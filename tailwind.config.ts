@@ -14,7 +14,9 @@ const config: Config = {
       },
       spacing: {
         '18': '4.5rem',
-        '4.5': '1.125rem'
+        '4.5': '1.125rem',
+        '100':'27rem',
+        '200': '120rem'
       },
       keyframes: {
         skeleton: {
