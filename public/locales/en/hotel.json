@@ -25,6 +25,7 @@
     "other-similar-hotels": "Other similar hotels",
     "picture": "Photo",
     "pictures": "Photo Gallery",
+    "price-for-nights": "Starting price for {{nights}} nights",
     "price-start-from": "start price for",
     "refundable": "refundable",
     "restaurant-quality": "Restaurant and Coffee Shop quality",
@@ -42,11 +43,14 @@
     "suggest-to-other": "Recommend to others",
     "suggestion": "Comments",
     "suggestion-text": "Comment text",
+    "updating-prices": "updating price",
     "user-suggestions": "User Comments",
     "very-good": "Very good",
     "view-suggestions": "View Comments",
     "viewOnMap": "View on map",
     "walking": "Walking",
+    "we-dont-have-any-available-rooms-for-these-dates": "We do not have any room available for these dates",
     "with-car": "by car",
-    "you-might-be-interested-this-hotels": "You might be interested in these hotels"
+    "you-might-be-interested-this-hotels": "You might be interested in these hotels",
+    "you-missed-this-deal": "You missed this deail!"
 }

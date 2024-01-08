@@ -1,14 +1,12 @@
 import { useTranslation } from 'next-i18next';
 import { useEffect, useCallback, useState, useMemo, useRef } from 'react';
-import { AxiosResponse } from 'axios';
 
-import { Header, ServerAddress, Hotel } from "../../../../enum/url";
 import { AvailabilityByIdItem, DomesticHotelMainType } from '@/modules/domesticHotel/types/hotel';
 import SimilarHotelItem from './SimilarHotelItem';
-import useHttp from '@/modules/shared/hooks/use-http';
 import { useRouter } from 'next/router';
 import { InfoCircle } from '@/modules/shared/components/ui/icons';
 import { addSomeDays, dateFormat, getDatesDiff } from '@/modules/shared/helpers';
+import { AvailabilityByHotelId } from '../../actions';
 
 type Props = {
     similarHotels?: DomesticHotelMainType[];
@@ -44,7 +42,7 @@ const SimilarHotels: React.FC<Props> = props => {
 
     const nights = getDatesDiff(new Date(checkin), new Date(checkout));
 
-    const { sendRequest, loading } = useHttp();
+    const [loading, setLoading] = useState<boolean>(true);
 
     const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -60,30 +58,16 @@ const SimilarHotels: React.FC<Props> = props => {
         }
     }
 
-    const fetchPrices = useCallback((ids: number[], acceptLanguage?: "fa-IR" | "en-US") => {
-        sendRequest({
-            url: `${ServerAddress.Type}${ServerAddress.Hotel_Availability}${Hotel.AvailabilityByHotelId}`,
-            header: {
-                ...Header,
-                "Accept-Language": acceptLanguage || "en-US",
-                Currency: "IRR",
-                Apikey: process.env.PROJECT_SERVER_APIKEY
-            },
-            data: {
-                hotelIds: ids,
-                checkIn: checkin,
-                checkOut: checkout
-            },
-            method: 'post'
-        }, (response: AxiosResponse) => {
-            if (response.data.result) {
-                setPricedResponse(response.data.result.hotels);
-            } else if (response.data.success) {
-                debugger;
-                //setReduxError()
-                //setErrorText(noResultMessage || 'No result found!');
-            }
-        })
+    const fetchPrices = useCallback(async(ids: number[], acceptLanguage?: "fa-IR" | "en-US") => {
+        setLoading(true);
+        const response = await AvailabilityByHotelId({checkin:checkin, checkout:checkout, ids:ids}, acceptLanguage);
+
+        if (response){
+            setPricedResponse(response.data.result.hotels);
+        }
+
+        setLoading(false);
+
     }, [checkin, checkout]);
 
     const hotelsId = useMemo(() => similarHotels?.map(item => item.HotelId!)

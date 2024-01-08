@@ -6,6 +6,15 @@
   .clearfix {
     @apply after:clear-both after:content-[''] after:table before:clear-both before:content-[''] before:table;
   }
+  .gradient-circle-loading{
+    background-image: conic-gradient(
+      from 0.25turn,
+      #1890ff,
+      rgba(255, 255, 255, 0) 0.01turn,
+      rgba(255, 255, 255, 0) 0.16turn,
+      #1890ff
+    );
+  }
 
 }
 

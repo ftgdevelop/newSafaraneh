@@ -25,6 +25,7 @@
     "other-similar-hotels": "سایر هتل های مشابه",
     "picture": "عکس",
     "pictures": "عکس ها",
+    "price-for-nights": "شروع قیمت برای {{nights}} شب",
     "price-start-from": "شروع قیمت برای",
     "refundable": "قابل استرداد",
     "restaurant-quality": "کیفیت رستوران و کافی شاپ",
@@ -42,11 +43,14 @@
     "suggest-to-other": "توصیه به سایرین",
     "suggestion": "نظرات",
     "suggestion-text": "متن دیدگاه",
+    "updating-prices": "بروز رسانی قیمت",
     "user-suggestions": "نظرات کاربران",
     "very-good": "خیلی خوب",
     "view-suggestions": "مشاهده نظرات ",
     "viewOnMap": "نمایش روی نقشه",
     "walking": "پیاده",
+    "we-dont-have-any-available-rooms-for-these-dates": "برای این تاریخ ها هیچ اتاقی در دسترس نداریم",
     "with-car": "با خودرو",
-    "you-might-be-interested-this-hotels": "شاید به این هتل ها علاقه مند باشید"
+    "you-might-be-interested-this-hotels": "شاید به این هتل ها علاقه مند باشید",
+    "you-missed-this-deal": "این مورد را از دست دادید!"
 }

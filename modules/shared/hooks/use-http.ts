@@ -14,6 +14,7 @@ type RequestConfig = {
     signal?:AbortSignal;
     closeErrorLink?:string;
     closeButtonText?:string;
+    dontShowError?:boolean;
 }
 type ApplyData = (data:any) => void;
 
@@ -48,12 +49,17 @@ const useHttp : () => HookReturn = () => {
         });
         applyData(response);
       }catch (error:any){
+        
+        if (requestConfig.dontShowError){
+          console.log(error);
+          return;
+        }
+
         let details = "";
         if (error.response) {
-          debugger;
-          
-          details = error.response.statusText || error.response.data.error?.message || t('oopsSomethingWentWrong3');
+          details = error.response.statusText || error.response.data.error?.message || error.message || error.code || t('oopsSomethingWentWrong3');
         } else if (error.request) {
+          debugger;
           // The request was made but no response was received
           // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
           // http.ClientRequest in node.js
@@ -62,6 +68,7 @@ const useHttp : () => HookReturn = () => {
           console.log('Error', error.message);
         }
         setErrorMessage(details || t('oopsSomethingWentWrong4'));
+
         dispatch(setReduxError({
           title: t('error'),
           message: details || t('oopsSomethingWentWrong5'),

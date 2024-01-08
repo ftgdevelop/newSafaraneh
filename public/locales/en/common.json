@@ -4,10 +4,13 @@
     "about-us": "About us",
     "blog": "Blog",
     "change-search": "Change search",
+    "checkin-date": "checkin date",
+    "checkout-date": "checkout date",
     "cip": "CIP",
     "close": "Close",
     "contact-us": "Contact us",
     "create-account": "Sign up",
+    "discount": "discount",
     "domestic-flight": "Domestic flight",
     "domestic-hotel": "Domestic hotel",
     "email": "Email",
@@ -40,7 +43,5 @@
     "sign-in": "Sign in",
     "sign-in-up": "Sign in or Sign up",
     "support": "Support",
-    "terms": "Terms and Conditions",
-    "checkin-date":"checkin date",
-    "checkout-date":"checkout date"
+    "terms": "Terms and Conditions"
 }

@@ -1,15 +1,15 @@
-import { useEffect } from 'react';
-import { SearchHotels } from '@/modules/domesticHotel/actions';
+import { useEffect, useState } from 'react';
+import { AvailabilityByHotelId, SearchHotels, getRates } from '@/modules/domesticHotel/actions';
 import type { GetServerSideProps, NextPage } from 'next';
-import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { SearchHotelsItem } from '@/modules/domesticHotel/types/hotel';
+import { PricedHotelItem, SearchHotelItem } from '@/modules/domesticHotel/types/hotel';
 import SearchForm from '@/modules/domesticHotel/components/shared/SearchForm';
 import HotelsList from '@/modules/domesticHotel/components/hotelsList';
+import { addSomeDays, dateFormat } from '@/modules/shared/helpers';
 
 type Props = {
   searchHotelsData?: {
-    Hotels: SearchHotelsItem[];
+    Hotels: SearchHotelItem[];
     Content?: string;
   };
   url: string;
@@ -17,22 +17,78 @@ type Props = {
 
 const HotelList: NextPage<Props> = props => {
 
+  type RatesResponseItem = {
+    HotelId: number;
+    Satisfaction: number;
+    PositiveRowCount: number;
+    TotalRowCount: number;
+  }
+
+  type PricesResponseItem = {
+    id: number;
+    salePrice: number;
+    boardPrice: number;
+  }
+
+  const [ratesData, setRatesData] = useState<RatesResponseItem[] | undefined>();
+  const [ratesLoading, setRatesLoading] = useState<boolean>(false);
+
+  const [pricesData, setPricesData] = useState<PricesResponseItem[] | undefined>();
+  const [pricesLoading, setPricesLoading] = useState<boolean>(false);
+
   let hotelIds: (undefined | number)[] = [];
   if (props.searchHotelsData) {
     hotelIds = props.searchHotelsData.Hotels?.map(hotel => hotel.HotelId) || [];
   }
 
+  const today = dateFormat(new Date());
+  const tomorrow = dateFormat(addSomeDays(new Date()));
+  let checkin = today;
+  let checkout = tomorrow;
+
   useEffect(() => {
 
-    const fetchData = async () => {
-      const ggg = await SearchHotels(props.url);
+    const fetchRates = async () => {
+      setRatesLoading(true);
+      const ratesResponse = await getRates(hotelIds as number[], "fa-IR");
+      if (ratesResponse?.data) {
+        setRatesData(ratesResponse.data);
+      }
+      setRatesLoading(false);
     }
 
-    fetchData();
+    fetchRates();
 
-  }, [hotelIds]);
+    const fetchPrices = async () => {
+      setPricesLoading(true);
+      const pricesResponse = await AvailabilityByHotelId({ checkin: checkin, checkout: checkout, ids: hotelIds as number[] }, 'fa-IR');
+      if (pricesResponse.data?.result?.hotels) {
+        setPricesData(pricesResponse.data.result.hotels)
+      }
+      setPricesLoading(false);
+    }
 
-  const { t } = useTranslation('common');
+    fetchPrices();
+
+
+  }, []);
+
+
+  const hotels : PricedHotelItem[] = props.searchHotelsData?.Hotels?.map( hotel => {
+
+    const HotelRateData = ratesData?.find(item => item.HotelId === hotel.HotelId);
+    const ratesInfo = HotelRateData ? {Satisfaction: HotelRateData.Satisfaction, TotalRowCount: HotelRateData.TotalRowCount } :(ratesLoading || !ratesData)? "loading" :  undefined;
+
+    const hotelPriceData = pricesData?.find(item => item.id === hotel.HotelId);
+    const priceInfo = hotelPriceData ? {boardPrice : hotelPriceData.boardPrice, salePrice : hotelPriceData.salePrice} : (pricesLoading || !pricesData)? "loading" : undefined;
+
+    return({
+      ...hotel,
+      ratesInfo: ratesInfo,
+      priceInfo: priceInfo
+    })
+  }) || [];
+
 
   return (
 
@@ -46,7 +102,7 @@ const HotelList: NextPage<Props> = props => {
           </div>
           <div className='lg:col-span-3'>
             {!!props.searchHotelsData?.Hotels && <HotelsList
-              hotels={props.searchHotelsData.Hotels}
+              hotels={hotels}
             />}
           </div>
         </div>

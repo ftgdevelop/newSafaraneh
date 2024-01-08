@@ -1,8 +1,8 @@
-import { SearchHotelsItem } from "../../types/hotel";
+import { PricedHotelItem } from "../../types/hotel";
 import HotelListItem from "./HotelListItem";
 
 type Props ={
-    hotels: SearchHotelsItem[];
+    hotels: PricedHotelItem[];
 }
 
 const HotelsList : React.FC<Props> = props => {
@@ -14,7 +14,7 @@ const HotelsList : React.FC<Props> = props => {
         <div>
             pagination
         </div>
-          {hotels.slice(0,10).map(hotel => <HotelListItem key={hotel.HotelId} hotel={hotel} />)}            
+          {hotels.slice(0,20).map(hotel => <HotelListItem key={hotel.HotelId} hotel={hotel} />)}            
         <div>
             pagination
         </div>

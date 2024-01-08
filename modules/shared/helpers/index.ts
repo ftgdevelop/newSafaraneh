@@ -55,5 +55,5 @@ export const getDatesDiff = (a:Date, b:Date) => {
     const utca = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
     const utcb = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
   
-    return Math.floor((utcb - utca) / _MS_PER_DAY);
+    return Math.abs(Math.floor((utcb - utca) / _MS_PER_DAY));
 }
