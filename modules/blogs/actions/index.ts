@@ -2,11 +2,11 @@ import axios from 'axios';
 
 import { ServerAddress, Blog } from "../../../enum/url";
 
-export const getBlogs = async () => {
+export const getBlogs = async (perPage : number) => {
 
     try {
         let response = await axios.get(
-            `${ServerAddress.Type}${ServerAddress.Blog}${Blog.getPosts}?per_page=${1}`,
+            `${ServerAddress.Type}${ServerAddress.Blog}${Blog.getPosts}?per_page=${perPage}`,
         )
         return response
     } catch (error) {
