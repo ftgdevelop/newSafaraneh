@@ -160,9 +160,9 @@ const HotelListItem: React.FC<Props> = props => {
                     />
                 ) : (
                     <div
-                        className="md:col-span-1"
+                        className="md:col-span-1 bg-neutral-100 flex items-center justify-center h-full rtl:rounded-r-lg ltr:rounded-l-lg"
                     >
-                        <DefaultRoom />
+                        <DefaultRoom className="fill-neutral-300 w-32 h-32" />
                     </div>
                 )}
             </Link>

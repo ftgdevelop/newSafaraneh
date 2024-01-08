@@ -112,7 +112,7 @@ const SimilarHotelItem: React.FC<Props> = props => {
                     className='text-sm font-semibold px-5 h-10 rounded-md inline-flex'
                 >
                     {buttonText}
-                    <LeftCaret className='w-4 h-4 fill-current ltr:rotate-180' />
+                    <LeftCaret className='w-6 h-6 fill-current ltr:rotate-180' />
                 </Button>
             </footer>
 
