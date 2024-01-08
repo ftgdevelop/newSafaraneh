@@ -103,7 +103,7 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
             clearTimeout(fetchTimeout);
         }
 
-    }, [typingValue, fetchData, min, direction, acceptLanguage, onChangeHandle]);
+    }, [typingValue, fetchData, min, direction, errorText, acceptLanguage, onChangeHandle]);
 
     const selectItemHandle = (item: T) => {
         onChangeHandle(item);

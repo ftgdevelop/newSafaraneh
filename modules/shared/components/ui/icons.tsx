@@ -17,13 +17,13 @@ export const DownCaret: React.FC<Props> = props => {
 
 export const LeftCaret: React.FC<Props> = props => {
     return (
-        <svg className={props.className || ""} onClick={props.onClick} viewBox="0 -960 960 960"><path d="M561-240 320-481l241-241 43 43-198 198 198 198-43 43Z"/></svg>
+        <svg className={props.className || ""} onClick={props.onClick} viewBox="0 -960 960 960"><path d="M400-80 0-480l400-400 56 57-343 343 343 343-56 57Z" /></svg>
     );
 }
 
 export const RightCaret: React.FC<Props> = props => {
     return (
-        <svg className={props.className || ""} onClick={props.onClick} viewBox="0 -960 960 960"><path d="M530-481 332-679l43-43 241 241-241 241-43-43 198-198Z"/></svg>
+        <svg className={props.className || ""} onClick={props.onClick} viewBox="0 -960 960 960"><path d="m304-82-56-57 343-343-343-343 56-57 400 400L304-82Z" /></svg>
     );
 }
 

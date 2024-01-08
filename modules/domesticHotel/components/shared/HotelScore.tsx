@@ -4,7 +4,6 @@ type Props = {
     className?: string;
     reviews?: number;
     score?: number;
-    small?: boolean;
 }
 
 const HotelScore: React.FC<Props> = props => {
@@ -38,8 +37,8 @@ const HotelScore: React.FC<Props> = props => {
     }
 
     return (
-        <div className={`${props.small?"text-sm":""} ${props.className || ""}`}>
-            <span className={`${props.small?"text-base font-semibold":"text-3xl font-bold"}`}> {score} از 100  </span> {pointTitle} ({props.reviews} {tHotel("guest-reviews")}) 
+        <div className={` ${props.className || ""}`}>
+            <span className="text-3xl font-bold"> {score} از 100  </span> {pointTitle} ({props.reviews} {tHotel("guest-reviews")}) 
         </div>
     )
 };

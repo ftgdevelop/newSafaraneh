@@ -16,8 +16,8 @@ const NewBlog: NextPage<any> = () => {
                 </div>
 
                 <div className="w-full h-58 col-span-2 rounded-md p-5" style={{border:'solid 1px rgba(0,0,0,0.1)'}}>
-                    <p className="text-red-600">معرفی هتل</p>
-                    <h2 className="font-bold text-lg p-2">رزرو سالن هتل اصفهان برای همایش |رزرو همراه با تخفیف</h2>
+                    <Link href='/blog' className="text-red-600 block hover:text-red-400 translation-all duration-300">معرفی هتل</Link>
+                    <Link href='/blog' className="font-bold text-lg p-2 hover:text-blue-900 block translation-all duration-300">رزرو سالن هتل اصفهان برای همایش |رزرو همراه با تخفیف</Link>
                     <p className="text-xs text-gray-400">اصفهان با عنوان نصف جهانیکی از مهمترین شهرهای تاریخی کشور است که سومین شهر پرجمعیت و کلان‌شهر کشور به‌شمار می‌رود.این شهر با آثار تاریخی و باستانی
                         فراوانی که دارد همواره یکی از پربازدیدترین نقاط کشور محسوب می‌شود. علاوه بر بازدید و جذب گردشگر بسیار بالا در این منطقه همواره همایش‌ها و مراسم‌های بسیار ...</p>
                     

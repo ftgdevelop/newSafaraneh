@@ -269,7 +269,7 @@ export interface DomesticHotelAvailability {
 }[]
 
 
-export interface SearchHotelItem {
+export type SearchHotelsItem = {
     HotelId?: number;
     HotelName?: string;
     HotelTypeName?: string;
@@ -304,8 +304,3 @@ export interface SearchHotelItem {
         IsSpecial?: boolean;
     }[];
 }
-
-export interface PricedHotelItem extends SearchHotelItem {
-    ratesInfo?: "loading" | {Satisfaction: number; TotalRowCount: number;};
-    priceInfo?: "loading" | {boardPrice : number; salePrice : number;};
-} 

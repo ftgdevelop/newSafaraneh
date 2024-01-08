@@ -20,7 +20,7 @@ import Button from "../../../shared/components/ui/Button";
 type Props = {
     defaultDestination?: EntitySearchResultItemType;
     defaultDates?: [string, string];
-    wrapperClassName?: string;
+    wrapperClassName?:string;
 }
 
 const SearchForm: React.FC<Props> = props => {
@@ -61,39 +61,25 @@ const SearchForm: React.FC<Props> = props => {
 
     const { sendRequest } = useHttp();
 
-
-    const url = `${ServerAddress.Type}${ServerAddress.Hotel_Data}${Hotel.GetEntity}`;
+    const url = `${ServerAddress.Type}${ServerAddress.Hotel_Data}${Hotel.GetEntity}`
 
     useEffect(() => {
+        
+        const acceptLanguage = i18n && i18n.language === "fa" ? "fa-IR":"en-US";
 
-        if (!selectedDestination) {
+        sendRequest({
+            url: url,
+            header: {
+                ...Header,
+                "Accept-Language": acceptLanguage,
+            },
+            method: 'post'
+        }, (response: AxiosResponse) => {
 
-            const localStorageDefaultDestinations = localStorage.getItem('domesticHotelSearchDefaultDestinations');
-            const initialDestinations = localStorageDefaultDestinations ? JSON.parse(localStorageDefaultDestinations) : undefined;
-
-            if (initialDestinations) {
-
-                setDefaultDestinations(initialDestinations);
-
-            } else {
-                const acceptLanguage = i18n && i18n.language === "fa" ? "fa-IR" : "en-US";
-
-                sendRequest({
-                    dontShowError: true,
-                    url: url,
-                    header: {
-                        ...Header,
-                        "Accept-Language": acceptLanguage,
-                    },
-                    method: 'post'
-                }, (response: AxiosResponse) => {
-                    if (response.data.result) {
-                        setDefaultDestinations(response.data.result);
-                        localStorage.setItem('domesticHotelSearchDefaultDestinations', JSON.stringify(response.data.result));
-                    }
-                });
+            if (response.data.result) {
+                setDefaultDestinations(response.data.result);
             }
-        }
+        });
 
     }, [sendRequest, i18n?.language]);
 
@@ -174,7 +160,7 @@ const SearchForm: React.FC<Props> = props => {
 
 
     return (
-        <div className={`domestic-hotel-search-form grid grid-cols-1 md:grid-cols-7 gap-2 ${props.wrapperClassName || ""}`}>
+        <div className={`domestic-hotel-search-form grid grid-cols-1 md:grid-cols-7 gap-2 ${props.wrapperClassName||""}`}>
             <div className="relative col-span-1 md:col-span-3">
                 <label htmlFor="destination" className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5">
                     {t('searchHotelDestination')}
@@ -205,7 +191,7 @@ const SearchForm: React.FC<Props> = props => {
                 />
             </div>
             <div className="col-span-1 md:col-span-3 relative">
-
+                
                 <input type="date" className="border border-neutral-400 rounded-md w-full px-5 h-12" />
 
                 {/* <DatePicker
