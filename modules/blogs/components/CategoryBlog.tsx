@@ -11,7 +11,7 @@ import Link from "next/link";
 const CategoryBlog: NextPage<any> = () => {
     return (
         <div className="max-w-screen-xl m-auto p-10 max-lg:p-5 mt-10" >
-            <p className="text-3xl">دسته بندی های محبوب</p>
+            <p className="text-3xl">دسته بندی های محبوب</p><p>ss</p>
 
             <div className="grid gap-5 grid-cols-4 max-md:grid-cols-2 max-sm:grid-cols-1 grid-rows-2 max-md:grid-rows-5 mt-14 text-xl text-white text-center">
                 <div className="w-full h-fit rounded-md overflow-hidden bg-gradient-to-r from-indigo-500 z-40">
