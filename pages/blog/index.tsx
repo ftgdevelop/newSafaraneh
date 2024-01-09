@@ -5,8 +5,15 @@ import MainBlog from "@/modules/blogs/components/MainBlog";
 import CategoryBlog from "@/modules/blogs/components/CategoryBlog";
 import SearchBox from "@/modules/blogs/components/SearchBox";
 import NewBlog from "@/modules/blogs/components/NewBlog";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useEffect } from "react";
 
 const Blog: NextPage<null> = () => {
+    useEffect(() => {
+        const a = () => {
+            
+        }
+    } ,[])
     return (
         <div className="bg-white">
             <NavbarBlog />
@@ -20,4 +27,17 @@ const Blog: NextPage<null> = () => {
     )
 }
 
+
+export const getStaticProps = async (context: any) => {
+
+    // const recentBlogPost : any = await getBlogs(4);
+  
+    return ({
+      props: {
+        ...await serverSideTranslations(context.locale, ['common', 'home']),
+        context: context,
+      }
+    })
+};
+  
 export default Blog;
