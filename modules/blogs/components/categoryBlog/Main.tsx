@@ -1,14 +1,17 @@
 import { NextPage } from "next";
-import BlogItem from "./BlogItem";
-import Sidebar from "./Sidebar";
+import BlogItem from "../template/BlogItem";
+import Sidebar from "../template/Sidebar";
 import { useContext, useEffect, useState } from "react";
 import { AllBlogs } from "@/pages/blog/category/[categoriItem]";
-import { BlogItemType } from "../../types/blog";
+import { BlogItemType, CategoriesNameType } from "../../types/blog";
 
 
 const Main: NextPage = () => {
-    const Blogs : BlogItemType[] = useContext(AllBlogs)[0]
-
+    const Blogs: BlogItemType[] = useContext(AllBlogs)[0]
+    const LastBlogs: BlogItemType[] = useContext(AllBlogs)[1]
+    const CategoriesName: CategoriesNameType[] = useContext(AllBlogs)[2]
+    console.log(CategoriesName);
+    
     let BlogsLength = Blogs?.length
 
 
@@ -33,7 +36,9 @@ const Main: NextPage = () => {
     return (
         <div className="grid grid-cols-8 gap-3 max-w-screen-xl m-auto pl-10 pr-10 max-lg:grid-cols-1">
             <div className="col-span-6">
-                <BlogItem page={list} />
+                {
+                    Blogs?.slice(list[0] , list[1]).map(blog => <BlogItem data={blog} key={blog.id} />)
+                }
                 <div className="w-full rounded mt-5 mb-5" style={{border:'solid 1px rgba(0,0,0,.2)'}}>
                     <ul className="flex justify-center">
                     {
@@ -47,7 +52,7 @@ const Main: NextPage = () => {
                 </div>
             </div>
             <div className="col-span-2 w-full">
-                <Sidebar />
+                <Sidebar recentBlogs={LastBlogs} CategoriesNames={CategoriesName} />
             </div>
         </div>
     )

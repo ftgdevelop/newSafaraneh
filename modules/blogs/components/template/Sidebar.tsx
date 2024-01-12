@@ -1,17 +1,10 @@
 import { NextPage } from "next";
 import Image from "next/image";
-import RecentBlogSidebar from "./RecentBlogSidebar";
-import { useContext } from "react";
-import { AllBlogs } from "@/pages/blog/category/[categoriItem]";
-import { CategoriesNameType } from "../../types/blog";
+import RecentBlogSidebar from "../categoryBlog/RecentBlogSidebar";
 
-
-const Sidebar: NextPage<any> = () => {
-    const recentBlogs: [] = useContext(AllBlogs)[1]
-    const category_name : CategoriesNameType[] = useContext(AllBlogs)[2]
-
+const Sidebar: NextPage<any> = ({ recentBlogs, CategoriesNames }) => {
+    console.log(CategoriesNames);
     
-
     return (
         <div>
             <div>
@@ -20,8 +13,8 @@ const Sidebar: NextPage<any> = () => {
             <div>
                 <ul className="divide-y p-4">
                     {
-                        category_name && 
-                        category_name.map(item => 
+                        CategoriesNames && 
+                        CategoriesNames.map((item : any) => 
                             <li key={item.name} className="p-2">{item.name}</li>
                         )
                     }
@@ -36,7 +29,7 @@ const Sidebar: NextPage<any> = () => {
             <div >
                     {
                         recentBlogs &&
-                        recentBlogs.map(blog => <RecentBlogSidebar data={blog} /> )
+                        recentBlogs.map((blog : any) => <RecentBlogSidebar data={blog} /> )
                     }
             </div>
             </div>
