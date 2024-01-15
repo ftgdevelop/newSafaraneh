@@ -34,7 +34,7 @@ const Main: NextPage<any> = () => {
     const [pageNumber, setpageNumber] = useState<any>([])
     const [list, setlist] = useState<[number , number]>([0 , 10])
     return (
-        <div className="grid grid-cols-8 gap-3 max-w-screen-xl m-auto pl-10 pr-10 max-lg:grid-cols-1">
+        <div className="grid grid-cols-8 gap-1 max-w-screen-xl m-auto pl-10 pr-10 max-lg:grid-cols-1">
             <div className="col-span-6">
                 {
                     Blogs?.slice(list[0] , list[1]).map(blog => <BlogItem data={blog} key={blog.id} />)
@@ -52,7 +52,7 @@ const Main: NextPage<any> = () => {
                 </div>
             </div>
             <div className="col-span-2 w-full">
-                <Sidebar recentBlogs={LastBlogs} CategoriesNames={CategoriesName} SerarchItem={true} />
+                <Sidebar recentBlogs={LastBlogs} CategoriesNames={CategoriesName} SearchItem={true} />
             </div>
         </div>
     )

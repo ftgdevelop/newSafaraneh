@@ -1,6 +1,6 @@
-import NavbarBlog from "@/modules/blogs/components/HomeBlog/NavbarBlog";
-import Main from "@/modules/blogs/components/categoryBlog/Main";
-import Title from "@/modules/blogs/components/categoryBlog/Title";
+import NavbarBlog from "@/modules/blogs/components/BlogHome/NavbarBlog";
+import Main from "@/modules/blogs/components/BlogCategory/Main";
+import Title from "@/modules/blogs/components/BlogCategory/Title";
 import { NextPage } from "next";
 import { GetBlogPostCategory, GetCategories, getBlogs } from "@/modules/blogs/actions";
 import { BlogItemType, CategoriesNameType } from "@/modules/blogs/types/blog";
@@ -10,7 +10,6 @@ import { useRouter } from "next/router";
 export const AllBlogs = createContext<any | null>(null)
 const Category: NextPage<any> = ({ LastBlogs, BlogCategory, categories_name }:
     { LastBlogs?: BlogItemType[], BlogCategory?: BlogItemType[], categories_name : CategoriesNameType }) => {
-    console.log(useRouter().query.categoriItem);
     
     return (
         <div className="bg-white">

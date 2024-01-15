@@ -21,8 +21,8 @@ const Main: NextPage = () => {
             for (let i = 1; i <= pages; i++) {
                 listPage.push(i)
                 setpageNumber(listPage)
-            }
-
+        }
+        
     }, [])
     
     const pageclick = (item: number) => {
@@ -33,7 +33,7 @@ const Main: NextPage = () => {
     const [pageNumber, setpageNumber] = useState<any>([])
     const [list, setlist] = useState<[number , number]>([0 , 10])
     return (
-        <div className="grid grid-cols-8 gap-3 max-w-screen-xl m-auto pl-10 pr-10 max-lg:grid-cols-1">
+        <div className="grid grid-cols-8 gap-3 max-w-screen-xl m-auto pl-8 pr-8 max-lg:grid-cols-1 max-lg:p-2">
             <div className="col-span-6">
                 {
                     Blogs?.slice(list[0] , list[1]).map(blog => <BlogItem data={blog} key={blog.id} />)

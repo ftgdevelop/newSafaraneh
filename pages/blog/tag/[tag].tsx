@@ -1,4 +1,4 @@
-import { GetTagBlogs, GetTagName , GetCategories , getBlogs} from "@/modules/blogs/actions";
+import { GetTags, GetTagName , GetCategories , getBlogs} from "@/modules/blogs/actions";
 import Title from "@/modules/blogs/components/BlogTag/Title";
 import NavbarBlog from "@/modules/blogs/components/BlogHome/NavbarBlog";
 import Main from "@/modules/blogs/components/BlogTag/Main";
@@ -8,7 +8,7 @@ import { createContext } from "react";
 
 export const TagData = createContext<any | null>(null)
 const Tag: NextPage<any> = ({ TagBlogs, TagName, categories_name, recentBlogs }) => {
-    console.log(TagName.name);
+  
     
     return (
         <div className="bg-white">
@@ -29,7 +29,7 @@ export async function getServerSideProps(contex: any) {
     let tag = contex.query.tag;
 
     let TagName : any = await GetTagName(+tag)
-    let TagBlogs: any = await GetTagBlogs(+tag)
+    let TagBlogs: any = await GetTags(+tag)
     let categories_name: any = await GetCategories()
     let recentBlogs: any = await getBlogs(3)
     

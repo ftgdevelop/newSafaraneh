@@ -99,7 +99,7 @@ export const GetBlogPostCategory = async (id: number) => {
 export const GetCategories = async () => {
     try {
       const res = await axios.get(
-        `${ServerAddress.Type}${ServerAddress.Blog}/wp-json/wp/v2/categories`,
+        `${ServerAddress.Type}${ServerAddress.Blog}${Blog.getCategoeyName}`,
         {
           headers: {
             // "Content-Type": "application/json",
@@ -114,4 +114,47 @@ export const GetCategories = async () => {
       console.log("error", error);
       return error.response
     }
+};
+
+export const GetTagName = async (id : number) => {
+  try {
+    const res = await axios.get(
+      `${ServerAddress.Type}${ServerAddress.Blog}${Blog.getTagName}${id}`
+    );
+    return res;
+  } catch (error : any) {
+    console.log("error", error);
+    return error.response
+  }
+};
+
+export const GetTags = async (id : number) => {
+  try {
+    const res = await axios.get(
+      `${ServerAddress.Type}${ServerAddress.Blog}${Blog.getTagPost}${id}`
+    );
+    return res;
+  } catch (error : any) {
+    console.log("error", error);
+    return error.response
+  }
+};
+
+export const GetSearchBlogPosts = async (value : any) => {
+  try {
+    const res = await axios.get(
+      `${ServerAddress.Type}${ServerAddress.Blog}${Blog.getSearchPost}${value}`,
+      {
+        headers: {
+          // "Content-Type": "application/json",
+          // accept: "text/plain",
+          // "Accept-Language": "fa-IR",
+        },
+      }
+    );
+    return res;
+  } catch (error : any) {
+    console.log("error", error);
+    return error.response
+  }
 };

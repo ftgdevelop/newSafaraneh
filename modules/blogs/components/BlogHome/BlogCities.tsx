@@ -48,7 +48,7 @@ const BlogCities: NextPage<Props> = ({data}) => {
                 data ?
                 data.map(city => 
                     <div className="p-2" key={city.title.rendered}>
-                        <Link href={city.excerpt.rendered.slice(3,city.excerpt.rendered.length - 5)} target="_blan">
+                        <Link href={city.excerpt.rendered.slice(3,city.excerpt.rendered.length - 5)} target="_blank">
                         <Image src={city.images.medium} alt="pic" width={400} height={250} className="object-fit rounded-md"/>
                         <p className="bg-white max-w-20 p-4 text-center rounded-lg relative bottom-18 ml-3 mr-3 m-auto text-xl">{city.title.rendered}</p>
                         </Link>    
@@ -57,7 +57,7 @@ const BlogCities: NextPage<Props> = ({data}) => {
 
             }
             </Carousel>
-                
+
             </div>
         </div>
     )

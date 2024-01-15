@@ -21,13 +21,13 @@ const CategoryBlog: NextPage<Props> = ({ data, data2, CategoriesData }) => {
         <div className="max-w-screen-xl m-auto p-10 max-lg:p-5 mt-10" >
             <p className="text-3xl">دسته بندی های محبوب</p>
 
-            <div className="grid gap-5 grid-cols-4 max-md:grid-cols-2 max-sm:grid-cols-1 max-md:grid-rows-5 mt-14 text-xl text-white text-center">
+            <div className="grid gap-5 grid-cols-2 max-md:grid-cols-1 mt-14 text-xl text-white text-center">
 
-                <section className="grid gap-2 grid-cols-2 col-span-2 max-sm:grid-cols-1">
+                <section className="grid gap-4 grid-cols-2 max-sm:grid-cols-1">
                 {
                     data && CategoriesData &&
                         data.map(category =>
-                    <div className="w-full h-fit rounded-md overflow-hidden">
+                    <div className=" rounded-md overflow-hidden">
                     <Link href={`/blog/category/${CategoriesData.find(item => item.name == category.title.rendered)?.id}`}>
                         <Image src={category.images.large} alt={category.title.rendered} width={600} height={590} />
                         <p className="relative bottom-10 h-0">{category.title.rendered}</p>
@@ -37,17 +37,17 @@ const CategoryBlog: NextPage<Props> = ({ data, data2, CategoriesData }) => {
                 }
                 </section>
                 
-                <section className="col-span-2">
+                <section>
                 {
                     data2 && CategoriesData &&
-                    <div className="w-full h-fit rounded-md overflow-hidden">
+                    <div className="max-md: rounded-md overflow-hidden">
                     <Link href={`/blog/category/${CategoriesData?.find(item => item.name == data2[0].title.rendered)?.id}`}>
                         <Image src={data2[0].images.large} alt={data2[0].title.rendered} width={600} height={590} />
                         <p className="relative bottom-10 h-0">{data2[0].title.rendered}</p>
                     </Link>
                     </div>
                 }
-                </section>    
+                </section>
         </div>
         </div>
     )

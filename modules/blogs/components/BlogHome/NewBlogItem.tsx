@@ -21,7 +21,7 @@ const NewBlog: NextPage<Props> = (props) => {
                     <div>
                         <Link href='/blog'>
                             <Image src={blog.images.large}
-                            alt={blog.title.rendered} height={200} width={600} className="object-fit rounded-md max-sm:mr-1" />
+                            alt={blog.title.rendered} height={200} width={600} className="object-fit rounded-md max-sm:mr-2" />
                         </Link>
                     </div>
     
@@ -32,9 +32,9 @@ const NewBlog: NextPage<Props> = (props) => {
                         <Link href='/blog' className="font-bold text-lg p-2 hover:text-blue-900 block translation-all duration-300">
                             {blog.title.rendered}
                         </Link>
-                        <p className="text-xs text-gray-400">{blog.excerpt.rendered}</p>
+                        <p className="text-xs text-gray-400 pr-1">{blog.excerpt.rendered}</p>
                         <div className="flex justify-between text-xs mt-4">
-                            <div className="flex w-52 justify-between">
+                            <div className="flex w-52 justify-between text-gray-400">
                                 <p>{blog.date}</p>
                                 <p className="font-bold text-3xl">.</p>
                                 <p>{blog.acf.time_read}</p>

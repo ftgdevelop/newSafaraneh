@@ -10,14 +10,13 @@ const Main: NextPage<any> = () => {
     const Blogs: BlogItemType[] = useContext(TagData)[0]
     const LastBlogs: BlogItemType[] = useContext(TagData)[1]
     const CategoriesName: CategoriesNameType[] = useContext(TagData)[2]
-    console.log(Blogs);
     
     let BlogsLength = Blogs?.length
 
     let listPage :any = []
     useEffect(() => {
         //This is for: how many page we need
-            const pages = BlogsLength / 10
+            const pages = Math.ceil(BlogsLength / 10)
             for (let i = 1; i <= pages; i++) {
                 listPage.push(i)
                 setpageNumber(listPage)
@@ -33,7 +32,7 @@ const Main: NextPage<any> = () => {
     const [pageNumber, setpageNumber] = useState<any>([])
     const [list, setlist] = useState<[number , number]>([0 , 10])
     return (
-        <div className="grid grid-cols-8 gap-3 max-w-screen-xl m-auto pl-10 pr-10 max-lg:grid-cols-1">
+        <div className="grid grid-cols-8 gap-1 max-w-screen-xl m-auto pl-8 pr-8 max-lg:grid-cols-1 max-lg:p-0">
             <div className="col-span-6">
                 {
                     Blogs?.slice(list[0] , list[1]).map(blog => <BlogItem data={blog} key={blog.id} />)

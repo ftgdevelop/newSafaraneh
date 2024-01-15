@@ -31,6 +31,9 @@ export interface CityItemType {
     title: {
         rendered: string;
     };
+    excerpt: {
+        rendered: string
+    }
 }
 
 export interface HomeCategoryItemType {

@@ -1,13 +1,13 @@
 import { NextPage } from "next";
 import { GetBestCategory, GetBestCategory2, GetCategories, GetCities, getBlogs } from "@/modules/blogs/actions";
-import NavbarBlog from "@/modules/blogs/components/HomeBlog/NavbarBlog";
-import CategoryBlog from "@/modules/blogs/components/HomeBlog/CategoryHomeBlog";
-import SearchBox from "@/modules/blogs/components/HomeBlog/SearchBox";
-import NewBlog from "@/modules/blogs/components/HomeBlog/NewBlogItem";
+import NavbarBlog from "@/modules/blogs/components/BlogHome/NavbarBlog";
+import CategoryBlog from "@/modules/blogs/components/BlogHome/CategoryHomeBlog";
+import SearchBox from "@/modules/blogs/components/BlogHome/SearchBox";
+import NewBlog from "@/modules/blogs/components/BlogHome/NewBlogItem";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { BlogItemType, CategoriesNameType, CityItemType, HomeCategoryItemType } from "@/modules/blogs/types/blog";
 import { createContext, useState } from "react";
-import BlogCities from "@/modules/blogs/components/HomeBlog/BlogCities";
+import BlogCities from "@/modules/blogs/components/BlogHome/BlogCities";
 
 
 
