@@ -16,17 +16,16 @@ const Flights: NextPage<any> = ({ FlightsData } : {FlightsData : FlightType[]}) 
     
     
     const router = useRouter()
+    console.log(router);
     useEffect(() => {
         router.replace({
             query: {
                 ...router.query,
-                departureCode: 'AHW',
-                returnCode: 'THR',
                 adult: 1,
                 child: 0,
                 infant: 0,
                 step: 'result',
-                departing: '2024-03-07'
+                departing: '2024-03-12'
             }
         })
 
@@ -44,20 +43,22 @@ const Flights: NextPage<any> = ({ FlightsData } : {FlightsData : FlightType[]}) 
 export default Flights;
 
 
-export async function getStaticProps(context: any) {
-    const getdata = await GetAvailability(
+export async function getServerSideProps(context: any) {
+    console.log(context.query.flights);
+    let flyRoute = context.query.flights.split('-')
+    const GetKey = await GetAvailability(
         {
-            adult: 1,
-            child: 0,
-            departureCode: "AWZ",
-            departureTime: "2024-03-11",
-            infant: 0,
-            returnCode: "THR"
+            adult: +context.query.adult,
+            child: +context.query.child,
+            departureCode: flyRoute[0],
+            departureTime: context.query.departing,
+            infant: +context.query.infant,
+            returnCode: flyRoute[1]
         }
     )
 
-    const data = getdata?.data
-    const FlightsData = await GetFlights(data.result)
+    const key = GetKey?.data
+    const FlightsData = await GetFlights(key.result)
 
     return (
         {

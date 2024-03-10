@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Plus, RightCaret } from "../../shared/components/ui/icons";
 import FlightsFlightItem from "./FlightFlightItem";
-import { FlightsDataContext } from "@/pages/flights";
+import { FlightsDataContext } from "@/pages/flights/[flights]";
 
 const FlightFilters: React.FC = () => {
     const FlightsData = useContext(FlightsDataContext)   

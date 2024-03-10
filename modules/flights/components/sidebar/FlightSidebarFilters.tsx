@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { FlightsDataContext } from "@/pages/flights";
+import { FlightsDataContext } from "@/pages/flights/[flights]";
 import FlightSidebarAirlines from "./FlightSidebarAirlines";
 import FlightSidebarHours from "./FlightSidebarHours";
 import FlightSidebarPriceRange from "./FlightSidebarPriceRange";
@@ -28,7 +28,7 @@ const FlightSidebarFilters: React.FC = () => {
             >
                 <div>
                     <h3 className="font-semibold">نتیجه جستجوی شما</h3>
-                    <p className="text-2xs">{FlightsData.length} پرواز پیدا شد</p>
+                    <p className="text-2xs">{FlightsData?.length} پرواز پیدا شد</p>
                 </div>
                 <FlightSidebarAirlines FlightsData={FlightsData} />            
                 <FlightSidebarHours />
