@@ -5,21 +5,14 @@ import Image from "next/image";
 
 const FlightSidebarAirlines: React.FC<any> = ({ FlightsData }: { FlightsData: FlightType[] }) => {
     
-    const airlines = FlightsData.map(flight => (
-        {
-            airline: flight.airline?.name,
-            price: flight.adultPrice,
-            cappacity: flight.capacity
-        }
-    ))
+
     const uniq : any = [];
-    airlines.map(item => {
-        if (!uniq.includes(item)) {
-            uniq.push(item)
+    FlightsData.map(item => {
+        if (!uniq.includes(item.airline?.name)) {
+            uniq.push(item.airline?.name)
         }
     })
 
-    console.log(airlines);
     console.log(uniq);
     
     return (
