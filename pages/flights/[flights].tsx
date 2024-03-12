@@ -4,8 +4,7 @@ import FlightsMain from "@/modules/flights/components/FlightsMain";
 import { FlightType } from "@/modules/flights/types/flights";
 import { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useRouter } from "next/router";
-import { createContext, useEffect } from "react";
+import { createContext } from "react";
 
 export const FlightsDataContext = createContext<any>('')
 
@@ -13,23 +12,6 @@ const Flights: NextPage<any> = ({ FlightsData } : {FlightsData : FlightType[]}) 
     console.log(FlightsData);
     let a = new Date();
     console.log(`${a.getFullYear()}-${a.getMonth()}-${a.getDay()}`);
-    
-    
-    const router = useRouter()
-    console.log(router);
-    useEffect(() => {
-        router.replace({
-            query: {
-                ...router.query,
-                adult: 1,
-                child: 0,
-                infant: 0,
-                step: 'result',
-                departing: '2024-03-12'
-            }
-        })
-
-    },[])
     return (
         <div className="max-w-container m-auto p-5 max-md:p-3 flex gap-5">
             <FlightsDataContext.Provider value={FlightsData}>
@@ -44,12 +26,20 @@ export default Flights;
 
 
 export async function getServerSideProps(context: any) {
-    console.log(context.query.flights);
+    
+    context.query = {
+            ...context.query,
+            adult: 1,
+            child: 0,
+            infant: 0,
+            departing: '2024-03-14'
+    }
+
     let flyRoute = context.query.flights.split('-')
     const GetKey = await GetAvailability(
         {
-            adult: +context.query.adult,
-            child: +context.query.child,
+            adult: 1,
+            child: 0,
             departureCode: flyRoute[0],
             departureTime: context.query.departing,
             infant: +context.query.infant,

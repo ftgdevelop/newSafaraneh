@@ -42,8 +42,13 @@ export interface FlightType {
         flightType?: string;
         id?: number;
     }
+    cabinClass: {
+        name: string;
+    }
     departureTime?: string;
     arrivalTime?: string;
     capacity: number;
     flightType: string;
+    maxAllowedBaggage: number;
+    flightNumber: string;
 }

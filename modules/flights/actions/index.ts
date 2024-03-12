@@ -1,8 +1,9 @@
+import { Flight, ServerAddress } from "@/enum/url"
 import axios from "axios"
 
 export const GetFlights = async (key: string) => {
     try {
-        const response = await axios.get(`https://flightdomestic.safaraneh.com/api/services/app/BookingFlight/GetAvailability?key=${key}`,
+        const response = await axios.get(`${ServerAddress.Type}${Flight.getFlights}${key}`,
             {
                 headers: {
                     "Content-Type": "appliction/json",
@@ -19,7 +20,7 @@ export const GetFlights = async (key: string) => {
 export const GetAvailability = async (FlightData:
     { departureCode: string, returnCode: string, departureTime: string, adult: number, child: number, infant: number }) => {
     try {
-        const response = axios.post('https://flightdomestic.safaraneh.com/api/services/app/BookingFlight/Availability',
+        const response = axios.post(`${ServerAddress.Type}${Flight.getAvailability}`,
             FlightData,
             {
                 headers: {

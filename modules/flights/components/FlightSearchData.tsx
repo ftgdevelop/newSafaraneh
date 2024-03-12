@@ -1,18 +1,29 @@
+import { useRouter } from "next/router";
 import { ArrowLeft } from "../../shared/components/ui/icons";
+import { useContext } from "react";
+import { FlightsDataContext } from "@/pages/flights/[flights]";
+import { FlightType } from "../types/flights";
 
 const FlightSearchData: React.FC = () => {
+    const query: any = useRouter().query
+    const FlightData: FlightType[] = useContext(FlightsDataContext)
+    
+    const departureCity = FlightData.find(item => item.departureAirport?.city?.code == query.flights.split('-')[0])?.departureAirport?.city?.name
+    const arrivalCity = FlightData.find(item => item.arrivalAirport?.city?.code == query.flights.split('-')[1])?.arrivalAirport?.city?.name
+
+
     return (
         <div className="flex flex-wrap h-fit relative gap-10 max-md:gap-5 max-sm:gap-4 cursor-pointer
             max-sm:justify-around max-sm:border-2 max-sm:border-gray-200 max-sm:p-3 rounded">
                 
                     <div>
-                        <p className="text-sm max-md:text-2xs">SYZ</p>
-                        <p className="text-gray-500 text-sm max-lg:text-xs max-md:text-3xs">شیراز</p>
+                        <p className="text-sm max-md:text-2xs">{query.flights.split('-')[0]}</p>
+                        <p className="text-gray-500 text-sm max-lg:text-xs max-md:text-3xs">{departureCity}</p>
                     </div>
                     <ArrowLeft className="w-5 max-sm:w-4 fill-gray-400 ltr:rotate-180" />
                     <div>
-                        <p className="text-sm max-md:text-2xs">AWZ</p>
-                        <p className="text-gray-500 text-sm max-lg:text-xs max-md:text-3xs">اهواز</p>
+                        <p className="text-sm max-md:text-2xs">{query.flights.split('-')[1]}</p>
+                        <p className="text-gray-500 text-sm max-lg:text-xs max-md:text-3xs">{arrivalCity}</p>
                     </div>
 
                     <span className="border-e-1 border-gray-300 h-14 max-sm:hidden"></span>
@@ -23,7 +34,7 @@ const FlightSearchData: React.FC = () => {
                     </div>
                     <div>
                         <p className="text-xs max-lg:text-4xs text-gray-400">مسافران</p>
-                        <p className="text-sm max-md:text-2xs">1</p>
+                        <p className="text-sm max-md:text-2xs">{+query.adult + +query.child + +query.infant || 1}</p>
                     </div>
                     <div>
                         <p className="text-xs max-lg:text-4xs text-gray-400">کابین</p>
@@ -34,7 +45,7 @@ const FlightSearchData: React.FC = () => {
                     absolute rtl:left-0 ltr:right-0 max-sm:sticky max-sm:w-full hover:bg-blue-600 duration-300"
                         type="submit">
                         تغییر جستجو
-            </button>
+                    </button>
             </div>
     )
 }

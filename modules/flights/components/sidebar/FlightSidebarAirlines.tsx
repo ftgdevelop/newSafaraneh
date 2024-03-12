@@ -13,10 +13,10 @@ type uniqAirlinesType = {
 const FlightSidebarAirlines: React.FC<any> = ({ FlightsData }: { FlightsData: FlightType[] }) => {
     
 
-    const uniq : uniqAirlinesType[] = [];
+    const airlines : uniqAirlinesType[] = [];
     FlightsData?.map((item: any) => {
-        if (!uniq.find((i : any) => i.airlineName == item.airline?.name)) {
-            uniq.push(
+        if (!airlines.find((i : any) => i.airlineName == item.airline?.name)) {
+            airlines.push(
                 {
                 airlineName: item.airline?.name,
                 price: item.adultPrice,
@@ -26,9 +26,9 @@ const FlightSidebarAirlines: React.FC<any> = ({ FlightsData }: { FlightsData: Fl
                 }
             )
         }
-        else if (uniq.find((i: any) => i.airlineName == item.airline?.name && i.price > item.adultPrice && i.capacity < item.capacity)) {
-            uniq.splice(uniq.findIndex(e => e.airlineName == item.airline.name), 1)
-            uniq.push(
+        else if (airlines.find((i: any) => i.airlineName == item.airline?.name && i.price > item.adultPrice && i.capacity < item.capacity)) {
+            airlines.splice(airlines.findIndex(e => e.airlineName == item.airline.name), 1)
+            airlines.push(
                 {
                     airlineName: item.airline?.name,
                     price: item.adultPrice,
@@ -44,7 +44,7 @@ const FlightSidebarAirlines: React.FC<any> = ({ FlightsData }: { FlightsData: Fl
             <div className="pt-2 pb-2">
                     <h5 className="text-sm font-semibold mb-2">ایرلاین ها</h5>
                     {
-                        uniq.map(flight => 
+                        airlines.map(flight => 
                             <Checkbox
                             label={
                                (<div className="flex w-full justify-between">
