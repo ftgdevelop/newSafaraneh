@@ -1,10 +1,14 @@
 import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
 import { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Head from "next/head";
 
 const Terms: NextPage = () => {
     return (
         <>
+        <Head>
+            <title>قوانین و مقررات</title>        
+        </Head>
         <div className="max-w-container m-auto p-5 max-sm:p-3">
         <BreadCrumpt items={[{label: 'قوانین مقررات'}]}/>
             <h2 className="mt-10 font-bold text-2xl">قوانین و مقررات</h2>

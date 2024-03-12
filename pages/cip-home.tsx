@@ -8,6 +8,7 @@ import CipFaq from "@/modules/cip/components/cip-home/CipFaq";
 import CipServices from "@/modules/cip/components/cip-home/CipServices";
 import { AirportDetailType } from "@/modules/cip/types/cip";
 import CipGallery from "@/modules/cip/components/cip-home/CipGallery";
+import Head from "next/head";
 
 const CipMainPage: NextPage<any> = ({ generalData, priceData }: { generalData: AirportDetailType[]; priceData: any}) => {
 
@@ -23,6 +24,9 @@ const CipMainPage: NextPage<any> = ({ generalData, priceData }: { generalData: A
     
     return (
         <>
+            <Head>
+                <title>تشریفات فرودگاهی cip||رزرو آنلاین هتل و بلیط هواپیما</title>
+            </Head>
             <CipGallery />
             <div className="max-w-container m-auto pr-5 pl-5 max-md:p-3">
                 <CipDescription content={priceData?.Content} />

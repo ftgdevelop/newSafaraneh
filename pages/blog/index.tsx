@@ -7,13 +7,22 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { BlogItemType, CategoriesNameType, CityItemType, HomeCategoryItemType } from "@/modules/blogs/types/blog";
 import BlogCities from "@/modules/blogs/components/BlogHome/BlogCities";
 import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
+import Head from "next/head";
+import { PortalDataType } from "@/modules/shared/types/common";
 
 
-const Blog: NextPage<any> = ({ NewBlogs, Cities, Categories , Categories2 ,Categories3}:
-    { NewBlogs?: BlogItemType[], Cities?: CityItemType[], Categories?: HomeCategoryItemType[] , Categories2?: HomeCategoryItemType[] ,Categories3:CategoriesNameType[]}) => {
+const Blog: NextPage<any> = ({ NewBlogs, Cities, Categories , Categories2 ,Categories3 , portalData}:
+    {
+        NewBlogs?: BlogItemType[], Cities?: CityItemType[], Categories?: HomeCategoryItemType[], Categories2?: HomeCategoryItemType[],
+        Categories3: CategoriesNameType[] , portalData: PortalDataType
+    }) => {
     
-    return (
+        const siteName = portalData?.Phrases?.find(item => item.Keyword === "Name")?.Value || "";
+        return (
         <div className="bg-white">
+            <Head>
+                <title>وبلاگ | حرفه ای ترین شبکه معرفی هتل های ایران | {siteName}</title>
+            </Head>
             <div className="max-w-container m-auto pr-5 pl-5 max-sm:p-4">
                 <BreadCrumpt items={[{label : "بلاگ"}]} />
             </div>

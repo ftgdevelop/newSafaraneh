@@ -41,6 +41,7 @@ const Rooms: React.FC<Props> = props => {
         if (hotelId) {
 
             const fetchRooms = async () => {
+                setAvailabilities(undefined);
 
                 const response: any = await GetRooms({ id: hotelId, checkin: checkin, checkout: checkout }, i18n?.language === "fa" ? "fa-IR" : "en-US");
 
@@ -54,12 +55,6 @@ const Rooms: React.FC<Props> = props => {
         }
 
     }, [hotelId, checkin, checkout]);
-
-    useEffect(() => {
-        if (selectedRoomToken) {
-            router.push("/hotel/checkout/123")
-        }
-    }, [selectedRoomToken])
 
     const selectRoomHandle = async (token: string, count: number) => {
         setSelectedRoomToken(token);

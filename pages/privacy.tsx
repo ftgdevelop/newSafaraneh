@@ -1,10 +1,14 @@
 import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
 import { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Head from "next/head";
 
 const privacy: NextPage = () => {
     return (
         <>
+        <Head>
+            <title>حفظ حریم خصوصی</title>        
+        </Head>
         <div className="max-w-container m-auto p-5 max-sm:p-3 ">
         <BreadCrumpt items={[{ label: 'حفظ حریم خصوصی'}]} />
             <h2 className="font-bold text-3xl mt-10 mb-5">حفظ حریم خصوصی</h2>

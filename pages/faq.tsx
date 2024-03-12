@@ -3,6 +3,7 @@ import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
 import { QuestionCircle } from "@/modules/shared/components/ui/icons";
 import { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Head from "next/head";
 
 const faq: NextPage = () => {
 
@@ -163,6 +164,9 @@ const faq: NextPage = () => {
 
     return (
         <>
+        <Head>
+            <title>سوالات متداول</title>        
+        </Head>
         <div className="max-w-container m-auto p-5 max-sm:p-3">
         <BreadCrumpt items={[{ label: 'سوالات متداول' }]} />
         <h2 className="font-bold mt-10 text-3xl">سوالات متداول</h2>

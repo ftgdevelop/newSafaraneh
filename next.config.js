@@ -24,10 +24,14 @@ const nextConfig = {
   i18n,
   env: {
     PROJECT: "SAFARANEH",
+    SITE_NAME: 'https://www.safaraneh.com',
     THEME: "THEME1",
     PROJECT_SERVER_TYPE: "https://",
     PROJECT_SERVER_USER: "",
-        
+    
+    GOOGLE_ANALYTIC_ID: 'G-BT6EJ64D29',
+    GOOGLE_TAG_MANAGER_ID: 'GTM-MJQWGBV',
+
     PROJECT_SERVER_APIKEY: 'e8fad1497a1244f29f15cde4a242baf0',
     PROJECT_PORTAL_APIKEY: 'b4fa99cc-3dfd-40a5-8bcf-53acdc2dbd84',
     

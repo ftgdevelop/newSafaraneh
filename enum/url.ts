@@ -104,7 +104,9 @@ export const Flight = {
   };
 
   export const Cip = {
-    GetAirportByUrl:"/api/services/app/Airport/GetByUrl"
+    GetAirportByUrl:"/api/services/app/Airport/GetByUrl",
+    AvailabilityByIataCode:"/api/services/app/BookingCip/AvailabilityByIataCode",
+    Validate:"/api/services/app/BookingCip/Validate"
   }
   
   export const ServerStatus = {
