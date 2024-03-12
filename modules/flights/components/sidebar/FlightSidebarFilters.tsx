@@ -2,8 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { FlightsDataContext } from "@/pages/flights/[flights]";
 import FlightSidebarAirlines from "./FlightSidebarAirlines";
 import FlightSidebarHours from "./FlightSidebarHours";
-import FlightSidebarPriceRange from "./FlightSidebarPriceRange";
 import FlightSidebarFlightType from "./FlightSidebarFlightType";
+import FlightSidebarPriceChange from "./FlightSidebarPriceRange";
 
 const FlightSidebarFilters: React.FC = () => {
     const FlightsData = useContext(FlightsDataContext)   
@@ -32,7 +32,7 @@ const FlightSidebarFilters: React.FC = () => {
                 </div>
                 <FlightSidebarAirlines FlightsData={FlightsData} />            
                 <FlightSidebarHours />
-                <FlightSidebarPriceRange />
+                <FlightSidebarPriceChange />
                 <FlightSidebarFlightType />
                 </div>
  
