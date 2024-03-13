@@ -61,6 +61,17 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
 
   const enamadElement = portalData?.Phrases.find(item => item.Keyword === "Enamad")?.Value;
 
+  let canonicalUrl = "";
+  if(typeof router !== 'undefined'){
+    if (router.route === '/hotels/[...hotelList]'){
+      canonicalUrl = process.env.SITE_NAME + (router.query.hotelList ? "/hotels/"+router.query.hotelList[0] : "");
+    }else if (router.route === '/hotel/[...hotelDetail]'){
+      canonicalUrl = process.env.SITE_NAME + (router.query.hotelDetail ? "/hotel/"+router.query.hotelDetail[0] : "");
+    }else{
+      canonicalUrl = process.env.SITE_NAME + router.asPath
+    }
+  }
+  
   return (
     <Provider store={store}>
       <Head>
@@ -107,14 +118,7 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
           content="text/html; charset=UTF-8"
         />
 
-        {typeof router !== 'undefined' && router.route !== '/hotels/[...hotelList]' && (
-          <link
-            rel="canonical"
-            href={
-              process.env.SITE_NAME + router.asPath.split('/location-')[0]
-            }
-          />
-        )}
+        {canonicalUrl && <link rel="canonical" href={canonicalUrl } /> }
 
         <meta
           name="google-site-verification"
