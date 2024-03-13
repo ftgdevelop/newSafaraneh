@@ -1,7 +1,7 @@
 import { i18n } from 'next-i18next';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { appWithTranslation } from 'next-i18next'; 
+import { appWithTranslation } from 'next-i18next';
 import type { AppProps } from 'next/app';
 import App from 'next/app';
 import { Provider } from 'react-redux';
@@ -17,6 +17,7 @@ import { store } from '../modules/shared/store';
 import { PortalDataType } from '@/modules/shared/types/common';
 import { getPortal } from '@/modules/shared/actions/portalActions';
 import Layout from '@/modules/shared/components/layout';
+import { GTM_ID } from '@/modules/shared/helpers';
 
 type TProps = Pick<AppProps, "Component" | "pageProps"> & {
   portalData?: PortalDataType;
@@ -24,24 +25,24 @@ type TProps = Pick<AppProps, "Component" | "pageProps"> & {
 
 function MyApp({ Component, pageProps, portalData }: TProps) {
   const router = useRouter();
-  
+
   const { locale } = router;
   const dir = locale === 'fa' ? 'rtl' : 'ltr';
-  
+
   useEffect(() => {
     i18n?.changeLanguage(locale);
   }, [locale]);
 
   useEffect(() => {
     document.documentElement.dir = dir;
-  },[dir]);
+  }, [dir]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const locale = localStorage.getItem("publicLocale");
-    if (locale){
+    if (locale) {
       router.push(router.asPath, router.asPath, { locale: locale });
     }
-  },[]);
+  }, []);
 
 
   const tel = portalData?.Phrases?.find(item => item.Keyword === "PhoneNumber")?.Value || "";
@@ -58,15 +59,17 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
   const portalKeywords = portalData?.MetaTags?.find(item => item.Name === "keywords")?.Content || "";
   const portalDescription = portalData?.MetaTags?.find(item => item.Name === "description")?.Content || "";
 
+  const enamadElement = portalData?.Phrases.find(item => item.Keyword === "Enamad")?.Value;
+
   return (
     <Provider store={store}>
       <Head>
-        
-       
-       
-       
-       
-       
+
+
+
+
+
+
         {/* TODO: _-_-_S_T_A_R_T_-_-_ delete when mobiscroll is activated */}
         <link
           rel="stylesheet"
@@ -78,33 +81,82 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
 
 
 
+        <meta name="robots" content="index, follow" />
+        <meta name="theme-color" content="#0a438b" />
+        <meta charSet="utf-8" />
 
+        <meta name="author" content="safaraneh.com" />
+        <meta name="copyright" content="safaraneh.com" />
+        <meta name="cache-control" content="cache" />
+        <meta name="content-language" content="fa" />
+        <meta name="content-type" content="text/html;UTF-8" />
+        <meta name="creator" content="safaraneh.com" />
+        <meta name="DC.Language" content="fa" />
+        <meta name="DC.Type" content="Text,Image" />
+        <meta name="DC.Creator" content="safaraneh.com" />
+        <meta name="rating" content="General" />
 
-        
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="#0a438b"
+        />
+        <meta
+          httpEquiv="content-type"
+          content="text/html; charset=UTF-8"
+        />
+
+        {typeof router !== 'undefined' && router.route !== '/hotels/[...hotelList]' && (
+          <link
+            rel="canonical"
+            href={
+              process.env.SITE_NAME + router.asPath.split('/location-')[0]
+            }
+          />
+        )}
+
+        <meta
+          name="google-site-verification"
+          content="dL12BD7zy5YUBkz4xPLy-hKkz1PPUyStFEiXgJks_h0"
+        />
+
         <link rel="icon" type="image/x-icon" href={favIconLink} />
-        
+
         {!!portalTitle && <title>{portalTitle}</title>}
-        {!!portalKeywords && <meta name="keywords" content={portalKeywords} />  }
-        {!!portalDescription && <meta name="description" content={portalDescription} />  }
+        {!!portalKeywords && <meta name="keywords" content={portalKeywords} />}
+        {!!portalDescription && <meta name="description" content={portalDescription} />}
 
       </Head>
-      
+
+      <noscript>
+        <iframe
+          src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+          height="0"
+          width="0"
+          style={{ display: 'none', visibility: 'hidden' }}
+        />
+      </noscript>
+
       <Layout
-          contactInfo={
-          {tel: tel,
-          instagram: instagram,
-          linkedin: linkedin,
-          twitter: twitter,
-          facebook: facebook}
+        contactInfo={
+          {
+            tel: tel,
+            instagram: instagram,
+            linkedin: linkedin,
+            twitter: twitter,
+            facebook: facebook
+          }
         }
         logo={logo}
         siteName={siteName}
+        enamadElement={enamadElement}
       >
 
         <Component {...pageProps} portalData={portalData} />
-      
+
       </Layout>
-    
+
     </Provider>
   )
 }
@@ -114,7 +166,7 @@ MyApp.getInitialProps = async (
 ): Promise<any> => {
   const ctx = await App.getInitialProps(context);
 
-  const portalData = await  getPortal(context?.locale === "en" ? "en-US" : "fa-IR")
+  const portalData = await getPortal(context?.locale === "en" ? "en-US" : "fa-IR")
 
   return { ...ctx, portalData: portalData?.data || null };
 };

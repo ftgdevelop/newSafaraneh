@@ -182,7 +182,8 @@ export const GetRooms = async (params:{id:number,checkin:string,checkout:string 
                 headers: {
                     'Content-Type': 'application/json',
                     apikey: process.env.PROJECT_SERVER_APIKEY,
-                    'Accept-Language': acceptLanguage
+                    'Accept-Language': acceptLanguage,
+                    Currency: "IRR"
                 },
             },
         )
@@ -257,7 +258,8 @@ export const domesticHotelGetValidate = async (key: string, acceptLanguage: stri
                 headers: {
                     'Content-Type': 'application/json',
                     apikey: process.env.PROJECT_SERVER_APIKEY,
-                    'Accept-Language': acceptLanguage
+                    'Accept-Language': acceptLanguage,
+                    Currency: "IRR"
                 },
             },
         )
@@ -302,7 +304,8 @@ export const domesticHotelGetReserveById = async (params: { reserveId: string, u
                 headers: {
                     'Content-Type': 'application/json',
                     apikey: process.env.PROJECT_SERVER_APIKEY,
-                    'Accept-Language': acceptLanguage
+                    'Accept-Language': acceptLanguage,
+                    Currency: "IRR"
                 },
             },
         )

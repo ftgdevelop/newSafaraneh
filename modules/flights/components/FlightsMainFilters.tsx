@@ -1,11 +1,15 @@
-import { Plus, RightCaret } from "../shared/components/ui/icons";
-import FlightsFlightItem from "./FlightFlightItem";
+import { useContext } from "react";
+import { Plus, RightCaret } from "../../shared/components/ui/icons";
+import FlightsFlightItem from "./flightItem/FlightFlightItem";
+import { FlightsDataContext } from "@/pages/flights/[flights]";
 
 const FlightFilters: React.FC = () => {
+    const FlightsData = useContext(FlightsDataContext)   
+    
     return (
         <>
-        <hr className="w-full mt-3 max-sm:hidden"/>
-        <div className="mt-6 flex justify-between max-md:block max-md:space-y-5">
+        <hr className="w-full mt-4 max-sm:hidden"/>
+        <div className="mt-3 flex justify-between items-center max-md:block max-md:space-y-5">
             <div className="inline-block">
                 <h3 className="text-sm font-semibold">فیلتر های پیشنهادی :</h3>
                 <div className="text-xs flex gap-1 mt-2 text-blue-700 shadow rounded-full justify-center shadow-blue-600 bg-blue-100/15 cursor-pointer">
@@ -28,19 +32,23 @@ const FlightFilters: React.FC = () => {
             </div>
             </div>
             
-            <div className="flex gap-4 mt-8">
+            <div className="flex gap-4 mt-6 items-center">
                 <h5 className="font-semibold text-sm whitespace-nowrap max-lg:hidden">مرتب سازی بر اساس:</h5>
-                <div className="flex w-full gap-2 overflow-auto">
-                    <p className="bg-white border-1 text-sm text-blue-700 text-center h-fit w-full p-1 cursor-pointer max-sm:text-xs
+                <div className="flex w-full gap-2">
+                    <p className="bg-white border-1 text-sm text-blue-700 text-center h-fit w-full p-1 cursor-pointer max-sm:text-2xs shadow-lg
                     hover:border-blue-800 border-white duration-100 whitespace-nowrap">کمترین قیمت</p>
-                    <p className="bg-white shadow-md text-sm text-blue-700 text-center h-fit w-full p-1 cursor-pointer max-sm:text-xs
+                    <p className="bg-white text-sm text-blue-700 text-center h-fit w-full p-1 cursor-pointer max-sm:text-2xs shadow-lg
                     hover:border-blue-800 border-white border-1 duration-100 whitespace-nowrap">بیشترین قیمت</p>
-                    <p className="bg-white shadow-md text-sm text-blue-700 text-center h-fit w-full p-1 cursor-pointer max-sm:text-xs
+                    <p className="bg-white text-sm text-blue-700 text-center h-fit w-full p-1 cursor-pointer max-sm:text-2xs shadow-lg
                     hover:border-blue-800 border-white border-1 duration-100 whitespace-nowrap">زمان پرواز</p>
                 </div>
             </div>
 
-            <FlightsFlightItem />
+            {
+                FlightsData?.map((flight : any) => 
+                    <FlightsFlightItem flightData={flight} />
+                )
+            }
         </>    
     )
 }

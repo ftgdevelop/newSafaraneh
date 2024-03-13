@@ -149,3 +149,6 @@ export const shamsiToMiladi = (j_y: number, j_m: number, j_d: number) => {
     return [gy, gm, gd];
 
 }
+
+
+export const GTM_ID = process.env.GOOGLE_TAG_MANAGER_ID

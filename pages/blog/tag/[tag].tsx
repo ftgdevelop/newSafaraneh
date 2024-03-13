@@ -5,14 +5,20 @@ import Content from "@/modules/blogs/components/template/Content";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { BlogItemType, CategoriesNameType } from "@/modules/blogs/types/blog";
 import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
+import Head from "next/head";
+import { PortalDataType } from "@/modules/shared/types/common";
 
 
-const Tag: NextPage<any> = ({ TagBlogs, TagName, categories_name, recentBlogs, pages } :
-    {TagBlogs : BlogItemType[] , TagName:any , categories_name:CategoriesNameType[], recentBlogs: BlogItemType[],pages:string}) => {
+const Tag: NextPage<any> = ({ TagBlogs, TagName, categories_name, recentBlogs, pages, portalData } :
+    {TagBlogs : BlogItemType[] , TagName:any , categories_name:CategoriesNameType[], recentBlogs: BlogItemType[],pages:string , portalData: PortalDataType}) => {
     
-    const tagname : string = TagName.name || ''
+    const tagname: string = TagName.name || ''
+    const siteName = portalData?.Phrases?.find(item => item.Keyword === "Name")?.Value || "";
     return (
         <div className="bg-white">
+            <Head>
+            <title>وبلاگ | حرفه ای ترین شبکه معرفی هتل های ایران | {siteName}</title>
+            </Head>
             <div className="max-w-container m-auto pr-5 pl-5 max-sm:p-4">
                 <BreadCrumpt items={[{ label: "بلاگ", link: "/blog" }, { label: tagname }]} />
             </div>

@@ -151,3 +151,32 @@ body {
   height: auto!important;
   border: 0;
 }
+
+footer img[src*=trustseal], footer img[src*='logo.samandehi'] {
+  font-size: 11px;
+  line-height: 15px;
+  color: #bbb;
+  height: 72px;
+  width: auto;
+  object-fit: contain;
+  @media screen and (max-width:639px) {
+    height: 44px;
+  }
+}
+
+.post-link {
+  text-align: center;
+  a {
+    background: #0a468f;
+    color: white;
+    display: inline-block;
+    padding: 7px 30px;
+    border-radius: 8px;
+    border: 1px solid #0a468f;
+    transition: all .1s linear;
+    &:hover{
+      background-color: #fff;
+      color: #0a468f;
+    }
+  }
+}

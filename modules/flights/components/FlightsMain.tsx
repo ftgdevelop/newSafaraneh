@@ -1,5 +1,5 @@
 import FlightSearchData from "./FlightSearchData";
-import FlightFilters from "./FlightsFilters";
+import FlightFilters from "./FlightsMainFilters";
 
 const FlightsMain: React.FC = () => {
     return (

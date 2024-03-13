@@ -50,8 +50,10 @@ export const Header = {
     ActivateEmail:"/api/services/app/Account/ActivateEmail"
   };
 
-  export const Flight = {
-  };
+export const Flight = {
+  getAvailability: 'flightdomestic.safaraneh.com/api/services/app/BookingFlight/Availability',
+  getFlights: 'flightdomestic.safaraneh.com/api/services/app/BookingFlight/GetAvailability?key='
+};
 
   export const Blog = {
     getPosts: "//wp-json/wp/v2/posts",
@@ -102,7 +104,9 @@ export const Header = {
   };
 
   export const Cip = {
-    GetAirportByUrl:"/api/services/app/Airport/GetByUrl"
+    GetAirportByUrl:"/api/services/app/Airport/GetByUrl",
+    AvailabilityByIataCode:"/api/services/app/BookingCip/AvailabilityByIataCode",
+    Validate:"/api/services/app/BookingCip/Validate"
   }
   
   export const ServerStatus = {

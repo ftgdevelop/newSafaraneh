@@ -70,7 +70,6 @@ const HotelGuestPointFilter: React.FC = () => {
 
             <CheckboxGroup
                 items={options}
-                name="hotelGuestPointFilter"
                 onChange={v => { setValues(v) }}
                 values={values}
             />

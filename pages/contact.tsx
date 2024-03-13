@@ -9,6 +9,7 @@ import { PortalDataType } from "@/modules/shared/types/common";
 import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
 
 import dynamic from "next/dynamic";
+import Head from "next/head";
 
 const LeafletNoSsr = dynamic(() => import('../modules/shared/components/ui/LeafletMap'), {
     ssr: false
@@ -27,6 +28,9 @@ const Contact: NextPage = ({portalData }: { portalData?: PortalDataType}) => {
 
     return (
         <>
+            <Head>
+                <title>تماس با ما</title>
+            </Head>
             <div className="max-w-container m-auto p-5 max-sm:p-3">
             <BreadCrumpt items={[{ label: 'تماس ما' }]} />
             <h2 className="text-3xl font-bold">تماس با ما</h2>

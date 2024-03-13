@@ -5,7 +5,6 @@ type Props = {
     values: string[];
     items: { value: string, label: React.ReactNode }[];
     onChange: (values: string[]) => void;
-    name: string;
 }
 
 const CheckboxGroup: React.FC<Props> = props => {

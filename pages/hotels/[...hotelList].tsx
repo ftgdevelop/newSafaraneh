@@ -158,7 +158,6 @@ const HotelList: NextPage<Props> = props => {
 
   }
 
-
   const saveFacilityOptions = (hotelItems: SearchHotelItem[]) => {
 
     const options: { keyword: string, label: string, count: number }[] = [];
@@ -224,6 +223,7 @@ const HotelList: NextPage<Props> = props => {
   }, [props.searchHotelsData?.Hotels]);
 
 
+  const firstHotelName = props.searchHotelsData?.Hotels[0]?.HotelName;
 
   useEffect(() => {
 
@@ -232,6 +232,7 @@ const HotelList: NextPage<Props> = props => {
       setFetchPercentage(10);
 
       setRatesLoading(true);
+      setRatesData(undefined);
 
       const ratesResponse: { data?: RatesResponseItem[] } = await getRates(hotelIds as number[], "fa-IR");
 
@@ -250,6 +251,7 @@ const HotelList: NextPage<Props> = props => {
 
     const fetchPrices = async () => {
       setPricesLoading(true);
+      setPricesData(undefined);
       const pricesResponse = await AvailabilityByHotelId({ checkin: checkin, checkout: checkout, ids: hotelIds as number[] }, 'fa-IR');
       if (pricesResponse.data?.result?.hotels) {
         setPricesData(pricesResponse.data.result.hotels);
@@ -273,7 +275,7 @@ const HotelList: NextPage<Props> = props => {
 
     fetchEntityDetail(locationId || cityId);
 
-  }, []);
+  }, [firstHotelName, checkin, checkout]);
 
 
   const hotels: PricedHotelItem[] = props.searchHotelsData?.Hotels?.map(hotel => {

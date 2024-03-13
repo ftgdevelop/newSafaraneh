@@ -17,7 +17,7 @@ type Props = {
     portalName: string;
 }
 
-const EditProfileForm:React.FC<Props> = props => {
+const EditProfileForm: React.FC<Props> = props => {
 
     const { t } = useTranslation('common');
 
@@ -231,6 +231,7 @@ const EditProfileForm:React.FC<Props> = props => {
                                 <div>
 
                                     <DatePickerSelect
+                                        labelIsSimple
                                         max={maximumBirthDate}
                                         min={minimumBirthDate}
                                         initialValue={user.birthDay ? dateFormat(new Date(user.birthDay)) : ""}
@@ -271,18 +272,15 @@ const EditProfileForm:React.FC<Props> = props => {
             <hr className="my-5" />
 
             <h5 className='text-base mb-5'>
-            اطلاعات تماس
+                اطلاعات تماس
             </h5>
-
 
             <EmailActivationForm />
 
-            
+
             <PhoneActivationForm
                 portalName={props.portalName}
             />
-
-
 
         </>
 

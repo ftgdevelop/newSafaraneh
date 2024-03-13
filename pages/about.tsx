@@ -7,6 +7,7 @@ import honor2 from '../public/images/about/download (1).png';
 import honor3 from '../public/images/about/download (2).png';
 import honor4 from '../public/images/about/download (3).png';
 import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
+import Head from "next/head";
 
 const about: NextPage = () => {
     const list1 = [
@@ -43,6 +44,9 @@ const about: NextPage = () => {
 
     return (
         <>
+            <Head>
+                <title>درباره ما</title>
+            </Head>
             <div className="max-w-container m-auto p-5 max-sm:p-3">
             <BreadCrumpt items={[{ label: 'درباره ما' }]} />
             <h2 className="text-3xl font-bold mt-10">درباره ما</h2>

@@ -19,6 +19,7 @@ type Props = {
     twitter?: string;
     facebook?: string;
   }
+  enamadElement?: any;
 }
 
 const Layout: React.FC<PropsWithChildren<Props>> = props => {
@@ -105,7 +106,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
           <main id="main" className={`min-h-desktop-main relative ${isHeaderUnderMain ? "z-50" : "z-10"}`}>
             {props.children}
           </main>
-          <Footer logo={props.logo} siteName={props.siteName} contactInfo={props.contactInfo} />
+          <Footer logo={props.logo} siteName={props.siteName} contactInfo={props.contactInfo} enamadElement={props.enamadElement || undefined} />
         </>
       ) : (
         <main id="main" >

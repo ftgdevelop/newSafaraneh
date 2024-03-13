@@ -1,8 +1,16 @@
 import Link from "next/link";
 
 import { useTranslation } from "next-i18next";
+import parse from 'html-react-parser';
 
 import Image from "next/image";
+import dynamic from "next/dynamic";
+
+const GoToTop = dynamic(() => import('./GoToTop'), {
+    ssr: false
+});
+
+
 
 type Props = {
     logo: string;
@@ -14,6 +22,7 @@ type Props = {
         twitter?: string;
         facebook?: string;
     }
+    enamadElement?: any;
 }
 
 const Footer: React.FC<Props> = props => {
@@ -25,74 +34,124 @@ const Footer: React.FC<Props> = props => {
     const linkClassNames = "block hover:text-blue-600 hover:underline";
 
     return (
-        <footer>
+        <>
+            <footer>
 
-            <div className="max-w-container mx-auto p-3 text-neutral-700 pt-8 pb-14">
+                <div className="max-w-container mx-auto p-3 text-neutral-700 pt-8 pb-14">
 
-                <div className="flex justify-center gap-1 sm:gap-4 mb-10" onContextMenu={e => {e.preventDefault()}}>
-                    <Image src='/images/footer/tandis-01.png' className="h-12 sm:h-18 object-contain" alt='' width={62} height={72} />
-                    <Image src='/images/footer/tandis-02.png' className="h-12 sm:h-18 object-contain" alt='' width={62} height={72} />
-                    <Image src='/images/footer/tandis-03.png' className="h-12 sm:h-18 object-contain" alt='' width={62} height={72} />
-                    <Image src='/images/footer/tandis-04.png' className="h-12 sm:h-18 object-contain" alt='' width={62} height={72} />
-                    <Image src='/images/footer/tandis-05.png' className="h-12 sm:h-18 object-contain" alt='' width={62} height={72} />
-                    <a href="#" aria-label="نماد اعتماد">
+                    <div className="flex justify-center gap-1 sm:gap-4 mb-10" onContextMenu={e => { e.preventDefault() }}>
+                        <Image src='/images/footer/tandis-01.png' className="h-11 sm:h-18 object-contain" alt='' width={62} height={72} />
+                        <Image src='/images/footer/tandis-02.png' className="h-11 sm:h-18 object-contain" alt='' width={62} height={72} />
+                        <Image src='/images/footer/tandis-03.png' className="h-11 sm:h-18 object-contain" alt='' width={62} height={72} />
+                        <Image src='/images/footer/tandis-04.png' className="h-11 sm:h-18 object-contain" alt='' width={62} height={72} />
+                        <Image src='/images/footer/tandis-05.png' className="h-11 sm:h-18 object-contain" alt='' width={62} height={72} />
+
+
+                        {!!props.enamadElement && parse(props.enamadElement)}
+
+                        {/* <a href="#" aria-label="نماد اعتماد">
                         <Image src='/images/footer/enamad.png' className="h-12 sm:h-18 object-contain" alt='' width={43} height={72} />
                     </a>
+
                     <a href="#" aria-label="رسانه">
                         <Image src='/images/footer/resaneh.png' className="h-12 sm:h-18 object-contain" alt='' width={60} height={72} />
-                    </a>
+                    </a> */}
+
+                        <a
+                            href="https://logo.samandehi.ir/Verify.aspx?id=238809&p=uiwkxlaomcsimcsiobpdpfvl"
+                            target="_blank"
+                            title="logo-samandehi"
+                            aria-label="samandehi"
+                        //className={`unset-img ${styles.nemads}`}
+                        >
+                            <img
+                                id="nbqergvjoeukoeukesgtsizp"
+                                alt="logo-samandehi"
+                                title="logo-samandehi"
+                                src="https://logo.samandehi.ir/logo.aspx?id=238809&p=odrfqftiaqgwaqgwlymabsiy"
+                                // layout="fill"
+                                // className={`unset-img ${styles.nemads}`}
+                                width="70"
+                                height="75"
+                            //layout="fixed"
+                            />
+                        </a>
+
+                    </div>
+
+                    <nav className="hidden sm:flex justify-center gap-6 text-xs mb-6">
+                        <Link title={t('contact-us')} href="/contact" className={linkClassNames} >
+                            {t('contact-us')}
+                        </Link>
+                        <Link title={t('faq')} href="/faq" className={linkClassNames} >
+                            {t('faq')}
+                        </Link>
+                        <Link title={t('terms')} href="/terms" className={linkClassNames} >
+                            {t('terms')}
+                        </Link>
+                        <Link title={t('privacy')} href="/privacy" className={linkClassNames} >
+                            {t('privacy')}
+                        </Link>
+                        <Link title={t("about-us")} href="/about" className={linkClassNames} >
+                            {t("about-us")}
+                        </Link>
+                        <Link title={t('organizational-reservation')} href="/organizational-reservation" className={linkClassNames} >
+                            {t('organizational-reservation')}
+                        </Link>
+                    </nav>
+
+                    {!!logo && <Link href="/">
+                        <Image src={logo} alt={siteName} width={115} height={48} className="block mx-auto mb-4" onContextMenu={e => { e.preventDefault() }} />
+                    </Link>}
+
+                    <div className="flex gap-4 justify-center mb-4">
+                        {t('support')}
+                        <a href={`tel:${props.contactInfo.tel}`} className="text-lg font-semibold" dir="ltr">
+                            {props.contactInfo.tel?.replace("+98", "0")}
+                        </a>
+                    </div>
+
+                    <div className="flex justify-center gap-3 items-center">
+                        {!!props.contactInfo.instagram && <a href={props.contactInfo.instagram || "#"} aria-label="Instagram" title="Instagram" >
+                            <Image src='/images/footer/Instagram.svg' width={30} height={30} className="block" alt="Instagram" />
+                        </a>}
+                        {!!props.contactInfo.twitter && <a href={props.contactInfo.twitter || "#"} aria-label="Twitter" title="Twitter" >
+                            <Image src='/images/footer/Twitter.svg' width={30} height={30} className="block" alt="Twitter" />
+                        </a>}
+                        {!!props.contactInfo.facebook && <a href={props.contactInfo.facebook || "#"} aria-label="Facebook" title="Facebook" >
+                            <Image src='/images/footer/Facebook.svg' width={30} height={30} className="block" alt="Facebook" />
+                        </a>}
+                        {!!props.contactInfo.linkedin && <a href={props.contactInfo.linkedin || "#"} aria-label="Linkedin" title="Linkedin" >
+                            <Image src='/images/footer/Linkedin.svg' width={30} height={30} className="block" alt="Linkedin" />
+                        </a>}
+                    </div>
+
                 </div>
 
-                <nav className="hidden sm:flex justify-center gap-6 text-xs mb-6">
-                    <Link title={t('contact-us')} href="/contact" className={linkClassNames} >
-                        {t('contact-us')}
-                    </Link>
-                    <Link title={t('faq')} href="/faq" className={linkClassNames} >
-                        {t('faq')}
-                    </Link>
-                    <Link title={t('terms')} href="/terms" className={linkClassNames} >
-                        {t('terms')}
-                    </Link>
-                    <Link title={t('privacy')} href="/privacy" className={linkClassNames} >
-                        {t('privacy')}
-                    </Link>
-                    <Link title={t("about-us")} href="/about" className={linkClassNames} >
-                        {t("about-us")}
-                    </Link>
-                    <Link title={t('organizational-reservation')} href="/organizational-reservation" className={linkClassNames} >
-                        {t('organizational-reservation')}
-                    </Link>
-                </nav>
+                {/* <!-- Yektanet --> */}
+                <script
+                    id="script_footer_15"
+                    dangerouslySetInnerHTML={{
+                        __html: `
+          !function (t, e, n) { t.yektanetAnalyticsObject = n, t[n] = t[n] || function () { t[n].q.push(arguments) }, t[n].q = t[n].q || []; var a = new Date, r = a.getFullYear().toString() + "0" + a.getMonth() + "0" + a.getDate() + "0" + a.getHours(), c = e.getElementsByTagName("script")[0], s = e.createElement("script"); s.id = "ua-script-GHp3ZhOz"; s.dataset.analyticsobject = n; s.async = 1; s.type = "text/javascript"; s.src = "/static/scripts/rg.complete.js?v=" + r, c.parentNode.insertBefore(s, c) }(window, document, "yektanet");
+        `,
+                    }}
+                />
+                {/* <!---start GOFTINO code---> */}
+                <script
+                    id="script_footer_16"
+                    dangerouslySetInnerHTML={{
+                        __html: `
+          !function(){var i="HVhVQP",a=window,d=document;function g(){var g=d.createElement("script"),s="https://www.goftino.com/widget/"+i,l=localStorage.getItem("goftino_"+i);g.async=!0,g.src=l?s+"?o="+l:s;d.getElementsByTagName("head")[0].appendChild(g);}"complete"===d.readyState?g():a.attachEvent?a.attachEvent("onload",g):a.addEventListener("load",g,!1);}();
+          `,
+                    }}
+                />
 
-                {!!logo && <Link href="/">
-                    <Image src={logo} alt={siteName} width={115} height={48} className="block mx-auto mb-4" onContextMenu={e => {e.preventDefault()}} />
-                </Link>}
 
-                <div className="flex gap-4 justify-center mb-4">
-                    {t('support')}
-                    <a href={`tel:${props.contactInfo.tel}`} className="text-lg font-semibold" dir="ltr">
-                        {props.contactInfo.tel?.replace("+98", "0")}
-                    </a>
-                </div>
+            </footer>
 
-                <div className="flex justify-center gap-3 items-center">
-                    <a href={props.contactInfo.instagram || "#"} aria-label="Instagram" title="Instagram" >
-                        <Image src='/images/footer/Instagram.svg' width={30} height={30} className="block" alt="Instagram" />
-                    </a>
-                    <a href={props.contactInfo.twitter || "#"} aria-label="Twitter" title="Twitter" >
-                        <Image src='/images/footer/Twitter.svg' width={30} height={30} className="block" alt="Twitter" />
-                    </a>
-                    <a href={props.contactInfo.facebook || "#"} aria-label="Facebook" title="Facebook" >
-                        <Image src='/images/footer/Facebook.svg' width={30} height={30} className="block" alt="Facebook" />
-                    </a>
-                    <a href={props.contactInfo.linkedin || "#"} aria-label="Linkedin" title="Linkedin" >
-                        <Image src='/images/footer/Linkedin.svg' width={30} height={30} className="block" alt="Linkedin" />
-                    </a>
-                </div>
-
-            </div>
-
-        </footer>
+            <GoToTop />
+        </>
     )
 }
 
