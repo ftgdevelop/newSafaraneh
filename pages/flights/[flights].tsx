@@ -32,7 +32,7 @@ export async function getServerSideProps(context: any) {
             adult: 1,
             child: 0,
             infant: 0,
-            departing: '2024-03-14'
+            departing: '2024-03-15'
     }
 
     let flyRoute = context.query.flights.split('-')

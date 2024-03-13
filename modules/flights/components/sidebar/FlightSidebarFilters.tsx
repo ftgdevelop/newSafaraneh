@@ -23,14 +23,14 @@ const FlightSidebarFilters: React.FC = () => {
     return (
         <>
             <div className={`w-1/4 h-fit shadow max-lg:fixed max-lg:top-0 max-lg:-right-1 max-lg:overflow-y-auto p-4 pt-2 divide-y space-y-2 max-lg:w-2/5 max-md:w-3/5
-            max-sm:w-10/12 max-lg:h-screen bg-white border-1 border-gray-200 rounded max-lg:rounded-none z-20 duration-300 max-lg:border-0
+            max-sm:w-11/12 max-lg:h-screen bg-white border-1 border-gray-200 rounded max-lg:rounded-none z-20 duration-300 max-lg:border-0
             ${OpenSide ? 'max-lg:translate-x-0' : 'max-lg:translate-x-full'}`}
             >
                 <div>
                     <h3 className="font-semibold">نتیجه جستجوی شما</h3>
                     <p className="text-2xs font-semibold">{FlightsData?.length} پرواز پیدا شد</p>
                 </div>
-                <FlightSidebarAirlines FlightsData={FlightsData} />            
+                <FlightSidebarAirlines FlightsData={FlightsData} />
                 <FlightSidebarHours />
                 <FlightSidebarPriceChange />
                 <FlightSidebarFlightType />

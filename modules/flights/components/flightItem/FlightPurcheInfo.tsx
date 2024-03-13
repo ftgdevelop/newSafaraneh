@@ -3,7 +3,8 @@ import { FlightType } from "../../types/flights";
 
 const FlightPurcheInfo: React.FC<any> = ({flightData , detail} : {flightData : FlightType, detail: boolean}) => {
     return (
-        <div className="text-left p-3 bg-white w-1/5 max-sm:w-2/5">
+        <div className="text-left p-3 bg-white w-1/5 max-sm:w-2/5 grid content-around">
+            <div>
             {
                 flightData?.capacity ? 
                 <p className="text-xl max-lg:text-lg max-sm:text-base font-bold leading-5">
@@ -17,7 +18,7 @@ const FlightPurcheInfo: React.FC<any> = ({flightData , detail} : {flightData : F
                     <button type="submit" className={`flex w-full justify-center bg-blue-800
                     duration-200 text-white p-1 font-semibold max-md:pr-2 max-md:pl-2 rounded-lg text-sm mt-2 whitespace-nowrap  hover:bg-blue-600 max-md:text-xs`}>
                         انتخاب پرواز
-                    <RightCaret className="w-5 fill-white my-auto rtl:rotate-180 max-sm:hidden " />
+                    <RightCaret className="w-5 fill-white my-auto rtl:rotate-180 max-sm:hidden" />
                     </button> :
                     <button type="submit" className={`flex w-full justify-center bg-gray-400 cursor-not-allowed
                     duration-200 text-white p-1 font-semibold max-md:pr-2 max-md:pl-2 rounded-lg text-sm mt-2 whitespace-nowrap`}>
@@ -29,22 +30,23 @@ const FlightPurcheInfo: React.FC<any> = ({flightData , detail} : {flightData : F
                 flightData?.capacity < 10 && flightData?.capacity !== 0 &&
                 <p className="text-3xs text-red-600">{flightData.capacity} صندلی باقیمانده</p>
             }
+            </div>    
             {
                 detail &&
-                <div className="text-3xs max-md:text-4xs text-gray-400 pt-5">
-                    <div className="flex justify-between">
+                <div className="text-3xs max-md:text-4xs text-gray-400 ">
+                    <div className="flex justify-between max-sm:block">
                         <p>بزرگسال (2)</p>
                         <p>0 ریال</p>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between max-sm:block">
                         <p>کودک (2)</p>
                         <p>0 ریال</p>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between max-sm:block">
                         <p>نوزاد (2)</p>
                         <p>0 ریال</p>
                     </div>
-                    <div className="flex justify-between text-sm max-sm:text-xs text-black font-semibold">
+                    <div className="flex justify-between text-sm max-sm:text-xs text-black font-semibold max-sm:block">
                         <p>مجموع</p>
                         <p>0 ریال</p>
                     </div>
