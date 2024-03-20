@@ -44,8 +44,7 @@ const Flights: NextPage<any> = ({ FlightsData } : {FlightsData : FlightType[]}) 
             <div className="w-3/4 max-lg:w-full">
                 <FlightSearchData FlightsData={FlightsData} />
                 <FlightMainFilters />
-                {   
-                    flightsInFilter?.length &&                 
+                    {
                         flightsInFilter?.map((flight : FlightType, index) => 
                             <FlightsFlightItem flightData={flight} key={index} />
                         )
