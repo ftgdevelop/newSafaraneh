@@ -116,9 +116,6 @@ export interface CipAvailabilityItemType {
     }[]
   }[];
 
-
-
-
   services: {
     id: number;
     name: string;
@@ -168,22 +165,21 @@ export interface CipAvailabilityItemType {
   //     "id": 0
   //   }
   // ],
-  // "transport": [
-  //   {
-  //     "name": "string",
-  //     "description": "string",
-  //     "boardPrice": 0,
-  //     "netPrice": 0,
-  //     "salePrice": 0,
-  //     "currencyType": "USD",
-  //     "picture": {
-  //       "path": "string",
-  //       "altAttribute": "string",
-  //       "titleAttribute": "string"
-  //     },
-  //     "id": 0
-  //   }
-  // ],
+  transport:
+  {
+    name?: string;
+    salePrice: number;
+    id: number;
+    picture: {
+      path?: string;
+      altAttribute?: string;
+      titleAttribute?: string;
+    };
+    // "description": "string",
+    // "boardPrice": 0,
+    // "netPrice": 0,
+    // "currencyType": "USD",
+  }[];
 }
 
 export interface CipValidateResponseType {
@@ -268,22 +264,6 @@ export interface CipValidateResponseType {
       "id": 0
     }
   ],
-  "transport": [
-    {
-      "name": "string",
-      "description": "string",
-      "boardPrice": 0,
-      "netPrice": 0,
-      "salePrice": 0,
-      "currencyType": "USD",
-      "picture": {
-        "path": "string",
-        "altAttribute": "string",
-        "titleAttribute": "string"
-      },
-      "id": 0
-    }
-  ],
   "passengerTypeServices": [
     {
       "passengerType": "Adult",
@@ -350,6 +330,21 @@ export interface CipValidateResponseType {
     // "rateId": 0,
     // "hourNetPrice": 0,
     // "hourBoardPrice": 0,
-  }[]
+  }[];
+  transport:
+  {
+    name?: string;
+    salePrice: number;
+    id: number;
+    picture: {
+      path?: string;
+      altAttribute?: string;
+      titleAttribute?: string;
+    };
+    // "description": "string",
+    // "boardPrice": 0,
+    // "netPrice": 0,
+    // "currencyType": "USD",
+  }[];
 
 }

@@ -95,7 +95,7 @@ const CipPassengerItem: React.FC<Props> = props => {
     const services = props.passengerServicesArray?.find(passengerServicesItem => passengerServicesItem.passengerType === passengerItem.type)?.services;
 
     return (
-        <div className="bg-white rounded-lg border border-neutral-300 mb-5 md:mb-8">
+        <div className="bg-white rounded-lg border border-neutral-300 mt-5">
 
             <div className="border-b border-neutral-300 px-5 py-2 flex justify-between">
                 <h4 className="font-semibold text-sm">مسافر {passengerIndex + 1}</h4>

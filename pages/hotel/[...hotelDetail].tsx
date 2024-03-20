@@ -24,7 +24,7 @@ import AnchorTabs from '@/modules/shared/components/ui/AnchorTabs';
 
 type Props = {
   allData: {
-    accommodation: {result: DomesticAccomodationType};
+    accommodation: { result: DomesticAccomodationType };
     score: HotelScoreDataType;
     page: PageDataType;
     hotel: DomesticHotelDetailType;
@@ -36,7 +36,7 @@ const HotelDetail: NextPage<Props> = props => {
 
   const { portalData, allData } = props;
 
-  const {accommodation, hotel: hotelData , page: pageData, score: hotelScoreData} = allData;
+  const { accommodation, hotel: hotelData, page: pageData, score: hotelScoreData } = allData;
 
   const accommodationData = accommodation.result;
 
@@ -82,7 +82,7 @@ const HotelDetail: NextPage<Props> = props => {
 
   if (portalData) {
     siteName = portalData.Phrases.find(item => item.Keyword === "Name")?.Value || "";
-    
+
     tel = portalData.Phrases.find(item => item.Keyword === "PhoneNumber")?.Value || "";
     twitter = portalData.Phrases.find(item => item.Keyword === "Twitter")?.Value || "";
     siteURL = portalData.PortalName || "";
@@ -92,13 +92,15 @@ const HotelDetail: NextPage<Props> = props => {
     return null;
   }
 
+  const configWebsiteUrl = process.env.SITE_NAME || "";
+
   return (
     <>
       <Head>
 
         {pageData && <>
-          <title>{pageData.PageTitle}</title>
-          {pageData.MetaTags?.map((item) => <meta name={item.Name} content={item.Content} key={item.Name} />)}
+          <title>{pageData.PageTitle?.replace("{0}",siteName)}</title>
+          {pageData.MetaTags?.map((item) => <meta name={item.Name} content={item.Content?.replaceAll("{0}", siteName)} key={item.Name} />)}
         </>}
 
 
@@ -130,21 +132,119 @@ const HotelDetail: NextPage<Props> = props => {
             <meta name="og:locale" content="fa-IR" />
             <meta name="twitter:card" content="summary" />
             <meta name="twitter:site" content={twitter} />
-            <meta name="twitter:title" content={hotelData.PageTitle} />
+            <meta name="twitter:title" content={hotelData.PageTitle?.replaceAll("{0}", siteName)} />
             <meta
               name="twitter:description"
-              content={hotelData.MetaDescription}
+              content={hotelData.MetaDescription?.replaceAll("{0}", siteName)}
             />
           </>
         )}
 
+
+        <script
+          id="script_detail_1"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: `{
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "name": "${hotelData?.PageTitle?.replaceAll("{0}", siteName)}",
+            "description": "${hotelData?.BriefDescription}",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "${hotelData?.Address}"
+            },
+            "checkinTime": "14:00",
+            "checkoutTime": "14:00",
+            "telephone": "021-26150051",
+            "image": "${hotelData?.ImageUrl}",
+            "starRating": {
+              "@type": "Rating",
+              "ratingValue": "${hotelData?.HotelRating}"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "${hotelScoreData.Satisfaction !== 0 ? hotelScoreData.Satisfaction : '100'
+              }",
+              "reviewCount": "${hotelScoreData.CommentCount !== 0 ? hotelScoreData.CommentCount : '1'
+              }",
+              "worstRating": "0",
+              "bestRating": "100"
+            }
+          }`,
+          }}
+        />
+
+        <script
+          id="script_detail_2"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: `{
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement":
+            [
+              {
+              "@type": "ListItem",
+              "position": 1,
+              "item":
+              {
+                "@id": "${configWebsiteUrl}",
+                "name": "صفحه اصلی"
+                }
+              },
+              {
+              "@type": "ListItem",
+              "position": 2,
+              "item":
+              {
+                "@id": "${configWebsiteUrl}/fa/hotels/${hotelData && hotelData.CityName
+              }/location-${hotelData && hotelData.CityId}",
+                "name": "هتل های ${hotelData && hotelData.CityName}"
+              }
+              }
+            ]
+          }`,
+          }}
+        />
+
+        {accommodationData && accommodationData.faqs.length !== 0 ? (
+          <script
+            id="script_detail_3"
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: `
+              {"@context":"https://schema.org",
+                "@type":"FAQPage",
+                "mainEntity":[
+                  ${accommodationData.faqs &&
+                accommodationData.faqs.map(
+                  (item) => `{
+                    "@type":"Question",
+                    "name":"${item.question && item.question}",
+                    "acceptedAnswer":{
+                        "@type":"Answer",
+                        "text":"${item.answer &&
+                    item.answer
+                      .replace(/<\/?[^>]+(>|$)/g, '')
+                      .replace(/&zwnj;/g, '')
+                    }"
+                    }
+                  }`,
+                )
+                }
+                ]
+              }`,
+            }}
+          />
+        ) : null}
       </Head>
 
       <div className="max-w-container mx-auto px-3 sm:px-5 pt-5">
         <div className='bg-white p-3'>
           {!!hotelData.IsCovid && <div className='bg-emerald-700 leading-4 p-3 sm:p-4 text-white text-xs sm:text-sm rounded-md flex flex-wrap gap-2 items-center m-1 mb-3'>
             <Phone className='w-5 h-5 sm:w-6 sm:h-6 fill-current block' />
-            جهت رزرو با شماره <a dir="ltr" href={`tel:${tel?.replace("021","+9821") || "+982126150051" }`} className='underline text-sm sm:text-base'> {tel || "02126150051"} </a> تماس بگیرید.
+            جهت رزرو با شماره <a dir="ltr" href={`tel:${tel?.replace("021", "+9821") || "+982126150051"}`} className='underline text-sm sm:text-base'> {tel || "02126150051"} </a> تماس بگیرید.
           </div>}
 
           <BackToList checkin={checkin} checkout={checkout} cityId={hotelData.CityId} cityName={hotelData.CityName} />

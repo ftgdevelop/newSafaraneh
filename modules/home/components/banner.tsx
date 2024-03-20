@@ -26,12 +26,12 @@ const Banner :React.FC = () => {
           label: (<div className='text-center'> <Apartment className='w-6 h-6 fill-current block mx-auto mb-1' /> {t('domestic-hotel')} </div>),
           children: <SearchForm wrapperClassName='py-5' defaultDates={domesticHotelDefaultDates} />,
         },
-        {
-          key: '2',
-          label: (<div className='text-center'> <Travel className='w-6 h-6 fill-current block mx-auto mb-1' /> {t('domestic-flight')} </div>),
-          children: (<div className='py-20'></div>),
-          href:"https://tickets.safaraneh.com/fa/flights-home"
-        }
+        // {
+        //   key: '2',
+        //   label: (<div className='text-center'> <Travel className='w-6 h-6 fill-current block mx-auto mb-1' /> {t('domestic-flight')} </div>),
+        //   children: (<div className='py-20'></div>),
+        //   href:"https://tickets.safaraneh.com/fa/flights-home"
+        // }
     ];
 
     return(

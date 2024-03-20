@@ -135,9 +135,9 @@ const CipPassengersInformation: React.FC<Props> = props => {
     }
 
     return (
-        <div>
-            <div className="flex justify-between items-center mb-4">
-                <strong className="font-semibold text-base block sm:col-span-2 md:col-span-5 "> مشخصات مسافران </strong>
+        <div className='py-2 md:py-5'>
+            <div className="flex justify-between items-center">
+                <strong className="font-semibold text-lg block "> مشخصات مسافران </strong>
                 <div>
                     <button
                         type="button"

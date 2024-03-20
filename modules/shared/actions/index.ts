@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Header,ServerAddress, Hotel , Reserve} from "../../../enum/url";
 import { ReserveType } from '../types/common';
 
-export const getpageByUrl = async (url: string, acceptLanguage: string = "fa-IR") => {
+export const getPageByUrl = async (url: string, acceptLanguage: string = "fa-IR") => {
     try {
         let response = await axios.get(
             `${ServerAddress.Type}${ServerAddress.Hotel_Main}${Hotel.GetPageByUrl}?url=${url}&isNewVisitor=true`,
