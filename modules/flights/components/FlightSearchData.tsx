@@ -1,20 +1,18 @@
 import { useRouter } from "next/router";
 import { ArrowLeft } from "../../shared/components/ui/icons";
-import { useContext } from "react";
-import { FlightsDataContext } from "@/pages/flights/[flights]";
 import { FlightType } from "../types/flights";
 
-const FlightSearchData: React.FC = () => {
+const FlightSearchData: React.FC<any> = ({FlightsData} : {FlightsData : FlightType[]}) => {
     const query: any = useRouter().query
-    const FlightData: FlightType[] = useContext(FlightsDataContext)
+
     
-    const departureCity = FlightData.find(item => item.departureAirport?.city?.code == query.flights.split('-')[0])?.departureAirport?.city?.name
-    const arrivalCity = FlightData.find(item => item.arrivalAirport?.city?.code == query.flights.split('-')[1])?.arrivalAirport?.city?.name
+    const departureCity = FlightsData.find(item => item.departureAirport?.city?.code == query.flights.split('-')[0])?.departureAirport?.city?.name
+    const arrivalCity = FlightsData.find(item => item.arrivalAirport?.city?.code == query.flights.split('-')[1])?.arrivalAirport?.city?.name
 
 
     return (
         <div className="flex flex-wrap h-fit relative gap-10 max-md:gap-5 max-sm:gap-4 cursor-pointer
-            max-sm:justify-around max-sm:border-2 max-sm:border-gray-200 max-sm:p-3 rounded">
+            max-sm:justify-around max-sm:border-1 max-sm:border-gray-200 max-sm:p-3 rounded">
                 
                     <div>
                         <p className="text-sm max-md:text-2xs">{query.flights.split('-')[0]}</p>
@@ -26,7 +24,7 @@ const FlightSearchData: React.FC = () => {
                         <p className="text-gray-500 text-sm max-lg:text-xs max-md:text-3xs">{arrivalCity}</p>
                     </div>
 
-                    <span className="border-e-1 border-gray-300 h-14 max-sm:hidden"></span>
+                    <span className="border-e-1 border-gray-200 h-14 max-sm:hidden"></span>
             
                     <div>
                         <p className="text-xs max-lg:text-4xs text-gray-400">تاریخ رفت</p>

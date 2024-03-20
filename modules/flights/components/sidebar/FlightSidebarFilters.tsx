@@ -1,12 +1,11 @@
-import { useContext, useEffect, useState } from "react";
-import { FlightsDataContext } from "@/pages/flights/[flights]";
+import { useEffect, useState } from "react";
 import FlightSidebarAirlines from "./FlightSidebarAirlines";
-import FlightSidebarHours from "./FlightSidebarHours";
+import FlightSidebarHours from "./FlightSidebarTime";
 import FlightSidebarFlightType from "./FlightSidebarFlightType";
 import FlightSidebarPriceChange from "./FlightSidebarPriceRange";
+import { FlightType } from "../../types/flights";
 
-const FlightSidebarFilters: React.FC = () => {
-    const FlightsData = useContext(FlightsDataContext)   
+const FlightSidebarFilters: React.FC<any> = ({ FlightsData, flightsInFilterLengths }: {FlightsData: FlightType[], flightsInFilterLengths: number}) => {
     const [OpenSide, setOpenSide] = useState<boolean>(false)
     
     useEffect(() => {
@@ -22,18 +21,22 @@ const FlightSidebarFilters: React.FC = () => {
 
     return (
         <>
-            <div className={`w-1/4 h-fit shadow max-lg:fixed max-lg:top-0 max-lg:-right-1 max-lg:overflow-y-auto p-4 pt-2 divide-y space-y-2 max-lg:w-2/5 max-md:w-3/5
+            <div className={`w-1/4 h-fit max-lg:fixed max-lg:top-0 max-lg:-right-1 max-lg:overflow-y-auto p-4 pt-2 divide-y space-y-2 max-lg:w-2/5 max-md:w-3/5
             max-sm:w-11/12 max-lg:h-screen bg-white border-1 border-gray-200 rounded max-lg:rounded-none z-20 duration-300 max-lg:border-0
             ${OpenSide ? 'max-lg:translate-x-0' : 'max-lg:translate-x-full'}`}
             >
                 <div>
                     <h3 className="font-semibold">نتیجه جستجوی شما</h3>
-                    <p className="text-2xs font-semibold">{FlightsData?.length} پرواز پیدا شد</p>
+                    {
+                        flightsInFilterLengths ?
+                            <p className="text-2xs font-semibold">{flightsInFilterLengths} پرواز پیدا شد</p> :
+                            <p className="text-2xs font-semibold">پروازی پیدا نشد</p>
+                    }
                 </div>
                 <FlightSidebarAirlines FlightsData={FlightsData} />
                 <FlightSidebarHours />
                 <FlightSidebarPriceChange />
-                <FlightSidebarFlightType />
+                <FlightSidebarFlightType FlightsData={FlightsData} />
                 </div>
  
             <div className={`bg-black/75 z-10 fixed top-0 left-0 backdrop-blur contrast-100 ${!OpenSide ? 'hidden' : 'max-lg:w-full h-full'}`}

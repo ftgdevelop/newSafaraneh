@@ -40,11 +40,11 @@ export interface FlightType {
             name?: string;
         }
         flightType?: string;
-        id?: number;
     }
     cabinClass: {
         name: string;
     }
+    id?: number;
     departureTime?: string;
     arrivalTime?: string;
     capacity: number;

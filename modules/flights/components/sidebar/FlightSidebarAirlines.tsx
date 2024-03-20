@@ -1,6 +1,9 @@
 import Checkbox from "@/modules/shared/components/ui/Checkbox";
 import { FlightType } from "../../types/flights";
 import Image from "next/image";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/modules/shared/store";
+import { setAirlineFilter } from "../../store/flightsSlice";
 
 type uniqAirlinesType = {
     airlineName: string;
@@ -11,7 +14,8 @@ type uniqAirlinesType = {
 }
 
 const FlightSidebarAirlines: React.FC<any> = ({ FlightsData }: { FlightsData: FlightType[] }) => {
-    
+    const airlinesFilter = useSelector((state: RootState) => state.flightFilters.filterOption.airlineOption)
+    const dispatch = useDispatch()
 
     const airlines : uniqAirlinesType[] = [];
     FlightsData?.map((item: any) => {
@@ -40,12 +44,33 @@ const FlightSidebarAirlines: React.FC<any> = ({ FlightsData }: { FlightsData: Fl
         }
     })
 
+    const CheckboxOnchange = (cheched : boolean, airlineName : string) => {
+        if (cheched) {
+            dispatch(setAirlineFilter(airlinesFilter.concat(airlineName)))
+        }
+        else if (airlinesFilter.length && !cheched) {
+            dispatch(setAirlineFilter(airlinesFilter.filter(item => item !== airlineName)))
+        }
+    }
+
     return (
             <div className="pt-2 pb-2">
+                <div className="flex justify-between items-center">
                     <h5 className="text-sm font-semibold mb-2">ایرلاین ها</h5>
+                    {
+                        airlinesFilter.length ?
+                        <button type="button" className="text-3xs bg-red-500 text-white pl-2 pr-2 rounded"
+                        onClick={() => dispatch(setAirlineFilter([]))} 
+                        >
+                            حذف
+                        </button> :
+                        <p></p>
+                    }
+                </div>
                     {
                         airlines.map(flight => 
                             <Checkbox
+                            key={flight.airlineName}
                             label={
                                (<div className="flex w-full justify-between">
                                 <div className="flex gap-1">
@@ -62,12 +87,13 @@ const FlightSidebarAirlines: React.FC<any> = ({ FlightsData }: { FlightsData: Fl
                                     }
                                 </div>
                                 )}
-                                onChange={(c : any) => null}
-                                value=""
-                            />  
-                        ) 
+                                onChange={e => CheckboxOnchange(e , flight?.airlineName)}
+                                value={flight.airlineName}
+                                checked= {airlinesFilter.includes(flight.airlineName) ? true : false}
+                            />
+                        )
                     }
-        </div>
+            </div>
     )
 }
 

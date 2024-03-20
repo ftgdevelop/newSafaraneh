@@ -3,7 +3,7 @@ import { FlightType } from "../../types/flights";
 
 const FlightPurcheInfo: React.FC<any> = ({flightData , detail} : {flightData : FlightType, detail: boolean}) => {
     return (
-        <div className="text-left p-3 bg-white w-1/5 max-sm:w-2/5 grid content-around">
+        <div className="text-left p-3 bg-white w-1/5 max-sm:w-2/6 grid content-around">
             <div>
             {
                 flightData?.capacity ? 
@@ -33,7 +33,7 @@ const FlightPurcheInfo: React.FC<any> = ({flightData , detail} : {flightData : F
             </div>    
             {
                 detail &&
-                <div className="text-3xs max-md:text-4xs text-gray-400 ">
+                <div className="text-3xs max-md:text-4xs text-gray-400 max-lg:text-black">
                     <div className="flex justify-between max-sm:block">
                         <p>بزرگسال (2)</p>
                         <p>0 ریال</p>
