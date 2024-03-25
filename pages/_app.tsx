@@ -42,6 +42,7 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
     if (locale) {
       router.push(router.asPath, router.asPath, { locale: locale });
     }
+    console.log("_app mounted!")
   }, []);
 
 
