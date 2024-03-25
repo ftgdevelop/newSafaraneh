@@ -9,47 +9,39 @@ import FlightMainFilters from "@/modules/flights/components/FlightsMainFilters";
 import FlightsFlightItem from "@/modules/flights/components/flightItem/FlightFlightItem";
 import { useSelector } from "react-redux";
 import { RootState } from "@/modules/shared/store";
+import { SidebarFilterChange } from "@/modules/flights/templates/SidebarFilterChange";
+import { SortHightestPrice, SortLowestPrice, SortTime } from "@/modules/flights/templates/SortFlightItem";
 
 const Flights: NextPage<any> = ({ FlightsData } : {FlightsData : FlightType[]}) => {
     const SidebarFilter = useSelector((state: RootState) => state.flightFilters.filterOption)
-    const [flightsInFilter, setFlightsInFilter] = useState<FlightType[]>()
-
+    let [flightsInFilter, setFlightsInFilter] = useState<FlightType[]>(FlightsData)
+    let [sortFlights, setSortFlights] = useState('LowestPrice')
+    console.log(FlightsData);
+    
     useEffect(() => {
-        let list = FlightsData
-        if (SidebarFilter.airlineOption.length) {
-            list = list.filter((item: any) => SidebarFilter.airlineOption.includes(item.airline?.name))
-        }
-        if (SidebarFilter.flightHoursOption.length) {
-            list = list.filter((item: any) => {
-                let time = item.departureTime?.split('T')[1].split(':')[0]
-                if (time.split('')[0] == 0) {
-                    time = +time.split('')[1]
-                }
-                else time = +time
-                let itemOnFilterTime = SidebarFilter.flightHoursOption.map(i => time >= i.minTime && time < i.maxTime).find(a => a == true)
-                return itemOnFilterTime
-            })
-        }
-        if (SidebarFilter.cabinClassOption.length) {
-            list = list.filter(item => SidebarFilter.cabinClassOption.includes(item.cabinClass.name))
-        }
-        if (SidebarFilter.ticketTypeOption.length) {
-            list = list.filter(item => SidebarFilter.ticketTypeOption.includes(item.flightType))
-        }
-        setFlightsInFilter(list)
-    },[SidebarFilter])
+        SidebarFilterChange(FlightsData, SidebarFilter, setFlightsInFilter)
+        if (sortFlights == 'HighestPrice') setFlightsInFilter(prev => prev.sort(SortHightestPrice))
+        if (sortFlights == 'Time') setFlightsInFilter(prev => prev.sort(SortTime))
+        if (sortFlights == 'LowestPrice') setFlightsInFilter(prev => prev.sort(SortLowestPrice))
+    }, [SidebarFilter])
+
     return (
         <div className="max-w-container m-auto p-5 max-md:p-3 flex gap-5">
             <FlightSidebarFilters FlightsData={FlightsData} flightsInFilterLengths={flightsInFilter?.length} />
             <div className="w-3/4 max-lg:w-full">
                 <FlightSearchData FlightsData={FlightsData} />
-                <FlightMainFilters />
-                    {
-                        flightsInFilter?.map((flight : FlightType, index) => 
-                            <FlightsFlightItem flightData={flight} key={index} />
+                <FlightMainFilters sortFlights={sortFlights} changeSortFlights={(e: string) => setSortFlights(e)} />
+                {
+                    flightsInFilter?.sort((a: FlightType,b:FlightType) :any => {
+                        if (sortFlights == "LowestPrice") return SortLowestPrice(a,b)
+                        if (sortFlights == "HighestPrice") return SortHightestPrice(a,b)
+                        if (sortFlights == "Time") return SortTime(a,b)
+                        return SortLowestPrice
+                        }).map((flight : FlightType) => 
+                            <FlightsFlightItem flightData={flight} key={flight.flightKey} />
                         )
-                    }
-                </div>
+                }
+            </div>
         </div>
     )
 }
@@ -57,14 +49,15 @@ const Flights: NextPage<any> = ({ FlightsData } : {FlightsData : FlightType[]}) 
 export default Flights;
 
 export async function getServerSideProps(context: any) {
-    let a = new Date();
-    const date = `${a.getFullYear()}-0${a.getMonth() + 2}-${a.getDay() + 9}`
+    let getDate = new Date();
+    const date = `${getDate.getFullYear()}-0${getDate.getMonth() + 1}-${getDate.getDay() + 25}`
+    
     context.query = {
             ...context.query,
             adult: 1,
             child: 0,
             infant: 0,
-            departing: '2024-03-25'
+            departing: '2024-03-27'
     }
 
     let flyRoute = context.query.flights.split('-')

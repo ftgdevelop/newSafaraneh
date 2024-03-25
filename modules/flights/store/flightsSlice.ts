@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 type FlightsFilters = {
     filterOption: {
         airlineOption: string[],
-        flightHoursOption: { minTime: number, maxTime: number, filterName: string }[],
+        flightTimeOption: { minTime: number, maxTime: number, filterName: string }[],
         cabinClassOption: string[],
         ticketTypeOption: string[]
     }
@@ -12,7 +12,7 @@ type FlightsFilters = {
 const initialState: FlightsFilters = {
     filterOption: {
         airlineOption: [],
-        flightHoursOption: [],
+        flightTimeOption: [],
         cabinClassOption: [],
         ticketTypeOption: []
     }
@@ -26,7 +26,7 @@ export const flightSlice = createSlice({
             state.filterOption.airlineOption = action.payload
         },
         setFlightTimeFilter: (state, action) => {
-            state.filterOption.flightHoursOption = action.payload
+            state.filterOption.flightTimeOption = action.payload
         },
         setCabinClassFilter: (state, action) => {
             state.filterOption.cabinClassOption = action.payload

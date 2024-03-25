@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setFlightTimeFilter } from "../../store/flightsSlice";
 
 const FlightSidebarTime: React.FC = () => {
-    const FlightTimeFilter = useSelector((state: RootState) => state.flightFilters.filterOption.flightHoursOption)
+    const FlightTimeFilter = useSelector((state: RootState) => state.flightFilters.filterOption.flightTimeOption)
     const dispatch = useDispatch()
 
     const CheckboxOnchange = (checked: any, time: number[], filterName: string) => {

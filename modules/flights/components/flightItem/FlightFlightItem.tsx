@@ -9,7 +9,7 @@ const FlightsFlightItem: React.FC<any> = ({ flightData } : {flightData : FlightT
     return (
         <>
             <div className="flex mt-6 border-1 shadow-sm border-gray-200">
-                <FlightDataItem flightData={flightData} detail={OpenDetail} changeOpenDetail={(parametr : boolean) => setOpenDetail(parametr) } />
+                <FlightDataItem flightData={flightData} detail={OpenDetail} changeOpenDetail={(open : boolean) => setOpenDetail(open) } />
                 <FlightPurcheInfo flightData={flightData} detail={OpenDetail} />
             </div>
         </>

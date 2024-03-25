@@ -3,16 +3,16 @@ import Image from "next/image"
 import FlightDetailItem from "./FlightDetail"
 import { FlightType } from "../../types/flights"
 
-const FlightDataItem: React.FC<any> = ({flightData , detail , changeOpenDetail} : {flightData : FlightType, detail : any, changeOpenDetail : any}) => {
+const FlightDataItem: React.FC<any> = ({flightData , detail , changeOpenDetail} : {flightData : FlightType, detail : boolean, changeOpenDetail : any}) => {
 
     const arrivalTime = flightData?.arrivalTime?.split('T')[1].split(":").slice(0,2).join(":")
     const departureTime = flightData?.departureTime?.split('T')[1].split(":").slice(0, 2).join(":")    
 
     return (
         <div className="w-4/5 border-e-1 border-gray-300 border-dashed relative">
-            <span className="w-6 h-6 bg-gray-100 rounded-full absolute -left-3 -top-2"></span>    
+            <span className="w-6 h-6 bg-gray-100 rounded-full absolute -left-3 -top-2"></span>
             <div className="grid grid-cols-5 bg-white items-center p-6 max-md:pl-2 max-md:pr-2 max-sm:p-3 max-sm:grid-cols-3 max-sm:justify-items-center"
-            onClick={e => changeOpenDetail(!detail)}>
+            onClick={e => changeOpenDetail((prev:boolean) => !prev)}>
                 <div className="flex text-3xs max-sm:text-4xs leading-5 max-sm:col-span-3 max-sm:justify-self-start max-sm:pb-3">
                     <Image src={flightData?.airline?.picture?.path || ''}
                         alt={flightData?.airline?.picture?.altAttribute || ''}
@@ -46,14 +46,14 @@ const FlightDataItem: React.FC<any> = ({flightData , detail , changeOpenDetail} 
                 <span className="w-6 h-6 bg-gray-100 rounded-full absolute -left-3 -bottom-2"></span>
             </div>
                   
-                    {detail && <FlightDetailItem FlightsData={flightData} />}
+                {detail && <FlightDetailItem FlightsData={flightData} />}
                     
-                    <button type="submit" className="text-xs max-sm:text-2xs bg-gray-100 text-gray-500 flex w-full justify-center"
+                <button type="submit" className="text-xs max-sm:text-2xs bg-gray-100 text-gray-500 flex w-full justify-center"
                     onClick={e => changeOpenDetail(!detail)}>
                     {!detail ? 'جزییات پرواز' : 'بستن جزییات پرواز'}
                     <span><RightCaret className={`w-5 mt-1 ${detail ? '-rotate-90' : 'rotate-90'} fill-gray-500`} /></span>
                 </button>
-                </div>
+        </div>
     )
 }
 

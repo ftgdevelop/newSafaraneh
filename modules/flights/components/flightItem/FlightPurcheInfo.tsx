@@ -7,8 +7,8 @@ const FlightPurcheInfo: React.FC<any> = ({flightData , detail} : {flightData : F
             <div>
             {
                 flightData?.capacity ? 
-                <p className="text-xl max-lg:text-lg max-sm:text-base font-bold leading-5">
-                <span className="text-2xs font-bold block">ریال</span>
+                <p className="text-xl max-lg:text-lg max-sm:text-sm font-bold leading-5 max-sm:leading-4">
+                <span className="text-2xs max-sm:text-3xs font-bold block">ریال</span>
                 {flightData?.adultPrice}
                 </p> :
                 <p className="text-xs max-md:text-2xs font-semibold text-gray-400">ظرفیت تکمیل است</p>
@@ -36,19 +36,19 @@ const FlightPurcheInfo: React.FC<any> = ({flightData , detail} : {flightData : F
                 <div className="text-3xs max-md:text-4xs text-gray-400 max-lg:text-black">
                     <div className="flex justify-between max-sm:block">
                         <p>بزرگسال (2)</p>
-                        <p>0 ریال</p>
+                        <p>{2 * flightData.adultPrice} ریال</p>
                     </div>
                     <div className="flex justify-between max-sm:block">
                         <p>کودک (2)</p>
-                        <p>0 ریال</p>
+                        <p>{2 * flightData.adultPrice} ریال</p>
                     </div>
                     <div className="flex justify-between max-sm:block">
                         <p>نوزاد (2)</p>
-                        <p>0 ریال</p>
+                        <p>{2 * flightData.adultPrice} ریال</p>
                     </div>
                     <div className="flex justify-between text-sm max-sm:text-xs text-black font-semibold max-sm:block">
                         <p>مجموع</p>
-                        <p>0 ریال</p>
+                        <p>{Math.round(2 * flightData.adultPrice + 2 * flightData.adultPrice + 2 * flightData.adultPrice)} ریال</p>
                     </div>
                 </div>
             }

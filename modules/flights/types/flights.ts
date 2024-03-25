@@ -51,4 +51,5 @@ export interface FlightType {
     flightType: string;
     maxAllowedBaggage: number;
     flightNumber: string;
+    flightKey: string;
 }
