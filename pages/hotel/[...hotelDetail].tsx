@@ -98,27 +98,22 @@ const HotelDetail: NextPage<Props> = props => {
     <>
       <Head>
 
-        {pageData && <>
-          <title>{pageData.PageTitle?.replace("{0}",siteName)}</title>
-          {pageData.MetaTags?.map((item) => <meta name={item.Name} content={item.Content?.replaceAll("{0}", siteName)} key={item.Name} />)}
-        </>}
-
-
         {hotelData && (
-          <>
+          <>          
+            <title>{hotelData.PageTitle?.replace("{0}",siteName)}</title>
+            
+            <meta name="description" content={hotelData.MetaDescription?.replaceAll("{0}", siteName)} />
+            <meta name="keywords" content={hotelData.MetaKeyword?.replaceAll("{0}", siteName)} />
+
             <meta property="og:site_name" content={siteName} key="site_name" />
             <meta
               property="og:title"
-              content={hotelData.PageTitle}
+              content={hotelData.PageTitle?.replace("{0}",siteName)}
               key="title"
             ></meta>
             <meta
-              name="description"
-              content={hotelData.MetaDescription}
-            ></meta>
-            <meta
               property="og:description"
-              content={hotelData.MetaDescription}
+              content={hotelData.MetaDescription?.replace("{0}",siteName)}
               key="description"
             ></meta>
             <meta property="og:type" content="website"></meta>
@@ -139,7 +134,6 @@ const HotelDetail: NextPage<Props> = props => {
             />
           </>
         )}
-
 
         <script
           id="script_detail_1"

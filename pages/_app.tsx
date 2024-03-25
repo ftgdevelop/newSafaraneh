@@ -42,6 +42,7 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
     if (locale) {
       router.push(router.asPath, router.asPath, { locale: locale });
     }
+    console.log("_app mounted!")
   }, []);
 
 
@@ -125,7 +126,7 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
           content="dL12BD7zy5YUBkz4xPLy-hKkz1PPUyStFEiXgJks_h0"
         />
 
-        <link rel="icon" type="image/x-icon" href={favIconLink} />
+        <link rel="shortcut icon" href={favIconLink} />
 
         {!!portalTitle && <title>{portalTitle}</title>}
         {!!portalKeywords && <meta name="keywords" content={portalKeywords} />}

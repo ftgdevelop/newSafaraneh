@@ -5,13 +5,15 @@ type Props = {
     title: React.ReactNode;
     WrapperClassName?: string;
     type2?:boolean;
+    initiallyOpen?:boolean;
+    updateContent?:string;
 }
 
 const Accordion: React.FC<Props> = props => {
 
     const contentRef = useRef<HTMLDivElement>(null);
 
-    const [open, setOpen] = useState<boolean>(false);
+    const [open, setOpen] = useState<boolean>(props.initiallyOpen || false);
 
     const {content, title, WrapperClassName, type2} = props;
 
@@ -23,7 +25,7 @@ const Accordion: React.FC<Props> = props => {
         } else {
             contentRef.current!.style.maxHeight = "0";
         }
-    }, [open]);
+    }, [open, props.updateContent]);
 
     return (
         <div className={`${type2 ? "":"border border-neutral-200 rounded-lg"} text-sm sm:text-base text-neutral-700 ${WrapperClassName || ""}`}>
