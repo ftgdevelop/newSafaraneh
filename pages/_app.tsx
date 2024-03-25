@@ -126,17 +126,7 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
           content="dL12BD7zy5YUBkz4xPLy-hKkz1PPUyStFEiXgJks_h0"
         />
 
-
         <link rel="shortcut icon" href={favIconLink} />
-
-        <link rel="icon" type="image/png" sizes="16x16" href="/icons/16.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/icons/32.png" />
-        <link rel="icon" type="image/png" sizes="48x48" href="/icons/48.png" />
-        <link rel="icon" type="image/png" sizes="192x192" href="/icons/192.png" />
-        <link rel="apple-touch-icon" type="image/png" sizes="167x167" href="/icons/167.png" />
-        <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/icons/180.png" />
-        <link rel="mask-icon" href="/icons/safaraneh.svg"></link>
-
 
         {!!portalTitle && <title>{portalTitle}</title>}
         {!!portalKeywords && <meta name="keywords" content={portalKeywords} />}

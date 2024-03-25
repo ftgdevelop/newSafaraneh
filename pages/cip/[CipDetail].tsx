@@ -28,6 +28,9 @@ import CipFacilities from '@/modules/cip/components/cip-detail/CipFacilities';
 import { useRouter } from 'next/router';
 import CipFAQ from '@/modules/cip/components/cip-detail/CipFAQ';
 import CipPriceDetails from '@/modules/cip/components/cip-detail/CipPriceDetails';
+import CipDiscountForm from '@/modules/cip/components/cip-detail/CipDiscountForm';
+import { validateDiscountCode } from '@/modules/payment/actions';
+import CipAvailibilityItem from '@/modules/cip/components/cip-detail/CipAvailibilityItem';
 
 const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { portalData?: PortalDataType, airportData?: CipGetAirportByUrlResponseType, availabilities?: { latitude: string; longitude: string; availability: CipAvailabilityItemType[] } }) => {
 
@@ -46,6 +49,246 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
         siteURL = portalData.PortalName || "";
     }
 
+    const availabilities2 = [
+        {
+          "adults": 1,
+          "children": 0,
+          "accompanying": 0,
+          "name": "خدمات کامل Cip برای پرواز داخلی",
+          "remark": null,
+          "description": null,
+          "boardPrice": 3900000,
+          "netPrice": 3315000,
+          "salePrice": 3745950,
+          "passengers": [
+            {
+              "passengerType": "Adult",
+              "boardPrice": 3900000,
+              "netPrice": 3315000,
+              "salePrice": 3745950,
+              "currencyType": "IRR",
+              "id": 2366
+            },
+            {
+              "passengerType": "Accompanying",
+              "boardPrice": 1280000,
+              "netPrice": 1088000,
+              "salePrice": 1229440,
+              "currencyType": "IRR",
+              "id": 2367
+            },
+            {
+              "passengerType": "Child",
+              "boardPrice": 1950000,
+              "netPrice": 1657500,
+              "salePrice": 1872975,
+              "currencyType": "IRR",
+              "id": 2368
+            }
+          ],
+          "services": [
+            {
+              "name": "خدمات ویژه",
+              "description": null,
+              "hourDescription": null,
+              "extraDescription": null,
+              "title": "خدمات ویژه ",
+              "type": "SpecialService",
+              "priceType": "AllService",
+              "boardPrice": 1500000,
+              "netPrice": 1275000,
+              "salePrice": 1384013,
+              "currencyType": "IRR",
+              "passengerType": null,
+              "extraSalePrice": null,
+              "extraNetPrice": null,
+              "extraBoardPrice": null,
+              "rateId": 0,
+              "hourSalePrice": null,
+              "hourNetPrice": null,
+              "hourBoardPrice": null,
+              "picture": {
+                "path": "https://cdn2.safaraneh.com/images/cip/services/default.jpg",
+                "altAttribute": "default",
+                "titleAttribute": "default service"
+              },
+              "count": 0,
+              "extraCount": null,
+              "hourCount": null,
+              "id": 1049
+            },
+            {
+              "name": "FAST TRACK",
+              "description": null,
+              "hourDescription": null,
+              "extraDescription": null,
+              "title": "FAST TRACK برای پروازهای داخلی",
+              "type": "FastTrack",
+              "priceType": "AllService",
+              "boardPrice": 1450000,
+              "netPrice": 1232500,
+              "salePrice": 1392725,
+              "currencyType": "IRR",
+              "passengerType": null,
+              "extraSalePrice": null,
+              "extraNetPrice": null,
+              "extraBoardPrice": null,
+              "rateId": 0,
+              "hourSalePrice": null,
+              "hourNetPrice": null,
+              "hourBoardPrice": null,
+              "picture": {
+                "path": "https://cdn2.safaraneh.com/images/cip/services/default.jpg",
+                "altAttribute": "default",
+                "titleAttribute": "default service"
+              },
+              "count": 0,
+              "extraCount": null,
+              "hourCount": null,
+              "id": 1045
+            }
+          ],
+          "transport": [],
+          "passengerTypeServices": [
+            {
+              "passengerType": "Adult",
+              "services": []
+            },
+            {
+              "passengerType": "Child",
+              "services": []
+            },
+            {
+              "passengerType": "Infant",
+              "services": []
+            },
+            {
+              "passengerType": "Accompanying",
+              "services": []
+            }
+          ],
+          "id": 10
+        },
+        {
+          "adults": 1,
+          "children": 0,
+          "accompanying": 0,
+          "name": "خدمات کامل Cip برای پرواز خارجی",
+          "remark": null,
+          "description": null,
+          "boardPrice": 4900000,
+          "netPrice": 4165000,
+          "salePrice": 4643975,
+          "passengers": [
+            {
+              "passengerType": "Adult",
+              "boardPrice": 4900000,
+              "netPrice": 4165000,
+              "salePrice": 4643975,
+              "currencyType": "IRR",
+              "id": 2363
+            },
+            {
+              "passengerType": "Accompanying",
+              "boardPrice": 1280000,
+              "netPrice": 1088000,
+              "salePrice": 1229440,
+              "currencyType": "IRR",
+              "id": 2364
+            },
+            {
+              "passengerType": "Child",
+              "boardPrice": 2450000,
+              "netPrice": 2082500,
+              "salePrice": 2321988,
+              "currencyType": "IRR",
+              "id": 2365
+            }
+          ],
+          "services": [
+            {
+              "name": "خدمات ویژه",
+              "description": null,
+              "hourDescription": null,
+              "extraDescription": null,
+              "title": "خدمات ویژه ",
+              "type": "SpecialService",
+              "priceType": "AllService",
+              "boardPrice": 1500000,
+              "netPrice": 1275000,
+              "salePrice": 1384013,
+              "currencyType": "IRR",
+              "passengerType": null,
+              "extraSalePrice": null,
+              "extraNetPrice": null,
+              "extraBoardPrice": null,
+              "rateId": 0,
+              "hourSalePrice": null,
+              "hourNetPrice": null,
+              "hourBoardPrice": null,
+              "picture": {
+                "path": "https://cdn2.safaraneh.com/images/cip/services/default.jpg",
+                "altAttribute": "default",
+                "titleAttribute": "default service"
+              },
+              "count": 0,
+              "extraCount": null,
+              "hourCount": null,
+              "id": 1049
+            },
+            {
+              "name": "FAST TRACK",
+              "description": null,
+              "hourDescription": null,
+              "extraDescription": null,
+              "title": "FAST TRACK برای پروازهای خارجی",
+              "type": "FastTrack",
+              "priceType": "AllService",
+              "boardPrice": 2450000,
+              "netPrice": 2082500,
+              "salePrice": 2277214,
+              "currencyType": "IRR",
+              "passengerType": null,
+              "extraSalePrice": null,
+              "extraNetPrice": null,
+              "extraBoardPrice": null,
+              "rateId": 0,
+              "hourSalePrice": null,
+              "hourNetPrice": null,
+              "hourBoardPrice": null,
+              "picture": {
+                "path": "https://cdn2.safaraneh.com/images/cip/services/default.jpg",
+                "altAttribute": "default",
+                "titleAttribute": "default service"
+              },
+              "count": 0,
+              "extraCount": null,
+              "hourCount": null,
+              "id": 1048
+            }
+          ],
+          "transport": [],
+          "passengerTypeServices": [
+            {
+              "passengerType": "Adult",
+              "services": []
+            },
+            {
+              "passengerType": "Child",
+              "services": []
+            },
+            {
+              "passengerType": "Infant",
+              "services": []
+            },
+            {
+              "passengerType": "Accompanying",
+              "services": []
+            }
+          ],
+          "id": 11
+        }
+      ];
 
 
     const user = useAppSelector(state => state.authentication.isAuthenticated ? state.authentication.user : undefined);
@@ -90,6 +333,11 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
     //     }
 
     // },[airportData]);
+
+    const [discountData, setDiscountData] = useState<any>();
+    const [discountLoading, setDiscountLoading] = useState<boolean>(false);
+  
+    const [promoCode,setPromoCode] = useState<string>("");
 
 
     useEffect(() => {
@@ -185,6 +433,29 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
         passengerServicesArray = selectedAvailability.passengerTypeServices;
     }
 
+    const discountSubmitHandler = async (value: string) => {
+
+        setDiscountLoading(true);
+        setDiscountData(undefined);
+
+        const key = validateResponse?.preReserveKey;
+        
+        if (!key) return;
+    
+        const response = await validateDiscountCode({ prereserveKey: key, type: 'Cip', discountPromoCode: value });
+    
+        setDiscountLoading(false);
+    
+        if (response?.data?.result) {
+          setDiscountData(response.data.result);
+          setPromoCode(value);
+        } else if (response?.data?.error) {
+          setDiscountData(response.data?.error);
+        }
+    
+      }
+
+
     const submitHandler = async (values: any) => {
         debugger;
     }
@@ -275,7 +546,7 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
 
                     <CipName address={airportData?.address} name={airportData?.name} location={airportLocation} />
 
-                    <Steps
+                    {!!selectedAvailability && <Steps
                         className="mt-6 md:mt-10 mb-5 max-sm:hidden"
                         items={[
                             { label: "تکمیل اطلاعات", status: "active" },
@@ -283,9 +554,24 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
                             { label: "تایید و پرداخت", status: "up-comming" },
                             { label: "تکمیل خرید", status: "up-comming" }
                         ]}
-                    />
+                    />}
+
+                    {availabilities && availabilities.availability.length > 1 && !selectedAvailability && (
+                        <>
+                            {availabilities.availability.map(item =>(
+                                <CipAvailibilityItem 
+                                    key={item.id}
+                                    item={item}
+                                    setSelectedAvailability={setSelectedAvailability}
+                                />
+                            ))}
+                        </>
+                    )}
+
                 </div>
 
+
+                {!!selectedAvailability && (               
                 <div>
                     <Formik
                         validate={() => { return {} }}
@@ -365,6 +651,14 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
                                         values={values}
                                     />
 
+                                    <br />
+
+                                    <CipDiscountForm 
+                                        onSubmit={discountSubmitHandler}
+                                        data={discountData}
+                                        loading={discountLoading}
+                                    />
+
                                     <CipPriceDetails 
                                         activeServices={activeServices}
                                         companions={companions}
@@ -401,10 +695,8 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
                             )
                         }}
                     </Formik>
-
-
-
                 </div>
+                )}
 
 
 
