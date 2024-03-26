@@ -13,8 +13,8 @@ const CipAvailibilityItem : React.FC<Props> = props => {
             <strong className="font-semibold text-md md:text-xl">
                 {item.name}
             </strong>
-            <div className="grid">
-                <div>
+            <div className="grid md:grid-cols-2">
+                <div className="md:order-1">
                     <button type="button">
                         سرویس های مازاد
                     </button>
@@ -22,15 +22,19 @@ const CipAvailibilityItem : React.FC<Props> = props => {
                         جزئیات قیمت
                     </button>
                 </div>
-                <div className="">
+                <div className="md:order-3 md:col-span-2">
                     details
                 </div>
-                <div className="text-left">
+                <div className="text-left flex justify-end gap-3 md:order-2">
+                    
                     <span>
                         125000000 ریال
                     </span>
 
-                    <Button type="button">
+                    <Button 
+                        type="button"
+                        className="h-10 px-5"
+                    >
                         رزرو آنلاین
                     </Button>
                 </div>
