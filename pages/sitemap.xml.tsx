@@ -1,6 +1,6 @@
 import axios from "axios";
 
-function creareSiteMap(hotelsData,postsData, domesticFlightsData){
+function creareSiteMap(hotelsData:any,postsData:any, domesticFlightsData:any){
   let latestPost = 0;
   let projectsXML = "";
   let hotelXML = "";
@@ -71,7 +71,7 @@ function creareSiteMap(hotelsData,postsData, domesticFlightsData){
 function SiteMap() {
 }
 
-export const getServerSideProps = async ({ res }) => {
+export const getServerSideProps = async ({ res }:{res:any}) => {
 
 
   const [postsResponse, hotelsResponse, flightResponse] = await Promise.all([
