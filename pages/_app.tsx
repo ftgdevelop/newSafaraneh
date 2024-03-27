@@ -59,7 +59,8 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
   const portalTitle = portalData?.MetaTags?.find(item => item.Name === "title")?.Content || "";
   const portalKeywords = portalData?.MetaTags?.find(item => item.Name === "keywords")?.Content || "";
   const portalDescription = portalData?.MetaTags?.find(item => item.Name === "description")?.Content || "";
-
+  
+  const portalEnamadMetaTag = portalData?.MetaTags?.find(item => item.Name === "enamad")?.Content || "";
   const enamadElement = portalData?.Phrases.find(item => item.Keyword === "Enamad")?.Value;
 
   let canonicalUrl = "";
@@ -131,6 +132,8 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
         {!!portalTitle && <title>{portalTitle}</title>}
         {!!portalKeywords && <meta name="keywords" content={portalKeywords} />}
         {!!portalDescription && <meta name="description" content={portalDescription} />}
+
+        {!!portalEnamadMetaTag && <meta name='enamad' content={portalEnamadMetaTag} />}
 
       </Head>
 
