@@ -5,7 +5,8 @@ type FlightsFilters = {
         airlineOption: string[],
         flightTimeOption: { minTime: number, maxTime: number, filterName: string }[],
         cabinClassOption: string[],
-        ticketTypeOption: string[]
+        ticketTypeOption: string[],
+        priceRangeOption?: {min: number, max: number}
     }
 }
 
@@ -14,7 +15,7 @@ const initialState: FlightsFilters = {
         airlineOption: [],
         flightTimeOption: [],
         cabinClassOption: [],
-        ticketTypeOption: []
+        ticketTypeOption: [],
     }
 }
 
@@ -33,10 +34,13 @@ export const flightSlice = createSlice({
         },
         setTicketTypeFilter: (state, action) => {
             state.filterOption.ticketTypeOption = action.payload
+        },
+        setPriceRangeFilter: (state, action) => {
+            state.filterOption.priceRangeOption = action.payload
         }
     }
 })
 
-export const { setAirlineFilter, setFlightTimeFilter, setCabinClassFilter, setTicketTypeFilter} = flightSlice.actions
+export const { setAirlineFilter, setFlightTimeFilter, setCabinClassFilter, setTicketTypeFilter, setPriceRangeFilter} = flightSlice.actions
 
 export default flightSlice.reducer;

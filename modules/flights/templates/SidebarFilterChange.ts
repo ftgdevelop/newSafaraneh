@@ -22,5 +22,13 @@ export const SidebarFilterChange = (FlightsData: FlightType[] , SidebarFilter: a
     if (SidebarFilter.ticketTypeOption.length) {
         list = list.filter(item => SidebarFilter.ticketTypeOption.includes(item.flightType))
     }
+    if (SidebarFilter.priceRangeOption?.min) {
+        list = list.filter(item => item.adultPrice >= SidebarFilter.priceRangeOption.min)
+    }
+    if (SidebarFilter.priceRangeOption?.max) {
+        list = list.filter(item => item.adultPrice <= SidebarFilter.priceRangeOption.max)
+    }
+    console.log(SidebarFilter);
+    
     setFlightsInFilter(list)
 }

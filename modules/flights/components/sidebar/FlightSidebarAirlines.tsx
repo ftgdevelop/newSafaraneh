@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/modules/shared/store";
 import { setAirlineFilter } from "../../store/flightsSlice";
+import { SortLowestPrice } from "../../templates/SortFlightItem";
 
 type uniqAirlinesType = {
     airlineName: string;
@@ -18,7 +19,7 @@ const FlightSidebarAirlines: React.FC<any> = ({ FlightsData }: { FlightsData: Fl
     const dispatch = useDispatch()
 
     const airlines : uniqAirlinesType[] = [];
-    FlightsData?.map((item: any) => {
+    FlightsData?.sort((a,b) => SortLowestPrice(a,b)).map((item: any) => {
         if (!airlines.find((i : any) => i.airlineName == item.airline?.name)) {
             airlines.push(
                 {

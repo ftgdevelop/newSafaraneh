@@ -14,15 +14,11 @@ import { SortHightestPrice, SortLowestPrice, SortTime } from "@/modules/flights/
 
 const Flights: NextPage<any> = ({ FlightsData } : {FlightsData : FlightType[]}) => {
     const SidebarFilter = useSelector((state: RootState) => state.flightFilters.filterOption)
-    let [flightsInFilter, setFlightsInFilter] = useState<FlightType[]>(FlightsData)
+    let [flightsInFilter, setFlightsInFilter] = useState<FlightType[]>()
     let [sortFlights, setSortFlights] = useState('LowestPrice')
-    console.log(FlightsData);
     
     useEffect(() => {
         SidebarFilterChange(FlightsData, SidebarFilter, setFlightsInFilter)
-        if (sortFlights == 'HighestPrice') setFlightsInFilter(prev => prev.sort(SortHightestPrice))
-        if (sortFlights == 'Time') setFlightsInFilter(prev => prev.sort(SortTime))
-        if (sortFlights == 'LowestPrice') setFlightsInFilter(prev => prev.sort(SortLowestPrice))
     }, [SidebarFilter])
 
     return (
@@ -32,11 +28,10 @@ const Flights: NextPage<any> = ({ FlightsData } : {FlightsData : FlightType[]}) 
                 <FlightSearchData FlightsData={FlightsData} />
                 <FlightMainFilters sortFlights={sortFlights} changeSortFlights={(e: string) => setSortFlights(e)} />
                 {
-                    flightsInFilter?.sort((a: FlightType,b:FlightType) :any => {
-                        if (sortFlights == "LowestPrice") return SortLowestPrice(a,b)
+                    flightsInFilter?.sort((a: FlightType, b: FlightType): any => {
                         if (sortFlights == "HighestPrice") return SortHightestPrice(a,b)
-                        if (sortFlights == "Time") return SortTime(a,b)
-                        return SortLowestPrice
+                        else if (sortFlights == "Time") return SortTime(a, b)
+                        return SortLowestPrice(a,b)
                         }).map((flight : FlightType) => 
                             <FlightsFlightItem flightData={flight} key={flight.flightKey} />
                         )
@@ -49,15 +44,13 @@ const Flights: NextPage<any> = ({ FlightsData } : {FlightsData : FlightType[]}) 
 export default Flights;
 
 export async function getServerSideProps(context: any) {
-    let getDate = new Date();
-    const date = `${getDate.getFullYear()}-0${getDate.getMonth() + 1}-${getDate.getDay() + 25}`
-    
+    let getDate: any = new Date().toLocaleDateString()
     context.query = {
             ...context.query,
             adult: 1,
             child: 0,
             infant: 0,
-            departing: '2024-03-27'
+            departing: '2024-04-04'
     }
 
     let flyRoute = context.query.flights.split('-')

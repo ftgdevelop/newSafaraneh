@@ -35,7 +35,7 @@ const FlightSidebarFilters: React.FC<any> = ({ FlightsData, flightsInFilterLengt
                 </div>
                 <FlightSidebarAirlines FlightsData={FlightsData} />
                 <FlightSidebarHours />
-                <FlightSidebarPriceChange />
+                <FlightSidebarPriceChange FlightsData={FlightsData} />
                 <FlightSidebarFlightType FlightsData={FlightsData} />
                 </div>
  
