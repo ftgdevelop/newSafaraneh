@@ -11,23 +11,23 @@ const DetailBlogAcordion: NextPage<any> = ({ blog }) => {
             }
             {
                 blog && blog.acf.pp_faq.pp_subject_q1 && blog.acf.pp_faq.pp_answer_q1 &&                
-                <Accordion title={blog.acf.pp_faq.pp_subject_q1} content={blog.acf.pp_faq.pp_answer_q1} />
+                <Accordion title={blog.acf.pp_faq.pp_subject_q1} content={(<p className="text-xs">{blog.acf.pp_faq.pp_answer_q1}</p>)} />
             }
             {
                 blog && blog.acf.pp_faq.pp_subject_q2 && blog.acf.pp_faq.pp_answer_q2 &&                
-                <Accordion title={blog.acf.pp_faq.pp_subject_q2} content={blog.acf.pp_faq.pp_answer_q2} />
+                <Accordion title={blog.acf.pp_faq.pp_subject_q2} content={(<p className="text-xs">{blog.acf.pp_faq.pp_answer_q2}</p>)} />
             }
             {
                 blog && blog.acf.pp_faq.pp_subject_q3 && blog.acf.pp_faq.pp_answer_q3 &&                
-                <Accordion title={blog.acf.pp_faq.pp_subject_q3} content={blog.acf.pp_faq.pp_answer_q3} />
+                <Accordion title={blog.acf.pp_faq.pp_subject_q3} content={(<p className="text-xs">{blog.acf.pp_faq.pp_answer_q3}</p>)} />
             }
             {
                 blog && blog.acf.pp_faq.pp_subject_q4 && blog.acf.pp_faq.pp_answer_q4 &&                
-                <Accordion title={blog.acf.pp_faq.pp_subject_q4} content={blog.acf.pp_faq.pp_answer_q4} />
+                <Accordion title={blog.acf.pp_faq.pp_subject_q4} content={(<p className="text-xs">{blog.acf.pp_faq.pp_answer_q4}</p>)} />
             }
             {
                 blog && blog.acf.pp_faq.pp_subject_q5 && blog.acf.pp_faq.pp_answer_q5 &&                
-                <Accordion title={blog.acf.pp_faq.pp_subject_q5} content={blog.acf.pp_faq.pp_answer_q5} />
+                <Accordion title={blog.acf.pp_faq.pp_subject_q5} content={(<p className="text-xs">{blog.acf.pp_faq.pp_answer_q5}</p>)} />
             }
         </div>
     )
