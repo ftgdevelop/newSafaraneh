@@ -70,7 +70,12 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
     }else if (router.route === '/hotel/[...hotelDetail]'){
       canonicalUrl = process.env.SITE_NAME + (i18n?.language ? `/${i18n?.language}` : "") + (router.query.hotelDetail ? "/hotel/"+router.query.hotelDetail[0] : "");
     }else{
-      canonicalUrl = process.env.SITE_NAME + (i18n?.language ? `/${i18n?.language}` : "") + router.asPath
+
+      let path = router.asPath;
+      if (path[path.length-1] === "/"){
+        path = path.substring(0, path.length - 1);
+      }
+      canonicalUrl = process.env.SITE_NAME + (i18n?.language ? `/${i18n?.language}` : "") + path
     }
   }
   
