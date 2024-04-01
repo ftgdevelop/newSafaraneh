@@ -510,7 +510,7 @@ const HotelList: NextPage<Props> = props => {
         ))}
 
         {!!pageData.Url && (
-          <link rel="canonical" href={process.env.SITE_NAME + pageData.Url} />
+          <link rel="canonical" href={process.env.SITE_NAME?.replace("samita","safaraneh") + pageData.Url} />
         )}
 
 

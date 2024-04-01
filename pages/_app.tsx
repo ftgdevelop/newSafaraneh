@@ -66,11 +66,11 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
   let canonicalUrl = "";
   if(typeof router !== 'undefined'){
     if (router.route === '/hotels/[...hotelList]'){
-      canonicalUrl = process.env.SITE_NAME + (router.query.hotelList ? "/hotels/"+router.query.hotelList[0] : "");
+      canonicalUrl = process.env.SITE_NAME?.replace("samita","safaraneh") + (router.query.hotelList ? "/hotels/"+router.query.hotelList[0] : "");
     }else if (router.route === '/hotel/[...hotelDetail]'){
-      canonicalUrl = process.env.SITE_NAME + (router.query.hotelDetail ? "/hotel/"+router.query.hotelDetail[0] : "");
+      canonicalUrl = process.env.SITE_NAME?.replace("samita","safaraneh") + (router.query.hotelDetail ? "/hotel/"+router.query.hotelDetail[0] : "");
     }else{
-      canonicalUrl = process.env.SITE_NAME + router.asPath
+      canonicalUrl = process.env.SITE_NAME?.replace("samita","safaraneh") + router.asPath
     }
   }
   

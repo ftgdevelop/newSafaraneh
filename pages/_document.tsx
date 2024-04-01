@@ -14,6 +14,9 @@ export default function Document() {
       case "https://www.safaraneh.com":
         ga_script_url = "/ga-script.js";
         break;
+      case "https://www.samita.com":
+        ga_script_url = "/ga-script-samita.js";
+        break;
       default:
         ga_script_url = "";
     }
