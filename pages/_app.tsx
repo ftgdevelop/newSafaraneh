@@ -59,17 +59,23 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
   const portalTitle = portalData?.MetaTags?.find(item => item.Name === "title")?.Content || "";
   const portalKeywords = portalData?.MetaTags?.find(item => item.Name === "keywords")?.Content || "";
   const portalDescription = portalData?.MetaTags?.find(item => item.Name === "description")?.Content || "";
-
+  
+  const portalEnamadMetaTag = portalData?.MetaTags?.find(item => item.Name === "enamad")?.Content || "";
   const enamadElement = portalData?.Phrases.find(item => item.Keyword === "Enamad")?.Value;
 
   let canonicalUrl = "";
   if(typeof router !== 'undefined'){
     if (router.route === '/hotels/[...hotelList]'){
-      canonicalUrl = process.env.SITE_NAME + (router.query.hotelList ? "/hotels/"+router.query.hotelList[0] : "");
+      canonicalUrl = process.env.SITE_NAME + (i18n?.language ? `/${i18n?.language}` : "") + (router.query.hotelList ? "/hotels/"+router.query.hotelList[0] : "");
     }else if (router.route === '/hotel/[...hotelDetail]'){
-      canonicalUrl = process.env.SITE_NAME + (router.query.hotelDetail ? "/hotel/"+router.query.hotelDetail[0] : "");
+      canonicalUrl = process.env.SITE_NAME + (i18n?.language ? `/${i18n?.language}` : "") + (router.query.hotelDetail ? "/hotel/"+router.query.hotelDetail[0] : "");
     }else{
-      canonicalUrl = process.env.SITE_NAME + router.asPath
+
+      let path = router.asPath;
+      if (path[path.length-1] === "/"){
+        path = path.substring(0, path.length - 1);
+      }
+      canonicalUrl = process.env.SITE_NAME + (i18n?.language ? `/${i18n?.language}` : "") + path
     }
   }
   
@@ -131,6 +137,8 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
         {!!portalTitle && <title>{portalTitle}</title>}
         {!!portalKeywords && <meta name="keywords" content={portalKeywords} />}
         {!!portalDescription && <meta name="description" content={portalDescription} />}
+
+        {!!portalEnamadMetaTag && <meta name='enamad' content={portalEnamadMetaTag} />}
 
       </Head>
 

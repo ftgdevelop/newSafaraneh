@@ -509,9 +509,6 @@ const HotelList: NextPage<Props> = props => {
           <meta name={item.Name} content={item.Content?.replaceAll("{0}", siteName)} key={item.Name} />
         ))}
 
-        {!!pageData.Url && (
-          <link rel="canonical" href={process.env.SITE_NAME + pageData.Url} />
-        )}
 
 
         {faq && faq.items.length !== 0 ? (
