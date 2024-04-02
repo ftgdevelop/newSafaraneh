@@ -34,22 +34,22 @@ const NewBlog: NextPage<Props> = (props) => {
                         </Link>
                         <div className="text-xs max-md:text-3xs text-gray-500 pr-2 max-sm:mt-1">{parse(blog.excerpt.rendered)} </div>
                         <div className="flex justify-between text-xs mt-4">
-                            <div className="flex w-52 justify-between text-gray-600 pr-2 max-sm:text-2xs">
+                            <div className="flex justify-between text-gray-600 pr-2 space-x-5 max-sm:text-2xs">
                                 <p>{blog.date}</p>
-                                <p className="font-bold text-3xl">.</p>
+                                <span></span>
                                 <p>{blog.acf.time_read}</p>
                             </div>
                             <Link href={`blog/${blog.slug}`} className="flex ml-4 font-bold text-sm hover:text-blue-700 duraction-300 max-sm:hidden">        
                                     <p>ادامه مطلب</p>
                                     <ArrowLeft
-                                    className="w-7 mr-2 bg-gray-200 rounded-2xl p-1 ltr:hidden hover:bg-blue-600 duration-300" />
+                                    className="w-7 h-fit mr-2 bg-gray-200 rounded-2xl p-1 ltr:hidden hover:fill-white hover:bg-blue-600 duration-300" />
                                     <ArrowRight
-                                    className="w-7 mr-2 bg-gray-200 rounded-2xl p-1 rtl:hidden hover:bg-blue-500 duration-300" />    
+                                    className="w-7 h-fit mr-2 bg-gray-200 rounded-2xl p-1 rtl:hidden hover:fill-white hover:bg-blue-500 duration-300" />    
                             </Link>
                         </div>
                     </div>
                 </div>
-                    </div>
+                </div>
                 )
             }
             <Link href='/blog-list'>
