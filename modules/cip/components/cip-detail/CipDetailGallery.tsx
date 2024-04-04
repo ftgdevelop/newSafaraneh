@@ -26,30 +26,57 @@ const CipDetailGallery: React.FC<{ items: CipGetAirportByUrlResponseType['galler
 
     return (
         <>
-            <div className="md:grid md:grid-cols-4 gap-1 relative">
-                {imageItems.slice(0, 5).map((item, index) => (
-                    <Image
-                        key={index}
-                        src={item.path!}
-                        alt={item.altAttribute || "cip"}
-                        title={item.titleAttribute || ""}
-                        priority={!index}
-                        onContextMenu={(e) => e.preventDefault()}
+            {imageItems.length >= 5 ? (
+                <div className="md:grid md:grid-cols-4 gap-1 relative">
+                    {imageItems.slice(0, 5).map((item, index) => (
+                        <Image
+                            key={index}
+                            src={item.path!}
+                            alt={item.altAttribute || "cip"}
+                            title={item.titleAttribute || ""}
+                            priority={!index}
+                            onContextMenu={(e) => e.preventDefault()}
 
-                        width={index ? 287 : 430}
-                        height={index ? 191 : 270}
+                            width={index ? 287 : 430}
+                            height={index ? 191 : 270}
 
-                        onClick={() => { openLightBox(index); }}
-                        className={`cursor-pointer w-full h-full object-cover ${index ? "hidden md:block md:col-span-1 md:row-span-1" : "md:col-span-2 md:row-span-2"}`}
+                            onClick={() => { openLightBox(index); }}
+                            className={`cursor-pointer w-full h-full object-cover ${index ? "hidden md:block md:col-span-1 md:row-span-1" : "md:col-span-2 md:row-span-2"}`}
 
-                    />
-                ))}
-                <span className='text-xs absolute bottom-3 rtl:left-3 ltr:right-3 bg-black/75 text-white px-5 py-2 rounded-lg pointer-events-none flex gap-2 items-center'>
-                    <ImageGallery className='w-6 h-6 fill-current' />
-                    {tCip("morePicyures")}
-                </span>
+                        />
+                    ))}
+                    <span className='text-xs absolute bottom-3 rtl:left-3 ltr:right-3 bg-black/75 text-white px-5 py-2 rounded-lg pointer-events-none flex gap-2 items-center'>
+                        <ImageGallery className='w-6 h-6 fill-current' />
+                        {tCip("morePicyures")}
+                    </span>
+                </div>
+            ):(
+                <div className="md:flex gap-1 relative">
+                    {imageItems.map((item, index) => (
+                        <div key={index}>
+                            <Image
+                                src={item.path!}
+                                alt={item.altAttribute || "cip"}
+                                title={item.titleAttribute || ""}
+                                priority={!index}
+                                onContextMenu={(e) => e.preventDefault()}
 
-            </div>
+                                width={287}
+                                height={191}
+
+                                onClick={() => { openLightBox(index); }}
+                                className={`cursor-pointer w-full h-full object-cover ${index ? "hidden md:block" : ""}`}
+
+                            />
+                        </div>
+                    ))}
+                    <span className='text-xs absolute bottom-3 rtl:left-3 ltr:right-3 bg-black/75 text-white px-5 py-2 rounded-lg pointer-events-none flex gap-2 items-center'>
+                        <ImageGallery className='w-6 h-6 fill-current' />
+                        {tCip("morePicyures")}
+                    </span>
+                </div>
+            )}
+
 
             <Lightbox
                 index={slideIndex}

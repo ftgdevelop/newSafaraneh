@@ -104,7 +104,8 @@ export const Header = {
   export const Cip = {
     GetAirportByUrl:"/api/services/app/Airport/GetByUrl",
     AvailabilityByIataCode:"/api/services/app/BookingCip/AvailabilityByIataCode",
-    Validate:"/api/services/app/BookingCip/Validate"
+    Validate:"/api/services/app/BookingCip/Validate",
+    PreReserve:"/api/services/app/BookingCip/PreReserve"
   }
   
   export const ServerStatus = {
