@@ -27,7 +27,7 @@ import CipTerms from '@/modules/cip/components/cip-detail/CipTerms';
 import CipFacilities from '@/modules/cip/components/cip-detail/CipFacilities';
 import { useRouter } from 'next/router';
 import CipFAQ from '@/modules/cip/components/cip-detail/CipFAQ';
-import CipPriceDetails from '@/modules/cip/components/cip-detail/CipPriceDetails';
+//import CipPriceDetails from '@/modules/cip/components/cip-detail/CipPriceDetails';
 import CipDiscountForm from '@/modules/cip/components/cip-detail/CipDiscountForm';
 import { validateDiscountCode } from '@/modules/payment/actions';
 import CipAvailibilityItem from '@/modules/cip/components/cip-detail/CipAvailibilityItem';
@@ -530,7 +530,7 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
                                         loading={discountLoading}
                                     />
 
-                                    <CipPriceDetails 
+                                    {/* <CipPriceDetails 
                                         activeServices={activeServices}
                                         companions={companions}
                                         passengerServicesArray={passengerServicesArray}
@@ -539,7 +539,7 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
                                         selectedTransport={selectedTransport}
                                         //discountResponse={"klkl"}
                                         validateResponse={validateResponse}
-                                    />
+                                    /> */}
                                     
                                     <div className='flex justify-end py-4'>
                                         <Button
