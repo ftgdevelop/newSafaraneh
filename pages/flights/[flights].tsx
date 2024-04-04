@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/modules/shared/store";
 import { SidebarFilterChange } from "@/modules/flights/templates/SidebarFilterChange";
 import { SortHightestPrice, SortLowestPrice, SortTime } from "@/modules/flights/templates/SortFlightItem";
+import FlightsSearchChange from "@/modules/flights/components/FlightSearchChange";
 
 const Flights: NextPage<any> = ({ FlightsData } : {FlightsData : FlightType[]}) => {
     const SidebarFilter = useSelector((state: RootState) => state.flightFilters.filterOption)
@@ -22,7 +23,7 @@ const Flights: NextPage<any> = ({ FlightsData } : {FlightsData : FlightType[]}) 
     }, [SidebarFilter])
 
     return (
-        <div className="max-w-container m-auto p-5 max-md:p-3 flex gap-5">
+        <div className="max-w-container m-auto p-5 max-md:p-3 flex gap-5 relative">
             <FlightSidebarFilters FlightsData={FlightsData} flightsInFilterLengths={flightsInFilter?.length} />
             <div className="w-3/4 max-lg:w-full">
                 <FlightSearchData FlightsData={FlightsData} />
@@ -37,6 +38,7 @@ const Flights: NextPage<any> = ({ FlightsData } : {FlightsData : FlightType[]}) 
                         )
                 }
             </div>
+            <FlightsSearchChange />
         </div>
     )
 }
@@ -50,7 +52,7 @@ export async function getServerSideProps(context: any) {
             adult: 1,
             child: 0,
             infant: 0,
-            departing: '2024-04-04'
+            departing: '2024-04-14'
     }
 
     let flyRoute = context.query.flights.split('-')

@@ -11,8 +11,6 @@ const FlightSidebarPriceChange: React.FC<any> = ({ FlightsData }: { FlightsData:
     const MaxPrice = Math.max(...FlightsData.map(item => item.adultPrice))
     const MinPrice = Math.min(...FlightsData.map(item => (item.adultPrice !== 0 ? item.adultPrice : MaxPrice)))
     const MaxMinDiffrence = Math.ceil(MaxPrice - MinPrice)
-
-    console.log(MaxPrice - MaxMinDiffrence / 2);
     
     const PriceItems = [
         MinPrice.toString(),

@@ -1,10 +1,15 @@
 import { useRouter } from "next/router";
 import { ArrowLeft } from "../../shared/components/ui/icons";
 import { FlightType } from "../types/flights";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/modules/shared/store";
+import { setSearchChangeOn } from "../store/flightsSlice";
 
 const FlightSearchData: React.FC<any> = ({FlightsData} : {FlightsData : FlightType[]}) => {
     const query: any = useRouter().query
 
+    const SearchChangeOn = useSelector((state: RootState) => state.flightFilters.SearchChangeOn)
+    const dispatch = useDispatch()
     
     const departureCity = FlightsData.find(item => item.departureAirport?.city?.code == query.flights.split('-')[0])?.departureAirport?.city?.name
     const arrivalCity = FlightsData.find(item => item.arrivalAirport?.city?.code == query.flights.split('-')[1])?.arrivalAirport?.city?.name
@@ -12,7 +17,8 @@ const FlightSearchData: React.FC<any> = ({FlightsData} : {FlightsData : FlightTy
 
     return (
         <div className="flex flex-wrap h-fit relative gap-10 max-md:gap-5 max-sm:gap-4 cursor-pointer
-            max-sm:justify-around max-sm:border-1 max-sm:border-gray-200 max-sm:p-3 rounded">
+            max-sm:justify-around max-sm:border-1 max-sm:border-gray-200 max-sm:p-3 rounded"
+            onClick={() => dispatch(setSearchChangeOn(true))}>
                 
                     <div>
                         <p className="text-sm max-md:text-2xs">{query.flights.split('-')[0]}</p>
@@ -41,7 +47,7 @@ const FlightSearchData: React.FC<any> = ({FlightsData} : {FlightsData : FlightTy
                 
                     <button className="bg-blue-800 text-white text-sm max-md:text-xs rounded-md p-1 pl-2 pr-2 h-fit whitespace-nowrap mt-auto mb-auto
                     absolute rtl:left-0 ltr:right-0 max-sm:sticky max-sm:w-full hover:bg-blue-600 duration-300"
-                        type="submit">
+                    type="submit">
                         تغییر جستجو
                     </button>
             </div>

@@ -8,7 +8,8 @@ const FlightMainFilters: React.FC<any> = ({ changeSortFlights, sortFlights} : {c
     const SortItem = (value: string, sortValue: string) => {
         return (
             <button type="button" className={`border-1 text-sm text-blue-700 text-center h-fit w-full p-1 cursor-pointer max-sm:text-2xs shadow-md
-             hover:border-blue-800 duration-100 whitespace-nowrap rounded-sm ${sortValue == sortFlights ? 'bg-blue-100/20 border-blue-800' : 'bg-white'}`}
+             hover:border-blue-800 duration-100 whitespace-nowrap rounded-sm ${sortValue == sortFlights ?
+             'bg-blue-100/20 border-blue-800 shadow-blue-700/30' : 'bg-white'}`}
              onClick={() => changeSortFlights(sortValue)}>
                 {value}
             </button>

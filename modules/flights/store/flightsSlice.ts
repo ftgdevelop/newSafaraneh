@@ -8,6 +8,7 @@ type FlightsFilters = {
         ticketTypeOption: string[],
         priceRangeOption?: {min: number, max: number}
     }
+    SearchChangeOn: boolean;
 }
 
 const initialState: FlightsFilters = {
@@ -16,7 +17,8 @@ const initialState: FlightsFilters = {
         flightTimeOption: [],
         cabinClassOption: [],
         ticketTypeOption: [],
-    }
+    },
+    SearchChangeOn: false
 }
 
 export const flightSlice = createSlice({
@@ -37,10 +39,14 @@ export const flightSlice = createSlice({
         },
         setPriceRangeFilter: (state, action) => {
             state.filterOption.priceRangeOption = action.payload
+        },
+        setSearchChangeOn: (state, action) => {
+            state.SearchChangeOn = action.payload
         }
     }
 })
 
-export const { setAirlineFilter, setFlightTimeFilter, setCabinClassFilter, setTicketTypeFilter, setPriceRangeFilter} = flightSlice.actions
+export const { setAirlineFilter, setFlightTimeFilter, setCabinClassFilter,
+setTicketTypeFilter, setPriceRangeFilter, setSearchChangeOn } = flightSlice.actions
 
 export default flightSlice.reducer;
