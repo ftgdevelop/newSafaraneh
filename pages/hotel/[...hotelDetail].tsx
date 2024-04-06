@@ -38,7 +38,7 @@ const HotelDetail: NextPage<Props> = props => {
 
   const { accommodation, hotel: hotelData, page: pageData, score: hotelScoreData } = allData;
 
-  const accommodationData = accommodation.result;
+  const accommodationData = accommodation?.result;
 
   const { t } = useTranslation('common');
   const { t: tHotel } = useTranslation('hotel');
