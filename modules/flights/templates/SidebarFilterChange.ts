@@ -28,7 +28,6 @@ export const SidebarFilterChange = (FlightsData: FlightType[] , SidebarFilter: a
     if (SidebarFilter.priceRangeOption?.max) {
         list = list.filter(item => item.adultPrice <= SidebarFilter.priceRangeOption.max)
     }
-    console.log(SidebarFilter);
     
     setFlightsInFilter(list)
 }

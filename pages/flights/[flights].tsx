@@ -10,8 +10,9 @@ import FlightsFlightItem from "@/modules/flights/components/flightItem/FlightFli
 import { useSelector } from "react-redux";
 import { RootState } from "@/modules/shared/store";
 import { SidebarFilterChange } from "@/modules/flights/templates/SidebarFilterChange";
-import { SortHightestPrice, SortLowestPrice, SortTime } from "@/modules/flights/templates/SortFlightItem";
+import { SortHightestPrice, SortCapacity, SortTime } from "@/modules/flights/templates/SortFlightItem";
 import FlightsSearchChange from "@/modules/flights/components/FlightSearchChange";
+import { dateFormat } from "@/modules/shared/helpers";
 
 const Flights: NextPage<any> = ({ FlightsData } : {FlightsData : FlightType[]}) => {
     const SidebarFilter = useSelector((state: RootState) => state.flightFilters.filterOption)
@@ -29,10 +30,13 @@ const Flights: NextPage<any> = ({ FlightsData } : {FlightsData : FlightType[]}) 
                 <FlightSearchData FlightsData={FlightsData} />
                 <FlightMainFilters sortFlights={sortFlights} changeSortFlights={(e: string) => setSortFlights(e)} />
                 {
-                    flightsInFilter?.sort((a: FlightType, b: FlightType): any => {
+                    flightsInFilter?.sort((a, b) => SortCapacity(a, b))
+                        .sort((a: FlightType, b: FlightType): any => {
                         if (sortFlights == "HighestPrice") return SortHightestPrice(a,b)
                         else if (sortFlights == "Time") return SortTime(a, b)
-                        return SortLowestPrice(a,b)
+                        else {
+                            return a.capacity && a.adultPrice - b.adultPrice
+                        }
                         }).map((flight : FlightType) => 
                             <FlightsFlightItem flightData={flight} key={flight.flightKey} />
                         )
@@ -46,13 +50,14 @@ const Flights: NextPage<any> = ({ FlightsData } : {FlightsData : FlightType[]}) 
 export default Flights;
 
 export async function getServerSideProps(context: any) {
-    let getDate: any = new Date().toLocaleDateString()
+    const today = dateFormat(new Date())
+
     context.query = {
             ...context.query,
             adult: 1,
             child: 0,
             infant: 0,
-            departing: '2024-04-14'
+            departing: today
     }
 
     let flyRoute = context.query.flights.split('-')

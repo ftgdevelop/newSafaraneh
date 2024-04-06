@@ -6,9 +6,9 @@ export const SortHightestPrice = (a: FlightType,b: FlightType) => {
     return 0
 }
 
-export const SortLowestPrice = (a: FlightType, b: FlightType) => {
-    if (a.adultPrice > b.adultPrice && a.capacity > 0 && b.capacity > 0) return 1
-    if (a.adultPrice < b.adultPrice && a.capacity > 0 && b.capacity > 0) return -1
+export const SortCapacity = (a: FlightType, b: FlightType) => {
+    if (a.capacity > b.capacity) return -1
+    if (a.capacity < b.capacity) return 1
     return 0
 }
 
