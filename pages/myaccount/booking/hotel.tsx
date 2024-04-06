@@ -20,6 +20,7 @@ import Rating from '@/modules/shared/components/ui/Rating';
 import HotelMap from '@/modules/domesticHotel/components/hotelDetails/HotelMap';
 import AccountSidebar from '@/modules/authentication/components/AccountSidebar';
 import { useAppSelector } from '@/modules/shared/hooks/use-store';
+import LoginSidebar from '@/modules/authentication/components/LoginSidebar';
 
 const DomesticHotelReserveDetail: NextPage = ({ portalData }: { portalData?: PortalDataType }) => {
 
@@ -42,6 +43,8 @@ const DomesticHotelReserveDetail: NextPage = ({ portalData }: { portalData?: Por
     const [showMap, setShowMap] = useState<boolean>(false);
 
     const [copied, setCopied] = useState<boolean>(false);
+
+    const [loginWithPassword, setLoginWithPassword] = useState<boolean>(true);
 
     const phoneLink = portalData?.Phrases?.find(item => item.Keyword === "PhoneNumber")?.Value || "";
     const phoneNumber = phoneLink?.replace("+98", "0");
@@ -150,7 +153,18 @@ const DomesticHotelReserveDetail: NextPage = ({ portalData }: { portalData?: Por
 
                 <div className='grid gap-4 md:grid-cols-3'>
                     <div className='max-md:hidden'>
+                    {userIsAuthenticated ? (
                         <AccountSidebar />
+                    ) : (
+                        <div className='border border-neutral-300 bg-white rounded-md mb-4 py-6'>
+                            <LoginSidebar
+                                isNotModal
+                                loginWithPassword={loginWithPassword}
+                                setLoginWithPassword={setLoginWithPassword}
+                                toggleLoginType={() => { setLoginWithPassword(prevState => !prevState) }}
+                            />
+                        </div>
+                    )}
                     </div>
                     <div className='md:col-span-2'>
                         <div className='border border-neutral-300 bg-white rounded-md mb-4'>

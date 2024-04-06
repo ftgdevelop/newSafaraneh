@@ -40,7 +40,15 @@ export const getReserveFromCoordinator = async (params:{reserveId:string, userna
     }
 }
 
-export const getUserAllReserves = async (params:{SkipCount?:number;MaxResultCount?:number;Statue?:string;Types?:ReserveType}, token: string, acceptLanguage: string = "fa-IR") => {
+export const getUserAllReserves = async (params:{
+    SkipCount?:number;
+    MaxResultCount?:number;
+    Statue?:string;
+    Types?:ReserveType[];
+    FromReturnTime?: string;
+    ToReturnTime?: string;
+    Ids?: number;
+}, token: string, acceptLanguage: string = "fa-IR") => {
     try {
         let response = await axios.get(
             `${ServerAddress.Type}${ServerAddress.Coordinator}${Reserve.GetUserAllReserves}`,

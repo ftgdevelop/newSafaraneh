@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { CipValidate, availabilityByIataCode, getAirportByUrl } from "@/modules/cip/actions";
+import { CipPreReserve, CipValidate, availabilityByIataCode, getAirportByUrl } from "@/modules/cip/actions";
 import CipDetailGallery from "@/modules/cip/components/cip-detail/CipDetailGallery";
 import CipName from "@/modules/cip/components/cip-detail/CipName";
 import { CipAvailabilityItemType, CipFormCompanionItemType, CipFormPassengerItemType, CipGetAirportByUrlResponseType, CipPrereservePayload, CipValidateResponseType } from "@/modules/cip/types/cip";
@@ -15,7 +15,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Link from "next/link";
 import CipReserverInformation from "@/modules/cip/components/cip-detail/CipReserverInformation";
 import CipAirportInformation from "@/modules/cip/components/cip-detail/CipAirportInformation";
-import { useAppSelector } from '@/modules/shared/hooks/use-store';
+import { useAppDispatch, useAppSelector } from '@/modules/shared/hooks/use-store';
 import CipPassengersInformation from '@/modules/cip/components/cip-detail/CipPassengersInformation';
 import CipCompanionInformation from '@/modules/cip/components/cip-detail/CipCompanionInformation';
 import CipExtraServices from '@/modules/cip/components/cip-detail/CipExtraServices';
@@ -27,12 +27,15 @@ import CipTerms from '@/modules/cip/components/cip-detail/CipTerms';
 import CipFacilities from '@/modules/cip/components/cip-detail/CipFacilities';
 import { useRouter } from 'next/router';
 import CipFAQ from '@/modules/cip/components/cip-detail/CipFAQ';
-//import CipPriceDetails from '@/modules/cip/components/cip-detail/CipPriceDetails';
+import CipPriceDetails from '@/modules/cip/components/cip-detail/CipPriceDetails';
 import CipDiscountForm from '@/modules/cip/components/cip-detail/CipDiscountForm';
-import { validateDiscountCode } from '@/modules/payment/actions';
+import { registerDiscountCode, validateDiscountCode } from '@/modules/payment/actions';
 import CipAvailibilityItem from '@/modules/cip/components/cip-detail/CipAvailibilityItem';
+import { setReduxError } from '@/modules/shared/store/errorSlice';
 
 const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { portalData?: PortalDataType, airportData?: CipGetAirportByUrlResponseType, availabilities?: { latitude: string; longitude: string; availability: CipAvailabilityItemType[] } }) => {
+
+    const dispatch = useAppDispatch();
 
     const { t } = useTranslation('common');
     const { t: tCip } = useTranslation('cip');
@@ -48,6 +51,9 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
         siteName = portalData.Phrases.find(item => item.Keyword === "Name")?.Value || "";
         siteURL = portalData.PortalName || "";
     }
+
+    const phoneLink = portalData?.Phrases?.find(item => item.Keyword === "PhoneNumber")?.Value || "";
+    const phoneNumber = phoneLink?.replace("+98", "0");
 
     const user = useAppSelector(state => state.authentication.isAuthenticated ? state.authentication.user : undefined);
 
@@ -94,8 +100,8 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
 
     const [discountData, setDiscountData] = useState<any>();
     const [discountLoading, setDiscountLoading] = useState<boolean>(false);
-  
-    const [promoCode,setPromoCode] = useState<string>("");
+
+    const [promoCode, setPromoCode] = useState<string>("");
 
 
     useEffect(() => {
@@ -194,21 +200,21 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
         setDiscountData(undefined);
 
         const key = validateResponse?.preReserveKey;
-        
+
         if (!key) return;
-    
+
         const response = await validateDiscountCode({ prereserveKey: key, type: 'Cip', discountPromoCode: value });
-    
+
         setDiscountLoading(false);
-    
+
         if (response?.data?.result) {
-          setDiscountData(response.data.result);
-          setPromoCode(value);
+            setDiscountData(response.data.result);
+            setPromoCode(value);
         } else if (response?.data?.error) {
-          setDiscountData(response.data?.error);
+            setDiscountData(response.data?.error);
         }
-    
-      }
+
+    }
 
 
     const submitHandler = async (values: {
@@ -218,9 +224,7 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
         flightNumber: string;
         flightDate: string;
         flightTime: string;
-
         cip_transport_address?: string;
-
         reserver: {
             firstName: string;
             lastName: string;
@@ -246,11 +250,9 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
             gender: boolean;
             services: string[]
         }[];
-
     }) => {
 
-        if (!validateResponse?.preReserveKey){
-            debugger;
+        if (!validateResponse?.preReserveKey) {
             console.log("no preReserveKey!");
             return;
         }
@@ -263,9 +265,11 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
             passengerType: 'Accompanying'
         }));
 
-        const passengers :CipPrereservePayload['passengers'] = values.passengers.map(passengerItem => (
+
+        const passengers: CipPrereservePayload['passengers'] = values.passengers.map(passengerItem => (
             {
                 ...passengerItem,
+                nationality: "IR",
                 services: passengerItem.services.map(serviceItem => +serviceItem)
             }
         ))
@@ -274,26 +278,26 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
             count: item.count,
             address: values.cip_transport_address,
             id: item.id
-          })) || [];
+        })) || [];
 
-        let services : CipPrereservePayload['services'] = [];
-        if (selectedServicesArray?.length && activeServices?.length ){
-          services = selectedServicesArray?.filter(item => activeServices.includes(item.id)).map(serviceItem => ({
-            count: serviceItem.count || 1,
-            extraCount: serviceItem.extraCount,
-            hourCount: serviceItem.hourCount,
-            id: serviceItem.id
-          }));
+        let services: CipPrereservePayload['services'] = [];
+        if (selectedServicesArray?.length && activeServices?.length) {
+            services = selectedServicesArray?.filter(item => activeServices.includes(item.id)).map(serviceItem => ({
+                count: serviceItem.count || 1,
+                extraCount: serviceItem.extraCount,
+                hourCount: serviceItem.hourCount,
+                id: serviceItem.id
+            }));
         }
 
-        const params : CipPrereservePayload = {
+        const params: CipPrereservePayload = {
             airline: values.airline,
             originName: values.originName,
             destinationName: values.destinationName,
             flightNumber: values.flightNumber,
-            flightTime : values.flightDate + "T" + values.flightTime + ":00",
+            flightTime: values.flightDate + "T" + values.flightTime + ":00",
             preReserveKey: validateResponse?.preReserveKey,
-            passengers: [...passengers , ...companionsPassengers],
+            passengers: [...passengers, ...companionsPassengers],
             reserver: {
                 ...values.reserver
                 , userName: values.reserver.phoneNumber
@@ -302,9 +306,29 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
             transports: transportsArray
 
         }
-        
-        debugger;
 
+        const response: any = await CipPreReserve(params);
+
+        if (response?.data?.result) {
+
+            const reserveId = response.data.result?.id;
+            const username = response.data.result?.username;
+
+            if (discountData?.isValid && promoCode) {
+                await registerDiscountCode({ discountPromoCode: promoCode, reserveId: reserveId, username: username });
+            }
+
+            router.push(`/payment?reserveId=${reserveId}&username=${username}`);
+
+        } else {
+            dispatch(
+                setReduxError({
+                    title: t('error'),
+                    message: response.response?.data?.error?.message || "متاسفانه مشکلی پیش آمده است",
+                    isVisible: true
+                })
+            )
+        }
 
     }
 
@@ -339,8 +363,8 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
 
     }
 
-    let unavailable : boolean = false;
-    if(availabilities && availabilities.availability.length === 0){
+    let unavailable: boolean = false;
+    if (availabilities && availabilities.availability.length === 0) {
         unavailable = true;
     }
 
@@ -374,7 +398,7 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
                         </Link>
                         <div className="text-sm font-semibold hidden sm:block">
                             شماره تلفن رزرو :
-                            <a href="tel:+982126150051" className="rtl:mr-1 ltr:ml-1"> 02126150051 </a>
+                            <a href={`tel:${phoneLink}`} className="rtl:mr-1 ltr:ml-1"> {phoneNumber} </a>
                         </div>
 
                     </div>
@@ -414,159 +438,159 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
 
                     {availabilities && availabilities.availability.length > 1 && (
                         <>
-                            {!!selectedAvailability ?(
+                            {!!selectedAvailability ? (
                                 <Button
                                     className='border border-neutral-400 rounded px-5 h-10 mt-8 inline-block'
                                     color='gray'
-                                    onClick={()=>{setSelectedAvailability(undefined)}}
+                                    onClick={() => { setSelectedAvailability(undefined) }}
                                 >
-                                    <ArrowRight className='w-7 h-7 fill-current'  /> برگشت به نتایج
+                                    <ArrowRight className='w-7 h-7 fill-current' /> برگشت به نتایج
                                 </Button>
-                            ):(
-                                <> <br/> </>
+                            ) : (
+                                <> <br /> </>
                             )}
 
-                            {availabilities.availability.map(item =>(
-                                <CipAvailibilityItem 
+                            {availabilities.availability.map(item => (
+                                <CipAvailibilityItem
                                     key={item.id}
                                     item={item}
                                     setSelectedAvailability={setSelectedAvailability}
-                                    selectedAvailibilityId={(selectedAvailability as CipAvailabilityItemType|undefined)?.id || undefined}
+                                    selectedAvailibilityId={(selectedAvailability as CipAvailabilityItemType | undefined)?.id || undefined}
                                 />
                             ))}
 
-                            <br/>
+                            <br />
                         </>
                     )}
 
                 </div>
 
 
-                {!!selectedAvailability && (               
-                <div>
-                    <Formik
-                        validate={() => { return {} }}
-                        initialValues={formInitialValue}
-                        onSubmit={submitHandler}
-                    >
-                        {({ errors, touched, setFieldValue, values, isValid, isSubmitting }) => {
+                {!!selectedAvailability && (
+                    <div>
+                        <Formik
+                            validate={() => { return {} }}
+                            initialValues={formInitialValue}
+                            onSubmit={submitHandler}
+                        >
+                            {({ errors, touched, setFieldValue, values, isValid, isSubmitting }) => {
 
-                            if (isSubmitting && !isValid) {
-                                setTimeout(() => {
-                                    const formFirstError = document.querySelector(".has-validation-error");
-                                    if (formFirstError) {
-                                        formFirstError.scrollIntoView({ behavior: "smooth" });
-                                    }
-                                }, 100)
-                            }
+                                if (isSubmitting && !isValid) {
+                                    setTimeout(() => {
+                                        const formFirstError = document.querySelector(".has-validation-error");
+                                        if (formFirstError) {
+                                            formFirstError.scrollIntoView({ behavior: "smooth" });
+                                        }
+                                    }, 100)
+                                }
 
-                            return (
+                                return (
 
-                                <Form className='px-5' autoComplete='off' >
+                                    <Form className='px-5' autoComplete='off' >
 
-                                    <CipAirportInformation
-                                        errors={errors}
-                                        setFieldValue={setFieldValue}
-                                        touched={touched}
-                                        values={values}
-                                    />
-
-                                    <div id="reserver_passengers_section">
-
-                                        <CipReserverInformation
-                                            reserverIsPassenger={reserverIsPassenger}
+                                        <CipAirportInformation
                                             errors={errors}
                                             setFieldValue={setFieldValue}
                                             touched={touched}
                                             values={values}
                                         />
 
-                                        <CipPassengersInformation
+                                        <div id="reserver_passengers_section">
+
+                                            <CipReserverInformation
+                                                reserverIsPassenger={reserverIsPassenger}
+                                                errors={errors}
+                                                setFieldValue={setFieldValue}
+                                                touched={touched}
+                                                values={values}
+                                            />
+
+                                            <CipPassengersInformation
+                                                passengerServicesArray={passengerServicesArray}
+                                                setFieldValue={setFieldValue}
+                                                values={values}
+                                                errors={errors}
+                                                touched={touched}
+                                                setReserverIsNotPassenger={() => { setReserverIsPassenger(false) }}
+                                                setPassengers={setPassengers}
+                                                passengers={passengers}
+
+                                            />
+                                        </div>
+
+
+                                        <CipCompanionInformation
+                                            companions={companions}
+                                            setCompanions={setCompanions}
                                             passengerServicesArray={passengerServicesArray}
                                             setFieldValue={setFieldValue}
-                                            values={values}
                                             errors={errors}
                                             touched={touched}
-                                            setReserverIsNotPassenger={() => { setReserverIsPassenger(false) }}
-                                            setPassengers={setPassengers}
-                                            passengers={passengers}
+                                            values={values}
 
                                         />
-                                    </div>
+
+                                        {!!selectedServicesArray && <CipExtraServices
+                                            selectedServicesArray={selectedServicesArray}
+                                            updateSelectedServices={updateSelectedServices}
+                                            activeServices={activeServices}
+                                            updateActiveService={updateActiveService}
+                                        />}
+
+                                        <CipTransport
+                                            selectedTransport={selectedTransport}
+                                            updateTransport={updateTransport}
+                                            errors={errors}
+                                            setFieldValue={setFieldValue}
+                                            touched={touched}
+                                            values={values}
+                                        />
+
+                                        <br />
+
+                                        <CipDiscountForm
+                                            onSubmit={discountSubmitHandler}
+                                            data={discountData}
+                                            loading={discountLoading}
+                                        />
+
+                                        <CipPriceDetails
+                                            activeServices={activeServices}
+                                            companions={companions}
+                                            passengerServicesArray={passengerServicesArray}
+                                            passengers={passengers}
+                                            selectedServicesArray={selectedServicesArray}
+                                            selectedTransport={selectedTransport}
+                                            //discountResponse={"klkl"}
+                                            validateResponse={validateResponse}
+                                        />
+
+                                        <div className='flex justify-end py-4'>
+                                            <Button
+                                                type="submit"
+                                                className="h-12 px-5 md:w-40"
+                                            >
+                                                ادامه فرایند خرید
+                                            </Button>
+
+                                        </div>
 
 
-                                    <CipCompanionInformation
-                                        companions={companions}
-                                        setCompanions={setCompanions}
-                                        passengerServicesArray={passengerServicesArray}
-                                        setFieldValue={setFieldValue}
-                                        errors={errors}
-                                        touched={touched}
-                                        values={values}
+                                        <div id="about_section">
+                                            <CipAboutAirport content={airportData?.description} siteName={siteName} siteUrl={siteURL} />
+                                            <CipTerms />
+                                        </div>
 
-                                    />
+                                        <div id="facilities_section">
+                                            {airportData?.facilities && airportData?.facilities.length > 0 ? <CipFacilities facilities={airportData?.facilities} /> : null}
+                                            <CipFAQ />
+                                        </div>
 
-                                    {!!selectedServicesArray && <CipExtraServices
-                                        selectedServicesArray={selectedServicesArray}
-                                        updateSelectedServices={updateSelectedServices}
-                                        activeServices={activeServices}
-                                        updateActiveService={updateActiveService}
-                                    />}
-
-                                    <CipTransport
-                                        selectedTransport={selectedTransport}
-                                        updateTransport={updateTransport}
-                                        errors={errors}
-                                        setFieldValue={setFieldValue}
-                                        touched={touched}
-                                        values={values}
-                                    />
-
-                                    <br />
-
-                                    <CipDiscountForm 
-                                        onSubmit={discountSubmitHandler}
-                                        data={discountData}
-                                        loading={discountLoading}
-                                    />
-
-                                    {/* <CipPriceDetails 
-                                        activeServices={activeServices}
-                                        companions={companions}
-                                        passengerServicesArray={passengerServicesArray}
-                                        passengers={passengers}
-                                        selectedServicesArray={selectedServicesArray}
-                                        selectedTransport={selectedTransport}
-                                        //discountResponse={"klkl"}
-                                        validateResponse={validateResponse}
-                                    /> */}
-                                    
-                                    <div className='flex justify-end py-4'>
-                                        <Button
-                                            type="submit"
-                                            className="h-12 px-5 md:w-40"
-                                        >
-                                            ادامه فرایند خرید
-                                        </Button>
-
-                                    </div>
-
-
-                                    <div id="about_section">
-                                        <CipAboutAirport content={airportData?.description} siteName={siteName} siteUrl={siteURL} />
-                                        <CipTerms />
-                                    </div>
-
-                                    <div id="facilities_section">
-                                        {airportData?.facilities && airportData?.facilities.length > 0 ? <CipFacilities facilities={airportData?.facilities} /> : null}
-                                        <CipFAQ />
-                                    </div>
-
-                                </Form>
-                            )
-                        }}
-                    </Formik>
-                </div>
+                                    </Form>
+                                )
+                            }}
+                        </Formik>
+                    </div>
                 )}
 
 

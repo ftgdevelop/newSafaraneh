@@ -1,5 +1,6 @@
 import AccountSidebar from '@/modules/authentication/components/AccountSidebar';
 import ReserveListItem from '@/modules/authentication/components/reservesList/ReserveListItem';
+import ReserveListSearchForm from '@/modules/authentication/components/reservesList/ReserveListSearchForm';
 import { getUserAllReserves } from '@/modules/shared/actions';
 import Pagination from '@/modules/shared/components/ui/Pagination';
 import Skeleton from '@/modules/shared/components/ui/Skeleton';
@@ -25,13 +26,26 @@ const Profile: NextPage = ({ portalData }: { portalData?: PortalDataType }) => {
     const [page, setPage] = useState<number>(1);
     const [loading, setLoading] = useState<boolean>(false);
 
+    const [ids, setIds] = useState<number>();
+    const [types, setTypes] = useState<ReserveType[]>(["Cip", 'HotelDomestic']);
+
 
     let portalName = "";
     if (portalData) {
         portalName = portalData.Phrases?.find(item => item.Keyword === "Name")?.Value || "";
     }
 
-    const fetchReserves = async (params: { MaxResultCount: number; SkipCount: number; Statue?: string; Types?: ReserveType;}) => {
+    type SearchParametesType = {
+        SkipCount?: number;
+        MaxResultCount?: number;
+        Statue?: string;
+        Types?: ReserveType[];
+        FromReturnTime?: string;
+        ToReturnTime?: string;
+        Ids?: number;
+    }
+
+    const fetchReserves = async (params: SearchParametesType) => {
 
         const token = localStorage.getItem('Token');
         if (!token) {
@@ -55,9 +69,48 @@ const Profile: NextPage = ({ portalData }: { portalData?: PortalDataType }) => {
         setLoading(false);
     }
 
+
     useEffect(() => {
-        fetchReserves({ MaxResultCount: 10, SkipCount: (page - 1) * 10 , Types:'HotelDomestic'});
-    }, [page]);
+
+        const parameters: SearchParametesType = { MaxResultCount: 10, SkipCount: (page - 1) * 10 };
+
+        if (ids) {
+            parameters.Ids = +ids;
+        }
+
+        if (types.length){
+            parameters.Types = types;
+        }
+
+        fetchReserves(parameters);
+
+    }, [page, ids, types.length]);
+
+
+    const searchSubmitHandle = (values: {
+        SkipCount?: number;
+        MaxResultCount?: number;
+        Statue?: string;
+        type?: string;
+        FromReturnTime?: string;
+        ToReturnTime?: string;
+        reserveId?: string;
+    }) => {
+        setPage(1);
+
+        if (values.reserveId) {
+            setIds(+values.reserveId);
+        } else {
+            setIds(undefined);
+        }
+
+        if (values.type){
+            setTypes([values.type as ReserveType])
+        }else{
+            setTypes(['Cip', 'HotelDomestic']);
+        }
+
+    }
 
 
     return (
@@ -88,6 +141,11 @@ const Profile: NextPage = ({ portalData }: { portalData?: PortalDataType }) => {
 
                                 {loading || reserveList.length ? (
                                     <div>
+
+                                        {/* <ReserveListSearchForm
+                                            submitHandle={searchSubmitHandle}
+                                        /> */}
+
                                         <div className='border border-neutral-200 rounded-t bg-gray-50 grid grid-cols-6 text-xs mb-3 max-md:hidden'>
                                             <div className='p-2'> شماره سفارش </div>
                                             <div className='p-2'> نوع سفارش </div>
@@ -96,7 +154,7 @@ const Profile: NextPage = ({ portalData }: { portalData?: PortalDataType }) => {
                                             <div className='col-span-2 p-2'> وضعیت </div>
                                         </div>
 
-                                        {!! (reserveList.length === 0 && loading) && [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(loadingItem => (
+                                        {!!(reserveList.length === 0 && loading) && [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(loadingItem => (
                                             <div className='border border-neutral-200 rounded-t bg-gray-50 grid grid-cols-6 text-xs mb-3' key={loadingItem}>
                                                 <div className='p-2'> <Skeleton /> </div>
                                                 <div className='p-2'> <Skeleton /> </div>
@@ -142,7 +200,7 @@ const Profile: NextPage = ({ portalData }: { portalData?: PortalDataType }) => {
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
     return ({
         props: {
-            ...await (serverSideTranslations(context.locale, ['common','hotel', 'payment']))
+            ...await (serverSideTranslations(context.locale, ['common', 'hotel', 'payment']))
         },
     })
 }

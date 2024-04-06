@@ -86,8 +86,8 @@ export interface CipAvailabilityItemType {
     services: {
       name: string;
       id: number;
-      // boardPrice: number;
-      // salePrice: number;
+      boardPrice: number;
+      salePrice: number;
 
       // "description": "string",
       // "hourDescription": "string",
@@ -156,11 +156,11 @@ export interface CipAvailabilityItemType {
   boardPrice: number;
   salePrice: number;
   passengers: {
-    passengerType:"Adult" | "Child" | "Infant" | "Accompanying";
+    passengerType: "Adult" | "Child" | "Infant" | "Accompanying";
     boardPrice: number;
     netPrice: number;
     salePrice: number;
-    currencyType: "USD"|"IRR";
+    currencyType: "USD" | "IRR";
     id: number;
   }[];
   transport:
@@ -390,4 +390,90 @@ export interface CipPrereservePayload {
     id: number;
   }[];
 
+}
+
+export interface CipGetReserveByIdResponse {
+  flightNumber: string;
+  airline: string;
+  flightTime: string;
+  username: string;
+  status:  "Undefined" | "Registered" | "Pending" | "Issued" | "Canceled" | "WebServiceCancel" | "PaymentSuccessful" | "WebServiceUnsuccessful" | "PriceChange" | "Unavailable" | "Refunded" | "Voided" | "InProgress" | "PaidBack" | "RefundInProgress" | "Changed" | "OnCredit" | "ContactProvider" | "UnConfirmed" | "ReceivedAdvance" | "ExtraReceiving" ;
+  reserver: {
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    email: string;
+    userName: string;
+    gender: boolean;
+  };
+  airport: {
+    name: string;
+    city: {
+      name: string;
+      code: string;
+    };
+    picture: {
+      path: string;
+      altAttribute: string;
+      titleAttribute: string;
+    },
+    id: number;
+  };
+  passengers: [
+    {
+      gender: boolean;
+      firstName: string;
+      lastName: string;
+      passengerType: CipPassengerType;
+      passportNumber: string;
+      nationalId: string;
+      nationality: string;
+      birthday: string,
+      service: {
+        items: [
+          {
+            name: string;
+            picture: {
+              path: string;
+              altAttribute: string;
+              titleAttribute: string;
+            };
+            id: number
+          }
+        ]
+      },
+      id: number;
+    }
+  ],
+  transport: {
+    items: [
+      {
+        name: string;
+        address: string;
+        count: number;
+        salePrice: number;
+        picture: {
+          path: string;
+          altAttribute: string;
+          titleAttribute: string;
+        };
+      }
+    ]
+  };
+  service: {
+    items: [
+      {
+        count: number;
+        name: string;
+        type: string;
+        salePrice: number;
+        picture: {
+          path: string;
+          altAttribute: string;
+          titleAttribute: string;
+        };
+      }
+    ];
+  };
+  id: number;
 }

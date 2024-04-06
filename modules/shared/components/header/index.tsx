@@ -24,7 +24,7 @@ const Header: React.FC<Props> = props => {
     return (
         <header className="bg-white z-30 relative">
 
-            {process.env.PROJECT === "SAFARANEH" && <div>
+            {/* {process.env.PROJECT === "SAFARANEH" && <div>
                 <a
                     href="https://safaranehnorooz.landin.ir/1403"
                     target="_blank"
@@ -39,7 +39,7 @@ const Header: React.FC<Props> = props => {
                         height={67}
                     />
                 </a>
-            </div>}
+            </div>} */}
 
             <div className="max-w-container mx-auto px-3 md:px-5 py-3 clearfix relative">
 

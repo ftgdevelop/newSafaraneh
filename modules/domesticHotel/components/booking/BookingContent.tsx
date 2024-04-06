@@ -145,7 +145,7 @@ const BookingContent: React.FC<Props> = props => {
 
                             <p className="text-sm text-center">
                                 برای تماس با پشتیبانی با شماره
-                                <a href="tel:+982126150051"> 02126150051 </a>
+                                <a href={`tel:${props.portalPhoneLink}`}> {props.portalPhoneNumber} </a>
                                 تماس بگیرید.
                             </p>
 
