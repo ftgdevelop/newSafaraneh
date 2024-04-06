@@ -9,7 +9,7 @@ type Props = {
     type?:"submit" | "button";
     href?:string;
     target?: "_blank";
-    color?:"red" | "blue" | 'green';
+    color?:"red" | "blue" | 'green'|'gray';
     hasArrow?: boolean;
 }
 
@@ -28,6 +28,8 @@ const Button: React.FC<PropsWithChildren<Props>> = props => {
         className += " text-white bg-blue-700 hover:bg-blue-800";
     }else if(color === 'green'){
         className += " text-white bg-green-800 hover:bg-green-700";
+    }else if (color === 'gray'){
+        className += " bg-neutral-100 hover:bg-neutral-200";
     }else{
         className += " text-white bg-red-600 hover:bg-red-700";
     }

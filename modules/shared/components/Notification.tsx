@@ -46,7 +46,7 @@ const Notification: React.FC = () => {
             show={storedNotification.isVisible}
             selector='notification_modal_portal'
         >
-            <div className={`fixed text-sm transition-all ${open ? "right-8 opacity-100" : "-right-96 opacity-0"} bottom-8 z-10 bg-black/90 text-white shadow-normal rounded w-60 p-3 sm:p-5 sm:w-96 max-w-md flex justify-between`}>
+            <div className={`fixed text-sm transition-all ${open ? "right-24 opacity-100" : "-right-96 opacity-0"} bottom-8 z-10 bg-black/90 text-white shadow-normal rounded w-60 p-3 sm:p-5 sm:w-96 max-w-md flex justify-between`}>
                 {storedNotification.message}
                 {icon}
             </div>

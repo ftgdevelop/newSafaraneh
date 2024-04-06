@@ -86,33 +86,33 @@ export interface CipAvailabilityItemType {
     services: {
       name: string;
       id: number;
+      boardPrice: number;
+      salePrice: number;
 
-      "description": "string",
-      "hourDescription": "string",
-      "extraDescription": "string",
-      "title": "string",
-      "type": "Pet",
-      "priceType": "PerPassenger",
-      "boardPrice": 0,
-      "netPrice": 0,
-      "salePrice": 0,
-      "currencyType": "USD",
-      "passengerType": "Adult",
-      "extraSalePrice": 0,
-      "extraNetPrice": 0,
-      "extraBoardPrice": 0,
-      "rateId": 0,
-      "hourSalePrice": 0,
-      "hourNetPrice": 0,
-      "hourBoardPrice": 0,
-      "picture": {
-        "path": "string",
-        "altAttribute": "string",
-        "titleAttribute": "string"
-      },
-      "count": 0,
-      "extraCount": 0,
-      "hourCount": 0,
+      // "description": "string",
+      // "hourDescription": "string",
+      // "extraDescription": "string",
+      // "title": "string",
+      // "type": "Pet",
+      // "priceType": "PerPassenger",
+      // "netPrice": 0,
+      // "currencyType": "USD",
+      // "passengerType": "Adult",
+      // "extraSalePrice": 0,
+      // "extraNetPrice": 0,
+      // "extraBoardPrice": 0,
+      // "rateId": 0,
+      // "hourSalePrice": 0,
+      // "hourNetPrice": 0,
+      // "hourBoardPrice": 0,
+      // "picture": {
+      //   "path": "string",
+      //   "altAttribute": "string",
+      //   "titleAttribute": "string"
+      // },
+      // "count": 0,
+      // "extraCount": 0,
+      // "hourCount": 0,
     }[]
   }[];
 
@@ -120,7 +120,7 @@ export interface CipAvailabilityItemType {
     id: number;
     name: string;
     passengerType: "Adult" | "Child" | "Infant" | "Accompanying";
-    // "description": "string",
+    description?: string;
     // "hourDescription": "string",
     // "extraDescription": "string",
     // "title": "string",
@@ -128,7 +128,7 @@ export interface CipAvailabilityItemType {
     // "priceType": "PerPassenger",
     // "boardPrice": 0,
     // "netPrice": 0,
-    // "salePrice": 0,
+    salePrice: number;
     // "currencyType": "USD",
     // "extraSalePrice": 0,
     // "extraNetPrice": 0,
@@ -150,21 +150,19 @@ export interface CipAvailabilityItemType {
   // "adults": 0,
   // "children": 0,
   // "accompanying": 0,
-  // "remark": "string",
+  remark?: string;
   // "description": "string",
-  // "boardPrice": 0,
   // "netPrice": 0,
-  // "salePrice": 0,
-  // "passengers": [
-  //   {
-  //     "passengerType": "Adult",
-  //     "boardPrice": 0,
-  //     "netPrice": 0,
-  //     "salePrice": 0,
-  //     "currencyType": "USD",
-  //     "id": 0
-  //   }
-  // ],
+  boardPrice: number;
+  salePrice: number;
+  passengers: {
+    passengerType: "Adult" | "Child" | "Infant" | "Accompanying";
+    boardPrice: number;
+    netPrice: number;
+    salePrice: number;
+    currencyType: "USD" | "IRR";
+    id: number;
+  }[];
   transport:
   {
     name?: string;
@@ -175,7 +173,7 @@ export interface CipAvailabilityItemType {
       altAttribute?: string;
       titleAttribute?: string;
     };
-    // "description": "string",
+    description: string;
     // "boardPrice": 0,
     // "netPrice": 0,
     // "currencyType": "USD",
@@ -347,4 +345,135 @@ export interface CipValidateResponseType {
     // "currencyType": "USD",
   }[];
 
+}
+
+export interface CipPrereservePayload {
+
+  airline: string;
+  flightNumber: string;
+  originName: string;
+  destinationName: string;
+  flightTime: string;
+  preReserveKey: string;
+
+  passengers: {
+    gender: boolean;
+    firstName: string;
+    lastName: string;
+    passengerType: CipPassengerType;
+    passportNumber?: string;
+    nationalId?: string;
+    nationality?: string;
+    birthday?: string;
+    services: number[]
+  }[];
+
+  reserver: {
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    email: string;
+    userName: string;
+    gender: boolean;
+  };
+
+  services?: {
+    count: number;
+    extraCount?: number;
+    hourCount?: number;
+    id: number;
+  }[];
+
+  transports?: {
+    count: number;
+    address?: string;
+    id: number;
+  }[];
+
+}
+
+export interface CipGetReserveByIdResponse {
+  flightNumber: string;
+  airline: string;
+  flightTime: string;
+  username: string;
+  status:  "Undefined" | "Registered" | "Pending" | "Issued" | "Canceled" | "WebServiceCancel" | "PaymentSuccessful" | "WebServiceUnsuccessful" | "PriceChange" | "Unavailable" | "Refunded" | "Voided" | "InProgress" | "PaidBack" | "RefundInProgress" | "Changed" | "OnCredit" | "ContactProvider" | "UnConfirmed" | "ReceivedAdvance" | "ExtraReceiving" ;
+  reserver: {
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    email: string;
+    userName: string;
+    gender: boolean;
+  };
+  airport: {
+    name: string;
+    city: {
+      name: string;
+      code: string;
+    };
+    picture: {
+      path: string;
+      altAttribute: string;
+      titleAttribute: string;
+    },
+    id: number;
+  };
+  passengers: [
+    {
+      gender: boolean;
+      firstName: string;
+      lastName: string;
+      passengerType: CipPassengerType;
+      passportNumber: string;
+      nationalId: string;
+      nationality: string;
+      birthday: string,
+      service: {
+        items: [
+          {
+            name: string;
+            picture: {
+              path: string;
+              altAttribute: string;
+              titleAttribute: string;
+            };
+            id: number
+          }
+        ]
+      },
+      id: number;
+    }
+  ],
+  transport: {
+    items: [
+      {
+        name: string;
+        address: string;
+        count: number;
+        salePrice: number;
+        picture: {
+          path: string;
+          altAttribute: string;
+          titleAttribute: string;
+        };
+      }
+    ]
+  };
+  service: {
+    items: [
+      {
+        count: number;
+        name: string;
+        type: string;
+        salePrice: number;
+        picture: {
+          path: string;
+          altAttribute: string;
+          titleAttribute: string;
+        };
+      }
+    ];
+  };
+  id: number;
 }

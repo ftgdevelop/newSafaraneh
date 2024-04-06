@@ -19,6 +19,7 @@ const CreditPayment: React.FC<Props> = props => {
 
     const balance = useAppSelector(state => state.authentication.balance);
     const balanceLoading = useAppSelector(state => state.authentication.balanceLoading);
+    const userIsAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
 
     let balanceElement: React.ReactNode = balanceLoading ? <Skeleton /> : 0;
     if (balance) {
@@ -66,6 +67,13 @@ const CreditPayment: React.FC<Props> = props => {
             setSubmitLoading(false);
             setErrorMessage(response.response?.data?.error?.message);
         }
+    }
+    if (!userIsAuthenticated){
+        return (
+            <div className='py-8'>
+                برای پرداخت اعتباری لطفا ابتدا وارد سایت شوید.
+            </div>
+        )
     }
 
     return (

@@ -69,9 +69,6 @@ type Props = {
         passengers: {
             firstName: string;
             lastName: string;
-            phoneNumber: string;
-            email: string;
-            userName: string;
             gender: boolean;
             passengerType: "Adult" | "Child";
             passportNumber: string;

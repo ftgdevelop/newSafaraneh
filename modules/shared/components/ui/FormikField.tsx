@@ -17,6 +17,7 @@ type Props = {
     onChange?: (value: string) => void;
     value: string;
     labelIsSimple?: boolean;
+    labelIsSmall?:boolean;
     showRequiredStar?: boolean;
     isPassword?: boolean;
     showNotConfirmedBadge?: boolean;
@@ -64,7 +65,7 @@ const FormikField: React.FC<Props> = props => {
                     {!!props.label && (
                         <label
                             htmlFor={props.id}
-                            className={`z-10 select-none pointer-events-none block leading-4 ${props.labelIsSimple ? "mb-3" : "absolute px-2 bg-white transition-all duration-300 -translate-y-1/2 rtl:right-1 ltr:left-1"} ${props.labelIsSimple ? "text-base" : labelUp ? "top-0 text-xs" : "top-1/2 text-sm"}`}
+                            className={`z-10 select-none pointer-events-none block leading-4 ${ props.labelIsSmall ? "mb-2": props.labelIsSimple ? "mb-3" : "absolute px-2 bg-white transition-all duration-300 -translate-y-1/2 rtl:right-1 ltr:left-1"} ${ props.labelIsSmall?"text-sm": props.labelIsSimple ? "text-base" : labelUp ? "top-0 text-xs" : "top-1/2 text-sm"}`}
                         >
                             {!!(props.labelIsSimple && props.showRequiredStar) && <span className='text-red-600'>* </span>}
                             {props.label}

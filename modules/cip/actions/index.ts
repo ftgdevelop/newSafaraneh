@@ -1,5 +1,6 @@
 import { Cip, ServerAddress } from "@/enum/url";
 import axios from "axios";
+import { CipPrereservePayload } from "../types/cip";
 
 export const GetAirportsDetail = async () => {
     try {
@@ -82,6 +83,91 @@ export const CipValidate = async (params: { iataCode: string; rateId: number; },
                 "destinationName": "",
                 "rateId": params.rateId
             },
+            {
+                headers: {
+                    Accept: 'application/json;charset=UTF-8',
+                    apikey: process.env.PROJECT_SERVER_APIKEY,
+                    "Accept-Language": acceptLanguage,
+                    Tenantid: process.env.PROJECT_SERVER_TENANTID
+                },
+            },
+        )
+        return response
+    } catch (error) {
+        return error
+    }
+}
+
+
+export const CipPreReserve = async (params: CipPrereservePayload, acceptLanguage: string = 'fa-IR') => {
+
+    try {
+        let response = await axios.post(
+            `${ServerAddress.Type}${ServerAddress.Cip}${Cip.PreReserve}`,
+            params,
+            {
+                headers: {
+                    Accept: 'application/json;charset=UTF-8',
+                    apikey: process.env.PROJECT_SERVER_APIKEY,
+                    "Accept-Language": acceptLanguage,
+                    Tenantid: process.env.PROJECT_SERVER_TENANTID
+                },
+            },
+        )
+        return response
+    } catch (error) {
+        return error
+    }
+}
+
+
+export const CipGetReserveById = async (params: { reserveId: string, userName: string }, acceptLanguage: string = 'fa-IR') => {
+    try {
+        let response = await axios.get(
+            `${ServerAddress.Type}${ServerAddress.Cip}${Cip.GetReserveById}?ReserveId=${params.reserveId}&Username=${params.userName}`,
+            {
+                headers: {
+                    Accept: 'application/json;charset=UTF-8',
+                    apikey: process.env.PROJECT_SERVER_APIKEY,
+                    "Accept-Language": acceptLanguage,
+                    Tenantid: process.env.PROJECT_SERVER_TENANTID
+                },
+            },
+        )
+        return response
+    } catch (error) {
+        return error
+    }
+}
+
+
+export const CipConfirm = async (params: { reserveId: string, username: string }, acceptLanguage: string = 'fa-IR') => {
+
+    try {
+        let response = await axios.post(
+            `${ServerAddress.Type}${ServerAddress.Cip}${Cip.Confirm}`,
+            params,
+            {
+                headers: {
+                    Accept: 'application/json;charset=UTF-8',
+                    apikey: process.env.PROJECT_SERVER_APIKEY,
+                    "Accept-Language": acceptLanguage,
+                    Tenantid: process.env.PROJECT_SERVER_TENANTID
+                },
+            },
+        )
+        return response
+    } catch (error) {
+        return error
+    }
+}
+
+
+
+export const CipGetVoucher = async (params: { reserveId: string, userName: string }, acceptLanguage: string = 'fa-IR') => {
+    try {
+        let response = await axios.get(
+            `${ServerAddress.Type}${ServerAddress.Cip}${Cip.GetVoucherPdf}?ReserveId=${params.reserveId}&Username=${params.userName}`,
             {
                 headers: {
                     Accept: 'application/json;charset=UTF-8',

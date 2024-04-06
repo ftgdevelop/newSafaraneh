@@ -18,6 +18,9 @@ import CreditPayment from '@/modules/payment/components/CreditPayment';
 import { getReserveBankGateway, makeToken } from '@/modules/payment/actions';
 import { useAppDispatch } from '@/modules/shared/hooks/use-store';
 import { setReduxError } from '@/modules/shared/store/errorSlice';
+import CipAside from '@/modules/cip/components/shared/CipAside';
+import { CipGetReserveByIdResponse } from '@/modules/cip/types/cip';
+import { CipGetReserveById } from '@/modules/cip/actions';
 
 
 const Payment: NextPage = () => {
@@ -39,7 +42,10 @@ const Payment: NextPage = () => {
   const [domesticHotelData, setDomesticHotelData] = useState<DomesticHotelSummaryDetail>();
   const [bankGatewayList, setBankGatewayList] = useState([]);
 
-  const [goToBankLoading,setGoToBankLoading] = useState<boolean>(false);
+  const [cipReserveInfo, setCipReserveInfo] = useState<CipGetReserveByIdResponse>();
+  const [cipReserveInfoLoading, setCipReserveInfoLoading] = useState<boolean>(true);
+
+  const [goToBankLoading, setGoToBankLoading] = useState<boolean>(false);
 
   const [expireDate, setExpireDate] = useState();
 
@@ -59,19 +65,19 @@ const Payment: NextPage = () => {
     fetchType();
 
     const getBankGatewayList = async () => {
-      
-      if(!reserveId) return;
 
-      const response :any = await getReserveBankGateway(reserveId);
+      if (!reserveId) return;
+
+      const response: any = await getReserveBankGateway(reserveId);
       if (response?.status == 200 && response.data.result) {
         setBankGatewayList(response.data.result[0]);
       } else {
         debugger;
         dispatch(setReduxError({
           title: t('error'),
-          message:response.data.error.message,
+          message: response.data.error.message,
           isVisible: true
-      }));
+        }));
       }
     };
 
@@ -100,23 +106,41 @@ const Payment: NextPage = () => {
       fetchDomesticHotelReserve();
     }
 
+    if (username && reserveId && type === 'Cip') {
+      
+      const fetchCipData = async (reserveId: string, userName: string) => {
+        
+        setCipReserveInfoLoading(true);
+        
+        const respone: any = await CipGetReserveById({ reserveId: reserveId, userName: userName });
+        
+        setCipReserveInfoLoading(false);
+
+        if (respone?.data?.result) {
+          setCipReserveInfo(respone.data.result);
+        }
+      };
+
+      fetchCipData(reserveId, username);
+    }
+
   }, [type, username, reserveId]);
 
 
-  const goTobank = async (gatewayId:number) => {
-    
+  const goTobank = async (gatewayId: number) => {
+
     if (!reserveId) return;
 
     setGoToBankLoading(true);
 
-    const callbackUrl = window?.location?.origin + (i18n?.language === "fa" ? "/fa" : "en") +"/callback";
-  
+    const callbackUrl = window?.location?.origin + (i18n?.language === "fa" ? "/fa" : "en") + "/callback";
+
     const params = {
       gatewayId: gatewayId,
       callBackUrl: callbackUrl,
       reserveId: reserveId,
     };
-    
+
     const response = await makeToken(params);
     if (response.status == 200) {
       window.location.replace(
@@ -125,9 +149,9 @@ const Payment: NextPage = () => {
     } else {
       dispatch(setReduxError({
         title: t('error'),
-        message:response.data.error.message,
+        message: response.data.error.message,
         isVisible: true
-    }));
+      }));
 
       setGoToBankLoading(false);
     }
@@ -174,7 +198,7 @@ const Payment: NextPage = () => {
         alt: domesticHotelData.picture?.altAttribute || domesticHotelData.displayName || "",
         title: domesticHotelData.picture?.titleAttribute || domesticHotelData.displayName || ""
       },
-      name: domesticHotelData.displayName || domesticHotelData.name || "" ,
+      name: domesticHotelData.displayName || domesticHotelData.name || "",
       rating: domesticHotelData.rating,
       address: domesticHotelData.address,
       Url: domesticHotelData.url,
@@ -280,8 +304,17 @@ const Payment: NextPage = () => {
 
           <div>
 
-            <DomesticHotelAside hotelInformation={domesticHotelInformation} reserveInformation={domesticHotelReserveInformation} />
-{/* 
+            {type === 'HotelDomestic' ? (
+              <DomesticHotelAside hotelInformation={domesticHotelInformation} reserveInformation={domesticHotelReserveInformation} />
+            ) : type === 'Cip' ? (
+              <CipAside
+                loading={cipReserveInfoLoading}
+                reserveInfo={cipReserveInfo}
+              />
+            ) : null}
+
+
+            {/* 
             <div className='bg-white p-4 border border-neutral-300 rounded-md mb-4 border-t-2 border-t-orange-400'>
               {domesticHotelInformation ? (
                 <>
@@ -318,7 +351,7 @@ const Payment: NextPage = () => {
                 </>
               )}
             </div> */}
-            
+
           </div>
         </div>
       </div>
@@ -329,7 +362,7 @@ const Payment: NextPage = () => {
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return ({
     props: {
-      ...await (serverSideTranslations(context.locale, ['common', 'hotel','payment']))
+      ...await (serverSideTranslations(context.locale, ['common', 'hotel', 'payment']))
 
     },
   })
