@@ -83,7 +83,7 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
                 setItems(response.data.result);
             } else {
                 setItems([]);
-                if (response.data.success) {
+                if (response.data?.success) {
                     setErrorText(noResultMessage || 'No result found!');
                 }
             }

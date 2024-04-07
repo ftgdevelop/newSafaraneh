@@ -41,7 +41,7 @@ const ModulesBanner: React.FC = () => {
 
 
         <Link 
-          href='https://tickets.safaraneh.com/fa/cip/فرودگاه-بین-المللی-امام-خمینی-Cip-خدمات' className={linkClassName} >
+          href='/cip/فرودگاه-بین-المللی-امام-خمینی-Cip-خدمات' className={linkClassName} >
 
           <div className='absolute top-0 right-0 left-0 p-5 text-white'>
             <h2 className='bg-black/25 text-sm md:text-lg px-3 py-1 mb-2 rounded inline-block font-bold'>

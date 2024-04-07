@@ -47,7 +47,7 @@ const Rooms: React.FC<Props> = props => {
 
                 if (response?.data?.result) {
                     setAvailabilities(response.data.result.availabilities);
-                } else if (response.data.success) {
+                } else if (response.data?.success) {
                     console.error("oops, no available room!")
                 }
             };

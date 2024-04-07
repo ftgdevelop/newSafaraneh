@@ -27,7 +27,10 @@ const Profile: NextPage = ({ portalData }: { portalData?: PortalDataType }) => {
     const [loading, setLoading] = useState<boolean>(false);
 
     const [ids, setIds] = useState<number>();
-    const [types, setTypes] = useState<ReserveType[]>(["Cip", 'HotelDomestic']);
+    const [types, setTypes] = useState<ReserveType>();
+
+    const [startDate, setStartDate] = useState<string>();
+    const [endDate, setEndDate] = useState<string>();
 
 
     let portalName = "";
@@ -39,7 +42,7 @@ const Profile: NextPage = ({ portalData }: { portalData?: PortalDataType }) => {
         SkipCount?: number;
         MaxResultCount?: number;
         Statue?: string;
-        Types?: ReserveType[];
+        Types?: ReserveType;
         FromReturnTime?: string;
         ToReturnTime?: string;
         Ids?: number;
@@ -78,13 +81,21 @@ const Profile: NextPage = ({ portalData }: { portalData?: PortalDataType }) => {
             parameters.Ids = +ids;
         }
 
-        if (types.length){
+        if (types){
             parameters.Types = types;
+        }
+
+        if (startDate){
+            parameters.FromReturnTime = startDate;
+        }
+
+        if (endDate){
+            parameters.ToReturnTime = endDate;
         }
 
         fetchReserves(parameters);
 
-    }, [page, ids, types.length]);
+    }, [page, ids, types, startDate, endDate]);
 
 
     const searchSubmitHandle = (values: {
@@ -105,9 +116,21 @@ const Profile: NextPage = ({ portalData }: { portalData?: PortalDataType }) => {
         }
 
         if (values.type){
-            setTypes([values.type as ReserveType])
+            setTypes(values.type as ReserveType)
         }else{
-            setTypes(['Cip', 'HotelDomestic']);
+            setTypes(undefined);
+        }
+
+        if (values.FromReturnTime){
+            setStartDate(values.FromReturnTime);
+        }else{
+            setStartDate(undefined);
+        }
+        
+        if (values.ToReturnTime){
+            setEndDate(values.ToReturnTime);
+        }else{
+            setEndDate(undefined);
         }
 
     }
@@ -142,9 +165,9 @@ const Profile: NextPage = ({ portalData }: { portalData?: PortalDataType }) => {
                                 {loading || reserveList.length ? (
                                     <div>
 
-                                        {/* <ReserveListSearchForm
+                                        <ReserveListSearchForm
                                             submitHandle={searchSubmitHandle}
-                                        /> */}
+                                        />
 
                                         <div className='border border-neutral-200 rounded-t bg-gray-50 grid grid-cols-6 text-xs mb-3 max-md:hidden'>
                                             <div className='p-2'> شماره سفارش </div>

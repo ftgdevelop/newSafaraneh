@@ -170,7 +170,7 @@ const TravelServices: React.FC<Props> = props => {
                         <Link 
                             onClick={()=>{setOpenMenu(false)}} 
                             //href='/cip' 
-                            href="https://tickets.safaraneh.com/fa/cip-home"
+                            href="/cip-home"
                             className={linkWithIconClassName} 
                         >
                             <Suitcase className={iconClassName} />

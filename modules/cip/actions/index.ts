@@ -99,19 +99,33 @@ export const CipValidate = async (params: { iataCode: string; rateId: number; },
 }
 
 
-export const CipPreReserve = async (params: CipPrereservePayload, acceptLanguage: string = 'fa-IR') => {
+export const CipPreReserve = async (params: CipPrereservePayload, token?:string, acceptLanguage: string = 'fa-IR') => {
 
     try {
+
+        const headers = {
+            Accept: 'application/json;charset=UTF-8',
+            apikey: process.env.PROJECT_SERVER_APIKEY,
+            "Accept-Language": acceptLanguage,
+            Tenantid: process.env.PROJECT_SERVER_TENANTID,           
+        };
+
+        let authHeaders;
+
+        if (token){
+            authHeaders = {
+                ...headers,
+                Authorization: `Bearer ${token}`,
+            }
+        } else {
+            authHeaders = headers;
+        }
+
         let response = await axios.post(
             `${ServerAddress.Type}${ServerAddress.Cip}${Cip.PreReserve}`,
             params,
             {
-                headers: {
-                    Accept: 'application/json;charset=UTF-8',
-                    apikey: process.env.PROJECT_SERVER_APIKEY,
-                    "Accept-Language": acceptLanguage,
-                    Tenantid: process.env.PROJECT_SERVER_TENANTID
-                },
+                headers:authHeaders,
             },
         )
         return response

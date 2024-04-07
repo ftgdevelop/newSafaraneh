@@ -44,7 +44,7 @@ export const getUserAllReserves = async (params:{
     SkipCount?:number;
     MaxResultCount?:number;
     Statue?:string;
-    Types?:ReserveType[];
+    Types?:ReserveType;
     FromReturnTime?: string;
     ToReturnTime?: string;
     Ids?: number;
