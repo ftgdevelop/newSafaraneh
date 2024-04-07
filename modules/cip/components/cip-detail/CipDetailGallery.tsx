@@ -47,7 +47,7 @@ const CipDetailGallery: React.FC<{ items: CipGetAirportByUrlResponseType['galler
                     ))}
                     <span className='text-xs absolute bottom-3 rtl:left-3 ltr:right-3 bg-black/75 text-white px-5 py-2 rounded-lg pointer-events-none flex gap-2 items-center'>
                         <ImageGallery className='w-6 h-6 fill-current' />
-                        {tCip("morePicyures")}
+                        {tCip("morePictures")}
                     </span>
                 </div>
             ):(
@@ -72,7 +72,7 @@ const CipDetailGallery: React.FC<{ items: CipGetAirportByUrlResponseType['galler
                     ))}
                     <span className='text-xs absolute bottom-3 rtl:left-3 ltr:right-3 bg-black/75 text-white px-5 py-2 rounded-lg pointer-events-none flex gap-2 items-center'>
                         <ImageGallery className='w-6 h-6 fill-current' />
-                        {tCip("morePicyures")}
+                        {tCip("morePictures")}
                     </span>
                 </div>
             )}

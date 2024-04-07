@@ -94,7 +94,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
 
   return (
 
-    <div className={`wrapper leading-7 ${process.env.THEME || ""} lang-${locale} ${locale === "fa" ? "rtl" : ""} ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`} >
+    <div className={`wrapper leading-7 ${process.env.THEME || ""} lang-${locale} ${locale !== "en" ? "rtl" : ""} ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`} >
 
       <PageLoadingBar active={loading} />
 
