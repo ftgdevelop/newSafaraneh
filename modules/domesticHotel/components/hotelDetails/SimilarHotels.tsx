@@ -62,7 +62,7 @@ const SimilarHotels: React.FC<Props> = props => {
         setLoading(true);
         const response = await AvailabilityByHotelId({checkin:checkin, checkout:checkout, ids:ids}, acceptLanguage);
 
-        if (response){
+        if (response?.data?.result?.hotels){
             setPricedResponse(response.data.result.hotels);
         }
 

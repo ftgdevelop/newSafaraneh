@@ -45,9 +45,10 @@ const Rooms: React.FC<Props> = props => {
 
                 const response: any = await GetRooms({ id: hotelId, checkin: checkin, checkout: checkout }, i18n?.language === "fa" ? "fa-IR" : "en-US");
 
-                if (response?.data.result) {
+                if (response?.data?.result) {
                     setAvailabilities(response.data.result.availabilities);
                 } else if (response.data.success) {
+                    console.error("oops, no available room!")
                 }
             };
 
@@ -76,7 +77,7 @@ const Rooms: React.FC<Props> = props => {
             MetaSearchKey: utm?.utmKey || null
         });
 
-        if (preReserveResponse.data) {
+        if (preReserveResponse.data?.result?.preReserveKey) {
             const key = preReserveResponse.data.result.preReserveKey;
             router.push(`/hotel/checkout/key=${key}`);
         }

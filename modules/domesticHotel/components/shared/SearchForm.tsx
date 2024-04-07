@@ -66,7 +66,7 @@ const SearchForm: React.FC<Props> = props => {
 
         if (!selectedDestination) {
 
-            const localStorageDefaultDestinations = localStorage.getItem('domesticHotelSearchDefaultDestinations');
+            const localStorageDefaultDestinations = localStorage?.getItem('domesticHotelSearchDefaultDestinations');
             const initialDestinations = localStorageDefaultDestinations ? JSON.parse(localStorageDefaultDestinations) : undefined;
 
             if (initialDestinations) {
@@ -91,7 +91,7 @@ const SearchForm: React.FC<Props> = props => {
                         if (response?.data?.result?.length) {
 
                             setDefaultDestinations(response.data.result);
-                            localStorage.setItem('domesticHotelSearchDefaultDestinations', JSON.stringify(response.data.result));
+                            localStorage?.setItem('domesticHotelSearchDefaultDestinations', JSON.stringify(response.data.result));
 
                         }
 
@@ -228,7 +228,7 @@ const SearchForm: React.FC<Props> = props => {
 
     return (
         <div className={`domestic-hotel-search-form grid grid-cols-1 md:grid-cols-7 gap-2 ${props.wrapperClassName || ""}`}>
-            <div className="relative col-span-1 md:col-span-3">
+            <div className="relative z-20 col-span-1 md:col-span-3">
                 <label htmlFor="destination" className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5">
                     {t('searchHotelDestination')}
                 </label>
@@ -257,7 +257,7 @@ const SearchForm: React.FC<Props> = props => {
                     url={autoCompleteUrl}
                 />
             </div>
-            <div className="col-span-1 md:col-span-3 relative">
+            <div className="col-span-1 md:col-span-3 relative z-10">
 
 
 
