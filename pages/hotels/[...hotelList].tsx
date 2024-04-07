@@ -105,9 +105,9 @@ const HotelList: NextPage<Props> = props => {
   const router = useRouter();
   const pathSegments = router.asPath?.split("/");
 
-  const locationSegment = pathSegments.find(item => item.includes("location"));
-  const checkinSegment = pathSegments.find(item => item.includes("checkin"));
-  const checkoutSegment = pathSegments.find(item => item.includes("checkout"));
+  const locationSegment = pathSegments.find(item => item.includes("location"))?.split("?")[0]?.split("#")[0];
+  const checkinSegment = pathSegments.find(item => item.includes("checkin"))?.split("?")[0]?.split("#")[0];
+  const checkoutSegment = pathSegments.find(item => item.includes("checkout"))?.split("?")[0]?.split("#")[0];
 
   let locationId: number;
   if (locationSegment) {
@@ -425,11 +425,11 @@ const HotelList: NextPage<Props> = props => {
 
   const filteredAvailability = urlSegments.find(item => item.includes('available'));
   const filteredName = urlSegments.find(item => item.includes('name-'))?.split("name-")[1];
-  const filteredRating = urlSegments.find(item => item.includes('rating'))?.split("rating-")[1].split(",") || [];
-  const filteredGuestPoints = urlSegments.find(item => item.includes('guestrate'))?.split("guestrate-")[1].split(",") || [];
-  const filteredHotelType = urlSegments.find(item => item.includes('type'))?.split("type-")[1].split(",") || [];
-  const filteredFacility = urlSegments.find(item => item.includes('amenities'))?.split("amenities-")[1].split(",") || [];
-  const filteredPrice = urlSegments.find(item => item.includes('price'))?.split("price-")[1].split(",") || [];
+  const filteredRating = urlSegments.find(item => item.includes('rating'))?.split("rating-")[1]?.split(",") || [];
+  const filteredGuestPoints = urlSegments.find(item => item.includes('guestrate'))?.split("guestrate-")[1]?.split(",") || [];
+  const filteredHotelType = urlSegments.find(item => item.includes('type'))?.split("type-")[1]?.split(",") || [];
+  const filteredFacility = urlSegments.find(item => item.includes('amenities'))?.split("amenities-")[1]?.split(",") || [];
+  const filteredPrice = urlSegments.find(item => item.includes('price'))?.split("price-")[1]?.split(",") || [];
 
   const filteredHotels = hotels.filter(hotelItem => {
 

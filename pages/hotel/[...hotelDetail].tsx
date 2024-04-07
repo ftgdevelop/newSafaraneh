@@ -44,7 +44,7 @@ const HotelDetail: NextPage<Props> = props => {
   const { t: tHotel } = useTranslation('hotel');
 
   const router = useRouter();
-  const searchInfo = router.asPath;
+  const searchInfo = router.asPath?.split("?")[0]?.split("#")[0];
 
   let checkin: string = "";
   let checkout: string = "";
