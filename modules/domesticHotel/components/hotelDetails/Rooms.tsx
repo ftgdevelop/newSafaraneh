@@ -43,7 +43,7 @@ const Rooms: React.FC<Props> = props => {
             const fetchRooms = async () => {
                 setAvailabilities(undefined);
 
-                const response: any = await GetRooms({ id: hotelId, checkin: checkin, checkout: checkout }, i18n?.language === "fa" ? "fa-IR" : "en-US");
+                const response: any = await GetRooms({ id: hotelId, checkin: checkin, checkout: checkout }, i18n?.language === "fa" ? "fa-IR" : i18n?.language === "ar"?"ar-SA" : "en-US");
 
                 if (response?.data?.result) {
                     setAvailabilities(response.data.result.availabilities);
