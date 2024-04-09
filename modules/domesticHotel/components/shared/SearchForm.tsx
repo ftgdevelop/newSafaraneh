@@ -233,6 +233,7 @@ const SearchForm: React.FC<Props> = props => {
                     {t('searchHotelDestination')}
                 </label>
                 <AutoComplete
+                    type="hotel"
                     defaultList={defaultDestinations}
                     inputId="destination"
                     //checkTypingLanguage

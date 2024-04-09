@@ -2,23 +2,50 @@ import { Cip, ServerAddress } from "@/enum/url";
 import axios from "axios";
 import { CipPrereservePayload } from "../types/cip";
 
-export const GetAirportsDetail = async () => {
+export const GetAirportsList = async () => {
     try {
-        const res = await axios.get('https://cip.safaraneh.com/api/services/app/Airport/GetAll')
+        const res = await axios.get(`${ServerAddress.Type}${ServerAddress.Cip}${Cip.GetAllAirports}`)
         return res
     } catch (error: any) {
         console.log(error);
     }
 }
 
-export const GetAirportList = async () => {
+export const GetCipAirPortListforContent = async () => {
     try {
         const res = await axios.get('https://api.safaraneh.com/v2/Cip/GetCipAirPortList')
         return res
-    } catch (error) {
+    } catch (error: any) {
         console.log(error);
     }
 }
+
+export const GetAirportsAvailability = async (codes: string[], acceptLanguage: string = 'fa-IR') => {
+
+    try {
+        let response = await axios.post(
+            `${ServerAddress.Type}${ServerAddress.Cip}${Cip.Availability}`,
+            {
+                "iataCodes": codes,
+                "adults": 1,
+                "children": 0,
+                "accompanying": 0
+            },
+            {
+                headers: {
+                    Accept: 'application/json;charset=UTF-8',
+                    apikey: process.env.PROJECT_SERVER_APIKEY,
+                    "Accept-Language": acceptLanguage,
+                    Tenantid: process.env.PROJECT_SERVER_TENANTID
+                },
+            },
+        )
+        return response
+    } catch (error) {
+        return error
+    }
+}
+
 
 export const getAirportByUrl = async (url: string, acceptLanguage: string = 'fa-IR') => {
 

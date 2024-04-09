@@ -477,3 +477,11 @@ export interface CipGetReserveByIdResponse {
   };
   id: number;
 }
+
+export interface CipAvailibilityItem {
+  availability: {
+    boardPrice: number;
+    salePrice: number;
+  }[];
+  id: number;
+}  

@@ -24,13 +24,14 @@ type Props<T> = {
     textPropertyName: string;
     noResultMessage?: string;
     checkTypingLanguage?: boolean;
+    type: "hotel" | "flight"
 }
 
 function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
 
     const { checkTypingLanguage, url, noResultMessage, onChangeHandle, acceptLanguage, min, icon } = props;
 
-    const {t} = useTranslation("common");
+    const { t } = useTranslation("common");
 
     const inputRef = useRef<HTMLInputElement>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
@@ -67,17 +68,38 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
 
     const fetchData = async (value: string, acceptLanguage?: "fa-IR" | "en-US") => {
         setLoading(true);
-    
-        try{
-            const response = await axios({
-                method: "post",
-                url:   `${url}?input=${value}`,
-                headers: {
-                    ...Header,
-                    apikey: process.env.PROJECT_PORTAL_APIKEY,
-                    "Accept-Language": acceptLanguage || "en-US",
+
+        try {
+
+            let axiosParams;
+            if (props.type === 'flight') {
+                axiosParams = {
+                    method: "post",
+                    url: url,
+                    data: {
+                        query: value
+                    },
+                    headers: {
+                        ...Header,
+                        apikey: process.env.PROJECT_PORTAL_APIKEY,
+                        "Accept-Language": acceptLanguage || "en-US",
+                    }
                 }
-            }) 
+            } else if (props.type === 'hotel') {
+                axiosParams = {
+                    method: "post",
+                    url: `${url}?input=${value}`,
+                    headers: {
+                        ...Header,
+                        apikey: process.env.PROJECT_PORTAL_APIKEY,
+                        "Accept-Language": acceptLanguage || "en-US",
+                    }
+                }
+            }
+
+            if (!axiosParams) return;
+
+            const response = await axios(axiosParams);
 
             if (response?.data?.result?.length) {
                 setItems(response.data.result);
@@ -88,12 +110,12 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
                 }
             }
 
-        }catch (error:any){
-            if(error.message){
+        } catch (error: any) {
+            if (error.message) {
                 dispatch(setReduxError({
                     title: t('error'),
                     message: error.message,
-                    isVisible : true
+                    isVisible: true
                 }))
             }
 
@@ -162,9 +184,9 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
 
     if (items?.length || props.defaultList?.length) {
         let data;
-        if(!typingValue){
+        if (!typingValue) {
             data = props.defaultList;
-        }else{
+        } else {
             data = undefined;
         }
         if (items?.length) {
@@ -241,7 +263,7 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
 
     let iconElement = null;
 
-    if (icon && icon === "location"){
+    if (icon && icon === "location") {
         iconElement = <Location className={iconClassName} />;
     }
 
@@ -269,7 +291,7 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
                     ref={inputRef}
                     placeholder={props.placeholder || ""}
                 />
-                
+
                 {iconElement}
 
                 {loading && <span className={`animate-spin block border-2 border-neutral-400 rounded-full border-r-transparent border-t-transparent  w-6 h-6 absolute top-1/2 -mt-3.5 ${!direction ? "ltr:right-3 rtl:left-3" : direction === 'rtl' ? "left-3" : "right-3"}`} />}
