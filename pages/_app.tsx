@@ -27,7 +27,7 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
   const router = useRouter();
 
   const { locale } = router;
-  const dir = locale === 'fa' ? 'rtl' : 'ltr';
+  const dir = locale === 'en' ? 'ltr' : 'rtl';
 
   useEffect(() => {
     i18n?.changeLanguage(locale);

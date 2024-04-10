@@ -7,7 +7,7 @@ import { ServerAddress } from '@/enum/url';
 type Props = {
     reserveId: string;
     username: string;
-    className: string;
+    className?: string;
     simple?: boolean;
 }
 
@@ -44,7 +44,7 @@ const DownloadPdfVoucher: React.FC<Props> = props => {
             type="button"
             onClick={handleClick}
             disabled={loading}
-            className={props.className}
+            className={props.className||""}
         >
 
             {loading ? (

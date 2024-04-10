@@ -24,10 +24,10 @@ import AnchorTabs from '@/modules/shared/components/ui/AnchorTabs';
 
 type Props = {
   allData: {
-    accommodation: { result: DomesticAccomodationType };
-    score: HotelScoreDataType;
-    page: PageDataType;
-    hotel: DomesticHotelDetailType;
+    accommodation?: { result: DomesticAccomodationType };
+    score?: HotelScoreDataType;
+    page?: PageDataType;
+    hotel?: DomesticHotelDetailType;
   };
   portalData: PortalDataType;
 }
@@ -38,13 +38,13 @@ const HotelDetail: NextPage<Props> = props => {
 
   const { accommodation, hotel: hotelData, page: pageData, score: hotelScoreData } = allData;
 
-  const accommodationData = accommodation.result;
+  const accommodationData = accommodation?.result;
 
   const { t } = useTranslation('common');
   const { t: tHotel } = useTranslation('hotel');
 
   const router = useRouter();
-  const searchInfo = router.asPath;
+  const searchInfo = router.asPath?.split("?")[0]?.split("#")[0];
 
   let checkin: string = "";
   let checkout: string = "";
@@ -135,7 +135,7 @@ const HotelDetail: NextPage<Props> = props => {
           </>
         )}
 
-        <script
+        {!!hotelScoreData && <script
           id="script_detail_1"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -167,7 +167,7 @@ const HotelDetail: NextPage<Props> = props => {
             }
           }`,
           }}
-        />
+        />}
 
         <script
           id="script_detail_2"
@@ -278,13 +278,13 @@ const HotelDetail: NextPage<Props> = props => {
 
       {!!hotelData.Facilities?.length && <HotelFacilities facilities={hotelData.Facilities} />}
 
-      {!!(hotelData.Policies?.length || accommodationData.instruction?.length || accommodationData.mendatoryFee?.length) && <HotelTerms
-        instruction={accommodationData.instruction}
-        mendatoryFee={accommodationData.mendatoryFee}
+      {!!(hotelData.Policies?.length || accommodationData?.instruction?.length || accommodationData?.mendatoryFee?.length) && <HotelTerms
+        instruction={accommodationData?.instruction}
+        mendatoryFee={accommodationData?.mendatoryFee}
         policies={hotelData.Policies}
       />}
 
-      {!!siteName && <HotelAbout siteName={siteName} siteUrl={siteURL} description={accommodationData.description} />}
+      {!!siteName && <HotelAbout siteName={siteName} siteUrl={siteURL} description={accommodationData?.description} />}
 
       {!!hotelData.DistancePoints?.length && (
         <div id="attractions_section" className="max-w-container mx-auto px-3 sm:px-5 pt-7 md:pt-10">
@@ -295,11 +295,11 @@ const HotelDetail: NextPage<Props> = props => {
         </div>
       )}
 
-      {pageData.Id && <Comments hotelScoreData={hotelScoreData} pageId={pageData.Id} />}
+      {!!pageData?.Id && <Comments hotelScoreData={hotelScoreData} pageId={pageData.Id} />}
 
       {!!hotelData.Similars && <SimilarHotels similarHotels={hotelData.Similars} />}
 
-      {!!accommodationData.faqs?.length && <FAQ faqs={accommodationData.faqs} />}
+      {!!accommodationData?.faqs?.length && <FAQ faqs={accommodationData.faqs} />}
 
     </>
   )
@@ -311,7 +311,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const url = encodeURI(`/${locale}/hotel/${query.hotelDetail![0]}`);
 
-  const allData: any = await getDomesticHotelDetailsByUrl(url, locale === "en" ? "en-US" : "fa-IR");
+  const allData: any = await getDomesticHotelDetailsByUrl(url, locale === "en" ? "en-US" : locale === "ar" ? "ar-SA" : "fa-IR");
 
   return ({
     props: {

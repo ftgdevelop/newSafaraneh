@@ -6,7 +6,7 @@ import { CipAvailabilityItemType, CipFormCompanionItemType, CipFormPassengerItem
 import AnchorTabs from "@/modules/shared/components/ui/AnchorTabs";
 import Button from "@/modules/shared/components/ui/Button";
 import Steps from "@/modules/shared/components/ui/Steps";
-import { ArrowRight, RightCaret } from "@/modules/shared/components/ui/icons";
+import { ArrowRight, ErrorCircle, RightCaret } from "@/modules/shared/components/ui/icons";
 //import DatePicker from "@hassanmojab/react-modern-calendar-datepicker";
 import { Form, Formik } from "formik";
 import { GetServerSideProps, NextPage } from "next";
@@ -79,24 +79,11 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
         ]))
     }
 
-
-
     const [selectedAvailability, setSelectedAvailability] = useState<CipAvailabilityItemType | undefined>(undefined);
 
     const [reserverIsPassenger, setReserverIsPassenger] = useState<boolean>(true);
 
-    // useEffect(()=>{
-    //     const fetch =async (code:string) => {
-    //         const rrr = await availabilityByIataCode(code);
-    //         debugger;
-
-    //     }
-
-    //     if(airportData?.code){
-    //         fetch(airportData?.code);
-    //     }
-
-    // },[airportData]);
+    const [preReserveLoading, setPreReserveLoading] = useState<boolean>(false);
 
     const [discountData, setDiscountData] = useState<any>();
     const [discountLoading, setDiscountLoading] = useState<boolean>(false);
@@ -257,6 +244,8 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
             return;
         }
 
+        setPreReserveLoading(true);
+
         const companionsPassengers: CipPrereservePayload['passengers'] = values.companions.map(item => ({
             gender: item.gender,
             firstName: item.firstName,
@@ -307,7 +296,13 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
 
         }
 
-        const response: any = await CipPreReserve(params);
+        const token = localStorage.getItem('Token');
+
+        const response: any = await CipPreReserve(params,token || undefined , "fa-IR");
+
+        setTimeout(()=>{
+            setPreReserveLoading(false)
+        },3000);
 
         if (response?.data?.result) {
 
@@ -364,7 +359,7 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
     }
 
     let unavailable: boolean = false;
-    if (availabilities && availabilities.availability.length === 0) {
+    if ( availabilities === null|| (availabilities && availabilities.availability.length === 0)) {
         unavailable = true;
     }
 
@@ -403,10 +398,10 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
 
                     </div>
 
-                    {!!airportData && <CipDetailGallery items={airportData?.galleries} />}
+                    {!!airportData && !!airportData?.galleries?.length && <CipDetailGallery items={airportData?.galleries} />}
                 </div>
 
-                <AnchorTabs
+                {availabilities && availabilities.availability.length > 1 && <AnchorTabs
                     items={[
                         { id: "pictures_section", title: tCip('pictures') },
                         { id: "about-travel-section", title: "اطلاعات سفر" },
@@ -415,7 +410,7 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
                         { id: "about_section", title: "درباره فرودگاه" },
                         { id: "facilities_section", title: "امکانات فرودگاه" }
                     ]}
-                />
+                />}
                 <div className="px-5 max-md:px-3">
 
                     <CipName address={airportData?.address} name={airportData?.name} location={airportLocation} />
@@ -431,8 +426,8 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
                     />}
 
                     {!!unavailable && (
-                        <p className='border p-5 bg-white text-red-500'>
-                            برای این فرودگاه در حال حاضر خدمات تشریفات فرودگاهی فعال نمی باشد.
+                        <p className='border p-5 bg-white font-semibold text-red-500 border-red-600 bg-red-50 my-6'>
+                            <ErrorCircle className='w-5 h-5 fill-current inline-block' /> برای این فرودگاه در حال حاضر خدمات تشریفات فرودگاهی فعال نمی باشد.
                         </p>
                     )}
 
@@ -568,7 +563,9 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
                                         <div className='flex justify-end py-4'>
                                             <Button
                                                 type="submit"
-                                                className="h-12 px-5 md:w-40"
+                                                className="h-12 px-5 md:w-60"
+                                                loading={preReserveLoading}
+                                                disabled={preReserveLoading}
                                             >
                                                 ادامه فرایند خرید
                                             </Button>

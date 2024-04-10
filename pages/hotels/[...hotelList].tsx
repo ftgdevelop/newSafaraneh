@@ -103,11 +103,14 @@ const HotelList: NextPage<Props> = props => {
   let checkout = tomorrow;
 
   const router = useRouter();
+  const locale = router.locale;
+  const acceptLanguage = locale === "fa" ? "fa-IR" : locale === "ar" ? "ar-SA" : "en-US";
+
   const pathSegments = router.asPath?.split("/");
 
-  const locationSegment = pathSegments.find(item => item.includes("location"));
-  const checkinSegment = pathSegments.find(item => item.includes("checkin"));
-  const checkoutSegment = pathSegments.find(item => item.includes("checkout"));
+  const locationSegment = pathSegments.find(item => item.includes("location"))?.split("?")[0]?.split("#")[0];
+  const checkinSegment = pathSegments.find(item => item.includes("checkin"))?.split("?")[0]?.split("#")[0];
+  const checkoutSegment = pathSegments.find(item => item.includes("checkout"))?.split("?")[0]?.split("#")[0];
 
   let locationId: number;
   if (locationSegment) {
@@ -248,7 +251,7 @@ const HotelList: NextPage<Props> = props => {
       setRatesLoading(true);
       setRatesData(undefined);
 
-      const ratesResponse: { data?: RatesResponseItem[] } = await getRates(hotelIds as number[], "fa-IR");
+      const ratesResponse: { data?: RatesResponseItem[] } = await getRates(hotelIds as number[], acceptLanguage);
 
       if (ratesResponse?.data) {
 
@@ -266,7 +269,7 @@ const HotelList: NextPage<Props> = props => {
     const fetchPrices = async () => {
       setPricesLoading(true);
       setPricesData(undefined);
-      const pricesResponse = await AvailabilityByHotelId({ checkin: checkin, checkout: checkout, ids: hotelIds as number[] }, 'fa-IR');
+      const pricesResponse = await AvailabilityByHotelId({ checkin: checkin, checkout: checkout, ids: hotelIds as number[] }, acceptLanguage);
       if (pricesResponse.data?.result?.hotels) {
         setPricesData(pricesResponse.data.result.hotels);
 
@@ -280,7 +283,7 @@ const HotelList: NextPage<Props> = props => {
 
 
     const fetchEntityDetail = async (id: number) => {
-      const entityResponse: any = await getEntityNameByLocation(id, 'fa-IR');
+      const entityResponse: any = await getEntityNameByLocation(id, acceptLanguage);
 
       if (entityResponse?.data?.result) {
         setEntity({ EntityName: entityResponse.data.result.name, EntityType: entityResponse.data.result.type });
@@ -425,11 +428,11 @@ const HotelList: NextPage<Props> = props => {
 
   const filteredAvailability = urlSegments.find(item => item.includes('available'));
   const filteredName = urlSegments.find(item => item.includes('name-'))?.split("name-")[1];
-  const filteredRating = urlSegments.find(item => item.includes('rating'))?.split("rating-")[1].split(",") || [];
-  const filteredGuestPoints = urlSegments.find(item => item.includes('guestrate'))?.split("guestrate-")[1].split(",") || [];
-  const filteredHotelType = urlSegments.find(item => item.includes('type'))?.split("type-")[1].split(",") || [];
-  const filteredFacility = urlSegments.find(item => item.includes('amenities'))?.split("amenities-")[1].split(",") || [];
-  const filteredPrice = urlSegments.find(item => item.includes('price'))?.split("price-")[1].split(",") || [];
+  const filteredRating = urlSegments.find(item => item.includes('rating'))?.split("rating-")[1]?.split(",") || [];
+  const filteredGuestPoints = urlSegments.find(item => item.includes('guestrate'))?.split("guestrate-")[1]?.split(",") || [];
+  const filteredHotelType = urlSegments.find(item => item.includes('type'))?.split("type-")[1]?.split(",") || [];
+  const filteredFacility = urlSegments.find(item => item.includes('amenities'))?.split("amenities-")[1]?.split(",") || [];
+  const filteredPrice = urlSegments.find(item => item.includes('price'))?.split("price-")[1]?.split(",") || [];
 
   const filteredHotels = hotels.filter(hotelItem => {
 
@@ -615,7 +618,7 @@ const HotelList: NextPage<Props> = props => {
             {props.faq && props.faq?.items?.length > 0 && (
               <div className='bg-white p-5 rounded-lg mt-10'>
                 <h5 className='font-semibold text-lg'>{t('faq')}</h5>
-                {props.faq.items.map(faq => (
+                {props.faq.items.filter(faq => (faq.answer && faq.question)).map(faq => (
                   <Accordion
                     key={faq.id}
                     title={(<>
@@ -666,17 +669,19 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const url = `/${locale}/hotels/${query.hotelList![0]}`;
 
+  const acceptLanguage = locale === "fa" ? "fa-IR" : locale === "ar" ? "ar-SA" : "en-US";
+
   const searchHotelsResponse: {
     data?: {
       Hotels: SearchHotelItem[];
       Content?: string;
     };
-  } = await SearchHotels({ url: url, cityId: +query.hotelList.find((item: string) => item.includes("location-"))?.split("location-")[1] }, locale);
+  } = await SearchHotels({ url: url, cityId: +query.hotelList.find((item: string) => item.includes("location-"))?.split("location-")[1] }, acceptLanguage);
 
 
   //getPageByUrl
 
-  const pageResponse: any = await getPageByUrl(url, "fa-IR");
+  const pageResponse: any = await getPageByUrl(url, acceptLanguage);
 
   //   const [BlogPost, recentBlogs, CategoriesName] = await Promise.all<any>([
   //     GetBlogPostDetails(context.query.DetailBlog),
@@ -689,7 +694,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   let faqResponse: any;
   if (searchHotelsResponse?.data?.Hotels[0]?.CityId) {
-    faqResponse = await GetCityFaqById(searchHotelsResponse?.data?.Hotels[0].CityId);
+    faqResponse = await GetCityFaqById(searchHotelsResponse?.data?.Hotels[0].CityId, acceptLanguage);
   }
 
   return ({

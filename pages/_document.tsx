@@ -25,7 +25,7 @@ export default function Document() {
 
 
   return (
-    <Html lang={i18n?.language === "en" ? "en" : "fa"} dir={i18n?.language === "en" ? "ltr" : "rtl"}>
+    <Html lang={i18n?.language} dir={(i18n?.language === "fa" || i18n?.language === "ar")  ? "rtl" : "ltr"}>
       <Head>
         {!!ga_script_url && <Script
           src={ga_script_url}

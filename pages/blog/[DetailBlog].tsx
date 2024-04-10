@@ -19,7 +19,7 @@ const DetailBlog: NextPage<any> = ({ BlogPost, CategoriesName, recentBlogs }:
     const [Related, setRelatedPost] = useState<any>('');
     useEffect(() => {
         const getRelatedPost = async () => {
-            let getRelatedPost : any = await getBlogs({ page: 1, category: BlogPost?.[0].categories?.[0],per_page:4 })
+            let getRelatedPost : any = await getBlogs({ page: 1, category: BlogPost?.[0]?.categories?.[0],per_page:4 })
             setRelatedPost(getRelatedPost.data)
             
         }
@@ -27,8 +27,13 @@ const DetailBlog: NextPage<any> = ({ BlogPost, CategoriesName, recentBlogs }:
     }, [])
     //data={BlogPost?.[0].title?.rendered} page="بلاگ" category={[BlogPost?.[0].categories_names[0], BlogPost?.[0].categories[0]]} />
     const category: string = BlogPost?.[0]?.categories_names[0] || ""
+<<<<<<< HEAD
     const CategoryId : string = BlogPost?.[0].categories[0].toString() || ""
     const PostTitle : string = BlogPost?.[0].title?.rendered || ""
+=======
+    const CategoryId : string = BlogPost?.[0]?.categories[0].toString() || ""
+    const PostTitle : string = BlogPost?.[0]?.title?.rendered || ""
+>>>>>>> 686dce2d92a2086d3461e617c1b50701d74ed22e
     return (
         <div className="bg-white">
             <Head>
@@ -45,7 +50,7 @@ const DetailBlog: NextPage<any> = ({ BlogPost, CategoriesName, recentBlogs }:
                     <RelatedPost Posts={Related} Blog={BlogPost} />
                     <DetailBlogAcordion blog={BlogPost?.[0]} />
                     <GetComment />
-                    <PostComment postId={BlogPost?.[0].id} />
+                    <PostComment postId={BlogPost?.[0]?.id} />
                 </div>
             </div>
         </div>
