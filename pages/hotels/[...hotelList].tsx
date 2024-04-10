@@ -104,7 +104,7 @@ const HotelList: NextPage<Props> = props => {
 
   const router = useRouter();
   const locale = router.locale;
-  const acceptLanguage = locale === "fa" ? "fa-IR" : locale === "ar" ? "ar-SA" : "en-US";
+  const acceptLanguage = locale === "fa" ? "fa-IR" : locale === "ar" ? "ar-AE" : "en-US";
 
   const pathSegments = router.asPath?.split("/");
 
@@ -669,7 +669,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const url = `/${locale}/hotels/${query.hotelList![0]}`;
 
-  const acceptLanguage = locale === "fa" ? "fa-IR" : locale === "ar" ? "ar-SA" : "en-US";
+  const acceptLanguage = locale === "fa" ? "fa-IR" : locale === "ar" ? "ar-AE" : "en-US";
 
   const searchHotelsResponse: {
     data?: {
