@@ -52,7 +52,8 @@ export const Header = {
 
 export const Flight = {
   getAvailability: 'flightdomestic.safaraneh.com/api/services/app/BookingFlight/Availability',
-  getFlights: 'flightdomestic.safaraneh.com/api/services/app/BookingFlight/GetAvailability?key='
+  getFlights: 'flightdomestic.safaraneh.com/api/services/app/BookingFlight/GetAvailability?key=',
+  searchFlights: 'flightdomestic.safaraneh.com/api/services/app/Airport/Search'
 };
 
   export const Blog = {
