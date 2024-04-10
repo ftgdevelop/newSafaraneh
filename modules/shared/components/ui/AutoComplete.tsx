@@ -21,7 +21,7 @@ type Props<T> = {
     wrapperClassName?: string;
     icon?: "location" | "airplane_";
     value?: T;
-    textPropertyName: string;
+    createTextFromOptionsObject : (object:T) => string;
     noResultMessage?: string;
     checkTypingLanguage?: boolean;
     type: "hotel" | "flight"
@@ -209,7 +209,7 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
         )
     }
 
-    const val: string = props.value && (props.value as any)[props.textPropertyName] || '';
+    const val: string = props.value && props.createTextFromOptionsObject(props.value) || '';
     useEffect(() => {
         if (val) {
             inputRef.current!.value = val;
