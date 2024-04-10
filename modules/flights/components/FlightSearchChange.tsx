@@ -8,11 +8,11 @@ const FlightsSearchChange: React.FC = () => {
     const dispatch = useDispatch()
     return (
         <>
-        <div className={`z-30 bg-black/85 text-white absolute top-0 right-0 left-0 ml-5 mr-5 max-xl:m-0 p-4
+        <div className={`z-30 bg-black/75 absolute top-0 right-0 left-0 ml-5 mr-5 max-xl:m-0 p-4
         ${!SearchChangeOn ? 'hidden' : ''}`}>
                 <div className="flex justify-between">
-                    <h3 className="max-sm:text-sm">تغییر جستجو</h3>
-                        <button type="submit" className="border-1 border-white pl-10 pr-10 rounded-sm max-sm:text-sm"
+                    <h3 className="max-sm:text-sm text-white">تغییر جستجو</h3>
+                        <button type="submit" className="border-1 border-white pl-10 pr-10 rounded-sm max-sm:text-sm text-white"
                             onClick={() => dispatch(setSearchChangeOn(false))}>
                             بستن
                         </button>
