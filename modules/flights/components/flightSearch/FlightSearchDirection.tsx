@@ -1,37 +1,30 @@
-import { ApartmentOutline, ArrowLeft, ArrowRight, Home2, Location } from "@/modules/shared/components/ui/icons";
+import { Airpalne, ApartmentOutline, ArrowLeft, ArrowRight, Home2, Location } from "@/modules/shared/components/ui/icons";
 import { useCallback, useState } from "react";
 import AutoComplete from "@/modules/shared/components/ui/AutoComplete";
 import { EntitySearchResultItemType } from "@/modules/domesticHotel/types/hotel";
 import { Flight, ServerAddress } from "@/enum/url";
+import { defaultAirportOption } from "./defaultAirportOptios";
 
 const FlightSearchDirection: React.FC = () => {
     const [selectedOrigin, setSelectedOrigin] = useState<EntitySearchResultItemType>();
     const [selectedDestination, setSelectedDestination] = useState<EntitySearchResultItemType>();
 
     const searchUrl = `${ServerAddress.Type}${Flight.searchFlights}`
-    let a : 'Province' | 'City' | 'Hotel' = 'City'
-    let list = [
-        {
-            name: "THR",
-            type: a,
-            displayName: 'tehran',
-            id: 0,
-            language: 'fa'
-        },
-        {
-            name: "SYZ",
-            type: a,
-            displayName: 'shiraz',
-            id: 0,
-            language: 'fa'
-        }
-    ]
+
+    const defaultList : EntitySearchResultItemType[] = defaultAirportOption.map((item, index) => {
+        return ({
+            name: item.value,
+            type: 'City',
+            displayName: item.label,
+            id: index,
+        })
+    })
 
     return (
         <>
             <div className="flex items-center gap-2 mt-5 w-full">
             <AutoComplete
-                    defaultList={list}
+                    defaultList={defaultList}
                     inputId="destination"
                     //checkTypingLanguage
                     noResultMessage={'NoResultsFound'}
@@ -39,7 +32,7 @@ const FlightSearchDirection: React.FC = () => {
                     acceptLanguage="fa-IR"
                     renderOption={useCallback((option: EntitySearchResultItemType, direction: "ltr" | "rtl" | undefined) => (
                         <div className={`px-3 py-2 flex gap-3 hover:bg-neutral-800 hover:text-white items-center ${!direction ? "" : direction === 'rtl' ? "rtl" : "ltr"}`}>
-                            {option.type === "Hotel" ? <ApartmentOutline className="w-5 h-5 fill-current" /> : option.type === "Province" ? <Home2 className="w-5 h-5 fill-current" /> : <Location className="w-5 h-5 fill-current" />}
+                            <Airpalne className="fill-current w-8"/>
                             <div className="leading-5">
                                 <div className='text-xs'>{option.name}</div>
                                 <div className='text-3xs'>{option.displayName}</div>
@@ -57,7 +50,7 @@ const FlightSearchDirection: React.FC = () => {
             />
             
             <AutoComplete
-                    defaultList={list}
+                    defaultList={defaultList}
                     inputId="destination"
                     //checkTypingLanguage
                     noResultMessage={'NoResultsFound'}
@@ -65,7 +58,7 @@ const FlightSearchDirection: React.FC = () => {
                     acceptLanguage="fa-IR"
                     renderOption={useCallback((option: EntitySearchResultItemType, direction: "ltr" | "rtl" | undefined) => (
                         <div className={`px-3 py-2 flex gap-3 hover:bg-neutral-800 hover:text-white items-center ${!direction ? "" : direction === 'rtl' ? "rtl" : "ltr"}`}>
-                            {option.type === "Hotel" ? <ApartmentOutline className="w-5 h-5 fill-current" /> : option.type === "Province" ? <Home2 className="w-5 h-5 fill-current" /> : <Location className="w-5 h-5 fill-current" />}
+                            <Airpalne className="fill-current w-8"/>
                             <div className="leading-5">
                                 <div className='text-xs'>{option.name}</div>
                                 <div className='text-3xs'>{option.displayName}</div>
