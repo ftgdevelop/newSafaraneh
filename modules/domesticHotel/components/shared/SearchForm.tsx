@@ -238,7 +238,7 @@ const SearchForm: React.FC<Props> = props => {
                     inputId="destination"
                     //checkTypingLanguage
                     noResultMessage={t('NoResultsFound')}
-                    textPropertyName='displayName'
+                    createTextFromOptionsObject={(item:EntitySearchResultItemType) => item.displayName || item.name || ""}
                     acceptLanguage="fa-IR"
                     renderOption={useCallback((option: EntitySearchResultItemType, direction: "ltr" | "rtl" | undefined) => (
                         <div className={`px-3 py-2 flex gap-3 hover:bg-neutral-800 hover:text-white items-center ${!direction ? "" : direction === 'rtl' ? "rtl" : "ltr"}`}>
