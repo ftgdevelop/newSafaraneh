@@ -8,7 +8,7 @@ const FlightsFlightItem: React.FC<any> = ({ flightData } : {flightData : FlightT
     const [OpenDetail, setOpenDetail] = useState<boolean>(false)
     return (
         <>
-            <div className="flex mt-6 border-1 shadow-sm border-gray-200">
+            <div className="flex mt-5 border-1 shadow-sm border-gray-200">
                 <FlightDataItem flightData={flightData} detail={OpenDetail} changeOpenDetail={(open : boolean) => setOpenDetail(open) } />
                 <FlightPurcheInfo flightData={flightData} detail={OpenDetail} />
             </div>

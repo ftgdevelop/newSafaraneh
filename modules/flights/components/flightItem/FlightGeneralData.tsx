@@ -10,9 +10,9 @@ const FlightDataItem: React.FC<any> = ({flightData , detail , changeOpenDetail} 
 
     return (
         <div className="w-4/5 border-e-1 border-gray-300 border-dashed relative">
-            <span className="w-6 h-6 bg-gray-100 rounded-full absolute -left-3 -top-2"></span>
+            <span className="w-6 h-6 bg-body-background rounded-full absolute -left-3 -top-2"></span>
             <div className="grid grid-cols-5 bg-white items-center p-6 max-md:pl-2 max-md:pr-2 max-sm:p-3 max-sm:grid-cols-3 max-sm:justify-items-center"
-            onClick={e => changeOpenDetail((prev:boolean) => !prev)}>
+            onClick={e => changeOpenDetail(true)}>
                 <div className="flex text-3xs max-sm:text-4xs leading-5 max-sm:col-span-3 max-sm:justify-self-start max-sm:pb-3">
                     <Image src={flightData?.airline?.picture?.path || ''}
                         alt={flightData?.airline?.picture?.altAttribute || ''}
@@ -43,9 +43,8 @@ const FlightDataItem: React.FC<any> = ({flightData , detail , changeOpenDetail} 
                     {flightData.arrivalAirport?.city?.name} <br />
                     {arrivalTime}
                 </p>
-                <span className="w-6 h-6 bg-gray-100 rounded-full absolute -left-3 -bottom-2"></span>
+                <span className="w-6 h-6 bg-body-background rounded-full absolute -left-3 -bottom-2"></span>
             </div>
-                  
                 {detail && <FlightDetailItem FlightsData={flightData} />}
                     
                 <button type="submit" className="text-xs max-sm:text-2xs bg-gray-100 text-gray-500 flex w-full justify-center"

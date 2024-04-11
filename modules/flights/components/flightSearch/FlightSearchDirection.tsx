@@ -1,42 +1,34 @@
-import { Airpalne, ApartmentOutline, ArrowLeft, ArrowRight, Home2, Location } from "@/modules/shared/components/ui/icons";
+import { Location, Travel } from "@/modules/shared/components/ui/icons";
 import { useCallback, useState } from "react";
 import AutoComplete from "@/modules/shared/components/ui/AutoComplete";
-import { EntitySearchResultItemType } from "@/modules/domesticHotel/types/hotel";
 import { Flight, ServerAddress } from "@/enum/url";
 import { defaultAirportOption } from "./defaultAirportOptios";
+import { AirportSearchResponseItem } from "../../types/flights";
 
 const FlightSearchDirection: React.FC = () => {
-    const [selectedOrigin, setSelectedOrigin] = useState<EntitySearchResultItemType>();
-    const [selectedDestination, setSelectedDestination] = useState<EntitySearchResultItemType>();
+    const [selectedOrigin, setSelectedOrigin] = useState<AirportSearchResponseItem>();
+    const [selectedDestination, setSelectedDestination] = useState<AirportSearchResponseItem>();
 
     const searchUrl = `${ServerAddress.Type}${Flight.searchFlights}`
-
-    const defaultList : EntitySearchResultItemType[] = defaultAirportOption.map((item, index) => {
-        return ({
-            name: item.value,
-            type: 'City',
-            displayName: item.label,
-            id: index,
-        })
-    })
 
     return (
         <>
             <div className="flex items-center gap-2 mt-5 w-full">
             <AutoComplete
-                    defaultList={defaultList}
+                    defaultList={defaultAirportOption}
                     inputId="destination"
                     //checkTypingLanguage
-                    noResultMessage={'NoResultsFound'}
-                    textPropertyName='displayName'
+                    noResultMessage={'نتیجه ای پیدا نشد'}
+                    createTextFromOptionsObject={(item:any) => item.city?.name + " - " + item.name}
                     acceptLanguage="fa-IR"
-                    renderOption={useCallback((option: EntitySearchResultItemType, direction: "ltr" | "rtl" | undefined) => (
+                    renderOption={useCallback((option: AirportSearchResponseItem, direction: "ltr" | "rtl" | undefined) => (
                         <div className={`px-3 py-2 flex gap-3 hover:bg-neutral-800 hover:text-white items-center ${!direction ? "" : direction === 'rtl' ? "rtl" : "ltr"}`}>
-                            <Airpalne className="fill-current w-8"/>
+                            {option.airportType == 'City' ? <Location className="w-4 fill-current"/>: <Travel className="fill-current w-3"/>}
                             <div className="leading-5">
-                                <div className='text-xs'>{option.name}</div>
-                                <div className='text-3xs'>{option.displayName}</div>
+                                <div className='text-xs'>{option.city.name}</div>
+                                <div className='text-3xs'>{option.name}</div>
                             </div>
+                            <span>{option.code}</span>
                         </div>
                     ), [])}
                     icon="location"
@@ -50,19 +42,20 @@ const FlightSearchDirection: React.FC = () => {
             />
             
             <AutoComplete
-                    defaultList={defaultList}
+                    defaultList={defaultAirportOption}
                     inputId="destination"
                     //checkTypingLanguage
-                    noResultMessage={'NoResultsFound'}
-                    textPropertyName='displayName'
+                    noResultMessage={'نتیجه ای پیدا نشد'}
+                    createTextFromOptionsObject={(item:AirportSearchResponseItem) => item.city?.name + " - " + item.name}
                     acceptLanguage="fa-IR"
-                    renderOption={useCallback((option: EntitySearchResultItemType, direction: "ltr" | "rtl" | undefined) => (
+                    renderOption={useCallback((option: AirportSearchResponseItem, direction: "ltr" | "rtl" | undefined) => (
                         <div className={`px-3 py-2 flex gap-3 hover:bg-neutral-800 hover:text-white items-center ${!direction ? "" : direction === 'rtl' ? "rtl" : "ltr"}`}>
-                            <Airpalne className="fill-current w-8"/>
+                            {option.airportType == 'City' ? <Location className="w-4 fill-current"/>: <Travel className="fill-current w-3"/>}
                             <div className="leading-5">
-                                <div className='text-xs'>{option.name}</div>
-                                <div className='text-3xs'>{option.displayName}</div>
+                                <div className='text-xs'>{option.city.name}</div>
+                                <div className='text-3xs'>{option.name}</div>
                             </div>
+                            <span>{option.code}</span>
                         </div>
                     ), [])}
                     icon="location"

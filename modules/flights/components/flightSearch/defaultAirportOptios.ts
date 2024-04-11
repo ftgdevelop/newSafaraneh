@@ -1,5 +1,25 @@
-export const defaultAirportOption = 
-    [
+import { AirportSearchResponseItem } from "../../types/flights"
+
+interface listType {
+    value: string,
+    label: string,
+    values: {
+        name: string,
+        city: {
+            name: any,
+            code: any,
+        },
+        country?: {
+            name: string,
+            code: string,
+        },
+        latitude?: string,
+        longitude?: string,
+        code: string,
+        airportType: "Main" | "Subsidiary"| "City"
+    },
+}
+const list: listType[]= [
         {
           value: "THR",
           label: "تهران",
@@ -138,4 +158,16 @@ export const defaultAirportOption =
             airportType: "Main",
           },
         },
-      ]
+]
+
+export const defaultAirportOption: AirportSearchResponseItem[] = list.map(item => {
+    return ({
+        name: item.label,
+        city: {
+            name: item.values.city.name,
+            code: item.values.city.code
+        },
+        code: item.value,
+        airportType: item.values.airportType
+    })
+})

@@ -53,3 +53,19 @@ export interface FlightType {
     flightNumber: string;
     flightKey: string;
 }
+
+export interface AirportSearchResponseItem  {
+    name?: string;
+    city: {
+        name?: string;
+        code?: string;
+    };
+    // country: {
+    //   name: "string",
+    //   code: "string"
+    // },
+    code: string;
+    // latitude: "string",
+    // longitude: "string",
+    airportType: "Main" | "Subsidiary"| "City"
+  }

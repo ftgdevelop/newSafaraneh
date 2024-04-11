@@ -1,30 +1,107 @@
-const FlightSearchPassengers: React.FC<any> = ({passengersOn}: {passengersOn: boolean}) => {
+import { Minus, Plus } from "@/modules/shared/components/ui/icons";
+import { RootState } from "@/modules/shared/store";
+import { setReduxNotification } from "@/modules/shared/store/notificationSlice";
+import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+const FlightSearchPassengers: React.FC<any> = () => {
+    const dispatch = useDispatch()
+
+    const wrapperRef = useRef<HTMLDivElement>(null);
+    const [passengersOpen, setPassengersOpen] = useState(false)
+
+    let router = useRouter()
+    const [adult, setAdult] = useState(1)
+    const [child, setChild] = useState<any>(router.query.child || 0)
+    const [infant, setInfant] = useState<any>(router.query.infant || 0)
+    const allPassengers = adult + child + infant    
+
+    const adultHandle = (type: string) => {
+        if (type == 'plus') {
+            if (allPassengers < 9) {
+                setAdult(adult+1)
+            }
+        }
+        else if (type == 'minus' && adult > 1) {
+            setAdult(adult - 1)
+            if (child+infant >= adult * 2) {
+                setChild((adult -1) * 3)
+            }
+            if (infant == adult) {
+                if (infant == 2) setInfant(0)
+                else setInfant(adult -1)
+            }
+        }
+        //check notification 
+        dispatch(setReduxNotification({state:'succses', message: 'تعداد بزرگسالان نمیتواند کمتر از 1 باشد',isVisible: false}))
+    }
+
+    const childHandle = (type: string) => {
+        if (type == 'plus') {
+            if (allPassengers < 9 && child+infant < adult * 3) {
+                setChild(child +1)
+            }
+        }
+        else if (type == 'minus' && child > 0) {
+            setChild(child -1)
+        }
+    }
+
+    const infantHandle = (type: string) => {
+        if (type == 'plus') {
+            if (allPassengers < 9 && infant < adult && child+infant < adult * 3) {
+                setInfant(infant +1)
+            }
+        }
+        else if (type == 'minus' && infant > 0) {
+            setInfant(infant -1)
+        }
+    }
+
+    const handleClickOutside = (e: any) => {
+        if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+            setPassengersOpen(false)
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    const passengersItem = (content: string, count: any, countHandel:any) => {
+        return (
+            <div className="flex text-sm justify-between">
+                <p>{content}</p>
+                <div className="flex">
+                    <button type="button" onClick={() => countHandel('minus')} >
+                        <Minus className="w-6 fill-white bg-gray-700 rounded-full m-auto" />
+                    </button>
+                    <span className="mr-3 ml-3">{count}</span>
+                    <button type="button" onClick={() => countHandel('plus')}>
+                        <Plus className="w-6 fill-white bg-gray-700 rounded-full m-auto"/>
+                    </button>
+                </div>
+            </div>
+    )
+}
+
     return (
-        <div className={`bg-white text-gray-600 w-72 p-3 pt-5 pb-5 ${passengersOn ? 'scale-100': 'scale-0'}
-        absolute -bottom-40 left-8 max-sm:left-0 max-sm:right-1 space-y-5 rounded-sm duration-150 shadow-lg shadow-gray-600`}>
-            <div className="flex text-sm justify-between">
-                <p>بزرگسال (+12 سال)</p>
-                <div className="flex">
-                    <button type="button" className="bg-gray-200 rounded-full text-black w-fit pl-3 pr-3 h-fit">+</button>
-                        <span className="mr-2 ml-2">3</span>
-                    <button type="button" className="bg-gray-200 rounded-full text-black w-fit pl-3 pr-3 h-fit">-</button>
-                </div>
-            </div>
-            <div className="flex text-sm justify-between">
-                <p>بزرگسال (+12 سال)</p>
-                <div className="flex">
-                    <button type="button" className="bg-gray-200 rounded-full text-black w-fit pl-3 pr-3 h-fit">+</button>
-                        <span className="mr-2 ml-2">3</span>
-                    <button type="button" className="bg-gray-200 rounded-full text-black w-fit pl-3 pr-3 h-fit">-</button>
-                </div>
-            </div>
-            <div className="flex text-sm justify-between">
-                <p>بزرگسال (+12 سال)</p>
-                <div className="flex">
-                    <button type="button" className="bg-gray-200 rounded-full text-black w-fit pl-3 pr-3 h-fit">+</button>
-                        <span className="mr-2 ml-2">3</span>
-                    <button type="button" className="bg-gray-200 rounded-full text-black w-fit pl-3 pr-3 h-fit">-</button>
-                </div>
+        <div ref={wrapperRef}>
+            <button type="button" className={`bg-white h-12 p-2 m-1 flex items-center rounded text-blue-800 text-sm w-32 relative
+                before:w-2.5 before:h-2.5 before:inline-block ${passengersOpen ? "before:-rotate-135" : "before:rotate-45"}  before:border-b-2 before:border-r-2 before:carret-down before:absolute before:border-neutral-500 rtl:before:left-3 ltr:before:right-3 before:top-1/2 before:-mt-1.5`}
+                onClick={() => setPassengersOpen(true)}>
+                <span className="ml-1 mr-1">8</span>
+                مسافران
+            </button>
+            <div className={`bg-white text-gray-600 w-72 p-3 pt-5 pb-5 ${passengersOpen ? "visible opacity-100 mt-0" : "invisible opacity-0 mt-1"}
+            absolute -bottom-28 left-2 max-sm:left-0 max-sm:right-1 space-y-5 rounded-sm duration-100 shadow-lg shadow-gray-600`}>
+                {passengersItem('بزرگسال (+12 سال)', adult, adultHandle)}
+                {passengersItem('کودک (2 تا 11 سال)', child, childHandle)}
+                {passengersItem('بزرگسال (زیر 2 سال)', infant, infantHandle)}
             </div>
         </div>
     )
