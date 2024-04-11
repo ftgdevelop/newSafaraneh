@@ -1,6 +1,6 @@
 import { getDomesticHotelDetailsByUrl } from '@/modules/domesticHotel/actions';
 import type { GetServerSideProps, NextPage } from 'next';
-import { useTranslation } from 'next-i18next';
+import { i18n, useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { PageDataType, PortalDataType } from '@/modules/shared/types/common';
@@ -93,6 +93,19 @@ const HotelDetail: NextPage<Props> = props => {
   }
 
   const configWebsiteUrl = process.env.SITE_NAME || "";
+
+
+  let script_detail_2_Url;
+  if (hotelData.CityName) {
+    if (i18n && i18n.language === "fa") {
+      script_detail_2_Url = `${configWebsiteUrl}/fa/hotels/هتل-های-${hotelData.CityName.replace(/ /g, "-")}`;
+    } else if (i18n && i18n.language === "ar") {
+      script_detail_2_Url = `${configWebsiteUrl}/ar/hotels/فنادق-${hotelData.CityName.replace(/ /g, "-")}`;
+    } else {
+      script_detail_2_Url = `${configWebsiteUrl}/en/hotels/${hotelData.CityName.replace(/ /g, "-")}`;
+    }
+  }
+
 
   return (
     <>
@@ -192,8 +205,7 @@ const HotelDetail: NextPage<Props> = props => {
               "position": 2,
               "item":
               {
-                "@id": "${configWebsiteUrl}/fa/hotels/${hotelData && hotelData.CityName
-              }/location-${hotelData && hotelData.CityId}",
+                "@id": "${script_detail_2_Url}/location-${hotelData && hotelData.CityId}",
                 "name": "هتل های ${hotelData && hotelData.CityName}"
               }
               }
