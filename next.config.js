@@ -9,6 +9,18 @@ const nextConfig = {
         destination: '/hotel/:slug',
         permanent: true,
       },
+      {
+        source: '/en/blog/:slug',
+        destination: '/fa/blog/:slug',
+        locale: false,
+        permanent: true,
+      },
+      {
+        source: '/blog/:slug',
+        destination: '/fa/blog/:slug',
+        locale: false,
+        permanent: true,
+      },
     ]
   },
   images: {
