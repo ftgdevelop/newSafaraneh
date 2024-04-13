@@ -36,14 +36,19 @@ const HotelDetail: NextPage<Props> = props => {
 
   const { portalData, allData } = props;
 
-  const { accommodation, hotel: hotelData, page: pageData, score: hotelScoreData } = allData;
-
-  const accommodationData = accommodation?.result;
-
   const { t } = useTranslation('common');
   const { t: tHotel } = useTranslation('hotel');
 
   const router = useRouter();
+  
+  if (!allData){
+    return null;
+  }
+
+  const { accommodation, hotel: hotelData, page: pageData, score: hotelScoreData } = allData;
+
+  const accommodationData = accommodation?.result;
+
   const searchInfo = router.asPath?.split("?")[0]?.split("#")[0];
 
   let checkin: string = "";
