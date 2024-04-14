@@ -22,6 +22,7 @@ import Rooms from '@/modules/domesticHotel/components/hotelDetails/Rooms';
 import { addSomeDays, dateFormat } from '@/modules/shared/helpers';
 import AnchorTabs from '@/modules/shared/components/ui/AnchorTabs';
 import NotFound from '@/modules/shared/components/ui/NotFound';
+import { useEffect } from 'react';
 
 type Props = {
   allData: {
@@ -42,6 +43,20 @@ const HotelDetail: NextPage<Props> = props => {
   const { t: tHotel } = useTranslation('hotel');
 
   const router = useRouter();
+
+
+  useEffect(() => {
+
+    const urrl = `/ar/hotel/${router?.query?.hotelDetail![0]}`
+
+    const fetch = async () => {
+      const Data: any = await getDomesticHotelDetailsByUrl(urrl, "ar-AE");
+      debugger;
+    }
+
+    fetch();
+
+  }, []);
 
 
   if (props.error410) {
@@ -348,9 +363,9 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
       const url_Ar = encodeURI(`/ar/hotel/${query.hotelDetail![0]}`);
       const allData_Ar: any = await getDomesticHotelDetailsByUrl(url_Ar, "ar-AE");
-      
+
       if (allData_Ar?.data?.result) {
-      
+
         return ({
           redirect: {
             destination: `/ar/hotel/${query.hotelDetail![0]}`,
@@ -361,12 +376,12 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
         });
 
       } else {
-        
+
         const url_En = encodeURI(`/en/hotel/${query.hotelDetail![0]}`);
         const allData_En: any = await getDomesticHotelDetailsByUrl(url_En, "en-US");
 
         if (allData_En?.data?.result) {
-        
+
           return ({
             redirect: {
               destination: `/en/hotel/${query.hotelDetail![0]}`,
@@ -444,7 +459,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
       const url_Fa = encodeURI(`/fa/hotel/${query.hotelDetail![0]}`);
       const allData_Fa: any = await getDomesticHotelDetailsByUrl(url_Fa, "fa-IR");
-      
+
       if (allData_Fa?.data?.result) {
 
         return ({
@@ -457,10 +472,10 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
         });
 
       } else {
-        
+
         const url_En = encodeURI(`/en/hotel/${query.hotelDetail![0]}`);
         const allData_En: any = await getDomesticHotelDetailsByUrl(url_En, "en_US");
-        
+
         if (allData_En?.data?.result) {
 
           return ({
@@ -473,9 +488,9 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
           });
 
         } else {
-          
+
           context.res.statusCode = 410;
-          
+
           return ({
             props: {
               ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
