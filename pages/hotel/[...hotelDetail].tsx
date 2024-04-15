@@ -44,12 +44,18 @@ const HotelDetail: NextPage<Props> = props => {
 
   const router = useRouter();
 
-
   useEffect(() => {
 
     const urrl = `/ar/hotel/${router?.query?.hotelDetail![0]}`
 
     const fetch = async () => {
+
+      const url = encodeURI(`/${router.locale}/hotel/${router.query.hotelDetail![0]}`);
+      debugger;
+
+      const allData1: any = await getDomesticHotelDetailsByUrl(url, router.locale === "en" ? "en-US" : router.locale === "ar" ? "ar-AE" : "fa-IR");      
+      debugger;
+
       const Data: any = await getDomesticHotelDetailsByUrl(urrl, "ar-AE");
       debugger;
     }
@@ -354,155 +360,6 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const allData: any = await getDomesticHotelDetailsByUrl(url, locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR");
 
-
-
-  if (!allData?.data?.result) {
-
-
-    if (locale === "fa") {
-
-      const url_Ar = encodeURI(`/ar/hotel/${query.hotelDetail![0]}`);
-      const allData_Ar: any = await getDomesticHotelDetailsByUrl(url_Ar, "ar-AE");
-
-      if (allData_Ar?.data?.result) {
-
-        return ({
-          redirect: {
-            destination: `/ar/hotel/${query.hotelDetail![0]}`,
-            locale: false,
-            permanent: true
-          },
-          props: {},
-        });
-
-      } else {
-
-        const url_En = encodeURI(`/en/hotel/${query.hotelDetail![0]}`);
-        const allData_En: any = await getDomesticHotelDetailsByUrl(url_En, "en-US");
-
-        if (allData_En?.data?.result) {
-
-          return ({
-            redirect: {
-              destination: `/en/hotel/${query.hotelDetail![0]}`,
-              locale: false,
-              permanent: true
-            },
-            props: {},
-          });
-
-        } else {
-
-          context.res.statusCode = 410;
-
-          return ({
-            props: {
-              ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
-              error410: "true"
-            },
-          });
-
-        }
-      }
-    }
-
-
-
-    if (locale === "en") {
-
-      const url_Fa = encodeURI(`/fa/hotel/${query.hotelDetail![0]}`);
-      const allData_Fa: any = await getDomesticHotelDetailsByUrl(url_Fa, "fa-IR");
-
-      if (allData_Fa?.data?.result) {
-
-        return ({
-          redirect: {
-            destination: `/fa/hotel/${query.hotelDetail![0]}`,
-            locale: false,
-            permanent: true
-          },
-          props: {},
-        });
-      } else {
-
-        const url_Ar = encodeURI(`/ar/hotel/${query.hotelDetail![0]}`);
-        const allData_Ar: any = await getDomesticHotelDetailsByUrl(url_Ar, "ar-AE");
-
-        if (allData_Ar?.data?.result) {
-
-          return ({
-            redirect: {
-              destination: `/ar/hotel/${query.hotelDetail![0]}`,
-              locale: false,
-              permanent: true
-            },
-            props: {},
-          });
-
-        } else {
-
-          context.res.statusCode = 410;
-          return ({
-            props: {
-              ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
-              error410: "true"
-            },
-          });
-
-        }
-      }
-    }
-
-
-
-    if (locale === "ar") {
-
-      const url_Fa = encodeURI(`/fa/hotel/${query.hotelDetail![0]}`);
-      const allData_Fa: any = await getDomesticHotelDetailsByUrl(url_Fa, "fa-IR");
-
-      if (allData_Fa?.data?.result) {
-
-        return ({
-          redirect: {
-            destination: `/fa/hotel/${query.hotelDetail![0]}`,
-            locale: false,
-            permanent: true
-          },
-          props: {},
-        });
-
-      } else {
-
-        const url_En = encodeURI(`/en/hotel/${query.hotelDetail![0]}`);
-        const allData_En: any = await getDomesticHotelDetailsByUrl(url_En, "en_US");
-
-        if (allData_En?.data?.result) {
-
-          return ({
-            redirect: {
-              destination: `/en/hotel/${query.hotelDetail![0]}`,
-              locale: false,
-              permanent: true
-            },
-            props: {},
-          });
-
-        } else {
-
-          context.res.statusCode = 410;
-
-          return ({
-            props: {
-              ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
-              error410: "true"
-            },
-          });
-
-        }
-      }
-    }
-
-  }
 
   return ({
     props: {
