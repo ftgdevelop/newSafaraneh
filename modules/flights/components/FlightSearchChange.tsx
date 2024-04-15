@@ -17,7 +17,7 @@ const FlightsSearchChange: React.FC = () => {
                             بستن
                         </button>
                 </div>
-                <FlightSearch />
+                <FlightSearch className="pl-4 pr-4 max-sm:p-0" />
         </div>
 
         <div className={`z-20 fixed top-0 left-0 bg-black/30 backdrop-blur-sm ${!SearchChangeOn ? 'hidden' : 'w-full h-full'}`}

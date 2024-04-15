@@ -27,13 +27,10 @@ const DetailBlog: NextPage<any> = ({ BlogPost, CategoriesName, recentBlogs }:
     }, [])
     //data={BlogPost?.[0].title?.rendered} page="بلاگ" category={[BlogPost?.[0].categories_names[0], BlogPost?.[0].categories[0]]} />
     const category: string = BlogPost?.[0]?.categories_names[0] || ""
-<<<<<<< HEAD
-    const CategoryId : string = BlogPost?.[0].categories[0].toString() || ""
-    const PostTitle : string = BlogPost?.[0].title?.rendered || ""
-=======
+
     const CategoryId : string = BlogPost?.[0]?.categories[0].toString() || ""
     const PostTitle : string = BlogPost?.[0]?.title?.rendered || ""
->>>>>>> 686dce2d92a2086d3461e617c1b50701d74ed22e
+
     return (
         <div className="bg-white">
             <Head>

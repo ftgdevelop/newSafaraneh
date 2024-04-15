@@ -534,7 +534,6 @@ export const User3: React.FC<Props> = props => {
     )
 }
 
-<<<<<<< HEAD
 export const Airpalne: React.FC<Props> = props => {
     return (
         <svg className={props.className || ""} viewBox="0 0 48 48">
@@ -542,7 +541,7 @@ export const Airpalne: React.FC<Props> = props => {
         </svg>
     )
 }
-=======
+
 export const CipIcon: React.FC<Props> = props => {
     return (
         <svg className={props.className || ""} viewBox="0 0 1024 1024">
@@ -550,4 +549,3 @@ export const CipIcon: React.FC<Props> = props => {
         </svg>
     )
   }
->>>>>>> 686dce2d92a2086d3461e617c1b50701d74ed22e

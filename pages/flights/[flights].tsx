@@ -22,7 +22,11 @@ const Flights: NextPage<any> = ({ FlightsData } : {FlightsData : FlightType[]}) 
     useEffect(() => {
         SidebarFilterChange(FlightsData, SidebarFilter, setFlightsInFilter)
     }, [SidebarFilter])
-
+    
+    useEffect(() => {
+        setFlightsInFilter(FlightsData)
+    },[FlightsData])
+    
     return (
         <div className="max-w-container m-auto p-5 max-md:p-3 flex gap-5 relative">
             <FlightSidebarFilters FlightsData={FlightsData} flightsInFilterLengths={flightsInFilter?.length} />
