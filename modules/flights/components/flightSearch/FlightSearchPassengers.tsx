@@ -17,7 +17,7 @@ const FlightSearchPassengers: React.FC<any> = () => {
     const [adult, setAdult] = useState<any>(router.query.adult || 1)
     const [child, setChild] = useState<any>(router.query.child || 0)
     const [infant, setInfant] = useState<any>(router.query.infant || 0)
-    const allPassengers = adult + child + infant
+    const allPassengers = +adult + +child + +infant
 
     const adultHandle = (type: string) => {
         if (type == 'plus') {
