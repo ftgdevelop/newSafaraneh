@@ -104,7 +104,7 @@ const HotelList: NextPage<Props> = props => {
 
   const router = useRouter();
   const locale = router.locale;
-  const acceptLanguage = locale === "fa" ? "fa-IR" : locale === "ar" ? "ar-SA" : "en-US";
+  const acceptLanguage = locale === "fa" ? "fa-IR" : locale === "ar" ? "ar-AE" : "en-US";
 
   const pathSegments = router.asPath?.split("/");
 
@@ -502,6 +502,8 @@ const HotelList: NextPage<Props> = props => {
     siteName = portalData.Phrases.find(item => item.Keyword === "Name")?.Value || "";
   }
 
+  const canonicalUrl =  pageData?.Url ? `${process.env.SITE_NAME}${pageData?.Url}` : "";
+
   return (
 
     <>
@@ -511,6 +513,8 @@ const HotelList: NextPage<Props> = props => {
         {!!pageData?.MetaTags && pageData.MetaTags.map(item => (
           <meta name={item.Name} content={item.Content?.replaceAll("{0}", siteName)} key={item.Name} />
         ))}
+
+        {!!canonicalUrl && <link rel="canonical" href={canonicalUrl } /> }
 
 
 
@@ -669,7 +673,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const url = `/${locale}/hotels/${query.hotelList![0]}`;
 
-  const acceptLanguage = locale === "fa" ? "fa-IR" : locale === "ar" ? "ar-SA" : "en-US";
+  const acceptLanguage = locale === "fa" ? "fa-IR" : locale === "ar" ? "ar-AE" : "en-US";
 
   const searchHotelsResponse: {
     data?: {
@@ -679,17 +683,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   } = await SearchHotels({ url: url, cityId: +query.hotelList.find((item: string) => item.includes("location-"))?.split("location-")[1] }, acceptLanguage);
 
 
-  //getPageByUrl
-
   const pageResponse: any = await getPageByUrl(url, acceptLanguage);
-
-  //   const [BlogPost, recentBlogs, CategoriesName] = await Promise.all<any>([
-  //     GetBlogPostDetails(context.query.DetailBlog),
-  //     getBlogs({page:1, per_page:10}),
-  //     GetCategories()
-  // ]) 
-
-
 
 
   let faqResponse: any;

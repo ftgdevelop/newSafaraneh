@@ -2,6 +2,27 @@
 const { i18n } = require('./next-i18next.config');
 
 const nextConfig = {
+  async redirects() {
+    return [
+      {
+        source: '/hotel/undefined/hotel/:slug',
+        destination: '/hotel/:slug',
+        permanent: true,
+      },
+      {
+        source: '/en/blog/:slug',
+        destination: '/fa/blog/:slug',
+        locale: false,
+        permanent: true,
+      },
+      {
+        source: '/blog/:slug',
+        destination: '/fa/blog/:slug',
+        locale: false,
+        permanent: true,
+      },
+    ]
+  },
   images: {
     domains: [
       'cdn.safaraneh.com',
