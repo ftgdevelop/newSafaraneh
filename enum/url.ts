@@ -51,8 +51,12 @@ export const Header = {
   };
 
 export const Flight = {
-  getAvailability: 'flightdomestic.safaraneh.com/api/services/app/BookingFlight/Availability',
-  getFlights: 'flightdomestic.safaraneh.com/api/services/app/BookingFlight/GetAvailability?key=',
+  GetAirportsByCode: "/api/services/app/Airport/GetAll",
+  Availability: "/api/services/app/BookingFlight/Availability",
+  GetAvailability: "/api/services/app/BookingFlight/GetAvailability",
+
+  // getAvailability: 'flightdomestic.safaraneh.com/api/services/app/BookingFlight/Availability',
+  // getFlights: 'flightdomestic.safaraneh.com/api/services/app/BookingFlight/GetAvailability?key=',
   searchFlights: 'flightdomestic.safaraneh.com/api/services/app/Airport/Search'
 };
 

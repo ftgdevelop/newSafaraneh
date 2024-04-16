@@ -69,3 +69,12 @@ export interface AirportSearchResponseItem  {
     // longitude: "string",
     airportType: "Main" | "Subsidiary"| "City"
   }
+
+  export type AvailibilityParams = {
+    departureCode: string;
+    returnCode: string;
+    departureTime: string;
+    adult: number;
+    child: number;
+    infant: number;
+}
