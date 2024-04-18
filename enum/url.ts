@@ -54,6 +54,7 @@ export const Flight = {
   GetAirportsByCode: "/api/services/app/Airport/GetAll",
   Availability: "/api/services/app/BookingFlight/Availability",
   GetAvailability: "/api/services/app/BookingFlight/GetAvailability",
+  GetValidate:"/api/services/app/BookingFlight/GetValidate",
 
   // getAvailability: 'flightdomestic.safaraneh.com/api/services/app/BookingFlight/Availability',
   // getFlights: 'flightdomestic.safaraneh.com/api/services/app/BookingFlight/GetAvailability?key=',

@@ -549,3 +549,19 @@ export const CipIcon: React.FC<Props> = props => {
         </svg>
     )
   }
+
+export const TakeOff: React.FC<Props> = props => {
+    return (
+        <svg className={props.className || ""} viewBox="0 -960 960 960" >
+            <path d="M120-120v-60h720v60H120Zm64-208L81-503l43-8 70 62 226-61-171-287 58-17 285 257 216-58q27-8 49 9.5t22 46.5q0 19-11.5 34T838-505L184-328Z" />
+        </svg>
+    )
+}
+
+export const Landing: React.FC<Props> = props => {
+    return (
+        <svg className={props.className || ""} viewBox="0 -960 960 960">
+            <path d="M767-331 120-511v-209l38 13 32 96 219 61v-330l58 14 115 364 215 61q19 5 31 20.5t12 35.5q0 28-22.5 45t-50.5 9ZM120-120v-60h720v60H120Z"/>
+        </svg>
+    )
+}

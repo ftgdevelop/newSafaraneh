@@ -63,7 +63,36 @@ export const GetFlightList = async (params:{key: string, currency: "IRR"|"USD"},
     }
 }
 
+export const FlightGetValidate = async (params:{key: string,token?:string}, acceptLanguage: string = 'fa-IR') => {
+    try {
+        
+        let Headers;
+        if (params.token){
+            Headers = {
+                'Content-Type': 'application/json',
+                apikey: process.env.PROJECT_SERVER_APIKEY,
+                'Accept-Language': acceptLanguage,
+                Authorization: `Bearer ${params.token}`
+            }
+        }else{
+            Headers = {
+                'Content-Type': 'application/json',
+                apikey: process.env.PROJECT_SERVER_APIKEY,
+                'Accept-Language': acceptLanguage
+            } 
+        }
 
+        let response = await axios.get(
+            `${ServerAddress.Type}${ServerAddress.Flight}${Flight.GetValidate}?preReserveKey=${params.key}`,
+            {
+                headers: Headers
+            },
+        )
+        return response
+    } catch (error) {
+        return error
+    }
+}
 
 
 

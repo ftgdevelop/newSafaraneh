@@ -78,3 +78,156 @@ export interface AirportSearchResponseItem  {
     child: number;
     infant: number;
 }
+
+export type AirportType = {
+    name?: string;
+    code?: string;
+    terminalId?: string;
+    city: {
+      name?: string;
+      code?: string;
+    };
+    country: {
+      name?: string;
+      code?: string;
+    };
+    latitude?: string;
+    longitude?: string;
+}
+
+export interface FlightGetValidateDataType {
+    preReserveKey?: string;
+    departureTime: string;
+    arrivalTime?: string;
+    adultCount: number;
+    childCount: number;
+    infantCount: number;
+    "creationTime": "2024-04-10T11:45:24.052Z",
+    "adultTotalPrice": 0,
+    "childTotalPrice": 0,
+    "infantTotalPrice": 0,
+    captchaLink?: string;
+    departureFlight: {
+        flightType: "System" | "Charter";
+        flightNumber: string;
+        departureTime: string;
+        arrivalTime?: string;
+        isForeign: boolean;
+      //   "adultPrice": 0,
+      //   "childPrice": 0,
+      //   "infantPrice": 0,
+      //   "maxAllowedBaggage": 0,
+      //   "capacity": 0,
+      //   "manufacturer": "string",
+      //   "description": "string",
+        cabinClass: {
+          code?: string;
+          type?: string;
+          name?: string;
+        };
+        departureAirport:AirportType;
+        arrivalAirport:AirportType;
+        airCraft: {
+          code?: string;
+          name?: string;
+          manufacturer?: string;
+        };
+        airline: {
+          code?: string;
+          name?: string;
+          picture: {
+            path?: string;
+            altAttribute?: string;
+            titleAttribute?: string;
+          }
+        };
+      //   "refundRule": {
+      //     "rows": [
+      //       {
+      //         "key": 0,
+      //         "value": "string"
+      //       }
+      //     ],
+      //     "items": [
+      //       {
+      //         "value": 0,
+      //         "fromMinutes": 0,
+      //         "fromTime": "string",
+      //         "toMinutes": 0,
+      //         "toTime": "string",
+      //         "description": "string",
+      //         "id": 0
+      //       }
+      //     ]
+      //   },
+      //   "pnrCode": "string",
+      //   "id": 0
+      }
+
+
+
+
+
+
+
+
+
+
+
+    returnFlight?: {
+      flightType: "System" | "Charter";
+      flightNumber: string;
+      departureTime: string;
+      arrivalTime?: string;
+      isForeign: boolean;
+    //   "adultPrice": 0,
+    //   "childPrice": 0,
+    //   "infantPrice": 0,
+    //   "maxAllowedBaggage": 0,
+    //   "capacity": 0,
+    //   "manufacturer": "string",
+    //   "description": "string",
+      cabinClass: {
+        code?: string;
+        type?: string;
+        name?: string;
+      };
+      departureAirport:AirportType;
+      arrivalAirport:AirportType;
+      airCraft: {
+        code?: string;
+        name?: string;
+        manufacturer?: string;
+      };
+      airline: {
+        code?: string;
+        name?: string;
+        picture: {
+          path?: string;
+          altAttribute?: string;
+          titleAttribute?: string;
+        }
+      };
+    //   "refundRule": {
+    //     "rows": [
+    //       {
+    //         "key": 0,
+    //         "value": "string"
+    //       }
+    //     ],
+    //     "items": [
+    //       {
+    //         "value": 0,
+    //         "fromMinutes": 0,
+    //         "fromTime": "string",
+    //         "toMinutes": 0,
+    //         "toTime": "string",
+    //         "description": "string",
+    //         "id": 0
+    //       }
+    //     ]
+    //   },
+    //   "pnrCode": "string",
+    //   "id": 0
+    }
+  }
