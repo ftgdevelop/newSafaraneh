@@ -335,10 +335,9 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const { locale, query } = context;
 
-  const url = encodeURI(`/${locale}/hotel/${query.hotelDetail![0]}`);
+  const url = encodeURI(`/hotel/${query.hotelDetail![0]}`);
 
-  const allData: any = await getDomesticHotelDetailsByUrl(url, locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR");
-
+  const allData: any = await getDomesticHotelDetailsByUrl("/" + locale + url, locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR");
 
 
   if (!allData?.data?.result?.hotel) {
@@ -346,14 +345,13 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
     if (locale === "fa") {
 
-      const url_Ar = encodeURI(`/ar/hotel/${query.hotelDetail![0]}`);
-      const allData_Ar: any = await getDomesticHotelDetailsByUrl(url_Ar, "ar-AE");
-      
+      const allData_Ar: any = await getDomesticHotelDetailsByUrl("/ar" + url, "ar-AE");
+
       if (allData_Ar?.data?.result?.hotel) {
-      
+
         return ({
           redirect: {
-            destination: `/ar/hotel/${query.hotelDetail![0]}`,
+            destination: "/ar" + url,
             locale: false,
             permanent: true
           },
@@ -361,15 +359,14 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
         });
 
       } else {
-        
-        const url_En = encodeURI(`/en/hotel/${query.hotelDetail![0]}`);
-        const allData_En: any = await getDomesticHotelDetailsByUrl(url_En, "en-US");
+
+        const allData_En: any = await getDomesticHotelDetailsByUrl("/en" + url, "en-US");
 
         if (allData_En?.data?.result?.hotel) {
-        
+
           return ({
             redirect: {
-              destination: `/en/hotel/${query.hotelDetail![0]}`,
+              destination: "/en" + url,
               locale: false,
               permanent: true
             },
@@ -392,32 +389,30 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     }
 
 
-
     if (locale === "en") {
 
-      const url_Fa = encodeURI(`/fa/hotel/${query.hotelDetail![0]}`);
-      const allData_Fa: any = await getDomesticHotelDetailsByUrl(url_Fa, "fa-IR");
+      const allData_Fa: any = await getDomesticHotelDetailsByUrl("/fa" + url, "fa-IR");
 
       if (allData_Fa?.data?.result?.hotel) {
 
         return ({
           redirect: {
-            destination: `/fa/hotel/${query.hotelDetail![0]}`,
+            destination: "/fa" + url,
             locale: false,
             permanent: true
           },
           props: {},
         });
+
       } else {
 
-        const url_Ar = encodeURI(`/ar/hotel/${query.hotelDetail![0]}`);
-        const allData_Ar: any = await getDomesticHotelDetailsByUrl(url_Ar, "ar-AE");
+        const allData_Ar: any = await getDomesticHotelDetailsByUrl("/ar" + url, "ar-AE");
 
         if (allData_Ar?.data?.result?.hotel) {
 
           return ({
             redirect: {
-              destination: `/ar/hotel/${query.hotelDetail![0]}`,
+              destination: "/ar" + url,
               locale: false,
               permanent: true
             },
@@ -439,17 +434,15 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     }
 
 
-
     if (locale === "ar") {
 
-      const url_Fa = encodeURI(`/fa/hotel/${query.hotelDetail![0]}`);
-      const allData_Fa: any = await getDomesticHotelDetailsByUrl(url_Fa, "fa-IR");
-      
+      const allData_Fa: any = await getDomesticHotelDetailsByUrl("/fa" + url, "fa-IR");
+
       if (allData_Fa?.data?.result?.hotel) {
 
         return ({
           redirect: {
-            destination: `/fa/hotel/${query.hotelDetail![0]}`,
+            destination: "/fa" + url,
             locale: false,
             permanent: true
           },
@@ -457,15 +450,14 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
         });
 
       } else {
-        
-        const url_En = encodeURI(`/en/hotel/${query.hotelDetail![0]}`);
-        const allData_En: any = await getDomesticHotelDetailsByUrl(url_En, "en_US");
-        
+
+        const allData_En: any = await getDomesticHotelDetailsByUrl("/en" + url, "en_US");
+
         if (allData_En?.data?.result?.hotel) {
 
           return ({
             redirect: {
-              destination: `/en/hotel/${query.hotelDetail![0]}`,
+              destination: "/en" + url,
               locale: false,
               permanent: true
             },
@@ -473,9 +465,9 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
           });
 
         } else {
-          
+
           context.res.statusCode = 410;
-          
+
           return ({
             props: {
               ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
