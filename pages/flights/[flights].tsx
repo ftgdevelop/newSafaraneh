@@ -18,7 +18,7 @@ import ProgressBarWithLabel from "@/modules/shared/components/ui/ProgressBarWith
 import { useTranslation } from "next-i18next";
 
 const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], routeCodes: string }) => {
-
+    
     const {t:tFlight} = useTranslation("flight");
 
     const SidebarFilter = useSelector((state: RootState) => state.flightFilters.filterOption)
@@ -43,10 +43,6 @@ const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], rou
     useEffect(() => {
         setFlightsInFilter(departureList)
     }, [departureList])
-
-
-
-
 
     const acceptLanguage = locale === "fa" ? "fa-IR" : locale === "ar" ? "ar-AE" : "en-US";
 
@@ -141,7 +137,7 @@ const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], rou
             <FlightSidebarFilters FlightsData={departureList} flightsInFilterLengths={flightsInFilter?.length} />
             <div className="w-3/4 max-lg:w-full">
                 
-                <FlightSearchData FlightsData={departureList} />
+                <FlightSearchData FlightsData={departureList} airports={airports} />
 
                 {!(loadingPercentage === 100) && <ProgressBarWithLabel 
                     percentage={loadingPercentage}

@@ -3,17 +3,27 @@ import { FlightType } from "../../types/flights";
 import { useDispatch, useSelector } from "react-redux";
 import { setCabinClassFilter, setTicketTypeFilter } from "../../store/flightsSlice";
 import { RootState } from "@/modules/shared/store";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 const FlightSidebarFlightType: React.FC<any> = ({ FlightsData }: { FlightsData: FlightType[] }) => {
     const economyCobinCount = FlightsData.filter(item => item.cabinClass.name == "Economy").length
     const businessCobinCount = FlightsData.filter(item => item.cabinClass.name == "Business").length
 
+    const query = useRouter().query
     const SidebarFilter = useSelector((state : RootState) => state.flightFilters.filterOption)
     const dispatch = useDispatch()
-
+    
+    useEffect(() => {
+        if (query.flightType) {
+            dispatch(setCabinClassFilter(SidebarFilter.cabinClassOption.concat(query.flightType)))
+        } 
+    },[])
     const cobinClassHandle = (checked: any, cobinClassName: string) => {
         if (checked) {
-            dispatch(setCabinClassFilter(SidebarFilter.cabinClassOption.concat(cobinClassName)))
+            if (!SidebarFilter.cabinClassOption.includes(cobinClassName)) {
+                dispatch(setCabinClassFilter(SidebarFilter.cabinClassOption.concat(cobinClassName)))
+            }    
         }
         else {
             dispatch(setCabinClassFilter(SidebarFilter.cabinClassOption.filter(item => item !== cobinClassName)))

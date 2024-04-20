@@ -83,7 +83,7 @@ const FlightSidebarAirlines: React.FC<any> = ({ FlightsData }: { FlightsData: Fl
                                     </div>
                                     {
                                         flight.capacity ? 
-                                            <p className="text-2xs text-left font-semibold">از {flight.price} ریال</p> :
+                                            <p className="text-2xs text-left font-semibold">از {flight.price.toLocaleString()} ریال</p> :
                                             <p className="text-2xs text-left font-semibold text-gray-500">ظرفیت تکمیل است</p>
                                     }
                                 </div>

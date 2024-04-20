@@ -1,22 +1,19 @@
 import Select from "@/modules/shared/components/ui/Select";
-import { RootState } from "@/modules/shared/store";
-import { useDispatch, useSelector } from "react-redux";
-import { setSearchData } from "../../store/flightsSlice";
+import { SearchDataType } from "./FlightSearch";
+import { useRouter } from "next/router";
 
-const FlightSearchFlightType: React.FC = () => {
-    const searchData = useSelector((state: RootState) => state.flightFilters.SearchData)
-    const dispatch = useDispatch()
-
+const FlightSearchFlightType: React.FC<any> = ({SearchData, setSearchData} : {SearchData: SearchDataType, setSearchData: any}) => {
     const flightTypeHandler = (e : any) => {
-        dispatch(setSearchData({...searchData, flightType: e}))
+        setSearchData({...SearchData, flightType: e})
     }
+    const router = useRouter().query
     return (
         <>
             <Select
                 onChange={(e) => flightTypeHandler(e)}
-                items={[{ label: 'همه', value: 'All' }, { label: 'اکونومی', value: 'Economy' }, { label: 'بیزنس', value: 'Bussines' }]}
+                items={[{ label: 'همه', value: 'All' }, { label: 'اکونومی', value: 'Economy' }, { label: 'بیزنس', value: 'Business' }]}
                 placeholder="همه"
-                value="i"
+                value={(router.flightType as string) || ''}
                 className="text-blue-800 w-32 max-sm:w-26 m-1"
             />
         </>

@@ -1,33 +1,25 @@
 import { useRouter } from "next/router";
 import { ArrowLeft } from "../../shared/components/ui/icons";
-import { FlightType } from "../types/flights";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/modules/shared/store";
+import { useDispatch } from "react-redux";
 import { setSearchChangeOn } from "../store/flightsSlice";
 
-const FlightSearchData: React.FC<any> = ({FlightsData} : {FlightsData : FlightType[]}) => {
+const FlightSearchData: React.FC<any> = ({airports}) => {
     const query: any = useRouter().query
-
-    const SearchChangeOn = useSelector((state: RootState) => state.flightFilters.SearchChangeOn)
-    const dispatch = useDispatch()
     
-    const departureCity = FlightsData.find(item => item.departureAirport?.city?.code == query.flights.split('-')[0])?.departureAirport?.city?.name
-    const arrivalCity = FlightsData.find(item => item.arrivalAirport?.city?.code == query.flights.split('-')[1])?.arrivalAirport?.city?.name
-
-
+    const dispatch = useDispatch()
     return (
-        <div className="flex flex-wrap h-fit relative gap-10 max-md:gap-5 max-sm:gap-4 cursor-pointer
+        <div className="flex flex-wrap h-fit relative gap-10 max-lg:gap-8 max-md:gap-5 max-sm:gap-4 cursor-pointer
             max-sm:justify-around max-sm:border-1 max-sm:border-gray-200 max-sm:p-3 rounded"
             onClick={() => dispatch(setSearchChangeOn(true))}>
                 
                     <div>
-                        <p className="text-sm max-md:text-2xs">{query.flights.split('-')[0]}</p>
-                        <p className="text-gray-500 text-sm max-lg:text-xs max-md:text-3xs">{departureCity}</p>
+                        <p className="text-sm max-md:text-2xs">{airports[1]?.code}</p>
+                        <p className="text-gray-500 text-sm max-lg:text-xs max-md:text-3xs">{airports[1]?.city.name}</p>
                     </div>
                     <ArrowLeft className="w-5 max-sm:w-4 fill-gray-400 ltr:rotate-180" />
                     <div>
-                        <p className="text-sm max-md:text-2xs">{query.flights.split('-')[1]}</p>
-                        <p className="text-gray-500 text-sm max-lg:text-xs max-md:text-3xs">{arrivalCity}</p>
+                        <p className="text-sm max-md:text-2xs">{airports[0]?.code}</p>
+                        <p className="text-gray-500 text-sm max-lg:text-xs max-md:text-3xs">{airports[0]?.city.name}</p>
                     </div>
 
                     <span className="border-e-1 border-gray-200 h-14 max-sm:hidden"></span>
@@ -36,6 +28,13 @@ const FlightSearchData: React.FC<any> = ({FlightsData} : {FlightsData : FlightTy
                         <p className="text-xs max-lg:text-4xs text-gray-400">تاریخ رفت</p>
                         <p className="text-sm max-md:text-2xs">یکشنبه 13 اسفند</p>
                     </div>
+                    {
+                        query.returning && 
+                            <div>
+                                <p className="text-xs max-lg:text-4xs text-gray-400">تاریخ برگشت</p>
+                                <p className="text-sm max-md:text-2xs">یکشنبه 13 اسفند</p>
+                            </div>
+                    }
                     <div>
                         <p className="text-xs max-lg:text-4xs text-gray-400">مسافران</p>
                         <p className="text-sm max-md:text-2xs">{+query.adult + +query.child + +query.infant || 1}</p>

@@ -1,7 +1,9 @@
 import { RightCaret } from "@/modules/shared/components/ui/icons";
 import { FlightType } from "../../types/flights";
+import { useRouter } from "next/router";
 
-const FlightPurcheInfo: React.FC<any> = ({flightData , detail} : {flightData : FlightType, detail: boolean}) => {
+const FlightPurcheInfo: React.FC<any> = ({ flightData, detail }: { flightData: FlightType, detail: boolean }) => {
+    const router = useRouter()
     return (
         <div className="text-left p-3 bg-white w-1/5 max-sm:w-2/5 grid content-around">
             <div>
@@ -9,7 +11,7 @@ const FlightPurcheInfo: React.FC<any> = ({flightData , detail} : {flightData : F
                 flightData?.capacity ? 
                 <p className="text-xl max-lg:text-lg max-sm:text-sm font-bold leading-5 max-sm:leading-4">
                 <span className="text-2xs max-sm:text-3xs font-bold block">ریال</span>
-                {flightData?.adultPrice}
+                {flightData?.adultPrice.toLocaleString()}
                 </p> :
                 <p className="text-xs max-md:text-2xs font-semibold text-gray-400">ظرفیت تکمیل است</p>
             }
@@ -46,9 +48,9 @@ const FlightPurcheInfo: React.FC<any> = ({flightData , detail} : {flightData : F
                         <p>نوزاد (2)</p>
                         <p>{2 * flightData.adultPrice} ریال</p>
                     </div>
-                    <div className="flex justify-between text-sm max-sm:text-xs text-black font-semibold max-sm:block">
+                    <div className="flex justify-between text-xs text-black font-semibold max-sm:block">
                         <p>مجموع</p>
-                        <p>{Math.round(2 * flightData.adultPrice + 2 * flightData.adultPrice + 2 * flightData.adultPrice)} ریال</p>
+                        <p>{Math.round(2 * flightData.adultPrice + 2 * flightData.adultPrice + 2 * flightData.adultPrice).toLocaleString()} ریال</p>
                     </div>
                 </div>
             }
