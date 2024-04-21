@@ -3,7 +3,6 @@ import { RightCaret } from "../../shared/components/ui/icons";
 import FlightSidebarFilterResult from "./FlightSidebarFilterResult";
 import { dateFormat } from "@/modules/shared/helpers";
 
-
 const FlightMainFilters: React.FC<any> = ({ changeSortFlights, sortFlights} : {changeSortFlights: any, sortFlights: string}) => {
 
     const SortItem = (value: string, sortValue: string) => {
@@ -16,8 +15,9 @@ const FlightMainFilters: React.FC<any> = ({ changeSortFlights, sortFlights} : {c
             </button>
         )
     }
+    
     const router = useRouter()
-    const a = (type: string) => {
+    const changeDate = (type: string) => {
         const queryDate: any = (router.query.departing as string).split('-')
         const today = dateFormat(new Date())
         if (type == 'tomorrow') {
@@ -43,13 +43,13 @@ const FlightMainFilters: React.FC<any> = ({ changeSortFlights, sortFlights} : {c
                         <div className="flex gap-3 bg-white w-fit text-sm text-gray-500 rounded
                                 h-fit max-md:w-full justify-center max-md:justify-around shadow-md">
                             <button type="button" className="flex hover:bg-gray-100 duration-200 p-1 pl-2 pr-2 w-full justify-center items-center cursor-pointer whitespace-nowrap"
-                            onClick={() => router.replace({query: {...router.query,departing:a('yesterday')}})}>
+                            onClick={() => router.replace({query: {...router.query,departing:changeDate('yesterday')}})}>
                                 <RightCaret className="w-5 fill-gray-400 ltr:rotate-180" />
                                 روز قبل
                             </button>
                             <p className="pr-2 pl-2 p-1 w-full whitespace-nowrap text-center">5 اسفند 1402</p>
                             <button type="button" className="flex hover:bg-gray-100 duration-200 p-1 pr-2 pl-2 w-full justify-center items-center cursor-pointer whitespace-nowrap"
-                            onClick={() => router.replace({query: {...router.query,departing:a('tomorrow')}})}>
+                            onClick={() => router.replace({query: {...router.query,departing:changeDate('tomorrow')}})}>
                                 روز بعد
                                 <RightCaret className="w-5 rtl:rotate-180 fill-gray-400"/>
                             </button>

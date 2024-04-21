@@ -10,6 +10,8 @@ const FlightSearchDirection: React.FC<any> = ({ className, SearchData, setSearch
     const [selectedOrigin, setSelectedOrigin] = useState<AirportSearchResponseItem>();
     const [selectedDestination, setSelectedDestination] = useState<AirportSearchResponseItem>();
 
+    const [selectedPoints, setSelectedPoints] = useState<[AirportSearchResponseItem,AirportSearchResponseItem]>();
+
     useEffect(() => {
         setSearchData({...SearchData, origin: selectedOrigin?.code})
     }, [selectedOrigin])
@@ -45,7 +47,7 @@ const FlightSearchDirection: React.FC<any> = ({ className, SearchData, setSearch
                     ), [])}
                     icon="airplane_"
                     inputClassName={`w-full outline-none border rounded-lg border-neutral-400 h-12 text-sm text-neutral-500 placeholder:text-neutral-500 focus:border-neutral-900`}
-                    placeholder={'مبدا پرواز'}
+                    placeholder={'پرواز از'}
                     min={2}
                     value={selectedOrigin}
                     onChangeHandle={setSelectedOrigin}
@@ -53,7 +55,7 @@ const FlightSearchDirection: React.FC<any> = ({ className, SearchData, setSearch
                     type="flight"
             />
             
-            <button type="button" className="bg-white z-30 rounded-full pr-2 pl-2 absolute border-gray-500 border-1 left-1/2"
+            <button type="button" className="bg-white z-30 rounded-full pr-2 pl-2 border-1 border-gray-600 absolute left-1/2"
             onClick={changeDirectionHandler}>
                     <ArrowLeft className="w-3 fill-gray-800"/>
                     <ArrowRight className="w-3 fill-gray-800"/>
@@ -78,7 +80,7 @@ const FlightSearchDirection: React.FC<any> = ({ className, SearchData, setSearch
                     ), [])}
                     icon="airplane_"
                     inputClassName={`w-full outline-none border rounded-lg border-neutral-400 h-12 text-sm text-neutral-500 placeholder:text-neutral-500 focus:border-neutral-900`}
-                    placeholder={'مقصد پرواز'}
+                    placeholder={'پرواز به'}
                     min={2}
                     value={selectedDestination}
                     onChangeHandle={setSelectedDestination}

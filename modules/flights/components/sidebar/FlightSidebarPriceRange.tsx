@@ -21,39 +21,44 @@ const FlightSidebarPriceChange: React.FC<any> = ({ FlightsData }: { FlightsData:
     ]
     
     return (
-        <div className="text-xs pt-2 pb-2 space-y-2">
-            <div className="flex justify-between items-center">
-                <h2 className="text-sm font-semibold mb-2">مبلغ</h2>
-                {
-                    priceFilter?.min || priceFilter?.max ?
-                    <button type="button" className="text-3xs bg-red-500 text-white pl-2 pr-2 rounded"
-                        onClick={() => dispatch(setPriceRangeFilter({}))} 
-                        >
-                    حذف
-                    </button> :
-                    <p></p>
-                }
-            </div>    
-            <div className="grid grid-cols-2 text-xs w-full content-center">
-                <p>حداقل</p>
-                <Select
-                    items={PriceItems.map(item => ({label: `${item.toLocaleString()} ریال`, value: item.toString()}))}
-                    placeholder="حداقل"
-                    value={priceFilter?.min?.toString() || '0'}
-                    onChange={e => dispatch(setPriceRangeFilter({min: +e, max:priceFilter?.max}))}
-                className="col-span-2 text-xs whitespace-nowrap h-fit p-1"/>
-            </div>
+        <>
+            {
+                FlightsData.length ?
+                <div className="text-xs pt-2 pb-2 space-y-2">
+                    <div className="flex justify-between items-center">
+                        <h2 className="text-sm font-semibold mb-2">مبلغ</h2>
+                        {
+                            priceFilter?.min || priceFilter?.max ?
+                                <button type="button" className="text-3xs bg-red-500 text-white pl-2 pr-2 rounded"
+                                    onClick={() => dispatch(setPriceRangeFilter({}))}
+                                >
+                                    حذف
+                                </button> :
+                                <p></p>
+                        }
+                    </div>
+                    <div className="grid grid-cols-2 text-xs w-full content-center">
+                        <p>حداقل</p>
+                        <Select
+                            items={PriceItems.map(item => ({ label: `${item.toLocaleString()} ریال`, value: item.toString() }))}
+                            placeholder="حداقل"
+                            value={priceFilter?.min?.toString() || '0'}
+                            onChange={e => dispatch(setPriceRangeFilter({ min: +e, max: priceFilter?.max }))}
+                            className="col-span-2 text-xs whitespace-nowrap h-fit p-1" />
+                    </div>
 
-            <div className="grid grid-cols-2 text-xs w-full content-center">
-                <p>حداکثر</p>
-                <Select
-                    items={PriceItems.map(item => ({label: `${item.toLocaleString()} ریال`, value: item.toString()}))}
-                    placeholder="حداکثر"
-                    value={priceFilter?.max?.toString() || '0'}
-                    onChange={e => dispatch(setPriceRangeFilter({min:priceFilter?.min, max: +e}))}
-                className="col-span-2 text-xs whitespace-nowrap h-fit p-1"/>
-            </div>
-        </div>
+                    <div className="grid grid-cols-2 text-xs w-full content-center">
+                        <p>حداکثر</p>
+                        <Select
+                            items={PriceItems.map(item => ({ label: `${item.toLocaleString()} ریال`, value: item.toString() }))}
+                            placeholder="حداکثر"
+                            value={priceFilter?.max?.toString() || '0'}
+                            onChange={e => dispatch(setPriceRangeFilter({ min: priceFilter?.min, max: +e }))}
+                            className="col-span-2 text-xs whitespace-nowrap h-fit p-1" />
+                    </div>
+                </div>:<div></div>
+            }
+        </>    
     )
 }
 
