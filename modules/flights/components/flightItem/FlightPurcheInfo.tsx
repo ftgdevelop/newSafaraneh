@@ -1,0 +1,67 @@
+import { RightCaret } from "@/modules/shared/components/ui/icons";
+import { FlightType } from "../../types/flights";
+import { useRouter } from "next/router";
+import { numberWithCommas } from "@/modules/shared/helpers";
+
+type PassengersType = {
+    adults:number;
+    children:number;
+    infants:number;
+}
+const FlightPurcheInfo: React.FC<any> = ({ flightData, detail, passengers }: { flightData: FlightType, detail: boolean, passengers: PassengersType }) => {
+    const router = useRouter()
+    return (
+        <div className="text-left p-3 bg-white w-1/5 max-sm:w-2/5 grid content-around">
+            <div>
+            {
+                flightData?.capacity ? 
+                <p className="text-xl max-lg:text-lg max-sm:text-sm font-bold leading-5 max-sm:leading-4">
+                <span className="text-2xs max-sm:text-3xs font-bold block">ریال</span>
+                {flightData?.adultPrice.toLocaleString()}
+                </p> :
+                <p className="text-xs max-md:text-2xs font-semibold text-gray-400">ظرفیت تکمیل است</p>
+            }
+            {
+                flightData?.capacity ?
+                    <button type="submit" className={`flex w-full justify-center bg-blue-800
+                    duration-200 text-white p-1 font-semibold max-md:pr-2 max-md:pl-2 rounded-lg text-sm mt-2 whitespace-nowrap  hover:bg-blue-600 max-md:text-xs`}>
+                        انتخاب پرواز
+                    <RightCaret className="w-5 fill-white my-auto rtl:rotate-180 max-sm:hidden" />
+                    </button> :
+                    <button type="submit" className={`flex w-full justify-center bg-gray-400 cursor-not-allowed
+                    duration-200 text-white p-1 font-semibold max-md:pr-2 max-md:pl-2 rounded-lg text-sm mt-2 whitespace-nowrap`}>
+                        انتخاب پرواز
+                    <RightCaret className="w-5 fill-white my-auto rtl:rotate-180 max-sm:hidden " />
+                    </button>
+            }
+            {
+                flightData?.capacity < 10 && flightData?.capacity !== 0 &&
+                <p className="text-3xs text-red-600">{flightData.capacity} صندلی باقیمانده</p>
+            }
+            </div>    
+            {
+                detail &&
+                <div className="text-3xs max-md:text-4xs text-gray-400 max-lg:text-black">
+                    <div className="flex justify-between max-sm:block">
+                        <p>بزرگسال ({passengers.adults})</p>
+                        <p>{numberWithCommas(passengers.adults * flightData.adultPrice)} ریال</p>
+                    </div>
+                    <div className="flex justify-between max-sm:block">
+                        <p>کودک ({passengers.children})</p>
+                        <p>{numberWithCommas(passengers.children * flightData.childPrice)} ریال</p>
+                    </div>
+                    <div className="flex justify-between max-sm:block">
+                        <p>نوزاد ({passengers.infants})</p>
+                        <p>{numberWithCommas(passengers.infants * flightData.infantPrice)} ریال</p>
+                    </div>
+                    <div className="flex justify-between text-xs text-black font-semibold max-sm:block">
+                        <p>مجموع</p>
+                        <p>{numberWithCommas(Math.round(passengers.adults * flightData.adultPrice + passengers.children * flightData.childPrice + passengers.infants * flightData.infantPrice))} ریال</p>
+                    </div>
+                </div>
+            }
+        </div>
+    )
+}
+
+export default FlightPurcheInfo;
