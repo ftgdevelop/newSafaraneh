@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { dateDiplayFormat, persianNumbersToEnglish, shamsiToMiladi } from '../../helpers';
 import { Field } from 'formik';
+import styles from './DatePickerSelect.module.scss';
 
 type Props = {
     min: string;
@@ -47,8 +48,11 @@ const DatePickerSelect: React.FC<Props> = props => {
 
     useEffect(() => {
         if (day && month && year) {
+            let dateArray:string[] = [year, month.padStart(2, '0'), day.padStart(2, '0')];
 
-            const dateArray = shamsiToMiladi(+year, +month, +day);
+            if (props.shamsi){
+                dateArray = shamsiToMiladi(+year, +month, +day);
+            }
 
             if (props.setFieldValue) {
                 props.setFieldValue(props.name, dateArray.join("-"), true);
@@ -84,16 +88,34 @@ const DatePickerSelect: React.FC<Props> = props => {
         { text: "اسفند", value: '12' }
     ];
 
-    let monthsArray: { text: string, value: string }[] = [...persianMonths];
+    const miladiMonths = [
+        { text: "January", value: '1' },
+        { text: "February", value: '2' },
+        { text: "March", value: '3' },
+        { text: "April", value: '4' },
+        { text: "May", value: '5' },
+        { text: "June", value: '6' },
+        { text: "July", value: '7' },
+        { text: "August", value: '8' },
+        { text: "September", value: '9' },
+        { text: "October", value: '10' },
+        { text: "November", value: '11' },
+        { text: "December", value: '12' }
+    ];
+
+    const months = props.shamsi? persianMonths : miladiMonths;
+
+    
+    let monthsArray: { text: string, value: string }[] = [...months];
 
     if (year === maxYear) {
-        monthsArray = persianMonths.filter(item => {
+        monthsArray = months.filter(item => {
             const monthNumber = item.value;
             return (+maxMonth >= +monthNumber);
         })
     }
     if (year === minYear) {
-        monthsArray = persianMonths.filter(item => {
+        monthsArray = months.filter(item => {
             const monthNumber = item.value;
             return (+minMonth <= +monthNumber);
         })
@@ -105,10 +127,20 @@ const DatePickerSelect: React.FC<Props> = props => {
     }
 
     let daysArray: string[] = [...days];
-
-    if (+month >= 7) {
-        daysArray = [...daysArray].filter(item => +item !== 31)
+    
+    if(props.shamsi){
+        if (+month >= 7) {
+            daysArray = [...daysArray].filter(item => +item !== 31)
+        }
+    }else{
+        if (+month === 2){
+            daysArray = [...daysArray].filter(item => +item !== 31 && +item !== 30);
+        }
+        if ([4,6,9,11].includes(+month)){
+            daysArray = [...daysArray].filter(item => +item !== 31);   
+        }
     }
+
 
     if (year === maxYear && month === maxMonth) {
         daysArray = [...daysArray].filter(item => item <= maxDay);
@@ -118,10 +150,10 @@ const DatePickerSelect: React.FC<Props> = props => {
         daysArray = [...daysArray].filter(item => item >= minDay);
     }
 
-    const selectClassName = `block grow focus:border-blue-500 h-10 px-1 text-sm bg-white border outline-none rounded-md ${props.errorText && props.isTouched ? "border-red-500" : "border-neutral-300 focus:border-blue-500"}`
+    const selectClassName = `block grow focus:border-blue-500 h-10 px-0.5 text-sm bg-white border outline-none rounded-md ${props.errorText && props.isTouched ? "border-red-500" : "border-neutral-300 focus:border-blue-500"}`
 
     return (
-        <div className='relative'>
+        <div className={`relative ${props.shamsi?"font-samim":"font-sans"}`}>
             {!!props.label && (
                 <label
                     className={`select-none pointer-events-none block leading-4 ${props.labelIsSimple ? "mb-3 text-base" : "top-0 text-xs z-10 text-sm absolute px-2 bg-white transition-all duration-300 -translate-y-1/2 rtl:right-1 ltr:left-1"}  `}
@@ -129,10 +161,10 @@ const DatePickerSelect: React.FC<Props> = props => {
                     {props.label}
                 </label>
             )}
-            <div className='flex rtl:text-right gap-1 rtl:flex-row-reverse'>
+            <div className='rtl:text-right' dir="ltr">
 
                 <select
-                    className={`${selectClassName} basis-20`}
+                    className={`${selectClassName} ${styles.year} inline-block`}
                     onChange={e => { setYear(e.target.value) }}
                     value={year}
                 >
@@ -148,7 +180,7 @@ const DatePickerSelect: React.FC<Props> = props => {
                 </select>
 
                 <select
-                    className={`${selectClassName} basis-24`}
+                    className={`${selectClassName} ${styles.month} inline-block`}
                     onChange={e => { setMonth(e.target.value) }}
                     value={month}
                 >
@@ -167,7 +199,7 @@ const DatePickerSelect: React.FC<Props> = props => {
 
 
                 <select
-                    className={`${selectClassName} basis-20`}
+                    className={`${selectClassName} ${styles.day} inline-block`}
                     onChange={e => { setDay(e.target.value) }}
                     value={day}
                 >
@@ -193,7 +225,6 @@ const DatePickerSelect: React.FC<Props> = props => {
                 type='text'
                 readOnly
                 value={props.value}
-                validateFunction={props.validateFunction}
             />
 
             {props.errorText && props.isTouched && <div className='text-red-500 text-xs'>{props.errorText}</div>}

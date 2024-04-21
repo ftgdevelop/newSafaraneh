@@ -35,6 +35,11 @@ const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], rou
 
     const { query, locale } = router;
 
+    const passengers = {
+        adults:+(query.adult || 0),
+        children:+(query.child || 0),
+        infants:+(query.infant || 0)
+    }
 
     useEffect(() => {
         SidebarFilterChange(departureList, SidebarFilter, setFlightsInFilter)
@@ -154,7 +159,7 @@ const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], rou
                                 return a.capacity && a.adultPrice - b.adultPrice
                             }
                         }).map((flight: FlightType) =>
-                            <FlightsFlightItem flightData={flight} key={flight.flightKey} />
+                            <FlightsFlightItem passengers={passengers} flightData={flight} key={flight.flightKey} />
                         )
                 }
             </div>

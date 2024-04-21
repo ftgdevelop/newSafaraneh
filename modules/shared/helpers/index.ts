@@ -6,7 +6,7 @@ export const numberWithCommas = (x: number) => {
     }
 }
 
-export const dateDiplayFormat = ({ date, format, locale }: { date: string; format?: "ddd dd mm" | "dd mm yyyy" | "yyyy/mm/dd" | "YYYY-MM-DD" | "yyyy/mm/dd h:m" , locale?: string }): string => {
+export const dateDiplayFormat = ({ date, format, locale }: { date: string; format?:  "HH:mm"| "dd mm"| "ddd dd mm" | "dd mm yyyy" | "yyyy/mm/dd" | "YYYY-MM-DD" | "yyyy/mm/dd h:m" , locale?: string }): string => {
 
     if (!date) return "";
 
@@ -20,6 +20,12 @@ export const dateDiplayFormat = ({ date, format, locale }: { date: string; forma
 
     let h = dateObject.getHours().toString().padStart(2, '0');
     let m = dateObject.getMinutes().toString().padStart(2, '0');
+
+    if (format === "HH:mm"){
+        const h = dateObject.toLocaleString(locale, { hour: "2-digit" });
+        const m = dateObject.toLocaleString(locale, { minute: "2-digit" });
+        return(h+":"+m);
+    }
 
     if (format === "ddd dd mm") {
         return (`${weekDay} ${day} ${month}`)
@@ -38,6 +44,10 @@ export const dateDiplayFormat = ({ date, format, locale }: { date: string; forma
 
     if (format === "yyyy/mm/dd h:m"){
         return (`${year}/${month2digit}/${day2digit} - ${h}:${m}`)
+    }
+
+    if (format === "dd mm"){
+        return (`${day} ${month}`)
     }
 
     return date;
@@ -146,7 +156,7 @@ export const shamsiToMiladi = (j_y: number, j_m: number, j_d: number) => {
     let gm = (i + 1).toString().padStart(2, '0');
     let gd = (g_day_no + 1).toString().padStart(2, '0');
 
-    return [gy, gm, gd];
+    return [gy.toString(), gm, gd];
 
 }
 
