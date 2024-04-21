@@ -113,9 +113,9 @@ export interface FlightGetValidateDataType {
         departureTime: string;
         arrivalTime?: string;
         isForeign: boolean;
-      //   "adultPrice": 0,
-      //   "childPrice": 0,
-      //   "infantPrice": 0,
+        adultPrice:number;
+        childPrice:number;
+        infantPrice:number;
       //   "maxAllowedBaggage": 0,
       //   "capacity": 0,
       //   "manufacturer": "string",
@@ -180,9 +180,9 @@ export interface FlightGetValidateDataType {
       departureTime: string;
       arrivalTime?: string;
       isForeign: boolean;
-    //   "adultPrice": 0,
-    //   "childPrice": 0,
-    //   "infantPrice": 0,
+      adultPrice:number;
+      childPrice:number;
+      infantPrice:number;
     //   "maxAllowedBaggage": 0,
     //   "capacity": 0,
     //   "manufacturer": "string",
@@ -230,4 +230,31 @@ export interface FlightGetValidateDataType {
     //   "pnrCode": "string",
     //   "id": 0
     }
+  }
+
+
+  export interface FlightPrereserveFormValue {
+    reserver: {
+      gender: boolean;
+      firstName: string;
+      lastName: string;
+      email: string;
+      phoneNumber: string;
+      userName?:string;
+  };
+  passengers: {
+    gender: boolean;
+    firstName: string;
+    lastName: string;
+    persianFirstName: string;
+    persianLastName: string;
+    nationalId: string;
+    birthDate: string;
+    passportNumber: string | null;
+    passportExpireDate: string | null;
+    passengerType: "ADT"|"CHD"|"INF"
+    nationality: string | null;
+  }[];
+    captchaCode: string;
+    preReserveKey?:string;
   }

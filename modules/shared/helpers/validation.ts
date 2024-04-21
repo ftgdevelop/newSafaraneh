@@ -38,6 +38,29 @@ export const validateRequiedPersianAndEnglish = (value: string, reqiredMessage: 
     return error;
 }
 
+
+export const validateRequiedPersian = (value: string, reqiredMessage: string, invalidMessage: string) => {
+    let error;
+    if (!value) {
+        error = reqiredMessage;
+    } else if (!/^[آابپتثجچحخدذرزژسشصضطظعغفقکگلمنوهیئ ]*$/.test(value)) {
+        error = invalidMessage;
+    }
+
+    return error;
+}
+
+export const validateRequiedEnglish = (value: string, reqiredMessage: string, invalidMessage: string) => {
+    let error;
+    if (!value) {
+        error = reqiredMessage;
+    } else if (!/^[a-zA-Z ]*$/.test(value)) {
+        error = invalidMessage;
+    }
+
+    return error;
+}
+
 export const validateNationalId = ({ value, reqiredMessage, invalidMessage }: { value: string, reqiredMessage?: string, invalidMessage: string }) => {
     let error;
     if (!value && reqiredMessage) {

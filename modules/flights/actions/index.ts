@@ -1,6 +1,6 @@
 import { Flight, ServerAddress } from "@/enum/url"
 import axios from "axios"
-import { AvailibilityParams } from "../types/flights";
+import { AvailibilityParams, FlightPrereserveFormValue } from "../types/flights";
 
 export const GetAirportsByCode = async (codes: string[], acceptLanguage: string = 'fa-IR') => {
     try {
@@ -94,6 +94,57 @@ export const FlightGetValidate = async (params:{key: string,token?:string}, acce
     }
 }
 
+export const getAllCountries = async (acceptLanguage: string = 'fa-IR') => {
+    try {        
+        let response = await axios.get(
+            `${ServerAddress.Type}${ServerAddress.Flight}${Flight.GetAllCountries}?MaxResultCount=300`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    apikey: process.env.PROJECT_SERVER_APIKEY,
+                    'Accept-Language': acceptLanguage
+                }
+            },
+        )
+        return response
+    } catch (error) {
+        return error
+    }
+}
+
+
+export const FlightPreReserve = async (values:{params: FlightPrereserveFormValue, token:string}, acceptLanguage: string = 'fa-IR') => {
+    try {
+
+        let Headers;
+        if (values.token){
+            Headers = {
+                'Content-Type': 'application/json',
+                apikey: process.env.PROJECT_SERVER_APIKEY,
+                'Accept-Language': acceptLanguage,
+                Authorization: `Bearer ${values.token}`
+            }
+        }else{
+            Headers = {
+                'Content-Type': 'application/json',
+                apikey: process.env.PROJECT_SERVER_APIKEY,
+                'Accept-Language': acceptLanguage
+            } 
+        }
+
+
+        let response = await axios.post(
+            `${ServerAddress.Type}${ServerAddress.Flight}${Flight.PreReserve}`,
+            values.params,
+            {
+                headers: Headers,
+            },
+        )
+        return response
+    } catch (error) {
+        return error
+    }
+}
 
 
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Formik, Form } from 'formik';
 import type { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
@@ -6,411 +6,395 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 
-import { domesticHotelGetValidate, domesticHotelPreReserve, getDomesticHotelSummaryDetailById } from '@/modules/domesticHotel/actions';
-import { getDatesDiff } from '@/modules/shared/helpers';
-import { AsideHotelInfoType, AsideReserveInfoType, DomesticHotelGetValidateResponse, DomesticHotelSummaryDetail } from '@/modules/domesticHotel/types/hotel';
-import SpecialReauests from '@/modules/domesticHotel/components/checkout/SpecialRequests';
-import ReserverInformation from '@/modules/domesticHotel/components/checkout/ReserverInformation';
-import RoomItemInformation from '@/modules/domesticHotel/components/checkout/RoomItemInformation';
-import DiscountForm from '@/modules/domesticHotel/components/checkout/DiscountForm';
-import { registerDiscountCode, validateDiscountCode } from '@/modules/payment/actions';
+import ReserverInformation from '@/modules/flights/components/checkout/ReserverInformation';
 import { useAppDispatch } from '@/modules/shared/hooks/use-store';
 import { setReduxError } from '@/modules/shared/store/errorSlice';
-import { dateFormat } from '@/modules/shared/helpers';
 import Steps from '@/modules/shared/components/ui/Steps';
-import Link from 'next/link';
 import Skeleton from '@/modules/shared/components/ui/Skeleton';
-import { LeftCaret } from '@/modules/shared/components/ui/icons';
-import { FlightGetValidate } from '@/modules/flights/actions';
-import { FlightGetValidateDataType } from '@/modules/flights/types/flights';
+import { FlightNotAvailable } from '@/modules/shared/components/ui/icons';
+import { FlightGetValidate, FlightPreReserve, getAllCountries } from '@/modules/flights/actions';
+import { FlightGetValidateDataType, FlightPrereserveFormValue } from '@/modules/flights/types/flights';
 import Aside from '@/modules/flights/components/shared/Aside';
+import PassengerItemInformation from '@/modules/flights/components/checkout/PassengerItemInformation';
+import Button from '@/modules/shared/components/ui/Button';
+import FormikField from '@/modules/shared/components/ui/FormikField';
+import { validateRequied } from '@/modules/shared/helpers/validation';
 
 const Checkout: NextPage = () => {
 
-    const { t } = useTranslation('common');
-    const { t: tHotel } = useTranslation('hotel');
+  const { t } = useTranslation('common');
 
-    const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
-    const router = useRouter();
+  const router = useRouter();
 
+  const { key } = router.query;
 
-    //   const [reserveInfo, setReserveInfo] = useState<DomesticHotelGetValidateResponse>();
-    //   const [hotelInfo, setHotelInfo] = useState<DomesticHotelSummaryDetail>();
-    //   const [reserverIsPassenger, setReserverIsPassenger] = useState<boolean>(true);
+  const [flightData, setFlightData] = useState<FlightGetValidateDataType>();
+  const [flightDataLoading, setFlightDataLoading] = useState<boolean>(true);
+  const [submitLoading, setSubmitLoading] = useState<boolean>(false);
 
-    //   const [roomsExtraBed, setRoomsExtraBed] = useState<number[]>([]);
+  type CountryItem = {
+    code?: string;
+    name?: string;
+    nationality?: string;
+    id: number;
+  }
+  const [countries, setCountries] = useState<CountryItem[]>();
 
-    //   const [discountData, setDiscountData] = useState<any>();
-    //   const [discountLoading, setDiscountLoading] = useState<boolean>(false);
+  useEffect(() => {
 
-    //   const [promoCode,setPromoCode] = useState<string>("");
+    const token = localStorage.getItem('Token');
 
-    //   const [submitLoading,setSubmitLoading] = useState<boolean>(false);
+    const fetchFlightData = async () => {
+      setFlightDataLoading(true);
+      if (!key) return;
+      const response: any = await FlightGetValidate({ key: key as string, token: token || undefined }, "fa-IR");
+      if (response?.data?.result) {
+        setFlightData(response.data.result);
+      }
+      setFlightDataLoading(false);
+    }
 
-    //   let backUrl: string = "";
-    //   const checkinDate = reserveInfo?.checkin && new Date(reserveInfo.checkin);
-    //   const checkoutDate = reserveInfo?.checkout && new Date(reserveInfo.checkout);
+    fetchFlightData();
 
-    //   if (hotelInfo && checkinDate && checkoutDate) {
+  }, [key]);
 
-    //     const checkin = dateFormat(checkinDate);
-    //     const checkout = dateFormat(checkoutDate);
+  useEffect(() => {
+    const fetchCountriesList = async () => {
+      const response: any = await getAllCountries("fa-IR");
+      if (response?.data?.result?.items) {
+        const sortedcountries = [...response.data.result.items].sort((b: CountryItem, a: CountryItem) => {
 
-    //     backUrl = `${hotelInfo.url}/location-${hotelInfo.cityId || hotelInfo.city?.id}/checkin-${checkin}/checkout-${checkout}`;
-    //   }
+          if (!a.name || !b.name) return 1;
 
-    //   useEffect(() => {
+          const farsiAlphabet = ["آ", "ا", "ب", "پ", "ت", "ث", "ج", "چ", "ح", "خ", "د", "ذ", "ر", "ز", "ژ", "س", "ش", "ص", "ض", "ط", "ظ", "ع", "غ", "ف", "ق", "ک", "گ", "ل", "م", "ن", "و", "ه", "ی",
+            "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
 
-    //     const fetchData = async (key: string) => {
+          const x = a.name.toLowerCase().trim();
+          const y = b.name.toLowerCase().trim();
 
-    //       const response: any = await domesticHotelGetValidate(key);
-
-    //       if (response?.data?.result) {
-    //         setReserveInfo(response.data.result);
-
-    //         setRoomsExtraBed(response.data.result.rooms.map((item: any) => (0)));
-
-    //         const hotelId = response.data.result.accommodationId;
-
-    //         if (!hotelId) return;
-
-    //         const hotelDataResponse: { data?: { result?: DomesticHotelSummaryDetail } } = await getDomesticHotelSummaryDetailById(hotelId);
-    //         if (hotelDataResponse.data?.result) {
-    //           setHotelInfo(hotelDataResponse.data.result);
-    //         }
-
-    //       }
-
-    //     }
-
-    //     if (key) {
-    //       fetchData(key);
-    //     }
-
-    //   }, [key]);
-
-    //   let hotelInformation: AsideHotelInfoType;
-    //   let reserveInformation: AsideReserveInfoType;
-
-    //   if (hotelInfo) {
-    //     hotelInformation = {
-    //       image: {
-    //         url: hotelInfo.picture?.path,
-    //         alt: hotelInfo.picture?.altAttribute || hotelInfo.displayName || "",
-    //         title:  hotelInfo.picture?.titleAttribute || hotelInfo.displayName || "",
-    //       },
-    //       name: hotelInfo.displayName || hotelInfo.name || "",
-    //       rating: hotelInfo.rating,
-    //       address: hotelInfo.address,
-    //       Url: hotelInfo.url,
-    //       CityId: hotelInfo.cityId || hotelInfo.city?.id
-    //     }
-    //   }
-
-    //   let needToInquire = false;
-
-    //   if (reserveInfo) {
-    //     reserveInformation = {
-    //       checkin: reserveInfo.checkin,
-    //       checkout: reserveInfo.checkout,
-
-    //       duration: getDatesDiff(new Date(reserveInfo.checkout), new Date(reserveInfo.checkin)),
-
-    //       rooms: reserveInfo.rooms.map((roomItem: DomesticHotelGetValidateResponse['rooms'][0]) => ({
-    //         name: roomItem.name,
-    //         board: roomItem.boardCode,
-    //         cancellationPolicyStatus: roomItem.cancellationPolicyStatus,
-    //         bed: roomItem.bed,
-    //         extraBed: roomItem.extraBed,
-    //         pricing: roomItem.pricing
-    //       })),
-
-    //       salePrice: reserveInfo.rooms.reduce((totalPrice: number, roomItem: DomesticHotelGetValidateResponse['rooms'][0]) => {
-    //         const roomItemPrice = roomItem.pricing.find(
-    //           (item: any) => item.type === "Room" && item.ageCategoryType === "ADL"
-    //         )?.amount;
-    //         if (roomItemPrice) {
-    //           return totalPrice + +roomItemPrice
-    //         } else {
-    //           needToInquire = true;
-    //           return totalPrice;
-    //         }
-    //       }, 0 as number),
-    //       boardPrice: reserveInfo.rooms.reduce((totalPrice: number, roomItem: DomesticHotelGetValidateResponse['rooms'][0]) => {
-    //         const roomItemPrice = roomItem.pricing.find(
-    //           (item: any) => item.type === "RoomBoard" && item.ageCategoryType === "ADL"
-    //         )?.amount;
-    //         if (roomItemPrice) {
-    //           return totalPrice + +roomItemPrice
-    //         } else {
-    //           needToInquire = true;
-    //           return totalPrice;
-    //         }
-    //       }, 0 as number)
-
-    //     }
-    //   }
-
-    //   const submitHandler = async (params: any) => {
-
-    //     setSubmitLoading(true);
-
-    //     const token = localStorage.getItem('Token');
-    //     const reserveResponse: any = await domesticHotelPreReserve(params, token);
-
-    //     if (reserveResponse.data && reserveResponse.data.result) {
-    //       const id = reserveResponse.data.result.id;
-    //       const username = reserveResponse.data.result.username;
-
-    //       if (discountData?.isValid && promoCode) {
-    //         await registerDiscountCode({ discountPromoCode: promoCode , reserveId: id.toString(), username: username });
-    //       }
-
-    //       if (reserveResponse.data.result.rooms.every((x: any) => x.availablityType === "Online")) {
-    //         router.push(`/payment?reserveId=${id}&username=${username}`);
-    //       } else {
-    //         router.push(`/hotel/capacity?reserveId=${id}&username=${username}`);
-    //       }
-
-    //     } else {
-
-    //       dispatch(setReduxError({
-    //         title: tHotel('error-in-reserve-room'),
-    //         message: tHotel('sorry-room-is-full'),
-    //         isVisible: true,
-    //         closeErrorLink: backUrl || "/",
-    //         closeButtonText: backUrl ? tHotel('choose-room') : t("home")
-    //       }));
-
-    //     }
-    //   }
-
-    //   const disableSyncedPassenger = () => {
-    //     setReserverIsPassenger(false);
-    //   }
-
-    //   const initialValues = {
-    //     reserver: {
-    //       gender: true,
-    //       firstName: "",
-    //       lastName: "",
-    //       email: "",
-    //       nationalId: "",
-    //       phoneNumber: ""
-    //     },
-    //     passengers: reserveInfo?.rooms.map((_, index) => ({
-    //       gender: true,
-    //       firstName: '',
-    //       lastName: '',
-    //       roomNumber: index + 1,
-    //       extraBed: 0
-    //     })) || [],
-    //     specialRequest: "",
-    //     preReserveKey: key
-    //   }
-
-    //   const discountSubmitHandler = async (value: string) => {
-
-    //     setDiscountLoading(true);
-    //     setDiscountData(undefined);
-
-    //     const response = await validateDiscountCode({ prereserveKey: key!, type: 'HotelDomestic', discountPromoCode: value });
-
-    //     setDiscountLoading(false);
-
-    //     if (response?.data?.result) {
-    //       setDiscountData(response.data.result);
-    //       setPromoCode(value);
-    //     } else if (response?.data?.error) {
-    //       setDiscountData(response.data?.error);
-    //     }
-
-    //   }
-
-
-    const { key } = router.query;
-
-    const [flightData, setFlightData] = useState<FlightGetValidateDataType>();
-
-    useEffect(() => {
-
-        const token = localStorage.getItem('Token');
-
-        const fetchFlightData = async () => {
-            if (!key) return;
-            const respons: any = await FlightGetValidate({ key: key as string, token: token || undefined }, "fa-IR");
-            if (respons?.data?.result) {
-                setFlightData(respons.data.result);
+          for (let i = 0; i < y.length; i++) {
+            if (farsiAlphabet.indexOf(y[i]) < farsiAlphabet.indexOf(x[i])) {
+              return -1;
             }
-        }
-
-        fetchFlightData();
-
-    }, [key]);
-
-    return (
-        <>
-            <Head>
-                <title>{t('passengers-information')}</title>
-            </Head>
-
-            <div className='max-w-container mx-auto px-5 py-4'>
-
-                <Steps
-                    className='py-3 mb-2'
-                    items={[
-                        { label: t('completing-information'), status: 'active' },
-                        { label: t('confirm-pay'), status: 'up-comming' },
-                        { label: t('complete-purchase'), status: 'up-comming' }
-                    ]}
-                />
-
-                <div className='grid md:grid-cols-3 gap-4' >
-                    <div className='md:col-span-2'>
-                        content
-                    </div>
-
-                    {flightData?.departureFlight && <Aside
-                        departureFlight={flightData.departureFlight}
-
-                    />}
-                </div>
+            if (farsiAlphabet.indexOf(y[i]) > farsiAlphabet.indexOf(x[i])) {
+              return 1;
+            }
+          }
+          return 1;
+        })
+        setCountries(sortedcountries);
+      }
+    }
+    fetchCountriesList();
+  }, []);
 
 
-                {/* 
-        {backUrl ? (
-          <Link href={backUrl} className='text-sm text-blue-500 mb-4 inline-block'> <LeftCaret className='inline-block align-middle w-5 h-5 fill-current rtl:rotate-180' /> برگشت به انتخاب اتاق </Link>
-        ) : (
-          <Skeleton className='mt-2 mb-3 w-60' />
-        )} */}
+  const createPassengersArray = useCallback((flight?: FlightGetValidateDataType) => {
 
-                {/* {reserveInfo ? (
-          <Formik
-            validate={() => { return {} }}
-            initialValues={initialValues}
-            onSubmit={submitHandler}
-          >
-            {({ errors, touched, isValid, isSubmitting, setFieldValue, values }) => {
-              if (isSubmitting && !isValid) {
-                setTimeout(() => {
-                  const formFirstError = document.querySelector(".has-validation-error");
-                  if (formFirstError) {
-                    formFirstError.scrollIntoView({ behavior: "smooth" });
-                  }
-                }, 100)
-              }
-              return (
+    if (!flight) {
+      return [];
+    }
 
-                <Form className='md:grid md:grid-cols-12 lg:grid-cols-3 gap-4' autoComplete='off' >
+    const passengerItems: {
+      type: "CHD" | "ADT" | "INF";
+      label: string;
+    }[] = [];
 
-                  <div className='md:col-span-7 lg:col-span-2'>
+    if (flight?.adultCount) {
+      for (let i = 0; i < flight.adultCount; i++) {
+        passengerItems.push({
+          type: "ADT",
+          label: t('adult'),
+        })
+      }
+    }
+    if (flight?.childCount) {
+      for (let i = 0; i < flight.childCount; i++) {
+        passengerItems.push({
+          type: "CHD",
+          label: t('child'),
+        })
+      }
+    }
+    if (flight?.infantCount) {
+      for (let i = 0; i < flight.infantCount; i++) {
+        passengerItems.push({
+          type: "INF",
+          label: t('infant'),
+        })
+      }
+    }
 
-                    <div className='bg-white border border-neutral-300 p-5 rounded-lg'>
+    return passengerItems;
+  }, [])
 
-                      <ReserverInformation
-                        errors={errors}
-                        setFieldValue={setFieldValue}
-                        touched={touched}
-                        values={values}
-                        reserverIsPassenger={reserverIsPassenger}
-                      />
+  const passengers: {
+    type: "CHD" | "ADT" | "INF";
+    label: string;
+    count: number;
+    departurePrice: number;
+    returnPrice?: number;
+  }[] = [];
 
-                      <SpecialReauests />
+  const passengerItems: {
+    type: "CHD" | "ADT" | "INF";
+    label: string;
+  }[] = useMemo(() => createPassengersArray(flightData), [flightData]);
 
-                    </div>
+  if (flightData?.adultCount) {
+    passengers.push({
+      type: "ADT",
+      label: t('adult'),
+      count: flightData.adultCount,
+      departurePrice: flightData.departureFlight.adultPrice,
+      returnPrice: flightData.returnFlight?.adultPrice
+    });
+  }
+  if (flightData?.childCount) {
+    passengers.push({
+      type: "CHD",
+      label: t('child'),
+      count: flightData.childCount,
+      departurePrice: flightData.departureFlight.childPrice,
+      returnPrice: flightData.returnFlight?.childPrice
+    });
+  }
+  if (flightData?.infantCount) {
+    passengers.push({
+      type: "INF",
+      label: t('infant'),
+      count: flightData.infantCount,
+      departurePrice: flightData.departureFlight.infantPrice,
+      returnPrice: flightData.returnFlight?.infantPrice
+    });
+  }
 
-                    <h5 className='font-semibold my-6'>
-                      {t('fill-passengers-information')}
-                    </h5>
+  const initialValues = {
+    reserver: {
+      gender: true,
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNumber: ""
+    },
+    passengers: passengerItems?.map(item => ({
+      gender: true,
+      firstName: '',
+      lastName: '',
+      persianFirstName: "",
+      persianLastName: "",
+      nationalId: "",
+      birthDate: "",
+      passportNumber: "",
+      passportExpireDate: "",
+      passengerType: item.type,
+      nationality: ""
+    })),
+    captchaCode: ""
+  }
 
-                    {reserveInfo?.rooms?.map((roomItem, roomIndex) => (
-                      <RoomItemInformation
-                        values={values}
-                        errors={errors}
-                        touched={touched}
-                        roomIndex={roomIndex}
-                        roomItem={roomItem}
-                        setFieldValue={setFieldValue}
-                        key={roomIndex}
-                        disableSyncedPassenger={roomIndex === 0 ? disableSyncedPassenger : undefined}
-                        onChangeExtraBed={extraBedValue => {
-                          setRoomsExtraBed(prevState => {
-                            const updatedValue = [...prevState];
-                            updatedValue[roomIndex] = extraBedValue
-                            return (updatedValue)
-                          })
-                        }}
-                      />
-                    ))}
+  const submitHandle = async (values: FlightPrereserveFormValue) =>{
+    if (!key){
+      return;
+    }
 
-                    <DiscountForm
-                      data={discountData}
-                      loading={discountLoading}
-                      onSubmit={discountSubmitHandler}
-                    />
+    setSubmitLoading(true);
 
-                  </div>
+    const params :FlightPrereserveFormValue = {
+      ...values,
+      preReserveKey:key as string,
+      passengers: values.passengers.map(item => ({
+        ...item,
+        nationality : item.nationality || null,
+        passportNumber: item.passportNumber || null,
+        passportExpireDate : item.passportExpireDate || null
+      })),
+      reserver : {
+        ...values.reserver,
+        userName : ""
+      }
+    }
+    const token = localStorage.getItem('Token') || "";
 
-                  <div className='md:col-span-5 lg:col-span-1'>
+    const response:any = await FlightPreReserve({params:params, token},"fa-IR");
+    
+    if (response && response.status == 200 &&  response.data?.result?.reserver?.userName && response.data.result.id ) {
+      router.push(
+        `/payment?username=${response.data.result.reserver.userName}&reserveId=${response.data.result.id}`,
+      )
+    } else {
+      setSubmitLoading(false);
+      dispatch(setReduxError({
+        title: t('error'),
+        message: response.response?.data?.error?.message || "ارسال اطلاعات با خطا متوقف شد!",
+        isVisible: true
+    }))
+    }
+  } 
 
-                    <Aside
-                      hotelInformation={hotelInformation}
-                      reserveInformation={reserveInformation}
-                      hasSubmit
-                      submitLoading={submitLoading}
-                      roomExtraBed={roomsExtraBed}
-                      discountLoading={discountLoading}
-                      discountResponse={discountData?.isValid ? discountData : undefined}
-                    />
-                    
-                  </div>
-                </Form>
-              )
-            }}
-          </Formik>
-        ) : (
-          <div className='md:grid md:grid-cols-12 lg:grid-cols-3 gap-4'>
-            <div className='md:col-span-7 lg:col-span-2'>
-              <div className='bg-white border border-neutral-300 p-5 rounded-lg mb-6'>
-                <Skeleton className='mb-6 w-40' />
-                <Skeleton className='mb-5' />
-                <Skeleton className='mb-5' />
-                <Skeleton className='mb-5' />
-                <Skeleton className='w-1/3' />
-              </div>
-              <h5 className='font-semibold my-6'>
-                <Skeleton className='w-52' />
-              </h5>
-              <div className='bg-white border border-neutral-300 p-5 rounded-lg mb-6'>
-                <Skeleton className='mb-6 w-40' />
-                <Skeleton className='mb-5' />
-                <Skeleton className='mb-5' />
-                <Skeleton className='mb-5' />
-                <Skeleton className='w-1/3 mb-5' />
-                <Skeleton />
-              </div>
-              <div className='bg-white border border-neutral-300 p-5 rounded-lg'>
-                <Skeleton className='mb-6 w-40' />
-                <Skeleton className='w-1/3' />
-              </div>
-            </div>
+  return (
+    <>
+      <Head>
+        <title>{t('passengers-information')}</title>
+      </Head>
 
-            <div className='md:col-span-5 lg:col-span-1'>
-              <Aside />
-            </div>
+      <div className='max-w-container mx-auto px-5 py-4'>
+
+        <Steps
+          className='py-3 mb-4 max-md:hidden'
+          items={[
+            { label: t('completing-information'), status: 'active' },
+            { label: t('confirm-pay'), status: 'up-comming' },
+            { label: t('complete-purchase'), status: 'up-comming' }
+          ]}
+        />
+
+        {!flightDataLoading && !flightData ? (
+          
+          <div className=' flex flex-col gap-2 items-center py-5'>
+            <strong className='block font-semibold'> پرواز انتخابی شما موجود نیست </strong>
+            <p className='text-sm text-neutral-600 mb-10'>
+              لطفا پرواز دیگری را انتخاب کنید
+            </p>
+            <FlightNotAvailable className='max-w-full' />
           </div>
-        )} */}
+        
+      ):(
+          <div className='grid md:grid-cols-3 gap-4' >
+            <div className='md:col-span-2'>
+
+              {flightDataLoading ? (
+                <>
+                  <div className='bg-white border border-neutral-300 p-5 rounded-lg mb-6'>
+                    <Skeleton className='mb-6 w-40' />
+                    <Skeleton className='mb-5' />
+                    <Skeleton className='mb-5' />
+                    <Skeleton className='mb-5' />
+                    <Skeleton className='w-1/3' />
+                  </div>
+                  <h5 className='font-semibold my-6'>
+                    <Skeleton className='w-52' />
+                  </h5>
+                  <div className='bg-white border border-neutral-300 p-5 rounded-lg mb-6'>
+                    <Skeleton className='mb-6 w-40' />
+                    <Skeleton className='mb-5' />
+                    <Skeleton className='mb-5' />
+                    <Skeleton className='mb-5' />
+                    <Skeleton className='w-1/3 mb-5' />
+                    <Skeleton />
+                  </div>
+                  <div className='bg-white border border-neutral-300 p-5 rounded-lg'>
+                    <Skeleton className='mb-6 w-40' />
+                    <Skeleton className='w-1/3' />
+                  </div>
+                </>
+              ) : (
+                <Formik
+                  validate={() => { return {} }}
+                  initialValues={initialValues}
+                  onSubmit={submitHandle}
+                >
+                  {({ errors, touched, isValid, isSubmitting, setFieldValue, values }) => {
+                    if (isSubmitting && !isValid) {
+                      setTimeout(() => {
+                        const formFirstError = document.querySelector(".has-validation-error");
+                        if (formFirstError) {
+                          formFirstError.scrollIntoView({ behavior: "smooth" });
+                        }
+                      }, 100)
+                    }
+                    return (
+
+                      <Form autoComplete='off' >
+                        <ReserverInformation
+                          errors={errors}
+                          setFieldValue={setFieldValue}
+                          touched={touched}
+                          values={values}
+                        />
+
+                        <h5 className="font-semibold my-6">{t('fill-passengers-information')}</h5>
+
+                        {passengerItems.map((passenger, index) => (
+                          <PassengerItemInformation
+                            index={index}
+                            key={index}
+                            errors={errors}
+                            label={passenger.label}
+                            type={passenger.type}
+                            setFieldValue={setFieldValue}
+                            touched={touched}
+                            values={values}
+                            countries={countries}
+                          />
+                        ))}
+
+                        <div className="mb-5 flex flex-col md:items-end gap-3">
+                          <label className='text-sm block'>
+                            کد تصویر را وارد کنید.
+                          </label>
+                          <img
+                            src={flightData!.captchaLink}
+                            alt="captchaCode"
+                            className='block h-12 auto border border-neutral-300'
+                            height={48}
+                            width={144}
+                          />
+
+                          <FormikField
+                            setFieldValue={setFieldValue}
+                            id="captchaCode"
+                            errorText={errors.captchaCode}
+                            name="captchaCode"
+                            isTouched={touched.captchaCode}
+                            //label={"شماره پاسپورت"}
+                            validateFunction={(value: string) => validateRequied(value, "لطفا کد را وارد کنید")}
+                            value={values.captchaCode}
+                            className='w-52 ltr text-left font-sans text-xl'
+                          />
+                        </div>
+
+                        <div className='md:flex md:justify-end mb-6 md:mb-10'>
+                          <Button
+                            type='submit'
+                            hasArrow
+                            color='blue'
+                            className='h-12 px-5 sm:w-64 w-full'
+                            loading={submitLoading}
+                          >
+                            ادامه فرایند خرید
+                          </Button>
+
+                        </div>
+
+                      </Form>
+                    )
+                  }}
+                </Formik>
+              )}
 
             </div>
-        </>
-    )
+              <div>
+                <Aside
+                  loading={flightDataLoading}
+                  passengers={passengers}
+                  departureFlight={flightData?.departureFlight}
+                />
+              </div>
+          </div>
+        )}
+
+      </div>
+    </>
+  )
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => ({
-    props: {
-        ...await serverSideTranslations(locale as string, ['common', 'flight']),
-    },
+  props: {
+    ...await serverSideTranslations(locale as string, ['common', 'flight']),
+  },
 })
 
 export default Checkout;

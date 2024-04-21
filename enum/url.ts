@@ -55,6 +55,8 @@ export const Flight = {
   Availability: "/api/services/app/BookingFlight/Availability",
   GetAvailability: "/api/services/app/BookingFlight/GetAvailability",
   GetValidate:"/api/services/app/BookingFlight/GetValidate",
+  GetAllCountries:"/api/services/app/Country/GetAll",
+  PreReserve:"/api/services/app/BookingFlight/PreReserve",
 
   // getAvailability: 'flightdomestic.safaraneh.com/api/services/app/BookingFlight/Availability',
   // getFlights: 'flightdomestic.safaraneh.com/api/services/app/BookingFlight/GetAvailability?key=',
