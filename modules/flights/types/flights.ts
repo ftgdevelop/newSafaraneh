@@ -1,5 +1,7 @@
 export interface FlightType {
     adultPrice: number;
+    childPrice: number;
+    infantPrice: number;
     country?: {
         name?: string;
     }
