@@ -1,8 +1,14 @@
 import { RightCaret } from "@/modules/shared/components/ui/icons";
 import { FlightType } from "../../types/flights";
 import { useRouter } from "next/router";
+import { numberWithCommas } from "@/modules/shared/helpers";
 
-const FlightPurcheInfo: React.FC<any> = ({ flightData, detail }: { flightData: FlightType, detail: boolean }) => {
+type PassengersType = {
+    adults:number;
+    children:number;
+    infants:number;
+}
+const FlightPurcheInfo: React.FC<any> = ({ flightData, detail, passengers }: { flightData: FlightType, detail: boolean, passengers: PassengersType }) => {
     const router = useRouter()
     return (
         <div className="text-left p-3 bg-white w-1/5 max-sm:w-2/5 grid content-around">
@@ -37,20 +43,20 @@ const FlightPurcheInfo: React.FC<any> = ({ flightData, detail }: { flightData: F
                 detail &&
                 <div className="text-3xs max-md:text-4xs text-gray-400 max-lg:text-black">
                     <div className="flex justify-between max-sm:block">
-                        <p>بزرگسال (2)</p>
-                        <p>{2 * flightData.adultPrice} ریال</p>
+                        <p>بزرگسال ({passengers.adults})</p>
+                        <p>{numberWithCommas(passengers.adults * flightData.adultPrice)} ریال</p>
                     </div>
                     <div className="flex justify-between max-sm:block">
-                        <p>کودک (2)</p>
-                        <p>{2 * flightData.adultPrice} ریال</p>
+                        <p>کودک ({passengers.children})</p>
+                        <p>{numberWithCommas(passengers.children * flightData.childPrice)} ریال</p>
                     </div>
                     <div className="flex justify-between max-sm:block">
-                        <p>نوزاد (2)</p>
-                        <p>{2 * flightData.adultPrice} ریال</p>
+                        <p>نوزاد ({passengers.infants})</p>
+                        <p>{numberWithCommas(passengers.infants * flightData.infantPrice)} ریال</p>
                     </div>
                     <div className="flex justify-between text-xs text-black font-semibold max-sm:block">
                         <p>مجموع</p>
-                        <p>{Math.round(2 * flightData.adultPrice + 2 * flightData.adultPrice + 2 * flightData.adultPrice).toLocaleString()} ریال</p>
+                        <p>{numberWithCommas(Math.round(passengers.adults * flightData.adultPrice + passengers.children * flightData.childPrice + passengers.infants * flightData.infantPrice))} ریال</p>
                     </div>
                 </div>
             }
