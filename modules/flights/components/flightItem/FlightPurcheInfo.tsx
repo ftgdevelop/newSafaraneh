@@ -1,7 +1,12 @@
-import { RightCaret } from "@/modules/shared/components/ui/icons";
 import { FlightType } from "../../types/flights";
 import { useRouter } from "next/router";
 import { numberWithCommas } from "@/modules/shared/helpers";
+import Button from "@/modules/shared/components/ui/Button";
+import { useAppDispatch } from "@/modules/shared/hooks/use-store";
+import { setReduxError } from "@/modules/shared/store/errorSlice";
+import { useTranslation } from "next-i18next";
+import { useState } from "react";
+import { validateFlight } from "../../actions";
 
 type PassengersType = {
     adults:number;
@@ -9,7 +14,58 @@ type PassengersType = {
     infants:number;
 }
 const FlightPurcheInfo: React.FC<any> = ({ flightData, detail, passengers }: { flightData: FlightType, detail: boolean, passengers: PassengersType }) => {
-    const router = useRouter()
+    
+    const router = useRouter();
+
+    const dispatch = useAppDispatch();
+
+    const {t} = useTranslation('common');
+
+    const urlParameters = router.query;
+
+    const[loading, setLoading] = useState<boolean>(false);
+    const[unAvailableFlight, setUnAvailableFlight] = useState<boolean>(false);
+
+    const bookFlight = () => {
+
+        if(unAvailableFlight) return;
+
+        if (!flightData.hasReturn && urlParameters.returning) {
+            dispatch(setReduxError({
+                title: t('error'),
+                message: "در حال حاضر خرید این بلیط به صورت رفت و برگشت امکان پذیر نیست. اگر مایل به خرید این پرواز هستید لطفا به صورت بلیط رفت و برگشت مجزا برای خرید ان اقدام کنید",
+                isVisible: true
+            }));
+            return;           
+        }
+
+        if(!urlParameters.returning){
+            setLoading(true);
+
+            const validate = async (key:string) => {
+                const response : any = await validateFlight({departureKey:key});
+                if (response?.data?.result?.preReserveKey){
+                    router.push(
+                        `/flights/checkout?key=${response.data.result.preReserveKey}`
+                      );
+                }else{
+                    setLoading(false);
+                    setUnAvailableFlight(true);
+
+                    dispatch(setReduxError({
+                        title: t('error'),
+                        message: "لطفا پرواز دیگری را انتخاب کنید",
+                        isVisible: true
+                    }));
+
+                    return;  
+                }
+            }
+            validate(flightData.flightKey);            
+        }
+        
+    }
+
     return (
         <div className="text-left p-3 bg-white w-1/5 max-sm:w-2/5 grid content-around">
             <div>
@@ -21,7 +77,18 @@ const FlightPurcheInfo: React.FC<any> = ({ flightData, detail, passengers }: { f
                 </p> :
                 <p className="text-xs max-md:text-2xs font-semibold text-gray-400">ظرفیت تکمیل است</p>
             }
-            {
+            <Button
+                type="button"
+                onClick={bookFlight}
+                disabled={!flightData?.capacity || unAvailableFlight}
+                color="blue"
+                className="px-5 w-full h-8 leading-6 text-sm mt-2"
+                hasArrow
+                loading={loading}
+            >
+                انتخاب پرواز
+            </Button>
+            {/* {
                 flightData?.capacity ?
                     <button type="submit" className={`flex w-full justify-center bg-blue-800
                     duration-200 text-white p-1 font-semibold max-md:pr-2 max-md:pl-2 rounded-lg text-sm mt-2 whitespace-nowrap  hover:bg-blue-600 max-md:text-xs`}>
@@ -33,7 +100,7 @@ const FlightPurcheInfo: React.FC<any> = ({ flightData, detail, passengers }: { f
                         انتخاب پرواز
                     <RightCaret className="w-5 fill-white my-auto rtl:rotate-180 max-sm:hidden " />
                     </button>
-            }
+            } */}
             {
                 flightData?.capacity < 10 && flightData?.capacity !== 0 &&
                 <p className="text-3xs text-red-600">{flightData.capacity} صندلی باقیمانده</p>

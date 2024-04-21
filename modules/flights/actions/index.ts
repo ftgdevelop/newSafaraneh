@@ -146,6 +146,28 @@ export const FlightPreReserve = async (values:{params: FlightPrereserveFormValue
     }
 }
 
+export const validateFlight = async (params: {
+    departureKey: string;
+    returnKey?: string;
+}, acceptLanguage: string = 'fa-IR') => {
+    try {
+        let response = await axios.post(
+            `${ServerAddress.Type}${ServerAddress.Flight}${Flight.ValidateFlight}`,
+            params,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    apikey: process.env.PROJECT_SERVER_APIKEY,
+                    'Accept-Language': acceptLanguage
+                }
+            },
+        )
+        return response
+    } catch (error) {
+        return error
+    }
+}
+
 
 
 

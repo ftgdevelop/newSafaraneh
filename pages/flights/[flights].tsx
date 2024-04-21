@@ -150,6 +150,9 @@ const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], rou
                 />}
 
                 <FlightMainFilters sortFlights={sortFlights} changeSortFlights={(e: string) => setSortFlights(e)} />
+
+                {!!query.returning && <p className="text-sm mt-5" > ابتدا از لیست زیر، بلیط رفت خود را انتخاب نمایید</p>}
+
                 {
                     flightsInFilter?.sort((a, b) => SortCapacity(a, b))
                         .sort((a: FlightType, b: FlightType): any => {
