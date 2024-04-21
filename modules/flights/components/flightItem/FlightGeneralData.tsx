@@ -2,12 +2,15 @@ import { Airpalne, ArrowLeft, RightCaret } from "@/modules/shared/components/ui/
 import Image from "next/image"
 import FlightDetailItem from "./FlightDetail"
 import { FlightType } from "../../types/flights"
+import { useRouter } from "next/router"
+import { dateDiplayFormat } from "@/modules/shared/helpers"
 
 const FlightDataItem: React.FC<any> = ({flightData , detail , changeOpenDetail} : {flightData : FlightType, detail : boolean, changeOpenDetail : any}) => {
 
     const arrivalTime = flightData?.arrivalTime?.split('T')[1].split(":").slice(0,2).join(":")
     const departureTime = flightData?.departureTime?.split('T')[1].split(":").slice(0, 2).join(":")    
 
+    const query = useRouter().query
     return (
         <div className="w-4/5 border-e-1 border-gray-300 border-dashed relative">
             <span className="w-6 h-6 bg-body-background rounded-full absolute -left-3 -top-2"></span>
@@ -28,7 +31,7 @@ const FlightDataItem: React.FC<any> = ({flightData , detail , changeOpenDetail} 
                     {departureTime}
                 </p>
                 <div className="text-center max-sm:hidden col-span-2">
-                    <p className="text-xs text-gray-400">یکشنبه 13 اسفند</p>
+                    <p className="text-xs text-gray-400">{dateDiplayFormat({date:(query.departing as string), locale:'fa',format:'ddd dd mm'})}</p>
                     <span className="border-t-1 border-gray-200 block m-3 ml-5 mr-5 border-dashed h-1 relative">
                         <Airpalne className="w-12 fill-gray-200 -rotate-90 ltr:rotate-90 absolute -left-7 -bottom-1 ltr:right-0 ltr:-top-2" />
                     </span>    

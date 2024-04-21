@@ -1,20 +1,24 @@
+import { useRouter } from "next/router"
 import { FlightType } from "../../types/flights"
+import { dateDiplayFormat } from "@/modules/shared/helpers"
 
 const FlightDetailItem: React.FC<any> = ({ FlightsData }: { FlightsData: FlightType }) => {
     
     const arrivalTime = FlightsData?.arrivalTime?.split('T')[1].split(":").slice(0,2).join(":")
     const departureTime = FlightsData?.departureTime?.split('T')[1].split(":").slice(0, 2).join(":")
+
+    const query = useRouter().query
     return (
         <div className="grid grid-cols-3 max-sm:grid-cols-2 justify-items-center pt-3 pb-2 max-sm:pl-2 max-sm:pr-2 gap-3 bg-gray-100">
             <div>
                 <h2 className="text-lg max-sm:text-sm font-bold">{FlightsData?.departureAirport?.city?.name}</h2>
                 <p className="text-lg max-sm:text-sm font-bold">{departureTime}</p>
-                <p className="text-2xs max-sm:text-4xs text-gray-500"> دوشنبه 13 مارس (13اسفند)</p>
+                <p className="text-2xs max-sm:text-4xs text-gray-500">{dateDiplayFormat({date:(query.departing as string), locale:'fa',format:'ddd dd mm'})}</p>
             </div>
             <div>
                 <h2 className="text-lg max-sm:text-sm font-bold">{FlightsData?.arrivalAirport?.city?.name}</h2>
                 <p className="text-lg max-sm:text-sm font-bold">{arrivalTime}</p>
-                <p className="text-2xs max-sm:text-4xs text-gray-500">دوشنبه 13 مارس (13اسفند)</p>
+                <p className="text-2xs max-sm:text-4xs text-gray-500">{dateDiplayFormat({date:(query.departing as string), locale:'fa',format:'ddd dd mm'})}</p>
             </div>
             <div className="border-r-1 border-gray-300 pr-2 max-sm:p-0 max-sm:pt-3 max-sm:pb-2 border-dashed max-sm:col-span-2 max-sm:flex max-sm:flex-wrap
                 max-sm:border-r-0 max-sm:border-t-1 gap-1 space-y-2 max-sm:space-y-0">
