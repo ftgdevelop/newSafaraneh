@@ -13,11 +13,11 @@ const FlightSidebarPriceChange: React.FC<any> = ({ FlightsData }: { FlightsData:
     const MaxMinDiffrence = Math.ceil(MaxPrice - MinPrice)
     
     const PriceItems = [
-        MinPrice.toString(),
-        MinPrice !== 0 ? Math.ceil(MinPrice + MaxMinDiffrence / 4).toString() : '0',
-        MinPrice !== 0 ? Math.ceil(MinPrice + MaxMinDiffrence / 2).toString() : '0',
-        MaxPrice !== 0 ? Math.ceil(MaxPrice - MaxMinDiffrence / 4).toString() : '0',
-        MaxPrice.toString()
+        MinPrice,
+        MinPrice !== 0 ? Math.ceil(MinPrice + MaxMinDiffrence / 4) : '',
+        MinPrice !== 0 ? Math.ceil(MinPrice + MaxMinDiffrence / 2) : '',
+        MaxPrice !== 0 ? Math.ceil(MaxPrice - MaxMinDiffrence / 4) : '',
+        MaxPrice
     ]
     
     return (
@@ -37,7 +37,7 @@ const FlightSidebarPriceChange: React.FC<any> = ({ FlightsData }: { FlightsData:
             <div className="grid grid-cols-2 text-xs w-full content-center">
                 <p>حداقل</p>
                 <Select
-                    items={PriceItems.map(item => ({label: `${item} ریال`, value: item}))}
+                    items={PriceItems.map(item => ({label: `${item.toLocaleString()} ریال`, value: item.toString()}))}
                     placeholder="حداقل"
                     value={priceFilter?.min?.toString() || '0'}
                     onChange={e => dispatch(setPriceRangeFilter({min: +e, max:priceFilter?.max}))}
@@ -47,7 +47,7 @@ const FlightSidebarPriceChange: React.FC<any> = ({ FlightsData }: { FlightsData:
             <div className="grid grid-cols-2 text-xs w-full content-center">
                 <p>حداکثر</p>
                 <Select
-                    items={PriceItems.map(item => ({label: `${item} ریال`, value: item}))}
+                    items={PriceItems.map(item => ({label: `${item.toLocaleString()} ریال`, value: item.toString()}))}
                     placeholder="حداکثر"
                     value={priceFilter?.max?.toString() || '0'}
                     onChange={e => dispatch(setPriceRangeFilter({min:priceFilter?.min, max: +e}))}

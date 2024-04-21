@@ -4,26 +4,22 @@ import AutoComplete from "@/modules/shared/components/ui/AutoComplete";
 import { Flight, ServerAddress } from "@/enum/url";
 import { defaultAirportOption } from "./defaultAirportOptios";
 import { AirportSearchResponseItem } from "../../types/flights";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/modules/shared/store";
-import { setSearchData } from "../../store/flightsSlice";
+import { SearchDataType } from "./FlightSearch";
 
-const FlightSearchDirection: React.FC<any> = ({className} : {className: string}) => {
+const FlightSearchDirection: React.FC<any> = ({ className, SearchData, setSearchData }: { className: string, SearchData:SearchDataType, setSearchData: any }) => {
     const [selectedOrigin, setSelectedOrigin] = useState<AirportSearchResponseItem>();
     const [selectedDestination, setSelectedDestination] = useState<AirportSearchResponseItem>();
 
-    const searchData = useSelector((state: RootState) => state.flightFilters.SearchData)
-    const dispatch = useDispatch()
     useEffect(() => {
-        dispatch(setSearchData({...searchData, origin: selectedOrigin?.code}))
+        setSearchData({...SearchData, origin: selectedOrigin?.code})
     }, [selectedOrigin])
     useEffect(() => {
-        dispatch(setSearchData({...searchData, destination: selectedDestination?.code}))
+        setSearchData({...SearchData, destination: selectedDestination?.code})
     }, [selectedDestination])
+
     const searchUrl = `${ServerAddress.Type}${Flight.searchFlights}`
 
     const changeDirectionHandler = () => {
-        console.log(selectedDestination, selectedOrigin);
         setSelectedDestination(selectedOrigin)
         setSelectedOrigin(selectedDestination)
     }
@@ -44,7 +40,7 @@ const FlightSearchDirection: React.FC<any> = ({className} : {className: string})
                                 <p className='text-xs'>{option.city.name || option.name}</p>
                                 <p className='text-3xs'>{option.name}</p>
                             </div>
-                            <span className="bg-gray-400 text-white rounded-sm pl-2 pr-2 text-xs absolute left-4">{option.code}</span>
+                            <span className="bg-gray-400 text-white rounded-sm pl-2 pr-2 text-2xs absolute left-4">{option.code}</span>
                         </div>
                     ), [])}
                     icon="airplane_"

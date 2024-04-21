@@ -1,17 +1,15 @@
-import { RootState } from "@/modules/shared/store";
-import { useDispatch, useSelector } from "react-redux";
-import { setSearchData } from "../../store/flightsSlice";
+import { useEffect } from "react";
+import { SearchDataType } from "./FlightSearch";
+import { useRouter } from "next/router";
 
-const FlightDirectionType: React.FC = () => {
-    const searchData = useSelector((state: RootState) => state.flightFilters.SearchData)
-    const dispatch = useDispatch()
-
-    const DirectionTypeHandle = (type : string) => {
+const FlightDirectionType: React.FC<any> = ({SearchData, setSearchData} : {SearchData: SearchDataType, setSearchData: any}) => {
+    const router = useRouter()
+    const DirectionTypeHandle = (type: string) => {
         if (type == 'BackForth') {
-            dispatch(setSearchData({...searchData, BackForth: true}))
+            setSearchData({ ...SearchData, BackForth: true })
         }
         else if (type == 'OneWay') {
-            dispatch(setSearchData({...searchData, BackForth: false}))
+            setSearchData({...SearchData, BackForth: false})
         }
     }
     
@@ -19,12 +17,12 @@ const FlightDirectionType: React.FC = () => {
         <>
             <div className="flex">
                 <button type="button"
-                    className={`p-2 max-sm:p-1 ${!searchData?.BackForth ? 'text-blue-800 bg-blue-50' : 'text-gray-400 '} rounded-xl text-sm max-sm:text-xs cursor-pointer m-1`}
+                    className={`p-2 max-sm:p-1 ${!SearchData?.BackForth ? 'text-blue-800 bg-blue-50' : 'text-gray-400 '} rounded-xl text-sm max-sm:text-xs cursor-pointer m-1`}
                 onClick={() => DirectionTypeHandle('OneWay')}>
                     یک طرفه
                 </button>
                 <button type="button"
-                    className={`p-2 max-sm:p-1 ${searchData?.BackForth ? 'text-blue-800 bg-blue-50' : 'text-gray-400 '} rounded-xl text-sm max-sm:text-xs cursor-pointer m-1`}
+                    className={`p-2 max-sm:p-1 ${SearchData?.BackForth ? 'text-blue-800 bg-blue-50' : 'text-gray-400 '} rounded-xl text-sm max-sm:text-xs cursor-pointer m-1`}
                 onClick={() => DirectionTypeHandle('BackForth')}>
                     رفت و برگشت
                 </button>

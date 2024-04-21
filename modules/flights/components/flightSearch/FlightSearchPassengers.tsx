@@ -1,34 +1,35 @@
 import { Minus, Plus } from "@/modules/shared/components/ui/icons";
-import { RootState } from "@/modules/shared/store";
 import { setReduxNotification } from "@/modules/shared/store/notificationSlice";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setSearchData } from "../../store/flightsSlice";
+import { useDispatch } from "react-redux";
+import { SearchDataType } from "./FlightSearch";
 
-const FlightSearchPassengers: React.FC<any> = () => {
-    const searchData = useSelector((state: RootState) => state.flightFilters.SearchData)
+const FlightSearchPassengers: React.FC<any> = ({SearchData, setSearchData}: {SearchData: SearchDataType, setSearchData: any}) => {
     const dispatch = useDispatch()
 
     const wrapperRef = useRef<HTMLDivElement>(null);
     const [passengersOpen, setPassengersOpen] = useState(false)
 
     let router = useRouter()
-    const [adult, setAdult] = useState<any>(router.query.adult || 1)
-    const [child, setChild] = useState<any>(router.query.child || 0)
-    const [infant, setInfant] = useState<any>(router.query.infant || 0)
+    const [adult, setAdult] = useState<any>(+(router.query.adult as string) || 1)
+    const [child, setChild] = useState<any>(+(router.query.child as string) || 0)
+    const [infant, setInfant] = useState<any>(+(router.query.infant as string) || 0)
     const allPassengers = +adult + +child + +infant
 
     const adultHandle = (type: string) => {
         if (type == 'plus') {
             if (allPassengers < 9) {
-                setAdult(adult+1)
+                setAdult((prev: number) => prev+1)
             }
         }
         else if (type == 'minus' && adult > 1) {
-            setAdult(adult - 1)
+            setAdult((prev: number) => prev-1)
             if (child+infant >= adult * 2) {
-                setChild((adult -1) * 3)
+                if (infant) {
+                    setChild((adult - 1) * 3 -1)
+                }
+                else setChild((adult - 1) * 3)
             }
             if (infant == adult) {
                 if (infant == 2) setInfant(0)
@@ -42,14 +43,14 @@ const FlightSearchPassengers: React.FC<any> = () => {
     const childHandle = (type: string) => {
         if (type == 'plus') {
             if (allPassengers < 9 && child+infant < adult * 3) {
-                setChild(child +1)
+                setChild((prev: number) => prev+1)
             }
             else {
                 dispatch(setReduxNotification({state:'error', message: 'به ازای هر بزرگسال 3 کودک , یا 2 کودک 1 نوزاد',isVisible: true}))
             }
         }
         else if (type == 'minus' && child > 0) {
-            setChild(child -1)
+            setChild((prev: number) => prev-1)
         }
         if (type == 'plus' && allPassengers == 9) dispatch(setReduxNotification({state:'error', message: 'حداکثر تعداد مسافران 9 نفر است',isVisible: true}))
 
@@ -58,7 +59,7 @@ const FlightSearchPassengers: React.FC<any> = () => {
     const infantHandle = (type: string) => {
         if (type == 'plus') {
             if (allPassengers < 9 && infant < adult && child+infant < adult * 3) {
-                setInfant(infant +1)
+                setInfant((prev: number) => prev+1)
             }
             else if (allPassengers < 9 && infant < adult && child+infant >= adult * 3){
                 dispatch(setReduxNotification({state:'error', message: 'به ازای هر بزرگسال 3 کودک , یا 2 کودک 1 نوزاد',isVisible: true}))
@@ -68,7 +69,7 @@ const FlightSearchPassengers: React.FC<any> = () => {
             }
         }
         else if (type == 'minus' && infant > 0) {
-            setInfant(infant -1)
+            setInfant((prev: number) => prev-1)
         }
         if (type == 'plus' && allPassengers == 9) dispatch(setReduxNotification({state:'error', message: 'حداکثر تعداد مسافران 9 نفر است',isVisible: true}))
     }
@@ -87,15 +88,15 @@ const FlightSearchPassengers: React.FC<any> = () => {
     }, []);
 
     useEffect(() => {
-        dispatch(setSearchData({...searchData, adult}))
+        setSearchData({...SearchData, adult})
     }, [adult])
 
     useEffect(() => {
-        dispatch(setSearchData({...searchData, child}))
+        setSearchData({...SearchData, child})
     }, [child])
 
     useEffect(() => {
-        dispatch(setSearchData({...searchData, infant}))
+        setSearchData({...SearchData, infant})
     }, [infant])
     const passengersItem = (content: string, count: any, countHandel:any) => {
         return (
@@ -123,7 +124,7 @@ const FlightSearchPassengers: React.FC<any> = () => {
                 مسافران
             </button>
             <div className={`bg-white text-gray-600 w-72 p-3 pt-5 pb-5 ${passengersOpen ? "visible opacity-100 mt-0" : "invisible opacity-0 mt-1"}
-            absolute top-34 max-sm:top-42 left-6 max-sm:left-0 max-sm:right-2 space-y-5 rounded-sm duration-100 shadow-lg shadow-gray-600`}>
+            absolute top-34 max-sm:top-42 left-6 max-sm:left-0 max-sm:right-1 space-y-5 rounded-sm duration-100 shadow-lg shadow-gray-600`}>
                 {passengersItem('بزرگسال (+12 سال)', adult, adultHandle)}
                 {passengersItem('کودک (2 تا 11 سال)', child, childHandle)}
                 {passengersItem(' نوزاد (زیر 2 سال)', infant, infantHandle)}

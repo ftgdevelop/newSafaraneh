@@ -3,13 +3,9 @@ import { addSomeDays, checkDateIsAfterDate, dateDiplayFormat, dateFormat } from 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Calendar, Minus } from "@/modules/shared/components/ui/icons";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/modules/shared/store";
-import { setSearchData } from "../../store/flightsSlice";
+import { SearchDataType } from "./FlightSearch";
 
-const FlightSearchDate: React.FC = () => {
-    const searchData = useSelector((state: RootState) => state.flightFilters.SearchData)
-    const dispatch = useDispatch()
+const FlightSearchDate: React.FC<any> = ({SearchData, setSearchData}: {SearchData: SearchDataType, setSearchData: any}) => {
 
     const onChangeCheckout = (d:string) => {
         setDates(prevState => {
@@ -21,23 +17,23 @@ const FlightSearchDate: React.FC = () => {
     let router = useRouter()
     const today = dateFormat(new Date())
     let passed = router.query.deprating || today
-    const [dates, setDates] = useState<[any, any]>([passed, null]);
+    const [dates, setDates] = useState<[any, any]>([passed, router.query.returning || null]);
     
     useEffect(() => {
-        if (dates[0]) dispatch(setSearchData({ ...searchData, depatrting: dates[0] }))
-        if (dates[1]) dispatch(setSearchData({...searchData, returning: dates[1]}))
+        if (dates[0]) setSearchData({...SearchData, departing: dates[0]})
+        if (dates[1]) setSearchData({...SearchData, returning: dates[1]})
     } ,[dates])
     useEffect(() => {
-        if (searchData?.BackForth) {
+        if (SearchData?.BackForth && !dates[1]) {
             let minimumDestination = dates ? dateFormat(addSomeDays(new Date(dates[0]))) : dateFormat(addSomeDays(new Date()))
             setDates([dates[0], minimumDestination])
-            dispatch(setSearchData({...searchData, returning: minimumDestination}))
+            setSearchData({...SearchData, returning: minimumDestination})
         }
         else {
             setDates([dates[0], null])
-            dispatch(setSearchData({...searchData, returning: null}))
+            setSearchData({...SearchData, returning: null})
         }
-    } ,[searchData?.BackForth])
+    } ,[SearchData?.BackForth])
 
     const onChangeCheckin = (d:string) => {
         setDates(prevState => {
@@ -58,7 +54,7 @@ const FlightSearchDate: React.FC = () => {
     const deleteReturnDate = () => {
         if (dates[1]) {
             setDates([dates[0], null])
-            dispatch(setSearchData({ ...searchData, BackForth: false}))
+            setSearchData({ ...SearchData, BackForth: false})
         }
         
     }
