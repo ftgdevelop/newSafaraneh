@@ -2,6 +2,7 @@ export interface FlightType {
     adultPrice: number;
     childPrice: number;
     infantPrice: number;
+    hasReturn:boolean;
     country?: {
         name?: string;
     }

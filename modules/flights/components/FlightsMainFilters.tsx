@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { RightCaret } from "../../shared/components/ui/icons";
 import FlightSidebarFilterResult from "./FlightSidebarFilterResult";
-import { dateFormat } from "@/modules/shared/helpers";
+import { dateDiplayFormat, dateFormat } from "@/modules/shared/helpers";
 
 const FlightMainFilters: React.FC<any> = ({ changeSortFlights, sortFlights} : {changeSortFlights: any, sortFlights: string}) => {
 
@@ -47,7 +47,7 @@ const FlightMainFilters: React.FC<any> = ({ changeSortFlights, sortFlights} : {c
                                 <RightCaret className="w-5 fill-gray-400 ltr:rotate-180" />
                                 روز قبل
                             </button>
-                            <p className="pr-2 pl-2 p-1 w-full whitespace-nowrap text-center">5 اسفند 1402</p>
+                            <p className="pr-2 pl-2 p-1 w-full whitespace-nowrap text-center">{dateDiplayFormat({date:(router.query.departing as string), locale:'fa',format:'ddd dd mm'})}</p>
                             <button type="button" className="flex hover:bg-gray-100 duration-200 p-1 pr-2 pl-2 w-full justify-center items-center cursor-pointer whitespace-nowrap"
                             onClick={() => router.replace({query: {...router.query,departing:changeDate('tomorrow')}})}>
                                 روز بعد

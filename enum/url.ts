@@ -57,9 +57,7 @@ export const Flight = {
   GetValidate:"/api/services/app/BookingFlight/GetValidate",
   GetAllCountries:"/api/services/app/Country/GetAll",
   PreReserve:"/api/services/app/BookingFlight/PreReserve",
-
-  // getAvailability: 'flightdomestic.safaraneh.com/api/services/app/BookingFlight/Availability',
-  // getFlights: 'flightdomestic.safaraneh.com/api/services/app/BookingFlight/GetAvailability?key=',
+  ValidateFlight:"/api/services/app/BookingFlight/Validate",
   searchFlights: 'flightdomestic.safaraneh.com/api/services/app/Airport/Search'
 };
 
