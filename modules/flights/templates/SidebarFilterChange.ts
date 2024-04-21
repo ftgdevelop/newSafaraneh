@@ -17,7 +17,7 @@ export const SidebarFilterChange = (FlightsData: FlightType[] , SidebarFilter: a
         })
     }
     if (SidebarFilter.cabinClassOption.length) {
-        list = list.filter(item => SidebarFilter.cabinClassOption.includes(item.cabinClass.name))
+        list = list.filter(item => SidebarFilter.cabinClassOption.includes(item.cabinClass.name))        
     }
     if (SidebarFilter.ticketTypeOption.length) {
         list = list.filter(item => SidebarFilter.ticketTypeOption.includes(item.flightType))
