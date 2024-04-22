@@ -63,14 +63,28 @@ const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], rou
 
             const today = dateFormat(new Date());
 
-            const response: any = await GetAvailabilityKey({
+            const parameters : {
+                adult:number;
+                child:number;
+                infant:number;
+                departureCode:string;
+                returnCode:string;
+                departureTime:string;
+                retrunTime?: string;
+            } = {
                 adult: query.adult ? +query.adult : 1,
                 child: query.child ? +query.child : 0,
                 infant: query.infant ? +query.infant : 0,
                 departureCode: codes.split("-")[0],
                 returnCode: codes.split("-")[1],
                 departureTime: (query.departing as string) || today
-            }, acceptLanguage);
+            };
+
+            if (query.returning){
+                parameters.retrunTime = query.returning  as string
+            }
+            const token = localStorage.getItem('Token') || "";
+            const response: any = await GetAvailabilityKey(parameters, token , acceptLanguage);
 
             if (response?.data?.result) {
                 setKey(response.data.result);
@@ -94,7 +108,10 @@ const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], rou
         if (key) {
 
             const fetchData = async () => {
-                const response: any = await GetFlightList({key:key, currency:"IRR"}, acceptLanguage);
+                
+                const token = localStorage.getItem('Token') || "";
+
+                const response: any = await GetFlightList({key:key, currency:"IRR",token:token}, acceptLanguage);
 
                 if (response?.data?.result?.isCompleted) {
 
