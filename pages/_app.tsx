@@ -69,6 +69,8 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
       canonicalUrl = "";
     }else if (router.route === '/hotel/[...hotelDetail]'){
       canonicalUrl = process.env.SITE_NAME + (i18n?.language ? `/${i18n?.language}` : "") + (router.query.hotelDetail ? "/hotel/"+router.query.hotelDetail[0] : "");
+    }else if (router.route === '/flights/[flights]'){
+      canonicalUrl = process.env.SITE_NAME + (i18n?.language ? `/${i18n?.language}` : "") + (router.query.flights ? "/flights/"+router.query.flights : "");
     }else{
 
       let path = router.asPath;
