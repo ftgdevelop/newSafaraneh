@@ -173,16 +173,16 @@ const faq: NextPage = () => {
         <div className="pl-5 pr-5 pt-5 pb-10 mt-5 border-2 border-gray rounded-md space-y-3 bg-white">
             <h2 className="mt-6 mb-6 fnt-bold text-lg">هتل داخلی</h2>
             {
-                        faqs.map((item, index) =>
-                            <Accordion
-                                content={item.a}
-                                title={(
-                                    <>
-                                    <QuestionCircle className='w-5 h-5 mt-.5 rtl:ml-2 ltr:mr-2 fill-current inline-block' />
-                                    {item.q}
-                                    </>
-                                )}
-                                key={index} />)
+                faqs.map((item, index) =>
+                    <Accordion
+                    content={item.a}
+                    title={(
+                    <>
+                    <QuestionCircle className='w-5 h-5 mt-.5 rtl:ml-2 ltr:mr-2 fill-current inline-block' />
+                        {item.q}
+                    </>
+                )}
+                key={index} />)
             }
         </div>
         </div>

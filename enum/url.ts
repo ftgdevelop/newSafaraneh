@@ -50,8 +50,17 @@ export const Header = {
     ActivateEmail:"/api/services/app/Account/ActivateEmail"
   };
 
-  export const Flight = {
-  };
+export const Flight = {
+  GetAirportsByCode: "/api/services/app/Airport/GetAll",
+  Availability: "/api/services/app/BookingFlight/Availability",
+  GetAvailability: "/api/services/app/BookingFlight/GetAvailability",
+  GetValidate:"/api/services/app/BookingFlight/GetValidate",
+  GetAllCountries:"/api/services/app/Country/GetAll",
+  PreReserve:"/api/services/app/BookingFlight/PreReserve",
+  ValidateFlight:"/api/services/app/BookingFlight/Validate",
+  FlightGetReserveById:"/api/services/app/Reserve/Get",
+  searchFlights: 'flightdomestic.safaraneh.com/api/services/app/Airport/Search'
+};
 
   export const Blog = {
     getPosts: "//wp-json/wp/v2/posts",
