@@ -28,7 +28,7 @@ const FlightPurcheInfo: React.FC<any> = ({ flightData, detail, passengers }: { f
 
     const bookFlight = () => {
 
-        if(unAvailableFlight) return;
+        if(unAvailableFlight || !flightData?.capacity ) return;
 
         if (!flightData.hasReturn && urlParameters.returning) {
             dispatch(setReduxError({
@@ -41,9 +41,11 @@ const FlightPurcheInfo: React.FC<any> = ({ flightData, detail, passengers }: { f
 
         if(!urlParameters.returning){
             setLoading(true);
+            
+            const token = localStorage.getItem('Token') || "";
 
             const validate = async (key:string) => {
-                const response : any = await validateFlight({departureKey:key});
+                const response : any = await validateFlight({departureKey:key, token:token});
                 if (response?.data?.result?.preReserveKey){
                     router.push(
                         `/flights/checkout?key=${response.data.result.preReserveKey}`

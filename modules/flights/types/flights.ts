@@ -98,6 +98,62 @@ export type AirportType = {
     longitude?: string;
 }
 
+type FlightDetail = {
+  flightType: "System" | "Charter";
+  flightNumber: string;
+  departureTime: string;
+  arrivalTime?: string;
+  isForeign: boolean;
+  adultPrice:number;
+  childPrice:number;
+  infantPrice:number;
+  maxAllowedBaggage: number;
+  capacity: number;
+//   "manufacturer": "string",
+//   "description": "string",
+  cabinClass: {
+    code?: string;
+    type?: string;
+    name?: string;
+  };
+  departureAirport:AirportType;
+  arrivalAirport:AirportType;
+  airCraft: {
+    code?: string;
+    name?: string;
+    manufacturer?: string;
+  };
+  airline: {
+    code?: string;
+    name?: string;
+    picture: {
+      path?: string;
+      altAttribute?: string;
+      titleAttribute?: string;
+    }
+  };
+//   "refundRule": {
+//     "rows": [
+//       {
+//         "key": 0,
+//         "value": "string"
+//       }
+//     ],
+//     "items": [
+//       {
+//         "value": 0,
+//         "fromMinutes": 0,
+//         "fromTime": "string",
+//         "toMinutes": 0,
+//         "toTime": "string",
+//         "description": "string",
+//         "id": 0
+//       }
+//     ]
+//   },
+//   "pnrCode": "string",
+//   "id": 0
+}
 export interface FlightGetValidateDataType {
     preReserveKey?: string;
     departureTime: string;
@@ -110,129 +166,8 @@ export interface FlightGetValidateDataType {
     "childTotalPrice": 0,
     "infantTotalPrice": 0,
     captchaLink?: string;
-    departureFlight: {
-        flightType: "System" | "Charter";
-        flightNumber: string;
-        departureTime: string;
-        arrivalTime?: string;
-        isForeign: boolean;
-        adultPrice:number;
-        childPrice:number;
-        infantPrice:number;
-      //   "maxAllowedBaggage": 0,
-      //   "capacity": 0,
-      //   "manufacturer": "string",
-      //   "description": "string",
-        cabinClass: {
-          code?: string;
-          type?: string;
-          name?: string;
-        };
-        departureAirport:AirportType;
-        arrivalAirport:AirportType;
-        airCraft: {
-          code?: string;
-          name?: string;
-          manufacturer?: string;
-        };
-        airline: {
-          code?: string;
-          name?: string;
-          picture: {
-            path?: string;
-            altAttribute?: string;
-            titleAttribute?: string;
-          }
-        };
-      //   "refundRule": {
-      //     "rows": [
-      //       {
-      //         "key": 0,
-      //         "value": "string"
-      //       }
-      //     ],
-      //     "items": [
-      //       {
-      //         "value": 0,
-      //         "fromMinutes": 0,
-      //         "fromTime": "string",
-      //         "toMinutes": 0,
-      //         "toTime": "string",
-      //         "description": "string",
-      //         "id": 0
-      //       }
-      //     ]
-      //   },
-      //   "pnrCode": "string",
-      //   "id": 0
-      }
-
-
-
-
-
-
-
-
-
-
-
-    returnFlight?: {
-      flightType: "System" | "Charter";
-      flightNumber: string;
-      departureTime: string;
-      arrivalTime?: string;
-      isForeign: boolean;
-      adultPrice:number;
-      childPrice:number;
-      infantPrice:number;
-    //   "maxAllowedBaggage": 0,
-    //   "capacity": 0,
-    //   "manufacturer": "string",
-    //   "description": "string",
-      cabinClass: {
-        code?: string;
-        type?: string;
-        name?: string;
-      };
-      departureAirport:AirportType;
-      arrivalAirport:AirportType;
-      airCraft: {
-        code?: string;
-        name?: string;
-        manufacturer?: string;
-      };
-      airline: {
-        code?: string;
-        name?: string;
-        picture: {
-          path?: string;
-          altAttribute?: string;
-          titleAttribute?: string;
-        }
-      };
-    //   "refundRule": {
-    //     "rows": [
-    //       {
-    //         "key": 0,
-    //         "value": "string"
-    //       }
-    //     ],
-    //     "items": [
-    //       {
-    //         "value": 0,
-    //         "fromMinutes": 0,
-    //         "fromTime": "string",
-    //         "toMinutes": 0,
-    //         "toTime": "string",
-    //         "description": "string",
-    //         "id": 0
-    //       }
-    //     ]
-    //   },
-    //   "pnrCode": "string",
-    //   "id": 0
-    }
+    departureFlight: FlightDetail;
+    returnFlight?:FlightDetail;
   }
 
 
@@ -260,4 +195,52 @@ export interface FlightGetValidateDataType {
   }[];
     captchaCode: string;
     preReserveKey?:string;
+  }
+
+export interface DomesticFlightGetReserveByIdType {
+    username?: string;
+    tripType: "OneWay" | "Return" | "MultiCity";
+    departureTime: string;
+    arrivalTime?: string;
+    adultCount: number;
+    childCount: number;
+    infantCount: number;
+    creationTime: string;
+    adultTotalPrice: number;
+    childTotalPrice: number;
+    infantTotalPrice: number;
+    supplierType: "HiHoliday"|"Charter724"| "Itours";
+    status: "Undefined" | "Registered" | "Pending" | "Issued" | "Canceled" | "WebServiceCancel" | "PaymentSuccessful" | "WebServiceUnsuccessful" | "PriceChange" | "Unavailable" | "Refunded" | "Voided" | "InProgress" | "PaidBack" | "RefundInProgress" | "Changed" | "OnCredit" | "ContactProvider" | "UnConfirmed";
+    terminal: {
+      name?: string;
+      id: string;
+    };
+    reserver: {
+      firstName?: string;
+      lastName?: string;
+      phoneNumber?: string;
+      email?: string;
+      userName?: string;
+      gender:boolean;
+      userId?: number;
+    };
+    departureFlight: FlightDetail;
+    returnFlight?: FlightDetail;
+    passengers: {
+        firstName?: string;
+        lastName?: string;
+        persianFirstName?: string;
+        persianLastName?: string;
+        gender: boolean;
+        passengerType: "ADT"|"CHD"|"INF";
+        nationalId?: string;
+        birthDate?: string;
+        nationality?: string;
+        passportNumber?: string;
+        passportExpireDate?: string;
+        departureTicketNumber?: string;
+        returnTicketNumber?: string;
+        id: number;
+      }[];
+    id: number;
   }

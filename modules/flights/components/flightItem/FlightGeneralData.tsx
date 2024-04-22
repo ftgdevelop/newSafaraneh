@@ -20,7 +20,7 @@ const FlightDataItem: React.FC<any> = ({flightData , detail , changeOpenDetail} 
                     <Image src={flightData?.airline?.picture?.path || ''}
                         alt={flightData?.airline?.picture?.altAttribute || ''}
                         width={50} height={30} className={`w-12 h-12 max-sm:w-8 max-sm:h-8 ${!flightData?.capacity ? 'grayscale' : ''}`} />
-                    <span className="mr-1 ml-1">
+                    <span className="mr-1 ml-1 font-sans">
                         {flightData?.airline?.name} <br/>
                         {flightData?.airCraft.name}
                     </span>
