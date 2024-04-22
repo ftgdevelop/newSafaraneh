@@ -15,7 +15,10 @@ const FlightSearchButton: React.FC<any> = ({SearchData}: {SearchData: SearchData
         if (SearchData?.returning) search.returning = SearchData?.returning
         if (SearchData?.flightType !== "All") search.flightType = SearchData?.flightType
     
-        if (SearchData.origin && SearchData.destination) router.replace({ query: search })
+        if (SearchData.origin && SearchData.destination) {
+            router.replace({ query: search })   
+            .then(() => location.reload())
+        } 
     }
     
     return (

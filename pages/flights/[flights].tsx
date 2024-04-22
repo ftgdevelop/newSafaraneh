@@ -83,7 +83,7 @@ const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], rou
             fetchKey(routeCodes);
         }
 
-    }, [routeCodes, query.departing , query.adult, query.child, query.infant]);
+    }, [router.asPath]);
 
 
 
