@@ -22,7 +22,6 @@ import Rooms from '@/modules/domesticHotel/components/hotelDetails/Rooms';
 import { addSomeDays, dateFormat } from '@/modules/shared/helpers';
 import AnchorTabs from '@/modules/shared/components/ui/AnchorTabs';
 import NotFound from '@/modules/shared/components/ui/NotFound';
-import { useEffect } from 'react';
 
 type Props = {
   allData: {
@@ -44,22 +43,6 @@ const HotelDetail: NextPage<Props> = props => {
 
   const router = useRouter();
 
-  useEffect(()=>{
-
-    const fetchData = async () => {
-
-      const url = encodeURI(`/hotel/${router.query.hotelDetail![0]}`);
-
-      const response1 =  await getDomesticHotelDetailsByUrl("/fa"+ url, "fa-IR");
-
-      const response2 =  await getDomesticHotelDetailsByUrl("/ar"+ url, "ar-AE");
-
-      const response3 =  await getDomesticHotelDetailsByUrl("/en"+ url, "en-US");
-    }
-
-    fetchData();
-
-  },[]);
 
   if (props.error410) {
     return (
@@ -357,146 +340,146 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const allData: any = await getDomesticHotelDetailsByUrl("/" + locale + url, locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR");
 
 
-  // if (!allData?.data?.result?.hotel) {
+  if (!allData?.data?.result?.hotel) {
 
 
-  //   if (locale === "fa") {
+    if (locale === "fa") {
 
-  //     const allData_Ar: any = await getDomesticHotelDetailsByUrl("/ar" + url, "ar-AE");
+      const allData_Ar: any = await getDomesticHotelDetailsByUrl("/ar" + url, "ar-AE");
 
-  //     if (allData_Ar?.data?.result?.hotel) {
+      if (allData_Ar?.data?.result?.hotel) {
 
-  //       return ({
-  //         redirect: {
-  //           destination: "/ar" + url,
-  //           locale: false,
-  //           permanent: true
-  //         },
-  //         props: {},
-  //       });
+        return ({
+          redirect: {
+            destination: "/ar" + url,
+            locale: false,
+            permanent: true
+          },
+          props: {},
+        });
 
-  //     } else {
+      } else {
 
-  //       const allData_En: any = await getDomesticHotelDetailsByUrl("/en" + url, "en-US");
+        const allData_En: any = await getDomesticHotelDetailsByUrl("/en" + url, "en-US");
 
-  //       if (allData_En?.data?.result?.hotel) {
+        if (allData_En?.data?.result?.hotel) {
 
-  //         return ({
-  //           redirect: {
-  //             destination: "/en" + url,
-  //             locale: false,
-  //             permanent: true
-  //           },
-  //           props: {},
-  //         });
+          return ({
+            redirect: {
+              destination: "/en" + url,
+              locale: false,
+              permanent: true
+            },
+            props: {},
+          });
 
-  //       } else {
+        } else {
 
-  //         context.res.statusCode = 410;
+          context.res.statusCode = 410;
 
-  //         return ({
-  //           props: {
-  //             ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
-  //             error410: "true"
-  //           },
-  //         });
+          return ({
+            props: {
+              ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
+              error410: "true"
+            },
+          });
 
-  //       }
-  //     }
-  //   }
-
-
-  //   if (locale === "en") {
-
-  //     const allData_Fa: any = await getDomesticHotelDetailsByUrl("/fa" + url, "fa-IR");
-
-  //     if (allData_Fa?.data?.result?.hotel) {
-
-  //       return ({
-  //         redirect: {
-  //           destination: "/fa" + url,
-  //           locale: false,
-  //           permanent: true
-  //         },
-  //         props: {},
-  //       });
-
-  //     } else {
-
-  //       const allData_Ar: any = await getDomesticHotelDetailsByUrl("/ar" + url, "ar-AE");
-
-  //       if (allData_Ar?.data?.result?.hotel) {
-
-  //         return ({
-  //           redirect: {
-  //             destination: "/ar" + url,
-  //             locale: false,
-  //             permanent: true
-  //           },
-  //           props: {},
-  //         });
-
-  //       } else {
-
-  //         context.res.statusCode = 410;
-  //         return ({
-  //           props: {
-  //             ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
-  //             error410: "true"
-  //           },
-  //         });
-
-  //       }
-  //     }
-  //   }
+        }
+      }
+    }
 
 
-  //   if (locale === "ar") {
+    if (locale === "en") {
 
-  //     const allData_Fa: any = await getDomesticHotelDetailsByUrl("/fa" + url, "fa-IR");
+      const allData_Fa: any = await getDomesticHotelDetailsByUrl("/fa" + url, "fa-IR");
 
-  //     if (allData_Fa?.data?.result?.hotel) {
+      if (allData_Fa?.data?.result?.hotel) {
 
-  //       return ({
-  //         redirect: {
-  //           destination: "/fa" + url,
-  //           locale: false,
-  //           permanent: true
-  //         },
-  //         props: {},
-  //       });
+        return ({
+          redirect: {
+            destination: "/fa" + url,
+            locale: false,
+            permanent: true
+          },
+          props: {},
+        });
 
-  //     } else {
+      } else {
 
-  //       const allData_En: any = await getDomesticHotelDetailsByUrl("/en" + url, "en_US");
+        const allData_Ar: any = await getDomesticHotelDetailsByUrl("/ar" + url, "ar-AE");
 
-  //       if (allData_En?.data?.result?.hotel) {
+        if (allData_Ar?.data?.result?.hotel) {
 
-  //         return ({
-  //           redirect: {
-  //             destination: "/en" + url,
-  //             locale: false,
-  //             permanent: true
-  //           },
-  //           props: {},
-  //         });
+          return ({
+            redirect: {
+              destination: "/ar" + url,
+              locale: false,
+              permanent: true
+            },
+            props: {},
+          });
 
-  //       } else {
+        } else {
 
-  //         context.res.statusCode = 410;
+          context.res.statusCode = 410;
+          return ({
+            props: {
+              ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
+              error410: "true"
+            },
+          });
 
-  //         return ({
-  //           props: {
-  //             ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
-  //             error410: "true"
-  //           },
-  //         });
+        }
+      }
+    }
 
-  //       }
-  //     }
-  //   }
 
-  // }
+    if (locale === "ar") {
+
+      const allData_Fa: any = await getDomesticHotelDetailsByUrl("/fa" + url, "fa-IR");
+
+      if (allData_Fa?.data?.result?.hotel) {
+
+        return ({
+          redirect: {
+            destination: "/fa" + url,
+            locale: false,
+            permanent: true
+          },
+          props: {},
+        });
+
+      } else {
+
+        const allData_En: any = await getDomesticHotelDetailsByUrl("/en" + url, "en_US");
+
+        if (allData_En?.data?.result?.hotel) {
+
+          return ({
+            redirect: {
+              destination: "/en" + url,
+              locale: false,
+              permanent: true
+            },
+            props: {},
+          });
+
+        } else {
+
+          context.res.statusCode = 410;
+
+          return ({
+            props: {
+              ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
+              error410: "true"
+            },
+          });
+
+        }
+      }
+    }
+
+  }
 
   return ({
     props: {
