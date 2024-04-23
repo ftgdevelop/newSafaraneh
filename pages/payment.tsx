@@ -21,6 +21,9 @@ import { setReduxError } from '@/modules/shared/store/errorSlice';
 import CipAside from '@/modules/cip/components/shared/CipAside';
 import { CipGetReserveByIdResponse } from '@/modules/cip/types/cip';
 import { CipGetReserveById } from '@/modules/cip/actions';
+import { flightGetReserveById } from '@/modules/flights/actions';
+import { DomesticFlightGetReserveByIdType } from '@/modules/flights/types/flights';
+import Aside from '@/modules/flights/components/shared/Aside';
 
 
 const Payment: NextPage = () => {
@@ -44,6 +47,11 @@ const Payment: NextPage = () => {
 
   const [cipReserveInfo, setCipReserveInfo] = useState<CipGetReserveByIdResponse>();
   const [cipReserveInfoLoading, setCipReserveInfoLoading] = useState<boolean>(true);
+
+  const [domesticFlightReserveInfo, setDomesticFlightReserveInfo] = useState<DomesticFlightGetReserveByIdType>();
+  const [domesticFlightReserveInfoLoading, setDomesticFlightReserveInfoLoading] = useState<boolean>(true);
+
+
 
   const [goToBankLoading, setGoToBankLoading] = useState<boolean>(false);
 
@@ -70,12 +78,11 @@ const Payment: NextPage = () => {
 
       const response: any = await getReserveBankGateway(reserveId);
       if (response?.status == 200 && response.data.result) {
-        setBankGatewayList(response.data.result[0]);
+        setBankGatewayList(response.data?.result[0]);
       } else {
-        debugger;
         dispatch(setReduxError({
           title: t('error'),
-          message: response.data.error.message,
+          message: response?.data?.error?.message,
           isVisible: true
         }));
       }
@@ -87,6 +94,8 @@ const Payment: NextPage = () => {
 
 
   useEffect(() => {
+
+    const token = localStorage.getItem('Token') || "";
 
     if (username && reserveId && type === 'HotelDomestic') {
       const fetchDomesticHotelReserve = async () => {
@@ -107,13 +116,13 @@ const Payment: NextPage = () => {
     }
 
     if (username && reserveId && type === 'Cip') {
-      
+
       const fetchCipData = async (reserveId: string, userName: string) => {
-        
+
         setCipReserveInfoLoading(true);
-        
+
         const respone: any = await CipGetReserveById({ reserveId: reserveId, userName: userName });
-        
+
         setCipReserveInfoLoading(false);
 
         if (respone?.data?.result) {
@@ -122,6 +131,25 @@ const Payment: NextPage = () => {
       };
 
       fetchCipData(reserveId, username);
+    }
+
+    if (username && reserveId && type === 'FlightDomestic') {
+
+      const fetchDomesticFlightData = async (reserveId: string, userName: string) => {
+
+        setDomesticFlightReserveInfoLoading(true);
+
+        const respone: any = await flightGetReserveById({ reserveId: reserveId, userName: userName, token: token });
+
+        setDomesticFlightReserveInfoLoading(false);
+
+        if (respone?.data?.result) {
+          setDomesticFlightReserveInfo(respone.data.result);
+        }
+      };
+
+      fetchDomesticFlightData(reserveId, username);
+
     }
 
   }, [type, username, reserveId]);
@@ -270,6 +298,46 @@ const Payment: NextPage = () => {
     }
   }
 
+
+
+  let domesticFlightPassengers: {
+    type: "ADT" | "CHD" | "INF";
+    label: string;
+    count: number;
+    departurePrice: number;
+    returnPrice?: number;
+  }[] = [];
+  if (domesticFlightReserveInfo) {
+    if (domesticFlightReserveInfo?.adultCount) {
+      domesticFlightPassengers.push({
+        type: "ADT",
+        label: t('adult'),
+        count: domesticFlightReserveInfo.adultCount,
+        departurePrice: domesticFlightReserveInfo.departureFlight.adultPrice,
+        returnPrice: domesticFlightReserveInfo.returnFlight?.adultPrice
+      });
+    }
+    if (domesticFlightReserveInfo?.childCount) {
+      domesticFlightPassengers.push({
+        type: "CHD",
+        label: t('child'),
+        count: domesticFlightReserveInfo.childCount,
+        departurePrice: domesticFlightReserveInfo.departureFlight.childPrice,
+        returnPrice: domesticFlightReserveInfo.returnFlight?.childPrice
+      });
+    }
+    if (domesticFlightReserveInfo?.infantCount) {
+      domesticFlightPassengers.push({
+        type: "INF",
+        label: t('infant'),
+        count: domesticFlightReserveInfo.infantCount,
+        departurePrice: domesticFlightReserveInfo.departureFlight.infantPrice,
+        returnPrice: domesticFlightReserveInfo.returnFlight?.infantPrice
+      });
+    }
+
+
+  }
   return (
     <>
 
@@ -311,7 +379,38 @@ const Payment: NextPage = () => {
                 loading={cipReserveInfoLoading}
                 reserveInfo={cipReserveInfo}
               />
+            ) : type === 'FlightDomestic' ? (
+              <Aside
+                loading={domesticFlightReserveInfoLoading}
+                departureFlight={domesticFlightReserveInfo?.departureFlight}
+                passengers={domesticFlightPassengers}
+                returnFlight={domesticFlightReserveInfo?.returnFlight}
+              />
             ) : null}
+
+            <div className='flex gap-5 bg-white border border-neutral-300 rounded p-4 mb-1' >
+ 
+                <img
+                  src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNiIgdmlld0JveD0iMCAwIDI0IDI2Ij4KICAgIDxwYXRoIGZpbGw9IiMxREFDMDgiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iTTExLjA1OC4xODhjLjM4Ni0uMjUgMS40OTgtLjI1IDEuODg0IDAgMy4zOSAyLjE5NyA2LjQ1IDMuMzM0IDkuNjc1IDMuNTMuOTUxLjA0IDEuMzY1LjQ3MSAxLjM2NSAxLjM3NCAwIC41NjkuMDQxIDYuNTUgMCA4LjcwOCAwIC43NDUtLjA4MyAxLjUzLS4yOSAyLjMxNS0uNDU1IDEuODA0LTEuNDQ3IDMuNDktMy4xIDUuMDYtMi4xMSAyLTguMzk0IDQuODI1LTguNjI0IDQuODI1LS4xNjYgMC02LjQ1LTIuODI0LTguNTYtNC44MjUtMS42NTMtMS41Ny0yLjY0NS0zLjI1Ni0zLjEtNS4wNmE5LjA4OSA5LjA4OSAwIDAgMS0uMjktMi4zMTVjLS4wNDEtMi4xNTcgMC04LjEzOSAwLTguNzA4IDAtLjkwMy40MTQtMS4zMzQgMS4zNjUtMS4zNzMgMy4yMjUtLjE5NyA2LjI4NS0xLjMzNCA5LjY3NS0zLjUzMXpNOS41MTEgMTYuOTM5Yy41NC41MjYgMS40MTQuNTI2IDEuOTU0IDBsNi4xMy01Ljk3NGMuNTQtLjUyNi41NC0xLjM3OCAwLTEuOTA0YTEuNDA3IDEuNDA3IDAgMCAwLTEuOTU0IDBsLTUuMTM5IDUuMDM2LTIuMTQzLTIuMDlhMS40MDcgMS40MDcgMCAwIDAtMS45NTQgMCAxLjMyMiAxLjMyMiAwIDAgMCAwIDEuOTA1bDMuMTA2IDMuMDI3eiIvPgo8L3N2Zz4K"
+                />
+   
+              <div>
+                <strong className='text-green-600 font-semibold'>٪۱۰۰ ایمن</strong>
+                <p className='text-xs'>ما از رمزگذاری 256 بیتی SSL استفاده می کنیم</p>
+              </div>
+            </div>
+
+            <div className='flex gap-5 bg-white border border-neutral-300 rounded p-4 mb-4' >
+     
+                <img
+                  src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMjAiIGhlaWdodD0iMjYiIHZpZXdCb3g9IjAgMCAyMCAyNiI+CiAgICA8ZGVmcz4KICAgICAgICA8cGF0aCBpZD0iYSIgZD0iTTc2LjMzMyAxNzEuMzc1di0zLjI1YzAtNC40ODgtMy43My04LjEyNS04LjMzMy04LjEyNXMtOC4zMzMgMy42MzctOC4zMzMgOC4xMjV2My4yNWMtLjkyMiAwLTEuNjY3LjcyNi0xLjY2NyAxLjYyNXYxMS4zNzVjMCAuODk5Ljc0NSAxLjYyNSAxLjY2NyAxLjYyNWgxNi42NjZjLjkyMiAwIDEuNjY3LS43MjYgMS42NjctMS42MjVWMTczYzAtLjg5OS0uNzQ1LTEuNjI1LTEuNjY3LTEuNjI1ek02OCAxNjMuMjVjMi43NTcgMCA1IDIuMTg3IDUgNC44NzV2My4yNUg2M3YtMy4yNWMwLTIuNjg4IDIuMjQzLTQuODc1IDUtNC44NzV6bS0yLjMzMiAxOC4wOGwtMi4zNi0yLjE4M2EuOTIuOTIgMCAwIDEgMC0xLjM3M2MuNDEtLjM4IDEuMDc0LS4zOCAxLjQ4NCAwbDEuNjMgMS41MDcgMy45MDUtMy42MzNjLjQxLS4zOCAxLjA3NS0uMzggMS40ODUgMGEuOTIuOTIgMCAwIDEgMCAxLjM3M2wtNC42NTkgNC4zMWMtLjQxLjM3OS0xLjA3NS4zNzktMS40ODUgMHoiLz4KICAgIDwvZGVmcz4KICAgIDx1c2UgZmlsbD0iIzFEQUMwOCIgZmlsbC1ydWxlPSJub256ZXJvIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNTggLTE2MCkiIHhsaW5rOmhyZWY9IiNhIi8+Cjwvc3ZnPgo="
+                />
+
+              <div>
+                <strong className='text-green-600 font-semibold'>عملیات بانکی مورد اعتماد است</strong>
+                <p className='text-xs'> ما داده های کارت شما را ذخیره یا مشاهده نمی کنیم </p>
+              </div>
+            </div>
 
 
             {/* 

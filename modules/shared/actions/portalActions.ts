@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { Header,ServerAddress, Hotel } from "../../../enum/url";
 
-export const getPortal = async (acceptLanguage: string = "fa-IR") => {
+export const getPortal = async (acceptLanguage: "fa-IR"|"en-US"|"ar-AE" = "fa-IR") => {
 
     try {
         const response = await axios({
