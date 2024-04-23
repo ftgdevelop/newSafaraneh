@@ -173,6 +173,7 @@ const Flights: NextPage<any> = ({ airports, routeCodes , portalData }: { airport
     let origin:string ="";
     let destination:string = "";
     if(airports && routeCodes){
+        debugger;
         const originCode = routeCodes.split("-")[0];
         const destinationCode = routeCodes.split("-")[1];
         origin = airports.find(item => item.code === originCode)?.city.name || "";
@@ -186,7 +187,7 @@ const Flights: NextPage<any> = ({ airports, routeCodes , portalData }: { airport
         <Head>            
             {!!(destination && origin) && (
             <>
-                <title> {siteName} | {tFlight("flight-list-title",{ origin:origin, destination: destination})} </title>
+                <title>{tFlight("flight-list-title",{ origin:origin, destination: destination, siteName:siteName})}</title>
                 <meta name="description" content={tFlight("flight-list-description",{origin:origin, destination: destination, siteName:siteName })} />
             </>
             )}
