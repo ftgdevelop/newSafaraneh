@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 
 import ReserverInformation from '@/modules/flights/components/checkout/ReserverInformation';
-import { useAppDispatch } from '@/modules/shared/hooks/use-store';
+import { useAppDispatch, useAppSelector } from '@/modules/shared/hooks/use-store';
 import { setReduxError } from '@/modules/shared/store/errorSlice';
 import Steps from '@/modules/shared/components/ui/Steps';
 import Skeleton from '@/modules/shared/components/ui/Skeleton';
@@ -19,6 +19,7 @@ import PassengerItemInformation from '@/modules/flights/components/checkout/Pass
 import Button from '@/modules/shared/components/ui/Button';
 import FormikField from '@/modules/shared/components/ui/FormikField';
 import { validateRequied } from '@/modules/shared/helpers/validation';
+import { UserInformation } from '@/modules/authentication/types/authentication';
 
 const Checkout: NextPage = () => {
 
@@ -29,6 +30,8 @@ const Checkout: NextPage = () => {
   const router = useRouter();
 
   const { key } = router.query;
+
+  const user : UserInformation = useAppSelector(state => state.authentication.isAuthenticated ? state.authentication.user : undefined);
 
   const [flightData, setFlightData] = useState<FlightGetValidateDataType>();
   const [flightDataLoading, setFlightDataLoading] = useState<boolean>(true);
@@ -173,11 +176,11 @@ const Checkout: NextPage = () => {
 
   const initialValues = {
     reserver: {
-      gender: true,
-      firstName: "",
-      lastName: "",
-      email: "",
-      phoneNumber: ""
+      gender: user?.gender || true,
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      email: user?.emailAddress || "",
+      phoneNumber: user?.phoneNumber || ""
     },
     passengers: passengerItems?.map(item => ({
       gender: true,

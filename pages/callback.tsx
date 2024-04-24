@@ -34,9 +34,9 @@ const Callback: NextPage = () => {
                 `/cip/booking?username=${username}&reserveId=${reserveId}`
               );
             } else if (response.data.result.type === "FlightDomestic") {
-              // router.push(
-              //   `/flights/booking?username=${username}&reserveId=${reserveId}`
-              // );
+              router.push(
+                `/flights/booking?username=${username}&reserveId=${reserveId}`
+              );
             } else if (response.data.result.type === "HotelDomestic") {
               router.push(`/hotel/booking?username=${username}&reserveId=${reserveId}`);
             } else if (response.data.result.type === "Flight") {
