@@ -4,6 +4,7 @@ import FlightSidebarHours from "./FlightSidebarTime";
 import FlightSidebarFlightType from "./FlightSidebarFlightType";
 import FlightSidebarPriceChange from "./FlightSidebarPriceRange";
 import { FlightType } from "../../types/flights";
+import Skeleton from "@/modules/shared/components/ui/Skeleton";
 
 const FlightSidebarFilters: React.FC<any> = ({ FlightsData, flightsInFilterLengths }: {FlightsData: FlightType[], flightsInFilterLengths: number}) => {
     const [OpenSidebar, setOpenSidebar] = useState<boolean>(false)
@@ -22,19 +23,21 @@ const FlightSidebarFilters: React.FC<any> = ({ FlightsData, flightsInFilterLengt
     return (
         <>
             <div className={`w-1/4 h-fit max-lg:fixed max-lg:top-0 max-lg:-right-1 max-lg:overflow-y-auto p-4 pt-2 divide-y space-y-2 max-lg:w-2/5 max-md:w-3/5
-            max-sm:w-11/12 max-lg:h-screen bg-white border-1 border-gray-200 rounded max-lg:rounded-none z-20 duration-300 max-lg:border-0
+            max-sm:w-11/12 max-lg:h-screen ${FlightsData.length ? 'bg-white' : 'bg-gray-100'} border-1 border-gray-200 rounded max-lg:rounded-none z-20 duration-300 max-lg:border-0
             ${OpenSidebar ? 'max-lg:translate-x-0' : 'max-lg:translate-x-full'}`}
             >
                 <div>
                     <h3 className="font-semibold">نتیجه جستجوی شما</h3>
                     {
+                        FlightsData.length ?
                         flightsInFilterLengths ?
                             <p className="text-2xs font-semibold">{flightsInFilterLengths} پرواز پیدا شد</p> :
-                            <p className="text-2xs font-semibold">پروازی پیدا نشد</p>
+                            <p className="text-2xs font-semibold">پروازی پیدا نشد</p> :
+                        <Skeleton className="w-20" />
                     }
                 </div>
                 <FlightSidebarAirlines FlightsData={FlightsData} />
-                <FlightSidebarHours />
+                <FlightSidebarHours FlightsData={FlightsData} />
                 <FlightSidebarPriceChange FlightsData={FlightsData} />
                 <FlightSidebarFlightType FlightsData={FlightsData} />
                 </div>
