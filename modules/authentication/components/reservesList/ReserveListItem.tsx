@@ -8,8 +8,9 @@ import { useTranslation } from 'next-i18next';
 import Image from 'next/image';
 import Link from 'next/link';
 import DownloadPdfVoucher from '@/modules/domesticHotel/components/booking/DownloadPdfVoucher';
-import CipDownloadPdfVoucher from '@/modules/cip/components/booking/DownloadPdfVoucher'; 
+import CipDownloadPdfVoucher from '@/modules/cip/components/booking/DownloadPdfVoucher';
 import { CipGetReserveById } from '@/modules/cip/actions';
+import { flightGetReserveById } from '@/modules/flights/actions';
 
 type Props = {
     item: UserReserveListItem
@@ -27,6 +28,8 @@ const ReserveListItem: React.FC<Props> = props => {
     const [detailLoading, setDetailLoading] = useState<any>();
 
     const fetchDetail = async () => {
+
+        const token = localStorage.getItem('Token') || "";
 
         if (!username) return;
 
@@ -49,6 +52,17 @@ const ReserveListItem: React.FC<Props> = props => {
                 setReserveDetail(response.data.result);
             }
         }
+
+        if (type === 'FlightDomestic') {
+            setReserveDetail(undefined);
+            setDetailLoading(true);
+            const response: any = await flightGetReserveById({ reserveId: id.toString(), userName: username, token: token });
+            setDetailLoading(false);
+            if (response?.data?.result) {
+                setReserveDetail(response.data.result);
+            }
+        }
+
     }
 
     useEffect(() => {
@@ -166,10 +180,10 @@ const ReserveListItem: React.FC<Props> = props => {
         />
     };
 
-    if(type === 'Cip' && (status === "Issued" || status === "ContactProvider") && reserveDetail && username){
-        downloadTicket = <CipDownloadPdfVoucher 
-            reserveId={id.toString()} 
-            username={username} 
+    if (type === 'Cip' && (status === "Issued" || status === "ContactProvider") && reserveDetail && username) {
+        downloadTicket = <CipDownloadPdfVoucher
+            reserveId={id.toString()}
+            username={username}
             className="flex items-center justify-center gap-1 rounded border border-primary-700 hover:bg-primary-700 text-neutral-600 hover:text-white px-1 transition-all h-8 disabled:bg-neutral-500 disabled:cursor-not-allowed disabled:text-white"
         />
     }
@@ -222,9 +236,9 @@ const ReserveListItem: React.FC<Props> = props => {
             {!!openDetail && <div className='p-3 bg-neutral-100'>
 
                 <div className='hidden md:grid grid-cols-5 gap-3 border-b border-dashed border-neutral-300 pb-3 mb-3'>
-                    <div />
-                    <label> {type === 'HotelDomestic' ? tHotel("hotel-name") : type === 'Cip' ? "نام فرودگاه" : ""} </label>
-                    <label> {type === 'HotelDomestic' ? t("checkin-date") : type === 'Cip' ? "تاریخ پرواز" : ""} </label>
+                    {type === 'FlightDomestic' ? (<label> اطلاعات پرواز </label>) : (<div />)}
+                    <label> {type === 'HotelDomestic' ? tHotel("hotel-name") : type === 'Cip' ? "نام فرودگاه" : type === 'FlightDomestic' ? "مسیر" : ""} </label>
+                    <label> {type === 'HotelDomestic' ? t("checkin-date") : type === 'Cip' ? "تاریخ پرواز" : type === 'FlightDomestic' ? "زمان حرکت" : ""} </label>
                     <div className='col-span-2' />
                 </div>
 
@@ -271,10 +285,40 @@ const ReserveListItem: React.FC<Props> = props => {
                                     {reserveDetail?.flightTime ? dateDiplayFormat({ date: reserveDetail.flightTime, locale: "fa", format: "ddd dd mm" }) : " -- "}
                                 </span>
                             </>
+                        ) : type === 'FlightDomestic' ? (
+                            <>
+                                <div>
+
+                                    <Image
+                                        src={reserveDetail?.departureFlight?.airline?.picture?.path || '/images/pattern.png'}
+                                        alt={reserveDetail?.departureFlight?.airline?.picture?.altAttribute || reserveDetail?.departureFlight?.airline?.name}
+                                        width={65}
+                                        height={65}
+                                        className='h-12 w-12 object-contain'
+                                    />
+
+                                    <span className='leading-4'> {reserveDetail?.departureFlight?.airline?.name || " -- "} </span>
+                                </div>
+
+                                <span className=''>
+                                    {reserveDetail?.departureFlight?.departureAirport?.city.name} - {reserveDetail?.departureFlight?.arrivalAirport?.city?.name}
+                                </span>
+
+                                {reserveDetail.departureTime ? (
+                                <div className='hidden md:block' title={reserveDetail.departureTime}>
+                                    {dateDiplayFormat({ date: reserveDetail.departureTime, locale: "fa", format: 'dd mm yyyy'})}
+                                    <br/>
+                                    {dateDiplayFormat({ date: reserveDetail.departureTime, locale: "fa", format: 'HH:mm' })}
+                                </div>
+                                ):(
+                                    <span className='hidden md:block' > -- </span>
+                                )}
+
+                            </>
                         ) : (
                             null
                         )}
-                        
+
                         {paymentLink || downloadTicket || <div />}
 
                         {linkToDetail || <div />}
