@@ -16,8 +16,7 @@ const FlightSearchDate: React.FC<any> = ({SearchData, setSearchData}: {SearchDat
     }
     let router = useRouter()
     const today = dateFormat(new Date())
-    let passed = router.query.deprating || today
-    const [dates, setDates] = useState<[any, any]>([passed, router.query.returning || null]);
+    const [dates, setDates] = useState<[any, any]>([router.query.departing || today, router.query.returning || null]);
     
     useEffect(() => {
         if (dates[0]) setSearchData({...SearchData, departing: dates[0]})

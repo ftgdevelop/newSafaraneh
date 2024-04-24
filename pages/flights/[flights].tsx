@@ -16,6 +16,7 @@ import { dateFormat } from "@/modules/shared/helpers";
 import { useRouter } from "next/router";
 import ProgressBarWithLabel from "@/modules/shared/components/ui/ProgressBarWithLabel";
 import { useTranslation } from "next-i18next";
+import Skeleton from "@/modules/shared/components/ui/Skeleton";
 
 const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], routeCodes: string }) => {
     
@@ -171,6 +172,7 @@ const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], rou
                 {!!query.returning && <p className="text-sm mt-5" > ابتدا از لیست زیر، بلیط رفت خود را انتخاب نمایید</p>}
 
                 {
+                    departureList ?
                     flightsInFilter?.sort((a, b) => SortCapacity(a, b))
                         .sort((a: FlightType, b: FlightType): any => {
                             if (sortFlights == "HighestPrice") return SortHightestPrice(a, b)
@@ -180,10 +182,11 @@ const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], rou
                             }
                         }).map((flight: FlightType) =>
                             <FlightsFlightItem passengers={passengers} flightData={flight} key={flight.flightKey} />
-                        )
+                        ) :
+                        <Skeleton className="h-20"/>
                 }
             </div>
-            <FlightsSearchChange />
+            <FlightsSearchChange airports={airports} />
         </div>
     )
 }
