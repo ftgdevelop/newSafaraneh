@@ -104,7 +104,7 @@ const HotelList: NextPage<Props> = props => {
 
   const router = useRouter();
   const locale = router.locale;
-  const acceptLanguage = locale === "fa" ? "fa-IR" : locale === "ar" ? "ar-AE" : "en-US";
+  const acceptLanguage = locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR";
 
   const pathSegments = router.asPath?.split("/");
 
