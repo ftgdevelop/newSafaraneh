@@ -270,7 +270,7 @@ const HotelList: NextPage<Props> = props => {
       setPricesLoading(true);
       setPricesData(undefined);
       //TODO: remove this logs:
-      console.log("fetching prices", acceptLanguage);      
+      console.log("fetching prices acceptLanguage", acceptLanguage);      
       const pricesResponse = await AvailabilityByHotelId({ checkin: checkin, checkout: checkout, ids: hotelIds as number[] }, acceptLanguage);      
       
       if (pricesResponse.data?.result?.hotels) {        
