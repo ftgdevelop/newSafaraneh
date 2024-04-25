@@ -16,7 +16,9 @@ import { dateFormat } from "@/modules/shared/helpers";
 import { useRouter } from "next/router";
 import ProgressBarWithLabel from "@/modules/shared/components/ui/ProgressBarWithLabel";
 import { useTranslation } from "next-i18next";
+import Pagination from "@/modules/shared/components/ui/Pagination";
 import Skeleton from "@/modules/shared/components/ui/Skeleton";
+import FlightNoItem from "@/modules/flights/components/FlightNoFlightItem";
 
 const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], routeCodes: string }) => {
     
@@ -25,7 +27,9 @@ const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], rou
     const SidebarFilter = useSelector((state: RootState) => state.flightFilters.filterOption)
     let [flightsInFilter, setFlightsInFilter] = useState<FlightType[]>()
     let [sortFlights, setSortFlights] = useState('LowestPrice')
+    let [fetchDataCompelete, setFetchDataCompelte] = useState(false)
 
+    const [page, setPage] = useState(1)
     const [key, setKey] = useState<string>("");
 
     const [departureList, setDepartureList] = useState<any>([]);
@@ -117,7 +121,8 @@ const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], rou
                 if (response?.data?.result?.isCompleted) {
 
                     const result = response?.data?.result;
-
+                    setFetchDataCompelte(result.isCompleted)
+                    
                     setDepartureList(result.departureFlights);
 
                     clearInterval(fetchInterval);
@@ -153,7 +158,10 @@ const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], rou
 
     }, [key]);
 
-
+    useEffect(() => {
+    console.log(departureList);
+    
+},[departureList])
 
     return (
         <div className="max-w-container m-auto p-5 max-md:p-3 flex gap-5 relative">
@@ -171,8 +179,14 @@ const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], rou
 
                 {!!query.returning && <p className="text-sm mt-5" > ابتدا از لیست زیر، بلیط رفت خود را انتخاب نمایید</p>}
 
+                {departureList.length ? <Pagination
+                    totalItems={flightsInFilter?.length || 0}
+                    itemsPerPage={10}
+                    onChange={setPage}
+                    currentPage={page}
+                    wrapperClassName="mt-5"
+                />: null}
                 {
-                    departureList ?
                     flightsInFilter?.sort((a, b) => SortCapacity(a, b))
                         .sort((a: FlightType, b: FlightType): any => {
                             if (sortFlights == "HighestPrice") return SortHightestPrice(a, b)
@@ -180,13 +194,25 @@ const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], rou
                             else {
                                 return a.capacity && a.adultPrice - b.adultPrice
                             }
-                        }).map((flight: FlightType) =>
+                        }).slice(page*10-10, page*10).map((flight: FlightType) =>
                             <FlightsFlightItem passengers={passengers} flightData={flight} key={flight.flightKey} />
-                        ) :
-                        <Skeleton className="h-20"/>
+                        )
                 }
+                {
+                    departureList.length ? <Pagination
+                        totalItems={flightsInFilter?.length || 0}
+                        itemsPerPage={10}
+                        onChange={setPage}
+                        currentPage={page}
+                        wrapperClassName="mt-5"
+                />: null
+                }
+                {
+                    fetchDataCompelete && !departureList.length && 
+                    <FlightNoItem />
+                }
+                <FlightsSearchChange airports={airports} />
             </div>
-            <FlightsSearchChange airports={airports} />
         </div>
     )
 }

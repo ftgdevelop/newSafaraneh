@@ -1,7 +1,6 @@
 import { NextPage } from "next";
 import BlogItem from "../template/BlogItem";
 import Sidebar from "../template/Sidebar";
-import { useContext, useEffect, useState } from "react";
 import { BlogItemType, CategoriesNameType } from "../../types/blog";
 import { useRouter } from "next/router";
 import Pagination from "./Pagination";
