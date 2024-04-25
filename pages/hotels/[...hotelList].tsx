@@ -270,11 +270,11 @@ const HotelList: NextPage<Props> = props => {
       setPricesLoading(true);
       setPricesData(undefined);
       //TODO: remove this logs:
-      console.log("fetching prices");      
+      console.log("fetching prices acceptLanguage", acceptLanguage);      
       const pricesResponse = await AvailabilityByHotelId({ checkin: checkin, checkout: checkout, ids: hotelIds as number[] }, acceptLanguage);      
-      console.log("prices fetched");      
+      
       if (pricesResponse.data?.result?.hotels) {        
-        console.log(pricesResponse.data.result);
+        
         setPricesData(pricesResponse.data.result.hotels);
 
         savePriceRange(pricesResponse.data.result.hotels);
@@ -296,7 +296,7 @@ const HotelList: NextPage<Props> = props => {
 
     fetchEntityDetail(locationId || cityId);
 
-  }, [firstHotelName, checkin, checkout]);
+  }, [firstHotelName, checkin, checkout, acceptLanguage]);
 
 
   const hotels: PricedHotelItem[] = searchHotelsData?.Hotels?.map(hotel => {
