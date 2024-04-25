@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Bed, Cancel, CreditCard, DefaultRoom, DownCaret, ErrorIcon, TikCircle, TimeSand, Travel } from "@/modules/shared/components/ui/icons";
+import { Bed, Cancel, CipIcon, CreditCard, DownCaret, ErrorIcon, TikCircle, TimeSand, Travel } from "@/modules/shared/components/ui/icons";
 import { dateDiplayFormat, numberWithCommas } from "@/modules/shared/helpers";
 import { UserReserveListItem } from "@/modules/shared/types/common";
 import { domesticHotelGetReserveById } from '@/modules/domesticHotel/actions';
@@ -8,6 +8,8 @@ import { useTranslation } from 'next-i18next';
 import Image from 'next/image';
 import Link from 'next/link';
 import DownloadPdfVoucher from '@/modules/domesticHotel/components/booking/DownloadPdfVoucher';
+import CipDownloadPdfVoucher from '@/modules/cip/components/booking/DownloadPdfVoucher'; 
+import { CipGetReserveById } from '@/modules/cip/actions';
 
 type Props = {
     item: UserReserveListItem
@@ -21,7 +23,7 @@ const ReserveListItem: React.FC<Props> = props => {
     const { creationTime, id, salePrice, status, type, username } = props.item;
 
     const [openDetail, setOpenDetail] = useState<boolean>(false);
-    const [domesticHotelDetail, setDomesticHotelDetail] = useState<any>(undefined);
+    const [reserveDetail, setReserveDetail] = useState<any>(undefined);
     const [detailLoading, setDetailLoading] = useState<any>();
 
     const fetchDetail = async () => {
@@ -29,18 +31,28 @@ const ReserveListItem: React.FC<Props> = props => {
         if (!username) return;
 
         if (type === 'HotelDomestic') {
-            setDomesticHotelDetail(undefined);
+            setReserveDetail(undefined);
             setDetailLoading(true);
             const response: any = await domesticHotelGetReserveById({ reserveId: id.toString(), userName: username });
             setDetailLoading(false);
             if (response?.data?.result) {
-                setDomesticHotelDetail(response.data.result);
+                setReserveDetail(response.data.result);
+            }
+        }
+
+        if (type === 'Cip') {
+            setReserveDetail(undefined);
+            setDetailLoading(true);
+            const response: any = await CipGetReserveById({ reserveId: id.toString(), userName: username });
+            setDetailLoading(false);
+            if (response?.data?.result) {
+                setReserveDetail(response.data.result);
             }
         }
     }
 
     useEffect(() => {
-        if (openDetail && !domesticHotelDetail) {
+        if (openDetail && !reserveDetail) {
             fetchDetail();
         }
     }, [openDetail]);
@@ -50,6 +62,8 @@ const ReserveListItem: React.FC<Props> = props => {
             case "HotelDomestic":
             case "Hotel":
                 return (<Bed className="w-4.5 h-4.5 fill-current inline-block align-middle" />);
+            case 'Cip':
+                return (<CipIcon className="w-4 h-4 fill-current inline-block align-middle" />)
             case "Flight":
             case "FlightDomestic":
                 return (<Travel className="w-4.5 h-4.5 fill-current inline-block align-middle" />)
@@ -131,8 +145,19 @@ const ReserveListItem: React.FC<Props> = props => {
         )
     };
 
+    if (type === 'Cip' && !['Canceled', 'Issued', 'Registered', 'Unavailable', 'PaymentSuccessful', 'WebServiceUnsuccessful'].includes(status)) {
+        paymentLink = (
+            <Link
+                href={`/payment?username=${username}&reserveId=${id}`}
+                className='bg-green-600 text-white hover:bg-green-700 px-3 h-8 rounded transition-all inline-flex items-center justify-center'
+            >
+                پرداخت کنید
+            </Link>
+        )
+    }
+
     let downloadTicket = null;
-    if (type === 'HotelDomestic' && status === 'Issued' && domesticHotelDetail && username) {
+    if (type === 'HotelDomestic' && status === 'Issued' && reserveDetail && username) {
         downloadTicket = <DownloadPdfVoucher
             simple
             reserveId={id.toString()}
@@ -140,6 +165,14 @@ const ReserveListItem: React.FC<Props> = props => {
             className="rounded border border-primary-700 hover:bg-primary-700 text-neutral-600 hover:text-white px-1 transition-all h-8 disabled:bg-neutral-500 disabled:cursor-not-allowed disabled:text-white"
         />
     };
+
+    if(type === 'Cip' && (status === "Issued" || status === "ContactProvider") && reserveDetail && username){
+        downloadTicket = <CipDownloadPdfVoucher 
+            reserveId={id.toString()} 
+            username={username} 
+            className="flex items-center justify-center gap-1 rounded border border-primary-700 hover:bg-primary-700 text-neutral-600 hover:text-white px-1 transition-all h-8 disabled:bg-neutral-500 disabled:cursor-not-allowed disabled:text-white"
+        />
+    }
 
     let linkToDetail = null;
     if (type === 'HotelDomestic' && id && username) {
@@ -153,32 +186,45 @@ const ReserveListItem: React.FC<Props> = props => {
         )
     }
 
+    if (type === 'Cip' && id && username) {
+        linkToDetail = (
+            <Link
+                className='border border-green-600 rounded text-green-600 hover:text-white hover:bg-green-600 transition-all px-3 h-8 inline-flex items-center justify-center'
+                href={`/myaccount/booking/cip?username=${username}&reserveId=${id}`}
+            >
+                اطلاعات بیشتر
+            </Link>
+        )
+    }
+
     return (
-        <div className='relative border border-neutral-200 text-xs mb-3 max-md:pb-8'>
-            <div className='grid grid-cols-6 leading-5 p-3'>
-                <div className="px-3 py-1.5 col-span-3 md:col-span-1"> <span className='md:hidden'> {statusIcon} </span> {id} </div>
-                <div className="px-3 py-1.5 col-span-3 md:col-span-1 rtl:max-md:text-left ltr:max-md:text-right">
+        <div className='relative border border-neutral-200 text-xs mb-3 max-md:pb-8 py-2'>
+
+            <div className='grid grid-cols-6 leading-5'>
+                <div className="px-2 py-1.5 col-span-3 md:col-span-1"> <span className='md:hidden'> {statusIcon} </span> {id} </div>
+                <div className="px-2 py-1.5 col-span-3 md:col-span-1 rtl:max-md:text-left ltr:max-md:text-right">
                     {typeIcon(type)} {typeName(type)}
                 </div>
-                <div className="px-3 py-1.5 whitespace-nowrap col-span-3 md:col-span-1"> {dateDiplayFormat({ date: creationTime, locale: "fa", format: "ddd dd mm" })} </div>
-                <div className="px-3 py-1.5 col-span-3 md:col-span-1 rtl:max-md:text-left ltr:max-md:text-right whitespace-nowrap">  {numberWithCommas(salePrice || 0)}  <span className='md:hidden'> ریال </span></div>
-                <div className="px-3 py-1.5 whitespace-nowrap col-span-6 md:col-span-1 max-md:hidden"> {statusIcon} {statusText} </div>
-                <div className="md:px-3 md:py-1.5 max-md:absolute max-md:bottom-0 max-md:left-0 max-md:right-0 md:rtl:text-left md:ltr:text-right">
+                <div className="px-2 py-1.5 whitespace-nowrap col-span-3 md:col-span-1 text-xs"> {dateDiplayFormat({ date: creationTime, locale: "fa", format: "ddd dd mm" })} </div>
+                <div className="px-2 py-1.5 col-span-3 md:col-span-1 md:text-center rtl:max-md:text-left ltr:max-md:text-right whitespace-nowrap">  {numberWithCommas(salePrice || 0)}  <span className='md:hidden'> ریال </span></div>
+                <div className="px-2 py-1.5 whitespace-nowrap col-span-6 md:col-span-1 max-md:hidden"> {statusIcon} {statusText} </div>
+                <div className="md:px-2 md:py-1.5 max-md:absolute max-md:bottom-0 max-md:left-0 max-md:right-0 md:rtl:text-left md:ltr:text-right">
                     <button
                         type="button"
                         className="max-md:bg-blue-700 max-md:w-full max-md:h-8 max-md:block text-white md:text-blue-700 outline-none"
                         onClick={() => { setOpenDetail(prevstate => !prevstate) }}
                     >
-                        {openDetail? "بستن" : "جزییات"} <DownCaret className={`w-4 h-4 inline-block align-middle fill-current transition-all ${openDetail ? "rotate-180" : ""}`} />
+                        {openDetail ? "بستن" : "جزییات"} <DownCaret className={`w-4 h-4 inline-block align-middle fill-current transition-all ${openDetail ? "rotate-180" : ""}`} />
                     </button>
                 </div>
             </div>
+
             {!!openDetail && <div className='p-3 bg-neutral-100'>
 
                 <div className='hidden md:grid grid-cols-5 gap-3 border-b border-dashed border-neutral-300 pb-3 mb-3'>
                     <div />
-                    <label> {tHotel("hotel-name")} </label>
-                    <label> {t("checkin-date")} </label>
+                    <label> {type === 'HotelDomestic' ? tHotel("hotel-name") : type === 'Cip' ? "نام فرودگاه" : ""} </label>
+                    <label> {type === 'HotelDomestic' ? t("checkin-date") : type === 'Cip' ? "تاریخ پرواز" : ""} </label>
                     <div className='col-span-2' />
                 </div>
 
@@ -192,18 +238,45 @@ const ReserveListItem: React.FC<Props> = props => {
                     </div>
                 ) : (
                     <div className='grid grid-cols-2 md:grid-cols-5 gap-3 items-center'>
-                        <Image
-                            src={domesticHotelDetail?.accommodation?.filePath || '/images/default-hotel.jpg'}
-                            alt={domesticHotelDetail?.accommodation?.displayName}
-                            width={130}
-                            height={80}
-                            className='h-20 object-cover w-full'
-                        />
-                        <span> {domesticHotelDetail?.accommodation?.displayName || " -- "} </span>
-                        <span className='hidden md:block'>
-                            {domesticHotelDetail?.checkin ? dateDiplayFormat({ date: domesticHotelDetail.checkin, locale: "fa", format: "ddd dd mm" }) : " -- "}
-                        </span>
+
+                        {type === 'HotelDomestic' ? (
+                            <>
+                                <Image
+                                    src={reserveDetail?.accommodation?.filePath || '/images/default-hotel.jpg'}
+                                    alt={reserveDetail?.accommodation?.displayName}
+                                    width={130}
+                                    height={80}
+                                    className='h-20 object-cover w-full'
+                                />
+                                <span> {reserveDetail?.accommodation?.displayName || " -- "} </span>
+
+                                <span className='hidden md:block' title={reserveDetail?.checkin}>
+                                    {reserveDetail?.checkin ? dateDiplayFormat({ date: reserveDetail.checkin, locale: "fa", format: "ddd dd mm" }) : " -- "}
+                                </span>
+                            </>
+                        ) : type === "Cip" ? (
+                            <>
+
+                                <Image
+                                    src={reserveDetail?.airport?.picture?.path || '/images/pattern.png'}
+                                    alt={reserveDetail?.airport?.picture?.altAttribute || reserveDetail?.airport?.name}
+                                    width={130}
+                                    height={80}
+                                    className='h-20 object-cover w-full'
+                                />
+
+                                <span className='leading-4'> {reserveDetail?.airport?.name || " -- "} </span>
+
+                                <span className='hidden md:block' title={reserveDetail?.flightTime}>
+                                    {reserveDetail?.flightTime ? dateDiplayFormat({ date: reserveDetail.flightTime, locale: "fa", format: "ddd dd mm" }) : " -- "}
+                                </span>
+                            </>
+                        ) : (
+                            null
+                        )}
+                        
                         {paymentLink || downloadTicket || <div />}
+
                         {linkToDetail || <div />}
                     </div>
                 )}

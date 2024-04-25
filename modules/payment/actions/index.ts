@@ -58,7 +58,7 @@ export const getReserveBankGateway = async (id:string, acceptLanguage: string = 
           headers: {
             ...Header,
             "Accept-Language": acceptLanguage,
-            //TenantId: process.env.ABP_TENANT_ID,
+            TenantId: process.env.PROJECT_SERVER_TENANTID,
           },
         },
       )

@@ -2,7 +2,7 @@ import { i18n } from 'next-i18next';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { appWithTranslation } from 'next-i18next';
-import type { AppProps } from 'next/app';
+import type { AppContext, AppProps } from 'next/app';
 import App from 'next/app';
 import { Provider } from 'react-redux';
 import Head from 'next/head';
@@ -27,7 +27,7 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
   const router = useRouter();
 
   const { locale } = router;
-  const dir = locale === 'fa' ? 'rtl' : 'ltr';
+  const dir = locale === 'en' ? 'ltr' : 'rtl';
 
   useEffect(() => {
     i18n?.changeLanguage(locale);
@@ -66,9 +66,11 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
   let canonicalUrl = "";
   if(typeof router !== 'undefined'){
     if (router.route === '/hotels/[...hotelList]'){
-      canonicalUrl = process.env.SITE_NAME + (i18n?.language ? `/${i18n?.language}` : "") + (router.query.hotelList ? "/hotels/"+router.query.hotelList[0] : "");
+      canonicalUrl = "";
     }else if (router.route === '/hotel/[...hotelDetail]'){
       canonicalUrl = process.env.SITE_NAME + (i18n?.language ? `/${i18n?.language}` : "") + (router.query.hotelDetail ? "/hotel/"+router.query.hotelDetail[0] : "");
+    }else if (router.route === '/flights/[flights]'){
+      canonicalUrl = process.env.SITE_NAME + (i18n?.language ? `/${i18n?.language}` : "") + (router.query.flights ? "/flights/"+router.query.flights : "");
     }else{
 
       let path = router.asPath;
@@ -175,11 +177,12 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
 }
 
 MyApp.getInitialProps = async (
-  context: any
+  context: AppContext
 ): Promise<any> => {
   const ctx = await App.getInitialProps(context);
 
-  const portalData = await getPortal(context?.locale === "en" ? "en-US" : "fa-IR")
+  //const portalData = await getPortal(context?.router?.locale === "ar" ? "ar-AE" : context?.router?.locale=== "en" ? "en-US" : "fa-IR");
+  const portalData = await getPortal("fa-IR");
 
   return { ...ctx, portalData: portalData?.data || null };
 };

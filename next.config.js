@@ -1,11 +1,28 @@
 /** @type {import('next').NextConfig} */
 const { i18n } = require('./next-i18next.config');
 
-const withPWA = require('next-pwa')({
-  dest: 'public'
-})
-
 const nextConfig = {
+  async redirects() {
+    return [
+      {
+        source: '/hotel/undefined/hotel/:slug',
+        destination: '/hotel/:slug',
+        permanent: true,
+      },
+      {
+        source: '/en/blog/:slug',
+        destination: '/fa/blog/:slug',
+        locale: false,
+        permanent: true,
+      },
+      {
+        source: '/blog/:slug',
+        destination: '/fa/blog/:slug',
+        locale: false,
+        permanent: true,
+      },
+    ]
+  },
   images: {
     domains: [
       'cdn.safaraneh.com',
@@ -45,7 +62,7 @@ const nextConfig = {
     PROJECT_SERVER_PAYMENT: "payline.safaraneh.com",
     PROJECT_SERVER_IDENTITY:"identity.safaraneh.com",
     PROJECT_SERVER_CIP:"cip.safaraneh.com",
-    PROJECT_SERVER_FLIGHT: "",
+    PROJECT_SERVER_FLIGHT: "flightdomestic.safaraneh.com",
     PROJECT_SERVER_TENANTID: "1040",
     PROJECT_SERVER_NATIONALITY: "",
     PORT: '',
@@ -56,4 +73,4 @@ const nextConfig = {
   }
 }
 
-module.exports = withPWA(nextConfig);
+module.exports = nextConfig;

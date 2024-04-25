@@ -1,6 +1,6 @@
 import { getDomesticHotelDetailsByUrl } from '@/modules/domesticHotel/actions';
 import type { GetServerSideProps, NextPage } from 'next';
-import { useTranslation } from 'next-i18next';
+import { i18n, useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { PageDataType, PortalDataType } from '@/modules/shared/types/common';
@@ -21,30 +21,44 @@ import Comments from '@/modules/domesticHotel/components/hotelDetails/comments';
 import Rooms from '@/modules/domesticHotel/components/hotelDetails/Rooms';
 import { addSomeDays, dateFormat } from '@/modules/shared/helpers';
 import AnchorTabs from '@/modules/shared/components/ui/AnchorTabs';
+import NotFound from '@/modules/shared/components/ui/NotFound';
 
 type Props = {
   allData: {
-    accommodation: { result: DomesticAccomodationType };
-    score: HotelScoreDataType;
-    page: PageDataType;
-    hotel: DomesticHotelDetailType;
+    accommodation?: { result: DomesticAccomodationType };
+    score?: HotelScoreDataType;
+    page?: PageDataType;
+    hotel?: DomesticHotelDetailType;
   };
   portalData: PortalDataType;
+  error410?: "true";
 }
 
 const HotelDetail: NextPage<Props> = props => {
 
   const { portalData, allData } = props;
 
-  const { accommodation, hotel: hotelData, page: pageData, score: hotelScoreData } = allData;
-
-  const accommodationData = accommodation.result;
-
   const { t } = useTranslation('common');
   const { t: tHotel } = useTranslation('hotel');
 
   const router = useRouter();
-  const searchInfo = router.asPath;
+
+
+  if (props.error410) {
+    return (
+      <NotFound code={410} />
+    )
+  }
+
+  if (!allData) {
+    return null;
+  }
+
+  const { accommodation, hotel: hotelData, page: pageData, score: hotelScoreData } = allData;
+
+  const accommodationData = accommodation?.result;
+
+  const searchInfo = router.asPath?.split("?")[0]?.split("#")[0];
 
   let checkin: string = "";
   let checkout: string = "";
@@ -94,26 +108,39 @@ const HotelDetail: NextPage<Props> = props => {
 
   const configWebsiteUrl = process.env.SITE_NAME || "";
 
+
+  let script_detail_2_Url;
+  if (hotelData.CityName) {
+    if (i18n && i18n.language === "fa") {
+      script_detail_2_Url = `${configWebsiteUrl}/fa/hotels/هتل-های-${hotelData.CityName.replace(/ /g, "-")}`;
+    } else if (i18n && i18n.language === "ar") {
+      script_detail_2_Url = `${configWebsiteUrl}/ar/hotels/فنادق-${hotelData.CityName.replace(/ /g, "-")}`;
+    } else {
+      script_detail_2_Url = `${configWebsiteUrl}/en/hotels/${hotelData.CityName.replace(/ /g, "-")}`;
+    }
+  }
+
+
   return (
     <>
       <Head>
 
         {hotelData && (
-          <>          
-            <title>{hotelData.PageTitle?.replace("{0}",siteName)}</title>
-            
+          <>
+            <title>{hotelData.PageTitle?.replace("{0}", siteName)}</title>
+
             <meta name="description" content={hotelData.MetaDescription?.replaceAll("{0}", siteName)} />
             <meta name="keywords" content={hotelData.MetaKeyword?.replaceAll("{0}", siteName)} />
 
             <meta property="og:site_name" content={siteName} key="site_name" />
             <meta
               property="og:title"
-              content={hotelData.PageTitle?.replace("{0}",siteName)}
+              content={hotelData.PageTitle?.replace("{0}", siteName)}
               key="title"
             ></meta>
             <meta
               property="og:description"
-              content={hotelData.MetaDescription?.replace("{0}",siteName)}
+              content={hotelData.MetaDescription?.replace("{0}", siteName)}
               key="description"
             ></meta>
             <meta property="og:type" content="website"></meta>
@@ -135,7 +162,7 @@ const HotelDetail: NextPage<Props> = props => {
           </>
         )}
 
-        <script
+        {!!hotelScoreData && <script
           id="script_detail_1"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -167,7 +194,7 @@ const HotelDetail: NextPage<Props> = props => {
             }
           }`,
           }}
-        />
+        />}
 
         <script
           id="script_detail_2"
@@ -192,8 +219,7 @@ const HotelDetail: NextPage<Props> = props => {
               "position": 2,
               "item":
               {
-                "@id": "${configWebsiteUrl}/fa/hotels/${hotelData && hotelData.CityName
-              }/location-${hotelData && hotelData.CityId}",
+                "@id": "${script_detail_2_Url}/location-${hotelData && hotelData.CityId}",
                 "name": "هتل های ${hotelData && hotelData.CityName}"
               }
               }
@@ -278,13 +304,13 @@ const HotelDetail: NextPage<Props> = props => {
 
       {!!hotelData.Facilities?.length && <HotelFacilities facilities={hotelData.Facilities} />}
 
-      {!!(hotelData.Policies?.length || accommodationData.instruction?.length || accommodationData.mendatoryFee?.length) && <HotelTerms
-        instruction={accommodationData.instruction}
-        mendatoryFee={accommodationData.mendatoryFee}
+      {!!(hotelData.Policies?.length || accommodationData?.instruction?.length || accommodationData?.mendatoryFee?.length) && <HotelTerms
+        instruction={accommodationData?.instruction}
+        mendatoryFee={accommodationData?.mendatoryFee}
         policies={hotelData.Policies}
       />}
 
-      {!!siteName && <HotelAbout siteName={siteName} siteUrl={siteURL} description={accommodationData.description} />}
+      {!!siteName && <HotelAbout siteName={siteName} siteUrl={siteURL} description={accommodationData?.description} />}
 
       {!!hotelData.DistancePoints?.length && (
         <div id="attractions_section" className="max-w-container mx-auto px-3 sm:px-5 pt-7 md:pt-10">
@@ -295,11 +321,11 @@ const HotelDetail: NextPage<Props> = props => {
         </div>
       )}
 
-      {pageData.Id && <Comments hotelScoreData={hotelScoreData} pageId={pageData.Id} />}
+      {!!pageData?.Id && <Comments hotelScoreData={hotelScoreData} pageId={pageData.Id} />}
 
       {!!hotelData.Similars && <SimilarHotels similarHotels={hotelData.Similars} />}
 
-      {!!accommodationData.faqs?.length && <FAQ faqs={accommodationData.faqs} />}
+      {!!accommodationData?.faqs?.length && <FAQ faqs={accommodationData.faqs} />}
 
     </>
   )
@@ -309,15 +335,156 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const { locale, query } = context;
 
-  const url = encodeURI(`/${locale}/hotel/${query.hotelDetail![0]}`);
+  const url = encodeURI(`/hotel/${query.hotelDetail![0]}`);
 
-  const allData: any = await getDomesticHotelDetailsByUrl(url, locale === "en" ? "en-US" : "fa-IR");
+  const allData: any = await getDomesticHotelDetailsByUrl("/" + locale + url, locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR");
+
+
+  if (!allData?.data?.result?.hotel) {
+
+
+    if (locale === "fa") {
+
+      const allData_Ar: any = await getDomesticHotelDetailsByUrl("/ar" + url, "ar-AE");
+
+      if (allData_Ar?.data?.result?.hotel) {
+
+        return ({
+          redirect: {
+            destination: "/ar" + url,
+            locale: false,
+            permanent: true
+          },
+          props: {},
+        });
+
+      } else {
+
+        const allData_En: any = await getDomesticHotelDetailsByUrl("/en" + url, "en-US");
+
+        if (allData_En?.data?.result?.hotel) {
+
+          return ({
+            redirect: {
+              destination: "/en" + url,
+              locale: false,
+              permanent: true
+            },
+            props: {},
+          });
+
+        } else {
+
+          context.res.statusCode = 410;
+
+          return ({
+            props: {
+              ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
+              error410: "true"
+            },
+          });
+
+        }
+      }
+    }
+
+
+    if (locale === "en") {
+
+      const allData_Fa: any = await getDomesticHotelDetailsByUrl("/fa" + url, "fa-IR");
+
+      if (allData_Fa?.data?.result?.hotel) {
+
+        return ({
+          redirect: {
+            destination: "/fa" + url,
+            locale: false,
+            permanent: true
+          },
+          props: {},
+        });
+
+      } else {
+
+        const allData_Ar: any = await getDomesticHotelDetailsByUrl("/ar" + url, "ar-AE");
+
+        if (allData_Ar?.data?.result?.hotel) {
+
+          return ({
+            redirect: {
+              destination: "/ar" + url,
+              locale: false,
+              permanent: true
+            },
+            props: {},
+          });
+
+        } else {
+
+          context.res.statusCode = 410;
+          return ({
+            props: {
+              ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
+              error410: "true"
+            },
+          });
+
+        }
+      }
+    }
+
+
+    if (locale === "ar") {
+
+      const allData_Fa: any = await getDomesticHotelDetailsByUrl("/fa" + url, "fa-IR");
+
+      if (allData_Fa?.data?.result?.hotel) {
+
+        return ({
+          redirect: {
+            destination: "/fa" + url,
+            locale: false,
+            permanent: true
+          },
+          props: {},
+        });
+
+      } else {
+
+        const allData_En: any = await getDomesticHotelDetailsByUrl("/en" + url, "en_US");
+
+        if (allData_En?.data?.result?.hotel) {
+
+          return ({
+            redirect: {
+              destination: "/en" + url,
+              locale: false,
+              permanent: true
+            },
+            props: {},
+          });
+
+        } else {
+
+          context.res.statusCode = 410;
+
+          return ({
+            props: {
+              ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
+              error410: "true"
+            },
+          });
+
+        }
+      }
+    }
+
+  }
 
   return ({
     props: {
       ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
       allData: allData.data?.result || null
-
     },
   })
 }
