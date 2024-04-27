@@ -285,7 +285,6 @@ const HotelList: NextPage<Props> = props => {
 
     fetchPrices();
 
-
     const fetchEntityDetail = async (id: number) => {
       const entityResponse: any = await getEntityNameByLocation(id, acceptLanguage);
 

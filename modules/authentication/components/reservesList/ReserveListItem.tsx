@@ -192,6 +192,7 @@ const ReserveListItem: React.FC<Props> = props => {
         />
     };
 
+
     if(type === 'Cip' && (status === "Issued" || status === "ContactProvider") && reserveDetail && username){
         downloadTicket = <CipDownloadPdfVoucher
             reserveId={id.toString()}
@@ -202,6 +203,14 @@ const ReserveListItem: React.FC<Props> = props => {
 
     if(type === 'FlightDomestic' && status === "Issued" && reserveDetail && username){
         downloadTicket = <FlightDownloadPdfVoucher
+            reserveId={id.toString()}
+            username={username}
+            className="flex items-center justify-center gap-1 rounded border border-primary-700 hover:bg-primary-700 text-neutral-600 hover:text-white px-1 transition-all h-8 disabled:bg-neutral-500 disabled:cursor-not-allowed disabled:text-white"
+        />
+    }
+
+    if (type === 'Cip' && (status === "Issued" || status === "ContactProvider") && reserveDetail && username) {
+        downloadTicket = <CipDownloadPdfVoucher
             reserveId={id.toString()}
             username={username}
             className="flex items-center justify-center gap-1 rounded border border-primary-700 hover:bg-primary-700 text-neutral-600 hover:text-white px-1 transition-all h-8 disabled:bg-neutral-500 disabled:cursor-not-allowed disabled:text-white"
