@@ -2,7 +2,7 @@ import { i18n } from 'next-i18next';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { appWithTranslation } from 'next-i18next';
-import type { AppProps } from 'next/app';
+import type { AppContext, AppProps } from 'next/app';
 import App from 'next/app';
 import { Provider } from 'react-redux';
 import Head from 'next/head';
@@ -184,11 +184,12 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
 }
 
 MyApp.getInitialProps = async (
-  context: any
+  context: AppContext
 ): Promise<any> => {
   const ctx = await App.getInitialProps(context);
 
-  const portalData = await getPortal(context?.locale === "en" ? "en-US" : "fa-IR")
+  //const portalData = await getPortal(context?.router?.locale === "ar" ? "ar-AE" : context?.router?.locale=== "en" ? "en-US" : "fa-IR");
+  const portalData = await getPortal("fa-IR");
 
   return { ...ctx, portalData: portalData?.data || null };
 };

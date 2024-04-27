@@ -58,8 +58,10 @@ export const Flight = {
   GetAllCountries:"/api/services/app/Country/GetAll",
   PreReserve:"/api/services/app/BookingFlight/PreReserve",
   ValidateFlight:"/api/services/app/BookingFlight/Validate",
-  FlightGetReserveById:"/api/services/app/Reserve/Get",
-  searchFlights: 'flightdomestic.safaraneh.com/api/services/app/Airport/Search'
+  GetReserveById:"/api/services/app/Reserve/Get",
+  searchFlights: 'flightdomestic.safaraneh.com/api/services/app/Airport/Search',
+  Confirm:"/api/services/app/BookingFlight/Confirm",
+  GetVoucherPdf:"/api/services/app/Reserve/GetVoucherPdf"
 };
 
   export const Blog = {

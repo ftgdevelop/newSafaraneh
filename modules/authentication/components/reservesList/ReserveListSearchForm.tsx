@@ -69,6 +69,7 @@ const ReserveListSearchForm: React.FC<Props> = props => {
                                 <option value="">همه</option>
                                 <option value="HotelDomestic"> هتل داخلی </option>
                                 <option value="Cip"> تشریفات فرودگاهی </option>
+                                <option value="FlightDomestic"> پرواز داخلی </option>
                             </Field>
                         </div>
 
