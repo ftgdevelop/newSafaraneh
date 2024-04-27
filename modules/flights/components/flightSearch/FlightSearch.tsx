@@ -20,7 +20,7 @@ export type SearchDataType = {
         BackForth: boolean
 }
 
-const FlightSearch: React.FC<any> = ({ className }: { className: string }) => {
+const FlightSearch: React.FC<any> = ({ className, airports }: { className: string, airports: any }) => {
     const query = useRouter().query
     const [SearchData, setSearchData] = useState<SearchDataType>({
         destination: (query.flights as string).split('-')[0] || null,
@@ -43,7 +43,7 @@ const FlightSearch: React.FC<any> = ({ className }: { className: string }) => {
                 </div>
             </div>
             <div className="grid grid-cols-3 max-lg:block max-lg:space-y-3 gap-2 mt-4 relative z-10">
-                <FlightSearchDirection className={'col-span-2'} SearchData={SearchData} setSearchData={(e: SearchDataType) => setSearchData(e)}/>
+                <FlightSearchDirection className={'col-span-2'} airports={airports} SearchData={SearchData} setSearchData={(e: SearchDataType) => setSearchData(e)}/>
                 <FlightSearchDate SearchData={SearchData} setSearchData={(e: SearchDataType) => setSearchData(e)} />
             </div>
             <FlightSearchButton SearchData={SearchData}/>

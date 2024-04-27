@@ -220,6 +220,12 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
         }
     }, [val, items.length]);
 
+    useEffect(()=>{
+        if (!props.value){
+            inputRef.current!.value = "";
+        }
+    },[props.value])
+
     if (loading) {
         loadingElement = [1, 2, 3, 4].map(item => <div key={item} className="py-2 px-4 border-b border-gray-200 first:rounded-t last:rounded-b last:border-none cursor-pointer text-cyan-500 hover:bg-gray-100">
             <Skeleton className='my-2' />
