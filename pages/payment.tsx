@@ -172,7 +172,7 @@ const Payment: NextPage = () => {
     const response = await makeToken(params);
     if (response.status == 200) {
       window.location.replace(
-        `https://payline.safaraneh.com/fa/Reserves/Payment/PaymentRequest?tokenId=${response.data.result.tokenId}`
+        `https://payline.samita.com/fa/Reserves/Payment/PaymentRequest?tokenId=${response.data.result.tokenId}`
       );
     } else {
       dispatch(setReduxError({
