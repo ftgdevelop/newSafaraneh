@@ -79,7 +79,14 @@ const Flights: NextPage<any> = ({ airports, routeCodes , portalData }: { airport
 
         const fetchKey = async (codes: string) => {
 
-            const today = dateFormat(new Date());
+            let departureDate  = dateFormat(new Date());
+            let returnDate : string = "";  
+            if(query.departing){
+                departureDate = dateFormat(new Date(query.departing as string));
+            }
+            if(query.returning){
+                returnDate = dateFormat(new Date(query.returning as string));
+            }
 
             const parameters : {
                 adult:number;
@@ -95,11 +102,11 @@ const Flights: NextPage<any> = ({ airports, routeCodes , portalData }: { airport
                 infant: query.infant ? +query.infant : 0,
                 departureCode: codes.split("-")[0],
                 returnCode: codes.split("-")[1],
-                departureTime: (query.departing as string) || today
+                departureTime: departureDate
             };
 
-            if (query.returning){
-                parameters.retrunTime = query.returning  as string
+            if (returnDate){
+                parameters.retrunTime = returnDate;
             }
             const token = localStorage.getItem('Token') || "";
             const response: any = await GetAvailabilityKey(parameters, token , acceptLanguage);
@@ -173,7 +180,6 @@ const Flights: NextPage<any> = ({ airports, routeCodes , portalData }: { airport
     let origin:string ="";
     let destination:string = "";
     if(airports && routeCodes){
-        debugger;
         const originCode = routeCodes.split("-")[0];
         const destinationCode = routeCodes.split("-")[1];
         origin = airports.find(item => item.code === originCode)?.city.name || "";

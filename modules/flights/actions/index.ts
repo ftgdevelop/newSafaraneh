@@ -204,7 +204,7 @@ export const validateFlight = async (params: {
 
         let response = await axios.post(
             `${ServerAddress.Type}${ServerAddress.Flight}${Flight.ValidateFlight}`,
-            params,
+            {departureKey: params.departureKey,returnKey: params.returnKey},
             {headers:Headers}
         )
         return response
@@ -238,7 +238,7 @@ export const flightGetReserveById = async (params:{userName:string, reserveId: s
         }
 
         let response = await axios.get(
-            `${ServerAddress.Type}${ServerAddress.Flight}${Flight.FlightGetReserveById}?reserveId=${params.reserveId}&username=${params.userName}`,
+            `${ServerAddress.Type}${ServerAddress.Flight}${Flight.GetReserveById}?reserveId=${params.reserveId}&username=${params.userName}`,
             {headers:Headers}
         )
         return response
@@ -248,40 +248,65 @@ export const flightGetReserveById = async (params:{userName:string, reserveId: s
 }
 
 
+export const confirmFlight = async (params:{userName:string, reserveId: string, token:string}, acceptLanguage: string = 'fa-IR') => {
+    try {
 
+        let Headers;
+        if (params.token){
+            Headers = {
+                'Content-Type': 'application/json',
+                apikey: process.env.PROJECT_SERVER_APIKEY,
+                'Accept-Language': acceptLanguage,
+                Tenantid: process.env.PROJECT_SERVER_TENANTID,
+                Authorization: `Bearer ${params.token}`
+            }
+        }else{
+            Headers = {
+                'Content-Type': 'application/json',
+                apikey: process.env.PROJECT_SERVER_APIKEY,
+                'Accept-Language': acceptLanguage,
+                Tenantid: process.env.PROJECT_SERVER_TENANTID
+            } 
+        }
 
-// export const GetFlights = async (key: string) => {
-//     try {
-//         const response = await axios.get(`${ServerAddress.Type}${Flight.getFlights}${key}`,
-//             {
-//                 headers: {
-//                     "Content-Type": "appliction/json",
-//                     "TenantId": "1040",
-//                     "Accept-Language": "fa-IR"
-//                 }
-//             }
-//         )
-//         return response
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
+        let response = await axios.post(
+            `${ServerAddress.Type}${ServerAddress.Flight}${Flight.Confirm}`,
+            {userName:params.userName, reserveId: params.reserveId},
+            {headers:Headers}
+        )
+        return response
+    } catch (error) {
+        return error
+    }
+}
 
-// export const GetAvailability = async (FlightData:
-//     { departureCode: string, returnCode: string, departureTime: string, adult: number, child: number, infant: number }) => {
-//     try {
-//         const response = axios.post(`${ServerAddress.Type}${Flight.getAvailability}`,
-//             FlightData,
-//             {
-//                 headers: {
-//                     "Content-Type": "application/json",
-//                     "TenantId": "1040",
-//                     "Accept-Language": "fa-IR",
-//                 }
-//             }
-//             )
-//             return response
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
+export const flightGetVoucherPdf = async (params:{userName:string, reserveId: string, token:string},acceptLanguage: string = 'fa-IR') => {
+    try {   
+        
+        let Headers;
+        if (params.token){
+            Headers = {
+                'Content-Type': 'application/json',
+                apikey: process.env.PROJECT_SERVER_APIKEY,
+                'Accept-Language': acceptLanguage,
+                Tenantid: process.env.PROJECT_SERVER_TENANTID,
+                Authorization: `Bearer ${params.token}`
+            }
+        }else{
+            Headers = {
+                'Content-Type': 'application/json',
+                apikey: process.env.PROJECT_SERVER_APIKEY,
+                'Accept-Language': acceptLanguage,
+                Tenantid: process.env.PROJECT_SERVER_TENANTID
+            } 
+        }
+
+        let response = await axios.get(
+            `${ServerAddress.Type}${ServerAddress.Flight}${Flight.GetVoucherPdf}?ReserveId=${params.reserveId}&Username=${params.userName}`,
+            {headers:Headers}
+        )
+        return response
+    } catch (error) {
+        return error
+    }
+}

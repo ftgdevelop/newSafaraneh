@@ -8,3 +8,20 @@ export interface UpdateUserParams {
     nationalityId?: string;
     isNewsLetter?: boolean;
 }
+
+export interface UserInformation {
+    firstName?: string;
+    lastName?: string;
+    userName?: string;
+    id: number;
+    emailAddress?: string;
+    phoneNumber?: string;
+    isPhoneNumberConfirmed: boolean;
+    isEmailConfirmed: boolean;
+    isActive: boolean;
+    gender: boolean;
+    birthDay?: string;
+    isNewsletter: boolean;
+    nationalityId?: string;
+    nationalId?: string;
+}

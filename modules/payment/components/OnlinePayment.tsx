@@ -183,7 +183,7 @@ const OnlinePayment: React.FC<Props> = props => {
                                     src={bank.image.path}
                                     alt={bank.image.altAttribute}
                                 />
-                                {bank.name}
+                                {bank.displayName || bank.name}
                             </button>
                         ))}
 

@@ -22,6 +22,7 @@ type Props = {
     loading: boolean;
     departureFlight?: FlightGetValidateDataType['departureFlight'];
     returnFlight?: FlightGetValidateDataType['returnFlight'];
+    onWhiteBackground?: boolean;
 }
 const Aside: React.FC<Props> = props => {
 
@@ -252,7 +253,11 @@ const Aside: React.FC<Props> = props => {
                         </>
                     )}
 
-                    <div dir="ltr" className="border-t border-dashed border-neutral-300 relative before:clip-ticket-circle-right after:clip-ticket-circle-left" />
+                    {props.onWhiteBackground ? (
+                        <hr className="mt-6 mb-3 mx-4" />
+                    ) : (
+                        <div dir="ltr" className="border-t border-dashed border-neutral-300 relative before:clip-ticket-circle-right after:clip-ticket-circle-left" />
+                    )}
 
                     <div className="p-3 px-4">
                         <h5 className="font-semibold text-sm mb-3">
