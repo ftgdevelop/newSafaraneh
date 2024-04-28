@@ -18,6 +18,10 @@ import ProgressBarWithLabel from "@/modules/shared/components/ui/ProgressBarWith
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { PortalDataType } from "@/modules/shared/types/common";
+import FlightNoItemFilter from "@/modules/flights/components/FlightNoItemFilter";
+import Pagination from "@/modules/shared/components/ui/Pagination";
+import FlightMainFilters from "@/modules/flights/components/FlightMainFilter";
+import FlightNoItemDate from "@/modules/flights/components/FlightNoItemDate";
 
 type Airport = {
     name?: string;
@@ -212,7 +216,7 @@ const Flights: NextPage<any> = ({ airports, routeCodes , portalData }: { airport
                 <FlightMainFilters />
                 {
                     flightsInFilter?.length ?
-                    <FlightSortFlight sortFlights={sortFlights} changeSortFlights={(e: string) => setSortFlights(e)} />: null
+                    <FlightSortFlights sortFlights={sortFlights} changeSortFlights={(e: string) => setSortFlights(e)} />: null
                 }
 
                 {!!query.returning && <p className="text-sm mt-5" > ابتدا از لیست زیر، بلیط رفت خود را انتخاب نمایید</p>}
