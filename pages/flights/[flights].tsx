@@ -16,13 +16,26 @@ import { dateFormat } from "@/modules/shared/helpers";
 import { useRouter } from "next/router";
 import ProgressBarWithLabel from "@/modules/shared/components/ui/ProgressBarWithLabel";
 import { useTranslation } from "next-i18next";
-import Pagination from "@/modules/shared/components/ui/Pagination";
-import FlightNoItemDate from "@/modules/flights/components/FlightNoItemDate";
-import FlightSortFlight from "@/modules/flights/components/FlightSortFlights";
-import FlightMainFilters from "@/modules/flights/components/FlightMainFilter";
-import FlightNoItemFilter from "@/modules/flights/components/FlightNoItemFilter";
+import Head from "next/head";
+import { PortalDataType } from "@/modules/shared/types/common";
 
-const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], routeCodes: string }) => {
+type Airport = {
+    name?: string;
+    city: {
+        name: string;
+        code: string;
+    };
+    country: {
+        name: string;
+        code: string;
+    };
+    code?: string;
+    latitude?: string;
+    longitude?: string;
+    airportType: "Main" | "Subsidiary" | "City";
+}
+
+const Flights: NextPage<any> = ({ airports, routeCodes , portalData }: { airports: Airport[], routeCodes: string , portalData?:PortalDataType }) => {
     
     const {t:tFlight} = useTranslation("flight");
 
@@ -70,7 +83,14 @@ const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], rou
 
         const fetchKey = async (codes: string) => {
 
-            const today = dateFormat(new Date());
+            let departureDate  = dateFormat(new Date());
+            let returnDate : string = "";  
+            if(query.departing){
+                departureDate = dateFormat(new Date(query.departing as string));
+            }
+            if(query.returning){
+                returnDate = dateFormat(new Date(query.returning as string));
+            }
 
             const parameters : {
                 adult:number;
@@ -86,11 +106,11 @@ const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], rou
                 infant: query.infant ? +query.infant : 0,
                 departureCode: codes.split("-")[0],
                 returnCode: codes.split("-")[1],
-                departureTime: (query.departing as string) || today
+                departureTime: departureDate
             };
 
-            if (query.returning){
-                parameters.retrunTime = query.returning  as string
+            if (returnDate){
+                parameters.retrunTime = returnDate;
             }
             const token = localStorage.getItem('Token') || "";
             const response: any = await GetAvailabilityKey(parameters, token , acceptLanguage);
@@ -162,7 +182,28 @@ const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], rou
 
     }, [key]);
 
+    let origin:string ="";
+    let destination:string = "";
+    if(airports && routeCodes){
+        const originCode = routeCodes.split("-")[0];
+        const destinationCode = routeCodes.split("-")[1];
+        origin = airports.find(item => item.code === originCode)?.city.name || "";
+        destination = airports.find(item => item.code === destinationCode)?.city.name || "";
+    }
+
+    const siteName = portalData?.Phrases?.find(item => item.Keyword === "Name")?.Value || "";
+
     return (
+    <>
+        <Head>            
+            {!!(destination && origin) && (
+            <>
+                <title>{tFlight("flight-list-title",{ origin:origin, destination: destination, siteName:siteName})}</title>
+                <meta name="description" content={tFlight("flight-list-description",{origin:origin, destination: destination, siteName:siteName })} />
+            </>
+            )}
+        </Head>
+
         <div className="max-w-container m-auto p-5 max-md:p-3 flex gap-5 relative">
             <FlightSidebarFilters FlightsData={departureList} flightsInFilterLengths={flightsInFilter?.length} />
             <div className="w-3/4 max-lg:w-full">
@@ -225,6 +266,7 @@ const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], rou
                 <FlightsSearchChange airports={airports} />
             </div>
         </div>
+    </>
     )
 }
 

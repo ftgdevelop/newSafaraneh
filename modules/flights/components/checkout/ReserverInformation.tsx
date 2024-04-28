@@ -126,7 +126,7 @@ const ReserverInformation: React.FC<Props> = props => {
                     isTouched={touched.reserver?.phoneNumber}
                     label={t("phone-number") + " (بدون صفر)"}
                     errorText={errors.reserver?.phoneNumber}
-                //initialValue='+989374755674'
+                initialValue={values.reserver.phoneNumber || ""}
                 />
 
                 <FormikField

@@ -15,13 +15,14 @@ import ReserverInformation from '@/modules/domesticHotel/components/checkout/Res
 import RoomItemInformation from '@/modules/domesticHotel/components/checkout/RoomItemInformation';
 import DiscountForm from '@/modules/domesticHotel/components/checkout/DiscountForm';
 import { registerDiscountCode, validateDiscountCode } from '@/modules/payment/actions';
-import { useAppDispatch } from '@/modules/shared/hooks/use-store';
+import { useAppDispatch, useAppSelector } from '@/modules/shared/hooks/use-store';
 import { setReduxError } from '@/modules/shared/store/errorSlice';
 import { dateFormat } from '@/modules/shared/helpers';
 import Steps from '@/modules/shared/components/ui/Steps';
 import Link from 'next/link';
 import Skeleton from '@/modules/shared/components/ui/Skeleton';
 import { LeftCaret } from '@/modules/shared/components/ui/icons';
+import { UserInformation } from '@/modules/authentication/types/authentication';
 
 const Checkout: NextPage = () => {
 
@@ -34,6 +35,8 @@ const Checkout: NextPage = () => {
   const pathSegments = router.asPath.split("?")[0].split("#")[0].split("/");
   const keySegment = pathSegments.find(item => item.includes('key='));
   const key = keySegment?.split("key=")[1];
+
+  const user : UserInformation = useAppSelector(state => state.authentication.isAuthenticated ? state.authentication.user : undefined);
 
   const [reserveInfo, setReserveInfo] = useState<DomesticHotelGetValidateResponse>();
   const [hotelInfo, setHotelInfo] = useState<DomesticHotelSummaryDetail>();
@@ -192,12 +195,12 @@ const Checkout: NextPage = () => {
 
   const initialValues = {
     reserver: {
-      gender: true,
-      firstName: "",
-      lastName: "",
-      email: "",
-      nationalId: "",
-      phoneNumber: ""
+      gender: user?.gender || true,
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      email: user?.emailAddress || "",
+      nationalId: user?.nationalId || "",
+      phoneNumber: user?.phoneNumber || ""     
     },
     passengers: reserveInfo?.rooms.map((_, index) => ({
       gender: true,

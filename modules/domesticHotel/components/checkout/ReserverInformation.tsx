@@ -68,7 +68,7 @@ const ReserverInformation: React.FC<Props> = props => {
                 {t('reserver-information')}
             </h4>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-2">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-2 gap-y-5">
                 <div role="group" className="md:col-span-2 lg:col-span-1 leading-4" >
                     <label className='block text-xs mb-1' > جنسیت </label>
                     <label className='inline-flex items-center gap-1 rtl:ml-4 ltr:mr-4'>
@@ -151,7 +151,7 @@ const ReserverInformation: React.FC<Props> = props => {
                     isTouched={touched.reserver?.phoneNumber}
                     label={t("phone-number") + " (بدون صفر)"}
                     errorText={errors.reserver?.phoneNumber}
-                //initialValue='+989374755674'
+                    initialValue={values.reserver.phoneNumber || ""}
                 />
 
                 <FormikField

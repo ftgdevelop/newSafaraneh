@@ -244,3 +244,11 @@ export interface DomesticFlightGetReserveByIdType {
       }[];
     id: number;
   }
+
+export type FlightConfirmStatus = "Undefined" | "Registered" | "Pending" | "Issued" | "Canceled" | "WebServiceCancel" | "PaymentSuccessful" | "WebServiceUnsuccessful" | "PriceChange" | "Unavailable" | "Refunded" | "Voided" | "InProgress" | "PaidBack" | "RefundInProgress" | "Changed" | "OnCredit" | "ContactProvider" | "UnConfirmed";;
+export interface DomesticFlightConfirmType {
+  isCompleted: boolean;
+  reserve: {
+    status: FlightConfirmStatus;
+  };
+}

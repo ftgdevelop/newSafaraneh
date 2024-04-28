@@ -1,7 +1,7 @@
 import Pagination from "@/modules/shared/components/ui/Pagination";
 import { PricedHotelItem } from "../../types/hotel";
 import HotelListItem from "./HotelListItem";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
     hotels: PricedHotelItem[];
@@ -16,7 +16,9 @@ const HotelsList: React.FC<Props> = props => {
     const firstItemIndex = (currentPage - 1) * 10;
     const lastItem = currentPage * 10;
 
-
+    useEffect(()=>{
+        setCurrentPage(1);
+    },[hotels.length]);
 
     hotels?.sort((b: PricedHotelItem, a: PricedHotelItem) => {
 
