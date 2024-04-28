@@ -5,7 +5,7 @@ import { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useEffect, useState } from "react";
 import FlightSearchData from "@/modules/flights/components/FlightSearchData";
-import FlightMainFilters from "@/modules/flights/components/FlightsMainFilters";
+import FlightSortFlights from "@/modules/flights/components/FlightSortFlights";
 import FlightsFlightItem from "@/modules/flights/components/flightItem/FlightFlightItem";
 import { useSelector } from "react-redux";
 import { RootState } from "@/modules/shared/store";
@@ -17,8 +17,10 @@ import { useRouter } from "next/router";
 import ProgressBarWithLabel from "@/modules/shared/components/ui/ProgressBarWithLabel";
 import { useTranslation } from "next-i18next";
 import Pagination from "@/modules/shared/components/ui/Pagination";
-import Skeleton from "@/modules/shared/components/ui/Skeleton";
-import FlightNoItem from "@/modules/flights/components/FlightNoFlightItem";
+import FlightNoItemDate from "@/modules/flights/components/FlightNoItemDate";
+import FlightSortFlight from "@/modules/flights/components/FlightSortFlights";
+import FlightMainFilters from "@/modules/flights/components/FlightMainFilter";
+import FlightNoItemFilter from "@/modules/flights/components/FlightNoItemFilter";
 
 const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], routeCodes: string }) => {
     
@@ -30,6 +32,8 @@ const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], rou
     let [fetchDataCompelete, setFetchDataCompelte] = useState(false)
 
     const [page, setPage] = useState(1)
+    const firstItemIndex = (page - 1) * 10;
+    const lastItem = page * 10;
     const [key, setKey] = useState<string>("");
 
     const [departureList, setDepartureList] = useState<any>([]);
@@ -158,34 +162,37 @@ const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], rou
 
     }, [key]);
 
-    useEffect(() => {
-    console.log(departureList);
-    
-},[departureList])
-
     return (
         <div className="max-w-container m-auto p-5 max-md:p-3 flex gap-5 relative">
             <FlightSidebarFilters FlightsData={departureList} flightsInFilterLengths={flightsInFilter?.length} />
             <div className="w-3/4 max-lg:w-full">
                 
                 <FlightSearchData FlightsData={departureList} airports={airports} />
-
-                {!(loadingPercentage === 100) && <ProgressBarWithLabel 
-                    percentage={loadingPercentage}
-                    label={tFlight('getting-best-suggestion')}
-                />}
-
-                <FlightMainFilters sortFlights={sortFlights} changeSortFlights={(e: string) => setSortFlights(e)} />
+                <FlightMainFilters />
+                {
+                    flightsInFilter?.length ?
+                    <FlightSortFlight sortFlights={sortFlights} changeSortFlights={(e: string) => setSortFlights(e)} />: null
+                }
 
                 {!!query.returning && <p className="text-sm mt-5" > ابتدا از لیست زیر، بلیط رفت خود را انتخاب نمایید</p>}
 
-                {departureList.length ? <Pagination
-                    totalItems={flightsInFilter?.length || 0}
-                    itemsPerPage={10}
-                    onChange={setPage}
-                    currentPage={page}
-                    wrapperClassName="mt-5"
-                />: null}
+                {
+                    departureList.length ? <Pagination
+                        totalItems={flightsInFilter?.length || 0}
+                        itemsPerPage={10}
+                        onChange={setPage}
+                        currentPage={page}
+                        wrapperClassName="mt-5"
+                    /> : null
+                }
+                
+                {
+                    !(loadingPercentage === 100) && <ProgressBarWithLabel 
+                    percentage={loadingPercentage}
+                        label={tFlight('getting-best-suggestion')}
+                        className="mt-5"
+                    />
+                }
                 {
                     flightsInFilter?.sort((a, b) => SortCapacity(a, b))
                         .sort((a: FlightType, b: FlightType): any => {
@@ -194,7 +201,7 @@ const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], rou
                             else {
                                 return a.capacity && a.adultPrice - b.adultPrice
                             }
-                        }).slice(page*10-10, page*10).map((flight: FlightType) =>
+                        }).slice(firstItemIndex, lastItem).map((flight: FlightType) =>
                             <FlightsFlightItem passengers={passengers} flightData={flight} key={flight.flightKey} />
                         )
                 }
@@ -209,7 +216,11 @@ const Flights: NextPage<any> = ({ airports, routeCodes }: { airports: any[], rou
                 }
                 {
                     fetchDataCompelete && !departureList.length && 
-                    <FlightNoItem />
+                    <FlightNoItemDate />
+                }
+                {
+                     !flightsInFilter?.length && departureList.length && loadingPercentage == 100 ?
+                    <FlightNoItemFilter />:null
                 }
                 <FlightsSearchChange airports={airports} />
             </div>
