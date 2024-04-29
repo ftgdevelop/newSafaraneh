@@ -16,7 +16,7 @@
     "Registered": "Registered",
     "Unavailable": "Unavailable",
     "Undefined": "Undefined",
-    "Voided": "Voided",
+    "Voided": "Unavailable",
     "WebServiceCancel": "WebServiceCancel",
     "WebServiceUnsuccessful": "Error in ticket issuance",
     "accept-privacy": "By completing this reservation, you agree to the terms and conditions as well as the terms of privacy.",

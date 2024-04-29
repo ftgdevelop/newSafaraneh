@@ -102,6 +102,7 @@ const DomesticHotelReserveDetail: NextPage = ({ portalData }: { portalData?: Por
                 StatusColor = "bg-[#52c41a] text-white";
                 break;
             case "Unavailable":
+            case "Voided":
                 StatusColor = "bg-[#e7412a] text-white";
                 break;
 
@@ -141,6 +142,7 @@ const DomesticHotelReserveDetail: NextPage = ({ portalData }: { portalData?: Por
             || reserveData.status === "Unavailable"
             || reserveData.status === "PaymentSuccessful"
             || reserveData.status === "WebServiceUnsuccessful"
+            || reserveData.status === "Voided"
         ) {
             paymentLink = null;
         }

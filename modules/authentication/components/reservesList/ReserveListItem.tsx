@@ -123,6 +123,7 @@ const ReserveListItem: React.FC<Props> = props => {
             statusText = <span className="inline-block align-middle text-[#52c41a]"> در حال بررسی  </span>;
             break;
         case "Unavailable":
+        case "Voided":
             statusIcon = <ErrorIcon className="w-4.5 h-4.5 fill-red-500 inline-block align-middle" />;
             statusText = <span className="inline-block align-middle text-red-500"> جا نمی دهد  </span>;
             break;
@@ -149,7 +150,7 @@ const ReserveListItem: React.FC<Props> = props => {
     }
 
     let paymentLink = null;
-    if (type === 'HotelDomestic' && !['Canceled', 'Issued', 'Registered', 'Unavailable', 'PaymentSuccessful', 'WebServiceUnsuccessful'].includes(status)) {
+    if (type === 'HotelDomestic' && !['Canceled', 'Issued', 'Registered', 'Unavailable', 'PaymentSuccessful', 'WebServiceUnsuccessful','Voided'].includes(status)) {
         paymentLink = (
             <Link
                 href={`/payment?username=${username}&reserveId=${id}`}
