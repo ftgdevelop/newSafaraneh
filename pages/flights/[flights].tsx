@@ -75,6 +75,10 @@ const Flights: NextPage<any> = ({ airports, routeCodes , portalData }: { airport
         setFlightsInFilter(departureList)
     }, [departureList])
 
+    useEffect(() => {
+        setPage(1)
+    },[SidebarFilter])
+
     const acceptLanguage = locale === "fa" ? "fa-IR" : locale === "ar" ? "ar-AE" : "en-US";
 
     useEffect(() => {
