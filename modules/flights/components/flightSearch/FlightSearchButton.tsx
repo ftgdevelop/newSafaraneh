@@ -1,10 +1,10 @@
-import { RootState } from "@/modules/shared/store";
 import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
 import { SearchDataType } from "./FlightSearch";
 
 const FlightSearchButton: React.FC<any> = ({SearchData}: {SearchData: SearchDataType}) => {
     const router = useRouter()
+    console.log(router);
+    
     const searchButtonHandler = () => {
         const search: any = {}
         search.flights=`${SearchData.origin}-${SearchData.destination}`
@@ -16,7 +16,8 @@ const FlightSearchButton: React.FC<any> = ({SearchData}: {SearchData: SearchData
         if (SearchData?.flightType !== "All") search.flightType = SearchData?.flightType
     
         if (SearchData.origin && SearchData.destination) {
-            router.replace({ query: search })   
+            //bug in here
+            router.replace({query: search})
             .then(() => location.reload())
         } 
     }

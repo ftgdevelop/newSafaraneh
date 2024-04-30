@@ -23,8 +23,8 @@ export type SearchDataType = {
 const FlightSearch: React.FC<any> = ({ className, airports }: { className: string, airports: any }) => {
     const query = useRouter().query
     const [SearchData, setSearchData] = useState<SearchDataType>({
-        destination: (query.flights as string).split('-')[0] || null,
-        origin: (query.flights as string).split('-')[1] || null,
+        destination: (query.flights as string)?.split('-')[0] || null,
+        origin: (query.flights as string)?.split('-')[1] || null,
         adult: query.adult || 1,
         child: query.child || 0,
         infant: query.infant || 0,

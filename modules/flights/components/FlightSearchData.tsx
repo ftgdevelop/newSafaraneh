@@ -15,12 +15,12 @@ const FlightSearchData: React.FC<any> = ({airports}) => {
             onClick={() => dispatch(setSearchChangeOn(true))}>
                 
             <div>
-                <p className="text-sm max-md:text-2xs">{airports.find((i: any) => i.code == query.flights.split('-')[0]).city?.code}</p>
+                <p className="text-sm max-md:text-2xs">{airports?.find((i: any) => i.code == query.flights.split('-')[0]).city?.code}</p>
                 <p className="text-gray-500 text-sm max-lg:text-xs max-md:text-3xs">{airports.find((i: any) => i.code == query.flights.split('-')[0]).city?.name}</p>
             </div>
             <ArrowLeft className="w-5 max-sm:w-4 fill-gray-400 ltr:rotate-180" />
             <div>
-                <p className="text-sm max-md:text-2xs">{airports.find((i: any) => i.code == query.flights.split('-')[1]).city?.code}</p>
+                <p className="text-sm max-md:text-2xs">{airports?.find((i: any) => i.code == query.flights.split('-')[1]).city?.code}</p>
                 <p className="text-gray-500 text-sm max-lg:text-xs max-md:text-3xs">{airports.find((i: any) => i.code == query.flights.split('-')[1])?.city.name}</p>
             </div>
 

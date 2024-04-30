@@ -9,29 +9,30 @@ import { useRouter } from "next/router";
 
 const FlightSearchDirection: React.FC<any> = ({ className, SearchData, setSearchData, airports }: { className: string, SearchData:SearchDataType, setSearchData: any, airports: any }) => {
     const query = useRouter().query
-    const points: AirportSearchResponseItem[] = [
-        {
-            code: (airports[0]?.code as string),
-            name: (airports[0]?.city.name as string),
-            city: {
-                name: (airports[0]?.city.name as string),
-                code: airports[0]?.code
-            },
-            airportType: airports[0]?.airportType
-        },
-        {
-            code: (airports[1].code as string),
-            name: (airports[1].city.name as string),
-            city: {
-                name: (airports[1]?.city.name as string),
-                code: airports[1]?.code
-            },
-            airportType: airports[1].airportType
-        }
-    ]
 
-    const [selectedOrigin, setSelectedOrigin] = useState<AirportSearchResponseItem | undefined>(points.find(i => i.city.code == (query?.flights as string).split('-')[0]));
-    const [selectedDestination, setSelectedDestination] = useState<AirportSearchResponseItem | undefined>(points.find(i => i.city.code == (query?.flights as string).split('-')[1]));
+
+    const [selectedOrigin, setSelectedOrigin] = useState<AirportSearchResponseItem | undefined>(
+    airports?.lenght ?
+        {
+        code: (airports[0].code as string),
+        name: (airports[0]?.city.name as string),
+        city: {
+            name: (airports[0]?.city.name as string),
+            code: airports[0]?.code
+        },
+        airportType: airports[0]?.airportType
+    } : undefined);
+    const [selectedDestination, setSelectedDestination] = useState<AirportSearchResponseItem | undefined>(
+        airports?.length ?
+        {
+        code: (airports[1].code as string),
+        name: (airports[1].city.name as string),
+        city: {
+            name: (airports[1]?.city.name as string),
+            code: airports[1]?.code
+        },
+        airportType: airports[1].airportType
+    } : undefined);
     useEffect(() => {
         setSearchData({...SearchData, origin: selectedOrigin?.code})
     }, [selectedOrigin])
