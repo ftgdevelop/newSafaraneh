@@ -12,7 +12,7 @@ const FlightSearchDirection: React.FC<any> = ({ className, SearchData, setSearch
 
 
     const [selectedOrigin, setSelectedOrigin] = useState<AirportSearchResponseItem | undefined>(
-    airports?.lenght ?
+    airports?.length ?
         {
         code: (airports[0].code as string),
         name: (airports[0]?.city.name as string),
@@ -54,14 +54,14 @@ const FlightSearchDirection: React.FC<any> = ({ className, SearchData, setSearch
                     inputId="origin"
                     //checkTypingLanguage
                     noResultMessage={'نتیجه ای پیدا نشد'}
-                    createTextFromOptionsObject={(item:AirportSearchResponseItem | undefined) => (item?.city?.name || item?.name) + " - " + item?.name}
+                    createTextFromOptionsObject={(item:AirportSearchResponseItem | undefined) => item?.name + " - " + (item?.values?.name || item?.name)}
                     acceptLanguage="fa-IR"
                     renderOption={useCallback((option: AirportSearchResponseItem | undefined, direction: "ltr" | "rtl" | undefined) => (
                         <div className={`px-3 py-2 flex gap-3 hover:bg-neutral-800 hover:text-white items-center relative${!direction ? "" : direction === 'rtl' ? "rtl" : "ltr"}`}>
                             {option?.airportType == 'City' ? <Location className="w-4 fill-current"/>: <Travel className="fill-current w-3"/>}
                             <div className="leading-5">
                                 <p className='text-xs'>{option?.city.name || option?.name}</p>
-                                <p className='text-3xs'>{option?.name}</p>
+                                <p className='text-3xs'>{option?.values?.name}</p>
                             </div>
                             <span className="bg-gray-400 text-white rounded-sm pl-2 pr-2 text-2xs absolute left-4">{option?.code}</span>
                         </div>
@@ -88,14 +88,14 @@ const FlightSearchDirection: React.FC<any> = ({ className, SearchData, setSearch
                     inputId="destination"
                     //checkTypingLanguage
                     noResultMessage={'نتیجه ای پیدا نشد'}
-                    createTextFromOptionsObject={(item:AirportSearchResponseItem | undefined) => (item?.city?.name || item?.name) + " - " + item?.name}
+                    createTextFromOptionsObject={(item:AirportSearchResponseItem | undefined) => item?.name + " - " + (item?.values?.name || item?.name)}
                     acceptLanguage="fa-IR"
                     renderOption={useCallback((option: AirportSearchResponseItem | undefined, direction: "ltr" | "rtl" | undefined) => (
                         <div className={`px-3 py-2 flex gap-3 hover:bg-neutral-800 hover:text-white items-center ${!direction ? "" : direction === 'rtl' ? "rtl" : "ltr"}`}>
                             {option?.airportType == 'City' ? <Location className="w-4 fill-current"/>: <Travel className="fill-current w-3"/>}
                             <div className="leading-5">
                                 <p className='text-xs'>{option?.city.name || option?.name}</p>
-                                <p className='text-3xs'>{option?.name}</p>
+                                <p className='text-3xs'>{option?.values?.name}</p>
                             </div>
                             <span className="bg-gray-400 text-white rounded-sm pl-2 pr-2 text-xs absolute left-4">{option?.code}</span>
                         </div>

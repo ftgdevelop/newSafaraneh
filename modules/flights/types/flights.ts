@@ -67,7 +67,10 @@ export interface AirportSearchResponseItem  {
     //   name: "string",
     //   code: "string"
     // },
-    code: string;
+  code: string;
+  values?: {
+    name: string
+  }
     // latitude: "string",
     // longitude: "string",
     airportType: "Main" | "Subsidiary"| "City"
