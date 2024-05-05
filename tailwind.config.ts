@@ -10,7 +10,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        'samim': ['samim', 'sans-serif']
+        'samim': ['samim', 'sans-serif'],
+        'vazir': ['vazir', 'sans-serif']
       },
       spacing: {
         '18': '4.5rem',
