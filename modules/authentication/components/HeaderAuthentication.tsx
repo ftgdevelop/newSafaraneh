@@ -51,6 +51,14 @@ const HeaderAuthentication: React.FC = () => {
         setDelayedOpen(false)
     },[path]);
 
+    const theme2 = process.env.THEME === "THEME2";
+
+    let buttonClassName = "h-12 text-sm text-blue-700 hover:text-blue-500 ltr:float-right rtl:float-left hidden md:block";
+
+    if (theme2){
+        buttonClassName = "rounded-lg h-10 px-3 border border-stone-300 text-sm text-black hover:text-stone-800 ltr:float-right rtl:float-left font-semibold hidden md:flex items-center gap-3";
+    }
+
     return (
         <>
             {userLoginLoading ? (
@@ -60,7 +68,7 @@ const HeaderAuthentication: React.FC = () => {
                     <button
                         type="button"
                         aria-label={t('sign-in-up')}
-                        className="h-12 text-sm text-blue-700 hover:text-blue-500 ltr:float-right rtl:float-left hidden md:block"
+                        className={buttonClassName}
                         onClick={() => { setOpen(true) }}
                     >
 
@@ -75,11 +83,11 @@ const HeaderAuthentication: React.FC = () => {
                 <button
                     type="button"
                     aria-label={t('sign-in-up')}
-                    className="h-12 text-sm text-blue-700 hover:text-blue-500 ltr:float-right rtl:float-left hidden md:block"
+                    className={buttonClassName}
                     onClick={() => { setOpen(true) }}
                 >
 
-                    {t('sign-in-up')}
+                    {theme2 ? <>ورود <span className='block h-6 border-l border-stone-300' /> ثبت نام </> : t('sign-in-up')}
 
                 </button>
             )}
