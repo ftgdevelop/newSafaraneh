@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import FlightSearchData from "@/modules/flights/components/FlightSearchData";
 import FlightSortFlights from "@/modules/flights/components/FlightSortFlights";
 import FlightsFlightItem from "@/modules/flights/components/flightItem/FlightFlightItem";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/modules/shared/store";
 import { SidebarFilterChange } from "@/modules/flights/templates/SidebarFilterChange";
 import { SortHightestPrice, SortCapacity, SortTime } from "@/modules/flights/templates/SortFlightItem";
@@ -22,6 +22,7 @@ import { PortalDataType } from "@/modules/shared/types/common";
 import FlightNoItemFilter from "@/modules/flights/components/FlightNoItemFilter";
 import FlightMainFilters from "@/modules/flights/components/FlightMainFilter";
 import FlightNoItemDate from "@/modules/flights/components/FlightNoItemDate";
+import { setCabinClassFilter } from "@/modules/flights/store/flightsSlice";
 
 
 type Airport = {
@@ -41,14 +42,14 @@ type Airport = {
 }
 
 const Flights: NextPage<any> = ({ airports, routeCodes , portalData }: { airports: Airport[], routeCodes: string , portalData?:PortalDataType }) => {
-    
+    const dispatch = useDispatch()
     const {t:tFlight} = useTranslation("flight");
 
     const SidebarFilter = useSelector((state: RootState) => state.flightFilters.filterOption)
     let [flightsInFilter, setFlightsInFilter] = useState<FlightType[]>()
     let [sortFlights, setSortFlights] = useState('LowestPrice')
     let [fetchDataCompelete, setFetchDataCompelte] = useState(false)
-
+    
     const [page, setPage] = useState(1)
     const firstItemIndex = (page - 1) * 10;
     const lastItem = page * 10;
@@ -134,7 +135,9 @@ const Flights: NextPage<any> = ({ airports, routeCodes , portalData }: { airport
         if (routeCodes) {
             fetchKey(routeCodes);
         }
-
+        if (query.flightType) {
+            dispatch(setCabinClassFilter(SidebarFilter.cabinClassOption.concat(query.flightType)))
+        } 
     }, [router.asPath]);
 
 

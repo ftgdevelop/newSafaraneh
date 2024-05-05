@@ -50,6 +50,6 @@ export const flightSlice = createSlice({
 })
 
 export const { setAirlineFilter, setFlightTimeFilter, setCabinClassFilter,
-setTicketTypeFilter, setPriceRangeFilter, setSearchChangeOn, setCancelFilters} = flightSlice.actions
-
+    setTicketTypeFilter, setPriceRangeFilter, setSearchChangeOn, setCancelFilters} = flightSlice.actions
+    
 export default flightSlice.reducer;

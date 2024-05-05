@@ -5,7 +5,6 @@ import FlightDirectionType from "./FlightDirectionType";
 import FlightSearchFlightType from "./FlightSearchFlightType";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { dateFormat } from "@/modules/shared/helpers";
 import { useDispatch } from "react-redux";
 import { setReduxNotification } from "@/modules/shared/store/notificationSlice";
 import { setSearchChangeOn } from "../../store/flightsSlice";
@@ -25,6 +24,7 @@ export type SearchDataType = {
 const FlightSearch: React.FC<any> = ({ className, airports }: { className: string, airports: any }) => {
     const query = useRouter().query
     const dispatch = useDispatch()
+    const [searchButtonStatus, setSearchButtonStatus] = useState(false)
     const [SearchData, setSearchData] = useState<SearchDataType>({
         destination: (query.flights as string)?.split('-')[0] || null,
         origin: (query.flights as string)?.split('-')[1] || null,
@@ -46,10 +46,11 @@ const FlightSearch: React.FC<any> = ({ className, airports }: { className: strin
         search.departing = SearchData.departing
         if (SearchData?.returning) search.returning = SearchData?.returning
         if (SearchData?.flightType !== "All") search.flightType = SearchData?.flightType
-    
+
         if (SearchData.origin && SearchData.destination) {
-            router.push( {pathname: `/flights/${SearchData.origin}-${SearchData.destination}`,query: search})
-            .then(() => dispatch(setSearchChangeOn(false)))
+            setSearchButtonStatus(true)
+            router.push({ pathname: `/flights/${SearchData.origin}-${SearchData.destination}`, query: search })
+            .then(() => { dispatch(setSearchChangeOn(false)), setSearchButtonStatus(false) })
         }
         else {
             dispatch(setReduxNotification({state:'error', message: 'لطفا مبدا و مقصد حرکت را وارد کنید',isVisible: true}))
@@ -71,7 +72,7 @@ const FlightSearch: React.FC<any> = ({ className, airports }: { className: strin
             </div>
             <div className="w-full text-center">
             <button type="submit" className="p-2 pl-14 pr-14 bg-blue-700 hover:bg-blue-600 duration-200 rounded-md text-white mt-5">
-                جستجو
+                {searchButtonStatus? 'در حال جستجو...' : 'جستجو'}
             </button>
         </div>
         </form>

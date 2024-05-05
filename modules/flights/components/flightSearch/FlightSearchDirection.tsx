@@ -10,41 +10,37 @@ import { useRouter } from "next/router";
 const FlightSearchDirection: React.FC<any> = ({ className, SearchData, setSearchData, airports }: { className: string, SearchData:SearchDataType, setSearchData: any, airports: any }) => {
     const query = useRouter().query
 
-
-    const [selectedOrigin, setSelectedOrigin] = useState<AirportSearchResponseItem | undefined>(
-    airports?.length ?
-        {
-        code: (airports[0].code as string),
-        name: (airports[0]?.city.name as string),
-        city: {
-            name: (airports[0]?.city.name as string),
-            code: airports[0]?.code
-        },
-        airportType: airports[0]?.airportType
-    } : undefined);
-    const [selectedDestination, setSelectedDestination] = useState<AirportSearchResponseItem | undefined>(
+    const [SelectedPoints, setSelectedPoints] = useState<[AirportSearchResponseItem | undefined, AirportSearchResponseItem | undefined]>([
         airports?.length ?
-        {
-        code: (airports[1].code as string),
-        name: (airports[1].city.name as string),
-        city: {
-            name: (airports[1]?.city.name as string),
-            code: airports[1]?.code
-        },
-        airportType: airports[1].airportType
-    } : undefined);
+            {
+                code: (airports[0].code as string),
+                name: (airports[0]?.city.name as string),
+                city: {
+                    name: (airports[0]?.city.name as string),
+                    code: airports[0]?.code
+                },
+                airportType: airports[0]?.airportType
+                } : undefined,
+        airports?.length ?
+            {
+                code: (airports[1].code as string),
+                name: (airports[1].city.name as string),
+                city: {
+                    name: (airports[1]?.city.name as string),
+                    code: airports[1]?.code
+                },
+                airportType: airports[1].airportType
+            }:undefined
+    ])
+debugger
     useEffect(() => {
-        setSearchData({...SearchData, origin: selectedOrigin?.code})
-    }, [selectedOrigin])
-    useEffect(() => {
-        setSearchData({...SearchData, destination: selectedDestination?.code})
-    }, [selectedDestination])
+        setSearchData({ ...SearchData, origin: SelectedPoints[0]?.code, destination: SelectedPoints[1]?.code })
+    }, [SelectedPoints])
 
     const searchUrl = `${ServerAddress.Type}${Flight.searchFlights}`
 
     const changeDirectionHandler = () => {
-        setSelectedDestination(selectedOrigin)
-        setSelectedOrigin(selectedDestination)
+        setSelectedPoints(prev => [prev[1], prev[0]])
     }
 
     return (
@@ -69,8 +65,8 @@ const FlightSearchDirection: React.FC<any> = ({ className, SearchData, setSearch
                     inputClassName={`w-full outline-none border rounded-lg border-neutral-400 h-12 text-sm text-neutral-500 placeholder:text-neutral-500 focus:border-neutral-900`}
                     placeholder={'پرواز از'}
                     min={2}
-                    value={selectedOrigin}
-                    onChangeHandle={setSelectedOrigin}
+                    value={SelectedPoints[0]}
+                    onChangeHandle={(e: AirportSearchResponseItem|undefined) => setSelectedPoints(prev => [e,prev[1]])}
                     url={searchUrl}
                     type="flight"
             />
@@ -103,8 +99,8 @@ const FlightSearchDirection: React.FC<any> = ({ className, SearchData, setSearch
                     inputClassName={`w-full outline-none border rounded-lg border-neutral-400 h-12 text-sm text-neutral-500 placeholder:text-neutral-500 focus:border-neutral-900`}
                     placeholder={'پرواز به'}
                     min={2}
-                    value={selectedDestination}
-                    onChangeHandle={setSelectedDestination}
+                    value={SelectedPoints[1]}
+                    onChangeHandle={(e: AirportSearchResponseItem|undefined) => setSelectedPoints(prev =>[prev[0],e])}
                     url={searchUrl}
                     type="flight"
                 />
