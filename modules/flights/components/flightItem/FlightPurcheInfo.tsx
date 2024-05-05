@@ -84,7 +84,7 @@ const FlightPurcheInfo: React.FC<any> = ({ flightData, detail, passengers }: { f
                 onClick={bookFlight}
                 disabled={!flightData?.capacity || unAvailableFlight}
                 color="blue"
-                className="px-5 w-full h-8 leading-6 text-sm mt-2"
+                className="px-5 w-full h-8 leading-6 text-sm mt-2 text-nowrap"
                 hasArrow
                 loading={loading}
             >

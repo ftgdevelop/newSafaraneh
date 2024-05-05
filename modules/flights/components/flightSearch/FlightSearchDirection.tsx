@@ -5,13 +5,33 @@ import { Flight, ServerAddress } from "@/enum/url";
 import { defaultAirportOption } from "./defaultAirportOptios";
 import { AirportSearchResponseItem } from "../../types/flights";
 import { SearchDataType } from "./FlightSearch";
+import { useRouter } from "next/router";
 
-const FlightSearchDirection: React.FC<any> = ({ className, SearchData, setSearchData }: { className: string, SearchData:SearchDataType, setSearchData: any }) => {
-    const [selectedOrigin, setSelectedOrigin] = useState<AirportSearchResponseItem>();
-    const [selectedDestination, setSelectedDestination] = useState<AirportSearchResponseItem>();
+const FlightSearchDirection: React.FC<any> = ({ className, SearchData, setSearchData, airports }: { className: string, SearchData:SearchDataType, setSearchData: any, airports: any }) => {
+    const query = useRouter().query
+    const points: AirportSearchResponseItem[] = [
+        {
+            code: (airports[0]?.code as string),
+            name: (airports[0]?.city.name as string),
+            city: {
+                name: (airports[0]?.city.name as string),
+                code: airports[0]?.code
+            },
+            airportType: airports[0]?.airportType
+        },
+        {
+            code: (airports[1].code as string),
+            name: (airports[1].city.name as string),
+            city: {
+                name: (airports[1]?.city.name as string),
+                code: airports[1]?.code
+            },
+            airportType: airports[1].airportType
+        }
+    ]
 
-    const [selectedPoints, setSelectedPoints] = useState<[AirportSearchResponseItem,AirportSearchResponseItem]>();
-
+    const [selectedOrigin, setSelectedOrigin] = useState<AirportSearchResponseItem | undefined>(points.find(i => i.city.code == (query?.flights as string).split('-')[0]));
+    const [selectedDestination, setSelectedDestination] = useState<AirportSearchResponseItem | undefined>(points.find(i => i.city.code == (query?.flights as string).split('-')[1]));
     useEffect(() => {
         setSearchData({...SearchData, origin: selectedOrigin?.code})
     }, [selectedOrigin])
@@ -33,16 +53,16 @@ const FlightSearchDirection: React.FC<any> = ({ className, SearchData, setSearch
                     inputId="origin"
                     //checkTypingLanguage
                     noResultMessage={'نتیجه ای پیدا نشد'}
-                    createTextFromOptionsObject={(item:AirportSearchResponseItem) => (item.city?.name || item.name) + " - " + item.name}
+                    createTextFromOptionsObject={(item:AirportSearchResponseItem | undefined) => (item?.city?.name || item?.name) + " - " + item?.name}
                     acceptLanguage="fa-IR"
-                    renderOption={useCallback((option: AirportSearchResponseItem, direction: "ltr" | "rtl" | undefined) => (
+                    renderOption={useCallback((option: AirportSearchResponseItem | undefined, direction: "ltr" | "rtl" | undefined) => (
                         <div className={`px-3 py-2 flex gap-3 hover:bg-neutral-800 hover:text-white items-center relative${!direction ? "" : direction === 'rtl' ? "rtl" : "ltr"}`}>
-                            {option.airportType == 'City' ? <Location className="w-4 fill-current"/>: <Travel className="fill-current w-3"/>}
+                            {option?.airportType == 'City' ? <Location className="w-4 fill-current"/>: <Travel className="fill-current w-3"/>}
                             <div className="leading-5">
-                                <p className='text-xs'>{option.city.name || option.name}</p>
-                                <p className='text-3xs'>{option.name}</p>
+                                <p className='text-xs'>{option?.city.name || option?.name}</p>
+                                <p className='text-3xs'>{option?.name}</p>
                             </div>
-                            <span className="bg-gray-400 text-white rounded-sm pl-2 pr-2 text-2xs absolute left-4">{option.code}</span>
+                            <span className="bg-gray-400 text-white rounded-sm pl-2 pr-2 text-2xs absolute left-4">{option?.code}</span>
                         </div>
                     ), [])}
                     inputClassName={`w-full outline-none border rounded-lg border-neutral-400 h-12 text-sm text-neutral-500 placeholder:text-neutral-500 focus:border-neutral-900`}
@@ -67,16 +87,16 @@ const FlightSearchDirection: React.FC<any> = ({ className, SearchData, setSearch
                     inputId="destination"
                     //checkTypingLanguage
                     noResultMessage={'نتیجه ای پیدا نشد'}
-                    createTextFromOptionsObject={(item:AirportSearchResponseItem) => (item.city?.name || item.name) + " - " + item.name}
+                    createTextFromOptionsObject={(item:AirportSearchResponseItem | undefined) => (item?.city?.name || item?.name) + " - " + item?.name}
                     acceptLanguage="fa-IR"
-                    renderOption={useCallback((option: AirportSearchResponseItem, direction: "ltr" | "rtl" | undefined) => (
+                    renderOption={useCallback((option: AirportSearchResponseItem | undefined, direction: "ltr" | "rtl" | undefined) => (
                         <div className={`px-3 py-2 flex gap-3 hover:bg-neutral-800 hover:text-white items-center ${!direction ? "" : direction === 'rtl' ? "rtl" : "ltr"}`}>
-                            {option.airportType == 'City' ? <Location className="w-4 fill-current"/>: <Travel className="fill-current w-3"/>}
+                            {option?.airportType == 'City' ? <Location className="w-4 fill-current"/>: <Travel className="fill-current w-3"/>}
                             <div className="leading-5">
-                                <p className='text-xs'>{option.city.name || option.name}</p>
-                                <p className='text-3xs'>{option.name}</p>
+                                <p className='text-xs'>{option?.city.name || option?.name}</p>
+                                <p className='text-3xs'>{option?.name}</p>
                             </div>
-                            <span className="bg-gray-400 text-white rounded-sm pl-2 pr-2 text-xs absolute left-4">{option.code}</span>
+                            <span className="bg-gray-400 text-white rounded-sm pl-2 pr-2 text-xs absolute left-4">{option?.code}</span>
                         </div>
                     ), [])}
                     inputClassName={`w-full outline-none border rounded-lg border-neutral-400 h-12 text-sm text-neutral-500 placeholder:text-neutral-500 focus:border-neutral-900`}

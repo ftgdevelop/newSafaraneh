@@ -2,11 +2,12 @@ import { useRouter } from "next/router";
 import { ArrowLeft } from "../../shared/components/ui/icons";
 import { useDispatch } from "react-redux";
 import { setSearchChangeOn } from "../store/flightsSlice";
-import { dateDiplayFormat } from "@/modules/shared/helpers";
+import { dateDiplayFormat, dateFormat } from "@/modules/shared/helpers";
 
 const FlightSearchData: React.FC<any> = ({airports}) => {
     const query: any = useRouter().query
-    
+    const today = dateFormat(new Date())
+
     const dispatch = useDispatch()
     return (
         <div className="flex flex-wrap h-fit relative gap-10 max-lg:gap-8 max-md:gap-5 max-sm:gap-4 cursor-pointer
@@ -14,12 +15,12 @@ const FlightSearchData: React.FC<any> = ({airports}) => {
             onClick={() => dispatch(setSearchChangeOn(true))}>
                 
             <div>
-                <p className="text-sm max-md:text-2xs">{airports[1]?.code}</p>
+                <p className="text-sm max-md:text-2xs">{airports.find((i: any) => i.code == query.flights.split('-')[0]).city?.code}</p>
                 <p className="text-gray-500 text-sm max-lg:text-xs max-md:text-3xs">{airports.find((i: any) => i.code == query.flights.split('-')[0]).city?.name}</p>
             </div>
             <ArrowLeft className="w-5 max-sm:w-4 fill-gray-400 ltr:rotate-180" />
             <div>
-                <p className="text-sm max-md:text-2xs">{airports[0]?.code}</p>
+                <p className="text-sm max-md:text-2xs">{airports.find((i: any) => i.code == query.flights.split('-')[1]).city?.code}</p>
                 <p className="text-gray-500 text-sm max-lg:text-xs max-md:text-3xs">{airports.find((i: any) => i.code == query.flights.split('-')[1])?.city.name}</p>
             </div>
 
@@ -27,7 +28,8 @@ const FlightSearchData: React.FC<any> = ({airports}) => {
             
             <div>
                 <p className="text-xs max-lg:text-4xs text-gray-400">تاریخ رفت</p>
-                <p className="text-sm max-md:text-2xs">{dateDiplayFormat({ date:query.departing,locale:'fa',format:'ddd dd mm'})}</p>
+                <p className="text-sm max-md:text-2xs">{dateDiplayFormat({ date: query.departing, locale: 'fa', format: 'ddd dd mm' }) ||
+                dateDiplayFormat({ date: today, locale: 'fa', format: 'ddd dd mm' })}</p>
             </div>
             {
                 query.returning && 

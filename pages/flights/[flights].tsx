@@ -5,7 +5,7 @@ import { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useEffect, useState } from "react";
 import FlightSearchData from "@/modules/flights/components/FlightSearchData";
-import FlightMainFilters from "@/modules/flights/components/FlightsMainFilters";
+import FlightSortFlights from "@/modules/flights/components/FlightSortFlights";
 import FlightsFlightItem from "@/modules/flights/components/flightItem/FlightFlightItem";
 import { useSelector } from "react-redux";
 import { RootState } from "@/modules/shared/store";
@@ -16,8 +16,13 @@ import { dateFormat } from "@/modules/shared/helpers";
 import { useRouter } from "next/router";
 import ProgressBarWithLabel from "@/modules/shared/components/ui/ProgressBarWithLabel";
 import { useTranslation } from "next-i18next";
+import Pagination from "@/modules/shared/components/ui/Pagination";
 import Head from "next/head";
 import { PortalDataType } from "@/modules/shared/types/common";
+import FlightNoItemFilter from "@/modules/flights/components/FlightNoItemFilter";
+import FlightMainFilters from "@/modules/flights/components/FlightMainFilter";
+import FlightNoItemDate from "@/modules/flights/components/FlightNoItemDate";
+
 
 type Airport = {
     name?: string;
@@ -42,7 +47,11 @@ const Flights: NextPage<any> = ({ airports, routeCodes , portalData }: { airport
     const SidebarFilter = useSelector((state: RootState) => state.flightFilters.filterOption)
     let [flightsInFilter, setFlightsInFilter] = useState<FlightType[]>()
     let [sortFlights, setSortFlights] = useState('LowestPrice')
+    let [fetchDataCompelete, setFetchDataCompelte] = useState(false)
 
+    const [page, setPage] = useState(1)
+    const firstItemIndex = (page - 1) * 10;
+    const lastItem = page * 10;
     const [key, setKey] = useState<string>("");
 
     const [departureList, setDepartureList] = useState<any>([]);
@@ -66,6 +75,10 @@ const Flights: NextPage<any> = ({ airports, routeCodes , portalData }: { airport
     useEffect(() => {
         setFlightsInFilter(departureList)
     }, [departureList])
+
+    useEffect(() => {
+        setPage(1)
+    },[SidebarFilter])
 
     const acceptLanguage = locale === "fa" ? "fa-IR" : locale === "ar" ? "ar-AE" : "en-US";
 
@@ -141,7 +154,8 @@ const Flights: NextPage<any> = ({ airports, routeCodes , portalData }: { airport
                 if (response?.data?.result?.isCompleted) {
 
                     const result = response?.data?.result;
-
+                    setFetchDataCompelte(result.isCompleted)
+                    
                     setDepartureList(result.departureFlights);
 
                     clearInterval(fetchInterval);
@@ -204,16 +218,31 @@ const Flights: NextPage<any> = ({ airports, routeCodes , portalData }: { airport
             <div className="w-3/4 max-lg:w-full">
                 
                 <FlightSearchData FlightsData={departureList} airports={airports} />
-
-                {!(loadingPercentage === 100) && <ProgressBarWithLabel 
-                    percentage={loadingPercentage}
-                    label={tFlight('getting-best-suggestion')}
-                />}
-
-                <FlightMainFilters sortFlights={sortFlights} changeSortFlights={(e: string) => setSortFlights(e)} />
+                <FlightMainFilters />
+                {
+                    flightsInFilter?.length ?
+                    <FlightSortFlights sortFlights={sortFlights} changeSortFlights={(e: string) => setSortFlights(e)} />: null
+                }
 
                 {!!query.returning && <p className="text-sm mt-5" > ابتدا از لیست زیر، بلیط رفت خود را انتخاب نمایید</p>}
 
+                {
+                    departureList.length ? <Pagination
+                        totalItems={flightsInFilter?.length || 0}
+                        itemsPerPage={10}
+                        onChange={setPage}
+                        currentPage={page}
+                        wrapperClassName="mt-5"
+                    /> : null
+                }
+                
+                {
+                    !(loadingPercentage === 100) && <ProgressBarWithLabel 
+                    percentage={loadingPercentage}
+                        label={tFlight('getting-best-suggestion')}
+                        className="mt-5"
+                    />
+                }
                 {
                     flightsInFilter?.sort((a, b) => SortCapacity(a, b))
                         .sort((a: FlightType, b: FlightType): any => {
@@ -222,12 +251,29 @@ const Flights: NextPage<any> = ({ airports, routeCodes , portalData }: { airport
                             else {
                                 return a.capacity && a.adultPrice - b.adultPrice
                             }
-                        }).map((flight: FlightType) =>
+                        }).slice(firstItemIndex, lastItem).map((flight: FlightType) =>
                             <FlightsFlightItem passengers={passengers} flightData={flight} key={flight.flightKey} />
                         )
                 }
+                {
+                    departureList.length ? <Pagination
+                        totalItems={flightsInFilter?.length || 0}
+                        itemsPerPage={10}
+                        onChange={setPage}
+                        currentPage={page}
+                        wrapperClassName="mt-5"
+                />: null
+                }
+                {
+                    fetchDataCompelete && !departureList.length && 
+                    <FlightNoItemDate />
+                }
+                {
+                     !flightsInFilter?.length && departureList.length && loadingPercentage == 100 ?
+                    <FlightNoItemFilter />:null
+                }
+                <FlightsSearchChange airports={airports} />
             </div>
-            <FlightsSearchChange />
         </div>
     </>
     )
