@@ -146,7 +146,7 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
             clearTimeout(fetchTimeout);
         }
 
-    }, [typingValue, min, direction, acceptLanguage, onChangeHandle]);
+    }, [typingValue, min, direction, acceptLanguage]);
 
     const selectItemHandle = (item: T) => {
         onChangeHandle(item);
