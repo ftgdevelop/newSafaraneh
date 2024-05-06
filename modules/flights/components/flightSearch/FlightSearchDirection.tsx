@@ -93,7 +93,7 @@ debugger
                                 <p className='text-xs'>{option?.city.name || option?.name}</p>
                                 <p className='text-3xs'>{option?.values?.name}</p>
                             </div>
-                            <span className="bg-gray-400 text-white rounded-sm pl-2 pr-2 text-xs absolute left-4">{option?.code}</span>
+                            <span className="bg-gray-500 text-white rounded-sm pl-2 pr-2 text-xs absolute left-4">{option?.code}</span>
                         </div>
                     ), [])}
                     inputClassName={`w-full outline-none border rounded-lg border-neutral-400 h-12 text-sm text-neutral-500 placeholder:text-neutral-500 focus:border-neutral-900`}
