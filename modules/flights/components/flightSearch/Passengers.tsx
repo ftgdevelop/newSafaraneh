@@ -5,9 +5,13 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { SearchDataType } from "./FlightSearch";
 
-const FlightSearchPassengers: React.FC<any> = ({SearchData, setSearchData}: {SearchData: SearchDataType, setSearchData: any}) => {
+type Props = {
+    passengers: { adult: any, child: any, infant: any },
+    setPassengers: any
+}
+const Passengers: React.FC<Props> = props => {
     const dispatch = useDispatch()
-
+    const {passengers, setPassengers} = props
     const wrapperRef = useRef<HTMLDivElement>(null);
     const [passengersOpen, setPassengersOpen] = useState(false)
 
@@ -88,15 +92,15 @@ const FlightSearchPassengers: React.FC<any> = ({SearchData, setSearchData}: {Sea
     }, []);
 
     useEffect(() => {
-        setSearchData({...SearchData, adult})
+        setPassengers({...passengers, adult})
     }, [adult])
 
     useEffect(() => {
-        setSearchData({...SearchData, child})
+        setPassengers({...passengers, child})
     }, [child])
 
     useEffect(() => {
-        setSearchData({...SearchData, infant})
+        setPassengers({...passengers, infant})
     }, [infant])
     const passengersItem = (content: string, count: any, countHandel:any) => {
         return (
@@ -133,4 +137,4 @@ const FlightSearchPassengers: React.FC<any> = ({SearchData, setSearchData}: {Sea
     )
 }
 
-export default FlightSearchPassengers;
+export default Passengers;

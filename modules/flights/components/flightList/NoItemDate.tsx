@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
-import { setSearchChangeOn } from "../store/flightsSlice";
+import { setSearchChangeOn } from "../../store/flightsSlice";
 
-const FlightNoItemDate: React.FC = () => {
+const NoItemDate: React.FC = () => {
     const dispatch = useDispatch()
     return (
         <div className="text-center mt-18">
@@ -16,4 +16,4 @@ const FlightNoItemDate: React.FC = () => {
     )
 }
 
-export default FlightNoItemDate;
+export default NoItemDate;

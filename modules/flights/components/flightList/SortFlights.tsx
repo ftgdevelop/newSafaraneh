@@ -1,4 +1,4 @@
-const FlightSortFlight: React.FC<any> = ({ changeSortFlights, sortFlights} : {changeSortFlights: any, sortFlights: string}) => {
+const SortFlights: React.FC<any> = ({ changeSortFlights, sortFlights} : {changeSortFlights: any, sortFlights: string}) => {
 
     const SortItem = (value: string, sortValue: string) => {
         return (
@@ -25,4 +25,4 @@ const FlightSortFlight: React.FC<any> = ({ changeSortFlights, sortFlights} : {ch
     )
 }
 
-export default FlightSortFlight;
+export default SortFlights;

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import FlightSidebarAirlines from "./FlightSidebarAirlines";
-import FlightSidebarHours from "./FlightSidebarTime";
-import FlightSidebarFlightType from "./FlightSidebarFlightType";
-import FlightSidebarPriceChange from "./FlightSidebarPriceRange";
+import TicketCobinType from "./TicketCobinType";
 import { FlightType } from "../../types/flights";
 import Skeleton from "@/modules/shared/components/ui/Skeleton";
+import FlightTime from "./FlightTime";
+import Airlines from "./Airlines";
+import PriceChange from "./PriceRange";
 
-const FlightSidebarFilters: React.FC<any> = ({ FlightsData, flightsInFilterLengths }: {FlightsData: FlightType[], flightsInFilterLengths: number}) => {
+const SidebarFilters: React.FC<any> = ({ FlightsData, flightsInFilterLengths }: {FlightsData: FlightType[], flightsInFilterLengths: number}) => {
     const [OpenSidebar, setOpenSidebar] = useState<boolean>(false)
     
     useEffect(() => {
@@ -36,10 +36,10 @@ const FlightSidebarFilters: React.FC<any> = ({ FlightsData, flightsInFilterLengt
                         <Skeleton className="w-20" />
                     }
                 </div>
-                <FlightSidebarAirlines FlightsData={FlightsData} />
-                <FlightSidebarHours FlightsData={FlightsData} />
-                <FlightSidebarPriceChange FlightsData={FlightsData} />
-                <FlightSidebarFlightType FlightsData={FlightsData} />
+                <Airlines FlightsData={FlightsData} />
+                <FlightTime FlightsData={FlightsData} />
+                <PriceChange FlightsData={FlightsData} />
+                <TicketCobinType FlightsData={FlightsData} />
                 </div>
  
             <div className={`bg-black/75 z-10 fixed top-0 left-0 backdrop-blur contrast-100 ${!OpenSidebar ? 'hidden' : 'max-lg:w-full h-full'}`}
@@ -58,4 +58,4 @@ const FlightSidebarFilters: React.FC<any> = ({ FlightsData, flightsInFilterLengt
     )
 }
 
-export default FlightSidebarFilters;
+export default SidebarFilters;

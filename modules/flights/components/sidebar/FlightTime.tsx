@@ -5,7 +5,7 @@ import { setFlightTimeFilter } from "../../store/flightsSlice";
 import { FlightType } from "../../types/flights";
 import Skeleton from "@/modules/shared/components/ui/Skeleton";
 
-const FlightSidebarTime: React.FC<any> = ({FlightsData} : {FlightsData: FlightType[]}) => {
+const FlightTime: React.FC<any> = ({FlightsData} : {FlightsData: FlightType[]}) => {
     const FlightTimeFilter = useSelector((state: RootState) => state.flightFilters.filterOption.flightTimeOption)
     const dispatch = useDispatch()
 
@@ -61,4 +61,4 @@ const FlightSidebarTime: React.FC<any> = ({FlightsData} : {FlightsData: FlightTy
     )
 }
 
-export default FlightSidebarTime;
+export default FlightTime;

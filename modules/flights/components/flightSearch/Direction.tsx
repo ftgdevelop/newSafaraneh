@@ -2,14 +2,18 @@ import { Location, Swap, Travel } from "@/modules/shared/components/ui/icons";
 import { useCallback, useEffect, useState } from "react";
 import AutoComplete from "@/modules/shared/components/ui/AutoComplete";
 import { Flight, ServerAddress } from "@/enum/url";
-import { defaultAirportOption } from "./defaultAirportOptios";
-import { AirportSearchResponseItem } from "../../types/flights";
-import { SearchDataType } from "./FlightSearch";
+import { defaultAirportOption } from "./defaultAirportOptions";
+import { AirportSearchResponseItem, AirportType } from "../../types/flights";
 import { useRouter } from "next/router";
-
-const FlightSearchDirection: React.FC<any> = ({ className, SearchData, setSearchData, airports }: { className: string, SearchData:SearchDataType, setSearchData: any, airports: any }) => {
+type Props = {
+    className: string,
+    airports: any,
+    direction: {origin: string|null, destination: string|null},
+    setDirection: any
+}
+const Direction: React.FC<Props> = props => {
     const query = useRouter().query
-
+    const {airports, className, direction, setDirection} = props    
     const [SelectedPoints, setSelectedPoints] = useState<[AirportSearchResponseItem | undefined, AirportSearchResponseItem | undefined]>([
         airports?.length ?
             {
@@ -32,9 +36,9 @@ const FlightSearchDirection: React.FC<any> = ({ className, SearchData, setSearch
                 airportType: airports[1].airportType
             }:undefined
     ])
-debugger
+
     useEffect(() => {
-        setSearchData({ ...SearchData, origin: SelectedPoints[0]?.code, destination: SelectedPoints[1]?.code })
+        setDirection({ ...direction, origin: SelectedPoints[0]?.code, destination: SelectedPoints[1]?.code })
     }, [SelectedPoints])
 
     const searchUrl = `${ServerAddress.Type}${Flight.searchFlights}`
@@ -108,4 +112,4 @@ debugger
     )
 }
 
-export default FlightSearchDirection;
+export default Direction;

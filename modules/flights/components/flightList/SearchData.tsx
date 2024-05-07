@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
-import { ArrowLeft } from "../../shared/components/ui/icons";
+import { ArrowLeft } from "../../../shared/components/ui/icons";
 import { useDispatch } from "react-redux";
-import { setSearchChangeOn } from "../store/flightsSlice";
+import { setSearchChangeOn } from "../../store/flightsSlice";
 import { dateDiplayFormat, dateFormat } from "@/modules/shared/helpers";
 
-const FlightSearchData: React.FC<any> = ({airports}) => {
+const SearchData: React.FC<any> = ({airports}) => {
     const query: any = useRouter().query
     const today = dateFormat(new Date())
 
@@ -56,4 +56,4 @@ const FlightSearchData: React.FC<any> = ({airports}) => {
     )
 }
 
-export default FlightSearchData;
+export default SearchData;

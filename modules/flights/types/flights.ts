@@ -88,7 +88,7 @@ export interface AirportSearchResponseItem  {
 export type AirportType = {
     name?: string;
     code?: string;
-    terminalId?: string;
+  terminalId?: string;
     city: {
       name?: string;
       code?: string;
@@ -98,7 +98,7 @@ export type AirportType = {
       code?: string;
     };
     latitude?: string;
-    longitude?: string;
+  longitude?: string;
 }
 
 type FlightDetail = {
@@ -246,7 +246,7 @@ export interface DomesticFlightGetReserveByIdType {
         id: number;
       }[];
     id: number;
-  }
+}
 
 export type FlightConfirmStatus = "Undefined" | "Registered" | "Pending" | "Issued" | "Canceled" | "WebServiceCancel" | "PaymentSuccessful" | "WebServiceUnsuccessful" | "PriceChange" | "Unavailable" | "Refunded" | "Voided" | "InProgress" | "PaidBack" | "RefundInProgress" | "Changed" | "OnCredit" | "ContactProvider" | "UnConfirmed";;
 export interface DomesticFlightConfirmType {

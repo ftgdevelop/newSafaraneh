@@ -1,28 +1,28 @@
 import { GetAirportsByCode, GetAvailabilityKey, GetFlightList } from "@/modules/flights/actions";
-import FlightSidebarFilters from "@/modules/flights/components/sidebar/FlightSidebarFilters";
+import FlightSidebarFilters from "@/modules/flights/components/sidebar/SidebarFilters";
 import { FlightType } from "@/modules/flights/types/flights";
 import { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useEffect, useState } from "react";
-import FlightSearchData from "@/modules/flights/components/FlightSearchData";
-import FlightSortFlights from "@/modules/flights/components/FlightSortFlights";
-import FlightsFlightItem from "@/modules/flights/components/flightItem/FlightFlightItem";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/modules/shared/store";
 import { SidebarFilterChange } from "@/modules/flights/templates/SidebarFilterChange";
 import { SortHightestPrice, SortCapacity, SortTime } from "@/modules/flights/templates/SortFlightItem";
-import FlightsSearchChange from "@/modules/flights/components/FlightSearchChange";
 import { dateFormat } from "@/modules/shared/helpers";
 import { useRouter } from "next/router";
 import ProgressBarWithLabel from "@/modules/shared/components/ui/ProgressBarWithLabel";
 import { useTranslation } from "next-i18next";
 import Pagination from "@/modules/shared/components/ui/Pagination";
 import Head from "next/head";
-import { PortalDataType } from "@/modules/shared/types/common";
-import FlightNoItemFilter from "@/modules/flights/components/FlightNoItemFilter";
-import FlightMainFilters from "@/modules/flights/components/FlightMainFilter";
-import FlightNoItemDate from "@/modules/flights/components/FlightNoItemDate";
 import { setCabinClassFilter } from "@/modules/flights/store/flightsSlice";
+import SearchForm from "@/modules/flights/components/flightList/SearchForm";
+import NoItemFilter from "@/modules/flights/components/flightList/NoItemFilter";
+import NoItemDate from "@/modules/flights/components/flightList/NoItemDate";
+import ChangeDay from "@/modules/flights/components/flightList/ChangeDay";
+import FlightItem from "@/modules/flights/components/flightItem/FlightItem";
+import SearchData from "@/modules/flights/components/flightList/SearchData";
+import SortFlights from "@/modules/flights/components/flightList/SortFlights";
+import { PortalDataType } from "@/modules/shared/types/common";
 
 
 type Airport = {
@@ -135,7 +135,7 @@ const Flights: NextPage<any> = ({ airports, routeCodes , portalData }: { airport
         if (routeCodes) {
             fetchKey(routeCodes);
         }
-        if (query.flightType) {
+        if (query.flightType && !SidebarFilter.cabinClassOption.includes((query.flightType as string))) {
             dispatch(setCabinClassFilter(SidebarFilter.cabinClassOption.concat(query.flightType)))
         } 
     }, [router.asPath]);
@@ -220,11 +220,11 @@ const Flights: NextPage<any> = ({ airports, routeCodes , portalData }: { airport
             <FlightSidebarFilters FlightsData={departureList} flightsInFilterLengths={flightsInFilter?.length} />
             <div className="w-3/4 max-lg:w-full">
                 
-                <FlightSearchData FlightsData={departureList} airports={airports} />
-                <FlightMainFilters />
+                <SearchData FlightsData={departureList} airports={airports} />
+                <ChangeDay />
                 {
                     flightsInFilter?.length ?
-                    <FlightSortFlights sortFlights={sortFlights} changeSortFlights={(e: string) => setSortFlights(e)} />: null
+                    <SortFlights sortFlights={sortFlights} changeSortFlights={(e: string) => setSortFlights(e)} />: null
                 }
 
                 {!!query.returning && <p className="text-sm mt-5" > ابتدا از لیست زیر، بلیط رفت خود را انتخاب نمایید</p>}
@@ -255,7 +255,7 @@ const Flights: NextPage<any> = ({ airports, routeCodes , portalData }: { airport
                                 return a.capacity && a.adultPrice - b.adultPrice
                             }
                         }).slice(firstItemIndex, lastItem).map((flight: FlightType) =>
-                            <FlightsFlightItem passengers={passengers} flightData={flight} key={flight.flightKey} />
+                            <FlightItem passengers={passengers} flightData={flight} key={flight.flightKey} />
                         )
                 }
                 {
@@ -269,13 +269,13 @@ const Flights: NextPage<any> = ({ airports, routeCodes , portalData }: { airport
                 }
                 {
                     fetchDataCompelete && !departureList.length && 
-                    <FlightNoItemDate />
+                    <NoItemDate />
                 }
                 {
                      !flightsInFilter?.length && departureList.length && loadingPercentage == 100 ?
-                    <FlightNoItemFilter />:null
+                    <NoItemFilter />:null
                 }
-                <FlightsSearchChange airports={airports} />
+                <SearchForm airports={airports} />
             </div>
         </div>
     </>
