@@ -1,12 +1,9 @@
 import { GetAirportsByCode, GetAvailabilityKey, GetFlightList } from "@/modules/flights/actions";
-import FlightSidebarFilters from "@/modules/flights/components/sidebar/FlightSidebarFilters";
-import { FlightSearchDefaultValues, FlightType } from "@/modules/flights/types/flights";
+import FlightSidebarFilters from "@/modules/flights/components/sidebar/SidebarFilters";
+import { FlightType, FlightSearchDefaultValues } from "@/modules/flights/types/flights";
 import { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useEffect, useState } from "react";
-import FlightSearchData from "@/modules/flights/components/FlightSearchData";
-import FlightSortFlights from "@/modules/flights/components/FlightSortFlights";
-import FlightsFlightItem from "@/modules/flights/components/flightItem/FlightFlightItem";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/modules/shared/store";
 import { SidebarFilterChange } from "@/modules/flights/templates/SidebarFilterChange";
@@ -17,14 +14,19 @@ import ProgressBarWithLabel from "@/modules/shared/components/ui/ProgressBarWith
 import { useTranslation } from "next-i18next";
 import Pagination from "@/modules/shared/components/ui/Pagination";
 import Head from "next/head";
-import { PortalDataType } from "@/modules/shared/types/common";
-import FlightNoItemFilter from "@/modules/flights/components/FlightNoItemFilter";
-import FlightMainFilters from "@/modules/flights/components/FlightMainFilter";
-import FlightNoItemDate from "@/modules/flights/components/FlightNoItemDate";
 import { setCabinClassFilter } from "@/modules/flights/store/flightsSlice";
+
 import { Close } from "@/modules/shared/components/ui/icons";
 import SearchForm from "@/modules/flights/components/shared/searchForm";
 import ModalPortal from "@/modules/shared/components/ui/ModalPortal";
+
+import NoItemFilter from "@/modules/flights/components/flightList/NoItemFilter";
+import NoItemDate from "@/modules/flights/components/flightList/NoItemDate";
+import ChangeDay from "@/modules/flights/components/flightList/ChangeDay";
+import FlightItem from "@/modules/flights/components/flightItem/FlightItem";
+import SearchData from "@/modules/flights/components/flightList/SearchData";
+import SortFlights from "@/modules/flights/components/flightList/SortFlights";
+import { PortalDataType } from "@/modules/shared/types/common";
 
 
 type Airport = {
@@ -130,7 +132,7 @@ const Flights: NextPage<any> = ({ airports, routeCodes, portalData }: { airports
             setLoadingPercentage(40);
         }
     }
-    
+
     useEffect(() => {
 
         setLoadingPercentage(0);
@@ -142,7 +144,7 @@ const Flights: NextPage<any> = ({ airports, routeCodes, portalData }: { airports
         if (routeCodes) {
             fetchKey(routeCodes);
         }
-        if (query.flightType) {
+        if (query.flightType && !SidebarFilter.cabinClassOption.includes((query.flightType as string))) {
             dispatch(setCabinClassFilter(SidebarFilter.cabinClassOption.concat(query.flightType)))
         }
     }, [router.asPath]);
@@ -269,108 +271,112 @@ const Flights: NextPage<any> = ({ airports, routeCodes, portalData }: { airports
             </Head>
 
             <div className="max-w-container m-auto p-5 max-md:p-3 flex gap-5 relative">
-                
-                <FlightSidebarFilters FlightsData={departureList} flightsInFilterLengths={flightsInFilter?.length} />
 
-                <div className="w-3/4 max-lg:w-full">
 
-                    <FlightSearchData airports={airports} showSearchForm={()=>{setShowSearchForm(true)}} />
-                    
-                    <FlightMainFilters />
-                    {
-                        flightsInFilter?.length ?
-                            <FlightSortFlights sortFlights={sortFlights} changeSortFlights={(e: string) => setSortFlights(e)} /> : null
-                    }
+                <SearchData
+                    showSearchForm={() => { setShowSearchForm(true) }}
+                    airports={airports}
+                />
 
-                    {!!query.returning && <p className="text-sm mt-5" > ابتدا از لیست زیر، بلیط رفت خود را انتخاب نمایید</p>}
+                <ChangeDay />
+                {
+                    flightsInFilter?.length ?
+                        <SortFlights sortFlights={sortFlights} changeSortFlights={(e: string) => setSortFlights(e)} /> : null
+                }
 
-                    {
-                        departureList.length ? <Pagination
-                            totalItems={flightsInFilter?.length || 0}
-                            itemsPerPage={10}
-                            onChange={setPage}
-                            currentPage={page}
-                            wrapperClassName="mt-5"
-                        /> : null
-                    }
 
-                    {
-                        !(loadingPercentage === 100) && <ProgressBarWithLabel
-                            percentage={loadingPercentage}
-                            label={tFlight('getting-best-suggestion')}
-                            className="mt-5"
+
+
+                {!!query.returning && <p className="text-sm mt-5" > ابتدا از لیست زیر، بلیط رفت خود را انتخاب نمایید</p>}
+
+
+                {
+                    departureList.length ? <Pagination
+                        totalItems={flightsInFilter?.length || 0}
+                        itemsPerPage={10}
+                        onChange={setPage}
+                        currentPage={page}
+                        wrapperClassName="mt-5"
+                    /> : null
+                }
+
+                {
+                    !(loadingPercentage === 100) && <ProgressBarWithLabel
+                        percentage={loadingPercentage}
+                        label={tFlight('getting-best-suggestion')}
+                        className="mt-5"
+                    />
+                }
+                {
+                    flightsInFilter?.sort((a, b) => SortCapacity(a, b))
+                        .sort((a: FlightType, b: FlightType): any => {
+                            if (sortFlights == "HighestPrice") return SortHightestPrice(a, b)
+                            else if (sortFlights == "Time") return SortTime(a, b)
+                            else {
+                                return a.capacity && a.adultPrice - b.adultPrice
+                            }
+                        }).slice(firstItemIndex, lastItem).map((flight: FlightType) =>
+                            <FlightItem passengers={passengers} flightData={flight} key={flight.flightKey} />
+                        )
+                }
+                {
+                    departureList.length ? <Pagination
+                        totalItems={flightsInFilter?.length || 0}
+                        itemsPerPage={10}
+                        onChange={setPage}
+                        currentPage={page}
+                        wrapperClassName="mt-5"
+                    /> : null
+                }
+
+
+
+
+                {
+                    fetchDataCompelete && !departureList.length &&
+                    <NoItemDate />
+                }
+                {
+                    !flightsInFilter?.length && departureList.length && loadingPercentage == 100 ?
+                        <NoItemFilter /> : null
+                }
+
+
+
+                <ModalPortal
+                    selector="modal_portal"
+                    show={showSearchForm}
+                >
+                    <div className='fixed top-0 left-0 h-screen w-screen'>
+                        <div className='absolute left-0 right-0 top-0 bottom-0 bg-black/50 backdrop-blur'
+                            onClick={() => { setShowSearchForm(false) }}
                         />
-                    }
-                    {
-                        flightsInFilter?.sort((a, b) => SortCapacity(a, b))
-                            .sort((a: FlightType, b: FlightType): any => {
-                                if (sortFlights == "HighestPrice") return SortHightestPrice(a, b)
-                                else if (sortFlights == "Time") return SortTime(a, b)
-                                else {
-                                    return a.capacity && a.adultPrice - b.adultPrice
-                                }
-                            }).slice(firstItemIndex, lastItem).map((flight: FlightType) =>
-                                <FlightsFlightItem passengers={passengers} flightData={flight} key={flight.flightKey} />
-                            )
-                    }
-                    {
-                        departureList.length ? <Pagination
-                            totalItems={flightsInFilter?.length || 0}
-                            itemsPerPage={10}
-                            onChange={setPage}
-                            currentPage={page}
-                            wrapperClassName="mt-5"
-                        /> : null
-                    }
-                    {
-                        fetchDataCompelete && !departureList.length &&
-                        <FlightNoItemDate />
-                    }
-                    {
-                        !flightsInFilter?.length && departureList.length && loadingPercentage == 100 ?
-                            <FlightNoItemFilter /> : null
-                    }
 
+                        <div className="max-w-container mx-auto relative sm:p-5 sm:pt-20">
 
-                    {/* <FlightsSearchChange airports={airports} /> */}
-
-                    <ModalPortal
-                        selector="modal_portal"
-                        show={showSearchForm}
-                    >
-                        <div className='fixed top-0 left-0 h-screen w-screen'>
-                            <div className='absolute left-0 right-0 top-0 bottom-0 bg-black/50 backdrop-blur'
-                                onClick={() => { setShowSearchForm(false) }}
-                            />
-
-                            <div className="max-w-container mx-auto relative sm:p-5 sm:pt-20">
-
-                                <div className="sm:rounded-md p-3 max-sm:h-screen max-sm:overflow-auto sm:p-5 w-full bg-black/75 relative text-white" >
-                                    <div className="font-semibold mb-3 sm:text-lg">
-                                        تغییر جستجو
-                                    </div>
-
-                                    <button
-                                        type='button'
-                                        className='absolute top-3 left-3'
-                                        onClick={() => { setShowSearchForm(false) }}
-                                    >
-                                        <Close className='w-8 h-8 fill-neutral-400' />
-                                    </button>
-
-                                    <SearchForm
-                                        defaultValues={defaultValues}
-                                        research={research}
-                                    />
-
+                            <div className="sm:rounded-md p-3 max-sm:h-screen max-sm:overflow-auto sm:p-5 w-full bg-black/75 relative text-white" >
+                                <div className="font-semibold mb-3 sm:text-lg">
+                                    تغییر جستجو
                                 </div>
+
+                                <button
+                                    type='button'
+                                    className='absolute top-3 left-3'
+                                    onClick={() => { setShowSearchForm(false) }}
+                                >
+                                    <Close className='w-8 h-8 fill-neutral-400' />
+                                </button>
+
+                                <SearchForm
+                                    defaultValues={defaultValues}
+                                    research={research}
+                                />
+
                             </div>
-
                         </div>
-                    </ModalPortal>
 
-
-                </div>
+                    </div>
+                </ModalPortal>
             </div>
         </>
     )

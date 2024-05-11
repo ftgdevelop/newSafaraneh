@@ -1,14 +1,14 @@
 import { FlightType } from "../../types/flights";
 import { useState } from "react";
-import FlightDataItem from "./FlightGeneralData";
-import FlightPurcheInfo from "./FlightPurcheInfo";
+import FlightDataItem from "./GeneralData";
+import FlightPurcheInfo from "./PriceInfo";
 
 type PassengersType = {
     adults:number;
     children:number;
     infants:number;
 }
-const FlightsFlightItem: React.FC<any> = ({ flightData,passengers } : {flightData : FlightType , passengers: PassengersType}) => {
+const FlightItem: React.FC<any> = ({ flightData,passengers } : {flightData : FlightType , passengers: PassengersType}) => {
     
     const [OpenDetail, setOpenDetail] = useState<boolean>(false)
     return (
@@ -21,4 +21,4 @@ const FlightsFlightItem: React.FC<any> = ({ flightData,passengers } : {flightDat
     )
 }
 
-export default FlightsFlightItem;
+export default FlightItem;

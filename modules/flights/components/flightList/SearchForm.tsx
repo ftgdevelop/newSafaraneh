@@ -1,9 +1,14 @@
 import { RootState } from "@/modules/shared/store";
 import { useDispatch, useSelector } from "react-redux";
-import { setSearchChangeOn } from "../store/flightsSlice";
-import FlightSearch from "./flightSearch/FlightSearch";
+import { setSearchChangeOn } from "../../store/flightsSlice";
+import FlightSearch from "../flightSearch/FlightSearch";
 
-const FlightsSearchChange: React.FC<any> = ({airports}) => {
+type Props = {
+    airports: any
+}
+
+const SearchForm: React.FC<Props> = props => {
+    const {airports} = props
     const SearchChangeOn = useSelector((state: RootState) => state.flightFilters.SearchChangeOn)
     const dispatch = useDispatch()
     return (
@@ -27,4 +32,4 @@ const FlightsSearchChange: React.FC<any> = ({airports}) => {
     )
 }
 
-export default FlightsSearchChange;
+export default SearchForm;

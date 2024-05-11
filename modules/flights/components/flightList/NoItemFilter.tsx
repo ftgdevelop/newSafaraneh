@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
-import { setCancelFilters } from "../store/flightsSlice";
+import { setCancelFilters } from "../../store/flightsSlice";
 
-const FlightNoItemFilter: React.FC = () => {
+const NoItemFilter: React.FC = () => {
     const dispatch = useDispatch()
     return (
         <div className="text-center mt-18">
@@ -16,4 +16,4 @@ const FlightNoItemFilter: React.FC = () => {
     )
 }
 
-export default FlightNoItemFilter;
+export default NoItemFilter;

@@ -2,9 +2,14 @@ import Select from "@/modules/shared/components/ui/Select";
 import { SearchDataType } from "./FlightSearch";
 import { useRouter } from "next/router";
 
-const FlightSearchFlightType: React.FC<any> = ({SearchData, setSearchData} : {SearchData: SearchDataType, setSearchData: any}) => {
+type Props = {
+    flightType: 'All' | 'Economy' | 'Business',
+    setFlightType: any
+}
+const CobinClass: React.FC<Props> = props => {
+    const {flightType, setFlightType} = props
     const flightTypeHandler = (e : any) => {
-        setSearchData({...SearchData, flightType: e})
+        setFlightType(e)
     }
     const router = useRouter().query
     return (
@@ -20,4 +25,4 @@ const FlightSearchFlightType: React.FC<any> = ({SearchData, setSearchData} : {Se
     )
 }
 
-export default FlightSearchFlightType;
+export default CobinClass;

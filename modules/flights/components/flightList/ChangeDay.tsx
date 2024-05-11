@@ -1,9 +1,9 @@
 import { useRouter } from "next/router"
-import FlightSidebarFilterResult from "./FlightSidebarFilterResult"
+import FlightSidebarFilterResult from "./SidebarFilterResult"
 import { RightCaret } from "@/modules/shared/components/ui/icons"
 import { dateDiplayFormat, dateFormat } from "@/modules/shared/helpers"
 
-const FlightMainFilters: React.FC = () => {
+const ChangeDay: React.FC = () => {
     const today = dateFormat(new Date())
     const router = useRouter()
     const changeDate = (type: string) => {
@@ -49,4 +49,4 @@ const FlightMainFilters: React.FC = () => {
     )
 }
 
-export default FlightMainFilters;
+export default ChangeDay;

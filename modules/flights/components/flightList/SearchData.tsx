@@ -1,16 +1,17 @@
 import { useRouter } from "next/router";
-import { ArrowLeft } from "../../shared/components/ui/icons";
+import { ArrowLeft } from "../../../shared/components/ui/icons";
 import { useDispatch } from "react-redux";
-import { setSearchChangeOn } from "../store/flightsSlice";
+import { setSearchChangeOn } from "../../store/flightsSlice";
 import { dateDiplayFormat, dateFormat } from "@/modules/shared/helpers";
 
 type Props = {
     airports:any;
     showSearchForm: () => void;
 }
-const FlightSearchData: React.FC<Props> = props => {
+const SearchData: React.FC<Props> = props => {
 
     const {airports} = props;
+
 
     const query: any = useRouter().query
     const today = dateFormat(new Date())
@@ -65,4 +66,4 @@ const FlightSearchData: React.FC<Props> = props => {
     )
 }
 
-export default FlightSearchData;
+export default SearchData;
