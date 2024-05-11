@@ -255,3 +255,30 @@ export interface DomesticFlightConfirmType {
     status: FlightConfirmStatus;
   };
 }
+
+export type AirportAutoCompleteType = {
+  name: string;
+  city: {
+    name: string;
+    code: string;
+  };
+  code: string;
+  airportType: "Main" | "Subsidiary" | "City";
+}
+
+export type FlightSeachFormValue = {
+  originCode: string;
+  destinationCode: string;
+  departureDate?: string;
+  returnDate?: string;
+  adult: number;
+  child: number;
+  infant: number;
+  cabinClassCode: string;
+  airTripType: "OneWay" | "RoundTrip" ;
+}
+
+export interface FlightSearchDefaultValues extends FlightSeachFormValue {
+  originObject: AirportAutoCompleteType;
+  destinationObject: AirportAutoCompleteType;
+}

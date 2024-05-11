@@ -20,6 +20,10 @@ const FlightSidebarPriceChange: React.FC<any> = ({ FlightsData }: { FlightsData:
         MaxPrice !== 0 ? Math.ceil(MaxPrice - MaxMinDiffrence / 4) : '',
         MaxPrice
     ]
+
+    if(!MinPrice || !MaxPrice || MinPrice === MaxPrice){
+        return null;
+    }
     
     return (
         <>

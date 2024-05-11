@@ -4,7 +4,14 @@ import { useDispatch } from "react-redux";
 import { setSearchChangeOn } from "../store/flightsSlice";
 import { dateDiplayFormat, dateFormat } from "@/modules/shared/helpers";
 
-const FlightSearchData: React.FC<any> = ({airports}) => {
+type Props = {
+    airports:any;
+    showSearchForm: () => void;
+}
+const FlightSearchData: React.FC<Props> = props => {
+
+    const {airports} = props;
+
     const query: any = useRouter().query
     const today = dateFormat(new Date())
 
@@ -49,7 +56,9 @@ const FlightSearchData: React.FC<any> = ({airports}) => {
                 
             <button className="bg-blue-800 text-white text-sm max-md:text-xs rounded-md p-1 pl-2 pr-2 h-fit whitespace-nowrap mt-auto mb-auto
                 absolute rtl:left-0 ltr:right-0 max-sm:sticky max-sm:w-full hover:bg-blue-600 duration-300"
-                type="submit">
+                type="button"
+                onClick={()=>{props.showSearchForm();}}
+            >
                     تغییر جستجو
             </button>
         </div>
