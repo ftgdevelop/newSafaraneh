@@ -1,16 +1,17 @@
 import { useTranslation } from 'next-i18next';
 
 import SearchForm from '../../domesticHotel/components/shared/SearchForm';
-import { Apartment, Travel } from '../../shared/components/ui/icons';
+import { Apartment, Suitcase, Travel } from '../../shared/components/ui/icons';
 import Tab from '../../shared/components/ui/Tab';
 import { TabItem } from '@/modules/shared/types/common';
 import Image from 'next/image';
 import { addSomeDays, dateFormat } from '@/modules/shared/helpers';
 import FlightSearch from '@/modules/flights/components/shared/searchForm';
+import CipSearchForm from '@/modules/cip/components/searchForm';
 
 
 type Props = {
-  modules: ("domesticHotel" | "domesticFlight")[];
+  modules: ("domesticHotel" | "domesticFlight"| "cip")[];
 }
 
 const Banner: React.FC<Props> = props => {
@@ -42,6 +43,15 @@ const Banner: React.FC<Props> = props => {
       label: (<div className='text-center'> <Travel className='w-6 h-6 fill-current block mx-auto mb-1' /> {t('domestic-flight')} </div>),
       children: (<FlightSearch />)
     })
+  }
+
+  if(props.modules.includes("cip")){
+    items.push({
+      key: '3',
+      label: (<div className='text-center'> <Suitcase className='w-6 h-6 fill-current block mx-auto mb-1' /> {t('cip')} </div>),
+      children: (<CipSearchForm />)
+    })
+    
   }
 
   return (

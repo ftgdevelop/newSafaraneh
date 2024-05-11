@@ -41,7 +41,7 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
     const { t: tCip } = useTranslation('cip');
 
     const router = useRouter();
-
+    
     let siteName = "";
     let tel = "";
     let twitter = "";
@@ -326,7 +326,16 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
         }
 
     }
+    const urlSegments: string[] = router.query.CipDetail as string[] || [] ;
+    
+    const urlDateSegment = urlSegments.find(item => item.includes("flightdate-"));
+    const urlAirlineSegment = urlSegments.find(item => item.includes("airlineName-"));
+    const urlFlightNumberSegment = urlSegments.find(item => item.includes("flightNumber-"));
 
+    let initialFlightDate  = urlDateSegment?.split("-")[1];
+    let initialAirline = urlAirlineSegment?.split("-")[1];
+    let initialFlightNumber = urlFlightNumberSegment?.split("-")[1];
+    
     const formInitialValue = {
         reserver: {
             firstName: "",
@@ -350,9 +359,9 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
         companions: [],
         originName: "",
         destinationName: "",
-        airline: "",
-        flightNumber: "",
-        flightDate: "",
+        airline: initialAirline || "",
+        flightNumber: initialFlightNumber || "",
+        flightDate: initialFlightDate || "",
         flightTime: "",
         cip_transport_address: ""
 
@@ -603,7 +612,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
     const { locale, params } = context;
 
-    const url = 'fa/cip/' + params?.CipDetail;
+    const url = 'fa/cip/' + params?.CipDetail[0];
 
     const airportData: any = await getAirportByUrl(url, locale === "fa" ? "fa-IR" : "en-US");
 
