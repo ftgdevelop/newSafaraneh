@@ -1,9 +1,14 @@
 import { RootState } from "@/modules/shared/store";
 import { useDispatch, useSelector } from "react-redux";
-import { setSearchChangeOn } from "../store/flightsSlice";
-import FlightSearch from "./flightSearch/FlightSearch";
+import { setSearchChangeOn } from "../../store/flightsSlice";
+import FlightSearch from "../flightSearch/FlightSearch";
 
-const FlightsSearchChange: React.FC = () => {
+type Props = {
+    airports: any
+}
+
+const SearchForm: React.FC<Props> = props => {
+    const {airports} = props
     const SearchChangeOn = useSelector((state: RootState) => state.flightFilters.SearchChangeOn)
     const dispatch = useDispatch()
     return (
@@ -17,7 +22,7 @@ const FlightsSearchChange: React.FC = () => {
                             بستن
                         </button>
                 </div>
-                <FlightSearch className="pl-4 pr-4 max-sm:p-0" />
+                <FlightSearch className="pl-4 pr-4 max-sm:p-0" airports={airports} />
         </div>
 
         <div className={`z-20 fixed top-0 left-0 bg-black/30 backdrop-blur-sm ${!SearchChangeOn ? 'hidden' : 'w-full h-full'}`}
@@ -27,4 +32,4 @@ const FlightsSearchChange: React.FC = () => {
     )
 }
 
-export default FlightsSearchChange;
+export default SearchForm;

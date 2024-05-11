@@ -9,11 +9,11 @@ import { useState } from "react";
 import { validateFlight } from "../../actions";
 
 type PassengersType = {
-    adults:number;
+    adult:number;
     children:number;
-    infants:number;
+    infant:number;
 }
-const FlightPurcheInfo: React.FC<any> = ({ flightData, detail, passengers }: { flightData: FlightType, detail: boolean, passengers: PassengersType }) => {
+const PriceInfo: React.FC<any> = ({ flightData, detail, passengers }: { flightData: FlightType, detail: boolean, passengers: PassengersType }) => {
     
     const router = useRouter();
 
@@ -84,7 +84,7 @@ const FlightPurcheInfo: React.FC<any> = ({ flightData, detail, passengers }: { f
                 onClick={bookFlight}
                 disabled={!flightData?.capacity || unAvailableFlight}
                 color="blue"
-                className="px-5 w-full h-8 leading-6 text-sm mt-2"
+                className="px-5 w-full h-8 leading-6 text-sm mt-2 text-nowrap"
                 hasArrow
                 loading={loading}
             >
@@ -112,20 +112,20 @@ const FlightPurcheInfo: React.FC<any> = ({ flightData, detail, passengers }: { f
                 detail &&
                 <div className="text-3xs max-md:text-4xs text-gray-400 max-lg:text-black">
                     <div className="flex justify-between max-sm:block">
-                        <p>بزرگسال ({passengers.adults})</p>
-                        <p>{numberWithCommas(passengers.adults * flightData.adultPrice)} ریال</p>
+                        <p>بزرگسال ({passengers.adult})</p>
+                        <p>{numberWithCommas(passengers.adult * flightData.adultPrice)} ریال</p>
                     </div>
                     <div className="flex justify-between max-sm:block">
                         <p>کودک ({passengers.children})</p>
                         <p>{numberWithCommas(passengers.children * flightData.childPrice)} ریال</p>
                     </div>
                     <div className="flex justify-between max-sm:block">
-                        <p>نوزاد ({passengers.infants})</p>
-                        <p>{numberWithCommas(passengers.infants * flightData.infantPrice)} ریال</p>
+                        <p>نوزاد ({passengers.infant})</p>
+                        <p>{numberWithCommas(passengers.infant * flightData.infantPrice)} ریال</p>
                     </div>
                     <div className="flex justify-between text-xs text-black font-semibold max-sm:block">
                         <p>مجموع</p>
-                        <p>{numberWithCommas(Math.round(passengers.adults * flightData.adultPrice + passengers.children * flightData.childPrice + passengers.infants * flightData.infantPrice))} ریال</p>
+                        <p>{numberWithCommas(Math.round(passengers.adult * flightData.adultPrice + passengers.children * flightData.childPrice + passengers.infant * flightData.infantPrice))} ریال</p>
                     </div>
                 </div>
             }
@@ -133,4 +133,4 @@ const FlightPurcheInfo: React.FC<any> = ({ flightData, detail, passengers }: { f
     )
 }
 
-export default FlightPurcheInfo;
+export default PriceInfo;

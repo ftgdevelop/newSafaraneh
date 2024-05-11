@@ -5,9 +5,13 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { SearchDataType } from "./FlightSearch";
 
-const FlightSearchPassengers: React.FC<any> = ({SearchData, setSearchData}: {SearchData: SearchDataType, setSearchData: any}) => {
+type Props = {
+    passengers: { adult: any, child: any, infant: any },
+    setPassengers: any
+}
+const Passengers: React.FC<Props> = props => {
     const dispatch = useDispatch()
-
+    const {passengers, setPassengers} = props
     const wrapperRef = useRef<HTMLDivElement>(null);
     const [passengersOpen, setPassengersOpen] = useState(false)
 
@@ -88,15 +92,15 @@ const FlightSearchPassengers: React.FC<any> = ({SearchData, setSearchData}: {Sea
     }, []);
 
     useEffect(() => {
-        setSearchData({...SearchData, adult})
+        setPassengers({...passengers, adult})
     }, [adult])
 
     useEffect(() => {
-        setSearchData({...SearchData, child})
+        setPassengers({...passengers, child})
     }, [child])
 
     useEffect(() => {
-        setSearchData({...SearchData, infant})
+        setPassengers({...passengers, infant})
     }, [infant])
     const passengersItem = (content: string, count: any, countHandel:any) => {
         return (
@@ -118,7 +122,7 @@ const FlightSearchPassengers: React.FC<any> = ({SearchData, setSearchData}: {Sea
     return (
         <div ref={wrapperRef}>
             <button type="button" className={`bg-white h-12 p-2 m-1 flex items-center rounded text-blue-800 text-sm w-32 max-sm:w-26 relative
-                before:w-2.5 before:h-2.5 before:inline-block ${passengersOpen ? "before:-rotate-135" : "before:rotate-45"}  before:border-b-2 before:border-r-2 before:carret-down before:absolute before:border-neutral-500 rtl:before:left-3 ltr:before:right-3 before:top-1/2 before:-mt-1.5`}
+                before:w-2.5 before:h-2.5 before:inline-block border-1 border-gray-200 ${passengersOpen ? "before:-rotate-135" : "before:rotate-45"}  before:border-b-2 before:border-r-2 before:carret-down before:absolute before:border-neutral-500 rtl:before:left-3 ltr:before:right-3 before:top-1/2 before:-mt-1.5`}
                 onClick={() => setPassengersOpen(true)}>
                 <span className="ml-1 mr-1">{allPassengers}</span>
                 مسافران
@@ -133,4 +137,4 @@ const FlightSearchPassengers: React.FC<any> = ({SearchData, setSearchData}: {Sea
     )
 }
 
-export default FlightSearchPassengers;
+export default Passengers;
