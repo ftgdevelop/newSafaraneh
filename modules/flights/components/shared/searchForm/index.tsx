@@ -60,7 +60,7 @@ const SearchForm: React.FC<Props> = props => {
             +(query.infant || 0) === values.infant &&
             query.departing === values.departureDate &&
             query.returning === values.returnDate &&
-            query.flightType === values.cabinClassCode
+            query.flightType === (values.cabinClassCode === "All" ? undefined : values.cabinClassCode)
         ) {
             props.research();
         } else {
@@ -77,7 +77,7 @@ const SearchForm: React.FC<Props> = props => {
         adult: 1,
         child: 0,
         infant: 0,
-        cabinClassCode: "Economy",
+        cabinClassCode: "All",
         airTripType: "OneWay"
     }
 
@@ -138,7 +138,7 @@ const SearchForm: React.FC<Props> = props => {
                                             h10
                                             className='inline-block w-28 rounded-lg'
                                             items={[
-                                                { value: "all", label: "همه" },
+                                                { value: "All", label: "همه" },
                                                 { value: "Economy", label: "اکونومی" },
                                                 { value: "Business", label: "بیزینس" }
                                             ]}

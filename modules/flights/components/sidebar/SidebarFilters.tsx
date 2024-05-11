@@ -23,7 +23,7 @@ const SidebarFilters: React.FC<any> = ({ FlightsData, flightsInFilterLengths }: 
     return (
         <>
             <div className={`w-1/4 h-fit max-lg:fixed max-lg:top-0 max-lg:-right-1 max-lg:overflow-y-auto p-4 pt-2 divide-y space-y-2 max-lg:w-2/5 max-md:w-3/5
-            max-sm:w-11/12 max-lg:h-screen ${FlightsData.length ? 'bg-white' : 'bg-gray-100'} border-1 border-gray-200 rounded max-lg:rounded-none z-20 duration-300 max-lg:border-0
+            max-sm:w-11/12 max-lg:h-screen bg-white border-1 border-gray-200 rounded max-lg:rounded-none z-20 duration-300 max-lg:border-0
             ${OpenSidebar ? 'max-lg:translate-x-0' : 'max-lg:translate-x-full'}`}
             >
                 <div>

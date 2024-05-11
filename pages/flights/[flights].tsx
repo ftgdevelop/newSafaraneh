@@ -225,7 +225,7 @@ const Flights: NextPage<any> = ({ airports, routeCodes, portalData }: { airports
                 adult: +(query.adult || 0),
                 child: +(query.child || 0),
                 infant: +(query.infant || 0),
-                cabinClassCode: (query.flightType as string) || "all",
+                cabinClassCode: (query.flightType as string) || "All",
                 departureDate: query.departing as string || "",
                 returnDate: query.returning as string || undefined,
                 originObject: {
@@ -272,111 +272,115 @@ const Flights: NextPage<any> = ({ airports, routeCodes, portalData }: { airports
 
             <div className="max-w-container m-auto p-5 max-md:p-3 flex gap-5 relative">
 
+                <FlightSidebarFilters FlightsData={departureList} flightsInFilterLengths={flightsInFilter?.length} />
 
-                <SearchData
-                    showSearchForm={() => { setShowSearchForm(true) }}
-                    airports={airports}
-                />
+                <div className="w-3/4 max-lg:w-full">
 
-                <ChangeDay />
-                {
-                    flightsInFilter?.length ?
-                        <SortFlights sortFlights={sortFlights} changeSortFlights={(e: string) => setSortFlights(e)} /> : null
-                }
-
-
-
-
-                {!!query.returning && <p className="text-sm mt-5" > ابتدا از لیست زیر، بلیط رفت خود را انتخاب نمایید</p>}
-
-
-                {
-                    departureList.length ? <Pagination
-                        totalItems={flightsInFilter?.length || 0}
-                        itemsPerPage={10}
-                        onChange={setPage}
-                        currentPage={page}
-                        wrapperClassName="mt-5"
-                    /> : null
-                }
-
-                {
-                    !(loadingPercentage === 100) && <ProgressBarWithLabel
-                        percentage={loadingPercentage}
-                        label={tFlight('getting-best-suggestion')}
-                        className="mt-5"
+                    <SearchData
+                        showSearchForm={() => { setShowSearchForm(true) }}
+                        airports={airports}
                     />
-                }
-                {
-                    flightsInFilter?.sort((a, b) => SortCapacity(a, b))
-                        .sort((a: FlightType, b: FlightType): any => {
-                            if (sortFlights == "HighestPrice") return SortHightestPrice(a, b)
-                            else if (sortFlights == "Time") return SortTime(a, b)
-                            else {
-                                return a.capacity && a.adultPrice - b.adultPrice
-                            }
-                        }).slice(firstItemIndex, lastItem).map((flight: FlightType) =>
-                            <FlightItem passengers={passengers} flightData={flight} key={flight.flightKey} />
-                        )
-                }
-                {
-                    departureList.length ? <Pagination
-                        totalItems={flightsInFilter?.length || 0}
-                        itemsPerPage={10}
-                        onChange={setPage}
-                        currentPage={page}
-                        wrapperClassName="mt-5"
-                    /> : null
-                }
+
+                    <ChangeDay />
+                    {
+                        flightsInFilter?.length ?
+                            <SortFlights sortFlights={sortFlights} changeSortFlights={(e: string) => setSortFlights(e)} /> : null
+                    }
 
 
 
 
-                {
-                    fetchDataCompelete && !departureList.length &&
-                    <NoItemDate />
-                }
-                {
-                    !flightsInFilter?.length && departureList.length && loadingPercentage == 100 ?
-                        <NoItemFilter /> : null
-                }
+                    {!!query.returning && <p className="text-sm mt-5" > ابتدا از لیست زیر، بلیط رفت خود را انتخاب نمایید</p>}
 
 
+                    {
+                        departureList.length ? <Pagination
+                            totalItems={flightsInFilter?.length || 0}
+                            itemsPerPage={10}
+                            onChange={setPage}
+                            currentPage={page}
+                            wrapperClassName="mt-5"
+                        /> : null
+                    }
 
-                <ModalPortal
-                    selector="modal_portal"
-                    show={showSearchForm}
-                >
-                    <div className='fixed top-0 left-0 h-screen w-screen'>
-                        <div className='absolute left-0 right-0 top-0 bottom-0 bg-black/50 backdrop-blur'
-                            onClick={() => { setShowSearchForm(false) }}
+                    {
+                        !(loadingPercentage === 100) && <ProgressBarWithLabel
+                            percentage={loadingPercentage}
+                            label={tFlight('getting-best-suggestion')}
+                            className="mt-5"
                         />
+                    }
+                    {
+                        flightsInFilter?.sort((a, b) => SortCapacity(a, b))
+                            .sort((a: FlightType, b: FlightType): any => {
+                                if (sortFlights == "HighestPrice") return SortHightestPrice(a, b)
+                                else if (sortFlights == "Time") return SortTime(a, b)
+                                else {
+                                    return a.capacity && a.adultPrice - b.adultPrice
+                                }
+                            }).slice(firstItemIndex, lastItem).map((flight: FlightType) =>
+                                <FlightItem passengers={passengers} flightData={flight} key={flight.flightKey} />
+                            )
+                    }
+                    {
+                        departureList.length ? <Pagination
+                            totalItems={flightsInFilter?.length || 0}
+                            itemsPerPage={10}
+                            onChange={setPage}
+                            currentPage={page}
+                            wrapperClassName="mt-5"
+                        /> : null
+                    }
 
-                        <div className="max-w-container mx-auto relative sm:p-5 sm:pt-20">
 
-                            <div className="sm:rounded-md p-3 max-sm:h-screen max-sm:overflow-auto sm:p-5 w-full bg-black/75 relative text-white" >
-                                <div className="font-semibold mb-3 sm:text-lg">
-                                    تغییر جستجو
+
+
+                    {
+                        fetchDataCompelete && !departureList.length &&
+                        <NoItemDate />
+                    }
+                    {
+                        !flightsInFilter?.length && departureList.length && loadingPercentage == 100 ?
+                            <NoItemFilter /> : null
+                    }
+
+
+
+                    <ModalPortal
+                        selector="modal_portal"
+                        show={showSearchForm}
+                    >
+                        <div className='fixed top-0 left-0 h-screen w-screen'>
+                            <div className='absolute left-0 right-0 top-0 bottom-0 bg-black/50 backdrop-blur'
+                                onClick={() => { setShowSearchForm(false) }}
+                            />
+
+                            <div className="max-w-container mx-auto relative sm:p-5 sm:pt-20">
+
+                                <div className="sm:rounded-md p-3 max-sm:h-screen max-sm:overflow-auto sm:p-5 w-full bg-black/75 relative text-white" >
+                                    <div className="font-semibold mb-3 sm:text-lg">
+                                        تغییر جستجو
+                                    </div>
+
+                                    <button
+                                        type='button'
+                                        className='absolute top-3 left-3'
+                                        onClick={() => { setShowSearchForm(false) }}
+                                    >
+                                        <Close className='w-8 h-8 fill-neutral-400' />
+                                    </button>
+
+                                    <SearchForm
+                                        defaultValues={defaultValues}
+                                        research={research}
+                                    />
+
                                 </div>
-
-                                <button
-                                    type='button'
-                                    className='absolute top-3 left-3'
-                                    onClick={() => { setShowSearchForm(false) }}
-                                >
-                                    <Close className='w-8 h-8 fill-neutral-400' />
-                                </button>
-
-                                <SearchForm
-                                    defaultValues={defaultValues}
-                                    research={research}
-                                />
-
                             </div>
-                        </div>
 
-                    </div>
-                </ModalPortal>
+                        </div>
+                    </ModalPortal>
+                </div>
             </div>
         </>
     )
