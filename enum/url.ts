@@ -61,7 +61,8 @@ export const Flight = {
   GetReserveById:"/api/services/app/Reserve/Get",
   searchFlights: 'flightdomestic.safaraneh.com/api/services/app/Airport/Search',
   Confirm:"/api/services/app/BookingFlight/Confirm",
-  GetVoucherPdf:"/api/services/app/Reserve/GetVoucherPdf"
+  GetVoucherPdf:"/api/services/app/Reserve/GetVoucherPdf",
+  AirportSearch:"/api/services/app/Airport/Search"
 };
 
   export const Blog = {
