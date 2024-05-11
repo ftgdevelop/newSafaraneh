@@ -24,7 +24,7 @@ type Props<T> = {
     createTextFromOptionsObject: (object: T) => string;
     noResultMessage?: string;
     checkTypingLanguage?: boolean;
-    type: "hotel" | "flight";
+    type: "hotel" | "flight" | "cip";
     sortListFunction?: (a:T, b:T) => 1 | -1;
 }
 
@@ -96,6 +96,16 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
                         "Accept-Language": acceptLanguage || "fa-IR",
                     }
                 }
+            } else if (props.type === 'cip') {
+                axiosParams = {
+                    method: "get",
+                    url: url,
+                    headers: {
+                        ...Header,
+                        apikey: process.env.PROJECT_PORTAL_APIKEY,
+                        "Accept-Language": acceptLanguage || "fa-IR",
+                    }
+                }
             }
 
             if (!axiosParams) return;
@@ -104,6 +114,8 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
 
             if (response?.data?.result?.length) {
                 setItems(response.data.result);
+            } else if (response?.data?.result?.items?.length){
+                setItems(response.data.result.items);
             } else {
                 setItems([]);
                 if (response.data?.success) {

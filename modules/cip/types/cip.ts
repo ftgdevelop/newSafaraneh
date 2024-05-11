@@ -485,3 +485,10 @@ export interface CipAvailibilityItem {
   }[];
   id: number;
 }  
+
+
+export type CipAutoCompleteType = {
+  url?: string;
+  name?: string;
+  id?: number;
+}
