@@ -67,7 +67,10 @@ export interface AirportSearchResponseItem  {
     //   name: "string",
     //   code: "string"
     // },
-    code: string;
+  code: string;
+  values?: {
+    name: string
+  }
     // latitude: "string",
     // longitude: "string",
     airportType: "Main" | "Subsidiary"| "City"
@@ -85,7 +88,7 @@ export interface AirportSearchResponseItem  {
 export type AirportType = {
     name?: string;
     code?: string;
-    terminalId?: string;
+  terminalId?: string;
     city: {
       name?: string;
       code?: string;
@@ -95,7 +98,7 @@ export type AirportType = {
       code?: string;
     };
     latitude?: string;
-    longitude?: string;
+  longitude?: string;
 }
 
 type FlightDetail = {
@@ -243,7 +246,7 @@ export interface DomesticFlightGetReserveByIdType {
         id: number;
       }[];
     id: number;
-  }
+}
 
 export type FlightConfirmStatus = "Undefined" | "Registered" | "Pending" | "Issued" | "Canceled" | "WebServiceCancel" | "PaymentSuccessful" | "WebServiceUnsuccessful" | "PriceChange" | "Unavailable" | "Refunded" | "Voided" | "InProgress" | "PaidBack" | "RefundInProgress" | "Changed" | "OnCredit" | "ContactProvider" | "UnConfirmed";;
 export interface DomesticFlightConfirmType {
@@ -251,4 +254,31 @@ export interface DomesticFlightConfirmType {
   reserve: {
     status: FlightConfirmStatus;
   };
+}
+
+export type AirportAutoCompleteType = {
+  name: string;
+  city: {
+    name: string;
+    code: string;
+  };
+  code: string;
+  airportType: "Main" | "Subsidiary" | "City";
+}
+
+export type FlightSeachFormValue = {
+  originCode: string;
+  destinationCode: string;
+  departureDate?: string;
+  returnDate?: string;
+  adult: number;
+  child: number;
+  infant: number;
+  cabinClassCode: string;
+  airTripType: "OneWay" | "RoundTrip" ;
+}
+
+export interface FlightSearchDefaultValues extends FlightSeachFormValue {
+  originObject: AirportAutoCompleteType;
+  destinationObject: AirportAutoCompleteType;
 }

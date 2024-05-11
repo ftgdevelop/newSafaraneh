@@ -15,7 +15,7 @@ type uniqAirlinesType = {
     PictureAlt: string;
 }
 
-const FlightSidebarAirlines: React.FC<any> = ({ FlightsData }: { FlightsData: FlightType[] }) => {
+const Airlines: React.FC<any> = ({ FlightsData }: { FlightsData: FlightType[] }) => {
     const airlinesFilter = useSelector((state: RootState) => state.flightFilters.filterOption.airlineOption)
     const dispatch = useDispatch()
 
@@ -107,4 +107,4 @@ const FlightSidebarAirlines: React.FC<any> = ({ FlightsData }: { FlightsData: Fl
     )
 }
 
-export default FlightSidebarAirlines;
+export default Airlines;

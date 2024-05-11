@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import FlightSidebarAirlines from "./FlightSidebarAirlines";
-import FlightSidebarHours from "./FlightSidebarTime";
-import FlightSidebarFlightType from "./FlightSidebarFlightType";
-import FlightSidebarPriceChange from "./FlightSidebarPriceRange";
+import TicketCobinType from "./TicketCobinType";
 import { FlightType } from "../../types/flights";
 import Skeleton from "@/modules/shared/components/ui/Skeleton";
+import FlightTime from "./FlightTime";
+import Airlines from "./Airlines";
+import PriceChange from "./PriceRange";
 
-const FlightSidebarFilters: React.FC<any> = ({ FlightsData, flightsInFilterLengths }: {FlightsData: FlightType[], flightsInFilterLengths: number}) => {
+const SidebarFilters: React.FC<any> = ({ FlightsData, flightsInFilterLengths }: {FlightsData: FlightType[], flightsInFilterLengths: number}) => {
     const [OpenSidebar, setOpenSidebar] = useState<boolean>(false)
     
     useEffect(() => {
@@ -23,7 +23,7 @@ const FlightSidebarFilters: React.FC<any> = ({ FlightsData, flightsInFilterLengt
     return (
         <>
             <div className={`w-1/4 h-fit max-lg:fixed max-lg:top-0 max-lg:-right-1 max-lg:overflow-y-auto p-4 pt-2 divide-y space-y-2 max-lg:w-2/5 max-md:w-3/5
-            max-sm:w-11/12 max-lg:h-screen ${FlightsData.length ? 'bg-white' : 'bg-gray-100'} border-1 border-gray-200 rounded max-lg:rounded-none z-20 duration-300 max-lg:border-0
+            max-sm:w-11/12 max-lg:h-screen bg-white border-1 border-gray-200 rounded max-lg:rounded-none z-20 duration-300 max-lg:border-0
             ${OpenSidebar ? 'max-lg:translate-x-0' : 'max-lg:translate-x-full'}`}
             >
                 <div>
@@ -36,10 +36,10 @@ const FlightSidebarFilters: React.FC<any> = ({ FlightsData, flightsInFilterLengt
                         <Skeleton className="w-20" />
                     }
                 </div>
-                <FlightSidebarAirlines FlightsData={FlightsData} />
-                <FlightSidebarHours FlightsData={FlightsData} />
-                <FlightSidebarPriceChange FlightsData={FlightsData} />
-                <FlightSidebarFlightType FlightsData={FlightsData} />
+                <Airlines FlightsData={FlightsData} />
+                <FlightTime FlightsData={FlightsData} />
+                <PriceChange FlightsData={FlightsData} />
+                <TicketCobinType FlightsData={FlightsData} />
                 </div>
  
             <div className={`bg-black/75 z-10 fixed top-0 left-0 backdrop-blur contrast-100 ${!OpenSidebar ? 'hidden' : 'max-lg:w-full h-full'}`}
@@ -58,4 +58,4 @@ const FlightSidebarFilters: React.FC<any> = ({ FlightsData, flightsInFilterLengt
     )
 }
 
-export default FlightSidebarFilters;
+export default SidebarFilters;

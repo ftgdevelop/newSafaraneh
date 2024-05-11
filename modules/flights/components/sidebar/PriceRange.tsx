@@ -5,7 +5,7 @@ import { RootState } from "@/modules/shared/store";
 import { setPriceRangeFilter } from "../../store/flightsSlice";
 import Skeleton from "@/modules/shared/components/ui/Skeleton";
 
-const FlightSidebarPriceChange: React.FC<any> = ({ FlightsData }: { FlightsData: FlightType[] }) => {
+const PriceChange: React.FC<any> = ({ FlightsData }: { FlightsData: FlightType[] }) => {
     const priceFilter = useSelector((state : RootState) => state.flightFilters.filterOption.priceRangeOption)
     const dispatch = useDispatch()
     
@@ -20,6 +20,10 @@ const FlightSidebarPriceChange: React.FC<any> = ({ FlightsData }: { FlightsData:
         MaxPrice !== 0 ? Math.ceil(MaxPrice - MaxMinDiffrence / 4) : '',
         MaxPrice
     ]
+
+    if(!MinPrice || !MaxPrice || MinPrice === MaxPrice){
+        return null;
+    }
     
     return (
         <>
@@ -67,4 +71,4 @@ const FlightSidebarPriceChange: React.FC<any> = ({ FlightsData }: { FlightsData:
     )
 }
 
-export default FlightSidebarPriceChange;
+export default PriceChange;

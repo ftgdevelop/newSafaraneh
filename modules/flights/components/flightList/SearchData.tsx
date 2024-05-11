@@ -1,10 +1,18 @@
 import { useRouter } from "next/router";
-import { ArrowLeft } from "../../shared/components/ui/icons";
+import { ArrowLeft } from "../../../shared/components/ui/icons";
 import { useDispatch } from "react-redux";
-import { setSearchChangeOn } from "../store/flightsSlice";
+import { setSearchChangeOn } from "../../store/flightsSlice";
 import { dateDiplayFormat, dateFormat } from "@/modules/shared/helpers";
 
-const FlightSearchData: React.FC<any> = ({airports}) => {
+type Props = {
+    airports:any;
+    showSearchForm: () => void;
+}
+const SearchData: React.FC<Props> = props => {
+
+    const {airports} = props;
+
+
     const query: any = useRouter().query
     const today = dateFormat(new Date())
 
@@ -15,12 +23,12 @@ const FlightSearchData: React.FC<any> = ({airports}) => {
             onClick={() => dispatch(setSearchChangeOn(true))}>
                 
             <div>
-                <p className="text-sm max-md:text-2xs">{airports.find((i: any) => i.code == query.flights.split('-')[0]).city?.code}</p>
+                <p className="text-sm max-md:text-2xs">{airports?.find((i: any) => i.code == query.flights.split('-')[0]).city?.code}</p>
                 <p className="text-gray-500 text-sm max-lg:text-xs max-md:text-3xs">{airports.find((i: any) => i.code == query.flights.split('-')[0]).city?.name}</p>
             </div>
             <ArrowLeft className="w-5 max-sm:w-4 fill-gray-400 ltr:rotate-180" />
             <div>
-                <p className="text-sm max-md:text-2xs">{airports.find((i: any) => i.code == query.flights.split('-')[1]).city?.code}</p>
+                <p className="text-sm max-md:text-2xs">{airports?.find((i: any) => i.code == query.flights.split('-')[1]).city?.code}</p>
                 <p className="text-gray-500 text-sm max-lg:text-xs max-md:text-3xs">{airports.find((i: any) => i.code == query.flights.split('-')[1])?.city.name}</p>
             </div>
 
@@ -49,11 +57,13 @@ const FlightSearchData: React.FC<any> = ({airports}) => {
                 
             <button className="bg-blue-800 text-white text-sm max-md:text-xs rounded-md p-1 pl-2 pr-2 h-fit whitespace-nowrap mt-auto mb-auto
                 absolute rtl:left-0 ltr:right-0 max-sm:sticky max-sm:w-full hover:bg-blue-600 duration-300"
-                type="submit">
+                type="button"
+                onClick={()=>{props.showSearchForm();}}
+            >
                     تغییر جستجو
             </button>
         </div>
     )
 }
 
-export default FlightSearchData;
+export default SearchData;

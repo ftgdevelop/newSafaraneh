@@ -133,22 +133,20 @@ const TravelServices: React.FC<Props> = props => {
 
                         <Link 
                             onClick={()=>{setOpenMenu(false)}} 
-                            //href='/hotels-home' 
-                            href="/"
+                            href='/hotels-home' 
                             className={`max-sm:border-t max-sm:border-neutral-300 max-sm:mt-3 max-sm:pt-3 ${linkWithIconClassName}`} 
                         >
                             <Bed className={iconClassName} />
                             {t('domestic-hotel')}
                         </Link>
-                        {/* <Link 
+                        <Link 
                             onClick={()=>{setOpenMenu(false)}} 
-                            //href='/flights-home' 
-                            href="https://tickets.safaraneh.com/fa/flights-home"
+                            href="/flights-home"
                             className={linkWithIconClassName} 
                         >
                             <Travel className={iconClassName} />
                             {t('domestic-flight')}
-                        </Link> */}
+                        </Link>
                         <Link 
                             onClick={()=>{setOpenMenu(false)}} 
                             //</nav>href='/hotels-foreign-home' 
