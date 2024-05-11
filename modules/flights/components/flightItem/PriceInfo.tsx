@@ -9,9 +9,9 @@ import { useState } from "react";
 import { validateFlight } from "../../actions";
 
 type PassengersType = {
-    adult:number;
+    adults:number;
     children:number;
-    infant:number;
+    infants:number;
 }
 const PriceInfo: React.FC<any> = ({ flightData, detail, passengers }: { flightData: FlightType, detail: boolean, passengers: PassengersType }) => {
     
@@ -112,20 +112,20 @@ const PriceInfo: React.FC<any> = ({ flightData, detail, passengers }: { flightDa
                 detail &&
                 <div className="text-3xs max-md:text-4xs text-gray-400 max-lg:text-black">
                     <div className="flex justify-between max-sm:block">
-                        <p>بزرگسال ({passengers.adult})</p>
-                        <p>{numberWithCommas(passengers.adult * flightData.adultPrice)} ریال</p>
+                        <p>بزرگسال ({passengers.adults})</p>
+                        <p>{numberWithCommas(passengers.adults * flightData.adultPrice)} ریال</p>
                     </div>
                     <div className="flex justify-between max-sm:block">
                         <p>کودک ({passengers.children})</p>
                         <p>{numberWithCommas(passengers.children * flightData.childPrice)} ریال</p>
                     </div>
                     <div className="flex justify-between max-sm:block">
-                        <p>نوزاد ({passengers.infant})</p>
-                        <p>{numberWithCommas(passengers.infant * flightData.infantPrice)} ریال</p>
+                        <p>نوزاد ({passengers.infants})</p>
+                        <p>{numberWithCommas(passengers.infants * flightData.infantPrice)} ریال</p>
                     </div>
                     <div className="flex justify-between text-xs text-black font-semibold max-sm:block">
                         <p>مجموع</p>
-                        <p>{numberWithCommas(Math.round(passengers.adult * flightData.adultPrice + passengers.children * flightData.childPrice + passengers.infant * flightData.infantPrice))} ریال</p>
+                        <p>{numberWithCommas(Math.round(passengers.adults * flightData.adultPrice + passengers.children * flightData.childPrice + passengers.infants * flightData.infantPrice))} ریال</p>
                     </div>
                 </div>
             }
