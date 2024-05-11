@@ -193,7 +193,7 @@ const Home: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], portalD
         />
       </Head>
       <Banner
-        modules={['domesticFlight', 'domesticHotel']}
+        modules={['domesticFlight', 'domesticHotel', 'cip']}
       />
 
       <div className='max-w-container mx-auto px-5'>
