@@ -20,6 +20,8 @@ const Header: React.FC<Props> = props => {
     const userIsAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
 
     const { logo, siteName } = props;
+    
+    const theme2 = process.env.THEME === "THEME2";
 
     return (
         <header className="bg-white z-30 relative">
@@ -51,7 +53,7 @@ const Header: React.FC<Props> = props => {
 
                 <HeaderAuthentication />
 
-                { !userIsAuthenticated && <TrackOrder />}
+                { !userIsAuthenticated && !theme2 && <TrackOrder />}
 
                 {/* <Language className="ltr:float-right rtl:float-left rtl:ml-5 ltr:mr-5 hidden md:block" buttonClassName="h-12" /> */}
             </div>

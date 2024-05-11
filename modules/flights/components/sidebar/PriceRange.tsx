@@ -3,8 +3,9 @@ import { FlightType } from "../../types/flights";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/modules/shared/store";
 import { setPriceRangeFilter } from "../../store/flightsSlice";
+import Skeleton from "@/modules/shared/components/ui/Skeleton";
 
-const FlightSidebarPriceChange: React.FC<any> = ({ FlightsData }: { FlightsData: FlightType[] }) => {
+const PriceChange: React.FC<any> = ({ FlightsData }: { FlightsData: FlightType[] }) => {
     const priceFilter = useSelector((state : RootState) => state.flightFilters.filterOption.priceRangeOption)
     const dispatch = useDispatch()
     
@@ -19,6 +20,10 @@ const FlightSidebarPriceChange: React.FC<any> = ({ FlightsData }: { FlightsData:
         MaxPrice !== 0 ? Math.ceil(MaxPrice - MaxMinDiffrence / 4) : '',
         MaxPrice
     ]
+
+    if(!MinPrice || !MaxPrice || MinPrice === MaxPrice){
+        return null;
+    }
     
     return (
         <>
@@ -56,10 +61,14 @@ const FlightSidebarPriceChange: React.FC<any> = ({ FlightsData }: { FlightsData:
                             onChange={e => dispatch(setPriceRangeFilter({ min: priceFilter?.min, max: +e }))}
                             className="col-span-2 text-xs whitespace-nowrap h-fit p-1" />
                     </div>
-                </div>:<div></div>
+                </div> :
+                <div className="py-3 space-y-3">
+                    <Skeleton className="w-1/2"/>
+                    <Skeleton className="w-1/2"/>        
+                </div>    
             }
         </>    
     )
 }
 
-export default FlightSidebarPriceChange;
+export default PriceChange;

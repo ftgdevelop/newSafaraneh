@@ -3,10 +3,18 @@ import { addSomeDays, checkDateIsAfterDate, dateDiplayFormat, dateFormat } from 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Calendar, Minus } from "@/modules/shared/components/ui/icons";
-import { SearchDataType } from "./FlightSearch";
 
-const FlightSearchDate: React.FC<any> = ({SearchData, setSearchData}: {SearchData: SearchDataType, setSearchData: any}) => {
-
+type Props = {
+    flightDate: {
+        departing: string | null,
+        returning: string | null
+    },
+    setFlightDate: any,
+    hasReturn: boolean,
+    setHasReturn: any
+}
+const FlightDate: React.FC<Props> = props => {
+    const {flightDate, setFlightDate, hasReturn, setHasReturn} = props
     const onChangeCheckout = (d:string) => {
         setDates(prevState => {
             if (!d) {return prevState;}
@@ -16,24 +24,23 @@ const FlightSearchDate: React.FC<any> = ({SearchData, setSearchData}: {SearchDat
     }
     let router = useRouter()
     const today = dateFormat(new Date())
-    let passed = router.query.deprating || today
-    const [dates, setDates] = useState<[any, any]>([passed, router.query.returning || null]);
+    const [dates, setDates] = useState<[any, any]>([router.query.departing || today, router.query.returning || null]);
     
     useEffect(() => {
-        if (dates[0]) setSearchData({...SearchData, departing: dates[0]})
-        if (dates[1]) setSearchData({...SearchData, returning: dates[1]})
+        if (dates[0]) setFlightDate({...flightDate, departing: dates[0]})
+        if (dates[1]) setFlightDate({...flightDate, returning: dates[1]})
     } ,[dates])
     useEffect(() => {
-        if (SearchData?.BackForth && !dates[1]) {
+        if (hasReturn && !dates[1]) {
             let minimumDestination = dates ? dateFormat(addSomeDays(new Date(dates[0]))) : dateFormat(addSomeDays(new Date()))
             setDates([dates[0], minimumDestination])
-            setSearchData({...SearchData, returning: minimumDestination})
+            setFlightDate({...flightDate, returning: minimumDestination})
         }
         else {
             setDates([dates[0], null])
-            setSearchData({...SearchData, returning: null})
+            setFlightDate({...flightDate, returning:null})
         }
-    } ,[SearchData?.BackForth])
+    } ,[hasReturn])
 
     const onChangeCheckin = (d:string) => {
         setDates(prevState => {
@@ -54,7 +61,7 @@ const FlightSearchDate: React.FC<any> = ({SearchData, setSearchData}: {SearchDat
     const deleteReturnDate = () => {
         if (dates[1]) {
             setDates([dates[0], null])
-            setSearchData({ ...SearchData, BackForth: false})
+            setHasReturn(false)
         }
         
     }
@@ -103,4 +110,4 @@ const FlightSearchDate: React.FC<any> = ({SearchData, setSearchData}: {SearchDat
     )
 }
 
-export default FlightSearchDate;
+export default FlightDate;

@@ -5,20 +5,15 @@ import { setCabinClassFilter, setTicketTypeFilter } from "../../store/flightsSli
 import { RootState } from "@/modules/shared/store";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import Skeleton from "@/modules/shared/components/ui/Skeleton";
 
-const FlightSidebarFlightType: React.FC<any> = ({ FlightsData }: { FlightsData: FlightType[] }) => {
+const TicketCobinType: React.FC<any> = ({ FlightsData }: { FlightsData: FlightType[] }) => {
     const economyCobinCount = FlightsData.filter(item => item.cabinClass.name == "Economy").length
     const businessCobinCount = FlightsData.filter(item => item.cabinClass.name == "Business").length
 
-    const query = useRouter().query
-    const SidebarFilter = useSelector((state : RootState) => state.flightFilters.filterOption)
+    const SidebarFilter = useSelector((state : RootState) => state?.flightFilters.filterOption)
     const dispatch = useDispatch()
-    
-    useEffect(() => {
-        if (query.flightType) {
-            dispatch(setCabinClassFilter(SidebarFilter.cabinClassOption.concat(query.flightType)))
-        } 
-    },[])
+
     const cobinClassHandle = (checked: any, cobinClassName: string) => {
         if (checked) {
             if (!SidebarFilter.cabinClassOption.includes(cobinClassName)) {
@@ -38,6 +33,14 @@ const FlightSidebarFlightType: React.FC<any> = ({ FlightsData }: { FlightsData: 
             dispatch(setTicketTypeFilter(SidebarFilter.ticketTypeOption.filter(item => item !== ticketType)))
         }
     }
+
+    if (!FlightsData.length) return (
+        <div className="py-4 space-y-3">
+            <Skeleton className="w-1/2"/>
+            <Skeleton className="w-1/2"/>
+            <Skeleton className="w-1/2"/>
+        </div>
+    )
     return (
         <div className="divide-y">
             <div className="text-sm pt-2 pb-2">
@@ -98,4 +101,4 @@ const FlightSidebarFlightType: React.FC<any> = ({ FlightsData }: { FlightsData: 
     )
 }
 
-export default FlightSidebarFlightType;
+export default TicketCobinType;

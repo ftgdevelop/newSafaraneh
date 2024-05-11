@@ -1,9 +1,9 @@
 import { Plus } from "@/modules/shared/components/ui/icons";
 import { RootState } from "@/modules/shared/store"
 import { useDispatch, useSelector } from "react-redux"
-import { setAirlineFilter, setCabinClassFilter, setFlightTimeFilter, setPriceRangeFilter, setTicketTypeFilter } from "../store/flightsSlice";
+import { setAirlineFilter, setCabinClassFilter, setFlightTimeFilter, setPriceRangeFilter, setTicketTypeFilter } from "../../store/flightsSlice";
 
-const FlightSidebarFilterResult: React.FC = () => {
+const SidebarFilterResult: React.FC = () => {
     const SidebarFilter: any = useSelector((state: RootState) => state.flightFilters.filterOption)
     const dispatch = useDispatch()
     
@@ -55,4 +55,4 @@ const FlightSidebarFilterResult: React.FC = () => {
     )
 }
 
-export default FlightSidebarFilterResult
+export default SidebarFilterResult

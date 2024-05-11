@@ -33,7 +33,7 @@ export default function Document() {
         />}
 
       </Head>
-      <body className="bg-body-background text-neutral-700 rtl:font-samim" >
+      <body className={`${process.env.THEME === "THEME2" ?"theme-2 text-stone-900 rtl:font-vazir":"text-neutral-700 rtl:font-samim" } bg-body-background`} >
 
         {!!portalGoogleAnalytic && (
           <>

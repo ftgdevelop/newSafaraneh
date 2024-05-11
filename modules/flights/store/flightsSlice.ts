@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { useRouter } from "next/router";
 
 type FlightsFilters = {
     filterOption: {
@@ -44,10 +43,13 @@ export const flightSlice = createSlice({
         setSearchChangeOn: (state, action) => {
             state.SearchChangeOn = action.payload
         },
+        setCancelFilters: (state) => {
+            state.filterOption = initialState.filterOption
+        }
     }
 })
 
 export const { setAirlineFilter, setFlightTimeFilter, setCabinClassFilter,
-setTicketTypeFilter, setPriceRangeFilter, setSearchChangeOn} = flightSlice.actions
-
+    setTicketTypeFilter, setPriceRangeFilter, setSearchChangeOn, setCancelFilters} = flightSlice.actions
+    
 export default flightSlice.reducer;

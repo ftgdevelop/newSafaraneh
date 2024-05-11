@@ -2,8 +2,10 @@ import Checkbox from "@/modules/shared/components/ui/Checkbox";
 import { RootState } from "@/modules/shared/store";
 import { useDispatch, useSelector } from "react-redux";
 import { setFlightTimeFilter } from "../../store/flightsSlice";
+import { FlightType } from "../../types/flights";
+import Skeleton from "@/modules/shared/components/ui/Skeleton";
 
-const FlightSidebarTime: React.FC = () => {
+const FlightTime: React.FC<any> = ({FlightsData} : {FlightsData: FlightType[]}) => {
     const FlightTimeFilter = useSelector((state: RootState) => state.flightFilters.filterOption.flightTimeOption)
     const dispatch = useDispatch()
 
@@ -41,12 +43,22 @@ const FlightSidebarTime: React.FC = () => {
                     <p></p>
                 } 
             </div>
-            {checkbox(0,6,'قبل از 6:00 صبح')}
-            {checkbox(6,12, '۶:۰۰ صبح تا ۱۱:۵۹ ظهر')}
-            {checkbox(12,18,  '۱۲:۰۰ ظهر تا ۱۸:۰۰ بعد از ظهر')}
-            {checkbox(18,24, 'بعد از ۱۸:۰۰ بعد از ظهر')}
+            {FlightsData.length ?
+                <div>
+                    {checkbox(0, 6, 'قبل از 6:00 صبح')}
+                    {checkbox(6, 12, '۶:۰۰ صبح تا ۱۱:۵۹ ظهر')}
+                    {checkbox(12, 18, '۱۲:۰۰ ظهر تا ۱۸:۰۰ بعد از ظهر')}
+                    {checkbox(18, 24, 'بعد از ۱۸:۰۰ بعد از ظهر')}
+                </div> :
+                <div className="space-y-3">
+                    <Skeleton className="w-1/2"/>
+                    <Skeleton className="w-3/4"/>
+                    <Skeleton className="w-2/3"/>
+                    <Skeleton className="w-1/2"/>
+                </div>
+            }
         </div>
     )
 }
 
-export default FlightSidebarTime;
+export default FlightTime;

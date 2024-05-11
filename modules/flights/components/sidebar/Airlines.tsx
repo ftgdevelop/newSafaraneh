@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/modules/shared/store";
 import { setAirlineFilter } from "../../store/flightsSlice";
 import { SortCapacity } from "../../templates/SortFlightItem";
+import Skeleton from "@/modules/shared/components/ui/Skeleton";
 
 type uniqAirlinesType = {
     airlineName: string;
@@ -14,7 +15,7 @@ type uniqAirlinesType = {
     PictureAlt: string;
 }
 
-const FlightSidebarAirlines: React.FC<any> = ({ FlightsData }: { FlightsData: FlightType[] }) => {
+const Airlines: React.FC<any> = ({ FlightsData }: { FlightsData: FlightType[] }) => {
     const airlinesFilter = useSelector((state: RootState) => state.flightFilters.filterOption.airlineOption)
     const dispatch = useDispatch()
 
@@ -68,7 +69,8 @@ const FlightSidebarAirlines: React.FC<any> = ({ FlightsData }: { FlightsData: Fl
                         <p></p>
                     }
                 </div>
-                    {
+                {
+                    FlightsData.length ?
                         airlines.map(flight => 
                             <Checkbox
                             key={flight.airlineName}
@@ -92,10 +94,17 @@ const FlightSidebarAirlines: React.FC<any> = ({ FlightsData }: { FlightsData: Fl
                                 value={flight.airlineName}
                                 checked= {airlinesFilter.includes(flight.airlineName) ? true : false}
                             />
-                        )
+                        ) :
+                    <div className="space-y-3">
+                        <Skeleton />
+                        <Skeleton />
+                        <Skeleton />
+                        <Skeleton />
+                        <Skeleton />
+                    </div>
                     }
             </div>
     )
 }
 
-export default FlightSidebarAirlines;
+export default Airlines;
