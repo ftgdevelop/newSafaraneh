@@ -5,10 +5,17 @@ import { NextPage } from "next";
 import Content from "@/modules/blogs/components/template/Content";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
+import NotFound from "@/modules/shared/components/ui/NotFound";
 
 
-const BlogList: NextPage<any> = ({ blogsPage, categories_name, pages,recentBlogs }:
-    { blogsPage?: BlogItemType[], categories_name?: CategoriesNameType[] , pages:number,recentBlogs:BlogItemType[]}) => {
+const BlogList: NextPage<any> = ({ blogsPage, categories_name, pages,recentBlogs, moduleDisabled }:
+    { blogsPage?: BlogItemType[], categories_name?: CategoriesNameType[] , pages:number,recentBlogs:BlogItemType[] , moduleDisabled?:boolean}) => {
+
+        if (moduleDisabled) {
+            return (
+                <NotFound />
+            )
+        }
 
         return (
             <div className="bg-white">
@@ -25,6 +32,19 @@ export default BlogList;
 
 
 export async function  getServerSideProps (context: any)  {
+
+    if (!process.env.PROJECT_MODULES?.includes("Blog")) {
+        return (
+            {
+                props: {
+                    ...await serverSideTranslations(context.locale, ['common']),
+                    moduleDisabled: true
+                },
+            }
+        )
+    }
+
+
     let pageQuery = context.query.page || 1
     const [ LastBLogs, blogsPage, categories_name] = await Promise.all<any>([
         getBlogs({page: 1}),

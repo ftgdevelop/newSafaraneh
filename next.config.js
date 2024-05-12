@@ -66,7 +66,8 @@ const nextConfig = {
     PROJECT_SERVER_TENANTID: "6",
     PROJECT_SERVER_NATIONALITY: "",
     PORT: '',
-    PROJECT_SERVER_GA_ID: ""
+    //PROJECT_MODULES: ["Flight", "Hotel", "CIP", "Blog" , "ForeignFlight", "ForeignHotel"],
+    PROJECT_MODULES: ["Flight", "Hotel", "CIP", "Blog" , "ForeignFlight", "ForeignHotel"],
     // DEFAULT_lAN:"US",
     // LANGUAGES:["US","NO","FA"]
 
