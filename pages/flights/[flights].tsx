@@ -89,7 +89,7 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
         setPage(1)
     }, [SidebarFilter])
 
-    const acceptLanguage = locale === "fa" ? "fa-IR" : locale === "ar" ? "ar-AE" : "en-US";
+    const acceptLanguage = locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR";
 
     const fetchKey = async (codes?: string) => {
 
@@ -415,7 +415,7 @@ export async function getServerSideProps(context: any) {
 
     const { locale, query } = context;
 
-    const acceptLanguage = locale === "fa" ? "fa-IR" : locale === "ar" ? "ar-AE" : "en-US";
+    const acceptLanguage = locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR";
 
     const codesArray = query.flights?.split("-");
 

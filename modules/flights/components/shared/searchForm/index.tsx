@@ -160,7 +160,7 @@ const SearchForm: React.FC<Props> = props => {
                                             defaultList={defaultAirportOptions}
                                             noResultMessage={t('NoResultsFound')}
                                             placeholder='مبدا'
-                                            acceptLanguage={i18n?.language === "fa" ? "fa-IR" : i18n?.language === "en" ? "en-US" : "ar-AE"}
+                                            acceptLanguage={i18n?.language === "ar" ? "ar-AE" : i18n?.language === "en" ? "en-US" : "fa-IR"}
                                             inputClassName='w-full text-left border border-neutral-400 h-12 rounded-lg focus:border-neutral-900 outline-none'
                                             type="flight"
                                             createTextFromOptionsObject={(item: AirportAutoCompleteType) => item.airportType === 'City' ? item.city.name || item.name : item.city.name + " - " + item.name}
@@ -223,7 +223,7 @@ const SearchForm: React.FC<Props> = props => {
                                             defaultList={defaultAirportOptions}
                                             noResultMessage={t('NoResultsFound')}
                                             placeholder='مقصد'
-                                            acceptLanguage={i18n?.language === "fa" ? "fa-IR" : i18n?.language === "en" ? "en-US" : "ar-AE"}
+                                            acceptLanguage={i18n?.language === "ar" ? "ar-AE" : i18n?.language === "en" ? "en-US" : "fa-IR"}
                                             inputClassName='w-full text-left border border-neutral-400 h-12 rounded-lg focus:border-neutral-900 outline-none'
                                             type="flight"
                                             createTextFromOptionsObject={(item: AirportAutoCompleteType) => item.airportType === 'City' ? item.city.name || item.name : item.city.name + " - " + item.name}

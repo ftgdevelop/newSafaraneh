@@ -58,9 +58,9 @@ const SimilarHotels: React.FC<Props> = props => {
         }
     }
 
-    const fetchPrices = useCallback(async(ids: number[], acceptLanguage?: "fa-IR" | "en-US") => {
+    const fetchPrices = useCallback(async(ids: number[], acceptLanguage?: "fa-IR" | "en-US"|"ar-AE") => {
         setLoading(true);
-        const response = await AvailabilityByHotelId({checkin:checkin, checkout:checkout, ids:ids}, acceptLanguage);
+        const response = await AvailabilityByHotelId({checkin:checkin, checkout:checkout, ids:ids}, acceptLanguage || "fa-IR");
 
         if (response?.data?.result?.hotels){
             setPricedResponse(response.data.result.hotels);
