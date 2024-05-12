@@ -8,10 +8,17 @@ import { BlogItemType, CategoriesNameType } from "@/modules/blogs/types/blog";
 import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
 import Head from "next/head";
 import { PortalDataType } from "@/modules/shared/types/common";
+import NotFound from "@/modules/shared/components/ui/NotFound";
 
-const Search: NextPage<any> = ({ SearchBlog, LastBlogs, categories_name, pages, portalData }:
-    {SearchBlog: BlogItemType[], LastBlogs:BlogItemType[], categories_name:CategoriesNameType[],pages:string, portalData: PortalDataType}) => {
+const Search: NextPage<any> = ({ SearchBlog, LastBlogs, categories_name, pages, portalData, moduleDisabled }:
+    {SearchBlog: BlogItemType[], LastBlogs:BlogItemType[], categories_name:CategoriesNameType[],pages:string, portalData: PortalDataType , moduleDisabled?: boolean}) => {
     
+        if (moduleDisabled) {
+            return (
+                <NotFound />
+            )
+        }
+
     const SearchValue = useRouter().query.search
     const siteName = portalData?.Phrases?.find(item => item.Keyword === "Name")?.Value || "";
     return (
@@ -23,7 +30,7 @@ const Search: NextPage<any> = ({ SearchBlog, LastBlogs, categories_name, pages, 
                 <BreadCrumpt items={[{ label: "بلاگ", link: "/blog" }, { label: `جستجوی"${SearchValue}"` }]} />
             </div>
                 <Title data={'جستجوی'} searchValue={`"${SearchValue}"`} />
-                <Content Blogs={SearchBlog} LastBlogs={LastBlogs.slice(0,3)} CategoriesName={categories_name} blogPages={pages}/>
+                <Content Blogs={SearchBlog} LastBlogs={LastBlogs?.slice(0,3)} CategoriesName={categories_name} blogPages={pages}/>
         </div>
     )
 }
@@ -32,6 +39,18 @@ export default Search;
 
 
 export async function getServerSideProps(context: any) { 
+
+    if (!process.env.PROJECT_MODULES?.includes("Blog")) {
+        return (
+            {
+                props: {
+                    ...await serverSideTranslations(context.locale, ['common']),
+                    moduleDisabled: true
+                },
+            }
+        )
+    }
+
     const searchQuery = context.query.search;
     const pageQuery = context.query.page || 1
 

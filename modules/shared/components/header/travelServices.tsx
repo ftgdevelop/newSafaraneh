@@ -131,23 +131,25 @@ const TravelServices: React.FC<Props> = props => {
                             </>
                         )}
 
-                        <Link 
+                        {!!(process.env.PROJECT_MODULES?.includes("Hotel")) && <Link 
                             onClick={()=>{setOpenMenu(false)}} 
                             href='/hotels-home' 
                             className={`max-sm:border-t max-sm:border-neutral-300 max-sm:mt-3 max-sm:pt-3 ${linkWithIconClassName}`} 
                         >
                             <Bed className={iconClassName} />
                             {t('domestic-hotel')}
-                        </Link>
-                        <Link 
+                        </Link>}
+
+                        {!!(process.env.PROJECT_MODULES?.includes("Flight")) &&  <Link 
                             onClick={()=>{setOpenMenu(false)}} 
                             href="/flights-home"
                             className={linkWithIconClassName} 
                         >
                             <Travel className={iconClassName} />
                             {t('domestic-flight')}
-                        </Link>
-                        <Link 
+                        </Link>}
+
+                        {!!(process.env.PROJECT_MODULES?.includes("ForeignHotel")) && <Link 
                             onClick={()=>{setOpenMenu(false)}} 
                             //</nav>href='/hotels-foreign-home' 
                             href="https://tickets.safaraneh.com/fa/hotels-foreign-home"
@@ -155,8 +157,9 @@ const TravelServices: React.FC<Props> = props => {
                         >
                             <Bed className={iconClassName} />
                             {t('foreign-hotel')}
-                        </Link>
-                        <Link 
+                        </Link>}
+
+                        {!!(process.env.PROJECT_MODULES?.includes("ForeignFlight")) && <Link 
                             onClick={()=>{setOpenMenu(false)}} 
                             //href='/flight-foreign-home' 
                             href="https://tickets.safaraneh.com/fa/flights-foreign-home"
@@ -164,8 +167,9 @@ const TravelServices: React.FC<Props> = props => {
                             >
                             <Travel className={iconClassName} />
                             {t('foreign-flight')}
-                        </Link>
-                        <Link 
+                        </Link>}
+
+                        {process.env.PROJECT_MODULES?.includes("CIP") && <Link 
                             onClick={()=>{setOpenMenu(false)}} 
                             //href='/cip' 
                             href="/cip-home"
@@ -173,11 +177,12 @@ const TravelServices: React.FC<Props> = props => {
                         >
                             <Suitcase className={iconClassName} />
                             {t('cip')}
-                        </Link>
-                        <Link onClick={()=>{setOpenMenu(false)}} shallow href='/blog' className={`border-b border-neutral-200 md:border-none mb-5 md:mb-0 pb-5 md:pb-0 ${linkWithIconClassName}`}>
+                        </Link>}
+                        
+                        {!!(process.env.PROJECT_MODULES?.includes("Blog")) && <Link onClick={()=>{setOpenMenu(false)}} shallow href='/blog' className={`border-b border-neutral-200 md:border-none mb-5 md:mb-0 pb-5 md:pb-0 ${linkWithIconClassName}`}>
                             <Blog className={iconClassName} />
                             {t('blog')}
-                        </Link>
+                        </Link>}
                         
                         <div>
                             <Link onClick={()=>{setOpenMenu(false)}} href='/organizational-reservation' className={linkClassName} > {t('organizational-reservation')} </Link>

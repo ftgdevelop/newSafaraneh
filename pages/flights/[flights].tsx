@@ -27,6 +27,7 @@ import FlightItem from "@/modules/flights/components/flightItem/FlightItem";
 import SearchData from "@/modules/flights/components/flightList/SearchData";
 import SortFlights from "@/modules/flights/components/flightList/SortFlights";
 import { PortalDataType } from "@/modules/shared/types/common";
+import NotFound from "@/modules/shared/components/ui/NotFound";
 
 
 type Airport = {
@@ -45,7 +46,8 @@ type Airport = {
     airportType: "Main" | "Subsidiary" | "City";
 }
 
-const Flights: NextPage<any> = ({ airports, routeCodes, portalData }: { airports: Airport[], routeCodes: string, portalData?: PortalDataType }) => {
+const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }: { airports?: Airport[], routeCodes?: string, portalData?: PortalDataType; moduleDisabled?:boolean; }) => {
+
     const dispatch = useDispatch()
     const { t: tFlight } = useTranslation("flight");
 
@@ -89,7 +91,9 @@ const Flights: NextPage<any> = ({ airports, routeCodes, portalData }: { airports
 
     const acceptLanguage = locale === "fa" ? "fa-IR" : locale === "ar" ? "ar-AE" : "en-US";
 
-    const fetchKey = async (codes: string) => {
+    const fetchKey = async (codes?: string) => {
+
+        if (!codes) return;
 
         setShowSearchForm(false);
         setKey("");
@@ -201,6 +205,14 @@ const Flights: NextPage<any> = ({ airports, routeCodes, portalData }: { airports
         };
 
     }, [key]);
+
+
+    if (moduleDisabled) {
+        return (
+            <NotFound />
+        )
+    }
+
 
     let origin: string = "";
     let destination: string = "";
@@ -389,6 +401,17 @@ const Flights: NextPage<any> = ({ airports, routeCodes, portalData }: { airports
 export default Flights;
 
 export async function getServerSideProps(context: any) {
+
+    if (!process.env.PROJECT_MODULES?.includes("Flight")) {
+        return (
+            {
+                props: {
+                    ...await serverSideTranslations(context.locale, ['common']),
+                    moduleDisabled: true
+                },
+            }
+        )
+    }
 
     const { locale, query } = context;
 
