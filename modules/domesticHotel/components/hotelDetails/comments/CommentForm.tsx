@@ -56,7 +56,7 @@ const CommentForm: React.FC<Props> = props => {
 
         actions.resetForm();
 
-        const response : any = await insertComment(params, i18n?.language === 'fa'?"fa-IR":"en-US");
+        const response : any = await insertComment(params, i18n?.language === 'en'?"en-US":"fa-IR");
 
         if (response?.data?.result) {
             debugger;

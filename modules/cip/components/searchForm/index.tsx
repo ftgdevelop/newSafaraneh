@@ -110,7 +110,7 @@ const SearchForm: React.FC<Props> = props => {
                                             defaultList={defaultList}
                                             noResultMessage={t('NoResultsFound')}
                                             placeholder='جستجوی نام فرودگاه یا شهر'
-                                            acceptLanguage={i18n?.language === "fa" ? "fa-IR" : i18n?.language === "en" ? "en-US" : "ar-AE"}
+                                            acceptLanguage={i18n?.language === "ar" ? "ar-AE" : i18n?.language === "en" ? "en-US" : "fa-IR"}
                                             inputClassName={`w-full outline-none border rounded-lg border-neutral-400 pt-4 h-12 text-sm text-neutral-500 placeholder:text-neutral-500 focus:border-neutral-900`}
                                             type="cip"
                                             icon='location'
