@@ -27,7 +27,7 @@ const Banner: React.FC<Props> = props => {
 
   const items: TabItem[] = [];
   
-  if (props.modules.includes('domesticHotel')) {
+  if (props.modules.includes('domesticHotel') && process.env.PROJECT_MODULES?.includes("Hotel")) {
     items.push(
       {
         key: '1',
@@ -37,7 +37,7 @@ const Banner: React.FC<Props> = props => {
     )
   }
 
-  if (props.modules.includes('domesticFlight')) {
+  if (props.modules.includes('domesticFlight') && process.env.PROJECT_MODULES?.includes("Flight")) {
     items.push({
       key: '2',
       label: (<div className='text-center'> <Travel className='w-6 h-6 fill-current block mx-auto mb-1' /> {t('domestic-flight')} </div>),
@@ -45,7 +45,7 @@ const Banner: React.FC<Props> = props => {
     })
   }
 
-  if(props.modules.includes("cip")){
+  if(props.modules.includes("cip") && process.env.PROJECT_MODULES?.includes("CIP")){
     items.push({
       key: '3',
       label: (<div className='text-center'> <Suitcase className='w-6 h-6 fill-current block mx-auto mb-1' /> {t('cip')} </div>),

@@ -13,9 +13,9 @@ const ModulesBanner: React.FC = () => {
 
       <div className='grid grid-cols-1 md:grid-cols-2 gap-3 mb-6 md:mb-10'>
 
-        <Link
+        {!!(process.env. PROJECT_MODULES?.includes("Hotel")) && <Link
           href='/hotels/هتل-های-شیراز'
-          className={`${linkClassName} md:row-span-2`}
+          className={`${linkClassName} ${process.env. PROJECT_MODULES?.includes("CIP")?"md:row-span-2":""}`}
         >
           <div className='absolute top-0 right-0 left-0 p-5 text-white'>
             <h2 className='bg-black/25 text-sm md:text-lg px-3 py-1 mb-2 rounded inline-block font-bold'>
@@ -37,10 +37,10 @@ const ModulesBanner: React.FC = () => {
             className='h-48 md:h-full w-full object-cover object-center rounded-lg'
           />
 
-        </Link>
+        </Link>}
 
 
-        <Link 
+        {!!(process.env. PROJECT_MODULES?.includes("CIP")) && <Link 
           href='/cip/فرودگاه-بین-المللی-امام-خمینی-Cip-خدمات' className={linkClassName} >
 
           <div className='absolute top-0 right-0 left-0 p-5 text-white'>
@@ -59,10 +59,10 @@ const ModulesBanner: React.FC = () => {
             className='h-48 w-full object-cover object-center rounded-lg'
           />
 
-        </Link>
+        </Link>}
 
 
-        <Link href='/hotels/هتل-های-تهران' className={linkClassName}>
+        {!!(process.env. PROJECT_MODULES?.includes("Hotel")) && <Link href='/hotels/هتل-های-تهران' className={linkClassName}>
 
           <div className='absolute top-0 right-0 left-0 p-5 text-white'>
             <h2 className='bg-black/25 text-sm md:text-lg px-3 py-1 mb-2 rounded inline-block font-bold'>
@@ -78,10 +78,10 @@ const ModulesBanner: React.FC = () => {
             src="https://cdn2.safaraneh.com/images/home/hotelhomebanner.jpg"
             alt="هتل های تهران"
             width={570}
-            height={190}
-            className='h-48 w-full object-cover object-center rounded-lg'
+            height={process.env. PROJECT_MODULES?.includes("CIP") ? 370 : 190}
+            className='h-48 w-full md:h-full object-cover object-center rounded-lg'
           />
-        </Link>
+        </Link>}
 
       </div>
     </>

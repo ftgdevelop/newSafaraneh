@@ -11,10 +11,11 @@ import { useEffect, useState } from "react";
 import { BlogItemType, CategoriesNameType } from "@/modules/blogs/types/blog";
 import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
 import Head from "next/head";
+import NotFound from "@/modules/shared/components/ui/NotFound";
 
 
-const DetailBlog: NextPage<any> = ({ BlogPost, CategoriesName, recentBlogs }:
-    {BlogPost: BlogItemType[], CategoriesName: CategoriesNameType[], recentBlogs:BlogItemType[]}) => {
+const DetailBlog: NextPage<any> = ({ BlogPost, CategoriesName, recentBlogs, moduleDisabled }:
+    {BlogPost: BlogItemType[], CategoriesName: CategoriesNameType[], recentBlogs:BlogItemType[], moduleDisabled?: boolean}) => {
 
     const [Related, setRelatedPost] = useState<any>('');
     useEffect(() => {
@@ -25,6 +26,13 @@ const DetailBlog: NextPage<any> = ({ BlogPost, CategoriesName, recentBlogs }:
         }
         getRelatedPost()
     }, [])
+
+    if (moduleDisabled) {
+        return (
+            <NotFound />
+        )
+    }
+
     //data={BlogPost?.[0].title?.rendered} page="بلاگ" category={[BlogPost?.[0].categories_names[0], BlogPost?.[0].categories[0]]} />
     const category: string = BlogPost?.[0]?.categories_names[0] || ""
 
@@ -55,6 +63,17 @@ const DetailBlog: NextPage<any> = ({ BlogPost, CategoriesName, recentBlogs }:
 }
 
 export async function getServerSideProps(context: any) {
+
+    if (!process.env.PROJECT_MODULES?.includes("Blog")) {
+        return (
+            {
+                props: {
+                    ...await serverSideTranslations(context.locale, ['common']),
+                    moduleDisabled: true
+                },
+            }
+        )
+    }
 
     const [BlogPost, recentBlogs, CategoriesName] = await Promise.all<any>([
         GetBlogPostDetails(context.query.DetailBlog),

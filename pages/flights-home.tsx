@@ -205,7 +205,7 @@ const FlightsHome: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], 
       </div>
 
       <div className='max-w-container mx-auto px-5'>
-        {blogs && <RecentBlogs blogs={blogs} />}
+        {blogs ? <RecentBlogs blogs={blogs} /> : <br/>}
         <Services siteName={siteName} />
         <AboutSummary
           logo={logo}
@@ -221,7 +221,7 @@ const FlightsHome: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], 
 
 export const getStaticProps = async (context: any) => {
 
-  const recentBlogPost: any = await getBlogs({ page: 1, per_page: 4 });
+  const recentBlogPost: any = process.env.PROJECT_MODULES?.includes("Blog") ? await getBlogs({ page: 1, per_page: 4 }) : null;
 
   return ({
     props: {
