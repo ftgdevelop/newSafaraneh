@@ -32,8 +32,9 @@ import CipDiscountForm from '@/modules/cip/components/cip-detail/CipDiscountForm
 import { registerDiscountCode, validateDiscountCode } from '@/modules/payment/actions';
 import CipAvailibilityItem from '@/modules/cip/components/cip-detail/CipAvailibilityItem';
 import { setReduxError } from '@/modules/shared/store/errorSlice';
+import NotFound from '@/modules/shared/components/ui/NotFound';
 
-const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { portalData?: PortalDataType, airportData?: CipGetAirportByUrlResponseType, availabilities?: { latitude: string; longitude: string; availability: CipAvailabilityItemType[] } }) => {
+const CipDetails: NextPage = ({ airportData, availabilities, portalData, moduleDisabled }: { portalData?: PortalDataType, airportData?: CipGetAirportByUrlResponseType, availabilities?: { latitude: string; longitude: string; availability: CipAvailabilityItemType[] }; moduleDisabled?: Boolean }) => {
 
     const dispatch = useAppDispatch();
 
@@ -170,6 +171,13 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
     }
 
 
+
+    if (moduleDisabled) {
+        return (
+            <NotFound />
+        )
+    }
+
     let airportLocation: [number, number] | undefined = undefined;
     if (availabilities?.latitude && availabilities.longitude) {
         airportLocation = [+availabilities.latitude, +availabilities.longitude];
@@ -298,11 +306,11 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
 
         const token = localStorage.getItem('Token');
 
-        const response: any = await CipPreReserve(params,token || undefined , "fa-IR");
+        const response: any = await CipPreReserve(params, token || undefined, "fa-IR");
 
-        setTimeout(()=>{
+        setTimeout(() => {
             setPreReserveLoading(false)
-        },3000);
+        }, 3000);
 
         if (response?.data?.result) {
 
@@ -326,6 +334,15 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
         }
 
     }
+    const urlSegments: string[] = router.query.CipDetail as string[] || [];
+
+    const urlDateSegment = urlSegments.find(item => item.includes("flightdate-"));
+    const urlAirlineSegment = urlSegments.find(item => item.includes("airlineName-"));
+    const urlFlightNumberSegment = urlSegments.find(item => item.includes("flightNumber-"));
+
+    let initialFlightDate = urlDateSegment?.split("-")[1];
+    let initialAirline = urlAirlineSegment?.split("-")[1];
+    let initialFlightNumber = urlFlightNumberSegment?.split("-")[1];
 
     const formInitialValue = {
         reserver: {
@@ -350,16 +367,16 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData }: { por
         companions: [],
         originName: "",
         destinationName: "",
-        airline: "",
-        flightNumber: "",
-        flightDate: "",
+        airline: initialAirline || "",
+        flightNumber: initialFlightNumber || "",
+        flightDate: initialFlightDate || "",
         flightTime: "",
         cip_transport_address: ""
 
     }
 
     let unavailable: boolean = false;
-    if ( availabilities === null|| (availabilities && availabilities.availability.length === 0)) {
+    if (availabilities === null || (availabilities && availabilities.availability.length === 0)) {
         unavailable = true;
     }
 
@@ -601,11 +618,22 @@ export default CipDetails;
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
+    if (!process.env.PROJECT_MODULES?.includes("CIP")) {
+        return (
+            {
+                props: {
+                    ...await serverSideTranslations(context.locale, ['common']),
+                    moduleDisabled: true
+                },
+            }
+        )
+    }
+
     const { locale, params } = context;
 
-    const url = 'fa/cip/' + params?.CipDetail;
+    const url = 'fa/cip/' + params?.CipDetail[0];
 
-    const airportData: any = await getAirportByUrl(url, locale === "fa" ? "fa-IR" : "en-US");
+    const airportData: any = await getAirportByUrl(url, locale === "en" ? "en-US" : "fa-IR");
 
     let availibilityData: any = null;
     if (airportData?.data?.result.code) {

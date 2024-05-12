@@ -162,7 +162,10 @@ const list: listType[]= [
 
 export const defaultAirportOption: AirportSearchResponseItem[] = list.map(item => {
     return ({
-        name: item.label,
+      name: item.label,
+      values: {
+        name: item.values.name
+      },
         city: {
             name: item.values.city.name,
             code: item.values.city.code

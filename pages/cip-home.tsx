@@ -9,10 +9,17 @@ import CipServices from "@/modules/cip/components/cip-home/CipServices";
 import { AirportDetailType, CipAvailibilityItem } from "@/modules/cip/types/cip";
 import CipGallery from "@/modules/cip/components/cip-home/CipGallery";
 import Head from "next/head";
+import NotFound from "@/modules/shared/components/ui/NotFound";
 
-const CipHome: NextPage<any> = ({ content, airports, priceData }: { content: any, airports: AirportDetailType[]; priceData: CipAvailibilityItem[] }) => {
+const CipHome: NextPage<any> = ({ content, airports, priceData, moduleDisabled }: { content: any, airports: AirportDetailType[]; priceData: CipAvailibilityItem[], moduleDisabled?:boolean }) => {
 
-    const airportslist = airports.map(airportItem => {
+    if (moduleDisabled) {
+        return (
+            <NotFound />
+        )
+    }
+
+    const airportslist = airports?.map(airportItem => {
 
         const itemAvailibilityObject: CipAvailibilityItem | undefined = priceData.find(item => item.id === airportItem.id);
 
@@ -55,6 +62,18 @@ const CipHome: NextPage<any> = ({ content, airports, priceData }: { content: any
 }
 
 export async function getStaticProps(context: any) {
+
+    if (!process.env.PROJECT_MODULES?.includes("CIP")){
+        return (
+            {
+                props: {
+                    ...await serverSideTranslations(context.locale, ['common']),
+                    moduleDisabled: true
+                },
+            }
+        )
+    }
+
     const [contentData, airportsList, airportsAvailability] = await Promise.all<any>([
         GetCipAirPortListforContent(),
         GetAirportsList(),

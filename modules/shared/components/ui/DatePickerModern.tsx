@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import DatePicker, { Calendar } from "@hassanmojab/react-modern-calendar-datepicker";
+import DatePicker from "@hassanmojab/react-modern-calendar-datepicker";
 import { dateDiplayFormat, persianNumbersToEnglish, shamsiToMiladi } from "../../helpers";
 
 type Props = {
@@ -8,7 +8,7 @@ type Props = {
     inputClassName?: string;
     onChange?: (v: any) => void;
     inputName?: string;
-    locale: "fa" | "en";
+    locale: "fa" | "en" | "ar";
     toggleLocale?: () => void;
     value?: string;
     minimumDate?: string;

@@ -17,7 +17,7 @@ import Services from '@/modules/home/components/Services';
 import { PortalDataType } from '@/modules/shared/types/common';
 import Head from 'next/head';
 
-const Home: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], portalData?: PortalDataType }) => {
+const HotelsHomePage: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], portalData?: PortalDataType }) => {
 
   const logo = portalData?.Phrases?.find(item => item.Keyword === "Logo")?.ImageUrl || "";
   const siteName = portalData?.Phrases?.find(item => item.Keyword === "Name")?.Value || "";
@@ -193,7 +193,7 @@ const Home: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], portalD
         />
       </Head>
       <Banner
-        modules={['domesticFlight', 'domesticHotel', 'cip']}
+        modules={['domesticHotel']}
       />
 
       <div className='max-w-container mx-auto px-5'>
@@ -232,4 +232,4 @@ export const getStaticProps = async (context: any) => {
   })
 };
 
-export default Home;
+export default HotelsHomePage;

@@ -104,7 +104,7 @@ const CipAirportInformation: React.FC<Props> = props => {
                     fieldClassName="pt-1 text-base"
                     name="flightDate"
                     id="flightDate"
-                    //initialvalue="2024-03-05"
+                    initialvalue={values.flightDate}
                     validateFunction={(value: string) => validateRequied(value, "لطفا تاریخ پرواز را وارد نمایید")}
                 />
 

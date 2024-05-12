@@ -12,7 +12,7 @@ type Props<T> = {
     placeholder?: string;
     url: string;
     inputId?: string;
-    acceptLanguage?: 'fa-IR' | 'en-US';
+    acceptLanguage?: 'fa-IR' | 'en-US' | 'ar-AE';
     min: number;
     defaultList?: T[];
     renderOption: (option: T, direction: "rtl" | "ltr" | undefined) => ReactNode;
@@ -21,25 +21,26 @@ type Props<T> = {
     wrapperClassName?: string;
     icon?: "location" | "airplane_";
     value?: T;
-    createTextFromOptionsObject : (object:T) => string;
+    createTextFromOptionsObject: (object: T) => string;
     noResultMessage?: string;
     checkTypingLanguage?: boolean;
-    type: "hotel" | "flight"
+    type: "hotel" | "flight" | "cip";
+    sortListFunction?: (a:T, b:T) => 1 | -1;
 }
 
 function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
 
-    const { checkTypingLanguage, url, noResultMessage, onChangeHandle, acceptLanguage, min, icon } = props;
+    const { checkTypingLanguage, url, noResultMessage, acceptLanguage, min, icon, createTextFromOptionsObject } = props;
 
     const { t } = useTranslation("common");
 
-    const inputRef = useRef<HTMLInputElement>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
 
     const dispatch = useAppDispatch();
 
-    const [typingValue, setTypingValue] = useState<string>("");
-    const [selectedItem, setSelectedItem] = useState<string>("");
+    const [text, setText] = useState<string>("");
+    const [value, setValue] = useState<T>();
+
     const [errorText, setErrorText] = useState<string>("");
     const [items, setItems] = useState<T[]>([]);
     const [showList, setShowList] = useState<boolean>(false);
@@ -49,14 +50,14 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
     let direction: "rtl" | "ltr" | undefined;
     if (checkTypingLanguage) {
         const persianInput = /^[\u0600-\u06FF\s]+$/;
-        if (selectedItem) {
-            if (persianInput.test(selectedItem)) {
+        if (value) {
+            if (persianInput.test(createTextFromOptionsObject(value))) {
                 direction = 'rtl';
             } else {
                 direction = 'ltr';
             }
-        } else if (typingValue) {
-            if (persianInput.test(typingValue)) {
+        } else if (text) {
+            if (persianInput.test(text)) {
                 direction = 'rtl';
             } else {
                 direction = 'ltr';
@@ -66,7 +67,7 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
         }
     }
 
-    const fetchData = async (value: string, acceptLanguage?: "fa-IR" | "en-US") => {
+    const fetchData = async (val: string, acceptLanguage?: "fa-IR" | "en-US" | "ar-AE") => {
         setLoading(true);
 
         try {
@@ -77,22 +78,32 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
                     method: "post",
                     url: url,
                     data: {
-                        query: value
+                        query: val
                     },
                     headers: {
                         ...Header,
                         apikey: process.env.PROJECT_PORTAL_APIKEY,
-                        "Accept-Language": acceptLanguage || "en-US",
+                        "Accept-Language": acceptLanguage || "fa-IR",
                     }
                 }
             } else if (props.type === 'hotel') {
                 axiosParams = {
                     method: "post",
-                    url: `${url}?input=${value}`,
+                    url: `${url}?input=${val}`,
                     headers: {
                         ...Header,
                         apikey: process.env.PROJECT_PORTAL_APIKEY,
-                        "Accept-Language": acceptLanguage || "en-US",
+                        "Accept-Language": acceptLanguage || "fa-IR",
+                    }
+                }
+            } else if (props.type === 'cip') {
+                axiosParams = {
+                    method: "get",
+                    url: url,
+                    headers: {
+                        ...Header,
+                        apikey: process.env.PROJECT_PORTAL_APIKEY,
+                        "Accept-Language": acceptLanguage || "fa-IR",
                     }
                 }
             }
@@ -103,6 +114,8 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
 
             if (response?.data?.result?.length) {
                 setItems(response.data.result);
+            } else if (response?.data?.result?.items?.length){
+                setItems(response.data.result.items);
             } else {
                 setItems([]);
                 if (response.data?.success) {
@@ -129,37 +142,34 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
 
         let fetchTimeout: ReturnType<typeof setTimeout>;
 
-        if (selectedItem) {
-            onChangeHandle(undefined);
-            setSelectedItem("");
-        }
+        const valueText = value ? createTextFromOptionsObject(value) : "";
+        
+        setErrorText("");
 
-        if (errorText) {
-            setErrorText("");
-        }
-
-        if (typingValue.length >= min) {
-            fetchTimeout = setTimeout(() => { fetchData(typingValue, acceptLanguage || direction === "rtl" ? "fa-IR" : "en-US") }, 300);
+        if (text.length >= min && valueText !== text) {
+            fetchTimeout = setTimeout(() => { fetchData(text, acceptLanguage || direction === "rtl" ? "fa-IR" : "en-US") }, 300);
         }
 
         return () => {
             clearTimeout(fetchTimeout);
         }
 
-    }, [typingValue, min, direction, acceptLanguage, onChangeHandle]);
+    }, [text]);
 
     const selectItemHandle = (item: T) => {
-        onChangeHandle(item);
         setShowList(false);
+        setValue(item);
+        const text = createTextFromOptionsObject(item);
+        setText(text);
+        props.onChangeHandle(item);
     }
 
     const resetInput = () => {
-        onChangeHandle(undefined);
-        inputRef.current!.value = "";
-        setSelectedItem("");
+        setValue(undefined);
         setItems([]);
         setErrorText("");
-        setTypingValue("");
+        setText("");
+        props.onChangeHandle(undefined);
     }
 
     const handleClickOutside = useCallback((e: any) => {
@@ -184,7 +194,7 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
 
     if (items?.length || props.defaultList?.length) {
         let data;
-        if (!typingValue) {
+        if (!text) {
             data = props.defaultList;
         } else {
             data = undefined;
@@ -192,9 +202,13 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
         if (items?.length) {
             data = items;
         }
+        if( props.sortListFunction){
+            data?.sort(props.sortListFunction);
+        }
+
         listElement = data?.map((item, index) => <div
-            onClick={selectItemHandle.bind(null, item)}
             key={index}
+            onClick={selectItemHandle.bind(null, item)}
             className="border-b border-gray-200 first:rounded-t last:rounded-b last:border-none cursor-pointer transition-all"
         >
             {props.renderOption && props.renderOption(item, direction)}
@@ -209,22 +223,21 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
         )
     }
 
-    const val: string = props.value && props.createTextFromOptionsObject(props.value) || '';
+    const propsValueText = props.value ? createTextFromOptionsObject(props.value) : undefined;
+
     useEffect(() => {
-        if (val) {
-            inputRef.current!.value = val;
-            setSelectedItem(val);
+        if (props.value) {
+            setValue(props.value);
+            setText(propsValueText||"");
             if (items.length) {
                 setItems([]);
             }
+        }else{
+            setValue(undefined);
+            setText("");
         }
-    }, [val, items.length]);
+    }, [propsValueText]);
 
-    useEffect(()=>{
-        if (!props.value){
-            inputRef.current!.value = "";
-        }
-    },[props.value])
 
     if (loading) {
         loadingElement = [1, 2, 3, 4].map(item => <div key={item} className="py-2 px-4 border-b border-gray-200 first:rounded-t last:rounded-b last:border-none cursor-pointer text-cyan-500 hover:bg-gray-100">
@@ -232,9 +245,6 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
         </div>)
     }
 
-    const changeTypingValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setTypingValue(e.target.value);
-    }
 
     const inputClassNames: string[] = [];
     if (props.inputClassName) {
@@ -291,17 +301,17 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
                     autoComplete="off"
                     id={props.inputId || undefined}
                     type="text"
-                    onChange={changeTypingValue}
+                    onChange={e => {setText(e.target.value)}}
+                    value={text}
                     onFocus={() => { setShowList(true) }}
                     className={inputClassNames.join(" ")}
-                    ref={inputRef}
                     placeholder={props.placeholder || ""}
                 />
 
                 {iconElement}
 
                 {loading && <span className={`animate-spin block border-2 border-neutral-400 rounded-full border-r-transparent border-t-transparent  w-6 h-6 absolute top-1/2 -mt-3.5 ${!direction ? "ltr:right-3 rtl:left-3" : direction === 'rtl' ? "left-3" : "right-3"}`} />}
-                {!!selectedItem && <span onClick={resetInput} className={`absolute bg-white top-2/4 -mt-3.5 cursor-pointer ${!direction ? "ltr:right-3 rtl:left-3" : direction === 'rtl' ? "left-3" : "right-3"}`}>
+                {!!value && <span onClick={resetInput} className={`absolute bg-white top-2/4 -mt-3.5 cursor-pointer ${!direction ? "ltr:right-3 rtl:left-3" : direction === 'rtl' ? "left-3" : "right-3"}`}>
                     <Close className="w-7" />
                 </span>}
             </div>
