@@ -27,7 +27,7 @@ const DownloadPdfVoucher: React.FC<Props> = props => {
                     headers: {
                         'Content-Type': 'application/json',
                         apikey: process.env.PROJECT_SERVER_APIKEY,
-                        'Accept-Language': i18n?.language === "fa" ? "fa-IR" : "en-US"
+                        'Accept-Language': i18n?.language === "en" ? "en-US" :i18n?.language === "ar" ? "ar-AE" : "fa-IR"
                     },
                 },
             )

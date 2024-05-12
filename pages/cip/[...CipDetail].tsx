@@ -633,7 +633,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
     const url = 'fa/cip/' + params?.CipDetail[0];
 
-    const airportData: any = await getAirportByUrl(url, locale === "fa" ? "fa-IR" : "en-US");
+    const airportData: any = await getAirportByUrl(url, locale === "en" ? "en-US" : "fa-IR");
 
     let availibilityData: any = null;
     if (airportData?.data?.result.code) {

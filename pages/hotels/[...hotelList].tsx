@@ -676,7 +676,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const url = `/${locale}/hotels/${query.hotelList![0]}`;
 
-  const acceptLanguage = locale === "fa" ? "fa-IR" : locale === "ar" ? "ar-AE" : "en-US";
+  const acceptLanguage = locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR";
 
   const searchHotelsResponse: {
     data?: {

@@ -74,7 +74,7 @@ const SearchForm: React.FC<Props> = props => {
                 setDefaultDestinations(initialDestinations);
 
             } else {
-                const acceptLanguage = i18n && i18n.language === "fa" ? "fa-IR" : "en-US";
+                const acceptLanguage = i18n && i18n.language === "en" ? "en-US" : "fa-IR";
 
                 const fetchDefaultDestinations = async () => {
                     try {
@@ -84,7 +84,7 @@ const SearchForm: React.FC<Props> = props => {
                             headers: {
                                 ...Header,
                                 apikey: process.env.PROJECT_PORTAL_APIKEY,
-                                "Accept-Language": acceptLanguage || "en-US",
+                                "Accept-Language": acceptLanguage || "fa-IR",
                             }
                         })
 
@@ -155,7 +155,7 @@ const SearchForm: React.FC<Props> = props => {
                 break;
 
             case "Hotel":
-                const hotelDetailsResponse = await getDomesticHotelSummaryDetailById(selectedDestination.id!, i18n?.language === "fa" ? "fa-IR" : "en-US");
+                const hotelDetailsResponse = await getDomesticHotelSummaryDetailById(selectedDestination.id!, i18n?.language === "en" ? "en-US" : "fa-IR");
 
                 if (hotelDetailsResponse.data?.result?.url) {
                     url = hotelDetailsResponse.data.result.url;
