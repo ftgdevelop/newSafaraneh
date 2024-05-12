@@ -12,15 +12,16 @@ import NotFound from "@/modules/shared/components/ui/NotFound";
 
 const Search: NextPage<any> = ({ SearchBlog, LastBlogs, categories_name, pages, portalData, moduleDisabled }:
     {SearchBlog: BlogItemType[], LastBlogs:BlogItemType[], categories_name:CategoriesNameType[],pages:string, portalData: PortalDataType , moduleDisabled?: boolean}) => {
-    
-        if (moduleDisabled) {
-            return (
-                <NotFound />
-            )
-        }
 
     const SearchValue = useRouter().query.search
     const siteName = portalData?.Phrases?.find(item => item.Keyword === "Name")?.Value || "";
+    
+    if (moduleDisabled) {
+        return (
+            <NotFound />
+        )
+    }
+
     return (
         <div className="bg-white">
             <Head>
