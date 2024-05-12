@@ -8,17 +8,23 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
 import Head from "next/head";
 import { PortalDataType } from "@/modules/shared/types/common";
+import NotFound from "@/modules/shared/components/ui/NotFound";
 
 
-const Category: NextPage<any> = ({ LastBlogs, BlogCategory, categories_name, pages, portalData }:
-    { LastBlogs?: BlogItemType[], BlogCategory?: BlogItemType[], categories_name: CategoriesNameType[], pages: string, portalData: PortalDataType }) => {
-    
-    
+const Category: NextPage<any> = ({ LastBlogs, BlogCategory, categories_name, pages, portalData, moduleDisabled }:
+    { LastBlogs?: BlogItemType[], BlogCategory?: BlogItemType[], categories_name: CategoriesNameType[], pages: string, portalData: PortalDataType , moduleDisabled?:boolean}) => {
+
     const query: any = useRouter().query.categoriItem;
     const CategoryName : string = categories_name?.find(item => item.id == +query)?.name || ""
     const TitleData = BlogCategory?.find((item : any) => item.categories[0] == +query)?.categories_names?.[0]
     const siteName = portalData?.Phrases?.find(item => item.Keyword === "Name")?.Value || "";
 
+    if (moduleDisabled) {
+        return (
+            <NotFound />
+        )
+    }
+    
     return (
         <div className="bg-white">
             <Head>
@@ -37,6 +43,18 @@ export default Category;
 
 
 export async function getServerSideProps(context: any) {
+
+    if (!process.env.PROJECT_MODULES?.includes("Blog")) {
+        return (
+            {
+                props: {
+                    ...await serverSideTranslations(context.locale, ['common']),
+                    moduleDisabled: true
+                },
+            }
+        )
+    }
+    
     const categoryItemQuery: any = context.query.categoriItem
     const pageQuery : any = context.query.page || 1
 
