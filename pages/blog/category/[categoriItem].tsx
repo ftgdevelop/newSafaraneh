@@ -13,18 +13,18 @@ import NotFound from "@/modules/shared/components/ui/NotFound";
 
 const Category: NextPage<any> = ({ LastBlogs, BlogCategory, categories_name, pages, portalData, moduleDisabled }:
     { LastBlogs?: BlogItemType[], BlogCategory?: BlogItemType[], categories_name: CategoriesNameType[], pages: string, portalData: PortalDataType , moduleDisabled?:boolean}) => {
-    
-        if (moduleDisabled) {
-            return (
-                <NotFound />
-            )
-        }
 
     const query: any = useRouter().query.categoriItem;
     const CategoryName : string = categories_name?.find(item => item.id == +query)?.name || ""
     const TitleData = BlogCategory?.find((item : any) => item.categories[0] == +query)?.categories_names?.[0]
     const siteName = portalData?.Phrases?.find(item => item.Keyword === "Name")?.Value || "";
 
+    if (moduleDisabled) {
+        return (
+            <NotFound />
+        )
+    }
+    
     return (
         <div className="bg-white">
             <Head>
