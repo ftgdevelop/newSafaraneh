@@ -114,5 +114,10 @@
     "tracking-code": "tracking code",
     "visit-edit-account-informaion": "View and edit user information",
     "welcome-to-website": "Welcome to {portalName}} ",
-    "with-this-code": "With this code you can track your booking"
+    "with-this-code": "With this code you can track your booking",
+    "checkinTillCheckout": "{{checkinDay}} {{month}} - {{checkoutDay}} {{month}}",
+    "DatesAreExpired":"Dates are expired",
+    "ChangeDates":"Change dates",
+    "ContinueAnyway":"Continue anyway",
+    "SorryTheDatesYouEnteredAreExpiredChooseDifferentDatesToViewHotelOptions":"Sorry, the dates you entered are expired, Choose different dates to view options"
 }

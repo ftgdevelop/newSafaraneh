@@ -12,7 +12,7 @@ import DatePickerModern from '@/modules/shared/components/ui/DatePickerModern';
 import { dateDiplayFormat } from '@/modules/shared/helpers';
 import FormikField from '@/modules/shared/components/ui/FormikField';
 import { cipDefaultAirportOptions } from './defaultList';
-import { CipAutoCompleteType } from '../../types/cip';
+import { CipAutoCompleteType, CipRecentSearchItem } from '../../types/cip';
 
 type SearchFormValues = {
     airportUrl: string;
@@ -38,6 +38,8 @@ const SearchForm: React.FC<Props> = props => {
 
     const [submitPending, setSubmitPending] = useState<boolean>(false);
 
+    const [selectedAirportName, setSelectedAirportName] = useState<string>("");
+
     const submitHandle = (values: SearchFormValues) => {
 
         if (!values.airportUrl) return;
@@ -56,6 +58,24 @@ const SearchForm: React.FC<Props> = props => {
 
         if (values.flightNumber) {
             url += `/flightNumber-${values.flightNumber}`;
+        }
+
+        const localStorageRecentSearches = localStorage?.getItem("cipRecentSearches");
+        const recentSearches: CipRecentSearchItem[] = localStorageRecentSearches ? JSON.parse(localStorageRecentSearches) : [];
+
+        const searchObject: CipRecentSearchItem = {
+            url: url,
+            airportName: selectedAirportName,
+            flightDate: values.flightDate
+        };
+
+        if (!(recentSearches.find(item => item.url === searchObject.url))) {
+            recentSearches.unshift(searchObject);
+
+            const slicedArray = recentSearches.slice(0, 10);
+
+            const updatedRecentSearches = JSON.stringify(slicedArray);
+            localStorage?.setItem("cipRecentSearches", updatedRecentSearches)
         }
 
         router.push(url);
@@ -126,6 +146,7 @@ const SearchForm: React.FC<Props> = props => {
                                             onChangeHandle={
                                                 useCallback((v: CipAutoCompleteType | undefined) => {
                                                     setFieldValue("airportUrl", v?.url || "", true);
+                                                    setSelectedAirportName(v?.name || "")
                                                 }, [])
                                             }
                                         />

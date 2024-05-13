@@ -6,7 +6,7 @@ export const numberWithCommas = (x: number) => {
     }
 }
 
-export const dateDiplayFormat = ({ date, format, locale }: { date: string; format?:  "HH:mm"| "dd mm"| "ddd dd mm" | "dd mm yyyy" | "yyyy/mm/dd" | "YYYY-MM-DD" | "yyyy/mm/dd h:m" , locale?: string }): string => {
+export const dateDiplayFormat = ({ date, format, locale }: { date: string; format?: "m" | "d" | "HH:mm"| "dd mm"| "ddd dd mm" | "dd mm yyyy" | "yyyy/mm/dd" | "YYYY-MM-DD" | "yyyy/mm/dd h:m" , locale?: string }): string => {
 
     if (!date) return "";
 
@@ -48,6 +48,12 @@ export const dateDiplayFormat = ({ date, format, locale }: { date: string; forma
 
     if (format === "dd mm"){
         return (`${day} ${month}`)
+    }
+    if (format === "d"){
+        return (day)
+    }
+    if (format === "m"){
+        return (month)
     }
 
     return date;
