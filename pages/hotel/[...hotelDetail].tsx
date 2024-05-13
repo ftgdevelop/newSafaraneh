@@ -45,6 +45,39 @@ const HotelDetail: NextPage<Props> = props => {
 
   const router = useRouter();
 
+  const searchFormWrapperRef = useRef<HTMLDivElement>(null);
+  const [showChangeDateModal, setShowChangeDateModal] = useState<boolean>(false);
+  const [showOnlyForm, setShowOnlyForm] = useState<boolean>(false);
+
+
+  const today = dateFormat(new Date());
+  const tomorrow = dateFormat(addSomeDays(new Date()));
+  let defaultDates: [string, string] = [today, tomorrow];
+
+  const searchInfo = router.asPath?.split("?")[0]?.split("#")[0];
+
+  let checkin: string = "";
+  let checkout: string = "";
+
+  if (searchInfo.includes("checkin-")) {
+    checkin = searchInfo.split("checkin-")[1].split("/")[0];
+  }
+  if (searchInfo.includes("checkout-")) {
+    checkout = searchInfo.split("checkout-")[1].split("/")[0];
+  }
+  
+  if (checkin && checkout) {
+    defaultDates = [checkin, checkout];
+  }
+
+  useEffect(() => {
+    setShowOnlyForm(false);
+    const validDates = checkDateIsAfterDate(new Date(checkin), new Date(today)) && checkDateIsAfterDate(new Date(checkout), new Date(tomorrow));
+    if (!validDates) {
+      setShowChangeDateModal(true);
+    }
+  }, [checkin, checkout]);
+
 
   if (props.error410) {
     return (
@@ -60,18 +93,6 @@ const HotelDetail: NextPage<Props> = props => {
 
   const accommodationData = accommodation?.result;
 
-  const searchInfo = router.asPath?.split("?")[0]?.split("#")[0];
-
-  let checkin: string = "";
-  let checkout: string = "";
-
-  if (searchInfo.includes("checkin-")) {
-    checkin = searchInfo.split("checkin-")[1].split("/")[0];
-  }
-  if (searchInfo.includes("checkout-")) {
-    checkout = searchInfo.split("checkout-")[1].split("/")[0];
-  }
-
   let defaultDestination: EntitySearchResultItemType | undefined = undefined;
 
   if (hotelData && hotelData.HotelId) {
@@ -82,27 +103,6 @@ const HotelDetail: NextPage<Props> = props => {
       id: hotelData.HotelId
     }
   }
-
-  const searchFormWrapperRef = useRef<HTMLDivElement>(null);
-  const [showChangeDateModal, setShowChangeDateModal] = useState<boolean>(false);
-  const [showOnlyForm, setShowOnlyForm] = useState<boolean>(false);
-
-  const today = dateFormat(new Date());
-  const tomorrow = dateFormat(addSomeDays(new Date()));
-  let defaultDates: [string, string] = [today, tomorrow];
-
-  if (checkin && checkout) {
-    defaultDates = [checkin, checkout];
-  }
-
-  useEffect(() => {
-    setShowOnlyForm(false);
-    const validDates = checkDateIsAfterDate(new Date(checkin), new Date(today)) && checkDateIsAfterDate(new Date(checkout), new Date(tomorrow));
-    if (!validDates) {
-      setShowChangeDateModal(true);
-    }
-  }, [checkin, checkout]);
-
 
   let siteName = "";
   let tel = "";
