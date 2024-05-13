@@ -611,7 +611,12 @@ const HotelList: NextPage<Props> = props => {
         </ModalPortal>
 
 
-        {!!showOnlyForm && <div className='fixed bg-black/75 backdrop-blur-sm top-0 bottom-0 right-0 left-0 z-[1]' />}
+        {!!showOnlyForm && (
+          <div 
+            className='fixed bg-black/75 backdrop-blur-sm top-0 bottom-0 right-0 left-0 z-[1]'  
+            onClick={() => {setShowOnlyForm(false)}}
+          />
+        )}
         <SearchForm wrapperClassName='pb-4 relative z-[2]' defaultDates={domesticHotelDefaultDates} defaultDestination={defaultDestination} />
 
 

@@ -356,7 +356,12 @@ const HotelDetail: NextPage<Props> = props => {
 
 
         <div ref={searchFormWrapperRef} className='pt-5'>
-        {!!showOnlyForm && <div className='fixed bg-black/75 backdrop-blur-sm top-0 bottom-0 right-0 left-0 z-[1]' />}
+          {!!showOnlyForm && (
+            <div
+              className='fixed bg-black/75 backdrop-blur-sm top-0 bottom-0 right-0 left-0 z-[1]'
+              onClick={() => { setShowOnlyForm(false) }}
+            />
+          )}
           <h2 className='text-lg lg:text-3xl font-semibold mt-5 mb-3 md:mt-10 md:mb-7 relative z-[2]'>{t('change-search')}</h2>
 
           <SearchForm
