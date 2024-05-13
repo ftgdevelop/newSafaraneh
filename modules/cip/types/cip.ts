@@ -492,3 +492,9 @@ export type CipAutoCompleteType = {
   name?: string;
   id?: number;
 }
+
+export type CipRecentSearchItem = {
+  url: string;
+  airportName:string;
+  flightDate:string;
+}

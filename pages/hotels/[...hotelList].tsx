@@ -1,18 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AvailabilityByHotelId, GetCityFaqById, SearchHotels, getEntityNameByLocation, getRates } from '@/modules/domesticHotel/actions';
 import type { GetServerSideProps, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { EntitySearchResultItemType, PricedHotelItem, SearchHotelItem, SortTypes } from '@/modules/domesticHotel/types/hotel';
 import SearchForm from '@/modules/domesticHotel/components/shared/SearchForm';
 import HotelsList from '@/modules/domesticHotel/components/hotelsList';
-import { addSomeDays, dateFormat } from '@/modules/shared/helpers';
+import { addSomeDays, checkDateIsAfterDate, dateFormat } from '@/modules/shared/helpers';
 import ProgressBarWithLabel from '@/modules/shared/components/ui/ProgressBarWithLabel';
 import { useTranslation } from 'next-i18next';
 import Select from '@/modules/shared/components/ui/Select';
 import Skeleton from '@/modules/shared/components/ui/Skeleton';
 import parse from 'html-react-parser';
 import Accordion from '@/modules/shared/components/ui/Accordion';
-import { QuestionCircle } from '@/modules/shared/components/ui/icons';
+import {  CalendarError, QuestionCircle } from '@/modules/shared/components/ui/icons';
 import DomesticHotelListSideBar from '@/modules/domesticHotel/components/hotelsList/sidebar';
 import { setFacilityFilterOptions, setGuestPointFilterOptions, setTypeFilterOptions, setPriceFilterRange } from '@/modules/domesticHotel/store/domesticHotelSlice';
 import { useAppDispatch } from '@/modules/shared/hooks/use-store';
@@ -22,6 +22,7 @@ import Image from 'next/image';
 import { getPageByUrl } from '@/modules/shared/actions';
 import Head from 'next/head';
 import { PortalDataType } from '@/modules/shared/types/common';
+import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
 
 type Props = {
   searchHotelsData?: {
@@ -54,6 +55,8 @@ const HotelList: NextPage<Props> = props => {
 
   const { pageData, faq, searchHotelsData, portalData } = props;
 
+  const searchFormWrapperRef = useRef<HTMLDivElement>(null);
+
   type RatesResponseItem = {
     HotelId: number;
     Satisfaction: number;
@@ -85,6 +88,9 @@ const HotelList: NextPage<Props> = props => {
   const [entity, setEntity] = useState<{ EntityName: string; EntityType: "City" | "Province" | "Hotel" }>();
 
   const [showMap, setShowMap] = useState<boolean>(false);
+
+  const [showChangeDateModal, setShowChangeDateModal] = useState<boolean>(false);
+  const [showOnlyForm, setShowOnlyForm] = useState<boolean>(false);
 
   let hotelIds: (undefined | number)[] = [];
   if (searchHotelsData) {
@@ -269,12 +275,10 @@ const HotelList: NextPage<Props> = props => {
     const fetchPrices = async () => {
       setPricesLoading(true);
       setPricesData(undefined);
-      //TODO: remove this logs:
-      console.log("fetching prices acceptLanguage", acceptLanguage);      
-      const pricesResponse = await AvailabilityByHotelId({ checkin: checkin, checkout: checkout, ids: hotelIds as number[] }, acceptLanguage);      
-      
-      if (pricesResponse.data?.result?.hotels) {        
-        
+      const pricesResponse = await AvailabilityByHotelId({ checkin: checkin, checkout: checkout, ids: hotelIds as number[] }, acceptLanguage);
+
+      if (pricesResponse.data?.result?.hotels) {
+
         setPricesData(pricesResponse.data.result.hotels);
 
         savePriceRange(pricesResponse.data.result.hotels);
@@ -297,6 +301,14 @@ const HotelList: NextPage<Props> = props => {
 
   }, [firstHotelName, checkin, checkout, acceptLanguage]);
 
+
+  useEffect(() => {
+    setShowOnlyForm(false);
+    const validDates = checkDateIsAfterDate(new Date(checkin), new Date(today)) && checkDateIsAfterDate(new Date(checkout), new Date(tomorrow));
+    if (!validDates) {
+      setShowChangeDateModal(true);
+    }
+  }, [checkin, checkout]);
 
   const hotels: PricedHotelItem[] = searchHotelsData?.Hotels?.map(hotel => {
 
@@ -416,8 +428,6 @@ const HotelList: NextPage<Props> = props => {
 
   const cityName = hotels && hotels[0]?.CityName || "";
 
-
-
   const domesticHotelDefaultDates: [string, string] = [checkin, checkout];
 
   const defaultDestination: EntitySearchResultItemType = {
@@ -425,7 +435,6 @@ const HotelList: NextPage<Props> = props => {
     displayName: entity?.EntityName,
     type: entity?.EntityType || 'City'
   }
-
 
   const urlSegments = router.asPath.split("/");
 
@@ -498,14 +507,14 @@ const HotelList: NextPage<Props> = props => {
     fallbackLocation = [firstHotelWithLocation.Latitude!, firstHotelWithLocation.Longitude!];
   }
 
-  
+
   let siteName = "";
 
   if (portalData) {
     siteName = portalData.Phrases.find(item => item.Keyword === "Name")?.Value || "";
   }
 
-  const canonicalUrl =  pageData?.Url ? `${process.env.SITE_NAME}${pageData?.Url}` : "";
+  const canonicalUrl = pageData?.Url ? `${process.env.SITE_NAME}${pageData?.Url}` : "";
 
   return (
 
@@ -517,9 +526,7 @@ const HotelList: NextPage<Props> = props => {
           <meta name={item.Name} content={item.Content?.replaceAll("{0}", siteName)} key={item.Name} />
         ))}
 
-        {!!canonicalUrl && <link rel="canonical" href={canonicalUrl } /> }
-
-
+        {!!canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
 
         {faq && faq.items.length !== 0 ? (
           <script
@@ -553,9 +560,60 @@ const HotelList: NextPage<Props> = props => {
 
       </Head>
 
-      <div className='max-w-container mx-auto px-5 py-4'>
+      <div className='max-w-container mx-auto px-5 py-4' ref={searchFormWrapperRef}>
 
-        <SearchForm wrapperClassName='pb-4' defaultDates={domesticHotelDefaultDates} defaultDestination={defaultDestination} />
+        <ModalPortal
+          show={showChangeDateModal}
+          selector='modal_portal'
+        >
+          <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-screen bg-black/50 backdrop-blur-sm z-50 flex justify-center items-center">
+
+            <div className="bg-white max-sm:mx-3 rounded-xl px-5 pt-10 pb-12 w-full max-w-md text-center">
+
+              <CalendarError className="w-6 h-6 sm:w-10 sm:h-10 fill-neutral-400 mb-3 md:mb-4 inline-block" />
+
+              <h5 className="text-md sm:text-xl font-semibold mb-4">
+                {t("DatesAreExpired")}
+              </h5>
+
+              <div className="text-neutral-500 mb-4 md:mb-7 leading-7 text-sm text-center">
+                {t("SorryTheDatesYouEnteredAreExpiredChooseDifferentDatesToViewHotelOptions")}.
+              </div>
+
+
+              <button
+                type="button"
+                className="max-w-full w-32 cursor-pointer bg-primary-700 hover:bg-primary-600 text-white h-10 px-5 rounded-md"
+                onClick={() => {
+                  setShowChangeDateModal(false);
+                  setShowOnlyForm(true);
+                  searchFormWrapperRef.current?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                {t('ChangeDates')}
+              </button>
+
+              <br />
+
+              <button
+                type='button'
+                className='text-blue-500 mt-3'
+                onClick={() => { setShowChangeDateModal(false) }}
+              >
+                {t("ContinueAnyway")}
+              </button>
+
+
+            </div>
+
+          </div>
+
+        </ModalPortal>
+
+
+        {!!showOnlyForm && <div className='fixed bg-black/75 backdrop-blur-sm top-0 bottom-0 right-0 left-0 z-[1]' />}
+        <SearchForm wrapperClassName='pb-4 relative z-[2]' defaultDates={domesticHotelDefaultDates} defaultDestination={defaultDestination} />
+
 
         {(fetchPercentage === 100) || <ProgressBarWithLabel
           className='mb-4'

@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/modules/shared/store";
 import { SidebarFilterChange } from "@/modules/flights/templates/SidebarFilterChange";
 import { SortHightestPrice, SortCapacity, SortTime } from "@/modules/flights/templates/SortFlightItem";
-import { dateFormat } from "@/modules/shared/helpers";
+import { addSomeDays, checkDateIsAfterDate, dateFormat } from "@/modules/shared/helpers";
 import { useRouter } from "next/router";
 import ProgressBarWithLabel from "@/modules/shared/components/ui/ProgressBarWithLabel";
 import { useTranslation } from "next-i18next";
@@ -16,7 +16,7 @@ import Pagination from "@/modules/shared/components/ui/Pagination";
 import Head from "next/head";
 import { setCabinClassFilter } from "@/modules/flights/store/flightsSlice";
 
-import { Close } from "@/modules/shared/components/ui/icons";
+import { CalendarError, Close } from "@/modules/shared/components/ui/icons";
 import SearchForm from "@/modules/flights/components/shared/searchForm";
 import ModalPortal from "@/modules/shared/components/ui/ModalPortal";
 
@@ -46,9 +46,10 @@ type Airport = {
     airportType: "Main" | "Subsidiary" | "City";
 }
 
-const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }: { airports?: Airport[], routeCodes?: string, portalData?: PortalDataType; moduleDisabled?:boolean; }) => {
+const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }: { airports?: Airport[], routeCodes?: string, portalData?: PortalDataType; moduleDisabled?: boolean; }) => {
 
     const dispatch = useDispatch()
+    const { t } = useTranslation("common");
     const { t: tFlight } = useTranslation("flight");
 
     const SidebarFilter = useSelector((state: RootState) => state.flightFilters.filterOption)
@@ -67,6 +68,8 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
 
     const [loadingPercentage, setLoadingPercentage] = useState<number>(0);
 
+    const [showChangeDateModal, setShowChangeDateModal] = useState<boolean>(false);
+
     const router = useRouter();
 
     const { query, locale } = router;
@@ -76,6 +79,42 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
         children: +(query.child || 0),
         infants: +(query.infant || 0)
     }
+
+
+    useEffect(() => {
+
+        let departureDate;
+        let returnDate;
+
+        if (query.departing) {
+            departureDate = new Date(query.departing as string);
+        }
+        if (query.returning) {
+            returnDate = new Date(query.returning as string);
+        }
+
+        const today = dateFormat(new Date());
+        const tomorrow = dateFormat(addSomeDays(new Date()));
+
+        if (!departureDate) {
+            return;
+        }
+
+        //setShowOnlyForm(false);
+
+        let validDates: boolean;
+
+        if (returnDate) {
+            validDates = checkDateIsAfterDate(new Date(departureDate), new Date(today)) && checkDateIsAfterDate(new Date(returnDate), new Date(tomorrow));
+        } else {
+            validDates = checkDateIsAfterDate(new Date(departureDate), new Date(today));
+        }
+
+
+        if (!validDates) {
+            setShowChangeDateModal(true);
+        }
+    }, [query.departing, query.returning]);
 
     useEffect(() => {
         SidebarFilterChange(departureList, SidebarFilter, setFlightsInFilter)
@@ -281,6 +320,53 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
                     </>
                 )}
             </Head>
+
+            <ModalPortal
+                show={showChangeDateModal}
+                selector='modal_portal'
+            >
+                <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-screen bg-black/50 backdrop-blur-sm z-50 flex justify-center items-center">
+
+                    <div className="bg-white max-sm:mx-3 rounded-xl px-5 pt-10 pb-12 w-full max-w-md text-center">
+
+                        <CalendarError className="w-6 h-6 sm:w-10 sm:h-10 fill-neutral-400 mb-3 md:mb-4 inline-block" />
+
+                        <h5 className="text-md sm:text-xl font-semibold mb-4">
+                            {t("DatesAreExpired")}
+                        </h5>
+
+                        <div className="text-neutral-500 mb-4 md:mb-7 leading-7 text-sm text-center">
+                            {t("SorryTheDatesYouEnteredAreExpiredChooseDifferentDatesToViewHotelOptions")}.
+                        </div>
+
+
+                        <button
+                            type="button"
+                            className="max-w-full w-32 cursor-pointer bg-primary-700 hover:bg-primary-600 text-white h-10 px-5 rounded-md"
+                            onClick={() => {
+                                setShowChangeDateModal(false);
+                                setShowSearchForm(true);
+                            }}
+                        >
+                            {t('ChangeDates')}
+                        </button>
+
+                        <br />
+
+                        <button
+                            type='button'
+                            className='text-blue-500 mt-3'
+                            onClick={() => { setShowChangeDateModal(false) }}
+                        >
+                            {t("ContinueAnyway")}
+                        </button>
+
+
+                    </div>
+
+                </div>
+
+            </ModalPortal>
 
             <div className="max-w-container m-auto p-5 max-md:p-3 flex gap-5 relative">
 

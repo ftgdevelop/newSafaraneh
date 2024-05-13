@@ -543,3 +543,9 @@ export interface DomesticHotelSummaryDetail {
     // ],
     // "id": 0
   }
+
+export type HotelRecentSearchItem = {
+    url: string;
+    title: string;
+    dates: string[];
+}
