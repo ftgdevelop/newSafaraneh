@@ -115,5 +115,9 @@
   "visit-edit-account-informaion": "مشاهده و ویرایش اطلاعات کاربری",
   "welcome-to-website": "به سایت {{portalName}} خوش آمدید",
   "with-this-code": "از طریق این کد می توانید رزروتان را پیگیری کنید",
-  "checkinTillCheckout": "{{checkinDay}} تا {{checkoutDay}} {{month}}"
+  "checkinTillCheckout": "{{checkinDay}} تا {{checkoutDay}} {{month}}",
+  "DatesAreExpired":"تاریخ جستجو گذشته است",
+  "ChangeDates":"تغییر تاریخ",
+  "ContinueAnyway":"بستن",
+  "SorryTheDatesYouEnteredAreExpiredChooseDifferentDatesToViewHotelOptions":"متاسفانه، تاریخ هایی که وارد کرده اید منقضی شده است، برای مشاهده گزینه ها، تاریخ دیگری را انتخاب کنید"
 }

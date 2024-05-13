@@ -1,4 +1,4 @@
-import RecentSearchItem from "@/modules/shared/components/RecentSearchItem";
+import RecentSearchItem from "@/modules/home/components/RecentSearchItem";
 import { useEffect, useState } from "react";
 import { dateDiplayFormat } from "@/modules/shared/helpers";
 import { i18n } from "next-i18next";
@@ -38,7 +38,7 @@ const FlightRecentSearches: React.FC = () => {
                 </button>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 pb-3">
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-3 pb-3">
                 {slicedItems.map((item, index) => <RecentSearchItem
                     key={index}
                     model={{
@@ -46,7 +46,7 @@ const FlightRecentSearches: React.FC = () => {
                         subtitle: item.returnDate ?
                             dateDiplayFormat({ date: item.departureDate, format: "dd mm", locale: i18n?.language }) + " - " + dateDiplayFormat({ date: item.returnDate, format: "dd mm", locale: i18n?.language })
                             :
-                            dateDiplayFormat({ date: item.departureDate, format: "dd mm", locale: i18n?.language }),
+                            dateDiplayFormat({ date: item.departureDate, format: "ddd dd mm", locale: i18n?.language }),
                         title: (<div>
                             {item.origin}
                             {item.returnDate ? (
@@ -57,6 +57,7 @@ const FlightRecentSearches: React.FC = () => {
                             {item.destination}
                         </div>)
                     }}
+                    type="flight"
                 />)}
             </div>
 

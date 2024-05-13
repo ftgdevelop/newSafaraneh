@@ -1,4 +1,4 @@
-import RecentSearchItem from "@/modules/shared/components/RecentSearchItem";
+import RecentSearchItem from "@/modules/home/components/RecentSearchItem";
 import { HotelRecentSearchItem } from "../../types/hotel";
 import { useEffect, useState } from "react";
 import { dateDiplayFormat } from "@/modules/shared/helpers";
@@ -63,10 +63,11 @@ const HotelRecentSearches: React.FC = () => {
                 </button>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 pb-3">
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-3 pb-3">
                 {slicedItems.map((item, index) => <RecentSearchItem
                     key={index}
                     model={item}
+                    type="hotel"
                 />)}
             </div>
 
