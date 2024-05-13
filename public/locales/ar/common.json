@@ -114,5 +114,6 @@
   "tracking-code": "شفرة التتبع",
   "visit-edit-account-informaion": "عرض وتحرير معلومات المستخدم",
   "welcome-to-website": "مرحبا بكم في موقع السفر {{portalName}}",
-  "with-this-code": "يمكنك تتبع حجزك من خلال هذا الرمز"
+  "with-this-code": "يمكنك تتبع حجزك من خلال هذا الرمز",
+  "checkinTillCheckout": "{{checkinDay}} {{month}} - {{checkoutDay}} {{month}}"
 }
