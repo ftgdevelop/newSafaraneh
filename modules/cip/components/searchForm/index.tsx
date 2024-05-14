@@ -123,7 +123,7 @@ const SearchForm: React.FC<Props> = props => {
                                 <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-3 mb-5 z-[2] relative">
 
                                     <div className='lg:col-span-2 relative'>
-                                        <label htmlFor="destination" className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5">
+                                        <label htmlFor="destination" className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5 pointer-events-none">
                                             جستجوی نام فرودگاه یا شهر
                                         </label>
                                         <AutoComplete
@@ -142,7 +142,7 @@ const SearchForm: React.FC<Props> = props => {
                                                 </div>
                                             ), [])}
                                             min={3}
-                                            url={`${ServerAddress.Type}${ServerAddress.Cip}${Cip.GetAllAirports}`}
+                                            url={`${ServerAddress.Type}${ServerAddress.Cip}${Cip.SearchAirport}`}
                                             onChangeHandle={
                                                 useCallback((v: CipAutoCompleteType | undefined) => {
                                                     setFieldValue("airportUrl", v?.url || "", true);
