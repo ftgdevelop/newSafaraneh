@@ -98,8 +98,8 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
                 }
             } else if (props.type === 'cip') {
                 axiosParams = {
-                    method: "get",
-                    url: url,
+                    method: "post",
+                    url: `${url}?input=${val}`,
                     headers: {
                         ...Header,
                         apikey: process.env.PROJECT_PORTAL_APIKEY,
@@ -114,8 +114,6 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
 
             if (response?.data?.result?.length) {
                 setItems(response.data.result);
-            } else if (response?.data?.result?.items?.length){
-                setItems(response.data.result.items);
             } else {
                 setItems([]);
                 if (response.data?.success) {
@@ -275,7 +273,7 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
             inputClassNames.push("pl-3");
         }
     }
-    const iconClassName = `h-5 w-5 fill-current absolute z-20 top-1/2 -translate-y-1/2 ${!direction ? "rtl:right-3 ltr:left-3" : direction === 'rtl' ? "right-3" : "left-3"}`;
+    const iconClassName = `pointer-events-none h-5 w-5 fill-current absolute z-20 top-1/2 -translate-y-1/2 ${!direction ? "rtl:right-3 ltr:left-3" : direction === 'rtl' ? "right-3" : "left-3"}`;
 
     let iconElement = null;
 

@@ -114,6 +114,7 @@ export const Flight = {
   };
 
   export const Cip = {
+    SearchAirport: "/api/services/app/Airport/Search",
     GetAllAirports : "/api/services/app/Airport/GetAll",
     Availability:"/api/services/app/BookingCip/Availability",
     GetAirportByUrl:"/api/services/app/Airport/GetByUrl",
