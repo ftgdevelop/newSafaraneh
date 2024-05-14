@@ -156,10 +156,15 @@ export const CalendarToggle: React.FC<Props> = props => {
     )
 }
 
-
 export const Calendar: React.FC<Props> = props => {
     return (
         <svg className={props.className || ""} viewBox="0 -960 960 960" ><path d="M180-80q-24 0-42-18t-18-42v-620q0-24 18-42t42-18h65v-60h65v60h340v-60h65v60h65q24 0 42 18t18 42v620q0 24-18 42t-42 18H180Zm0-60h600v-430H180v430Zm0-490h600v-130H180v130Zm0 0v-130 130Z" /></svg>
+    )
+}
+
+export const CalendarError: React.FC<Props> = props => {
+    return (
+        <svg className={props.className || ""} viewBox="0 -960 960 960" ><path d="M388-230.85 345.85-273l92-92-92-92L388-499.15l92 92 92-92L614.15-457l-92 92 92 92L572-230.85l-92-92-92 92ZM212.31-100Q182-100 161-121q-21-21-21-51.31v-535.38Q140-738 161-759q21-21 51.31-21h55.38v-84.61h61.54V-780h303.08v-84.61h60V-780h55.38Q778-780 799-759q21 21 21 51.31v535.38Q820-142 799-121q-21 21-51.31 21H212.31Zm0-60h535.38q4.62 0 8.46-3.85 3.85-3.84 3.85-8.46v-375.38H200v375.38q0 4.62 3.85 8.46 3.84 3.85 8.46 3.85ZM200-607.69h560v-100q0-4.62-3.85-8.46-3.84-3.85-8.46-3.85H212.31q-4.62 0-8.46 3.85-3.85 3.84-3.85 8.46v100Zm0 0V-720v112.31Z"/></svg>
     )
 }
 
@@ -597,5 +602,11 @@ export const FlightNotAvailable : React.FC<Props> = props => {
 export const Swap: React.FC<Props> = props => {
     return (    
         <svg className={props.className || ""} viewBox="0 -960 960 960" ><path d="M273-160 80-353l193-193 42 42-121 121h316v60H194l121 121-42 42Zm414-254-42-42 121-121H450v-60h316L645-758l42-42 193 193-193 193Z"/></svg>
+    )
+}
+
+export const Update: React.FC<Props> = props => {
+    return (
+        <svg className={props.className || ""} viewBox="0 -960 960 960"><path d="M480-120q-75 0-140.5-28.5t-114-77q-48.5-48.5-77-114T120-480q0-75 28.5-140.5t77-114q48.5-48.5 114-77T480-840q82 0 155.5 35T760-706v-94h80v240H600v-80h110q-41-56-101-88t-129-32q-117 0-198.5 81.5T200-480q0 117 81.5 198.5T480-200q105 0 183.5-68T756-440h82q-15 137-117.5 228.5T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z" /></svg>
     )
 }

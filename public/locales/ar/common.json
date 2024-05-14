@@ -114,5 +114,13 @@
   "tracking-code": "شفرة التتبع",
   "visit-edit-account-informaion": "عرض وتحرير معلومات المستخدم",
   "welcome-to-website": "مرحبا بكم في موقع السفر {{portalName}}",
-  "with-this-code": "يمكنك تتبع حجزك من خلال هذا الرمز"
+  "with-this-code": "يمكنك تتبع حجزك من خلال هذا الرمز",
+  "checkinTillCheckout": "{{checkinDay}} {{month}} - {{checkoutDay}} {{month}}",
+  "DatesAreExpired":"انتهت التواريخ",
+  "ChangeDates":"تغيير التواريخ",
+  "ContinueAnyway":"واصل على أي حال",
+  "SorryTheDatesYouEnteredAreExpiredChooseDifferentDatesToViewHotelOptions":"عذرًا، التواريخ التي أدخلتها منتهية الصلاحية، اختر تواريخ مختلفة لعرض الخيارات",
+  "GetTheLatestPriceAndAvailabilityForYourSearchTo":"احصل على أفضل أسعار الغرف المتاحة في {{destination}} ({{dates}})",
+  "RefreshResults":"تحديث الصفحة",
+  "startANewSearch":"ابدأ بحثاً جديداً"
 }
