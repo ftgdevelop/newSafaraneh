@@ -119,5 +119,8 @@
   "DatesAreExpired":"تاریخ جستجو گذشته است",
   "ChangeDates":"تغییر تاریخ",
   "ContinueAnyway":"بستن",
-  "SorryTheDatesYouEnteredAreExpiredChooseDifferentDatesToViewHotelOptions":"متاسفانه، تاریخ هایی که وارد کرده اید منقضی شده است، برای مشاهده گزینه ها، تاریخ دیگری را انتخاب کنید"
+  "SorryTheDatesYouEnteredAreExpiredChooseDifferentDatesToViewHotelOptions":"متاسفانه، تاریخ هایی که وارد کرده اید منقضی شده است، برای مشاهده گزینه ها، تاریخ دیگری را انتخاب کنید",
+  "GetTheLatestPriceAndAvailabilityForYourSearchTo":"دریافت آخرین وضعیت ظرفیت و قیمت هتلها برای جستجوی شما در {{destination}} ({{dates}})",
+  "RefreshResults":"بروزرسانی نتایج",
+  "startANewSearch":"جستجوی جدید"
 }

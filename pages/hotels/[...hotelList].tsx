@@ -5,14 +5,14 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { EntitySearchResultItemType, PricedHotelItem, SearchHotelItem, SortTypes } from '@/modules/domesticHotel/types/hotel';
 import SearchForm from '@/modules/domesticHotel/components/shared/SearchForm';
 import HotelsList from '@/modules/domesticHotel/components/hotelsList';
-import { addSomeDays, checkDateIsAfterDate, dateFormat } from '@/modules/shared/helpers';
+import { addSomeDays, checkDateIsAfterDate, dateDiplayFormat, dateFormat } from '@/modules/shared/helpers';
 import ProgressBarWithLabel from '@/modules/shared/components/ui/ProgressBarWithLabel';
 import { useTranslation } from 'next-i18next';
 import Select from '@/modules/shared/components/ui/Select';
 import Skeleton from '@/modules/shared/components/ui/Skeleton';
 import parse from 'html-react-parser';
 import Accordion from '@/modules/shared/components/ui/Accordion';
-import {  CalendarError, QuestionCircle } from '@/modules/shared/components/ui/icons';
+import { CalendarError, QuestionCircle } from '@/modules/shared/components/ui/icons';
 import DomesticHotelListSideBar from '@/modules/domesticHotel/components/hotelsList/sidebar';
 import { setFacilityFilterOptions, setGuestPointFilterOptions, setTypeFilterOptions, setPriceFilterRange } from '@/modules/domesticHotel/store/domesticHotelSlice';
 import { useAppDispatch } from '@/modules/shared/hooks/use-store';
@@ -23,6 +23,7 @@ import { getPageByUrl } from '@/modules/shared/actions';
 import Head from 'next/head';
 import { PortalDataType } from '@/modules/shared/types/common';
 import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
+import AvailabilityTimeout from '@/modules/shared/components/AvailabilityTimeout';
 
 type Props = {
   searchHotelsData?: {
@@ -560,6 +561,13 @@ const HotelList: NextPage<Props> = props => {
 
       </Head>
 
+      {!!pricesData && <AvailabilityTimeout
+        minutes={10}
+        onRefresh={() => { window.location.reload() }}
+        type='hotel'
+        description={t("GetTheLatestPriceAndAvailabilityForYourSearchTo", { destination: cityName, dates: `${dateDiplayFormat({ date: checkin, locale: locale, format: "dd mm" })} - ${dateDiplayFormat({ date: checkout, locale: locale, format: "dd mm" })}` })}
+      />}
+
       <div className='max-w-container mx-auto px-5 py-4' ref={searchFormWrapperRef}>
 
         <ModalPortal
@@ -611,7 +619,12 @@ const HotelList: NextPage<Props> = props => {
         </ModalPortal>
 
 
-        {!!showOnlyForm && <div className='fixed bg-black/75 backdrop-blur-sm top-0 bottom-0 right-0 left-0 z-[1]' />}
+        {!!showOnlyForm && (
+          <div
+            className='fixed bg-black/75 backdrop-blur-sm top-0 bottom-0 right-0 left-0 z-[1]'
+            onClick={() => { setShowOnlyForm(false) }}
+          />
+        )}
         <SearchForm wrapperClassName='pb-4 relative z-[2]' defaultDates={domesticHotelDefaultDates} defaultDestination={defaultDestination} />
 
 

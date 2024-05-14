@@ -19,11 +19,12 @@ import FAQ from '@/modules/domesticHotel/components/hotelDetails/FAQ';
 import SimilarHotels from '@/modules/domesticHotel/components/hotelDetails/SimilarHotels';
 import Comments from '@/modules/domesticHotel/components/hotelDetails/comments';
 import Rooms from '@/modules/domesticHotel/components/hotelDetails/Rooms';
-import { addSomeDays, checkDateIsAfterDate, dateFormat } from '@/modules/shared/helpers';
+import { addSomeDays, checkDateIsAfterDate, dateDiplayFormat, dateFormat } from '@/modules/shared/helpers';
 import AnchorTabs from '@/modules/shared/components/ui/AnchorTabs';
 import NotFound from '@/modules/shared/components/ui/NotFound';
 import { useEffect, useRef, useState } from 'react';
 import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
+import AvailabilityTimeout from '@/modules/shared/components/AvailabilityTimeout';
 
 type Props = {
   allData: {
@@ -40,10 +41,12 @@ const HotelDetail: NextPage<Props> = props => {
 
   const { portalData, allData } = props;
 
+  
   const { t } = useTranslation('common');
   const { t: tHotel } = useTranslation('hotel');
-
+  
   const router = useRouter();
+  const locale = router.locale;
 
   const searchFormWrapperRef = useRef<HTMLDivElement>(null);
   const [showChangeDateModal, setShowChangeDateModal] = useState<boolean>(false);
@@ -65,7 +68,7 @@ const HotelDetail: NextPage<Props> = props => {
   if (searchInfo.includes("checkout-")) {
     checkout = searchInfo.split("checkout-")[1].split("/")[0];
   }
-  
+
   if (checkin && checkout) {
     defaultDates = [checkin, checkout];
   }
@@ -356,7 +359,12 @@ const HotelDetail: NextPage<Props> = props => {
 
 
         <div ref={searchFormWrapperRef} className='pt-5'>
-        {!!showOnlyForm && <div className='fixed bg-black/75 backdrop-blur-sm top-0 bottom-0 right-0 left-0 z-[1]' />}
+          {!!showOnlyForm && (
+            <div
+              className='fixed bg-black/75 backdrop-blur-sm top-0 bottom-0 right-0 left-0 z-[1]'
+              onClick={() => { setShowOnlyForm(false) }}
+            />
+          )}
           <h2 className='text-lg lg:text-3xl font-semibold mt-5 mb-3 md:mt-10 md:mb-7 relative z-[2]'>{t('change-search')}</h2>
 
           <SearchForm
@@ -394,6 +402,13 @@ const HotelDetail: NextPage<Props> = props => {
       {!!hotelData.Similars && <SimilarHotels similarHotels={hotelData.Similars} />}
 
       {!!accommodationData?.faqs?.length && <FAQ faqs={accommodationData.faqs} />}
+
+      <AvailabilityTimeout
+        minutes={10}
+        onRefresh={() => { window.location.reload() }}
+        type='hotel'
+        description={t("GetTheLatestPriceAndAvailabilityForYourSearchTo", { destination: hotelData.CityName, dates: `${dateDiplayFormat({ date: checkin || today, locale: locale, format: "dd mm" })} - ${dateDiplayFormat({ date: checkout || tomorrow, locale: locale, format: "dd mm" })}` })}
+      />
 
     </>
   )
