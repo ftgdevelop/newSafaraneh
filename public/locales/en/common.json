@@ -119,5 +119,8 @@
     "DatesAreExpired":"Dates are expired",
     "ChangeDates":"Change dates",
     "ContinueAnyway":"Continue anyway",
-    "SorryTheDatesYouEnteredAreExpiredChooseDifferentDatesToViewHotelOptions":"Sorry, the dates you entered are expired, Choose different dates to view options"
+    "SorryTheDatesYouEnteredAreExpiredChooseDifferentDatesToViewHotelOptions":"Sorry, the dates you entered are expired, Choose different dates to view options",
+    "GetTheLatestPriceAndAvailabilityForYourSearchTo":"Get the latest price and availability for your search to {{destination}} ({{dates}})",
+    "RefreshResults":"Refresh results",
+    "startANewSearch":"start a new search"
 }

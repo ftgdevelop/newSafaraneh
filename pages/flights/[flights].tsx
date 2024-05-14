@@ -28,6 +28,7 @@ import SearchData from "@/modules/flights/components/flightList/SearchData";
 import SortFlights from "@/modules/flights/components/flightList/SortFlights";
 import { PortalDataType } from "@/modules/shared/types/common";
 import NotFound from "@/modules/shared/components/ui/NotFound";
+import AvailabilityTimeout from "@/modules/shared/components/AvailabilityTimeout";
 
 
 type Airport = {
@@ -480,6 +481,15 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
                     </ModalPortal>
                 </div>
             </div>
+
+            {!!key && (
+                <AvailabilityTimeout
+                    minutes={10}
+                    onRefresh={() => { window.location.reload() }}
+                    type='flight'
+                    description={tFlight("flightTimeoutMessage")}
+                />
+            )}
         </>
     )
 }
