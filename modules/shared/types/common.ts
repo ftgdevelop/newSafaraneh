@@ -93,3 +93,21 @@ export interface UserReserveListItem {
 }
 
 export type ReserveType = "Undefined"| "HotelDomestic"| "FlightDomestic"| "Bus"| "Package"| "Flight"| "Hotel"| "PnrOutside"| "Cip"| "Activity";
+
+export interface TravelerItem {
+    userId:number;
+    firstname?:string;
+    firstnamePersian?:string;
+    lastname?:string;
+    lastnamePersian?:string;
+    gender:boolean;
+    nationalId?:string;
+    birthDate?:string;
+    nationality?:string;
+    email?:string;
+    passportCountry?:string;
+    passportExpirationDate?:string;
+    passportNumber?:string;
+    phoneNumber?:string;
+    id:number;
+}

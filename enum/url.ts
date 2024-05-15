@@ -26,7 +26,8 @@ export const Header = {
     Payment: process.env.PROJECT_SERVER_PAYMENT,
     Flight: process.env.PROJECT_SERVER_FLIGHT,
     Crm:process.env.PROJECT_SERVER_CRM,
-    Cip: process.env.PROJECT_SERVER_CIP
+    Cip: process.env.PROJECT_SERVER_CIP,
+    Traveler : process.env.PROJECT_SERVER_TRAVELER
   };
 
   export const Identity = {
@@ -124,6 +125,12 @@ export const Flight = {
     GetReserveById:"/api/services/app/Reserve/Get",
     Confirm:"/api/services/app/BookingCip/Confirm",
     GetVoucherPdf:"/api/services/app/Reserve/GetVoucherPdf"
+  }
+
+  export const Traveler = {
+    Create:"/api/services/app/Passenger/Create",
+    GetAll:"/api/services/app/Passenger/GetAll",
+    Delete:"​/api​/services​/app​/Passenger​/Delete"
   }
   
   export const ServerStatus = {
