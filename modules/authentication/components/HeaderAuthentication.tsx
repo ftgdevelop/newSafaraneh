@@ -12,6 +12,7 @@ import UserWallet from './UserWallet';
 import AccountSidebar from './AccountSidebar';
 import LoginSidebar from './LoginSidebar';
 import { useRouter } from 'next/router';
+import { closeLoginForm, openLoginForm } from '../store/authenticationSlice';
 
 
 const HeaderAuthentication: React.FC = () => {
@@ -27,7 +28,8 @@ const HeaderAuthentication: React.FC = () => {
     const userIsAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
     const userLoginLoading = useAppSelector(state => state.authentication.getUserLoading);
 
-    const [open, setOpen] = useState<boolean>(false);
+    const open = useAppSelector(state => state.authentication.loginFormIsOpen);
+
     const [delayedOpen, setDelayedOpen] = useState<boolean>(false);
 
     const [loginWithPassword, setLoginWithPassword] = useState<boolean>(false);
@@ -43,7 +45,7 @@ const HeaderAuthentication: React.FC = () => {
 
     useEffect(() => {
         if (!delayedOpen) {
-            setTimeout(() => { setOpen(false) }, 200);
+            setTimeout(() => { dispatch(closeLoginForm())}, 200);
         }
     }, [delayedOpen]);
 
@@ -69,7 +71,7 @@ const HeaderAuthentication: React.FC = () => {
                         type="button"
                         aria-label={t('sign-in-up')}
                         className={buttonClassName}
-                        onClick={() => { setOpen(true) }}
+                        onClick={() => {dispatch(openLoginForm()) }}
                     >
 
                         حساب کاربری
@@ -84,7 +86,7 @@ const HeaderAuthentication: React.FC = () => {
                     type="button"
                     aria-label={t('sign-in-up')}
                     className={buttonClassName}
-                    onClick={() => { setOpen(true) }}
+                    onClick={() => { dispatch(openLoginForm()) }}
                 >
 
                     {theme2 ? <>ورود <span className='block h-6 border-l border-stone-300' /> ثبت نام </> : t('sign-in-up')}

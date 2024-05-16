@@ -20,6 +20,8 @@ import Button from '@/modules/shared/components/ui/Button';
 import FormikField from '@/modules/shared/components/ui/FormikField';
 import { validateRequied } from '@/modules/shared/helpers/validation';
 import { UserInformation } from '@/modules/authentication/types/authentication';
+import { TravelerItem } from '@/modules/shared/types/common';
+import { getTravelers } from '@/modules/shared/actions';
 
 const Checkout: NextPage = () => {
 
@@ -36,6 +38,9 @@ const Checkout: NextPage = () => {
   const [flightData, setFlightData] = useState<FlightGetValidateDataType>();
   const [flightDataLoading, setFlightDataLoading] = useState<boolean>(true);
   const [submitLoading, setSubmitLoading] = useState<boolean>(false);
+
+  const [travelers, setTravelers] = useState<TravelerItem[] | undefined>(undefined);
+  const [fetchingTravelersLoading, setFetchingTravelersLoading] = useState<boolean>(false);
 
   type CountryItem = {
     code?: string;
@@ -198,6 +203,18 @@ const Checkout: NextPage = () => {
     captchaCode: ""
   }
 
+  const fetchTravelers = async () => {
+    setFetchingTravelersLoading(true);
+    const token = localStorage.getItem('Token') || "";
+    const response: any = await getTravelers(token, "fa-IR");
+    if(response.data?.result?.items){
+      setTravelers(response.data?.result?.items);
+      setFetchingTravelersLoading(false);
+    }
+
+  }
+
+
   const submitHandle = async (values: FlightPrereserveFormValue) =>{
     if (!key){
       return;
@@ -331,6 +348,9 @@ const Checkout: NextPage = () => {
                             touched={touched}
                             values={values}
                             countries={countries}
+                            fetchingTravelersLoading={fetchingTravelersLoading}
+                            travelers={travelers}
+                            fetchTravelers={fetchTravelers}
                           />
                         ))}
 

@@ -6,6 +6,7 @@ type Authentication = {
     user: any;
     balance?: number;
     balanceLoading? : boolean;
+    loginFormIsOpen?: boolean;
 };
 
 const initialState: Authentication = {
@@ -13,7 +14,8 @@ const initialState: Authentication = {
     getUserLoading: false,
     user: {},
     balance: undefined,
-    balanceLoading: false
+    balanceLoading: false,
+    loginFormIsOpen: false
 };
 
 export const authenticationSlice = createSlice({
@@ -28,10 +30,17 @@ export const authenticationSlice = createSlice({
         setReduxBalance: (state, action) => {
             state.balance = action.payload.balance;
             state.balanceLoading = action.payload.loading;
+        },
+        openLoginForm : (state) =>{
+            state.loginFormIsOpen = true;
+        },
+        closeLoginForm : (state) =>{
+            state.loginFormIsOpen = false;
         }
+
     }
 });
 
-export const { setReduxUser, setReduxBalance } = authenticationSlice.actions
+export const { setReduxUser, setReduxBalance, closeLoginForm, openLoginForm } = authenticationSlice.actions
 
 export default authenticationSlice.reducer;

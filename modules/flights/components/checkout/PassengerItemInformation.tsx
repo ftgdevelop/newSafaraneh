@@ -6,8 +6,13 @@ import { dateFormat, goBackYears } from "@/modules/shared/helpers";
 import { useState } from "react";
 import DatePickerSelect from "@/modules/shared/components/ui/DatePickerSelect";
 import SelectWithSearch from "@/modules/shared/components/ui/SelectWithSearch";
+import FormerTravelers from "@/modules/shared/components/FormerTravelers";
+import { TravelerItem } from "@/modules/shared/types/common";
 
 type Props = {
+  travelers?: TravelerItem[];
+  fetchTravelers?: () => void;
+  fetchingTravelersLoading?: boolean;
   index: number;
   type: "ADT" | "CHD" | "INF";
   label: string;
@@ -115,9 +120,17 @@ const PassengerItemInformation: React.FC<Props> = props => {
 
   return (
     <div className='bg-white border border-neutral-300 rounded-lg mb-5' >
-      <h5 className='font-semibold text-sm border-b py-3 px-5'>
-        {t('passenger')} {props.index + 1} ({props.label})
-      </h5>
+      <div className="flex justify-between text-sm border-b py-3 px-5">
+        <h5 className='font-semibold'>
+          {t('passenger')} {props.index + 1} ({props.label})
+        </h5>
+        <FormerTravelers 
+          fetchTravelers={props.fetchTravelers}
+          fetchingLoading={props.fetchingTravelersLoading}
+          onSelectTraveler={traveler=>{debugger}}
+          travelers={props.travelers}
+        />
+      </div>
       <div className="grid md:grid-cols-3 gap-x-3 gap-y-5 py-3 px-5">
         <div className="md:col-span-3">
           <label className='inline-flex items-center gap-1 rtl:ml-4 ltr:mr-4'>
