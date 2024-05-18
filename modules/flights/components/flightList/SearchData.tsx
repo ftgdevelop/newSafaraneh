@@ -52,7 +52,9 @@ const SearchData: React.FC<Props> = props => {
             </div>
             <div>
                 <p className="text-xs max-lg:text-4xs text-gray-400">کابین</p>
-                <p className="text-sm max-md:text-2xs">اکونومی</p>
+                <p className="text-sm max-md:text-2xs">
+                    {query.flightType && query.flightType == "Business"? 'بیزنس' : 'اکونومی'}
+                </p>
             </div>
                 
             <button className="bg-blue-800 text-white text-sm max-md:text-xs rounded-md p-1 pl-2 pr-2 h-fit whitespace-nowrap mt-auto mb-auto
