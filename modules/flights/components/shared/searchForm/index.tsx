@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import { i18n, useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 
-import { FlightSeachFormValue, AirportAutoCompleteType, FlightSearchDefaultValues } from '../../../types/flights';
+import { FlightSeachFormValue, AirportAutoCompleteType, FlightSearchDefaultValues, FlightRecentSearchItem } from '../../../types/flights';
 import SelectPassengers from './SelectPassengers';
 import { Field, Form, Formik } from 'formik';
 import Button from '@/modules/shared/components/ui/Button';
@@ -64,6 +64,33 @@ const SearchForm: React.FC<Props> = props => {
         ) {
             props.research();
         } else {
+
+
+            const localStorageRecentSearches = localStorage?.getItem("flightRecentSearches");
+            const recentSearches: FlightRecentSearchItem[] = localStorageRecentSearches ? JSON.parse(localStorageRecentSearches) : [];
+
+            const querisArray = Object.keys(searchQueries).map((key) => [key+ "="+ searchQueries[key]]);
+
+            const url = `/flights/${values.originCode}-${values.destinationCode}?` + querisArray.join("&");
+
+            const searchObject: FlightRecentSearchItem = {
+                url: url,
+                origin:locations[0]?.city.name || locations[0]?.code || "",
+                destination:locations[1]?.city.name || locations[1]?.code || "",
+                departureDate: values.departureDate || "",
+                returnDate: values.returnDate || ""
+            };
+
+            if (!(recentSearches.find(item => item.url === searchObject.url))) {
+                recentSearches.unshift(searchObject);
+
+                const slicedArray = recentSearches.slice(0, 10);
+
+                const updatedRecentSearches = JSON.stringify(slicedArray);
+
+                localStorage?.setItem("flightRecentSearches", updatedRecentSearches)
+            }
+
             router.push({ pathname: `/flights/${values.originCode}-${values.destinationCode}`, query: searchQueries });
         }
 
@@ -160,7 +187,7 @@ const SearchForm: React.FC<Props> = props => {
                                             defaultList={defaultAirportOptions}
                                             noResultMessage={t('NoResultsFound')}
                                             placeholder='مبدا'
-                                            acceptLanguage={i18n?.language === "fa" ? "fa-IR" : i18n?.language === "en" ? "en-US" : "ar-AE"}
+                                            acceptLanguage={i18n?.language === "ar" ? "ar-AE" : i18n?.language === "en" ? "en-US" : "fa-IR"}
                                             inputClassName='w-full text-left border border-neutral-400 h-12 rounded-lg focus:border-neutral-900 outline-none'
                                             type="flight"
                                             createTextFromOptionsObject={(item: AirportAutoCompleteType) => item.airportType === 'City' ? item.city.name || item.name : item.city.name + " - " + item.name}
@@ -223,7 +250,7 @@ const SearchForm: React.FC<Props> = props => {
                                             defaultList={defaultAirportOptions}
                                             noResultMessage={t('NoResultsFound')}
                                             placeholder='مقصد'
-                                            acceptLanguage={i18n?.language === "fa" ? "fa-IR" : i18n?.language === "en" ? "en-US" : "ar-AE"}
+                                            acceptLanguage={i18n?.language === "ar" ? "ar-AE" : i18n?.language === "en" ? "en-US" : "fa-IR"}
                                             inputClassName='w-full text-left border border-neutral-400 h-12 rounded-lg focus:border-neutral-900 outline-none'
                                             type="flight"
                                             createTextFromOptionsObject={(item: AirportAutoCompleteType) => item.airportType === 'City' ? item.city.name || item.name : item.city.name + " - " + item.name}

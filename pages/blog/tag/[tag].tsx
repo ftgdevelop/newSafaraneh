@@ -7,12 +7,19 @@ import { BlogItemType, CategoriesNameType } from "@/modules/blogs/types/blog";
 import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
 import Head from "next/head";
 import { PortalDataType } from "@/modules/shared/types/common";
+import NotFound from "@/modules/shared/components/ui/NotFound";
 
 
-const Tag: NextPage<any> = ({ TagBlogs, TagName, categories_name, recentBlogs, pages, portalData } :
-    {TagBlogs : BlogItemType[] , TagName:any , categories_name:CategoriesNameType[], recentBlogs: BlogItemType[],pages:string , portalData: PortalDataType}) => {
+const Tag: NextPage<any> = ({ TagBlogs, TagName, categories_name, recentBlogs, pages, portalData, moduleDisabled } :
+    {TagBlogs : BlogItemType[] , TagName:any , categories_name:CategoriesNameType[], recentBlogs: BlogItemType[],pages:string , portalData: PortalDataType, moduleDisabled?: boolean;}) => {
     
-    const tagname: string = TagName.name || ''
+        if (moduleDisabled) {
+            return (
+                <NotFound />
+            )
+        }
+
+    const tagname: string = TagName?.name || ''
     const siteName = portalData?.Phrases?.find(item => item.Keyword === "Name")?.Value || "";
     return (
         <div className="bg-white">
@@ -33,6 +40,18 @@ export default Tag;
 
 
 export async function getServerSideProps(context: any) {
+
+    if (!process.env.PROJECT_MODULES?.includes("Blog")) {
+        return (
+            {
+                props: {
+                    ...await serverSideTranslations(context.locale, ['common']),
+                    moduleDisabled: true
+                },
+            }
+        )
+    }
+
     let tag = context.query.tag;
     const pageQuery = context.query.page || 1
 

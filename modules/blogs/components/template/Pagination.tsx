@@ -25,7 +25,7 @@ const Pagination: NextPage<any> = ({ perPage, blogs }) => {
     }
     return (
         <>
-        {blogs.length ?
+        {blogs?.length ?
         <ul className="flex flex-wrap select-none justify-center rounded mt-4 max-sm:m-4 p-3 max-sm:p-1 max-sm:pt-3 max-sm:pb-3 max-md:gap-8 max-sm:gap-3 gap-10" style={{ border: 'solid 1px rgba(0,0,0,.2)' }}>
             
             <li

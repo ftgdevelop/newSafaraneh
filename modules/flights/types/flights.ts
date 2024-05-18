@@ -282,3 +282,11 @@ export interface FlightSearchDefaultValues extends FlightSeachFormValue {
   originObject: AirportAutoCompleteType;
   destinationObject: AirportAutoCompleteType;
 }
+
+export type FlightRecentSearchItem = {
+  url: string;
+  origin:string;
+  destination:string;
+  departureDate: string;
+  returnDate: string;
+}

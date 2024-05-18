@@ -29,18 +29,20 @@ const NotFound : React.FC<Props> = (props) => {
                     >
                     برو به صفحه اصلی
                 </Button>
-                <Button
+                
+                {!!(process.env.PROJECT_MODULES?.includes("Hotel")) && <Button
                 className="px-5 h-8 text-sm"
                     href="/hotel/هتل-پارسیان-آزادی-تهران"
                 >
                     برو به نزدیک‌ترین هتل
-                </Button>
-                <Button
+                </Button>}
+
+                {!!(process.env.PROJECT_MODULES?.includes("Blog")) &&<Button
                 className="px-5 h-8 text-sm"
                     href="/blog"
                 >
                     برو به یک جای هیجان انگیز
-                </Button>
+                </Button>}
 
             </div>
         </div>

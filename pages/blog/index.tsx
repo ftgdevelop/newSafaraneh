@@ -9,13 +9,20 @@ import BlogCities from "@/modules/blogs/components/BlogHome/BlogCities";
 import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
 import Head from "next/head";
 import { PortalDataType } from "@/modules/shared/types/common";
+import NotFound from "@/modules/shared/components/ui/NotFound";
 
 
-const Blog: NextPage<any> = ({ NewBlogs, Cities, Categories , Categories2 ,Categories3 , portalData}:
+const Blog: NextPage<any> = ({ NewBlogs, Cities, Categories , Categories2 ,Categories3 , portalData, moduleDisabled}:
     {
         NewBlogs?: BlogItemType[], Cities?: CityItemType[], Categories?: HomeCategoryItemType[], Categories2?: HomeCategoryItemType[],
-        Categories3: CategoriesNameType[] , portalData: PortalDataType
+        Categories3: CategoriesNameType[] , portalData: PortalDataType, moduleDisabled?:boolean
     }) => {
+
+        if (moduleDisabled) {
+            return (
+                <NotFound />
+            )
+        }
     
         const siteName = portalData?.Phrases?.find(item => item.Keyword === "Name")?.Value || "";
         return (
@@ -39,7 +46,16 @@ const Blog: NextPage<any> = ({ NewBlogs, Cities, Categories , Categories2 ,Categ
 
 export const getStaticProps: GetStaticProps = async (context: any) => {
 
-    const { locale, query } = context;
+    if (!process.env.PROJECT_MODULES?.includes("Blog")) {
+        return (
+            {
+                props: {
+                    ...await serverSideTranslations(context.locale, ['common']),
+                    moduleDisabled: true
+                },
+            }
+        )
+    }
     
     const [Blogdata, Cities, Categories, Categories2, Categories3] = await Promise.all<any>([
         getBlogs({page:1}),

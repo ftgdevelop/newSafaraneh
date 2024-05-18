@@ -485,3 +485,16 @@ export interface CipAvailibilityItem {
   }[];
   id: number;
 }  
+
+
+export type CipAutoCompleteType = {
+  url?: string;
+  name?: string;
+  id?: number;
+}
+
+export type CipRecentSearchItem = {
+  url: string;
+  airportName:string;
+  flightDate:string;
+}

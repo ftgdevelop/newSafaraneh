@@ -24,7 +24,7 @@ type Props<T> = {
     createTextFromOptionsObject: (object: T) => string;
     noResultMessage?: string;
     checkTypingLanguage?: boolean;
-    type: "hotel" | "flight";
+    type: "hotel" | "flight" | "cip";
     sortListFunction?: (a:T, b:T) => 1 | -1;
 }
 
@@ -87,6 +87,16 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
                     }
                 }
             } else if (props.type === 'hotel') {
+                axiosParams = {
+                    method: "post",
+                    url: `${url}?input=${val}`,
+                    headers: {
+                        ...Header,
+                        apikey: process.env.PROJECT_PORTAL_APIKEY,
+                        "Accept-Language": acceptLanguage || "fa-IR",
+                    }
+                }
+            } else if (props.type === 'cip') {
                 axiosParams = {
                     method: "post",
                     url: `${url}?input=${val}`,
@@ -263,7 +273,7 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
             inputClassNames.push("pl-3");
         }
     }
-    const iconClassName = `h-5 w-5 fill-current absolute z-20 top-1/2 -translate-y-1/2 ${!direction ? "rtl:right-3 ltr:left-3" : direction === 'rtl' ? "right-3" : "left-3"}`;
+    const iconClassName = `pointer-events-none h-5 w-5 fill-current absolute z-20 top-1/2 -translate-y-1/2 ${!direction ? "rtl:right-3 ltr:left-3" : direction === 'rtl' ? "right-3" : "left-3"}`;
 
     let iconElement = null;
 

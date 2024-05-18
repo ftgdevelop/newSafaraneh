@@ -7,7 +7,7 @@ import { getDomesticHotelSummaryDetailById } from "@/modules/domesticHotel/actio
 import { Header, ServerAddress, Hotel } from "../../../../enum/url";
 import AutoComplete from "../../../shared/components/ui/AutoComplete";
 import { ApartmentOutline, Calendar, Home2, Location } from "../../../shared/components/ui/icons";
-import { EntitySearchResultItemType } from "@/modules/domesticHotel/types/hotel";
+import { EntitySearchResultItemType, HotelRecentSearchItem } from "@/modules/domesticHotel/types/hotel";
 import { useAppDispatch } from "@/modules/shared/hooks/use-store";
 import { setReduxError } from "@/modules/shared/store/errorSlice";
 import DatePicker from "../../../shared/components/ui/RangePicker";
@@ -74,7 +74,7 @@ const SearchForm: React.FC<Props> = props => {
                 setDefaultDestinations(initialDestinations);
 
             } else {
-                const acceptLanguage = i18n && i18n.language === "fa" ? "fa-IR" : "en-US";
+                const acceptLanguage = i18n && i18n.language === "en" ? "en-US" : "fa-IR";
 
                 const fetchDefaultDestinations = async () => {
                     try {
@@ -84,7 +84,7 @@ const SearchForm: React.FC<Props> = props => {
                             headers: {
                                 ...Header,
                                 apikey: process.env.PROJECT_PORTAL_APIKEY,
-                                "Accept-Language": acceptLanguage || "en-US",
+                                "Accept-Language": acceptLanguage || "fa-IR",
                             }
                         })
 
@@ -155,7 +155,7 @@ const SearchForm: React.FC<Props> = props => {
                 break;
 
             case "Hotel":
-                const hotelDetailsResponse = await getDomesticHotelSummaryDetailById(selectedDestination.id!, i18n?.language === "fa" ? "fa-IR" : "en-US");
+                const hotelDetailsResponse = await getDomesticHotelSummaryDetailById(selectedDestination.id!, i18n?.language === "en" ? "en-US" : "fa-IR");
 
                 if (hotelDetailsResponse.data?.result?.url) {
                     url = hotelDetailsResponse.data.result.url;
@@ -188,6 +188,24 @@ const SearchForm: React.FC<Props> = props => {
         }
 
         url += `${urlSegment}/checkin-${dates[0]}/checkout-${dates[1]}`;
+
+        const localStorageRecentSearches = localStorage?.getItem("hotelRecentSearches");
+        const recentSearches : HotelRecentSearchItem[] = localStorageRecentSearches ? JSON.parse(localStorageRecentSearches) : [];
+        
+        const searchObject :HotelRecentSearchItem = {
+            url: url,
+            title: selectedDestination.displayName || selectedDestination.name || "",
+            dates: dates,
+        };
+
+        if (!(recentSearches.find(item => item.url === searchObject.url))){
+            recentSearches.unshift(searchObject);
+
+            const slicedArray = recentSearches.slice(0,10);
+
+            const updatedRecentSearches = JSON.stringify(slicedArray);
+            localStorage?.setItem("hotelRecentSearches", updatedRecentSearches )
+        }
 
         router.push(url);
 
