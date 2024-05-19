@@ -15,7 +15,7 @@ const Destination: React.FC = () => {
     return (
         <div className="text-xs pt-2 pb-2">
             <div className="flex justify-between items-center">
-                <h5 className="text-sm font-semibold mb-2">ساعت حرکت</h5>
+                <h5 className="text-sm font-semibold mb-2">پایانه</h5>
                 <button type="button" className="text-3xs bg-red-500 text-white pl-2 pr-2 rounded"
                     onClick={() => null} 
                 >

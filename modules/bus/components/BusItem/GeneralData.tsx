@@ -13,10 +13,10 @@ const GeneralData: React.FC = () => {
                 <div className="grid max-sm:flex max-sm:col-span-3 max-sm:justify-self-start max-sm:pb-3">
                     <Image src=''
                         alt=''
-                        width={50} height={30} className={`w-12 h-12 max-sm:w-8 max-sm:h-8`} />
+                        width={50} height={30} className={`w-12 h-12 max-sm:w-8 max-sm:h-8 m-auto`} />
                     <span className="mr-1 ml-1 text-3xs max-sm:text-4xs leading-5 text-center">
                         شرکت همسفر چابکسواران اصفهان پایانه صفه
-                        <span className="bg-gray-200 px-1 rounded-sm block">
+                        <span className="bg-gray-200 px-1 rounded-sm block w-fit mx-auto max-sm:mx-0">
                             vip مشترک با کاوه
                         </span>
                     </span>
@@ -45,7 +45,7 @@ const GeneralData: React.FC = () => {
                     
                 <button type="submit" className="text-xs max-sm:text-2xs bg-gray-100 text-gray-500 flex w-full justify-center"
                     onClick={e => null}>
-                     جزئیات پرواز
+                     اطلاعات بیشتر
                     <span><RightCaret className={`w-5 mt-1 fill-gray-500 rotate-90`} /></span>
                 </button>
         </div>

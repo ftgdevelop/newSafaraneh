@@ -4,6 +4,7 @@ import SearchData from "@/modules/bus/components/BusList/SearchData";
 import SortBuses from "@/modules/bus/components/BusList/SortBuses";
 import SidebarFilters from "@/modules/bus/components/sidebar/SidebarFilters";
 import { NextPage } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Head from "next/head";
 
 const Buses: NextPage = () => {
@@ -25,3 +26,16 @@ const Buses: NextPage = () => {
 }
 
 export default Buses;
+
+
+export async function  getStaticProps (context: any)  {
+    return (
+        {
+            props: {
+                ...await serverSideTranslations(context.locale, ['common']),
+            },
+
+        }
+    )
+
+}

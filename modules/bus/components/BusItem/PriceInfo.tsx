@@ -1,4 +1,3 @@
-import { Button } from "@mobiscroll/react"
 
 const PriceInfo: React.FC = () => {
     return (
@@ -8,17 +7,14 @@ const PriceInfo: React.FC = () => {
                     <span className="text-2xs max-sm:text-3xs font-bold block">ریال</span>
                     12000000
                     </p>
-                    <Button
+                <button
                     type="button"
-                    onClick={() => null}
-                    disabled={false}
-                    color='primary'
-                    className="px-5 w-full h-8 leading-6 text-sm mt-2 text-nowrap"
-                    hasArrow
-                    loading={true}
+                    className="px-5 w-full h-8 leading-6 text-sm mt-2 text-nowrap bg-blue-700 text-white rounded"
+                    
                 >
                     انتخاب صندلی
-                </Button>
+                </button>
+                <p className="text-3xs text-red-600">4 صندلی باقیمانده</p>
             </div>
         </div>
     )

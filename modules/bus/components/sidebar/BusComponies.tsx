@@ -21,7 +21,7 @@ const BusComponies: React.FC = () => {
                         alt=""
                         height={30} width={30} className={`w-6 h-6`}/>
                 </div>
-                <p className="text-xs">شرکت تعاونی اتوبوس ترمینال جنوب</p>
+                <p className="text-2xs whitespace-nowrap">شرکت تعاونی اتوبوس ترمینال جنوب تهران جنوب شمال</p>
             </div>
             )}
             onChange={() => null}
