@@ -33,7 +33,7 @@ const Checkout: NextPage = () => {
 
   const { key } = router.query;
 
-  const user : UserInformation = useAppSelector(state => state.authentication.isAuthenticated ? state.authentication.user : undefined);
+  const user: UserInformation = useAppSelector(state => state.authentication.isAuthenticated ? state.authentication.user : undefined);
 
   const [flightData, setFlightData] = useState<FlightGetValidateDataType>();
   const [flightDataLoading, setFlightDataLoading] = useState<boolean>(true);
@@ -97,7 +97,6 @@ const Checkout: NextPage = () => {
     }
     fetchCountriesList();
   }, []);
-
 
   const createPassengersArray = useCallback((flight?: FlightGetValidateDataType) => {
 
@@ -207,7 +206,7 @@ const Checkout: NextPage = () => {
     setFetchingTravelersLoading(true);
     const token = localStorage.getItem('Token') || "";
     const response: any = await getTravelers(token, "fa-IR");
-    if(response.data?.result?.items){
+    if (response.data?.result?.items) {
       setTravelers(response.data?.result?.items);
       setFetchingTravelersLoading(false);
     }
@@ -215,32 +214,32 @@ const Checkout: NextPage = () => {
   }
 
 
-  const submitHandle = async (values: FlightPrereserveFormValue) =>{
-    if (!key){
+  const submitHandle = async (values: FlightPrereserveFormValue) => {
+    if (!key) {
       return;
     }
 
     setSubmitLoading(true);
 
-    const params :FlightPrereserveFormValue = {
+    const params: FlightPrereserveFormValue = {
       ...values,
-      preReserveKey:key as string,
+      preReserveKey: key as string,
       passengers: values.passengers.map(item => ({
         ...item,
-        nationality : item.nationality || null,
+        nationality: item.nationality || null,
         passportNumber: item.passportNumber || null,
-        passportExpireDate : item.passportExpireDate || null
+        passportExpireDate: item.passportExpireDate || null
       })),
-      reserver : {
+      reserver: {
         ...values.reserver,
-        userName : ""
+        userName: ""
       }
     }
     const token = localStorage.getItem('Token') || "";
 
-    const response:any = await FlightPreReserve({params:params, token},"fa-IR");
-    
-    if (response && response.status == 200 &&  response.data?.result?.reserver?.userName && response.data.result.id ) {
+    const response: any = await FlightPreReserve({ params: params, token }, "fa-IR");
+
+    if (response && response.status == 200 && response.data?.result?.reserver?.userName && response.data.result.id) {
       router.push(
         `/payment?username=${response.data.result.reserver.userName}&reserveId=${response.data.result.id}`,
       )
@@ -250,9 +249,9 @@ const Checkout: NextPage = () => {
         title: t('error'),
         message: response.response?.data?.error?.message || "ارسال اطلاعات با خطا متوقف شد!",
         isVisible: true
-    }))
+      }))
     }
-  } 
+  }
 
   return (
     <>
@@ -272,7 +271,7 @@ const Checkout: NextPage = () => {
         />
 
         {!flightDataLoading && !flightData ? (
-          
+
           <div className=' flex flex-col gap-2 items-center py-5'>
             <strong className='block font-semibold'> پرواز انتخابی شما موجود نیست </strong>
             <p className='text-sm text-neutral-600 mb-10'>
@@ -280,8 +279,8 @@ const Checkout: NextPage = () => {
             </p>
             <FlightNotAvailable className='max-w-full' />
           </div>
-        
-      ):(
+
+        ) : (
           <div className='grid md:grid-cols-3 gap-4' >
             <div className='md:col-span-2'>
 
@@ -351,6 +350,7 @@ const Checkout: NextPage = () => {
                             fetchingTravelersLoading={fetchingTravelersLoading}
                             travelers={travelers}
                             fetchTravelers={fetchTravelers}
+                            clearTravelers={() => { setTravelers(undefined) }}
                           />
                         ))}
 
@@ -399,13 +399,13 @@ const Checkout: NextPage = () => {
               )}
 
             </div>
-              <div>
-                <Aside
-                  loading={flightDataLoading}
-                  passengers={passengers}
-                  departureFlight={flightData?.departureFlight}
-                />
-              </div>
+            <div>
+              <Aside
+                loading={flightDataLoading}
+                passengers={passengers}
+                departureFlight={flightData?.departureFlight}
+              />
+            </div>
           </div>
         )}
 

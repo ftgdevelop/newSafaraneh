@@ -2,16 +2,19 @@ import { useTranslation } from "next-i18next";
 import { Field, FormikErrors, FormikTouched } from "formik";
 import FormikField from "@/modules/shared/components/ui/FormikField";
 import { validateNationalId, validateRequied, validateRequiedEnglish, validateRequiedPersian } from "@/modules/shared/helpers/validation";
-import { dateFormat, goBackYears } from "@/modules/shared/helpers";
-import { useState } from "react";
+import { checkDateIsAfterDate, dateFormat, goBackYears } from "@/modules/shared/helpers";
+import { useEffect, useState } from "react";
 import DatePickerSelect from "@/modules/shared/components/ui/DatePickerSelect";
 import SelectWithSearch from "@/modules/shared/components/ui/SelectWithSearch";
 import FormerTravelers from "@/modules/shared/components/FormerTravelers";
 import { TravelerItem } from "@/modules/shared/types/common";
+import { useAppDispatch } from "@/modules/shared/hooks/use-store";
+import { setReduxNotification } from "@/modules/shared/store/notificationSlice";
 
 type Props = {
   travelers?: TravelerItem[];
   fetchTravelers?: () => void;
+  clearTravelers?: () => void;
   fetchingTravelersLoading?: boolean;
   index: number;
   type: "ADT" | "CHD" | "INF";
@@ -88,48 +91,92 @@ const PassengerItemInformation: React.FC<Props> = props => {
 
   const { errors, setFieldValue, touched, values } = props;
 
+  const dispatch = useAppDispatch();
+
   const { t } = useTranslation('common');
 
   const [reserveWithPassport, setReserveWithPassport] = useState<boolean>(false);
 
-  const minBirthDate = (type: "ADT" | "CHD" | "INF") => {
-    switch (type) {
-      case "ADT":
-        return dateFormat(goBackYears(new Date(), 100));
-      case "CHD":
-        return dateFormat(goBackYears(new Date(), 12));
-      case "INF":
-        return dateFormat(goBackYears(new Date(), 2));
-    }
-  }
+  const [selectedFormertraveler, setSelectedFormertraveler] = useState<TravelerItem>();
 
+  useEffect(() => {
 
-  const maxBirthDate = (type: "ADT" | "CHD" | "INF") => {
-    switch (type) {
-      case "ADT":
-        return dateFormat(goBackYears(new Date(), 12));
-      case "CHD":
-        return dateFormat(goBackYears(new Date(), 2));
-      case "INF":
-        return dateFormat(new Date());
+    if (!selectedFormertraveler) return;
+
+    if (reserveWithPassport) {
+      setFieldValue(`passengers.${props.index}.passportNumber`, selectedFormertraveler.passportNumber, true);
+      setFieldValue(`passengers.${props.index}.passportExpireDate`, selectedFormertraveler.passportExpirationDate, true);
+      setFieldValue(`passengers.${props.index}.nationality`, selectedFormertraveler.nationality, true);
+    } else {
+      setFieldValue(`passengers.${props.index}.persianFirstName`, selectedFormertraveler.firstnamePersian, true);
+      setFieldValue(`passengers.${props.index}.persianLastName`, selectedFormertraveler.lastnamePersian, true);
+      setFieldValue(`passengers.${props.index}.nationalId`, selectedFormertraveler.nationalId, true);
     }
-  }
+
+  }, [reserveWithPassport]);
+
+  const minBirthDate = props.type === "ADT" ? dateFormat(goBackYears(new Date(), 100)) :
+    props.type === "CHD" ? dateFormat(goBackYears(new Date(), 12)) :
+      dateFormat(goBackYears(new Date(), 2));
+
+  const maxBirthDate = props.type === "ADT" ? dateFormat(goBackYears(new Date(), 12)) :
+    props.type === "CHD" ? dateFormat(goBackYears(new Date(), 2)) :
+      dateFormat(new Date());
 
   const minPassportExpDate = dateFormat(new Date());
   const maxPassportExpDate = dateFormat(goBackYears(new Date(), -15));
 
+  const selectTravelerHandle = (traveler: TravelerItem) => {
+
+    setSelectedFormertraveler(traveler);
+
+    setFieldValue(`passengers.${props.index}.gender`, traveler.gender);
+
+    setFieldValue(`passengers.${props.index}.firstName`, traveler.firstname, true);
+    setFieldValue(`passengers.${props.index}.lastName`, traveler.lastname, true);
+
+    if(!traveler.birthDate){
+      console.log("passenger birthDate is empty");
+    } else if (
+      traveler.birthDate
+      && checkDateIsAfterDate(new Date(maxBirthDate), new Date(traveler.birthDate))
+      && checkDateIsAfterDate(new Date(traveler.birthDate), new Date(minBirthDate))
+    ) {
+      setFieldValue(`passengers.${props.index}.birthDate`, traveler.birthDate, true);
+    } else {
+      setFieldValue(`passengers.${props.index}.birthDate`, "", true);
+      dispatch(setReduxNotification({
+        status: 'error',
+        message: `سن مسافر به عنوان مسافر ${props.type === "ADT" ? t("adult") : props.type === "CHD" ? t("child") : t("infant")} معتبر نیست`,
+        isVisible: true
+      }))
+    }
+
+    if (reserveWithPassport) {
+      setFieldValue(`passengers.${props.index}.passportNumber`, traveler.passportNumber, true);
+      setFieldValue(`passengers.${props.index}.passportExpireDate`, traveler.passportExpirationDate, true);
+      setFieldValue(`passengers.${props.index}.nationality`, traveler.nationality, true);
+    } else {
+      setFieldValue(`passengers.${props.index}.persianFirstName`, traveler.firstnamePersian, true);
+      setFieldValue(`passengers.${props.index}.persianLastName`, traveler.lastnamePersian, true);
+      setFieldValue(`passengers.${props.index}.nationalId`, traveler.nationalId, true);
+    }
+
+  }
+
   return (
     <div className='bg-white border border-neutral-300 rounded-lg mb-5' >
-      <div className="flex justify-between text-sm border-b py-3 px-5">
+      <div className="flex justify-between text-sm border-b py-3 px-5 items-start">
         <h5 className='font-semibold'>
           {t('passenger')} {props.index + 1} ({props.label})
         </h5>
-        <FormerTravelers 
+        {(props.fetchTravelers && props.clearTravelers) && <FormerTravelers
           fetchTravelers={props.fetchTravelers}
-          fetchingLoading={props.fetchingTravelersLoading}
-          onSelectTraveler={traveler=>{debugger}}
+          fetchingLoading={props.fetchingTravelersLoading || false}
+          clearTravelers={props.clearTravelers}
+          onSelectTraveler={selectTravelerHandle}
           travelers={props.travelers}
-        />
+        />}
       </div>
       <div className="grid md:grid-cols-3 gap-x-3 gap-y-5 py-3 px-5">
         <div className="md:col-span-3">
@@ -294,8 +341,8 @@ const PassengerItemInformation: React.FC<Props> = props => {
 
         <DatePickerSelect
           setFieldValue={setFieldValue}
-          max={maxBirthDate(props.type)}
-          min={minBirthDate(props.type)}
+          max={maxBirthDate}
+          min={minBirthDate}
           name={`passengers.${props.index}.birthDate`}
           id={`passengers_${props.index}_birthDate`}
           shamsi={reserveWithPassport ? false : true}
@@ -321,10 +368,10 @@ const PassengerItemInformation: React.FC<Props> = props => {
               isTouched={(touched.passengers && touched.passengers[props.index]) ? touched.passengers[props.index].passportNumber : false}
               label={"شماره پاسپورت"}
               validateFunction={(value: string) => validateRequied(value, "لطفا شماره پاسپورت را وارد کنید")}
-              value={values.passengers[props.index]?.passportNumber||""}
+              value={values.passengers[props.index]?.passportNumber || ""}
             />
 
-              <DatePickerSelect          
+            <DatePickerSelect
               setFieldValue={setFieldValue}
               max={maxPassportExpDate}
               min={minPassportExpDate}

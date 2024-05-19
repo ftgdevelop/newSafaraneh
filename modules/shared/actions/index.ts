@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { Header,ServerAddress, Hotel , Reserve, Traveler} from "../../../enum/url";
+import { Header, ServerAddress, Hotel, Reserve, Traveler } from "../../../enum/url";
 import { ReserveType } from '../types/common';
 
 export const getPageByUrl = async (url: string, acceptLanguage: string = "fa-IR") => {
@@ -21,7 +21,7 @@ export const getPageByUrl = async (url: string, acceptLanguage: string = "fa-IR"
     }
 }
 
-export const getReserveFromCoordinator = async (params:{reserveId:string, username:string}, acceptLanguage: string = "fa-IR") => {
+export const getReserveFromCoordinator = async (params: { reserveId: string, username: string }, acceptLanguage: string = "fa-IR") => {
     try {
         let response = await axios.get(
             `${ServerAddress.Type}${ServerAddress.Coordinator}${Reserve.GetReserveFromCoordinator}?Id=${params.reserveId}&Username=${params.username}`,
@@ -29,7 +29,7 @@ export const getReserveFromCoordinator = async (params:{reserveId:string, userna
                 headers: {
                     'Content-Type': 'application/json',
                     accept: 'text/plain',
-                    "Accept-Language": acceptLanguage,                   
+                    "Accept-Language": acceptLanguage,
                     "TenantId": process.env.PROJECT_SERVER_TENANTID
                 }
             },
@@ -40,11 +40,11 @@ export const getReserveFromCoordinator = async (params:{reserveId:string, userna
     }
 }
 
-export const getUserAllReserves = async (params:{
-    SkipCount?:number;
-    MaxResultCount?:number;
-    Statue?:string;
-    Types?:ReserveType;
+export const getUserAllReserves = async (params: {
+    SkipCount?: number;
+    MaxResultCount?: number;
+    Statue?: string;
+    Types?: ReserveType;
     FromReturnTime?: string;
     ToReturnTime?: string;
     Ids?: number;
@@ -57,7 +57,7 @@ export const getUserAllReserves = async (params:{
                 headers: {
                     'Content-Type': 'application/json',
                     accept: 'text/plain',
-                    "Accept-Language": acceptLanguage,                   
+                    "Accept-Language": acceptLanguage,
                     "TenantId": process.env.PROJECT_SERVER_TENANTID,
                     Authorization: `Bearer ${token}`
                 }
@@ -80,7 +80,7 @@ export const getUserAllReserves = async (params:{
 
 
 
-export const getTravelers = async (token:string, acceptLanguage: string = "fa-IR") => {
+export const getTravelers = async (token: string, acceptLanguage: string = "fa-IR") => {
     try {
         let response = await axios.get(
             `${ServerAddress.Type}${ServerAddress.Traveler}${Traveler.GetAll}`,
@@ -99,60 +99,63 @@ export const getTravelers = async (token:string, acceptLanguage: string = "fa-IR
         return error
     }
 }
-  
-//   export const deleteTraveller = async (id) => {
-//     let token = localStorage.getItem("userToken");
-//     try {
-//       let response = await axios.delete(`${ServerAddress.Type}${ServerAddress.Traveller}${Traveller.Delete}?Id=${id}`,
-//         { headers: { Authorization: `Bearer ${token}`, ...Header } }
-//       );
-//       return response;
-//     } catch (error) {
-//       return error.response?.data || "Internal Error,Please try again";
-//     }
-//   };
-  
-  
-  // export const addTravelllller = () => {
-  
-  //   let token = localStorage.getItem("userToken");
-  //   let HeaderAthu = null;
-  //   if (token) {
-  //     HeaderAthu = { Authorization: `Bearer ${token}`, ...Header };
-  //   } else {
-  //     HeaderAthu = { ...Header };
-  //   }
-  
-  //   const params = {
-  //     "tenantId": 6,
-  //     "userId": 20139,
-  //     "firstname": "Zahra",
-  //     "firstnamePersian": "زهرا",
-  //     "lastname": "Mohammadi",
-  //     "lastnamePersian": "محمدی",
-  //     "gender": false,
-  //     "nationalId": "2640006100",
-  //     "birthDate": "1982-02-02",
-  //     "nationality": "IR",
-  //     "email": "zahra1@mohamadi.com",
-  //     "passportCountry": "IR",
-  //     "passportExpirationDate": "2029-07-17",
-  //     "passportNumber": "00500171011",
-  //     "phoneNumber": "",
-  //     "id": 0
-  //   }
-  
-  //   axios({
-  //     method: "post",
-  //     url: `https://traveller.itours.ir/api/services/app/Passenger/Create`,
-  //     data: { ...params },
-  //     headers: HeaderAthu,
-  //   })
-  //     .then((responsive) => {
-  //       debugger;
-  //     })
-  //     .catch((error) => {
-  //     });
-  
-  // };
 
+export const deleteTraveller = async (id:number, token: string, acceptLanguage: string = "fa-IR") => {
+    try {
+        let response = await axios.delete(
+            `${ServerAddress.Type}${ServerAddress.Traveler}${Traveler.Delete}?Id=${id}`,
+            {
+                headers: {
+                    Accept: 'application/json;charset=UTF-8',
+                    apikey: process.env.PROJECT_SERVER_APIKEY,
+                    "Accept-Language": acceptLanguage,
+                    Authorization: `Bearer ${token}`,
+                    Tenantid: process.env.PROJECT_SERVER_TENANTID
+                }
+            },
+        )
+        return response
+    } catch (error) {
+        return error
+    }
+}
+
+// export const addTraveler = async (token: string, acceptLanguage: string = "fa-IR") => {
+//     try {
+
+//         const params = {
+//             "tenantId": 1040,
+//             "userId": 120629,
+//             "firstname": "Saman",
+//             "firstnamePersian": "سامان",
+//             "lastname": "Rad",
+//             "lastnamePersian": "راد",
+//             "gender": true,
+//             "nationalId": "1999993199",
+//             "birthDate": "2024-01-01",
+//             "nationality": "IR",
+//             "email": "Ava@rez.com",
+//             "passportCountry": "IR",
+//             "passportExpirationDate": "2025-05-19",
+//             "passportNumber": "005000011",
+//             "phoneNumber": "",
+//             "id": 0
+//         }
+
+//         let response = await axios({
+//             method: "post",
+//             url: `${ServerAddress.Type}${ServerAddress.Traveler}${Traveler.Create}`,
+//             data: { ...params },
+//             headers: {
+//                 Accept: 'application/json;charset=UTF-8',
+//                 apikey: process.env.PROJECT_SERVER_APIKEY,
+//                 "Accept-Language": acceptLanguage,
+//                 Authorization: `Bearer ${token}`,
+//                 Tenantid: process.env.PROJECT_SERVER_TENANTID
+//             },
+//         })
+//         return response
+//     } catch (error) {
+//         return error
+//     }
+// }

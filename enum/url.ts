@@ -130,7 +130,7 @@ export const Flight = {
   export const Traveler = {
     Create:"/api/services/app/Passenger/Create",
     GetAll:"/api/services/app/Passenger/GetAll",
-    Delete:"​/api​/services​/app​/Passenger​/Delete"
+    Delete:"/api/services/app/Passenger/Delete"
   }
   
   export const ServerStatus = {
