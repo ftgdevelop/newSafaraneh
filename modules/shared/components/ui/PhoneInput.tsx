@@ -59,6 +59,26 @@ const PhoneInput: React.FC<Props> = props => {
         }
     }
 
+    useEffect(()=>{
+        if(initialValue){
+            let userCountry: CountryObject | undefined = undefined;
+
+            const userCountryArray = CountryCodes.find(item => initialValue.replace("+", "").startsWith(item[3].toString()));
+            if (userCountryArray) {
+                userCountry = {
+                    countryCode: userCountryArray[2] as string,
+                    dialCode: userCountryArray[3] as string,
+                    format: userCountryArray[4] as string
+                }
+                const code = userCountryArray[3] as string;                
+                setCountry(userCountry);
+                setPhoneNumberValue(initialValue.replace("+", "").substring(code?.length || 0))
+            }
+            setLabelUp(true);
+
+        }
+    },[initialValue]);
+
     const [typedCode, setTypedCode] = useState<string>("");
     const [openCodes, setOpenCodes] = useState<boolean>(false);
     const [country, setCountry] = useState<CountryObject>(initialCountry || defaultCountry);

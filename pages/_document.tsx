@@ -45,6 +45,7 @@ export default function Document() {
         )}
 
         <Main />
+        <div id="modal_portal_0" className='relative z-50'></div>
         <div id="modal_portal" className='relative z-50'></div>
         <div id="modal_portal_2" className='relative z-50'></div>
         <div id="error_modal_portal" className='relative z-50'></div>

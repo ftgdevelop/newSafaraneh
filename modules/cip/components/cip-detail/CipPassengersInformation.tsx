@@ -1,10 +1,12 @@
-import {SetStateAction, Dispatch} from 'react';
+import {SetStateAction, Dispatch, useState} from 'react';
 import {FormikErrors, FormikTouched } from "formik";
 import { useTranslation } from "next-i18next";
 
 import { CipAvailabilityItemType, CipFormPassengerItemType } from "../../types/cip";
 import { Loading, Minus, Plus } from "@/modules/shared/components/ui/icons";
 import CipPassengerItem from "./CipPassengerItem";
+import { getTravelers } from '@/modules/shared/actions';
+import { TravelerItem } from '@/modules/shared/types/common';
 
 type Props = {
     passengers: CipFormPassengerItemType[];
@@ -131,6 +133,20 @@ const CipPassengersInformation: React.FC<Props> = props => {
         });
     }
 
+    const [travelers, setTravelers] = useState<TravelerItem[] | undefined>(undefined);
+    const [fetchingTravelersLoading, setFetchingTravelersLoading] = useState<boolean>(false);
+
+    const fetchTravelers = async () => {
+        setFetchingTravelersLoading(true);
+        const token = localStorage.getItem('Token') || "";
+        const response: any = await getTravelers(token, "fa-IR");
+        if (response.data?.result?.items) {
+          setTravelers(response.data?.result?.items);
+          setFetchingTravelersLoading(false);
+        }
+    
+      }
+
     return (
         <div className='py-2 md:py-5'>
             <div className="flex justify-between items-center">
@@ -168,6 +184,12 @@ const CipPassengersInformation: React.FC<Props> = props => {
                 updatePassenger={(property: any, value: any) => { updatePassenger(passengerItem.id, property, value) }}
                 decreasePassengers={decreasePassengers}
                 isLastItem ={!!passengerIndex && passengerIndex === passengers.length-1} 
+
+                fetchingTravelersLoading={fetchingTravelersLoading}
+                travelers={travelers}
+                fetchTravelers={fetchTravelers}
+                clearTravelers={() => { setTravelers(undefined) }}
+                
             />)}
         </div>
     )

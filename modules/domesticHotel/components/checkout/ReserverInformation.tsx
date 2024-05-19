@@ -1,8 +1,11 @@
+import { UserInformation } from "@/modules/authentication/types/authentication";
 import FormikField from "@/modules/shared/components/ui/FormikField";
 import PhoneInput from "@/modules/shared/components/ui/PhoneInput";
 import { validateEmail, validateNationalId, validateRequiedPersianAndEnglish } from "@/modules/shared/helpers/validation";
+import { useAppSelector } from "@/modules/shared/hooks/use-store";
 import { Field, FormikErrors, FormikTouched } from "formik";
 import { useTranslation } from "next-i18next";
+import { useEffect } from "react";
 
 type Props = {
     errors: FormikErrors<{
@@ -33,7 +36,7 @@ type Props = {
             email: string;
             nationalId: string;
             phoneNumber: string;
-            extraBed:number;
+            extraBed: number;
         };
     }>>;
     values: {
@@ -50,7 +53,7 @@ type Props = {
             firstName: string;
             lastName: string;
             roomNumber: number;
-            extraBed:number;
+            extraBed: number;
         }[];
     }
     reserverIsPassenger?: boolean;
@@ -62,6 +65,30 @@ const ReserverInformation: React.FC<Props> = props => {
 
     const { errors, touched, setFieldValue, values } = props;
 
+    const user: UserInformation = useAppSelector(state => state.authentication.isAuthenticated ? state.authentication.user : undefined);
+
+    useEffect(() => {
+        if (user) {
+            setFieldValue(`reserver.gender`, user.gender, true);
+            if (!values.reserver.firstName) {
+                setFieldValue(`reserver.firstName`, user.firstName, true);
+            }
+            if (!values.reserver.lastName) {
+                setFieldValue(`reserver.lastName`, user.lastName, true);
+            }
+            if(!values.reserver.nationalId){
+                setFieldValue(`reserver.nationalId`, user.nationalId || "", true);
+            }
+
+            if(!values.reserver.phoneNumber){
+                setFieldValue(`reserver.phoneNumber`, user.phoneNumber || "", true);
+            }
+            if(!values.reserver.email){
+                setFieldValue(`reserver.email`, user.emailAddress || "", true);
+            }
+        }
+    }, [user]);
+
     return (
         <>
             <h4 className='font-semibold mb-4 text-lg'>
@@ -72,32 +99,32 @@ const ReserverInformation: React.FC<Props> = props => {
                 <div role="group" className="md:col-span-2 lg:col-span-1 leading-4" >
                     <label className='block text-xs mb-1' > جنسیت </label>
                     <label className='inline-flex items-center gap-1 rtl:ml-4 ltr:mr-4'>
-                        <Field 
-                            type="radio" 
-                            className="text-xs" 
-                            onChange={(e:any) => {
-                                const val = e.target.checked; 
+                        <Field
+                            type="radio"
+                            className="text-xs"
+                            onChange={(e: any) => {
+                                const val = e.target.checked;
                                 setFieldValue('reserver.gender', val);
                                 if (props.reserverIsPassenger) {
                                     setFieldValue(`passengers.${0}.gender`, val, true)
                                 }
-                            }} 
-                            checked={values.reserver.gender} 
+                            }}
+                            checked={values.reserver.gender}
                         />
                         مرد
                     </label>
                     <label className='inline-flex items-center gap-1'>
-                        <Field 
-                            type="radio" 
-                            className="text-xs" 
-                            onChange={(e:any) => {
-                                const val = !e.target.checked; 
+                        <Field
+                            type="radio"
+                            className="text-xs"
+                            onChange={(e: any) => {
+                                const val = !e.target.checked;
                                 setFieldValue('reserver.gender', val);
                                 if (props.reserverIsPassenger) {
                                     setFieldValue(`passengers.${0}.gender`, val, true)
                                 }
-                            }} 
-                            checked={!values.reserver.gender} 
+                            }}
+                            checked={!values.reserver.gender}
                         />
                         زن
                     </label>
