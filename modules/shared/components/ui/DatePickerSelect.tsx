@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { dateDiplayFormat, persianNumbersToEnglish, shamsiToMiladi } from '../../helpers';
+import { dateDiplayFormat, dateFormat, persianNumbersToEnglish, shamsiToMiladi } from '../../helpers';
 import { Field } from 'formik';
 import styles from './DatePickerSelect.module.scss';
 
@@ -48,10 +48,17 @@ const DatePickerSelect: React.FC<Props> = props => {
 
     useEffect(() => {
         if (day && month && year) {
-            let dateArray:string[] = [year, month.padStart(2, '0'), day.padStart(2, '0')];
+            let dateArray: string[] = [year, month.padStart(2, '0'), day.padStart(2, '0')];
 
-            if (props.shamsi){
+            if (props.shamsi) {
                 dateArray = shamsiToMiladi(+year, +month, +day);
+            }
+
+            const formatedValue = dateArray.join("-");
+            const formatedPropsValue = props.value ? dateFormat(new Date(props.value)) : "";
+
+            if (props.value && formatedValue === formatedPropsValue) {
+                return
             }
 
             if (props.setFieldValue) {
@@ -62,8 +69,23 @@ const DatePickerSelect: React.FC<Props> = props => {
                 props.onChange(dateArray.join("-"))
             }
 
+
         }
     }, [day, month, year]);
+
+    useEffect(() => {
+        if (props.value) {
+            const localizedPropsValue = persianNumbersToEnglish(dateDiplayFormat({ date: props.value, locale: shamsi ? 'fa' : 'en', format: "YYYY-MM-DD" }));
+            const formatedValueArray = localizedPropsValue.split("-");
+            setYear(formatedValueArray[0]);
+            setMonth(formatedValueArray[1]);
+            setDay(formatedValueArray[2]);
+        }else{
+            setDay("");
+            setMonth("");
+            setYear("");
+        }
+    }, [props.value, props.shamsi]);
 
     let yearsArray = [];
     for (let i = +minYear; i <= +maxYear; i++) {
@@ -74,38 +96,38 @@ const DatePickerSelect: React.FC<Props> = props => {
     }
 
     const persianMonths = [
-        { text: "فروردین", value: '1' },
-        { text: "اردیبهشت", value: '2' },
-        { text: "خرداد", value: '3' },
-        { text: "تیر", value: '4' },
-        { text: "مرداد", value: '5' },
-        { text: "شهریور", value: '6' },
-        { text: "مهر", value: '7' },
-        { text: "آبان", value: '8' },
-        { text: "آذر", value: '9' },
+        { text: "فروردین", value: '01' },
+        { text: "اردیبهشت", value: '02' },
+        { text: "خرداد", value: '03' },
+        { text: "تیر", value: '04' },
+        { text: "مرداد", value: '05' },
+        { text: "شهریور", value: '06' },
+        { text: "مهر", value: '07' },
+        { text: "آبان", value: '08' },
+        { text: "آذر", value: '09' },
         { text: "دی", value: '10' },
         { text: "بهمن", value: '11' },
         { text: "اسفند", value: '12' }
     ];
 
     const miladiMonths = [
-        { text: "January", value: '1' },
-        { text: "February", value: '2' },
-        { text: "March", value: '3' },
-        { text: "April", value: '4' },
-        { text: "May", value: '5' },
-        { text: "June", value: '6' },
-        { text: "July", value: '7' },
-        { text: "August", value: '8' },
-        { text: "September", value: '9' },
+        { text: "January", value: '01' },
+        { text: "February", value: '02' },
+        { text: "March", value: '03' },
+        { text: "April", value: '04' },
+        { text: "May", value: '05' },
+        { text: "June", value: '06' },
+        { text: "July", value: '07' },
+        { text: "August", value: '08' },
+        { text: "September", value: '09' },
         { text: "October", value: '10' },
         { text: "November", value: '11' },
         { text: "December", value: '12' }
     ];
 
-    const months = props.shamsi? persianMonths : miladiMonths;
+    const months = props.shamsi ? persianMonths : miladiMonths;
 
-    
+
     let monthsArray: { text: string, value: string }[] = [...months];
 
     if (year === maxYear) {
@@ -123,21 +145,21 @@ const DatePickerSelect: React.FC<Props> = props => {
 
     const days = [];
     for (let i = 1; i <= 31; i++) {
-        days.push(i.toString());
+        days.push(i.toString().padStart(2, '0'));
     }
 
     let daysArray: string[] = [...days];
-    
-    if(props.shamsi){
+
+    if (props.shamsi) {
         if (+month >= 7) {
             daysArray = [...daysArray].filter(item => +item !== 31)
         }
-    }else{
-        if (+month === 2){
+    } else {
+        if (+month === 2) {
             daysArray = [...daysArray].filter(item => +item !== 31 && +item !== 30);
         }
-        if ([4,6,9,11].includes(+month)){
-            daysArray = [...daysArray].filter(item => +item !== 31);   
+        if ([4, 6, 9, 11].includes(+month)) {
+            daysArray = [...daysArray].filter(item => +item !== 31);
         }
     }
 
@@ -153,7 +175,7 @@ const DatePickerSelect: React.FC<Props> = props => {
     const selectClassName = `block grow focus:border-blue-500 h-10 px-0.5 text-sm bg-white border outline-none rounded-md ${props.errorText && props.isTouched ? "border-red-500" : "border-neutral-300 focus:border-blue-500"}`
 
     return (
-        <div className={`relative ${props.shamsi?"font-samim":"font-sans"}`}>
+        <div className={`relative ${props.shamsi ? "font-samim" : "font-sans"}`}>
             {!!props.label && (
                 <label
                     className={`select-none pointer-events-none block leading-4 ${props.labelIsSimple ? "mb-3 text-base" : "top-0 text-xs z-10 text-sm absolute px-2 bg-white transition-all duration-300 -translate-y-1/2 rtl:right-1 ltr:left-1"}  `}

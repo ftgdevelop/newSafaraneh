@@ -53,6 +53,12 @@
   .rtl{
     direction: rtl;
   }
+  .bordered-table{
+    border-collapse: collapse;
+    &,td,th{
+      border: 1px solid #eee;
+    }
+  }
 
 }
 
