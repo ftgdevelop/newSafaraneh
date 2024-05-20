@@ -120,6 +120,7 @@ const RoomItemInformation: React.FC<Props> = props => {
           clearTravelers={props.clearTravelers}
           onSelectTraveler={selectTravelerHandle}
           travelers={props.travelers}
+          isHotel
         />}
       </div>
 

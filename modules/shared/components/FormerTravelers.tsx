@@ -170,7 +170,7 @@ const FormerTravelers: React.FC<Props> = props => {
                                                         {!props.isHotel && <td className="p-1 md:p-3"><Skeleton /></td>}
                                                     </tr>
                                                 ))
-                                            ) : (
+                                            ) : props.travelers?.length ? (
 
                                                 props.travelers?.map((traveller, travellerIndex) => (
                                                     <FormerTravelerItem
@@ -184,6 +184,15 @@ const FormerTravelers: React.FC<Props> = props => {
                                                         isHotel={props.isHotel}
                                                     />
                                                 ))
+                                            ) : (
+                                                <tr>
+                                                    <td 
+                                                        colSpan={props.isHotel ? 5 : 6}
+                                                        className="py-12" 
+                                                    >
+                                                        متاسفانه اطلاعاتی از مسافران سابق یافت نشد.
+                                                    </td>
+                                                </tr>
                                             )}
                                         </tbody>
                                     </table>
