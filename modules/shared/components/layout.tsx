@@ -8,6 +8,7 @@ import PageLoadingBar from "./ui/PageLoadingBar";
 import { setReduxUser } from "@/modules/authentication/store/authenticationSlice";
 import { getCurrentUserProfile } from "@/modules/authentication/actions";
 import Notification from "./Notification";
+import { setProgressLoading } from "../store/stylesSlice";
 
 type Props = {
   logo: string;
@@ -26,18 +27,18 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const { locale } = router;
+  const loading = useAppSelector(state => state.styles.progressLoading)
 
-  const [loading, setLoading] = useState<boolean>(false);
+  const { locale } = router;
 
   const isHeaderUnderMain = useAppSelector(state => state.styles.headerUnderMain);
   const isBodyScrollable = useAppSelector(state => state?.styles?.bodyScrollable);
 
   const addLoading = () => {
-    setLoading(true);
+    dispatch(setProgressLoading(true));
     setTimeout(removeLoading, 4000);
   }
-  const removeLoading = () => { setLoading(false) }
+  const removeLoading = () => { dispatch(setProgressLoading(false))}
 
 
   useEffect(() => {
