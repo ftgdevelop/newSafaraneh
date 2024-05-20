@@ -173,6 +173,12 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData, moduleD
         }
     }, [selectedAvailability, airportData?.code]);
 
+    useEffect(() => {
+        if (user && submitedValues) {
+            preReserve(submitedValues);
+        }
+    }, [user, submitedValues]);
+    
     const updateSelectedServices = (id: number, property: string, change: "inc" | "dec") => {
         setSelectedServicesArray((prevState: any) => {
             const updatingService = { ...prevState.find((item: any) => item.id === id) };
@@ -358,11 +364,6 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData, moduleD
         }
     }
 
-    useEffect(() => {
-        if (user && submitedValues) {
-            preReserve(submitedValues);
-        }
-    }, [user, submitedValues]);
 
     const urlSegments: string[] = router.query.CipDetail as string[] || [];
 
