@@ -3,11 +3,13 @@ import { createSlice } from "@reduxjs/toolkit";
 type StylesInfo = {
     bodyScrollable: boolean;
     headerUnderMain: boolean;
+    progressLoading : boolean;
 };
 
 const initialState: StylesInfo = {
     bodyScrollable: true,
-    headerUnderMain: false
+    headerUnderMain: false,
+    progressLoading: false
 };
 
 export const stylesSlice = createSlice({
@@ -19,10 +21,13 @@ export const stylesSlice = createSlice({
         },
         setHeaderUnderMain: (state, action) => {
             state.headerUnderMain = action.payload;
+        },
+        setProgressLoading: (state, action) => {
+            state.progressLoading = action.payload;
         }
     }
 });
 
-export const { setBodyScrollable, setHeaderUnderMain } = stylesSlice.actions
+export const { setBodyScrollable, setHeaderUnderMain , setProgressLoading} = stylesSlice.actions
 
 export default stylesSlice.reducer;

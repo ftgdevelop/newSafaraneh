@@ -58,11 +58,19 @@ const ReserverInformation: React.FC<Props> = props => {
     
     useEffect(()=>{
         if(user){
-            setFieldValue(`reserver.gender`, user.gender, true);
-            setFieldValue(`reserver.firstName`, user.firstName, true);
-            setFieldValue(`reserver.lastName`, user.lastName, true);
-            setFieldValue(`reserver.phoneNumber`, user.phoneNumber||"", true);
-            setFieldValue(`reserver.email`, user.emailAddress||"", true);
+            if (!values.reserver.firstName){
+                setFieldValue(`reserver.gender`, user.gender, true);
+                setFieldValue(`reserver.firstName`, user.firstName, true);
+            }
+            if (!values.reserver.lastName){
+                setFieldValue(`reserver.lastName`, user.lastName, true);
+            }
+            if(!values.reserver.phoneNumber){
+                setFieldValue(`reserver.phoneNumber`, user.phoneNumber||"", true);
+            }
+            if(!values.reserver.email){
+                setFieldValue(`reserver.email`, user.emailAddress||"", true);
+            }
         }
     },[user]);
 
