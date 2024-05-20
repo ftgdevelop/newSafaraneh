@@ -134,7 +134,7 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
           content="dL12BD7zy5YUBkz4xPLy-hKkz1PPUyStFEiXgJks_h0"
         />
 
-        <link rel="shortcut icon" href={favIconLink} />
+        <link rel="shortcut icon" href={favIconLink || "/favicon.ico"} />
 
         {!!portalTitle && <title>{portalTitle}</title>}
         {!!portalKeywords && <meta name="keywords" content={portalKeywords} />}
