@@ -22,6 +22,7 @@ import { validateRequied } from '@/modules/shared/helpers/validation';
 import { UserInformation } from '@/modules/authentication/types/authentication';
 import { TravelerItem } from '@/modules/shared/types/common';
 import { getTravelers } from '@/modules/shared/actions';
+import { openLoginForm, setLoginToContinueReserve } from '@/modules/authentication/store/authenticationSlice';
 
 const Checkout: NextPage = () => {
 
@@ -42,6 +43,8 @@ const Checkout: NextPage = () => {
   const [travelers, setTravelers] = useState<TravelerItem[] | undefined>(undefined);
   const [fetchingTravelersLoading, setFetchingTravelersLoading] = useState<boolean>(false);
 
+  const [submitedValues,setSubmitedValues ] = useState<FlightPrereserveFormValue>();
+
   type CountryItem = {
     code?: string;
     name?: string;
@@ -49,6 +52,8 @@ const Checkout: NextPage = () => {
     id: number;
   }
   const [countries, setCountries] = useState<CountryItem[]>();
+
+  const userIsLoggedIn = useAppSelector(state => state.authentication.isAuthenticated);
 
   useEffect(() => {
 
@@ -96,6 +101,9 @@ const Checkout: NextPage = () => {
       }
     }
     fetchCountriesList();
+    return(()=>{
+      dispatch(setLoginToContinueReserve(false));
+    })
   }, []);
 
   const createPassengersArray = useCallback((flight?: FlightGetValidateDataType) => {
@@ -213,12 +221,9 @@ const Checkout: NextPage = () => {
 
   }
 
+  const preReserveFlight = async (values: FlightPrereserveFormValue) => {
 
-  const submitHandle = async (values: FlightPrereserveFormValue) => {
-    if (!key) {
-      return;
-    }
-
+    dispatch(setLoginToContinueReserve(false));
     setSubmitLoading(true);
 
     const params: FlightPrereserveFormValue = {
@@ -251,6 +256,27 @@ const Checkout: NextPage = () => {
         isVisible: true
       }))
     }
+  }
+
+  useEffect(()=>{
+    if(userIsLoggedIn && submitedValues){
+      preReserveFlight(submitedValues);
+    }
+  },[userIsLoggedIn,submitedValues]);
+
+  const submitHandle = async (values: FlightPrereserveFormValue) => {
+    if (!key) {
+      return;
+    }
+
+    if(userIsLoggedIn){
+      preReserveFlight(values);
+    }else{
+      setSubmitedValues(values);
+      dispatch(openLoginForm());
+      dispatch(setLoginToContinueReserve(true));
+    }
+
   }
 
   return (
