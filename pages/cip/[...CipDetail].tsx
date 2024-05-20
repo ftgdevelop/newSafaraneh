@@ -33,6 +33,42 @@ import { registerDiscountCode, validateDiscountCode } from '@/modules/payment/ac
 import CipAvailibilityItem from '@/modules/cip/components/cip-detail/CipAvailibilityItem';
 import { setReduxError } from '@/modules/shared/store/errorSlice';
 import NotFound from '@/modules/shared/components/ui/NotFound';
+import { openLoginForm, setLoginToContinueReserve } from '@/modules/authentication/store/authenticationSlice';
+
+type FormValues = {
+    originName: string;
+    destinationName: string;
+    airline: string;
+    flightNumber: string;
+    flightDate: string;
+    flightTime: string;
+    cip_transport_address?: string;
+    reserver: {
+        firstName: string;
+        lastName: string;
+        phoneNumber: string;
+        email: string;
+        userName: string;
+        gender: boolean;
+    };
+    passengers: {
+        firstName: string;
+        lastName: string;
+        gender: boolean;
+        passengerType: "Adult" | "Child";
+        passportNumber: string;
+        nationalId: string;
+        nationality: string;
+        birthday: string;
+        services: string[]
+    }[];
+    companions: {
+        firstName: string;
+        lastName: string;
+        gender: boolean;
+        services: string[]
+    }[];
+}
 
 const CipDetails: NextPage = ({ airportData, availabilities, portalData, moduleDisabled }: { portalData?: PortalDataType, airportData?: CipGetAirportByUrlResponseType, availabilities?: { latitude: string; longitude: string; availability: CipAvailabilityItemType[] }; moduleDisabled?: Boolean }) => {
 
@@ -67,12 +103,21 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData, moduleD
         }
     ]);
 
+    
+    useEffect(()=>{
+        return(()=>{
+            dispatch(setLoginToContinueReserve(false));
+          })
+    },[]);
+
     const [companions, setCompanions] = useState<CipFormCompanionItemType[]>([]);
 
     const [validateResponse, setValidateResponse] = useState<CipValidateResponseType>();
     const [selectedServicesArray, setSelectedServicesArray] = useState<CipValidateResponseType['optionalServices']>();
 
     const [activeServices, setActiveServices] = useState<number[]>([]);
+
+    const [submitedValues, setSubmitedValues] = useState<FormValues>();
 
     const updateActiveService = (id: number) => {
         setActiveServices(prevArr => ([
@@ -211,47 +256,15 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData, moduleD
 
     }
 
-
-    const submitHandler = async (values: {
-        originName: string;
-        destinationName: string;
-        airline: string;
-        flightNumber: string;
-        flightDate: string;
-        flightTime: string;
-        cip_transport_address?: string;
-        reserver: {
-            firstName: string;
-            lastName: string;
-            phoneNumber: string;
-            email: string;
-            userName: string;
-            gender: boolean;
-        };
-        passengers: {
-            firstName: string;
-            lastName: string;
-            gender: boolean;
-            passengerType: "Adult" | "Child";
-            passportNumber: string;
-            nationalId: string;
-            nationality: string;
-            birthday: string;
-            services: string[]
-        }[];
-        companions: {
-            firstName: string;
-            lastName: string;
-            gender: boolean;
-            services: string[]
-        }[];
-    }) => {
+    const preReserve = async (values: FormValues) => {
 
         if (!validateResponse?.preReserveKey) {
             console.log("no preReserveKey!");
             return;
         }
 
+        dispatch(setLoginToContinueReserve(false));
+        
         setPreReserveLoading(true);
 
         const companionsPassengers: CipPrereservePayload['passengers'] = values.companions.map(item => ({
@@ -334,6 +347,23 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData, moduleD
         }
 
     }
+
+    const submitHandler = async (values: FormValues) => {
+        if (user) {
+            preReserve(values);
+        } else {
+            setSubmitedValues(values);
+            dispatch(openLoginForm());
+            dispatch(setLoginToContinueReserve(true));
+        }
+    }
+
+    useEffect(() => {
+        if (user && submitedValues) {
+            preReserve(submitedValues);
+        }
+    }, [user, submitedValues]);
+
     const urlSegments: string[] = router.query.CipDetail as string[] || [];
 
     const urlDateSegment = urlSegments.find(item => item.includes("flightdate-"));
