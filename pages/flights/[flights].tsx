@@ -498,7 +498,7 @@ export default Flights;
 
 export async function getServerSideProps(context: any) {
 
-    if (!process.env.PROJECT_MODULES?.includes("Flight")) {
+    if (!process.env.PROJECT_MODULES?.includes("DomesticFlight")) {
         return (
             {
                 props: {
