@@ -41,10 +41,10 @@ const HotelDetail: NextPage<Props> = props => {
 
   const { portalData, allData } = props;
 
-  
+
   const { t } = useTranslation('common');
   const { t: tHotel } = useTranslation('hotel');
-  
+
   const router = useRouter();
   const locale = router.locale;
 
@@ -111,10 +111,11 @@ const HotelDetail: NextPage<Props> = props => {
   let tel = "";
   let twitter = "";
   let siteURL = "";
+  let siteLogo = "";
 
   if (portalData) {
     siteName = portalData.Phrases.find(item => item.Keyword === "Name")?.Value || "";
-
+    siteLogo = portalData.Phrases.find(item => item.Keyword === "Logo")?.Value || "";
     tel = portalData.Phrases.find(item => item.Keyword === "PhoneNumber")?.Value || "";
     twitter = portalData.Phrases.find(item => item.Keyword === "Twitter")?.Value || "";
     siteURL = portalData.PortalName || "";
@@ -261,12 +262,12 @@ const HotelDetail: NextPage<Props> = props => {
             "description": "${hotelData?.PageTitle?.replaceAll("{0}", siteName)}",
             "address": {
               "@type": "PostalAddress",
-              "addressLocality": "${hotelData.CityName}"
+              "addressLocality": "${hotelData.CityName}",
               "streetAddress": "${hotelData?.Address}"
             },
-            "checkinTime": "${hotelData.Policies?.find(x=> x.Keyword === "CheckIn")?.Description || "14:00"}",
-            "checkoutTime": "${hotelData.Policies?.find(x=> x.Keyword === "CheckOut")?.Description || "12:00"}",
-            "telephone": "021-26150051",
+            "checkinTime": "${hotelData.Policies?.find(x => x.Keyword === "CheckIn")?.Description || "14:00"}",
+            "checkoutTime": "${hotelData.Policies?.find(x => x.Keyword === "CheckOut")?.Description || "12:00"}",
+            "telephone": "${tel}",
             "starRating": {
               "@type": "Rating",
               "ratingValue": "${hotelData?.HotelRating || 5}"
@@ -274,9 +275,39 @@ const HotelDetail: NextPage<Props> = props => {
             "aggregateRating": {
               "@type": "AggregateRating",
               "ratingValue": "${hotelScoreData?.Satisfaction || '100'}",
-              "reviewCount": "${hotelScoreData?.CommentCount || '1'}"
+              "reviewCount": "${hotelScoreData?.CommentCount || '1'}",
+              "worstRating": "0",
+              "bestRating": "100"
             }
           }`,
+          }}
+        />
+
+        <script
+          id="script_detail_1"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: `{
+            "@context": "http://schema.org",
+            "@type": "Organization",
+            "name": "${siteName}",
+            "alternateName": "${process.env.PROJECT || siteName}",
+            "url": "${configWebsiteUrl}",
+            "logo": "${siteLogo}",
+            "contactPoint": [{
+              "@type": "ContactPoint",
+            "telephone": "${tel}",
+            "contactType": "customer service",
+            "areaServed": "IR",
+            "availableLanguage": "Persian"
+          }, {
+              "@type": "ContactPoint",
+            "telephone": "${tel}",
+            "contactType": "sales",
+            "areaServed": "IR",
+            "availableLanguage": "Persian"
+          }]
+        }`,
           }}
         />
 
