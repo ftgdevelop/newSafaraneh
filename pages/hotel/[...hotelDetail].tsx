@@ -275,7 +275,9 @@ const HotelDetail: NextPage<Props> = props => {
             "aggregateRating": {
               "@type": "AggregateRating",
               "ratingValue": "${hotelScoreData?.Satisfaction || '100'}",
-              "reviewCount": "${hotelScoreData?.CommentCount || '1'}"
+              "reviewCount": "${hotelScoreData?.CommentCount || '1'}",
+              "worstRating": "0",
+              "bestRating": "100"
             }
           }`,
           }}
