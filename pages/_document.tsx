@@ -31,6 +31,8 @@ export default function Document() {
           src={ga_script_url}
           strategy="beforeInteractive"
         />}
+        
+        <meta name="robots" content="noindex" />
 
       </Head>
       <body className={`${process.env.THEME === "THEME2" ?"theme-2 text-stone-900 rtl:font-vazir":"text-neutral-700 rtl:font-samim" } bg-body-background`} >
@@ -45,6 +47,7 @@ export default function Document() {
         )}
 
         <Main />
+        <div id="modal_portal_0" className='relative z-50'></div>
         <div id="modal_portal" className='relative z-50'></div>
         <div id="modal_portal_2" className='relative z-50'></div>
         <div id="error_modal_portal" className='relative z-50'></div>

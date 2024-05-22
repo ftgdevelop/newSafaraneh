@@ -8,10 +8,13 @@ import Image from 'next/image';
 import { addSomeDays, dateFormat } from '@/modules/shared/helpers';
 import FlightSearch from '@/modules/flights/components/shared/searchForm';
 import CipSearchForm from '@/modules/cip/components/searchForm';
+import RecentSearches from '@/modules/domesticHotel/components/home/HotelRecentSearches';
+import FlightRecentSearches from '@/modules/flights/components/home/FlightRecentSearches';
+import CipRecentSearches from '@/modules/cip/components/home/CipRecentSearches';
 
 
 type Props = {
-  modules: ("domesticHotel" | "domesticFlight"| "cip")[];
+  modules: ("domesticHotel" | "domesticFlight" | "cip")[];
 }
 
 const Banner: React.FC<Props> = props => {
@@ -26,32 +29,45 @@ const Banner: React.FC<Props> = props => {
   const domesticHotelDefaultDates: [string, string] = [today, tomorrow];
 
   const items: TabItem[] = [];
-  
-  if (props.modules.includes('domesticHotel') && process.env.PROJECT_MODULES?.includes("Hotel")) {
+
+  if (props.modules.includes('domesticHotel') && process.env.PROJECT_MODULES?.includes("DomesticHotel")) {
     items.push(
       {
         key: '1',
         label: (<div className='text-center'> <Apartment className='w-6 h-6 fill-current block mx-auto mb-1' /> {t('domestic-hotel')} </div>),
-        children: <SearchForm wrapperClassName='py-5' defaultDates={domesticHotelDefaultDates} />
+        children: (<>
+          <SearchForm wrapperClassName='py-5' defaultDates={domesticHotelDefaultDates} />
+          <RecentSearches />
+        </>)
       }
     )
   }
 
-  if (props.modules.includes('domesticFlight') && process.env.PROJECT_MODULES?.includes("Flight")) {
+  if (props.modules.includes('domesticFlight') && process.env.PROJECT_MODULES?.includes("DomesticFlight")) {
     items.push({
       key: '2',
       label: (<div className='text-center'> <Travel className='w-6 h-6 fill-current block mx-auto mb-1' /> {t('domestic-flight')} </div>),
-      children: (<FlightSearch />)
+      children: (
+        <>
+          <FlightSearch />
+          <FlightRecentSearches />
+        </>
+      )
     })
   }
 
-  if(props.modules.includes("cip") && process.env.PROJECT_MODULES?.includes("CIP")){
+  if (props.modules.includes("cip") && process.env.PROJECT_MODULES?.includes("CIP")) {
     items.push({
       key: '3',
       label: (<div className='text-center'> <Suitcase className='w-6 h-6 fill-current block mx-auto mb-1' /> {t('cip')} </div>),
-      children: (<CipSearchForm />)
+      children: (
+        <>
+          <CipSearchForm />
+          <CipRecentSearches />
+        </>
+      )
     })
-    
+
   }
 
   return (

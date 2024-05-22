@@ -28,7 +28,7 @@ const Logout: React.FC<Props> = props => {
             props.closeModal();
         }
 
-         if (!router.asPath.includes('/myaccount/booking/')){
+         if (router.asPath.includes('/myaccount')){
              router.replace("/");
          }
 

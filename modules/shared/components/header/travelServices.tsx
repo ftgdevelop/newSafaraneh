@@ -131,7 +131,7 @@ const TravelServices: React.FC<Props> = props => {
                             </>
                         )}
 
-                        {!!(process.env.PROJECT_MODULES?.includes("Hotel")) && <Link 
+                        {!!(process.env.PROJECT_MODULES?.includes("DomesticHotel")) && <Link 
                             onClick={()=>{setOpenMenu(false)}} 
                             href='/hotels-home' 
                             className={`max-sm:border-t max-sm:border-neutral-300 max-sm:mt-3 max-sm:pt-3 ${linkWithIconClassName}`} 
@@ -140,7 +140,7 @@ const TravelServices: React.FC<Props> = props => {
                             {t('domestic-hotel')}
                         </Link>}
 
-                        {!!(process.env.PROJECT_MODULES?.includes("Flight")) &&  <Link 
+                        {!!(process.env.PROJECT_MODULES?.includes("DomesticFlight")) &&  <Link 
                             onClick={()=>{setOpenMenu(false)}} 
                             href="/flights-home"
                             className={linkWithIconClassName} 

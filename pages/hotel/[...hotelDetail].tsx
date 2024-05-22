@@ -7,7 +7,7 @@ import { PageDataType, PortalDataType } from '@/modules/shared/types/common';
 import { DomesticAccomodationType, DomesticHotelDetailType, EntitySearchResultItemType, HotelScoreDataType } from '@/modules/domesticHotel/types/hotel';
 import { useRouter } from 'next/router';
 import BackToList from '@/modules/domesticHotel/components/hotelDetails/BackToList';
-import { Phone } from '@/modules/shared/components/ui/icons';
+import { CalendarError, Phone } from '@/modules/shared/components/ui/icons';
 import Gallery from '@/modules/domesticHotel/components/hotelDetails/Gallery';
 import HotelName from '@/modules/domesticHotel/components/hotelDetails/HotelName';
 import SearchForm from '@/modules/domesticHotel/components/shared/SearchForm';
@@ -19,9 +19,12 @@ import FAQ from '@/modules/domesticHotel/components/hotelDetails/FAQ';
 import SimilarHotels from '@/modules/domesticHotel/components/hotelDetails/SimilarHotels';
 import Comments from '@/modules/domesticHotel/components/hotelDetails/comments';
 import Rooms from '@/modules/domesticHotel/components/hotelDetails/Rooms';
-import { addSomeDays, dateFormat } from '@/modules/shared/helpers';
+import { addSomeDays, checkDateIsAfterDate, dateDiplayFormat, dateFormat } from '@/modules/shared/helpers';
 import AnchorTabs from '@/modules/shared/components/ui/AnchorTabs';
 import NotFound from '@/modules/shared/components/ui/NotFound';
+import { useEffect, useRef, useState } from 'react';
+import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
+import AvailabilityTimeout from '@/modules/shared/components/AvailabilityTimeout';
 
 type Props = {
   allData: {
@@ -38,10 +41,45 @@ const HotelDetail: NextPage<Props> = props => {
 
   const { portalData, allData } = props;
 
+
   const { t } = useTranslation('common');
   const { t: tHotel } = useTranslation('hotel');
 
   const router = useRouter();
+  const locale = router.locale;
+
+  const searchFormWrapperRef = useRef<HTMLDivElement>(null);
+  const [showChangeDateModal, setShowChangeDateModal] = useState<boolean>(false);
+  const [showOnlyForm, setShowOnlyForm] = useState<boolean>(false);
+
+
+  const today = dateFormat(new Date());
+  const tomorrow = dateFormat(addSomeDays(new Date()));
+  let defaultDates: [string, string] = [today, tomorrow];
+
+  const searchInfo = router.asPath?.split("?")[0]?.split("#")[0];
+
+  let checkin: string = "";
+  let checkout: string = "";
+
+  if (searchInfo.includes("checkin-")) {
+    checkin = searchInfo.split("checkin-")[1].split("/")[0];
+  }
+  if (searchInfo.includes("checkout-")) {
+    checkout = searchInfo.split("checkout-")[1].split("/")[0];
+  }
+
+  if (checkin && checkout) {
+    defaultDates = [checkin, checkout];
+  }
+
+  useEffect(() => {
+    setShowOnlyForm(false);
+    const validDates = checkDateIsAfterDate(new Date(checkin), new Date(today)) && checkDateIsAfterDate(new Date(checkout), new Date(tomorrow));
+    if (!validDates) {
+      setShowChangeDateModal(true);
+    }
+  }, [checkin, checkout]);
 
 
   if (props.error410) {
@@ -58,18 +96,6 @@ const HotelDetail: NextPage<Props> = props => {
 
   const accommodationData = accommodation?.result;
 
-  const searchInfo = router.asPath?.split("?")[0]?.split("#")[0];
-
-  let checkin: string = "";
-  let checkout: string = "";
-
-  if (searchInfo.includes("checkin-")) {
-    checkin = searchInfo.split("checkin-")[1].split("/")[0];
-  }
-  if (searchInfo.includes("checkout-")) {
-    checkout = searchInfo.split("checkout-")[1].split("/")[0];
-  }
-
   let defaultDestination: EntitySearchResultItemType | undefined = undefined;
 
   if (hotelData && hotelData.HotelId) {
@@ -81,22 +107,15 @@ const HotelDetail: NextPage<Props> = props => {
     }
   }
 
-  const today = dateFormat(new Date());
-  const tomorrow = dateFormat(addSomeDays(new Date()));
-  let defaultDates: [string, string] = [today, tomorrow];
-
-  if (checkin && checkout) {
-    defaultDates = [checkin, checkout];
-  }
-
   let siteName = "";
   let tel = "";
   let twitter = "";
   let siteURL = "";
+  let siteLogo = "";
 
   if (portalData) {
     siteName = portalData.Phrases.find(item => item.Keyword === "Name")?.Value || "";
-
+    siteLogo = portalData.Phrases.find(item => item.Keyword === "Logo")?.Value || "";
     tel = portalData.Phrases.find(item => item.Keyword === "PhoneNumber")?.Value || "";
     twitter = portalData.Phrases.find(item => item.Keyword === "Twitter")?.Value || "";
     siteURL = portalData.PortalName || "";
@@ -162,40 +181,6 @@ const HotelDetail: NextPage<Props> = props => {
           </>
         )}
 
-        {!!hotelScoreData && <script
-          id="script_detail_1"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: `{
-            "@context": "https://schema.org",
-            "@type": "Hotel",
-            "name": "${hotelData?.PageTitle?.replaceAll("{0}", siteName)}",
-            "description": "${hotelData?.BriefDescription}",
-            "address": {
-              "@type": "PostalAddress",
-              "streetAddress": "${hotelData?.Address}"
-            },
-            "checkinTime": "14:00",
-            "checkoutTime": "14:00",
-            "telephone": "021-26150051",
-            "image": "${hotelData?.ImageUrl}",
-            "starRating": {
-              "@type": "Rating",
-              "ratingValue": "${hotelData?.HotelRating}"
-            },
-            "aggregateRating": {
-              "@type": "AggregateRating",
-              "ratingValue": "${hotelScoreData.Satisfaction !== 0 ? hotelScoreData.Satisfaction : '100'
-              }",
-              "reviewCount": "${hotelScoreData.CommentCount !== 0 ? hotelScoreData.CommentCount : '1'
-              }",
-              "worstRating": "0",
-              "bestRating": "100"
-            }
-          }`,
-          }}
-        />}
-
         <script
           id="script_detail_2"
           type="application/ld+json"
@@ -203,28 +188,33 @@ const HotelDetail: NextPage<Props> = props => {
             __html: `{
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
-            "itemListElement":
-            [
+            "itemListElement":[
               {
-              "@type": "ListItem",
-              "position": 1,
-              "item":
-              {
-                "@id": "${configWebsiteUrl}",
-                "name": "صفحه اصلی"
+                "@type": "ListItem",
+                "position": 1,
+                "item":{
+                  "@id": "${configWebsiteUrl}",
+                  "name": "رزرو هتل"
                 }
               },
               {
-              "@type": "ListItem",
-              "position": 2,
-              "item":
+                "@type": "ListItem",
+                "position": 2,
+                "item":{
+                  "@id": "${script_detail_2_Url}",
+                  "name": "هتل های ${hotelData && hotelData.CityName}"
+                }
+              },
               {
-                "@id": "${script_detail_2_Url}/location-${hotelData && hotelData.CityId}",
-                "name": "هتل های ${hotelData && hotelData.CityName}"
-              }
+                "@type": "ListItem",
+                "position": 3,
+                "item": {
+                  "@id": "${configWebsiteUrl}${hotelData.Url}",
+                  "name": "${hotelData.HotelCategoryName} ${hotelData.HotelName} ${hotelData.CityName}"
+                }
               }
             ]
-          }`,
+          }`
           }}
         />
 
@@ -258,7 +248,119 @@ const HotelDetail: NextPage<Props> = props => {
             }}
           />
         ) : null}
+
+        <script
+          id="script_detail_1"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: `{
+            "@context": "https://schema.org/",
+            "@type": "Hotel",
+            "image": "${hotelData.Gallery && hotelData.Gallery[0]?.Image || hotelData?.ImageUrl || ""}",
+            "url": "${configWebsiteUrl}${hotelData.Url}",
+            "name": "${hotelData.HotelCategoryName} ${hotelData.HotelName} ${hotelData.CityName}",
+            "description": "${hotelData?.PageTitle?.replaceAll("{0}", siteName)}",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "${hotelData.CityName}",
+              "streetAddress": "${hotelData?.Address}"
+            },
+            "checkinTime": "${hotelData.Policies?.find(x => x.Keyword === "CheckIn")?.Description || "14:00"}",
+            "checkoutTime": "${hotelData.Policies?.find(x => x.Keyword === "CheckOut")?.Description || "12:00"}",
+            "telephone": "${tel}",
+            "starRating": {
+              "@type": "Rating",
+              "ratingValue": "${hotelData?.HotelRating || 5}"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "${hotelScoreData?.Satisfaction || '100'}",
+              "reviewCount": "${hotelScoreData?.CommentCount || '1'}",
+              "worstRating": "0",
+              "bestRating": "100"
+            }
+          }`,
+          }}
+        />
+
+        <script
+          id="script_detail_1"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: `{
+            "@context": "http://schema.org",
+            "@type": "Organization",
+            "name": "${siteName}",
+            "alternateName": "${process.env.PROJECT || siteName}",
+            "url": "${configWebsiteUrl}",
+            "logo": "${siteLogo}",
+            "contactPoint": [{
+              "@type": "ContactPoint",
+            "telephone": "${tel}",
+            "contactType": "customer service",
+            "areaServed": "IR",
+            "availableLanguage": "Persian"
+          }, {
+              "@type": "ContactPoint",
+            "telephone": "${tel}",
+            "contactType": "sales",
+            "areaServed": "IR",
+            "availableLanguage": "Persian"
+          }]
+        }`,
+          }}
+        />
+
+
       </Head>
+
+      <ModalPortal
+        show={showChangeDateModal}
+        selector='modal_portal'
+      >
+        <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-screen bg-black/50 backdrop-blur-sm z-50 flex justify-center items-center">
+
+          <div className="bg-white max-sm:mx-3 rounded-xl px-5 pt-10 pb-12 w-full max-w-md text-center">
+
+            <CalendarError className="w-6 h-6 sm:w-10 sm:h-10 fill-neutral-400 mb-3 md:mb-4 inline-block" />
+
+            <h5 className="text-md sm:text-xl font-semibold mb-4">
+              {t("DatesAreExpired")}
+            </h5>
+
+            <div className="text-neutral-500 mb-4 md:mb-7 leading-7 text-sm text-center">
+              {t("SorryTheDatesYouEnteredAreExpiredChooseDifferentDatesToViewHotelOptions")}.
+            </div>
+
+
+            <button
+              type="button"
+              className="max-w-full w-32 cursor-pointer bg-primary-700 hover:bg-primary-600 text-white h-10 px-5 rounded-md"
+              onClick={() => {
+                setShowChangeDateModal(false);
+                setShowOnlyForm(true);
+                searchFormWrapperRef.current?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              {t('ChangeDates')}
+            </button>
+
+            <br />
+
+            <button
+              type='button'
+              className='text-blue-500 mt-3'
+              onClick={() => { setShowChangeDateModal(false) }}
+            >
+              {t("ContinueAnyway")}
+            </button>
+
+
+          </div>
+
+        </div>
+
+      </ModalPortal>
 
       <div className="max-w-container mx-auto px-3 sm:px-5 pt-5">
         <div className='bg-white p-3'>
@@ -291,12 +393,22 @@ const HotelDetail: NextPage<Props> = props => {
 
         <HotelName hotelData={hotelData} scoreData={hotelScoreData} />
 
-        <h2 className='text-lg lg:text-3xl font-semibold mt-5 mb-3 md:mt-10 md:mb-7'>{t('change-search')}</h2>
 
-        <SearchForm
-          defaultDestination={defaultDestination}
-          defaultDates={defaultDates}
-        />
+        <div ref={searchFormWrapperRef} className='pt-5'>
+          {!!showOnlyForm && (
+            <div
+              className='fixed bg-black/75 backdrop-blur-sm top-0 bottom-0 right-0 left-0 z-[1]'
+              onClick={() => { setShowOnlyForm(false) }}
+            />
+          )}
+          <h2 className='text-lg lg:text-3xl font-semibold mt-5 mb-3 md:mt-10 md:mb-7 relative z-[2]'>{t('change-search')}</h2>
+
+          <SearchForm
+            defaultDestination={defaultDestination}
+            defaultDates={defaultDates}
+            wrapperClassName='relative z-[2]'
+          />
+        </div>
 
       </div>
 
@@ -326,6 +438,13 @@ const HotelDetail: NextPage<Props> = props => {
       {!!hotelData.Similars && <SimilarHotels similarHotels={hotelData.Similars} />}
 
       {!!accommodationData?.faqs?.length && <FAQ faqs={accommodationData.faqs} />}
+
+      <AvailabilityTimeout
+        minutes={10}
+        onRefresh={() => { window.location.reload() }}
+        type='hotel'
+        description={t("GetTheLatestPriceAndAvailabilityForYourSearchTo", { destination: `${hotelData.HotelCategoryName} ${hotelData.HotelName} ${hotelData.CityName}`, dates: `${dateDiplayFormat({ date: checkin || today, locale: locale, format: "dd mm" })} - ${dateDiplayFormat({ date: checkout || tomorrow, locale: locale, format: "dd mm" })}` })}
+      />
 
     </>
   )

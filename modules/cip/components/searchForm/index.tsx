@@ -12,7 +12,7 @@ import DatePickerModern from '@/modules/shared/components/ui/DatePickerModern';
 import { dateDiplayFormat } from '@/modules/shared/helpers';
 import FormikField from '@/modules/shared/components/ui/FormikField';
 import { cipDefaultAirportOptions } from './defaultList';
-import { CipAutoCompleteType } from '../../types/cip';
+import { CipAutoCompleteType, CipRecentSearchItem } from '../../types/cip';
 
 type SearchFormValues = {
     airportUrl: string;
@@ -38,6 +38,8 @@ const SearchForm: React.FC<Props> = props => {
 
     const [submitPending, setSubmitPending] = useState<boolean>(false);
 
+    const [selectedAirportName, setSelectedAirportName] = useState<string>("");
+
     const submitHandle = (values: SearchFormValues) => {
 
         if (!values.airportUrl) return;
@@ -56,6 +58,24 @@ const SearchForm: React.FC<Props> = props => {
 
         if (values.flightNumber) {
             url += `/flightNumber-${values.flightNumber}`;
+        }
+
+        const localStorageRecentSearches = localStorage?.getItem("cipRecentSearches");
+        const recentSearches: CipRecentSearchItem[] = localStorageRecentSearches ? JSON.parse(localStorageRecentSearches) : [];
+
+        const searchObject: CipRecentSearchItem = {
+            url: url,
+            airportName: selectedAirportName,
+            flightDate: values.flightDate
+        };
+
+        if (!(recentSearches.find(item => item.url === searchObject.url))) {
+            recentSearches.unshift(searchObject);
+
+            const slicedArray = recentSearches.slice(0, 10);
+
+            const updatedRecentSearches = JSON.stringify(slicedArray);
+            localStorage?.setItem("cipRecentSearches", updatedRecentSearches)
         }
 
         router.push(url);
@@ -103,7 +123,7 @@ const SearchForm: React.FC<Props> = props => {
                                 <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-3 mb-5 z-[2] relative">
 
                                     <div className='lg:col-span-2 relative'>
-                                        <label htmlFor="destination" className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5">
+                                        <label htmlFor="destination" className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5 pointer-events-none">
                                             جستجوی نام فرودگاه یا شهر
                                         </label>
                                         <AutoComplete
@@ -122,10 +142,11 @@ const SearchForm: React.FC<Props> = props => {
                                                 </div>
                                             ), [])}
                                             min={3}
-                                            url={`${ServerAddress.Type}${ServerAddress.Cip}${Cip.GetAllAirports}`}
+                                            url={`${ServerAddress.Type}${ServerAddress.Cip}${Cip.SearchAirport}`}
                                             onChangeHandle={
                                                 useCallback((v: CipAutoCompleteType | undefined) => {
                                                     setFieldValue("airportUrl", v?.url || "", true);
+                                                    setSelectedAirportName(v?.name || "")
                                                 }, [])
                                             }
                                         />
