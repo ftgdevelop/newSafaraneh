@@ -412,7 +412,7 @@ const HotelDetail: NextPage<Props> = props => {
         minutes={10}
         onRefresh={() => { window.location.reload() }}
         type='hotel'
-        description={t("GetTheLatestPriceAndAvailabilityForYourSearchTo", { destination: hotelData.CityName, dates: `${dateDiplayFormat({ date: checkin || today, locale: locale, format: "dd mm" })} - ${dateDiplayFormat({ date: checkout || tomorrow, locale: locale, format: "dd mm" })}` })}
+        description={t("GetTheLatestPriceAndAvailabilityForYourSearchTo", { destination: `${hotelData.HotelCategoryName} ${hotelData.HotelName} ${hotelData.CityName}`, dates: `${dateDiplayFormat({ date: checkin || today, locale: locale, format: "dd mm" })} - ${dateDiplayFormat({ date: checkout || tomorrow, locale: locale, format: "dd mm" })}` })}
       />
 
     </>
