@@ -31,9 +31,6 @@ export default function Document() {
           src={ga_script_url}
           strategy="beforeInteractive"
         />}
-        
-        <meta name="robots" content="noindex" />
-
       </Head>
       <body className={`${process.env.THEME === "THEME2" ?"theme-2 text-stone-900 rtl:font-vazir":"text-neutral-700 rtl:font-samim" } bg-body-background`} >
 

@@ -101,7 +101,7 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
 
 
 
-        <meta name="robots" content="index, follow" />
+        <meta name="robots" content="noindex" />
         <meta name="theme-color" content="#0a438b" />
         <meta charSet="utf-8" />
 
