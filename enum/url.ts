@@ -48,7 +48,8 @@ export const Header = {
     Register:"/api/services/app/Account/Register",
     ChangePassword:"/api/services/app/Account/ChangePassword",
     SendEmailActivation:"/api/services/app/Account/SendEmailActivation",
-    ActivateEmail:"/api/services/app/Account/ActivateEmail"
+    ActivateEmail:"/api/services/app/Account/ActivateEmail",
+    GetSiteAllSettings:"/api/services/app/TenantSettings/GetAllSettings"
   };
 
 export const Flight = {
@@ -82,7 +83,6 @@ export const Flight = {
     GetDomesticHotelDetails:"/api/services/app/Accommodation/Get",
     GetScore: "/v2/Comment/GetScore",
     GetPageByUrl: "/v2/Page/GetPageByUrl",
-    GetPortal: "/v2/Portal/GetPortal",
     InsertComment : '/v2/Comment/InsertComment',
     AvailabilityByHotelId:"/api/services/app/Booking/AvailabilityByHotelId",
     GetRooms:"/api/services/app/Booking/GetRoom",
