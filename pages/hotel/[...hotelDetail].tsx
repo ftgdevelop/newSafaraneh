@@ -3,7 +3,7 @@ import type { GetServerSideProps, NextPage } from 'next';
 import { i18n, useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
-import { PageDataType, PortalDataType } from '@/modules/shared/types/common';
+import { PageDataType, WebSiteDataType } from '@/modules/shared/types/common';
 import { DomesticAccomodationType, DomesticHotelDetailType, EntitySearchResultItemType, HotelScoreDataType } from '@/modules/domesticHotel/types/hotel';
 import { useRouter } from 'next/router';
 import BackToList from '@/modules/domesticHotel/components/hotelDetails/BackToList';
@@ -33,7 +33,7 @@ type Props = {
     page?: PageDataType;
     hotel?: DomesticHotelDetailType;
   };
-  portalData: PortalDataType;
+  portalData: WebSiteDataType;
   error410?: "true";
 }
 
@@ -41,10 +41,10 @@ const HotelDetail: NextPage<Props> = props => {
 
   const { portalData, allData } = props;
 
-  
+
   const { t } = useTranslation('common');
   const { t: tHotel } = useTranslation('hotel');
-  
+
   const router = useRouter();
   const locale = router.locale;
 
@@ -111,13 +111,15 @@ const HotelDetail: NextPage<Props> = props => {
   let tel = "";
   let twitter = "";
   let siteURL = "";
+  let siteLogo = "";
 
   if (portalData) {
-    siteName = portalData.Phrases.find(item => item.Keyword === "Name")?.Value || "";
 
-    tel = portalData.Phrases.find(item => item.Keyword === "PhoneNumber")?.Value || "";
-    twitter = portalData.Phrases.find(item => item.Keyword === "Twitter")?.Value || "";
-    siteURL = portalData.PortalName || "";
+    tel = portalData.billing.telNumber || portalData?.billing.phoneNumber || "";    
+    twitter = portalData.social.x || "";
+    siteLogo = portalData.billing.logo?.value ||"";
+    siteName = portalData.billing.name || "";
+    siteURL = portalData.billing.website || "";
   }
 
   if (!hotelData) {
@@ -180,40 +182,6 @@ const HotelDetail: NextPage<Props> = props => {
           </>
         )}
 
-        {!!hotelScoreData && <script
-          id="script_detail_1"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: `{
-            "@context": "https://schema.org",
-            "@type": "Hotel",
-            "name": "${hotelData?.PageTitle?.replaceAll("{0}", siteName)}",
-            "description": "${hotelData?.BriefDescription}",
-            "address": {
-              "@type": "PostalAddress",
-              "streetAddress": "${hotelData?.Address}"
-            },
-            "checkinTime": "14:00",
-            "checkoutTime": "14:00",
-            "telephone": "021-26150051",
-            "image": "${hotelData?.ImageUrl}",
-            "starRating": {
-              "@type": "Rating",
-              "ratingValue": "${hotelData?.HotelRating}"
-            },
-            "aggregateRating": {
-              "@type": "AggregateRating",
-              "ratingValue": "${hotelScoreData.Satisfaction !== 0 ? hotelScoreData.Satisfaction : '100'
-              }",
-              "reviewCount": "${hotelScoreData.CommentCount !== 0 ? hotelScoreData.CommentCount : '1'
-              }",
-              "worstRating": "0",
-              "bestRating": "100"
-            }
-          }`,
-          }}
-        />}
-
         <script
           id="script_detail_2"
           type="application/ld+json"
@@ -221,28 +189,33 @@ const HotelDetail: NextPage<Props> = props => {
             __html: `{
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
-            "itemListElement":
-            [
+            "itemListElement":[
               {
-              "@type": "ListItem",
-              "position": 1,
-              "item":
-              {
-                "@id": "${configWebsiteUrl}",
-                "name": "صفحه اصلی"
+                "@type": "ListItem",
+                "position": 1,
+                "item":{
+                  "@id": "${configWebsiteUrl}",
+                  "name": "رزرو هتل"
                 }
               },
               {
-              "@type": "ListItem",
-              "position": 2,
-              "item":
+                "@type": "ListItem",
+                "position": 2,
+                "item":{
+                  "@id": "${script_detail_2_Url}",
+                  "name": "هتل های ${hotelData && hotelData.CityName}"
+                }
+              },
               {
-                "@id": "${script_detail_2_Url}/location-${hotelData && hotelData.CityId}",
-                "name": "هتل های ${hotelData && hotelData.CityName}"
-              }
+                "@type": "ListItem",
+                "position": 3,
+                "item": {
+                  "@id": "${configWebsiteUrl}${hotelData.Url}",
+                  "name": "${hotelData.HotelCategoryName} ${hotelData.HotelName} ${hotelData.CityName}"
+                }
               }
             ]
-          }`,
+          }`
           }}
         />
 
@@ -276,6 +249,70 @@ const HotelDetail: NextPage<Props> = props => {
             }}
           />
         ) : null}
+
+        <script
+          id="script_detail_1"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: `{
+            "@context": "https://schema.org/",
+            "@type": "Hotel",
+            "image": "${hotelData.Gallery && hotelData.Gallery[0]?.Image || hotelData?.ImageUrl || ""}",
+            "url": "${configWebsiteUrl}${hotelData.Url}",
+            "name": "${hotelData.HotelCategoryName} ${hotelData.HotelName} ${hotelData.CityName}",
+            "description": "${hotelData?.PageTitle?.replaceAll("{0}", siteName)}",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "${hotelData.CityName}",
+              "streetAddress": "${hotelData?.Address}"
+            },
+            "checkinTime": "${hotelData.Policies?.find(x => x.Keyword === "CheckIn")?.Description || "14:00"}",
+            "checkoutTime": "${hotelData.Policies?.find(x => x.Keyword === "CheckOut")?.Description || "12:00"}",
+            "telephone": "${tel}",
+            "starRating": {
+              "@type": "Rating",
+              "ratingValue": "${hotelData?.HotelRating || 5}"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "${hotelScoreData?.Satisfaction || '100'}",
+              "reviewCount": "${hotelScoreData?.CommentCount || '1'}",
+              "worstRating": "0",
+              "bestRating": "100"
+            }
+          }`,
+          }}
+        />
+
+        <script
+          id="script_detail_0"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: `{
+            "@context": "http://schema.org",
+            "@type": "Organization",
+            "name": "${siteName}",
+            "alternateName": "${process.env.PROJECT || siteName}",
+            "url": "${configWebsiteUrl}",
+            "logo": "${siteLogo}",
+            "contactPoint": [{
+              "@type": "ContactPoint",
+            "telephone": "${tel}",
+            "contactType": "customer service",
+            "areaServed": "IR",
+            "availableLanguage": "Persian"
+          }, {
+              "@type": "ContactPoint",
+            "telephone": "${tel}",
+            "contactType": "sales",
+            "areaServed": "IR",
+            "availableLanguage": "Persian"
+          }]
+        }`,
+          }}
+        />
+
+
       </Head>
 
       <ModalPortal
@@ -336,7 +373,7 @@ const HotelDetail: NextPage<Props> = props => {
           <BackToList checkin={checkin} checkout={checkout} cityId={hotelData.CityId} cityName={hotelData.CityName} />
         </div>
 
-        {!!hotelData.Gallery?.length && <Gallery images={hotelData.Gallery} />}
+        {!!hotelData.Gallery?.length && <Gallery images={hotelData.Gallery} hotelName={`${hotelData.HotelCategoryName} ${hotelData.HotelName} ${hotelData.CityName}`} />}
       </div>
 
       <AnchorTabs
@@ -407,7 +444,7 @@ const HotelDetail: NextPage<Props> = props => {
         minutes={10}
         onRefresh={() => { window.location.reload() }}
         type='hotel'
-        description={t("GetTheLatestPriceAndAvailabilityForYourSearchTo", { destination: hotelData.CityName, dates: `${dateDiplayFormat({ date: checkin || today, locale: locale, format: "dd mm" })} - ${dateDiplayFormat({ date: checkout || tomorrow, locale: locale, format: "dd mm" })}` })}
+        description={t("GetTheLatestPriceAndAvailabilityForYourSearchTo", { destination: `${hotelData.HotelCategoryName} ${hotelData.HotelName} ${hotelData.CityName}`, dates: `${dateDiplayFormat({ date: checkin || today, locale: locale, format: "dd mm" })} - ${dateDiplayFormat({ date: checkout || tomorrow, locale: locale, format: "dd mm" })}` })}
       />
 
     </>

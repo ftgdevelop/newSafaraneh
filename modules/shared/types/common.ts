@@ -15,35 +15,71 @@ export interface PageDataType {
         Content: string
     }[];
 }
-
-export interface PortalDataType {
-    PortalName?: string;
-    JavaScript?: string;
-    Style?: string;
-    CDNPath?: string;
-    IsSecureConnection?: boolean;
-    Modules: any[],
-    Apikeys: {
-        IdPortalApi: number;
-        PortalId: number;
-        ApiName: string;
-        ApiKey: string;
-        BaseUrl: string;
-    }[];
-    Phrases:{
-        Keyword?: string;
-        Value?: string;
-        CssClass?: string;
-        Url?: string;
-        ImageUrl?: string;
-        ImageAlt?: string;
-        ImageTitle?: string;
-    }[];
-    MetaTags: {
-        Name?: string;
-        Content?: string;
-    }[],
-    EmailServer: unknown
+export interface WebSiteDataType {
+    billing: {
+        name?: string;
+        email?: string;
+        telNumber?: string;
+        phoneNumber?: string;
+        faxNumber?: string;
+        countryName?: string;
+        provinceName?: string;
+        cityName?: string;
+        address?: string;
+        zipCode?: string;
+        website?: string;
+        latitude?: string;
+        longitude?: string;
+        logo?: {
+            value?: string;
+        };
+        favIcon?: {
+            value?: string;
+        };
+        //   "symbol": {
+        //     "value": null,
+        //     "key": null
+        //   },
+        //   "stamp": {
+        //     "value": "https://cdn2.safaraneh.com/images/setting/1040/signtue-safaraneh-png.png",
+        //     "key": "802f7cbc-6e18-ef11-a414-000c290e44c9"
+        //   },
+        //   "tagline": null
+    },
+    metaTags: {
+        creator?: string;
+        author?: string;
+        keyword?: string;
+        description?: string;
+        enamad?: string;
+    };
+    website: {
+        scripts?: string;
+        title?: string;
+        enamad?: string;
+        samandehi?: string;
+        // "scripts": null,
+        // "title": "رزرو هتل | بیشترین %تخفیف% جدیدترین اطلاعات و تصاویر - سفرانه",
+        // "enamad": "<a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=447333&Code=iGUI6OSzuWaWMbs0Yr3GlkAdt7PEWsm8'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=447333&Code=iGUI6OSzuWaWMbs0Yr3GlkAdt7PEWsm8' alt='' style='cursor:pointer' Code='iGUI6OSzuWaWMbs0Yr3GlkAdt7PEWsm8'></a>",
+        // "samandehi": null
+    },
+    social: {
+        telegram?: string;
+        x?: string;
+        facebook?: string;
+        instagram?: string;
+        linkedin?: string;
+        whatsapp?: string;
+    },
+    legal: {
+        name?:string;
+        // "sellerEconomyCode": "411445816571",
+        // "registeredNumber": "331036",
+        // "buyerNationalId": "10103699029",
+        // "accountNumber": null,
+        // "iataNumber": null,
+        // "taxVatNumber": null
+    }
 }
 
 export interface UserReserveListItem {

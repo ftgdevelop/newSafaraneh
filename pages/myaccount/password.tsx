@@ -6,17 +6,10 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import AccountSidebar from '@/modules/authentication/components/AccountSidebar';
 import PasswordChangeForm from '@/modules/authentication/components/PasswordChangeForm';
 import { Lock2 } from '@/modules/shared/components/ui/icons';
-import { PortalDataType } from '@/modules/shared/types/common';
 
-const Password: NextPage = ({ portalData }: { portalData?: PortalDataType }) => {
+const Password: NextPage = () => {
 
     const router = useRouter();
-
-    let portalName = "";
-    if (portalData) {
-        portalName = portalData.Phrases?.find(item => item.Keyword === "Name")?.Value || "";
-    }
-
 
     useEffect(() => {
         const token = localStorage.getItem('Token');
@@ -24,7 +17,6 @@ const Password: NextPage = ({ portalData }: { portalData?: PortalDataType }) => 
             router.push("/")
         }
     }, []);
-
 
     return (
         <>
