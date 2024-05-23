@@ -5,7 +5,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 
-import { PortalDataType } from '@/modules/shared/types/common';
+import { WebSiteDataType } from '@/modules/shared/types/common';
 import { setReduxError } from '@/modules/shared/store/errorSlice';
 import { useAppDispatch } from '@/modules/shared/hooks/use-store';
 import { confirmFlight, flightGetReserveById } from '@/modules/flights/actions';
@@ -16,7 +16,7 @@ import Skeleton from '@/modules/shared/components/ui/Skeleton';
 import Aside from '@/modules/flights/components/shared/Aside';
 import BookingContent from '@/modules/flights/components/booking/BookingContent';
 
-const Booking: NextPage = ({ portalData }: { portalData?: PortalDataType }) => {
+const Booking: NextPage = ({ portalData }: { portalData?: WebSiteDataType }) => {
 
     const { t } = useTranslation('common');
     const { t: tPayment } = useTranslation('payment');
@@ -29,9 +29,9 @@ const Booking: NextPage = ({ portalData }: { portalData?: PortalDataType }) => {
     const username: string | undefined = pathArray.find(item => item.includes("username="))?.split("username=")[1];
     const reserveId: string | undefined = pathArray.find(item => item.includes("reserveId="))?.split("reserveId=")[1];
 
-    const phoneLink = portalData?.Phrases?.find(item => item.Keyword === "PhoneNumber")?.Value || "";
+    const phoneLink = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
     const phoneNumber = phoneLink?.replace("+98", "0");
-    const email = portalData?.Phrases?.find(item => item.Keyword === "Email")?.Value || "";
+    const email = portalData?.billing.email || "";
 
     const [confirmStatus, setConfirmStatus] = useState<FlightConfirmStatus>();
     const [confirmLoading, setConfirmLoading] = useState<boolean>(true);

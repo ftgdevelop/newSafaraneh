@@ -43,7 +43,7 @@ const Rooms: React.FC<Props> = props => {
             const fetchRooms = async () => {
                 setAvailabilities(undefined);
 
-                const response: any = await GetRooms({ id: hotelId, checkin: checkin, checkout: checkout }, i18n?.language === "en" ? "en-US" : i18n?.language === "ar"?"ar-AE" : "fa-IR");
+                const response: any = await GetRooms({ id: hotelId, checkin: checkin, checkout: checkout }, i18n?.language === "en" ? "en-US" : i18n?.language === "ar" ? "ar-AE" : "fa-IR");
 
                 if (response?.data?.result) {
                     setAvailabilities(response.data.result.availabilities);
@@ -83,6 +83,7 @@ const Rooms: React.FC<Props> = props => {
         }
 
     }
+    const roomsHasImage = availabilites?.some(availabilityItem => (availabilityItem.rooms && availabilityItem.rooms[0]?.image));
 
     return (
 
@@ -111,26 +112,27 @@ const Rooms: React.FC<Props> = props => {
                                 room={availability.rooms![0]}
                                 onSelectRoom={selectRoomHandle}
                                 selectedRoomToken={selectedRoomToken}
+                                roomsHasImage={roomsHasImage || false}
                             />
                         ))
                     })}
                 </>
             ) : (
                 <>
-                    <h2 className="text-lg lg:text-3xl font-semibold mb-3 md:mb-7"> {tHotel('choose-room')}  </h2>
+                    <h2 className="text-lg lg:text-3xl font-semibold mb-3 md:mb-7" > {tHotel('choose-room')} </h2>
                     {[1, 2, 3, 4, 5].map(item => (
                         <div key={item} className='bg-white border border-neutral-300 rounded-xl mb-4 overflow-hidden grid grid-cols-4'>
                             <Skeleton type='image' />
                             <div className='col-span-3 p-4'>
-                                <div className='flex  justify-between mb-4'>
+                                <div className='flex justify-between mb-4'>
                                     <Skeleton className='w-40' />
                                     <Skeleton className='w-20' />
                                 </div>
-                                <div className='flex  justify-between mb-4'>
+                                <div className='flex justify-between mb-4'>
                                     <Skeleton className='w-24' />
                                     <Skeleton className='w-48' />
                                 </div>
-                                <div className='flex  justify-between'>
+                                <div className='flex justify-between'>
                                     <Skeleton className='w-20' />
                                     <Skeleton className='w-60' />
                                 </div>

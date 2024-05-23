@@ -4,15 +4,16 @@ import Section3 from "@/modules/shared/components/SitePage/organizational-reserv
 import Section4 from "@/modules/shared/components/SitePage/organizational-reservation/Section4";
 import Section5 from "@/modules/shared/components/SitePage/organizational-reservation/Section5";
 import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
-import { PortalDataType } from "@/modules/shared/types/common";
+import { WebSiteDataType } from "@/modules/shared/types/common";
 import { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Head from "next/head";
 
-const Organizational: NextPage<any> = ({portalData}: {portalData: PortalDataType}) => {
-    
-    const logo = portalData?.Phrases?.find(item => item.Keyword === "Logo")?.ImageUrl || "";
-    const siteName = portalData?.Phrases?.find(item => item.Keyword === "Name")?.Value || "";
+const Organizational: NextPage<any> = ({portalData}: {portalData: WebSiteDataType}) => {
+
+    const logo = portalData?.billing.logo?.value || "";
+    const siteName = portalData?.billing.name || "";
+
     return (
         <div className="bg-white">
             <Head>

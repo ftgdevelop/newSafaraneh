@@ -3,7 +3,7 @@ import type { GetServerSideProps, NextPage } from 'next';
 import { i18n, useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
-import { PageDataType, PortalDataType } from '@/modules/shared/types/common';
+import { PageDataType, WebSiteDataType } from '@/modules/shared/types/common';
 import { DomesticAccomodationType, DomesticHotelDetailType, EntitySearchResultItemType, HotelScoreDataType } from '@/modules/domesticHotel/types/hotel';
 import { useRouter } from 'next/router';
 import BackToList from '@/modules/domesticHotel/components/hotelDetails/BackToList';
@@ -33,7 +33,7 @@ type Props = {
     page?: PageDataType;
     hotel?: DomesticHotelDetailType;
   };
-  portalData: PortalDataType;
+  portalData: WebSiteDataType;
   error410?: "true";
 }
 
@@ -114,11 +114,12 @@ const HotelDetail: NextPage<Props> = props => {
   let siteLogo = "";
 
   if (portalData) {
-    siteName = portalData.Phrases.find(item => item.Keyword === "Name")?.Value || "";
-    siteLogo = portalData.Phrases.find(item => item.Keyword === "Logo")?.Value || "";
-    tel = portalData.Phrases.find(item => item.Keyword === "PhoneNumber")?.Value || "";
-    twitter = portalData.Phrases.find(item => item.Keyword === "Twitter")?.Value || "";
-    siteURL = portalData.PortalName || "";
+
+    tel = portalData.billing.telNumber || portalData?.billing.phoneNumber || "";    
+    twitter = portalData.social.x || "";
+    siteLogo = portalData.billing.logo?.value ||"";
+    siteName = portalData.billing.name || "";
+    siteURL = portalData.billing.website || "";
   }
 
   if (!hotelData) {
@@ -284,7 +285,7 @@ const HotelDetail: NextPage<Props> = props => {
         />
 
         <script
-          id="script_detail_1"
+          id="script_detail_0"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: `{
@@ -372,7 +373,7 @@ const HotelDetail: NextPage<Props> = props => {
           <BackToList checkin={checkin} checkout={checkout} cityId={hotelData.CityId} cityName={hotelData.CityName} />
         </div>
 
-        {!!hotelData.Gallery?.length && <Gallery images={hotelData.Gallery} />}
+        {!!hotelData.Gallery?.length && <Gallery images={hotelData.Gallery} hotelName={`${hotelData.HotelCategoryName} ${hotelData.HotelName} ${hotelData.CityName}`} />}
       </div>
 
       <AnchorTabs
