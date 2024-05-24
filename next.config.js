@@ -50,7 +50,7 @@ const nextConfig = {
     GOOGLE_TAG_MANAGER_ID: 'GTM-MJQWGBV',
 
     PROJECT_SERVER_APIKEY: 'e8fad1497a1244f29f15cde4a242baf0',
-    //PROJECT_PORTAL_APIKEY: 'b4fa99cc-3dfd-40a5-8bcf-53acdc2dbd84',
+    PROJECT_PORTAL_APIKEY: 'b4fa99cc-3dfd-40a5-8bcf-53acdc2dbd84',
     
     PROJECT_SERVER_HOTEL_WP:"wp.safaraneh.com",
     PROJECT_SERVER_HOTEL_MAIN: "api.safaraneh.com",
