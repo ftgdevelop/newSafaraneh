@@ -257,14 +257,17 @@ const HotelDetail: NextPage<Props> = props => {
             __html: `{
             "@context": "https://schema.org/",
             "@type": "Hotel",
+            "priceRange": "شروع قیمت ها از ${"%%%%%%%%% TODO %%%%%%%%%%"} ریال",
             "image": "${hotelData.Gallery && hotelData.Gallery[0]?.Image || hotelData?.ImageUrl || ""}",
             "url": "${configWebsiteUrl}${hotelData.Url}",
             "name": "${hotelData.HotelCategoryName} ${hotelData.HotelName} ${hotelData.CityName}",
             "description": "${hotelData?.PageTitle?.replaceAll("{0}", siteName)}",
             "address": {
               "@type": "PostalAddress",
-              "addressLocality": "${hotelData.CityName}",
-              "streetAddress": "${hotelData?.Address}"
+              "addressLocality": "${hotelData.CityName || "شهر ثبت نشده است"}",
+              "addressCountry":"${portalData.billing.countryName || "کشور ثبت نشده است"}",
+              "postalCode":"${portalData.billing.zipCode || "کد پستی  وجود ندارد"}",
+              "streetAddress": "${hotelData?.Address || "آدرس وجود ندارد"}"
             },
             "checkinTime": "${hotelData.Policies?.find(x => x.Keyword === "CheckIn")?.Description || "14:00"}",
             "checkoutTime": "${hotelData.Policies?.find(x => x.Keyword === "CheckOut")?.Description || "12:00"}",

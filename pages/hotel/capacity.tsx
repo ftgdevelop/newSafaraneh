@@ -17,14 +17,14 @@ const Capacity: NextPage = () => {
   const { t: tHotel } = useTranslation('hotel');
 
   const router = useRouter();
-  
+
   const [reserveInfo, setReserveInfo] = useState<DomesticHotelGetReserveByIdData | undefined>(undefined);
   const [remainedSeconds, setRemainedSeconds] = useState<number>(600);
 
   const fetchData = async () => {
 
     const pathArray = router.asPath.split("?")[1]?.split("#")[0].split("&");
-        
+
     const username = pathArray.find(item => item.includes("username="))?.split("username=")[1];
     const reserveId = pathArray.find(item => item.includes("reserveId="))?.split("reserveId=")[1];
 
@@ -101,7 +101,18 @@ const Capacity: NextPage = () => {
               (reserveInfo && reserveInfo.status === "Unavailable") ? (
                 tHotel('capacity-full-desc')
               ) : (
-                tHotel('capacity-checking-desc')
+                <>
+                  <p className='mt-3 mb-5'>
+                    {tHotel('capacity-checking-desc1')}
+                  </p>
+                  <p className='mb-5'>
+                    {tHotel('capacity-checking-desc2')}
+                  </p>
+                  <p>
+                    {t("PleaseWaitAMoment")} ...
+                  </p>
+
+                </>
               )
             ) : (
               tHotel('capacity-sorry-waiting')

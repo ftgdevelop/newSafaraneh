@@ -253,7 +253,7 @@ export interface DomesticHotelRateItem {
         name?: string;
         keyword?: string;
     };
-    availablityType: "Online" | "Ofline" | "Request" | "Completion";
+    availablityType: "Online" | "Offline" | "Request" | "Completion";
     nightly: {
         totalPrice: number;
         averagePrice: number;

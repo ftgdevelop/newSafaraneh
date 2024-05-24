@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { DomesticHotelAvailability } from '@/modules/domesticHotel/types/hotel';
 import { useRouter } from 'next/router';
 import RoomItem from './RoomItem';
-import { addSomeDays, dateFormat } from '@/modules/shared/helpers';
+import { addSomeDays, dateFormat, getDatesDiff } from '@/modules/shared/helpers';
 import { GetRooms, domesticHotelValidateRoom } from '../../actions';
 import { InfoCircle } from '@/modules/shared/components/ui/icons';
 import Skeleton from '@/modules/shared/components/ui/Skeleton';
@@ -85,6 +85,8 @@ const Rooms: React.FC<Props> = props => {
     }
     const roomsHasImage = availabilites?.some(availabilityItem => (availabilityItem.rooms && availabilityItem.rooms[0]?.image));
 
+    const nights = getDatesDiff(new Date(checkout), new Date(checkin));
+
     return (
 
         <div id="rooms_section" className="max-w-container mx-auto px-3 sm:px-5 pt-7 md:pt-10">
@@ -113,6 +115,7 @@ const Rooms: React.FC<Props> = props => {
                                 onSelectRoom={selectRoomHandle}
                                 selectedRoomToken={selectedRoomToken}
                                 roomsHasImage={roomsHasImage || false}
+                                nights={nights}
                             />
                         ))
                     })}
