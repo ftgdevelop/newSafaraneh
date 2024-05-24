@@ -20,7 +20,7 @@ const Header: React.FC<Props> = props => {
     const userIsAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
 
     const { logo, siteName } = props;
-    
+
     const theme2 = process.env.THEME === "THEME2";
 
     return (
@@ -45,15 +45,19 @@ const Header: React.FC<Props> = props => {
 
             <div className="max-w-container mx-auto px-3 md:px-5 py-3 clearfix relative">
 
-                {!!logo && <Link href="/" className="block md:rtl:float-right md:ltr:float-left md:rtl:ml-5 md:ltr:mr-5">
-                    <Image src={logo} alt={siteName} width={115} height={48} onContextMenu={e => { e.preventDefault() }} className="h-12 mx-auto" />
-                </Link>}
-                
+                <Link href="/" className="block md:rtl:float-right md:ltr:float-left md:rtl:ml-5 md:ltr:mr-5">
+                    {logo ? (
+                        <Image src={logo} alt={siteName} width={115} height={48} onContextMenu={e => { e.preventDefault() }} className="h-12 mx-auto" />
+                    ) : (
+                        <div className="text-center text-xl font-bold text-white bg-neutral-500 px-3 py-1.5 leading-5 rounded-xl"> NO <br /> LOGO </div>
+                    )}
+                </Link>
+
                 <TravelServices logo={logo} siteName={siteName} className="rtl:float-right ltr:float-left" />
 
                 <HeaderAuthentication />
 
-                { !userIsAuthenticated && !theme2 && <TrackOrder />}
+                {!userIsAuthenticated && !theme2 && <TrackOrder />}
 
                 {/* <Language className="ltr:float-right rtl:float-left rtl:ml-5 ltr:mr-5 hidden md:block" buttonClassName="h-12" /> */}
             </div>

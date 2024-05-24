@@ -15,6 +15,7 @@ type Props = {
     onSelectRoom: (bookingToken: string, count: number) => void;
     selectedRoomToken?: string;
     roomsHasImage?: boolean;
+    nights?:number;
 }
 
 const RoomItem: React.FC<Props> = props => {
@@ -141,12 +142,16 @@ const RoomItem: React.FC<Props> = props => {
                     <Tooltip
                         className='whitespace-nowrap'
                         position='end'
-                        title={<>
-                            {numberWithCommas(prices.roomPrice * count)} {t("rial")}
-                            <small className='block'> {tHotel("Avg-per-night")} </small>
-                        </>}
+                        title={rate.availablityType === 'Offline' ? (
+                            "قیمت نهایی پس از پردازش و تایید از طرف رزرواسیون مشخص می شود"
+                        ):(
+                            <>
+                                {numberWithCommas(prices.roomPrice * count /(props.nights || 1))} {t("rial")}
+                                <small className='block'> {tHotel("Avg-per-night")} </small>
+                            </>
+                        )}
                     >
-                        <div className="text-lg font-semibold flex gap-3">
+                        <div className="text-lg font-semibold flex gap-1.5 items-center">
                             {prices.boardPrice && (prices.roomPrice < prices.boardPrice) && (
                                 <span className="line-through font-semibold text-xs text-neutral-500">
                                     {numberWithCommas(prices.boardPrice * count)} {t("rial")}
@@ -154,6 +159,7 @@ const RoomItem: React.FC<Props> = props => {
                             )}
 
                             {numberWithCommas(prices.roomPrice * count)} {t("rial")}
+                            <InfoCircle className='fill-amber-500 w-5 h-5' />
                         </div>
                     </Tooltip>
                 </>
