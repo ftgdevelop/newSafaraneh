@@ -3,9 +3,13 @@ import BusComponies from "./BusComponies"
 import DepratureTime from "./DepratureTime"
 import Destination from "./Destination"
 import PriceRange from "./PriceRange"
+import { BusItemType } from "../../types"
 
-const SidebarFilters: React.FC = () => {
-
+type Props = {
+    busData: BusItemType[] | undefined
+}
+const SidebarFilters: React.FC<Props> = props => {
+    const {busData} = props
     const [OpenSidebar, setOpenSidebar] = useState<boolean>(false)
     
     useEffect(() => {
@@ -27,7 +31,7 @@ const SidebarFilters: React.FC = () => {
                     <h3 className="font-semibold">نتیجه جستجوی شما</h3>
                     <p className="text-2xs font-semibold">اتوبوس پیدا شد</p>
                 </div>    
-                <BusComponies />
+                <BusComponies busData={busData} />
                 <DepratureTime />
                 <PriceRange />
                 <Destination />

@@ -32,7 +32,8 @@ const nextConfig = {
       'trustseal.enamad.ir',
       'logo.samandehi.ir',
       'www.facebook.com',
-      'cdn.mehrbooking.net'
+      'cdn.mehrbooking.net',
+      'filemanager.safaraneh.com'
     ],
     formats: ['image/avif', 'image/webp'],
   },
@@ -67,7 +68,7 @@ const nextConfig = {
     PROJECT_SERVER_NATIONALITY: "",
     PORT: '',
     //PROJECT_MODULES: ["Flight", "Hotel", "CIP", "Blog" , "ForeignFlight", "ForeignHotel"],
-    PROJECT_MODULES: ["Flight", "Hotel", "CIP", "Blog" , "ForeignFlight", "ForeignHotel"],
+    PROJECT_MODULES: ["Flight", "Hotel", "CIP", "Blog" , "Buses" , "ForeignFlight", "ForeignHotel"],
     // DEFAULT_lAN:"US",
     // LANGUAGES:["US","NO","FA"]
 
