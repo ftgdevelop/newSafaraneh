@@ -3,8 +3,8 @@ import type { GetServerSideProps, NextPage } from 'next';
 import { i18n, useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
-import { PageDataType, PortalDataType } from '@/modules/shared/types/common';
-import { DomesticAccomodationType, DomesticHotelDetailType, EntitySearchResultItemType, HotelScoreDataType } from '@/modules/domesticHotel/types/hotel';
+import { PageDataType, WebSiteDataType } from '@/modules/shared/types/common';
+import { DomesticAccomodationType, DomesticHotelDetailType, EntitySearchResultItemType, HotelAllDataRooms, HotelScoreDataType } from '@/modules/domesticHotel/types/hotel';
 import { useRouter } from 'next/router';
 import BackToList from '@/modules/domesticHotel/components/hotelDetails/BackToList';
 import { CalendarError, Phone } from '@/modules/shared/components/ui/icons';
@@ -32,15 +32,15 @@ type Props = {
     score?: HotelScoreDataType;
     page?: PageDataType;
     hotel?: DomesticHotelDetailType;
+    rooms?: {result: HotelAllDataRooms};
   };
-  portalData: PortalDataType;
+  portalData: WebSiteDataType;
   error410?: "true";
 }
 
 const HotelDetail: NextPage<Props> = props => {
 
   const { portalData, allData } = props;
-
 
   const { t } = useTranslation('common');
   const { t: tHotel } = useTranslation('hotel');
@@ -114,11 +114,12 @@ const HotelDetail: NextPage<Props> = props => {
   let siteLogo = "";
 
   if (portalData) {
-    siteName = portalData.Phrases.find(item => item.Keyword === "Name")?.Value || "";
-    siteLogo = portalData.Phrases.find(item => item.Keyword === "Logo")?.Value || "";
-    tel = portalData.Phrases.find(item => item.Keyword === "PhoneNumber")?.Value || "";
-    twitter = portalData.Phrases.find(item => item.Keyword === "Twitter")?.Value || "";
-    siteURL = portalData.PortalName || "";
+
+    tel = portalData.billing.telNumber || portalData?.billing.phoneNumber || "";    
+    twitter = portalData.social.x || "";
+    siteLogo = portalData.billing.logo?.value ||"";
+    siteName = portalData.billing.name || "";
+    siteURL = portalData.billing.website || "";
   }
 
   if (!hotelData) {
@@ -138,6 +139,8 @@ const HotelDetail: NextPage<Props> = props => {
       script_detail_2_Url = `${configWebsiteUrl}/en/hotels/${hotelData.CityName.replace(/ /g, "-")}`;
     }
   }
+
+  const startingPrice = allData.rooms?.result?.availabilities[0]?.rates[0]?.price || 0;
 
 
   return (
@@ -256,18 +259,21 @@ const HotelDetail: NextPage<Props> = props => {
             __html: `{
             "@context": "https://schema.org/",
             "@type": "Hotel",
+            "priceRange": "شروع قیمت ها از ${startingPrice} ریال",
+            "telephone":"${hotelData.Tel || "تلفن ثبت نشده است."}",
             "image": "${hotelData.Gallery && hotelData.Gallery[0]?.Image || hotelData?.ImageUrl || ""}",
             "url": "${configWebsiteUrl}${hotelData.Url}",
             "name": "${hotelData.HotelCategoryName} ${hotelData.HotelName} ${hotelData.CityName}",
             "description": "${hotelData?.PageTitle?.replaceAll("{0}", siteName)}",
             "address": {
               "@type": "PostalAddress",
-              "addressLocality": "${hotelData.CityName}",
-              "streetAddress": "${hotelData?.Address}"
+              "addressLocality": "${hotelData.CityName || "شهر ثبت نشده است"}",
+              "addressCountry":"${portalData.billing.countryName || "کشور ثبت نشده است"}",
+              "postalCode":"${portalData.billing.zipCode || "کد پستی  وجود ندارد"}",
+              "streetAddress": "${hotelData?.Address || "آدرس وجود ندارد"}"
             },
             "checkinTime": "${hotelData.Policies?.find(x => x.Keyword === "CheckIn")?.Description || "14:00"}",
             "checkoutTime": "${hotelData.Policies?.find(x => x.Keyword === "CheckOut")?.Description || "12:00"}",
-            "telephone": "${tel}",
             "starRating": {
               "@type": "Rating",
               "ratingValue": "${hotelData?.HotelRating || 5}"
@@ -284,13 +290,13 @@ const HotelDetail: NextPage<Props> = props => {
         />
 
         <script
-          id="script_detail_1"
+          id="script_detail_0"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: `{
             "@context": "http://schema.org",
             "@type": "Organization",
-            "name": "${siteName}",
+            "name": "${siteName || process.env.PROJECT}",
             "alternateName": "${process.env.PROJECT || siteName}",
             "url": "${configWebsiteUrl}",
             "logo": "${siteLogo}",
@@ -372,7 +378,7 @@ const HotelDetail: NextPage<Props> = props => {
           <BackToList checkin={checkin} checkout={checkout} cityId={hotelData.CityId} cityName={hotelData.CityName} />
         </div>
 
-        {!!hotelData.Gallery?.length && <Gallery images={hotelData.Gallery} />}
+        {!!hotelData.Gallery?.length && <Gallery images={hotelData.Gallery} hotelName={`${hotelData.HotelCategoryName} ${hotelData.HotelName} ${hotelData.CityName}`} />}
       </div>
 
       <AnchorTabs
@@ -454,10 +460,20 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const { locale, query } = context;
 
-  const url = encodeURI(`/hotel/${query.hotelDetail![0]}`);
+  let checkin = dateFormat(new Date());
+  let checkout = dateFormat(addSomeDays(new Date()));
+
+  const checkinSegment = query.hotelDetail.find((s:string) => s.includes("checkin"));
+  const checkoutSegment = query.hotelDetail.find((s:string) => s.includes("checkout"));
+  
+  if(checkinSegment && checkinSegment){
+    checkin = dateFormat(new Date(checkinSegment.split("checkin-")[1]));
+    checkout = dateFormat(new Date(checkoutSegment.split("checkout-")[1]));
+  }
+
+  const url = encodeURI(`/hotel/${query.hotelDetail![0]}&checkin=${checkin}&checkout=${checkout}`);
 
   const allData: any = await getDomesticHotelDetailsByUrl("/" + locale + url, locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR");
-
 
   if (!allData?.data?.result?.hotel) {
 

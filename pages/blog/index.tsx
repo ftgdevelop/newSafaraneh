@@ -8,14 +8,14 @@ import { BlogItemType, CategoriesNameType, CityItemType, HomeCategoryItemType } 
 import BlogCities from "@/modules/blogs/components/BlogHome/BlogCities";
 import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
 import Head from "next/head";
-import { PortalDataType } from "@/modules/shared/types/common";
+import { WebSiteDataType } from "@/modules/shared/types/common";
 import NotFound from "@/modules/shared/components/ui/NotFound";
 
 
 const Blog: NextPage<any> = ({ NewBlogs, Cities, Categories , Categories2 ,Categories3 , portalData, moduleDisabled}:
     {
         NewBlogs?: BlogItemType[], Cities?: CityItemType[], Categories?: HomeCategoryItemType[], Categories2?: HomeCategoryItemType[],
-        Categories3: CategoriesNameType[] , portalData: PortalDataType, moduleDisabled?:boolean
+        Categories3: CategoriesNameType[] , portalData: WebSiteDataType, moduleDisabled?:boolean
     }) => {
 
         if (moduleDisabled) {
@@ -24,7 +24,8 @@ const Blog: NextPage<any> = ({ NewBlogs, Cities, Categories , Categories2 ,Categ
             )
         }
     
-        const siteName = portalData?.Phrases?.find(item => item.Keyword === "Name")?.Value || "";
+        const siteName = portalData?.billing.name || "";
+        
         return (
         <div className="bg-white">
             <Head>

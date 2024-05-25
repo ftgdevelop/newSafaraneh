@@ -11,7 +11,8 @@ import "yet-another-react-lightbox/plugins/thumbnails.css";
 import "yet-another-react-lightbox/plugins/captions.css";
 
 type Props = {
-    images?: DomesticHotelDetailType['Gallery']
+    images?: DomesticHotelDetailType['Gallery'];
+    hotelName?:string;
 }
 
 const Gallery: React.FC<Props> = props => {
@@ -50,7 +51,7 @@ const Gallery: React.FC<Props> = props => {
                         priority={!index}
                         onContextMenu={(e)=> e.preventDefault()}
                         src={slide.src}
-                        alt={slide.alt}
+                        alt={index?slide.alt : props.hotelName || slide.alt}
                         sizes={index?"(max-width: 768px) 100vh, 578px" : "(max-width: 768px) 100vh, 287"}
                         width={index ? 287 : 430}
                         height={index ? 191 : 270}

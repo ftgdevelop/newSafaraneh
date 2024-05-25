@@ -2,23 +2,20 @@ import AccountSidebar from '@/modules/authentication/components/AccountSidebar';
 import EditProfileForm from '@/modules/authentication/components/profile/EditProfileForm';
 import { User2 } from '@/modules/shared/components/ui/icons';
 import { useAppSelector } from '@/modules/shared/hooks/use-store';
-import { PortalDataType } from '@/modules/shared/types/common';
+import { WebSiteDataType } from '@/modules/shared/types/common';
 import type { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
-const Profile: NextPage = ({ portalData }: { portalData?: PortalDataType }) => {
+const Profile: NextPage = ({ portalData }: { portalData?: WebSiteDataType }) => {
 
     const { t } = useTranslation('common');
     const router = useRouter();
 
-    let portalName = "";
-    if (portalData) {
-        portalName = portalData.Phrases?.find(item => item.Keyword === "Name")?.Value || "";
-    }
-
+    let portalName = portalData?.billing.name || "";
+    
     useEffect(() => {
         const token = localStorage.getItem('Token');
         if (!token) {

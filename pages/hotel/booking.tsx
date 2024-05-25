@@ -6,7 +6,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 
 import { DomesticHotelConfirm, domesticHotelGetReserveById, getDomesticHotelSummaryDetailById } from '@/modules/domesticHotel/actions';
-import { PortalDataType } from '@/modules/shared/types/common';
+import { WebSiteDataType } from '@/modules/shared/types/common';
 import { AsideHotelInfoType, AsideReserveInfoType, DomesticHotelConfirmType, DomesticHotelGetReserveByIdData, DomesticHotelSummaryDetail } from '@/modules/domesticHotel/types/hotel';
 import { setReduxError } from '@/modules/shared/store/errorSlice';
 import { useAppDispatch } from '@/modules/shared/hooks/use-store';
@@ -17,7 +17,7 @@ import Steps from '@/modules/shared/components/ui/Steps';
 import Skeleton from '@/modules/shared/components/ui/Skeleton';
 import BookingContent from '@/modules/domesticHotel/components/booking/BookingContent';
 
-const Booking: NextPage = ({ portalData }: { portalData?: PortalDataType }) => {
+const Booking: NextPage = ({ portalData }: { portalData?: WebSiteDataType }) => {
 
     const { t } = useTranslation('common');
     const { t: tHotel } = useTranslation('hotel');
@@ -34,9 +34,9 @@ const Booking: NextPage = ({ portalData }: { portalData?: PortalDataType }) => {
     const [domesticHotelReserveData, setDomesticHotelReserveData] = useState<DomesticHotelGetReserveByIdData>();
     const [domesticHotelData, setDomesticHotelData] = useState<DomesticHotelSummaryDetail>();
 
-    const phoneLink = portalData?.Phrases?.find(item => item.Keyword === "PhoneNumber")?.Value || "";
+    const phoneLink = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
     const phoneNumber = phoneLink?.replace("+98", "0");
-    const email = portalData?.Phrases?.find(item => item.Keyword === "Email")?.Value || "";
+    const email = portalData?.billing.email ||"";
 
     const [confirmData, setConfirmData] = useState<DomesticHotelConfirmType>();
     const [confirmLoading, setConfirmLoading] = useState<boolean>(true);
