@@ -44,8 +44,8 @@ const CipReserveDetail: NextPage = ({ portalData }: { portalData?: WebSiteDataTy
 
     const phoneLink = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
     const phoneNumber = phoneLink?.replace("+98", "0");
-    const email = portalData?.billing.email || "";
-    const whatsApp = portalData?.social.whatsapp || "";
+    const email = portalData?.billing?.email || "";
+    const whatsApp = portalData?.social?.whatsapp || "";
 
 
     useEffect(() => {
