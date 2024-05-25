@@ -5,7 +5,7 @@ import instagram from '../public/images/footer/Instagram.svg';
 import twitter from '../public/images/footer/Twitter.svg';
 import linkden from '../public/images/footer/Linkedin.svg';
 import Image from "next/image";
-import { PortalDataType } from "@/modules/shared/types/common";
+import { WebSiteDataType } from "@/modules/shared/types/common";
 import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
 
 import dynamic from "next/dynamic";
@@ -16,15 +16,22 @@ const LeafletNoSsr = dynamic(() => import('../modules/shared/components/ui/Leafl
 });
 
 
-const Contact: NextPage = ({portalData }: { portalData?: PortalDataType}) => {
+const Contact: NextPage = ({portalData }: { portalData?: WebSiteDataType}) => {
 
-    let longitude, latitude, zoom;
+    let longitude, latitude;
 
     if(portalData){
-        latitude = portalData.Phrases.find(item => item.Keyword === "Latitude")?.Value;
-        longitude = portalData.Phrases.find(item => item.Keyword === "Longitude")?.Value;
-        zoom = portalData.Phrases.find(item => item.Keyword === "MapZoom")?.Value;
+        latitude = portalData.billing.latitude||"";
+        longitude = portalData.billing.longitude || "";
     }
+
+    const tel = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
+
+    const email = portalData?.billing.email ||"";
+
+    const instagramLink = portalData?.social.instagram || "";
+    const linkedinLink = portalData?.social.linkedin || "";
+    const twitterLink = portalData?.social.x || "";
 
     return (
         <>
@@ -37,45 +44,50 @@ const Contact: NextPage = ({portalData }: { portalData?: PortalDataType}) => {
                 <div className="pl-5 pr-5 pt-10 pb-10 border-2 border-gray mt-7 rounded-md bg-white grid grid-cols-2 gap-8 max-lg:grid-cols-1">
                     <div className="space-y-3">
                         <h5 className="text-xl font-semibold">با ما در ارتباط باشید</h5>
-                        <address className="not-italic">
+                        
+                        {!!portalData?.billing.address && <address className="not-italic">
                             <p className="text-sm space-x-1 whitespace-nowrap max-xl:whitespace-normal">
                                 <b className="text-base">آدرس</b>
                                 <span className="font-semibold text-base">:</span> 
-                                {portalData?.Phrases?.find((item : any) => item.Keyword == "Address")?.Value}
+                                {portalData?.billing.address}
                             </p>
-                        </address>
-                        <div className="flex gap-1">
+                        </address>}
+
+                        {!!tel && <div className="flex gap-1">
                             <b>تلفن</b>:
-                            <Link href={`tel:${portalData?.Phrases?.find(item => item.Keyword == "PhoneNumber")?.Value}`} className="font-semibold text-lg">
-                            {portalData?.Phrases?.find(item => item.Keyword == "PhoneNumber")?.Value}
+                            <Link href={`tel:${tel}`} className="font-semibold text-lg">
+                                {tel}
                             </Link>
-                        </div>
+                        </div>}
+
                         <div className="flex gap-1">
                             <b>فکس</b>:
                             <Link href={`tel:+982126150054`} className="font-semibold text-lg">2126150054 98+</Link>
                         </div>
-                        <div className="flex gap-1">
+
+                        {!!email && <div className="flex gap-1">
                             <b>ایمیل</b>:
-                            <Link href={`mailto:${portalData?.Phrases?.find(item => item.Keyword == "Email")?.Value}`} className="font-semibold">
-                                {portalData?.Phrases?.find(item => item.Keyword == "Email")?.Value}
+                            <Link href={`mailto:${email}`} className="font-semibold">
+                                {email}
                             </Link>
-                        </div>
-                        <div className="flex gap-1">
+                        </div>}
+
+                        {!!portalData?.billing.zipCode && <div className="flex gap-1">
                             <b>کد پستی</b>:
-                            <b className="font-semibold text-lg">1957644595</b>
-                        </div>
+                            <b className="font-semibold text-lg">{portalData.billing.zipCode}</b>
+                        </div>}
 
                         <h5 className="text-2xl pt-5 font-semibold">ما را در شبکه اجتماعی دنبال کنید</h5>
                         <div className="flex pt-2 max-lg:pb-10 gap-4">
-                            <Link href={portalData?.Phrases?.find(item => item.Keyword == "Instagram")?.Value || ''}>
+                            {instagramLink && <Link href={instagramLink}>
                                 <Image src={instagram} alt='instagram' width={30} height={30} />
-                            </Link> 
-                            <Link href={portalData?.Phrases?.find(item => item.Keyword == "Twitter")?.Value || ''}>
+                            </Link> }
+                            {twitterLink && <Link href={twitterLink}>
                                 <Image src={twitter} alt='twitter' width={30} height={30} />
-                            </Link>
-                            <Link href={portalData?.Phrases?.find(item => item.Keyword == "Linkedin")?.Value || ''}>
-                                <Image src={linkden} alt='instagram' width={30} height={30} />
-                            </Link>
+                            </Link>}
+                            {linkedinLink && <Link href={linkedinLink}>
+                                <Image src={linkden} alt='linkedin' width={30} height={30} />
+                            </Link>}
                         </div>
                     </div>
                     <div>
@@ -84,7 +96,7 @@ const Contact: NextPage = ({portalData }: { portalData?: PortalDataType}) => {
                         {!!(latitude && longitude) && <LeafletNoSsr
                             className='h-80 w-full rounded-xl'
                             location={[+latitude, +longitude]}
-                            zoom={zoom ? +zoom : 15}
+                            zoom={15}
                         />}
 
                     </div>

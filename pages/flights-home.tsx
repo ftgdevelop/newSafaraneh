@@ -14,16 +14,16 @@ import AboutSummary from '@/modules/home/components/AboutSummary';
 import HomeFAQ from '@/modules/home/components/HomeFAQ';
 import Newsletter from '@/modules/home/components/Newsletter';
 import Services from '@/modules/home/components/Services';
-import { PortalDataType } from '@/modules/shared/types/common';
+import { WebSiteDataType } from '@/modules/shared/types/common';
 import Head from 'next/head';
 
-const FlightsHome: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], portalData?: PortalDataType }) => {
+const FlightsHome: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], portalData?: WebSiteDataType }) => {
 
-  const logo = portalData?.Phrases?.find(item => item.Keyword === "Logo")?.ImageUrl || "";
-  const siteName = portalData?.Phrases?.find(item => item.Keyword === "Name")?.Value || "";
-  const portalEmailAddress = portalData?.Phrases?.find(item => item.Keyword === "Email")?.Value;
-  const portalPhoneNumber = portalData?.Phrases?.find(item => item.Keyword === "TelNumber")?.Value;
-  const portalAddress = portalData?.Phrases?.find(item => item.Keyword === "Address")?.Value;
+  const logo = portalData?.billing.logo?.value || "";
+  const siteName = portalData?.billing.name || "";
+  const portalEmailAddress = portalData?.billing.email || "";
+  const portalPhoneNumber = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
+  const portalAddress = portalData?.billing.address || "";
 
   const configWebsiteUrl = process.env.SITE_NAME || "";
 
@@ -39,7 +39,7 @@ const FlightsHome: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], 
         ></meta>
 
 
-        <script
+        {/* <script
           id="script_1"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -190,7 +190,8 @@ const FlightsHome: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], 
                 ]
               }`,
           }}
-        />
+        /> */}
+        
       </Head>
       <Banner
         modules={['domesticFlight']} 

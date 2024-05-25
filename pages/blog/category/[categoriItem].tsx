@@ -7,17 +7,17 @@ import Content from "@/modules/blogs/components/template/Content";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
 import Head from "next/head";
-import { PortalDataType } from "@/modules/shared/types/common";
+import { WebSiteDataType } from "@/modules/shared/types/common";
 import NotFound from "@/modules/shared/components/ui/NotFound";
 
 
 const Category: NextPage<any> = ({ LastBlogs, BlogCategory, categories_name, pages, portalData, moduleDisabled }:
-    { LastBlogs?: BlogItemType[], BlogCategory?: BlogItemType[], categories_name: CategoriesNameType[], pages: string, portalData: PortalDataType , moduleDisabled?:boolean}) => {
+    { LastBlogs?: BlogItemType[], BlogCategory?: BlogItemType[], categories_name: CategoriesNameType[], pages: string, portalData: WebSiteDataType , moduleDisabled?:boolean}) => {
 
     const query: any = useRouter().query.categoriItem;
     const CategoryName : string = categories_name?.find(item => item.id == +query)?.name || ""
     const TitleData = BlogCategory?.find((item : any) => item.categories[0] == +query)?.categories_names?.[0]
-    const siteName = portalData?.Phrases?.find(item => item.Keyword === "Name")?.Value || "";
+    const siteName = portalData?.billing.name || "";
 
     if (moduleDisabled) {
         return (

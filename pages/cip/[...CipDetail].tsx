@@ -22,7 +22,7 @@ import CipExtraServices from '@/modules/cip/components/cip-detail/CipExtraServic
 import CipTransport from '@/modules/cip/components/cip-detail/CipTransport';
 import Head from 'next/head';
 import CipAboutAirport from '@/modules/cip/components/cip-detail/CipAboutAirport';
-import { PortalDataType } from '@/modules/shared/types/common';
+import { WebSiteDataType } from '@/modules/shared/types/common';
 import CipTerms from '@/modules/cip/components/cip-detail/CipTerms';
 import CipFacilities from '@/modules/cip/components/cip-detail/CipFacilities';
 import { useRouter } from 'next/router';
@@ -70,7 +70,7 @@ type FormValues = {
     }[];
 }
 
-const CipDetails: NextPage = ({ airportData, availabilities, portalData, moduleDisabled }: { portalData?: PortalDataType, airportData?: CipGetAirportByUrlResponseType, availabilities?: { latitude: string; longitude: string; availability: CipAvailabilityItemType[] }; moduleDisabled?: Boolean }) => {
+const CipDetails: NextPage = ({ airportData, availabilities, portalData, moduleDisabled }: { portalData?: WebSiteDataType, airportData?: CipGetAirportByUrlResponseType, availabilities?: { latitude: string; longitude: string; availability: CipAvailabilityItemType[] }; moduleDisabled?: Boolean }) => {
 
     const dispatch = useAppDispatch();
 
@@ -80,16 +80,13 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData, moduleD
     const router = useRouter();
 
     let siteName = "";
-    let tel = "";
-    let twitter = "";
-    let siteURL = "";
+    let siteURL = process.env.SITE_NAME;
 
     if (portalData) {
-        siteName = portalData.Phrases.find(item => item.Keyword === "Name")?.Value || "";
-        siteURL = portalData.PortalName || "";
+        siteName = portalData?.billing.name || "";
     }
 
-    const phoneLink = portalData?.Phrases?.find(item => item.Keyword === "PhoneNumber")?.Value || "";
+    const phoneLink = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
     const phoneNumber = phoneLink?.replace("+98", "0");
 
     const user = useAppSelector(state => state.authentication.isAuthenticated ? state.authentication.user : undefined);
@@ -622,7 +619,7 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData, moduleD
 
 
                                         <div id="about_section">
-                                            <CipAboutAirport content={airportData?.description} siteName={siteName} siteUrl={siteURL} />
+                                            <CipAboutAirport content={airportData?.description} siteName={siteName} siteUrl={siteURL||""} />
                                             <CipTerms />
                                         </div>
 
