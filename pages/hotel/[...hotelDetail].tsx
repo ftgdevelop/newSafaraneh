@@ -116,10 +116,10 @@ const HotelDetail: NextPage<Props> = props => {
   if (portalData) {
 
     tel = portalData.billing.telNumber || portalData?.billing.phoneNumber || "";    
-    twitter = portalData.social.x || "";
-    siteLogo = portalData.billing.logo?.value ||"";
-    siteName = portalData.billing.name || "";
-    siteURL = portalData.billing.website || "";
+    twitter = portalData.social?.x || "";
+    siteLogo = portalData.billing?.logo?.value ||"";
+    siteName = portalData.billing?.name || "";
+    siteURL = portalData.billing?.website || "";
   }
 
   if (!hotelData) {

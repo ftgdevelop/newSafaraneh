@@ -52,21 +52,21 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
 
 
   const tel = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
-  const instagram = portalData?.social.instagram || "";
-  const facebook = portalData?.social.facebook || "";
-  const linkedin = portalData?.social.linkedin || "";
-  const twitter = portalData?.social.x || "";
+  const instagram = portalData?.social?.instagram || "";
+  const facebook = portalData?.social?.facebook || "";
+  const linkedin = portalData?.social?.linkedin || "";
+  const twitter = portalData?.social?.x || "";
 
   const logo = portalData?.billing.logo?.value ||"";
   const siteName = portalData?.billing.name || "";
   const favIconLink = portalData?.billing.favIcon?.value || "";
 
-  const portalTitle = portalData?.website.title || "";
-  const portalKeywords = portalData?.metaTags.keyword || "";
-  const portalDescription = portalData?.metaTags.description || "";
+  const portalTitle = portalData?.website?.title || "";
+  const portalKeywords = portalData?.metaTags?.keyword || "";
+  const portalDescription = portalData?.metaTags?.description || "";
   
-  const portalEnamadMetaTag = portalData?.metaTags.enamad || "";
-  const enamadElement = portalData?.website.enamad || "";
+  const portalEnamadMetaTag = portalData?.metaTags?.enamad || "";
+  const enamadElement = portalData?.website?.enamad || "";
 
   let canonicalUrl = "";
   if(typeof router !== 'undefined'){
