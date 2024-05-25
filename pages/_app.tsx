@@ -14,7 +14,7 @@ import '../styles/leaflet.css';
 import '../styles/modernDatePicker.scss';
 
 import { store } from '../modules/shared/store';
-import { PortalDataType } from '@/modules/shared/types/common';
+import { WebSiteDataType } from '@/modules/shared/types/common';
 import { getPortal } from '@/modules/shared/actions/portalActions';
 import Layout from '@/modules/shared/components/layout';
 import { GTM_ID } from '@/modules/shared/helpers';
@@ -25,7 +25,7 @@ const ElmahLogError = dynamic(() => import('../modules/shared/components/ElmahLo
 });
 
 type TProps = Pick<AppProps, "Component" | "pageProps"> & {
-  portalData?: PortalDataType;
+  portalData?: WebSiteDataType;
 };
 
 function MyApp({ Component, pageProps, portalData }: TProps) {
@@ -51,22 +51,22 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
   }, []);
 
 
-  const tel = portalData?.Phrases?.find(item => item.Keyword === "PhoneNumber")?.Value || "";
-  const instagram = portalData?.Phrases?.find(item => item.Keyword === "Instagram")?.Value || "";
-  const facebook = portalData?.Phrases?.find(item => item.Keyword === "Facebook")?.Value || "";
-  const linkedin = portalData?.Phrases?.find(item => item.Keyword === "Linkedin")?.Value || "";
-  const twitter = portalData?.Phrases?.find(item => item.Keyword === "Twitter")?.Value || "";
+  const tel = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
+  const instagram = portalData?.social.instagram || "";
+  const facebook = portalData?.social.facebook || "";
+  const linkedin = portalData?.social.linkedin || "";
+  const twitter = portalData?.social.x || "";
 
-  const logo = portalData?.Phrases?.find(item => item.Keyword === "Logo")?.ImageUrl || "";
-  const siteName = portalData?.Phrases?.find(item => item.Keyword === "Name")?.Value || "";
-  const favIconLink = portalData?.Phrases?.find(item => item.Keyword === "Favicon")?.Value || "";
+  const logo = portalData?.billing.logo?.value ||"";
+  const siteName = portalData?.billing.name || "";
+  const favIconLink = portalData?.billing.favIcon?.value || "";
 
-  const portalTitle = portalData?.MetaTags?.find(item => item.Name === "title")?.Content || "";
-  const portalKeywords = portalData?.MetaTags?.find(item => item.Name === "keywords")?.Content || "";
-  const portalDescription = portalData?.MetaTags?.find(item => item.Name === "description")?.Content || "";
+  const portalTitle = portalData?.website.title || "";
+  const portalKeywords = portalData?.metaTags.keyword || "";
+  const portalDescription = portalData?.metaTags.description || "";
   
-  const portalEnamadMetaTag = portalData?.MetaTags?.find(item => item.Name === "enamad")?.Content || "";
-  const enamadElement = portalData?.Phrases.find(item => item.Keyword === "Enamad")?.Value;
+  const portalEnamadMetaTag = portalData?.metaTags.enamad || "";
+  const enamadElement = portalData?.website.enamad || "";
 
   let canonicalUrl = "";
   if(typeof router !== 'undefined'){
@@ -191,7 +191,7 @@ MyApp.getInitialProps = async (
   //const portalData = await getPortal(context?.router?.locale === "ar" ? "ar-AE" : context?.router?.locale=== "en" ? "en-US" : "fa-IR");
   const portalData = await getPortal("fa-IR");
 
-  return { ...ctx, portalData: portalData?.data || null };
+  return { ...ctx, portalData: portalData?.data?.result || null };
 };
 
 export default appWithTranslation(MyApp);
