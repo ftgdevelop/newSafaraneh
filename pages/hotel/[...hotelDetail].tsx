@@ -274,7 +274,6 @@ const HotelDetail: NextPage<Props> = props => {
             },
             "checkinTime": "${hotelData.Policies?.find(x => x.Keyword === "CheckIn")?.Description || "14:00"}",
             "checkoutTime": "${hotelData.Policies?.find(x => x.Keyword === "CheckOut")?.Description || "12:00"}",
-            "telephone": "${tel||'تلفن ثبت نشده است.'}",
             "starRating": {
               "@type": "Rating",
               "ratingValue": "${hotelData?.HotelRating || 5}"
