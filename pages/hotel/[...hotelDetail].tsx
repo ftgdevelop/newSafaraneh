@@ -260,6 +260,7 @@ const HotelDetail: NextPage<Props> = props => {
             "@context": "https://schema.org/",
             "@type": "Hotel",
             "priceRange": "شروع قیمت ها از ${startingPrice} ریال",
+            "telephone":"${hotelData.Tel || "تلفن ثبت نشده است."}",
             "image": "${hotelData.Gallery && hotelData.Gallery[0]?.Image || hotelData?.ImageUrl || ""}",
             "url": "${configWebsiteUrl}${hotelData.Url}",
             "name": "${hotelData.HotelCategoryName} ${hotelData.HotelName} ${hotelData.CityName}",
@@ -273,7 +274,7 @@ const HotelDetail: NextPage<Props> = props => {
             },
             "checkinTime": "${hotelData.Policies?.find(x => x.Keyword === "CheckIn")?.Description || "14:00"}",
             "checkoutTime": "${hotelData.Policies?.find(x => x.Keyword === "CheckOut")?.Description || "12:00"}",
-            "telephone": "${tel}",
+            "telephone": "${tel||'تلفن ثبت نشده است.'}",
             "starRating": {
               "@type": "Rating",
               "ratingValue": "${hotelData?.HotelRating || 5}"
@@ -296,7 +297,7 @@ const HotelDetail: NextPage<Props> = props => {
             __html: `{
             "@context": "http://schema.org",
             "@type": "Organization",
-            "name": "${siteName}",
+            "name": "${siteName || process.env.PROJECT}",
             "alternateName": "${process.env.PROJECT || siteName}",
             "url": "${configWebsiteUrl}",
             "logo": "${siteLogo}",
