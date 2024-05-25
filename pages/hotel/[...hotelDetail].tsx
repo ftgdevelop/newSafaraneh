@@ -140,7 +140,7 @@ const HotelDetail: NextPage<Props> = props => {
     }
   }
 
-  const startingPrice = allData.rooms?.result.availabilities[0].rates[0].price || 0;
+  const startingPrice = allData.rooms?.result?.availabilities[0]?.rates[0]?.price || 0;
 
 
   return (
