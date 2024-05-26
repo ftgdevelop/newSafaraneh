@@ -58,7 +58,7 @@ const HeaderAuthentication: React.FC = () => {
     let buttonClassName = "h-12 text-sm text-blue-700 hover:text-blue-500 ltr:float-right rtl:float-left hidden md:block";
 
     if (theme2){
-        buttonClassName = "rounded-lg h-10 px-3 border border-stone-300 text-sm text-black hover:text-stone-800 ltr:float-right rtl:float-left font-semibold hidden md:flex items-center gap-3";
+        buttonClassName = "whitespace-nowrap rounded-lg h-10 px-3 border border-stone-300 text-sm text-black hover:text-stone-800 ltr:float-right rtl:float-left font-semibold hidden md:flex items-center gap-3";
     }
 
     return (

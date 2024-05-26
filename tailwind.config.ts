@@ -93,6 +93,7 @@ const config: Config = {
         '2xs': '12px',
         xs: '13px',
         sm: '14px',
+        md: '15px',
         '2xl': '22px',
         '3xl': '24px',
         '4xl': '28px',
