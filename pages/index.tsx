@@ -14,8 +14,10 @@ import AboutSummary from '@/modules/home/components/AboutSummary';
 import HomeFAQ from '@/modules/home/components/HomeFAQ';
 import Newsletter from '@/modules/home/components/Newsletter';
 import Services from '@/modules/home/components/Services';
-import {WebSiteDataType } from '@/modules/shared/types/common';
+import { WebSiteDataType } from '@/modules/shared/types/common';
 import Head from 'next/head';
+import HomeTheme1 from '@/modules/home/components/theme1/HomeTheme1';
+import HomeTheme2 from '@/modules/home/components/theme2/HomeTheme2';
 
 const Home: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], portalData?: WebSiteDataType }) => {
 
@@ -26,6 +28,10 @@ const Home: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], portalD
   const portalAddress = portalData?.billing.address || "";
 
   const configWebsiteUrl = process.env.SITE_NAME || "";
+
+  const theme2 = process.env.THEME === "THEME2";
+
+  const theme1 = process.env.THEME === "THEME1";
 
   return (
     <>
@@ -192,28 +198,20 @@ const Home: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], portalD
           }}
         />
       </Head>
-      <Banner
-        modules={['domesticFlight', 'domesticHotel', 'cip']}
-      />
 
-      <div className='max-w-container mx-auto px-5'>
-        <ModulesBanner />
-        <SuggestedHotels />
-        <PopularCities />
-        <BeachHotels />
-        <Unknowns />
-      </div>
+      {!!theme1 && <HomeTheme1
+        modules={["domesticHotel", "domesticFlight", "cip"]}
+        logo={logo}
+        siteName={siteName}
+        blogs={blogs}
+      />}
 
-      <div className='max-w-container mx-auto px-5'>
-        {blogs ? <RecentBlogs blogs={blogs} /> : <br/>}
-        <Services siteName={siteName} />
-        <AboutSummary
-          logo={logo}
-          siteName={siteName}
-        />
-        <HomeFAQ />
-        <Newsletter />
-      </div>
+      {!!theme2 && <HomeTheme2
+        modules={["domesticHotel", "domesticFlight", "cip"]}
+        logo={logo}
+        siteName={siteName}
+        blogs={blogs}
+      />}
 
     </>
   )

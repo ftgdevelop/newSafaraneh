@@ -24,7 +24,7 @@ const CipRecentSearches: React.FC = () => {
         title: string;
         subtitle: string;
         url: string;
-    }[] = items.slice(0, 6).map(item => {
+    }[] = items.slice(0, 5).map(item => {
 
         return ({
             title: item.airportName,
