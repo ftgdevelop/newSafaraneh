@@ -34,7 +34,7 @@ const Checkout: NextPage = () => {
 
   const { key } = router.query;
 
-  const user: UserInformation = useAppSelector(state => state.authentication.isAuthenticated ? state.authentication.user : undefined);
+  const user: UserInformation | undefined = useAppSelector(state => state.authentication.isAuthenticated ? state.authentication.user : undefined);
 
   const [flightData, setFlightData] = useState<FlightGetValidateDataType>();
   const [flightDataLoading, setFlightDataLoading] = useState<boolean>(true);

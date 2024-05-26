@@ -289,35 +289,6 @@ const HotelDetail: NextPage<Props> = props => {
           }}
         />
 
-        <script
-          id="script_detail_0"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: `{
-            "@context": "http://schema.org",
-            "@type": "Organization",
-            "name": "${siteName || process.env.PROJECT}",
-            "alternateName": "${process.env.PROJECT || siteName}",
-            "url": "${configWebsiteUrl}",
-            "logo": "${siteLogo}",
-            "contactPoint": [{
-              "@type": "ContactPoint",
-            "telephone": "${tel}",
-            "contactType": "customer service",
-            "areaServed": "IR",
-            "availableLanguage": "Persian"
-          }, {
-              "@type": "ContactPoint",
-            "telephone": "${tel}",
-            "contactType": "sales",
-            "areaServed": "IR",
-            "availableLanguage": "Persian"
-          }]
-        }`,
-          }}
-        />
-
-
       </Head>
 
       <ModalPortal

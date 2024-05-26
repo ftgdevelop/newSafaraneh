@@ -29,12 +29,12 @@ const PhoneActivationForm: React.FC<Props> = props => {
     const [sendVerificationCodeLoading, setSendVerificationCodeLoading] = useState<boolean>(false);
     const [submitVerificationCodeLoading, setSubmitVerificationCodeLoading] = useState<boolean>(false);
     const [openModal, setOpenModal] = useState<boolean>(false);
-    const [savedPhoneNumber, setSavedPhoneNumber] = useState<string>(user.phoneNumber);
+    const [savedPhoneNumber, setSavedPhoneNumber] = useState<string>(user?.phoneNumber || "");
     const [enteredCode, setEnteredCode] = useState<string>("");
 
     useEffect(() => {
-        setSavedPhoneNumber(user.phoneNumber);
-    }, [user.phoneNumber]);
+        setSavedPhoneNumber(user?.phoneNumber || "");
+    }, [user?.phoneNumber]);
 
     let initialValues = {
         phoneNumber: "",
@@ -42,7 +42,7 @@ const PhoneActivationForm: React.FC<Props> = props => {
 
     if (userAuthentication?.isAuthenticated) {
         initialValues = {
-            phoneNumber: user.phoneNumber || ""
+            phoneNumber: user?.phoneNumber || ""
         }
     }
 
@@ -206,8 +206,8 @@ const PhoneActivationForm: React.FC<Props> = props => {
                                     isTouched={touched.phoneNumber}
                                     label={t("phone-number") + " (بدون صفر)"}
                                     errorText={errors.phoneNumber}
-                                    initialValue={user.phoneNumber}
-                                    showNotConfirmedBadge={user?.phoneNumber && user.isPhoneNumberConfirmed === false}
+                                    initialValue={user?.phoneNumber || ""}
+                                    showNotConfirmedBadge={!!user?.phoneNumber && user.isPhoneNumberConfirmed === false}
                                 />
 
                                 <div>

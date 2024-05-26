@@ -54,7 +54,7 @@ const ReserverInformation: React.FC<Props> = props => {
 
     const { errors, touched, setFieldValue, values } = props;
 
-    const user: UserInformation = useAppSelector(state => state.authentication.isAuthenticated ? state.authentication.user : undefined);
+    const user: UserInformation | undefined = useAppSelector(state => state.authentication.isAuthenticated ? state.authentication.user : undefined);
     
     useEffect(()=>{
         if(user){
