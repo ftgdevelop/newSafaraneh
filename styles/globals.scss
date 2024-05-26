@@ -59,6 +59,25 @@
       border: 1px solid #eee;
     }
   }
+    .styled-scrollbar {
+      &::-webkit-scrollbar {
+        width: 7px;
+      }
+  
+      &::-webkit-scrollbar-track {
+        border-radius: 5px;
+        background: #ddd;
+      }
+  
+      &::-webkit-scrollbar-thumb {
+        background: #999;
+        border-radius: 10px;
+  
+        &:hover {
+          background: #888;
+        }
+      }
+    }
 
 }
 
