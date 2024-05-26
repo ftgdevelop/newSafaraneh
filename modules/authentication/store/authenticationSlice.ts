@@ -3,7 +3,22 @@ import { createSlice } from "@reduxjs/toolkit";
 type Authentication = {
     isAuthenticated: boolean;
     getUserLoading: boolean;
-    user: any;
+    user: {
+        userName?: string;
+        emailAddress?: string;
+        displayName?: string;
+        firstName?: string;
+        lastName?: string;
+        isActive?: boolean;
+        hostAccess?: any
+        gender?: boolean;
+        birthDay?: string;
+        isNewsLater?: boolean;
+        isEmailConfirmed?: boolean;
+        nationalityId?: string;
+        phoneNumber?: string;
+        id?: number;
+    };
     balance?: number;
     balanceLoading? : boolean;
     loginFormIsOpen?: boolean;

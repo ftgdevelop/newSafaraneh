@@ -4,7 +4,7 @@ import { useTranslation } from "next-i18next";
 const Navigation: React.FC = () => {
 
     const { t } = useTranslation('common');
-    const linkClassName = 'whitespace-nowrap px-3 lg:px-5 pb-3 md:py-3 block font-semibold transition-all duration-200 hover:text-blue-700';
+    const linkClassName = 'whitespace-nowrap px-1.5 lg:px-5 pb-3 md:py-3 block font-bold transition-all duration-200 text-neutral-700 hover:text-blue-700 text-sm md:text-md';
 
     return (
         <div className="overflow-auto text-center">
