@@ -96,8 +96,8 @@ const HeaderAuthentication: React.FC = () => {
                             >
                                 <User className='w-6 h-6 fill-white bg-neutral-600 p-0.5 rounded-full' />
 
-                                {userData.firstName && userData.lastName ? (
-                                    `${userData.firstName} ${userData.lastName}`
+                                {userData?.firstName && userData?.lastName ? (
+                                    `${userData?.firstName} ${userData?.lastName}`
                                 ) : (
                                     "حساب کاربری"
                                 )}

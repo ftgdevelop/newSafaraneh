@@ -38,7 +38,7 @@ const Checkout: NextPage = () => {
   const keySegment = pathSegments.find(item => item.includes('key='));
   const key = keySegment?.split("key=")[1];
 
-  const user : UserInformation = useAppSelector(state => state.authentication.isAuthenticated ? state.authentication.user : undefined);
+  const user : UserInformation | undefined = useAppSelector(state => state.authentication.isAuthenticated ? state.authentication.user : undefined);
 
   const [reserveInfo, setReserveInfo] = useState<DomesticHotelGetValidateResponse>();
   const [hotelInfo, setHotelInfo] = useState<DomesticHotelSummaryDetail>();
