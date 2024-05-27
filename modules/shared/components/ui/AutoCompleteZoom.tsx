@@ -326,7 +326,7 @@ function AutoCompleteZoom<T>(props: PropsWithChildren<Props<T>>) {
                 {text}
             </button>
 
-            <div className={`absolute z-[1] shadow-normal bg-white rounded-lg top-0 ${open?"transition-all rtl:right-0 scale-100 opacity-100 w-full" : "w-3/4 rtl:-right-5 scale-50 opacity-0"}`}>
+            <div className={`absolute z-[1] shadow-normal bg-white rounded-lg top-0 rtl:right-0 ltr:left-0 ${open?"transition-all rtl:origin-top-right ltr:origin-top-left scale-100 opacity-100 w-full" : "scale-20 opacity-0"}`}>
                 <div className='relative'>
                     <input
                         autoComplete="off"
@@ -334,7 +334,7 @@ function AutoCompleteZoom<T>(props: PropsWithChildren<Props<T>>) {
                         type="text"
                         onChange={e => {setText(e.target.value)}}
                         value={text}
-                        className="w-full font-bold text-3xl px-5 py-3 leading-10 outline-none placeholder:text-neutral-500 rounded-t-lg border-b border-neutral-200"
+                        className="w-full font-bold text-3xl px-5 rtl:pl-12 truncate py-3 leading-10 outline-none placeholder:text-neutral-500 rounded-t-lg border-b border-neutral-200"
                         placeholder={props.placeholder || ""}
                         ref={inputRef}
                     />

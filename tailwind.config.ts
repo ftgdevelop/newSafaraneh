@@ -9,6 +9,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      scale: {
+        '20': '0.2',
+      },
       fontFamily: {
         'samim': ['samim', 'sans-serif'],
         'vazir': ['vazir', 'sans-serif']
