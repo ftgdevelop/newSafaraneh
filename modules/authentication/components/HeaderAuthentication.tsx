@@ -58,15 +58,19 @@ const HeaderAuthentication: React.FC = () => {
     }, [path]);
 
     const handleClickOutside = useCallback((e: any) => {
-        if (style2AuthCtxOpen && style2AuthCtxRef.current && !style2AuthCtxRef.current.contains(e.target)) {
+        if (style2AuthCtxRef.current && !style2AuthCtxRef.current.contains(e.target)) {
             setStyle2AuthCtxOpen(false);
         }
     }, []);
 
     useEffect(() => {
-        document.addEventListener('mousedown', handleClickOutside);
+        if(theme2){
+            document.addEventListener('mousedown', handleClickOutside);
+        }
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
+            if(theme2){
+                document.removeEventListener('mousedown', handleClickOutside);
+            }
         };
     }, [handleClickOutside]);
 
