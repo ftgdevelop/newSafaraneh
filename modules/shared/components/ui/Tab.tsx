@@ -9,6 +9,8 @@ type Props = {
     style2?: boolean;
     style3?: boolean;
     wrapperClassName?: string;
+    tabLinksCenter?: boolean;
+    tabLinksBold?: boolean;
 }
 
 const Tab: React.FC<Props> = props => {
@@ -32,7 +34,7 @@ const Tab: React.FC<Props> = props => {
     return (
         <>
             <div className={props.wrapperClassName || ""}>
-                <div className={`${style2 ? "flex gap-4" : style3 ? "flex border-b border-neutral-200" : "border-b border-neutral-200 sm:px-5"}`}>
+                <div className={`${style2 ? "flex gap-4" : style3 ? "flex border-b border-neutral-200" : "border-b border-neutral-200 sm:px-5"} ${props.tabLinksCenter?"text-center":""} ${props.tabLinksBold?"font-bold":""}`}>
                     {items.map(item => <button
                         type="button"
                         key={item.key}

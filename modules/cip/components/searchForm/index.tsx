@@ -157,6 +157,15 @@ const SearchForm: React.FC<Props> = props => {
                                                 }, [])
                                             }
                                         />
+
+                                        <Field
+                                            validate={(value: string) => validateRequied(value, "فرودگاه را انتخاب کنید.")}
+                                            type='hidden'
+                                            name="airportUrl"
+                                            value={values.airportUrl}
+                                        />
+                                        {touched.airportUrl && errors.airportUrl && <div className='text-xs text-red-500'> {errors.airportUrl as string}</div>}
+
                                     </div>
                                 ) : (
 

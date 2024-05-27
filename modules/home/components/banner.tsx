@@ -99,6 +99,8 @@ const Banner: React.FC<Props> = props => {
         <Tab
           items={items}
           wrapperClassName={`sm:rounded-lg ${theme2 ? "sm:border sm:border-neutral-300" : "px-5 pt-3 sm:p-5 bg-white"}`}
+          tabLinksCenter={theme2}
+          tabLinksBold={theme2}
         />
 
       </div>
