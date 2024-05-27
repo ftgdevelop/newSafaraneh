@@ -18,6 +18,7 @@ import { defaultAirportOptions } from './defaultList';
 type Props = {
     defaultValues?: FlightSearchDefaultValues;
     research?: () => void;
+    wrapperClassName?: string;
 }
 
 const SearchForm: React.FC<Props> = props => {
@@ -109,7 +110,7 @@ const SearchForm: React.FC<Props> = props => {
     }
 
     return (
-        <div className='text-sm'>
+        <div className={`text-sm ${props.wrapperClassName || ""}`}>
 
             <Formik
                 validate={() => { return {} }}
@@ -129,7 +130,7 @@ const SearchForm: React.FC<Props> = props => {
 
                     return (
 
-                        <Form className='py-2' autoComplete='off' >
+                        <Form autoComplete='off' >
                             <div className=''>
                                 <div className='flex flex-col gap-3 md:flex-row md:justify-between mb-3 z-[3] relative'>
 

@@ -42,7 +42,7 @@ const Banner: React.FC<Props> = props => {
         key: '1',
         label: (<div className='text-center'> {!!theme1 && <Apartment className='w-6 h-6 fill-current block mx-auto mb-1' />} {t('domestic-hotel')} </div>),
         children: (<>
-          <SearchForm wrapperClassName='py-5' defaultDates={domesticHotelDefaultDates} />
+          <SearchForm wrapperClassName={`${theme2?"p-5":"py-5"}`} defaultDates={domesticHotelDefaultDates} />
           {!!theme1 && <RecentSearches />}
         </>
         ),
@@ -57,7 +57,7 @@ const Banner: React.FC<Props> = props => {
       label: (<div className='text-center'> {!!theme1 && <Travel className='w-6 h-6 fill-current block mx-auto mb-1' />} {t('domestic-flight')} </div>),
       children: (
         <>
-          <FlightSearch />
+          <FlightSearch wrapperClassName={theme2?"p-5":"py-5"} />
           {!!theme1 && <FlightRecentSearches />}
         </>
       ),
@@ -71,7 +71,7 @@ const Banner: React.FC<Props> = props => {
       label: (<div className='text-center'> {!!theme1 && <Suitcase className='w-6 h-6 fill-current block mx-auto mb-1' />} {t('cip')} </div>),
       children: (
         <>
-          <CipSearchForm />
+          <CipSearchForm wrapperClassName={theme2?"p-5":"py-5"} />
           {!!theme1 && <CipRecentSearches />}
         </>
       ),
@@ -98,7 +98,7 @@ const Banner: React.FC<Props> = props => {
 
         <Tab
           items={items}
-          wrapperClassName={`px-5 pt-3 sm:p-5 bg-white sm:rounded-lg ${theme2 ? "border border-neutral-300" : ""}`}
+          wrapperClassName={`sm:rounded-lg ${theme2 ? "sm:border sm:border-neutral-300" : "px-5 pt-3 sm:p-5 bg-white"}`}
         />
 
       </div>
