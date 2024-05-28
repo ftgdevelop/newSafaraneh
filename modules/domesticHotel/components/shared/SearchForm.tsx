@@ -13,8 +13,8 @@ import { setReduxError } from "@/modules/shared/store/errorSlice";
 import DatePicker from "../../../shared/components/ui/RangePicker";
 import { localeFa } from "@mobiscroll/react";
 import Button from "../../../shared/components/ui/Button";
-import DatePickerModern from "@/modules/shared/components/ui/DatePickerModern";
-import { addSomeDays, checkDateIsAfterDate, dateDiplayFormat, dateFormat } from "@/modules/shared/helpers";
+// import DatePickerModern from "@/modules/shared/components/ui/DatePickerModern";
+// import { addSomeDays, checkDateIsAfterDate, dateDiplayFormat, dateFormat } from "@/modules/shared/helpers";
 import AutoCompleteZoom from "@/modules/shared/components/ui/AutoCompleteZoom";
 
 
@@ -214,31 +214,29 @@ const SearchForm: React.FC<Props> = props => {
 
 
 
-
-
     //start sholud be removed when modern datepicker replaced with mobiscroll:
-    const [locale, setLocale] = useState<"fa" | "en">("fa");
-    const onChangeCheckin = (d: string) => {
-        setDates(prevState => {
-            if (!d) { return prevState; }
-            const prevCheckout = prevState?.length ? prevState[1] : "";
-            if (prevCheckout) {
-                const isAfter = checkDateIsAfterDate(new Date(d), new Date(prevCheckout));
-                if (isAfter) {
-                    const firstAvailableCheckout = dateFormat(addSomeDays(new Date(d)));
-                    return ([d, firstAvailableCheckout]);
-                }
-            }
-            return ([d, prevCheckout])
-        })
-    }
-    const onChangeCheckout = (d: string) => {
-        setDates(prevState => {
-            if (!d) { return prevState; }
-            const prevCheckin = prevState?.length ? prevState[0] : "";
-            return ([prevCheckin, d])
-        })
-    }
+    // const [locale, setLocale] = useState<"fa" | "en">("fa");
+    // const onChangeCheckin = (d: string) => {
+    //     setDates(prevState => {
+    //         if (!d) { return prevState; }
+    //         const prevCheckout = prevState?.length ? prevState[1] : "";
+    //         if (prevCheckout) {
+    //             const isAfter = checkDateIsAfterDate(new Date(d), new Date(prevCheckout));
+    //             if (isAfter) {
+    //                 const firstAvailableCheckout = dateFormat(addSomeDays(new Date(d)));
+    //                 return ([d, firstAvailableCheckout]);
+    //             }
+    //         }
+    //         return ([d, prevCheckout])
+    //     })
+    // }
+    // const onChangeCheckout = (d: string) => {
+    //     setDates(prevState => {
+    //         if (!d) { return prevState; }
+    //         const prevCheckin = prevState?.length ? prevState[0] : "";
+    //         return ([prevCheckin, d])
+    //     })
+    // }
     //end sholud be removed when modern datepicker replaced with mobiscroll:
 
 
@@ -315,15 +313,8 @@ const SearchForm: React.FC<Props> = props => {
 
             <div className="col-span-1 md:col-span-3 relative z-10">
 
-
-
-
-
-
-
-
                 {/* TODO: delete when mobiscroll is activated */}
-                <div className="modernCalendar-dates-wrapper grid grid-cols-2 gap-2">
+                {/* <div className="modernCalendar-dates-wrapper grid grid-cols-2 gap-2">
                     <div className="relative modernDatePicker-checkin">
                         <DatePickerModern
                             wrapperClassName="block"
@@ -358,20 +349,14 @@ const SearchForm: React.FC<Props> = props => {
                             تاریخ خروج
                         </label>
                     </div>
-                </div>
+                </div> */}
 
-
-                {/* <DatePicker
+                <DatePicker
                     value={dates}
                     onChange={dateChangeHandle}
                     rtl
                     locale={localeFa}
-                /> */}
-
-
-
-
-
+                />
 
 
             </div>
