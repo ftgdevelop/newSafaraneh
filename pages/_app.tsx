@@ -47,7 +47,6 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
     if (locale) {
       router.push(router.asPath, router.asPath, { locale: locale });
     }
-    console.log("_app mounted!")
   }, []);
 
 
@@ -90,21 +89,13 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
     <Provider store={store}>
       <Head>
 
-
-
-
-
-
-        {/* TODO: _-_-_S_T_A_R_T_-_-_ delete when mobiscroll is activated */}
-        <link
+        {/* _-_-_S_T_A_R_T_-_-_ delete when mobiscroll is activated */}
+        {/* <link
           rel="stylesheet"
           type="text/css"
           href="https://cdn2.safaraneh.com/libs/react-modern-calendar-datepicker/3.1.6/css/datepicker.min.css"
-        />
-        {/* TODO: _-_-_E_N_D_-_-_ delete when mobiscroll is activated */}
-
-
-
+        /> */}
+        {/* _-_-_E_N_D_-_-_ delete when mobiscroll is activated */}
 
         <meta name="robots" content="index, follow" />
         <meta name="theme-color" content="#0a438b" />

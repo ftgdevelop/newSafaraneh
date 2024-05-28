@@ -52,7 +52,6 @@ const Gallery: React.FC<Props> = props => {
                         onContextMenu={(e)=> e.preventDefault()}
                         src={slide.src}
                         alt={index?slide.alt : props.hotelName || slide.alt}
-                        sizes={index?"(max-width: 768px) 100vh, 578px" : "(max-width: 768px) 100vh, 287"}
                         width={index ? 287 : 430}
                         height={index ? 191 : 270}
                         onClick={() => { openLightBox(index); }}
