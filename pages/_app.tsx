@@ -11,7 +11,7 @@ import '../styles/carousel.scss';
 import '../styles/mobiscroll.scss';
 import '../styles/globals.scss';
 import '../styles/leaflet.css';
-import '../styles/modernDatePicker.scss';
+// import '../styles/modernDatePicker.scss';
 
 import { store } from '../modules/shared/store';
 import { WebSiteDataType } from '@/modules/shared/types/common';
