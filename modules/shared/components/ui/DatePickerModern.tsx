@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import DatePicker from "@hassanmojab/react-modern-calendar-datepicker";
+// import DatePicker from "@hassanmojab/react-modern-calendar-datepicker";
 import { dateDiplayFormat, persianNumbersToEnglish, shamsiToMiladi } from "../../helpers";
 
 type Props = {
@@ -96,63 +96,37 @@ const DatePickerModern: React.FC<Props> = props => {
     }
 
     return (
+        
+        null
 
-        <>
-        <DatePicker
-            inputClassName={`rtl:text-right ltr:text-left ${inputClassName}`}
-            wrapperClassName={wrapperClassName}
-            calendarSelectedDayClassName="datepicker-selected-date"
-            calendarTodayClassName="datepicker-today-date"
+        // <DatePicker
+        //     inputClassName={`rtl:text-right ltr:text-left ${inputClassName}`}
+        //     wrapperClassName={wrapperClassName}
+        //     calendarSelectedDayClassName="datepicker-selected-date"
+        //     calendarTodayClassName="datepicker-today-date"
 
-            value={displayValue}
-            onChange={(value: DateObject) => { changeHandler(value) }}
-            inputPlaceholder={inputPlaceholder}
-            locale={locale}
-            minimumDate={minimum}
-            maximumDate={maximum}
-            inputName={inputName || ''}
-            calendarPopperPosition="bottom"
-            renderFooter={() => (
-                <div className="px-6 pb-3 text-right">
-                    {!!props.toggleLocale && (
-                        <button
-                            type="button"
-                            onClick={toggleLocale}
-                            className="border-none outline-none bg-transparent cursor-pointer text-xs"
-                        >
-                            {locale == 'en' ? 'شمسی' : 'میلادی'}
-                        </button>
-                    )}
-                </div>
-            )}
-        />
-
-            {/* <Calendar
-
-                calendarSelectedDayClassName="datepicker-selected-date"
-                calendarTodayClassName="datepicker-today-date"
-
-                value={displayValue}
-                onChange={(value: DateObject) => { changeHandler(value) }}
-                locale={locale}
-                minimumDate={minimum}
-                renderFooter={() => (
-                    <div className="px-6 pb-3 text-right">
-                        {!!props.toggleLocale && (
-                            <button
-                                type="button"
-                                onClick={toggleLocale}
-                                className="border-none outline-none bg-transparent cursor-pointer text-xs"
-                            >
-                                {locale == 'en' ? 'شمسی' : 'میلادی'}
-                            </button>
-                        )}
-                    </div>
-                )}
-
-            /> */}
-
-        </>
+        //     value={displayValue}
+        //     onChange={(value: DateObject) => { changeHandler(value) }}
+        //     inputPlaceholder={inputPlaceholder}
+        //     locale={locale}
+        //     minimumDate={minimum}
+        //     maximumDate={maximum}
+        //     inputName={inputName || ''}
+        //     calendarPopperPosition="bottom"
+        //     renderFooter={() => (
+        //         <div className="px-6 pb-3 text-right">
+        //             {!!props.toggleLocale && (
+        //                 <button
+        //                     type="button"
+        //                     onClick={toggleLocale}
+        //                     className="border-none outline-none bg-transparent cursor-pointer text-xs"
+        //                 >
+        //                     {locale == 'en' ? 'شمسی' : 'میلادی'}
+        //                 </button>
+        //             )}
+        //         </div>
+        //     )}
+        // />
 
     )
 }
