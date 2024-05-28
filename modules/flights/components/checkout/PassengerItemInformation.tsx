@@ -136,7 +136,7 @@ const PassengerItemInformation: React.FC<Props> = props => {
     setFieldValue(`passengers.${props.index}.lastName`, traveler.lastname, true);
 
     if(!traveler.birthDate){
-      console.log("passenger birthDate is empty");
+      //console.log("passenger birthDate is empty");
     } else if (
       traveler.birthDate
       && checkDateIsAfterDate(new Date(maxBirthDate), new Date(traveler.birthDate))
