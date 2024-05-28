@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@hassanmojab/react-modern-calendar-datepicker": "^3.1.7",
     "@mobiscroll/react": "npm:@mobiscroll/datepicker-react-next@^5.30.0",
     "@reduxjs/toolkit": "^1.9.7",
     "axios": "^1.6.2",

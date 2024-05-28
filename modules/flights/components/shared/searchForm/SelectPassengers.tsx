@@ -119,7 +119,7 @@ const SelectPassengers: React.FC<Props> = props => {
                     </div>
                 </div>
 
-                <div className='p-2 flex justify-end'>
+                {!!theme2 && <div className='p-2 flex justify-end'>
                     <Button
                         type='button'
                         className='h-10 px-5 font-semibold'
@@ -127,7 +127,7 @@ const SelectPassengers: React.FC<Props> = props => {
                     >
                         تایید
                     </Button>
-                </div>
+                </div>}
             </div>
         </div>
     )
