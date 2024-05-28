@@ -18,7 +18,9 @@ const Button: React.FC<PropsWithChildren<Props>> = props => {
     
     const {color} = props;
 
-    let className = `transition-all rounded-lg flex gap-3 items-center justify-center cursor-pointer select-none relative ${props.className}`;
+    const theme2 = process.env.THEME === "THEME2";
+
+    let className = `transition-all ${theme2? "rounded-full":"rounded-lg"} flex gap-3 items-center justify-center cursor-pointer select-none relative ${props.className}`;
 
     if(props.disabled){
         className += " text-white bg-neutral-200";

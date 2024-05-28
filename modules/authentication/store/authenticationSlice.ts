@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { UserInformation } from "../types/authentication";
 
 type Authentication = {
     isAuthenticated: boolean;
     getUserLoading: boolean;
-    user: any;
+    user?: UserInformation | undefined;
     balance?: number;
     balanceLoading? : boolean;
     loginFormIsOpen?: boolean;
@@ -13,7 +14,7 @@ type Authentication = {
 const initialState: Authentication = {
     isAuthenticated: false,
     getUserLoading: false,
-    user: {},
+    user: undefined,
     balance: undefined,
     balanceLoading: false,
     loginFormIsOpen: false,

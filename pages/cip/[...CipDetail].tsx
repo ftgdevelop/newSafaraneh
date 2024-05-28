@@ -368,7 +368,7 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData, moduleD
     const urlAirlineSegment = urlSegments.find(item => item.includes("airlineName-"));
     const urlFlightNumberSegment = urlSegments.find(item => item.includes("flightNumber-"));
 
-    let initialFlightDate = urlDateSegment?.split("-")[1];
+    let initialFlightDate = urlDateSegment?.split("flightdate-")[1];
     let initialAirline = urlAirlineSegment?.split("-")[1];
     let initialFlightNumber = urlFlightNumberSegment?.split("-")[1];
 

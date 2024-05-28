@@ -116,10 +116,10 @@ const HotelDetail: NextPage<Props> = props => {
   if (portalData) {
 
     tel = portalData.billing.telNumber || portalData?.billing.phoneNumber || "";    
-    twitter = portalData.social.x || "";
-    siteLogo = portalData.billing.logo?.value ||"";
-    siteName = portalData.billing.name || "";
-    siteURL = portalData.billing.website || "";
+    twitter = portalData.social?.x || "";
+    siteLogo = portalData.billing?.logo?.value ||"";
+    siteName = portalData.billing?.name || "";
+    siteURL = portalData.billing?.website || "";
   }
 
   if (!hotelData) {
@@ -274,7 +274,6 @@ const HotelDetail: NextPage<Props> = props => {
             },
             "checkinTime": "${hotelData.Policies?.find(x => x.Keyword === "CheckIn")?.Description || "14:00"}",
             "checkoutTime": "${hotelData.Policies?.find(x => x.Keyword === "CheckOut")?.Description || "12:00"}",
-            "telephone": "${tel||'تلفن ثبت نشده است.'}",
             "starRating": {
               "@type": "Rating",
               "ratingValue": "${hotelData?.HotelRating || 5}"
@@ -289,35 +288,6 @@ const HotelDetail: NextPage<Props> = props => {
           }`,
           }}
         />
-
-        <script
-          id="script_detail_0"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: `{
-            "@context": "http://schema.org",
-            "@type": "Organization",
-            "name": "${siteName || process.env.PROJECT}",
-            "alternateName": "${process.env.PROJECT || siteName}",
-            "url": "${configWebsiteUrl}",
-            "logo": "${siteLogo}",
-            "contactPoint": [{
-              "@type": "ContactPoint",
-            "telephone": "${tel}",
-            "contactType": "customer service",
-            "areaServed": "IR",
-            "availableLanguage": "Persian"
-          }, {
-              "@type": "ContactPoint",
-            "telephone": "${tel}",
-            "contactType": "sales",
-            "areaServed": "IR",
-            "availableLanguage": "Persian"
-          }]
-        }`,
-          }}
-        />
-
 
       </Head>
 
