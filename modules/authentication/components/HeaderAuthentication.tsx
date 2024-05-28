@@ -58,21 +58,26 @@ const HeaderAuthentication: React.FC = () => {
     }, [path]);
 
     const handleClickOutside = useCallback((e: any) => {
-        if (style2AuthCtxOpen && style2AuthCtxRef.current && !style2AuthCtxRef.current.contains(e.target)) {
+        if (style2AuthCtxRef.current && !style2AuthCtxRef.current.contains(e.target)) {
             setStyle2AuthCtxOpen(false);
         }
     }, []);
 
     useEffect(() => {
-        document.addEventListener('mousedown', handleClickOutside);
+        if(theme2){
+            document.addEventListener('mousedown', handleClickOutside);
+        }
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
+            if(theme2){
+                document.removeEventListener('mousedown', handleClickOutside);
+            }
         };
     }, [handleClickOutside]);
 
 
 
     const theme2 = process.env.THEME === "THEME2";
+    const theme1 = process.env.THEME === "THEME1";
 
     let buttonClassName = "h-12 text-sm text-blue-700 hover:text-blue-500 ltr:float-right rtl:float-left hidden md:block";
 
@@ -172,7 +177,7 @@ const HeaderAuthentication: React.FC = () => {
                     onClick={() => { setDelayedOpen(false) }}
                 />
 
-                <div className={`fixed top-0 h-screen overflow-auto pb-5 rtl:left-0 ltr:right-0 w-screen sm:w-520 bg-white duration-200 transition-all ${delayedOpen ? "scale-100 opacity-100" : "scale-90 opacity-0"}`}>
+                <div className={`fixed h-screen pb-5 top-0 w-screen sm:w-520 bg-white duration-200 transition-all ${theme1 ? "overflow-auto rtl:left-0 ltr:right-0" : "sm:h-auto sm:rounded-xl sm:top-1/2 sm:left-1/2 sm:-translate-y-1/2 sm:-translate-x-1/2" } ${delayedOpen ? "scale-100 opacity-100" : "scale-90 opacity-0"}`}>
 
                     {userIsAuthenticated ? (
                         <AccountSidebar

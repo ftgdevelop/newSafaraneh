@@ -26,7 +26,7 @@ const HotelRecentSearches: React.FC = () => {
         title: string;
         subtitle: string;
         url: string;
-    }[] = items.slice(0, 6).map(item => {
+    }[] = items.slice(0, 5).map(item => {
 
         const checkinDay = dateDiplayFormat({ date: item.dates[0], format: "d", locale: i18n?.language });
         const checkoutMonth = dateDiplayFormat({ date: item.dates[1], format: "m", locale: i18n?.language });
