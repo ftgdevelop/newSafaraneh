@@ -1,31 +1,26 @@
 import type { NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import Banner from '@/modules/home/components/banner'
-import ModulesBanner from '@/modules/home/components/modules-banner';
-import SuggestedHotels from '@/modules/home/components/SuggestedHotels';
-import PopularCities from '@/modules/home/components/PopularCities';
-import BeachHotels from '@/modules/home/components/BeachHotels';
-import Unknowns from '@/modules/home/components/Unknowns';
 import { getBlogs } from '@/modules/blogs/actions';
-import RecentBlogs from '@/modules/home/components/RecentBlogs';
 import { BlogItemType } from '@/modules/blogs/types/blog';
-import AboutSummary from '@/modules/home/components/AboutSummary';
-import HomeFAQ from '@/modules/home/components/HomeFAQ';
-import Newsletter from '@/modules/home/components/Newsletter';
-import Services from '@/modules/home/components/Services';
 import { WebSiteDataType } from '@/modules/shared/types/common';
 import Head from 'next/head';
+import HomeTheme1 from '@/modules/home/components/theme1/HomeTheme1';
+import HomeTheme2 from '@/modules/home/components/theme2/HomeTheme2';
 
 const FlightsHome: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], portalData?: WebSiteDataType }) => {
 
   const logo = portalData?.billing.logo?.value || "";
   const siteName = portalData?.billing.name || "";
-  const portalEmailAddress = portalData?.billing.email || "";
-  const portalPhoneNumber = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
-  const portalAddress = portalData?.billing.address || "";
+  // const portalEmailAddress = portalData?.billing.email || "";
+  // const portalPhoneNumber = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
+  // const portalAddress = portalData?.billing.address || "";
 
-  const configWebsiteUrl = process.env.SITE_NAME || "";
+  // const configWebsiteUrl = process.env.SITE_NAME || "";
+
+  const theme2 = process.env.THEME === "THEME2";
+
+  const theme1 = process.env.THEME === "THEME1";
 
   return (
     <>
@@ -191,30 +186,22 @@ const FlightsHome: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], 
               }`,
           }}
         /> */}
-        
+
       </Head>
-      <Banner
-        modules={['domesticFlight']} 
-      />
 
-      <div className='max-w-container mx-auto px-5'>
-        <ModulesBanner />
-        <SuggestedHotels />
-        <PopularCities />
-        <BeachHotels />
-        <Unknowns />
-      </div>
+      {!!theme1 && <HomeTheme1
+        modules={["domesticFlight"]}
+        logo={logo}
+        siteName={siteName}
+        blogs={blogs}
+      />}
 
-      <div className='max-w-container mx-auto px-5'>
-        {blogs ? <RecentBlogs blogs={blogs} /> : <br/>}
-        <Services siteName={siteName} />
-        <AboutSummary
-          logo={logo}
-          siteName={siteName}
-        />
-        <HomeFAQ />
-        <Newsletter />
-      </div>
+      {!!theme2 && <HomeTheme2
+        modules={["domesticHotel"]}
+        logo={logo}
+        siteName={siteName}
+        blogs={blogs}
+      />}
 
     </>
   )

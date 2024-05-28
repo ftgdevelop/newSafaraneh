@@ -27,7 +27,7 @@ const Header: React.FC<Props> = props => {
     const theme1 = process.env.THEME === "THEME1";
 
     return (
-        <header className="bg-white z-30 relative">
+        <header className={`bg-white z-30 relative ${theme2 ? "border-b border-neutral-300" : ""}`}>
 
             {/* {process.env.PROJECT === "SAFARANEH" && <div>
                 <a
