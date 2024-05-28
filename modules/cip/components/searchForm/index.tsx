@@ -8,12 +8,12 @@ import AutoComplete from '@/modules/shared/components/ui/AutoComplete';
 import { Calendar, Location } from '@/modules/shared/components/ui/icons';
 import { Cip, ServerAddress } from '@/enum/url';
 import { validateRequied } from '@/modules/shared/helpers/validation';
-import DatePickerModern from '@/modules/shared/components/ui/DatePickerModern';
-import { dateDiplayFormat } from '@/modules/shared/helpers';
 import FormikField from '@/modules/shared/components/ui/FormikField';
 import { cipDefaultAirportOptions } from './defaultList';
 import { CipAutoCompleteType, CipRecentSearchItem } from '../../types/cip';
 import AutoCompleteZoom from '@/modules/shared/components/ui/AutoCompleteZoom';
+import DatePickerMobiscroll from '@/modules/shared/components/ui/DatePickerMobiscroll';
+import { localeFa } from '@mobiscroll/react';
 
 type SearchFormValues = {
     airportUrl: string;
@@ -35,8 +35,6 @@ const SearchForm: React.FC<Props> = props => {
     const { t } = useTranslation('common');
 
     const { defaultValues } = props;
-
-    const [locale, setLocale] = useState<"fa" | "en" | "ar">("fa");
 
     const [submitPending, setSubmitPending] = useState<boolean>(false);
 
@@ -226,7 +224,9 @@ const SearchForm: React.FC<Props> = props => {
                                 <div className='modernCalendar-dates-wrapper'>
 
                                     <div className="relative modernDatePicker-checkin">
-                                        <DatePickerModern
+
+
+                                        {/* <DatePickerModern
                                             wrapperClassName="block"
                                             minimumDate={dateDiplayFormat({ date: new Date().toISOString(), locale: 'en', format: "YYYY-MM-DD" })}
                                             inputPlaceholder="تاریخ پرواز"
@@ -239,9 +239,20 @@ const SearchForm: React.FC<Props> = props => {
                                                 }
                                             }}
                                             value={values.flightDate}
+                                        /> */}
+
+                                        <DatePickerMobiscroll
+                                            inputStyle='theme1'
+                                            onChange={a => {
+                                                setFieldValue("flightDate", a.value, true)
+                                            }}
+                                            rtl
+                                            locale={localeFa}
+                                            value={values.flightDate}
                                         />
+
                                         <Calendar className="w-5 h-5 fill-neutral-600 top-1/2 -mt-2.5 right-3 absolute select-none pointer-events-none" />
-                                        <label className="absolute top-1.5 leading-5 rtl:right-10 text-4xs select-none pointer-events-none">
+                                        <label className={`absolute leading-5 rtl:right-10 select-none pointer-events-none transition-all ${values.flightDate ? "top-1.5 text-4xs " : "top-1/2 -translate-y-1/2 text-sm "}`}>
                                             تاریخ پرواز
                                         </label>
                                     </div>

@@ -268,7 +268,7 @@ const HotelDetail: NextPage<Props> = props => {
             "address": {
               "@type": "PostalAddress",
               "addressLocality": "${hotelData.CityName || "شهر ثبت نشده است"}",
-              "addressCountry":"${portalData.billing.countryName || "کشور ثبت نشده است"}",
+              "addressCountry":"IR",
               "postalCode":"${portalData.billing.zipCode || "کد پستی  وجود ندارد"}",
               "streetAddress": "${hotelData?.Address || "آدرس وجود ندارد"}"
             },
