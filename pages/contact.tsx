@@ -21,17 +21,17 @@ const Contact: NextPage = ({portalData }: { portalData?: WebSiteDataType}) => {
     let longitude, latitude;
 
     if(portalData){
-        latitude = portalData.billing.latitude||"";
-        longitude = portalData.billing.longitude || "";
+        latitude = portalData.billing?.latitude||"";
+        longitude = portalData.billing?.longitude || "";
     }
 
     const tel = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
 
     const email = portalData?.billing.email ||"";
 
-    const instagramLink = portalData?.social.instagram || "";
-    const linkedinLink = portalData?.social.linkedin || "";
-    const twitterLink = portalData?.social.x || "";
+    const instagramLink = portalData?.social?.instagram || "";
+    const linkedinLink = portalData?.social?.linkedin || "";
+    const twitterLink = portalData?.social?.x || "";
 
     return (
         <>

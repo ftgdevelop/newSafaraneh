@@ -9,6 +9,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      scale: {
+        '20': '0.2',
+      },
       fontFamily: {
         'samim': ['samim', 'sans-serif'],
         'vazir': ['vazir', 'sans-serif']
@@ -93,12 +96,14 @@ const config: Config = {
         '2xs': '12px',
         xs: '13px',
         sm: '14px',
+        md: '15px',
         '2xl': '22px',
         '3xl': '24px',
         '4xl': '28px',
         '5xl': '40px'
       },
       gridTemplateColumns: {
+        '13': 'repeat(13, minmax(0, 1fr))',
         '14': 'repeat(14, minmax(0, 1fr))',
       },
       rotate: {

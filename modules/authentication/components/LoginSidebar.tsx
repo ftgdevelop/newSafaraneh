@@ -30,6 +30,8 @@ const LoginSidebar: React.FC<Props> = props => {
         setDelayedOpen = (state: boolean) => { return }
     }
 
+    const theme1 = process.env.THEME === "THEME1";
+
     return (
         <>
             {!props.isNotModal && (<>
@@ -49,14 +51,22 @@ const LoginSidebar: React.FC<Props> = props => {
                         {t('sign-in-up')}
                     </Link>
                 </div>
-                <div className='px-5'>
-                    <div className='bg-blue-gradient text-white p-4 rounded-md'>
-                        {loginToContinue ? (
-                            <p className='text-center'>
-                                برای ادامه باید وارد حساب کاربری خود شوید.
-                            </p>
-                        ):(
-                            <>
+
+                {loginToContinue ? (
+                    <>
+                        <div className='px-5'>
+                            <div className='bg-blue-gradient text-white p-4 rounded-md'>
+                                <p className='text-center'>
+                                    برای ادامه باید وارد حساب کاربری خود شوید.
+                                </p>
+                            </div>
+                        </div>
+                        <hr className='my-10' />
+                    </>
+                ) : theme1 ? (
+                    <>
+                        <div className='px-5'>
+                            <div className='bg-blue-gradient text-white p-4 rounded-md'>
                                 <h6 className='mb-4 font-semibold'> {t('sign-in-h6')} </h6>
                                 <ul className='text-2xs list-disc rtl:pr-5 ltr:pl-5'>
                                     <li className='mb-1'> {t('sign-in-desc-list-1')} </li>
@@ -66,12 +76,11 @@ const LoginSidebar: React.FC<Props> = props => {
                                     <li className='mb-1'> {t('sign-in-desc-list-5')} </li>
                                     <li className='mb-1'> {t('sign-in-desc-list-6')} </li>
                                 </ul>
-                            </>
-                        )}
-                    </div>
-                </div>
-
-                <hr className='my-10' />
+                            </div>
+                        </div>
+                        <hr className='my-10' />
+                    </>
+                ) : null}
             </>)
             }
 

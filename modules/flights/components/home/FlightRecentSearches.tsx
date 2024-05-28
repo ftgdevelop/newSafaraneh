@@ -21,7 +21,7 @@ const FlightRecentSearches: React.FC = () => {
         return null
     }
 
-    const slicedItems = items.slice(0, 6);
+    const slicedItems = items.slice(0, 5);
 
     return (
         <>

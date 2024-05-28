@@ -140,10 +140,12 @@ const RoomItem: React.FC<Props> = props => {
             {prices.roomPrice && (
                 <>
                     <Tooltip
-                        className='whitespace-nowrap'
+                        className={rate.availablityType === 'Offline' ? "w-60" : "whitespace-nowrap"}
                         position='end'
                         title={rate.availablityType === 'Offline' ? (
-                            "قیمت نهایی پس از پردازش و تایید از طرف رزرواسیون مشخص می شود"
+                            <div className='whitespace-wrap'>
+                                قیمت نهایی پس از پردازش و تایید از طرف رزرواسیون مشخص می شود
+                            </div>
                         ):(
                             <>
                                 {numberWithCommas(prices.roomPrice * count /(props.nights || 1))} {t("rial")}
@@ -151,15 +153,16 @@ const RoomItem: React.FC<Props> = props => {
                             </>
                         )}
                     >
-                        <div className="text-lg font-semibold flex gap-1.5 items-center">
+                        <div className="text-lg my-1 leading-4 font-semibold flex flex-col items-end lg:flex-row gap-x-1.5 lg:items-center">
                             {prices.boardPrice && (prices.roomPrice < prices.boardPrice) && (
-                                <span className="line-through font-semibold text-xs text-neutral-500">
+                                <div className="my-0.5 line-through font-semibold text-xs text-neutral-500">
                                     {numberWithCommas(prices.boardPrice * count)} {t("rial")}
-                                </span>
+                                </div>
                             )}
-
-                            {numberWithCommas(prices.roomPrice * count)} {t("rial")}
-                            <InfoCircle className='fill-amber-500 w-5 h-5' />
+                            <div className='my-0.5'>
+                                {numberWithCommas(prices.roomPrice * count)} {t("rial")}
+                                <InfoCircle className='fill-amber-500 w-5 h-5 inline-block rtl:mr-0.5 ltr:ml-0.5' />
+                            </div>
                         </div>
                     </Tooltip>
                 </>
@@ -194,11 +197,11 @@ const RoomItem: React.FC<Props> = props => {
     return (
         <div className='bg-white border border-neutral-300 rounded-xl mt-4 md:flex'>
             {image}
-            <div className='p-4 grid grid-cols-1 sm:grid-cols-2 leading-5 text-sm grow gap-2'>
+            <div className='p-3.5 grid grid-cols-1 sm:grid-cols-5 leading-5 text-sm grow gap-1'>
                 <div
-                    className='flex gap-2 flex-wrap justify-between sm:col-span-2'
+                    className='flex gap-2 flex-wrap justify-between sm:col-span-5'
                 >
-                    <div className='flex gap-3 items-center'>
+                    <div className='flex gap-x-3 gap-y-1 items-center flex-wrap'>
                         <h3 className='text-lg md:text-xl font-semibold'> {room.name}</h3>
                         <span className='text-sm text-green-600'> ({board(rate.board.code)}) </span>
                         {/* <Tooltip
@@ -213,7 +216,7 @@ const RoomItem: React.FC<Props> = props => {
                     {cancellation}
                 </div>
 
-                <div className='flex flex-col gap-1'>
+                <div className='flex flex-col gap-1 sm:col-span-2'>
                     {rate.view && (
                         <div>
                             {rate.view.name}
@@ -242,7 +245,7 @@ const RoomItem: React.FC<Props> = props => {
                     </div>}
 
                 </div>
-                <footer className='self-stretch md:self-end flex justify-between sm:justify-end items-end gap-5 xl:gap-10'>
+                <footer className='self-stretch md:self-end flex justify-between sm:justify-end items-end gap-5 xl:gap-10 sm:col-span-3'>
 
                     {rate.availablityType === "Completion" || <div dir='ltr'>
                         <label className="mb-1 block" dir="rtl" htmlFor={`counter-${rate.bookingToken}`} > تعداد </label>
