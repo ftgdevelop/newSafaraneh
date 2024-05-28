@@ -140,10 +140,10 @@ const RoomItem: React.FC<Props> = props => {
             {prices.roomPrice && (
                 <>
                     <Tooltip
-                        className={rate.availablityType === 'Offline' ? "w-60" : "whitespace-nowrap"}
+                        className={rate.availablityType === 'Offline' ? "" : "whitespace-nowrap"}
                         position='end'
                         title={rate.availablityType === 'Offline' ? (
-                            <div className='whitespace-wrap'>
+                            <div className='w-60'>
                                 قیمت نهایی پس از پردازش و تایید از طرف رزرواسیون مشخص می شود
                             </div>
                         ):(
