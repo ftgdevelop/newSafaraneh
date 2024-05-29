@@ -36,7 +36,6 @@ type Props = {
   };
   portalData: WebSiteDataType;
   error410?: "true";
-  url?: any;
 }
 
 const HotelDetail: NextPage<Props> = props => {
@@ -73,18 +72,6 @@ const HotelDetail: NextPage<Props> = props => {
   if (checkin && checkout) {
     defaultDates = [checkin, checkout];
   }
-
-  useEffect(()=>{
-    
-    const fetchData = async (url:string) => {
-
-      const res = await getDomesticHotelDetailsByUrl("/fa" + url, "fa-IR");
-      debugger;
-    }
-
-    fetchData(props.url);
-
-  },[props.url])
 
   useEffect(() => {
     setShowOnlyForm(false);
@@ -603,8 +590,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return ({
     props: {
       ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
-      allData: allData.data?.result || null,
-      url: url || null
+      allData: allData.data?.result || null
     },
   })
 }
