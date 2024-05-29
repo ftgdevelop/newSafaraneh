@@ -1,9 +1,4 @@
-import dynamic from 'next/dynamic';
-
-const Goftino = dynamic(() => import('./Goftino'), {
-    ssr: false
-});
-
+import Goftino from "./Goftino";
 
 const GoftinoWrapper = () => {
     return(
