@@ -5,14 +5,13 @@ import parse from 'html-react-parser';
 
 import Image from "next/image";
 import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+import GoftinoWrapper from "./GoftinoWrapper";
 
 const GoToTop = dynamic(() => import('./GoToTop'), {
     ssr: false
 });
 
-const Goftino = dynamic(() => import('./Goftino'), {
-    ssr: false
-});
 
 
 type Props = {
@@ -35,6 +34,13 @@ const Footer: React.FC<Props> = props => {
     const { logo, siteName } = props;
 
     const linkClassNames = "block hover:text-blue-600 hover:underline";
+
+    const [rendered, setRendered] = useState<boolean>(false);
+
+
+    useEffect(() => {
+        setRendered(true);
+    }, []);
 
     return (
         <>
@@ -111,7 +117,7 @@ const Footer: React.FC<Props> = props => {
                         )}
                     </Link>
 
-                    { !!props.contactInfo.tel && <div className="flex gap-4 justify-center mb-4">
+                    {!!props.contactInfo.tel && <div className="flex gap-4 justify-center mb-4">
                         {t('support')}
                         <a href={`tel:${props.contactInfo.tel}`} className="text-lg font-semibold" dir="ltr">
                             {props.contactInfo.tel.replace("+98", "0")}
@@ -144,7 +150,8 @@ const Footer: React.FC<Props> = props => {
         `,
                     }}
                 />
-                <Goftino />
+
+                {rendered && <GoftinoWrapper />}
 
 
             </footer>

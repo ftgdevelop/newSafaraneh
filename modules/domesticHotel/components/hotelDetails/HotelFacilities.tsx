@@ -24,7 +24,7 @@ const HotelFacilities: React.FC<Props> = props => {
 
     return (
         <div id='amenities_section' className="max-w-container mx-auto px-3 sm:px-5 pt-7 md:pt-10" >
-            <h2 className='text-lg lg:text-3xl font-semibold mb-3 md:mb-7'> {tHotel("hotel-facilities")} </h2>
+            <h3 className='text-lg lg:text-3xl font-semibold mb-3 md:mb-7'> {tHotel("hotel-facilities")} </h3>
             <div className='p-5 lg:p-7 bg-white rounded-xl leading-5'>
                 <div className={`grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 overflow-hidden ${open ? "" : "max-h-60"}`}>
                     <div className='columns-2 md:columns-1'>
