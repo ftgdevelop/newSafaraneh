@@ -5,8 +5,7 @@ import parse from 'html-react-parser';
 
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
-import GoftinoWrapper from "./GoftinoWrapper";
+import Goftino from "./Goftino";
 
 const GoToTop = dynamic(() => import('./GoToTop'), {
     ssr: false
@@ -34,13 +33,6 @@ const Footer: React.FC<Props> = props => {
     const { logo, siteName } = props;
 
     const linkClassNames = "block hover:text-blue-600 hover:underline";
-
-    const [rendered, setRendered] = useState<boolean>(false);
-
-
-    useEffect(() => {
-        setRendered(true);
-    }, []);
 
     return (
         <>
@@ -151,7 +143,7 @@ const Footer: React.FC<Props> = props => {
                     }}
                 />
 
-                {rendered && <GoftinoWrapper />}
+                <Goftino />
 
 
             </footer>
