@@ -89,7 +89,7 @@ const RangePicker: React.FC<Props> = props => {
     }
 
     return (
-        <div className={`${locale === localeFa ? 'persian-datepicker-wrapper' : ''} relative text-xs`} >
+        <div className={`mobiscroll-datepicker-wrapper ${locale === localeFa ? 'persian-datepicker-wrapper' : ''} relative text-xs`} >
 
             <div className='grid grid-cols-2'>
 
@@ -98,7 +98,12 @@ const RangePicker: React.FC<Props> = props => {
                         {t('checkin-date')}
                     </label>
                     <Calendar className='w-5 h-5 fill-current absolute  rtl:right-2 ltr:left-2 top-1/2 -mt-2.5 z-10 pointer-events-none' />
-                    <input id="checkin_date" className='border w-full h-12 border-neutral-400 rtl:rounded-r-lg ltr:rounded-l-lg rtl:pr-10 ltr:pl-10 pt-5 leading-4 rtl:border-l-0 ltr:border-r-0' value={start} readOnly />
+                    <input 
+                        id="checkin_date" 
+                        className={`border w-full h-12 border-neutral-400 rtl:rounded-r-lg ltr:rounded-l-lg rtl:pr-10 ltr:pl-10 pt-5 leading-4 rtl:border-l-0 ltr:border-r-0 ${locale === localeEn ? "font-sans" : ""}`} 
+                        value={start} 
+                        readOnly 
+                    />
                 </div>
                 <div className='relative'>
                     <label htmlFor='checkout_date' className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5 pointer-events-none">
@@ -137,9 +142,10 @@ const RangePicker: React.FC<Props> = props => {
                     marked={marked}
                     showRangeLabels={false}
                     onChange={onChange}
+                    value={values}
                 >
 
-                    <header className='direction-root font-samim mobi-date-picker-header px-5 py-3 border-b border-neutral-300  gap-5 text-sm hidden md:flex h-12 '>
+                    <header className={`direction-root font-samim mobi-date-picker-header px-5 py-3 border-b border-neutral-300  gap-5 text-sm hidden md:flex h-12 ${locale === localeEn ? "font-sans" : ""}`} >
 
                         <div className={`font-semibold text-sm border-b-2 border-transparent ${values && values[0] && !values[1] ? "border-blue-600" : ""}`}>
                             {startFormated}

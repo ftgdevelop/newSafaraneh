@@ -5,6 +5,7 @@ import parse from 'html-react-parser';
 
 import Image from "next/image";
 import dynamic from "next/dynamic";
+import Goftino from "./Goftino";
 
 const GoToTop = dynamic(() => import('./GoToTop'), {
     ssr: false
@@ -108,7 +109,7 @@ const Footer: React.FC<Props> = props => {
                         )}
                     </Link>
 
-                    { !!props.contactInfo.tel && <div className="flex gap-4 justify-center mb-4">
+                    {!!props.contactInfo.tel && <div className="flex gap-4 justify-center mb-4">
                         {t('support')}
                         <a href={`tel:${props.contactInfo.tel}`} className="text-lg font-semibold" dir="ltr">
                             {props.contactInfo.tel.replace("+98", "0")}
@@ -141,15 +142,8 @@ const Footer: React.FC<Props> = props => {
         `,
                     }}
                 />
-                {/* <!---start GOFTINO code---> */}
-                <script
-                    id="script_footer_16"
-                    dangerouslySetInnerHTML={{
-                        __html: `
-          !function(){var i="HVhVQP",a=window,d=document;function g(){var g=d.createElement("script"),s="https://www.goftino.com/widget/"+i,l=localStorage.getItem("goftino_"+i);g.async=!0,g.src=l?s+"?o="+l:s;d.getElementsByTagName("head")[0].appendChild(g);}"complete"===d.readyState?g():a.attachEvent?a.attachEvent("onload",g):a.addEventListener("load",g,!1);}();
-          `,
-                    }}
-                />
+
+                <Goftino />
 
 
             </footer>

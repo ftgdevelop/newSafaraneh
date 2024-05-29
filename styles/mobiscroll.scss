@@ -123,3 +123,26 @@ label.mbsc-form-control-wrapper .mbsc-textfield {
     order: 3;
   }
 }
+
+.mobiscroll-datepicker-wrapper .mbsc-textfield-wrapper .mbsc-textfield{
+  font-size: 13px;
+  [dir="rtl"] & {
+    text-align: right;
+  }
+}
+.mobiscroll-datepicker-wrapper.theme1 .mbsc-textfield {
+  border: 1px solid #999;
+  height: 3rem;
+  padding-top: 1.5rem;
+  [dir="rtl"] & {
+    padding-right: 2.5rem;
+  }
+  
+  [dir="ltr"] & {
+    padding-left: 2.5rem;
+  }
+}
+.mobiscroll-datepicker-wrapper.simple .mbsc-textfield {
+  height: 2.5rem;
+  border: 1px solid #d4d4d4;
+}

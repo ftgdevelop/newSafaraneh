@@ -49,12 +49,11 @@ const Gallery: React.FC<Props> = props => {
                     <Image
                         key={slide.src}
                         priority={!index}
-                        onContextMenu={(e)=> e.preventDefault()}
+                        //onContextMenu={(e)=> e.preventDefault()}
                         src={slide.src}
                         alt={index?slide.alt : props.hotelName || slide.alt}
-                        sizes={index?"(max-width: 768px) 100vh, 578px" : "(max-width: 768px) 100vh, 287"}
-                        width={index ? 287 : 430}
-                        height={index ? 191 : 270}
+                        width={index ? 287 : 401}
+                        height={index ? 191 : 253}
                         onClick={() => { openLightBox(index); }}
                         className={`cursor-pointer w-full h-full object-cover ${index ? "hidden md:block md:col-span-1 md:row-span-1" : "md:col-span-2 md:row-span-2"}`}
                     />
