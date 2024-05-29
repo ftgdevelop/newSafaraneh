@@ -49,7 +49,7 @@ const Gallery: React.FC<Props> = props => {
                     <Image
                         key={slide.src}
                         priority={!index}
-                        onContextMenu={(e)=> e.preventDefault()}
+                        //onContextMenu={(e)=> e.preventDefault()}
                         src={slide.src}
                         alt={index?slide.alt : props.hotelName || slide.alt}
                         width={index ? 287 : 401}
