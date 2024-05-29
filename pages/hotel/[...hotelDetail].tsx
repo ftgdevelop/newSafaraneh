@@ -36,6 +36,7 @@ type Props = {
   };
   portalData: WebSiteDataType;
   error410?: "true";
+  url?: any;
 }
 
 const HotelDetail: NextPage<Props> = props => {
@@ -72,6 +73,18 @@ const HotelDetail: NextPage<Props> = props => {
   if (checkin && checkout) {
     defaultDates = [checkin, checkout];
   }
+
+  useEffect(()=>{
+    
+    const fetchData = async (url:string) => {
+
+      const res = await getDomesticHotelDetailsByUrl("/fa" + url, "fa-IR");
+      debugger;
+    }
+
+    fetchData(props.url);
+
+  },[props.url])
 
   useEffect(() => {
     setShowOnlyForm(false);
@@ -378,7 +391,7 @@ const HotelDetail: NextPage<Props> = props => {
               onClick={() => { setShowOnlyForm(false) }}
             />
           )}
-          <h3 className='text-lg lg:text-3xl font-semibold mt-5 mb-3 md:mt-10 md:mb-7 relative z-[2]'>{t('change-search')}</h3>
+          <h2 className='text-lg lg:text-3xl font-semibold mt-5 mb-3 md:mt-10 md:mb-7 relative z-[2]'>{t('change-search')}</h2>
 
           <SearchForm
             defaultDestination={defaultDestination}
@@ -403,7 +416,7 @@ const HotelDetail: NextPage<Props> = props => {
 
       {!!hotelData.DistancePoints?.length && (
         <div id="attractions_section" className="max-w-container mx-auto px-3 sm:px-5 pt-7 md:pt-10">
-          <h3 className='text-lg lg:text-3xl font-semibold mb-3 md:mb-7'>{tHotel('attraction')}</h3>
+          <h2 className='text-lg lg:text-3xl font-semibold mb-3 md:mb-7'>{tHotel('attraction')}</h2>
           <div className='p-5 lg:p-7 bg-white rounded-xl'>
             <Attractions attractions={hotelData.DistancePoints} />
           </div>
@@ -590,7 +603,8 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return ({
     props: {
       ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
-      allData: allData.data?.result || null
+      allData: allData.data?.result || null,
+      url: url || null
     },
   })
 }
