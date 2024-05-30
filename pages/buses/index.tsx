@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 
 const Buses: NextPage<any> = ({data}) => {
     const [key, setKey] = useState()
-    const [busList, setBusList] = useState<BusItemType[]>()
+    const [busList, setBusList] = useState<any>()
     const [busInFilter, setBusInFilter] = useState<BusItemType[]>()
 
     const SidebarFilter = useSelector((state: RootState) => state.busFilters.filterOption)
