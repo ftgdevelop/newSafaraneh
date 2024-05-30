@@ -1,9 +1,9 @@
 version: '3'
 services:
-  server_asli_safaraneh:
-    image: asli_safaraneh
+  main_iranhotel_service:
+    image: main_iranhotel_image
     restart: always
     build: ./
-    command: 'yarn start -p 2091'
+    command: 'yarn start -p 2084'
     ports:
-      - '2091:2091'
+      - '2084:2084'
