@@ -4,20 +4,25 @@ import ChangeDay from "@/modules/bus/components/BusList/ChangeDay";
 import SearchData from "@/modules/bus/components/BusList/SearchData";
 import SortBuses from "@/modules/bus/components/BusList/SortBuses";
 import SidebarFilters from "@/modules/bus/components/sidebar/SidebarFilters";
+import { SidebarFilterChange } from "@/modules/bus/templates/SidebarFilterChange";
 import { BusItemType } from "@/modules/bus/types";
+import { RootState } from "@/modules/shared/store";
 import { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const Buses: NextPage<any> = ({data}) => {
     const [key, setKey] = useState()
-    const [fetchDataCompelete, setFetchDataCompelete] = useState<boolean>(false)
     const [busList, setBusList] = useState<BusItemType[]>()
+    const [busInFilter, setBusInFilter] = useState<BusItemType[]>()
+
+    const SidebarFilter = useSelector((state: RootState) => state.busFilters.filterOption)
     
     const fetchKey = async () => {
         const busData = {
-            departureTime: "2024-05-24",
+            departureTime: "2024-06-04",
             destinationCode: "34",
             originCode: "825"
         }
@@ -29,7 +34,16 @@ const Buses: NextPage<any> = ({data}) => {
     
     useEffect(() => {
         fetchKey()
-    },[])
+    }, [])
+
+    useEffect(() => {
+        setBusInFilter(busList)
+    } ,[busList])
+
+    useEffect(() => {
+        SidebarFilterChange(busList, SidebarFilter, setBusInFilter)
+    },[SidebarFilter])
+    
     useEffect(() => {
         let fetchInterval:NodeJS.Timeout | undefined;
 
@@ -70,8 +84,7 @@ const Buses: NextPage<any> = ({data}) => {
                 <SortBuses />
 
                 {
-                    busList?.map((item ,index) => <BusItem busData={item} key={index} />)
-                        
+                    busInFilter?.map((item ,index) => <BusItem busData={item} key={index} />)
                 }
                 
             </div>

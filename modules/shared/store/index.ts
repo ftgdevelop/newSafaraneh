@@ -5,6 +5,7 @@ import domesticHotelSlice from "@/modules/domesticHotel/store/domesticHotelSlice
 import stylesSlice from "./stylesSlice";
 import authenticationSlice from "@/modules/authentication/store/authenticationSlice";
 import flightSlice from "@/modules/flights/store/flightsSlice";
+import busSlice from "@/modules/bus/stroe/busSlice";
 
 export const store = configureStore({
     reducer: {
@@ -13,7 +14,8 @@ export const store = configureStore({
         domesticHotelFilter: domesticHotelSlice,
         styles: stylesSlice,
         authentication: authenticationSlice,
-        flightFilters: flightSlice
+        flightFilters: flightSlice,
+        busFilters: busSlice
     }
 })
 

@@ -33,7 +33,7 @@ const SidebarFilters: React.FC<Props> = props => {
                 </div>    
                 <BusComponies busData={busData} />
                 <DepratureTime />
-                <PriceRange />
+                <PriceRange busData={busData} />
                 <Destination />
             </div>
 

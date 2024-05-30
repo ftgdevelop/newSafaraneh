@@ -7,8 +7,8 @@ export type AvailibilityParams = {
 export type BusItemType = {
     token: string;
     supplierType: string;
-    salePrice: string;
-    boardPrice: string;
+    salePrice: number;
+    boardPrice: number;
     capacity: number;
     carrier: {
         id: number,
