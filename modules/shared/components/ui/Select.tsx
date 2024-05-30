@@ -48,7 +48,7 @@ const Select: React.FC<Props> = props => {
         <div className={`relative ${props.wrapperClassName || ""}`} ref={wrapperRef}>
 
             <div
-                className={`${props.buttonClassName || ""} bg-white rounded border px-3 ${props.h10?"h-10":"h-12"} justify-center flex flex-col leading-5 text-sm select-none cursor-pointer ${props.className || "border-neutral-400"}`}
+                className={`${props.buttonClassName || ""} bg-white relative rounded border px-3 ${props.h10?"h-10":"h-12"} justify-center flex flex-col leading-5 text-sm select-none cursor-pointer ${props.className || "border-neutral-400"}`}
                 onClick={() => { setOpen(true) }}
             >
                 {props.label ? (
