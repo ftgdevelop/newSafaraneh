@@ -5,7 +5,7 @@ import { CipGetReserveByIdResponse } from "@/modules/cip/types/cip";
 import Steps from "@/modules/shared/components/ui/Steps";
 import { useAppDispatch } from "@/modules/shared/hooks/use-store";
 import { setReduxError } from "@/modules/shared/store/errorSlice";
-import { PortalDataType } from "@/modules/shared/types/common";
+import { WebSiteDataType } from "@/modules/shared/types/common";
 import { GetServerSideProps, NextPage } from "next";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -13,14 +13,13 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-const Booking: NextPage = ({ portalData }: { portalData?: PortalDataType }) => {
+const Booking: NextPage = ({ portalData }: { portalData?: WebSiteDataType }) => {
 
     const { t } = useTranslation('common');
 
-    const phoneLink = portalData?.Phrases?.find(item => item.Keyword === "PhoneNumber")?.Value || "";
+    const phoneLink = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
     const phoneNumber = phoneLink?.replace("+98", "0");
-    const email = portalData?.Phrases?.find(item => item.Keyword === "Email")?.Value || "";
-
+    const email = portalData?.billing.email || "";
 
     const dispatch = useAppDispatch();
 

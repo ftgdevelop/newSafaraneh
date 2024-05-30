@@ -7,7 +7,7 @@ import Skeleton from '@/modules/shared/components/ui/Skeleton';
 import { CalendarBeautiful, ErrorCircle } from '@/modules/shared/components/ui/icons';
 import { useAppDispatch } from '@/modules/shared/hooks/use-store';
 import { setReduxError } from '@/modules/shared/store/errorSlice';
-import { PortalDataType, ReserveType, UserReserveListItem } from '@/modules/shared/types/common';
+import { ReserveType, UserReserveListItem } from '@/modules/shared/types/common';
 import type { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -15,7 +15,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-const Profile: NextPage = ({ portalData }: { portalData?: PortalDataType }) => {
+const Profile: NextPage = () => {
 
     const { t } = useTranslation('common');
     const router = useRouter();
@@ -31,12 +31,6 @@ const Profile: NextPage = ({ portalData }: { portalData?: PortalDataType }) => {
 
     const [startDate, setStartDate] = useState<string>();
     const [endDate, setEndDate] = useState<string>();
-
-
-    let portalName = "";
-    if (portalData) {
-        portalName = portalData.Phrases?.find(item => item.Keyword === "Name")?.Value || "";
-    }
 
     type SearchParametesType = {
         SkipCount?: number;
@@ -107,6 +101,7 @@ const Profile: NextPage = ({ portalData }: { portalData?: PortalDataType }) => {
         ToReturnTime?: string;
         reserveId?: string;
     }) => {
+        
         setPage(1);
 
         if (values.reserveId) {

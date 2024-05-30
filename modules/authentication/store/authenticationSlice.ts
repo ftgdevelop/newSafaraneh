@@ -1,19 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { UserInformation } from "../types/authentication";
 
 type Authentication = {
     isAuthenticated: boolean;
     getUserLoading: boolean;
-    user: any;
+    user?: UserInformation | undefined;
     balance?: number;
     balanceLoading? : boolean;
+    loginFormIsOpen?: boolean;
+    loginToContinueReserve?: boolean;
 };
 
 const initialState: Authentication = {
     isAuthenticated: false,
     getUserLoading: false,
-    user: {},
+    user: undefined,
     balance: undefined,
-    balanceLoading: false
+    balanceLoading: false,
+    loginFormIsOpen: false,
+    loginToContinueReserve:false
 };
 
 export const authenticationSlice = createSlice({
@@ -28,10 +33,20 @@ export const authenticationSlice = createSlice({
         setReduxBalance: (state, action) => {
             state.balance = action.payload.balance;
             state.balanceLoading = action.payload.loading;
+        },
+        openLoginForm : (state) =>{
+            state.loginFormIsOpen = true;
+        },
+        closeLoginForm : (state) =>{
+            state.loginFormIsOpen = false;
+        },
+        setLoginToContinueReserve:(state, action) => {
+            state.loginToContinueReserve = action.payload;
         }
+
     }
 });
 
-export const { setReduxUser, setReduxBalance } = authenticationSlice.actions
+export const { setReduxUser, setReduxBalance, closeLoginForm, openLoginForm , setLoginToContinueReserve} = authenticationSlice.actions
 
 export default authenticationSlice.reducer;

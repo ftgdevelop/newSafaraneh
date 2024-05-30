@@ -30,7 +30,7 @@ const NotFound : React.FC<Props> = (props) => {
                     برو به صفحه اصلی
                 </Button>
                 
-                {!!(process.env.PROJECT_MODULES?.includes("Hotel")) && <Button
+                {!!(process.env.PROJECT_MODULES?.includes("DomesticHotel")) && <Button
                 className="px-5 h-8 text-sm"
                     href="/hotel/هتل-پارسیان-آزادی-تهران"
                 >

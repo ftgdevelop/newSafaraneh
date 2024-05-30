@@ -126,7 +126,7 @@ const SuggestedHotels: React.FC = () => {
             <Slider {...settings}>
                 {hotels.map(hotel => (
                     <div className='sm:px-2 rtl:rtl' key={hotel.name}>
-                        <a href={hotel.url} className='block bg-white rounded-lg overflow-hidden' target='_blank'>
+                        <a href={"/fa/"+hotel.url} className='block bg-white rounded-lg overflow-hidden' target='_blank'>
                             <Image
                                 onContextMenu={e => { e.preventDefault() }}
                                 src={hotel.imageUrl}

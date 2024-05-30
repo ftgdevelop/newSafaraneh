@@ -6,12 +6,12 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { BlogItemType, CategoriesNameType } from "@/modules/blogs/types/blog";
 import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
 import Head from "next/head";
-import { PortalDataType } from "@/modules/shared/types/common";
+import { WebSiteDataType } from "@/modules/shared/types/common";
 import NotFound from "@/modules/shared/components/ui/NotFound";
 
 
 const Tag: NextPage<any> = ({ TagBlogs, TagName, categories_name, recentBlogs, pages, portalData, moduleDisabled } :
-    {TagBlogs : BlogItemType[] , TagName:any , categories_name:CategoriesNameType[], recentBlogs: BlogItemType[],pages:string , portalData: PortalDataType, moduleDisabled?: boolean;}) => {
+    {TagBlogs : BlogItemType[] , TagName:any , categories_name:CategoriesNameType[], recentBlogs: BlogItemType[],pages:string , portalData: WebSiteDataType, moduleDisabled?: boolean;}) => {
     
         if (moduleDisabled) {
             return (
@@ -20,7 +20,8 @@ const Tag: NextPage<any> = ({ TagBlogs, TagName, categories_name, recentBlogs, p
         }
 
     const tagname: string = TagName?.name || ''
-    const siteName = portalData?.Phrases?.find(item => item.Keyword === "Name")?.Value || "";
+    const siteName = portalData?.billing.name || "";
+    
     return (
         <div className="bg-white">
             <Head>

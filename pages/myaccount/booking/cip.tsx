@@ -8,7 +8,7 @@ import Tag from "@/modules/shared/components/ui/Tag"
 import { Child, DefaultRoom, EmailGrayIcon, Group, PhoneGrayIcon, RightCaret, Tik, Travel, User3, WhatsappGrayIcon } from "@/modules/shared/components/ui/icons"
 import { dateDiplayFormat, numberWithCommas } from "@/modules/shared/helpers"
 import { useAppDispatch, useAppSelector } from "@/modules/shared/hooks/use-store"
-import { PortalDataType } from "@/modules/shared/types/common"
+import { WebSiteDataType } from "@/modules/shared/types/common"
 import { GetServerSideProps, NextPage } from "next"
 import { useTranslation } from "next-i18next"
 import { serverSideTranslations } from "next-i18next/serverSideTranslations"
@@ -17,7 +17,7 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 
-const CipReserveDetail: NextPage = ({ portalData }: { portalData?: PortalDataType }) => {
+const CipReserveDetail: NextPage = ({ portalData }: { portalData?: WebSiteDataType }) => {
 
     const router = useRouter();
 
@@ -42,10 +42,10 @@ const CipReserveDetail: NextPage = ({ portalData }: { portalData?: PortalDataTyp
 
     const [copied, setCopied] = useState<boolean>(false);
 
-    const phoneLink = portalData?.Phrases?.find(item => item.Keyword === "PhoneNumber")?.Value || "";
+    const phoneLink = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
     const phoneNumber = phoneLink?.replace("+98", "0");
-    const email = portalData?.Phrases?.find(item => item.Keyword === "Email")?.Value || "";
-    const whatsApp = portalData?.Phrases?.find(item => item.Keyword === "whatsapp")?.Value || "";
+    const email = portalData?.billing?.email || "";
+    const whatsApp = portalData?.social?.whatsapp || "";
 
 
     useEffect(() => {

@@ -7,7 +7,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 import { domesticHotelGetReserveById, getDomesticHotelSummaryDetailById } from '@/modules/domesticHotel/actions';
-import { PortalDataType } from '@/modules/shared/types/common';
+import { WebSiteDataType } from '@/modules/shared/types/common';
 import { DomesticHotelGetReserveByIdData, DomesticHotelSummaryDetail } from '@/modules/domesticHotel/types/hotel';
 import { dateDiplayFormat, getDatesDiff, numberWithCommas } from '@/modules/shared/helpers';
 
@@ -22,7 +22,7 @@ import AccountSidebar from '@/modules/authentication/components/AccountSidebar';
 import { useAppSelector } from '@/modules/shared/hooks/use-store';
 import LoginSidebar from '@/modules/authentication/components/LoginSidebar';
 
-const DomesticHotelReserveDetail: NextPage = ({ portalData }: { portalData?: PortalDataType }) => {
+const DomesticHotelReserveDetail: NextPage = ({ portalData }: { portalData?: WebSiteDataType }) => {
 
     const { t } = useTranslation('common');
     const { t: tHotel } = useTranslation('hotel');
@@ -46,10 +46,10 @@ const DomesticHotelReserveDetail: NextPage = ({ portalData }: { portalData?: Por
 
     const [loginWithPassword, setLoginWithPassword] = useState<boolean>(true);
 
-    const phoneLink = portalData?.Phrases?.find(item => item.Keyword === "PhoneNumber")?.Value || "";
+    const phoneLink = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
     const phoneNumber = phoneLink?.replace("+98", "0");
-    const email = portalData?.Phrases?.find(item => item.Keyword === "Email")?.Value || "";
-    const whatsApp = portalData?.Phrases?.find(item => item.Keyword === "whatsapp")?.Value || "";
+    const email = portalData?.billing?.email || "";
+    const whatsApp = portalData?.social?.whatsapp || "";
 
     useEffect(() => {
 

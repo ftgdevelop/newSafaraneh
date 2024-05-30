@@ -5,8 +5,10 @@ import { useTranslation } from "next-i18next";
 import { CipAvailabilityItemType, CipFormPassengerItemType } from "../../types/cip";
 import { Close } from "@/modules/shared/components/ui/icons";
 import DatePickerSelect from "@/modules/shared/components/ui/DatePickerSelect";
-import { dateFormat, goBackYears } from "@/modules/shared/helpers";
+import { checkDateIsAfterDate, dateFormat, goBackYears } from "@/modules/shared/helpers";
 import CheckboxGroup from "@/modules/shared/components/ui/CheckboxGroup";
+import FormerTravelers from "@/modules/shared/components/FormerTravelers";
+import { TravelerItem } from "@/modules/shared/types/common";
 
 type Props = {
     passengerItem: CipFormPassengerItemType
@@ -16,6 +18,11 @@ type Props = {
     isLastItem?: boolean;
     updatePassenger: (property: any, value: any) => void;
     passengerServicesArray: CipAvailabilityItemType['passengerTypeServices'];
+
+    travelers?: TravelerItem[];
+    fetchTravelers?: () => void;
+    clearTravelers?: () => void;
+    fetchingTravelersLoading?: boolean;
 
     setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => Promise<void | FormikErrors<{
         passengers: {
@@ -91,15 +98,53 @@ const CipPassengerItem: React.FC<Props> = props => {
 
     const services = props.passengerServicesArray?.find(passengerServicesItem => passengerServicesItem.passengerType === passengerItem.type)?.services;
 
+
+    const selectTravelerHandle = (traveler: TravelerItem) => {
+
+        setFieldValue(`passengers.${passengerIndex}.gender`, traveler.gender);
+
+        setFieldValue(`passengers.${passengerIndex}.firstName`, traveler.firstname||"", true);
+        setFieldValue(`passengers.${passengerIndex}.lastName`, traveler.lastname||"", true);
+
+        setFieldValue(`passengers.${passengerIndex}.birthday`, traveler.birthDate||"", true);
+
+        setFieldValue(`passengers.${passengerIndex}.passportNumber`, traveler.passportNumber || "", true);
+
+        setFieldValue(`passengers.${passengerIndex}.nationalId`, traveler.nationalId || "", true);
+
+        const minBirthDate = dateFormat(goBackYears(new Date(), 2));
+        if( traveler.birthDate && checkDateIsAfterDate(new Date(traveler.birthDate) ,new Date(minBirthDate) )){
+            setFieldValue(`passengers.${passengerIndex}.passengerType`, "Child" || "", true);
+            updatePassenger("type", "Child");
+        }else{
+            setFieldValue(`passengers.${passengerIndex}.passengerType`, "Adult" || "", true);
+            updatePassenger("type", "Adult");
+        }
+
+    }
+
+
     return (
         <div className="bg-white rounded-lg border border-neutral-300 mt-5">
 
-            <div className="border-b border-neutral-300 px-5 py-2 flex justify-between">
+            <div className="border-b border-neutral-300 px-5 py-2 flex items-center justify-between">
                 <h4 className="font-semibold text-sm">مسافر {passengerIndex + 1}</h4>
 
-                {!!props.isLastItem && <button type="button" className="bg-red-100 rounded p-1.5" onClick={() => props.decreasePassengers()}>
-                    <Close className="w-5 h-5 fill-red-600" />
-                </button>}
+                <div className="flex gap-4 items-center">
+
+                    {(props.fetchTravelers && props.clearTravelers) && <FormerTravelers
+                        fetchTravelers={props.fetchTravelers}
+                        fetchingLoading={props.fetchingTravelersLoading || false}
+                        clearTravelers={props.clearTravelers}
+                        onSelectTraveler={selectTravelerHandle}
+                        travelers={props.travelers}
+                    />}
+
+                    {!!props.isLastItem && <button type="button" className="bg-red-100 rounded p-1.5" onClick={() => props.decreasePassengers()}>
+                        <Close className="w-5 h-5 fill-red-600" />
+                    </button>}
+                </div>
+
             </div>
             <div className="p-5 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
 

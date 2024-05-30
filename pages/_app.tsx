@@ -11,16 +11,16 @@ import '../styles/carousel.scss';
 import '../styles/mobiscroll.scss';
 import '../styles/globals.scss';
 import '../styles/leaflet.css';
-import '../styles/modernDatePicker.scss';
+// import '../styles/modernDatePicker.scss';
 
 import { store } from '../modules/shared/store';
-import { PortalDataType } from '@/modules/shared/types/common';
+import { WebSiteDataType } from '@/modules/shared/types/common';
 import { getPortal } from '@/modules/shared/actions/portalActions';
 import Layout from '@/modules/shared/components/layout';
 import { GTM_ID } from '@/modules/shared/helpers';
 
 type TProps = Pick<AppProps, "Component" | "pageProps"> & {
-  portalData?: PortalDataType;
+  portalData?: WebSiteDataType;
 };
 
 function MyApp({ Component, pageProps, portalData }: TProps) {
@@ -42,26 +42,25 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
     if (locale) {
       router.push(router.asPath, router.asPath, { locale: locale });
     }
-    console.log("_app mounted!")
   }, []);
 
 
-  const tel = portalData?.Phrases?.find(item => item.Keyword === "PhoneNumber")?.Value || "";
-  const instagram = portalData?.Phrases?.find(item => item.Keyword === "Instagram")?.Value || "";
-  const facebook = portalData?.Phrases?.find(item => item.Keyword === "Facebook")?.Value || "";
-  const linkedin = portalData?.Phrases?.find(item => item.Keyword === "Linkedin")?.Value || "";
-  const twitter = portalData?.Phrases?.find(item => item.Keyword === "Twitter")?.Value || "";
+  const tel = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
+  const instagram = portalData?.social?.instagram || "";
+  const facebook = portalData?.social?.facebook || "";
+  const linkedin = portalData?.social?.linkedin || "";
+  const twitter = portalData?.social?.x || "";
 
-  const logo = portalData?.Phrases?.find(item => item.Keyword === "Logo")?.ImageUrl || "";
-  const siteName = portalData?.Phrases?.find(item => item.Keyword === "Name")?.Value || "";
-  const favIconLink = portalData?.Phrases?.find(item => item.Keyword === "Favicon")?.Value || "";
+  const logo = portalData?.billing.logo?.value ||"";
+  const siteName = portalData?.billing.name || "";
+  const favIconLink = portalData?.billing.favIcon?.value || "";
 
-  const portalTitle = portalData?.MetaTags?.find(item => item.Name === "title")?.Content || "";
-  const portalKeywords = portalData?.MetaTags?.find(item => item.Name === "keywords")?.Content || "";
-  const portalDescription = portalData?.MetaTags?.find(item => item.Name === "description")?.Content || "";
+  const portalTitle = portalData?.website?.title || "";
+  const portalKeywords = portalData?.metaTags?.keyword || "";
+  const portalDescription = portalData?.metaTags?.description || "";
   
-  const portalEnamadMetaTag = portalData?.MetaTags?.find(item => item.Name === "enamad")?.Content || "";
-  const enamadElement = portalData?.Phrases.find(item => item.Keyword === "Enamad")?.Value;
+  const portalEnamadMetaTag = portalData?.metaTags?.enamad || "";
+  const enamadElement = portalData?.website?.enamad || "";
 
   let canonicalUrl = "";
   if(typeof router !== 'undefined'){
@@ -85,21 +84,13 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
     <Provider store={store}>
       <Head>
 
-
-
-
-
-
-        {/* TODO: _-_-_S_T_A_R_T_-_-_ delete when mobiscroll is activated */}
-        <link
+        {/* _-_-_S_T_A_R_T_-_-_ delete when mobiscroll is activated */}
+        {/* <link
           rel="stylesheet"
           type="text/css"
           href="https://cdn2.safaraneh.com/libs/react-modern-calendar-datepicker/3.1.6/css/datepicker.min.css"
-        />
-        {/* TODO: _-_-_E_N_D_-_-_ delete when mobiscroll is activated */}
-
-
-
+        /> */}
+        {/* _-_-_E_N_D_-_-_ delete when mobiscroll is activated */}
 
         <meta name="robots" content="index, follow" />
         <meta name="theme-color" content="#0a438b" />
@@ -184,7 +175,7 @@ MyApp.getInitialProps = async (
   //const portalData = await getPortal(context?.router?.locale === "ar" ? "ar-AE" : context?.router?.locale=== "en" ? "en-US" : "fa-IR");
   const portalData = await getPortal("fa-IR");
 
-  return { ...ctx, portalData: portalData?.data || null };
+  return { ...ctx, portalData: portalData?.data?.result || null };
 };
 
 export default appWithTranslation(MyApp);

@@ -26,7 +26,7 @@ import ChangeDay from "@/modules/flights/components/flightList/ChangeDay";
 import FlightItem from "@/modules/flights/components/flightItem/FlightItem";
 import SearchData from "@/modules/flights/components/flightList/SearchData";
 import SortFlights from "@/modules/flights/components/flightList/SortFlights";
-import { PortalDataType } from "@/modules/shared/types/common";
+import { WebSiteDataType } from "@/modules/shared/types/common";
 import NotFound from "@/modules/shared/components/ui/NotFound";
 import AvailabilityTimeout from "@/modules/shared/components/AvailabilityTimeout";
 
@@ -47,7 +47,7 @@ type Airport = {
     airportType: "Main" | "Subsidiary" | "City";
 }
 
-const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }: { airports?: Airport[], routeCodes?: string, portalData?: PortalDataType; moduleDisabled?: boolean; }) => {
+const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }: { airports?: Airport[], routeCodes?: string, portalData?: WebSiteDataType; moduleDisabled?: boolean; }) => {
 
     const dispatch = useDispatch()
     const { t } = useTranslation("common");
@@ -304,8 +304,7 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
 
     }
 
-    const siteName = portalData?.Phrases?.find(item => item.Keyword === "Name")?.Value || "";
-
+    const siteName = portalData?.billing.name || "";
 
     const research = () => {
         fetchKey(routeCodes);
@@ -498,7 +497,7 @@ export default Flights;
 
 export async function getServerSideProps(context: any) {
 
-    if (!process.env.PROJECT_MODULES?.includes("Flight")) {
+    if (!process.env.PROJECT_MODULES?.includes("DomesticFlight")) {
         return (
             {
                 props: {

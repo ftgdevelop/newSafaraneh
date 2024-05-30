@@ -1,19 +1,19 @@
 import ForgetPasswordForm from '@/modules/authentication/components/ForgetPasswordForm';
 import BreadCrumpt from '@/modules/shared/components/ui/BreadCrumpt';
-import { PortalDataType } from '@/modules/shared/types/common';
+import { WebSiteDataType } from '@/modules/shared/types/common';
 import type { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import Image from 'next/image';
 
-const ForgetPassword: NextPage = ({ portalData }: { portalData?: PortalDataType }) => {
+const ForgetPassword: NextPage = ({ portalData }: { portalData?: WebSiteDataType }) => {
 
     const { t } = useTranslation('common');
 
     let portalName = "";
     if (portalData) {
-        portalName = portalData.Phrases?.find(item => item.Keyword === "Name")?.Value || "";
+        portalName = portalData.billing.name || "";
     }
 
 

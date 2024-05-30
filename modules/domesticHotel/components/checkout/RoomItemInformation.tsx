@@ -6,6 +6,8 @@ import FormikField from "@/modules/shared/components/ui/FormikField";
 import { validateRequiedPersianAndEnglish } from "@/modules/shared/helpers/validation";
 import { numberWithCommas } from "@/modules/shared/helpers";
 import Quantity from "@/modules/shared/components/ui/Quantity";
+import { TravelerItem } from "@/modules/shared/types/common";
+import FormerTravelers from "@/modules/shared/components/FormerTravelers";
 
 type Props = {
   roomIndex: number;
@@ -80,6 +82,10 @@ type Props = {
   }
   disableSyncedPassenger?: () => void;
   onChangeExtraBed: (value: number) => void;
+  travelers?: TravelerItem[];
+  fetchTravelers?: () => void;
+  clearTravelers?: () => void;
+  fetchingTravelersLoading?: boolean;
 }
 
 const RoomItemInformation: React.FC<Props> = props => {
@@ -91,11 +97,33 @@ const RoomItemInformation: React.FC<Props> = props => {
 
   const extraBedPrice = roomItem.pricing?.find((item) => item.type === 'ExtraBed' && item.ageCategoryType === 'ADL')?.amount || 0;
 
+  const selectTravelerHandle = (traveler: TravelerItem) => {
+
+    setFieldValue(`passengers.${props.roomIndex}.gender`, traveler.gender);
+
+    setFieldValue(`passengers.${props.roomIndex}.firstName`, traveler.firstnamePersian || traveler.firstname, true);
+    setFieldValue(`passengers.${props.roomIndex}.lastName`, traveler.lastnamePersian || traveler.lastname, true);
+
+  }
+
   return (
     <div className='bg-white border border-neutral-300 p-5 rounded-lg grid md:grid-cols-3 gap-2 mb-5' >
-      <h5 className='font-semibold text-xl mb-4 md:col-span-3'>
-        <Bed className='w-5 h-5 fill-current inline-block align-middle rtl:ml-2 ltr:mr-2' /> {tHotel('room')} {roomIndex + 1} - {roomItem.name}
-      </h5>
+
+      <div className="flex justify-between text-sm items-start md:col-span-3">
+        <h5 className='font-semibold text-xl mb-4'>
+          <Bed className='w-5 h-5 fill-current inline-block align-middle rtl:ml-2 ltr:mr-2' /> {tHotel('room')} {roomIndex + 1} - {roomItem.name}
+        </h5>
+
+        {(props.fetchTravelers && props.clearTravelers) && <FormerTravelers
+          fetchTravelers={props.fetchTravelers}
+          fetchingLoading={props.fetchingTravelersLoading || false}
+          clearTravelers={props.clearTravelers}
+          onSelectTraveler={selectTravelerHandle}
+          travelers={props.travelers}
+          isHotel
+        />}
+      </div>
+
 
       <div role="group" className="leading-4" >
         <label className='block text-xs mb-1' > جنسیت </label>

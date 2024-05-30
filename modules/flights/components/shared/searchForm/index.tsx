@@ -11,13 +11,15 @@ import AutoComplete from '@/modules/shared/components/ui/AutoComplete';
 import { Calendar, Location, Minus, Swap, Travel } from '@/modules/shared/components/ui/icons';
 import { Flight, ServerAddress } from '@/enum/url';
 import { validateRequied } from '@/modules/shared/helpers/validation';
-import DatePickerModern from '@/modules/shared/components/ui/DatePickerModern';
-import { addSomeDays, dateDiplayFormat, dateFormat } from '@/modules/shared/helpers';
+import { addSomeDays, dateFormat } from '@/modules/shared/helpers';
 import { defaultAirportOptions } from './defaultList';
+import DatePickerMobiscroll from '@/modules/shared/components/ui/DatePickerMobiscroll';
+import { localeFa } from '@mobiscroll/react';
 
 type Props = {
     defaultValues?: FlightSearchDefaultValues;
     research?: () => void;
+    wrapperClassName?: string;
 }
 
 const SearchForm: React.FC<Props> = props => {
@@ -28,7 +30,7 @@ const SearchForm: React.FC<Props> = props => {
 
     const { defaultValues } = props;
 
-    const [locale, setLocale] = useState<"fa" | "en" | "ar">("fa");
+    const [locale, setLocale] = useState<any>(localeFa);
 
     const [locations, setLocations] = useState<[AirportAutoCompleteType | undefined, AirportAutoCompleteType | undefined]>([defaultValues?.originObject || undefined, defaultValues?.destinationObject || undefined]);
 
@@ -69,14 +71,14 @@ const SearchForm: React.FC<Props> = props => {
             const localStorageRecentSearches = localStorage?.getItem("flightRecentSearches");
             const recentSearches: FlightRecentSearchItem[] = localStorageRecentSearches ? JSON.parse(localStorageRecentSearches) : [];
 
-            const querisArray = Object.keys(searchQueries).map((key) => [key+ "="+ searchQueries[key]]);
+            const querisArray = Object.keys(searchQueries).map((key) => [key + "=" + searchQueries[key]]);
 
             const url = `/flights/${values.originCode}-${values.destinationCode}?` + querisArray.join("&");
 
             const searchObject: FlightRecentSearchItem = {
                 url: url,
-                origin:locations[0]?.city.name || locations[0]?.code || "",
-                destination:locations[1]?.city.name || locations[1]?.code || "",
+                origin: locations[0]?.city.name || locations[0]?.code || "",
+                destination: locations[1]?.city.name || locations[1]?.code || "",
                 departureDate: values.departureDate || "",
                 returnDate: values.returnDate || ""
             };
@@ -108,8 +110,11 @@ const SearchForm: React.FC<Props> = props => {
         airTripType: "OneWay"
     }
 
+    const theme1 = process.env.THEME === "THEME1";
+    const theme2 = process.env.THEME === "THEME2";
+
     return (
-        <div className='text-sm'>
+        <div className={`text-sm ${props.wrapperClassName || ""}`}>
 
             <Formik
                 validate={() => { return {} }}
@@ -129,41 +134,58 @@ const SearchForm: React.FC<Props> = props => {
 
                     return (
 
-                        <Form className='py-2' autoComplete='off' >
+                        <Form autoComplete='off' >
                             <div className=''>
-                                <div className='flex flex-col gap-3 md:flex-row md:justify-between mb-3 z-[3] relative'>
+                                <div className={`flex flex-col gap-3 md:flex-row ${theme2 ? "" : "md:justify-between"} mb-4 z-[3] relative`}>
 
-                                    <div className='flex gap-3'>
-                                        <button
-                                            type='button'
-                                            className={`transition-all h-10 px-3 cursor-pointer outline-none rounded-lg ${values.airTripType === "OneWay" ? "bg-blue-100 text-blue-800" : "hover:text-blue-700 hover:bg-blue-50"}`}
-                                            onClick={() => {
-                                                setFieldValue("returnDate", undefined, true);
-                                                setFieldValue("airTripType", "OneWay", true);
+                                    {theme2 ? (
+                                        <Select
+                                            h10
+                                            className='inline-block w-32 rounded-full'
+                                            buttonClassName='font-bold'
+                                            items={[
+                                                { value: "OneWay", label: "یک طرفه" },
+                                                { value: "RoundTrip", label: "رفت و برگشت" }
+                                            ]}
+                                            onChange={(value) => {
+                                                setFieldValue("airTripType", value, true)
                                             }}
-                                        >
-                                            یک طرفه
-                                        </button>
-                                        <button
-                                            type='button'
-                                            className={`transition-all h-10 px-3 cursor-pointer outline-none rounded-lg ${values.airTripType === "RoundTrip" ? "bg-blue-100 text-blue-800" : "hover:text-blue-700 hover:bg-blue-50"}`}
-                                            onClick={() => { setFieldValue("airTripType", "RoundTrip", true) }}
-                                        >
-                                            رفت و برگشت
-                                        </button>
-                                    </div>
+                                            value={values.airTripType}
+                                        />
+                                    ) : (
+                                        <div className='flex gap-3'>
+                                            <button
+                                                type='button'
+                                                className={`transition-all h-10 px-3 cursor-pointer outline-none rounded-lg ${values.airTripType === "OneWay" ? "bg-blue-100 text-blue-800" : "hover:text-blue-700 hover:bg-blue-50"}`}
+                                                onClick={() => {
+                                                    setFieldValue("returnDate", undefined, true);
+                                                    setFieldValue("airTripType", "OneWay", true);
+                                                }}
+                                            >
+                                                یک طرفه
+                                            </button>
+                                            <button
+                                                type='button'
+                                                className={`transition-all h-10 px-3 cursor-pointer outline-none rounded-lg ${values.airTripType === "RoundTrip" ? "bg-blue-100 text-blue-800" : "hover:text-blue-700 hover:bg-blue-50"}`}
+                                                onClick={() => { setFieldValue("airTripType", "RoundTrip", true) }}
+                                            >
+                                                رفت و برگشت
+                                            </button>
+                                        </div>
+                                    )}
 
                                     <div className='flex gap-3 text-neutral-800'>
 
-                                        <SelectPassengers
+                                        {!theme2 && <SelectPassengers
                                             values={values}
                                             setFieldValue={setFieldValue}
                                             wrapperClassNames='sm:col-span-2 shrink-0'
-                                        />
+                                        />}
 
                                         <Select
                                             h10
-                                            className='inline-block w-28 rounded-lg'
+                                            className={`inline-block w-28 ${theme2 ? "rounded-full" : "rounded-lg"}`}
+                                            buttonClassName={theme2 ? "font-bold" : ""}
                                             items={[
                                                 { value: "All", label: "همه" },
                                                 { value: "Economy", label: "اکونومی" },
@@ -179,9 +201,9 @@ const SearchForm: React.FC<Props> = props => {
 
                                 </div>
 
-                                <div className="text-neutral-800 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 mb-5 z-[2] relative">
+                                <div className={`text-neutral-800 grid gap-3 gap-y-4 z-[2] relative ${theme1 ? "grid-cols-2 md:grid-cols-4 lg:grid-cols-6" : theme2 ? "grid-cols-2 md:grid-cols-4 lg:grid-cols-13" : ""}`}>
 
-                                    <div className='col-span-2 sm:col-span-1 lg:col-span-2 relative'>
+                                    <div className={`relative ${theme1 ? "col-span-2 sm:col-span-1 lg:col-span-2" : theme2 ? "col-span-2 sm:col-span-1 lg:col-span-3" : ""}`}>
                                         <AutoComplete
                                             sortListFunction={(b, a) => { return b.airportType === 'City' ? -1 : 1 }}
                                             defaultList={defaultAirportOptions}
@@ -244,7 +266,7 @@ const SearchForm: React.FC<Props> = props => {
                                         </button>
                                     </div>
 
-                                    <div className='col-span-2 sm:col-span-1 lg:col-span-2'>
+                                    <div className={`${theme1 ? "col-span-2 sm:col-span-1 lg:col-span-2" : theme2 ? "col-span-2---- sm:col-span-1--- lg:col-span-3" : ""}`}>
                                         <AutoComplete
                                             sortListFunction={(b, a) => { return b.airportType === 'City' ? -1 : 1 }}
                                             defaultList={defaultAirportOptions}
@@ -294,8 +316,7 @@ const SearchForm: React.FC<Props> = props => {
                                     </div>
 
                                     {/* TODO: delete when mobiscroll is activated */}
-                                    <div className='modernCalendar-dates-wrapper'>
-
+                                    {/* <div className={`modernCalendar-dates-wrapper ${theme2?"lg:col-span-2":""}`}>
                                         <div className="relative modernDatePicker-checkin">
                                             <DatePickerModern
                                                 wrapperClassName="block"
@@ -316,6 +337,32 @@ const SearchForm: React.FC<Props> = props => {
                                                 تاریخ رفت
                                             </label>
                                         </div>
+                                        <Field
+                                            validate={(value: string) => validateRequied(value, values.airTripType === 'RoundTrip' ? "تاریخ رفت را انتخاب کنید." : "تاریخ پرواز را انتخاب کنید.")}
+                                            type='hidden'
+                                            name="departureDate"
+                                            value={values.departureDate}
+                                        />
+                                        {touched.departureDate && errors.departureDate && <div className='text-xs text-red-500'> {errors.departureDate as string}</div>}
+                                    </div> */}
+
+                                    <div className={`${theme2 ? "lg:col-span-2" : ""}`} >
+                                        <div className='relative'>
+                                            <DatePickerMobiscroll
+                                                inputStyle='theme1'
+                                                onChange={a => {
+                                                    setFieldValue("departureDate", a.value, true)
+                                                }}
+                                                rtl
+                                                locale={locale}
+                                                onChangeLocale={setLocale}
+                                                value={values.departureDate}
+                                            />
+                                            <Calendar className="w-5 h-5 fill-neutral-600 top-1/2 -translate-y-1/2 right-3 absolute select-none pointer-events-none" />
+                                            <label className={`absolute leading-5 rtl:right-10 select-none pointer-events-none transition-all ${values.departureDate ? "top-1.5 text-4xs " : "top-1/2 -translate-y-1/2 text-sm "}`}>
+                                                تاریخ رفت
+                                            </label>
+                                        </div>
 
                                         <Field
                                             validate={(value: string) => validateRequied(value, values.airTripType === 'RoundTrip' ? "تاریخ رفت را انتخاب کنید." : "تاریخ پرواز را انتخاب کنید.")}
@@ -323,34 +370,73 @@ const SearchForm: React.FC<Props> = props => {
                                             name="departureDate"
                                             value={values.departureDate}
                                         />
-
                                         {touched.departureDate && errors.departureDate && <div className='text-xs text-red-500'> {errors.departureDate as string}</div>}
-
                                     </div>
 
                                     {values.airTripType === 'RoundTrip' ? (
-                                        <div className='modernCalendar-dates-wrapper'>
+                                        // <div className={`modernCalendar-dates-wrapper ${theme2 ? "lg:col-span-2" : ""}`}>
 
-                                            <div className="relative modernDatePicker-checkout">
-                                                <DatePickerModern
-                                                    wrapperClassName="block"
-                                                    minimumDate={dateDiplayFormat({ date: values.departureDate ? dateFormat(addSomeDays(new Date(values.departureDate))) : dateFormat(addSomeDays(new Date())), locale: 'en', format: "YYYY-MM-DD" })}
-                                                    inputPlaceholder="تاریخ برگشت"
-                                                    inputClassName="border border-neutral-400 h-12 rounded-lg focus:border-neutral-900 outline-none pt-7 text-xs w-full pr-10"
-                                                    toggleLocale={() => { setLocale(prevState => prevState === 'fa' ? "en" : "fa") }}
-                                                    locale={locale}
-                                                    onChange={(v: string) => {
-                                                        if (v) {
-                                                            setFieldValue("returnDate", v, true);
-                                                        }
+                                        //     <div className="relative modernDatePicker-checkout">
+                                        //         <DatePickerModern
+                                        //             wrapperClassName="block"
+                                        //             minimumDate={dateDiplayFormat({ date: values.departureDate ? dateFormat(addSomeDays(new Date(values.departureDate))) : dateFormat(addSomeDays(new Date())), locale: 'en', format: "YYYY-MM-DD" })}
+                                        //             inputPlaceholder="تاریخ برگشت"
+                                        //             inputClassName="border border-neutral-400 h-12 rounded-lg focus:border-neutral-900 outline-none pt-7 text-xs w-full pr-10"
+                                        //             toggleLocale={() => { setLocale(prevState => prevState === 'fa' ? "en" : "fa") }}
+                                        //             locale={locale}
+                                        //             onChange={(v: string) => {
+                                        //                 if (v) {
+                                        //                     setFieldValue("returnDate", v, true);
+                                        //                 }
+                                        //             }}
+                                        //             value={values.returnDate}
+                                        //         />
+                                        //         <Calendar className="w-5 h-5 fill-neutral-600 top-1/2 -mt-2.5 right-3 absolute select-none pointer-events-none" />
+                                        //         <label className="absolute top-1.5 leading-5 rtl:right-10 text-4xs select-none pointer-events-none">
+                                        //             تاریخ برگشت
+                                        //         </label>
+
+                                        //         <button
+                                        //             type='button'
+                                        //             className='p-1 border border-neutral-300 rounded bg-neutral-600 absolute top-1/2 -mt-3 left-3'
+                                        //             onClick={() => {
+                                        //                 setFieldValue("returnDate", undefined, true);
+                                        //                 setFieldValue("airTripType", 'OneWay', true);
+                                        //             }
+                                        //             }
+                                        //         >
+                                        //             <Minus className='w-4 h-4 fill-white' />
+                                        //         </button>
+
+                                        //     </div>
+                                        //     <Field
+                                        //         validate={(value: string) => validateRequied(value, "تاریخ برگشت را انتخاب کنید.")}
+                                        //         type='hidden'
+                                        //         name="returnDate"
+                                        //         value={values.returnDate}
+                                        //     />
+
+                                        //     {touched.returnDate && errors.returnDate && <div className='text-xs text-red-500'> {errors.returnDate as string}</div>}
+                                        // </div>
+
+
+                                        <div className={`${theme2 ? "lg:col-span-2" : ""}`} >
+                                            <div className='relative'>
+                                                <DatePickerMobiscroll
+                                                    inputStyle='theme1'
+                                                    onChange={a => {
+                                                        setFieldValue("returnDate", a.value, true)
                                                     }}
+                                                    rtl
+                                                    locale={locale}
+                                                    onChangeLocale={setLocale}
                                                     value={values.returnDate}
+                                                    minDate={values.departureDate ? dateFormat(addSomeDays(new Date(values.departureDate))) : dateFormat(addSomeDays(new Date()))}
                                                 />
-                                                <Calendar className="w-5 h-5 fill-neutral-600 top-1/2 -mt-2.5 right-3 absolute select-none pointer-events-none" />
-                                                <label className="absolute top-1.5 leading-5 rtl:right-10 text-4xs select-none pointer-events-none">
+                                                <Calendar className="w-5 h-5 fill-neutral-600 top-1/2 -translate-y-1/2 right-3 absolute select-none pointer-events-none" />
+                                                <label className={`absolute leading-5 rtl:right-10 select-none pointer-events-none transition-all ${values.returnDate ? "top-1.5 text-4xs " : "top-1/2 -translate-y-1/2 text-sm "}`}>
                                                     تاریخ برگشت
                                                 </label>
-
                                                 <button
                                                     type='button'
                                                     className='p-1 border border-neutral-300 rounded bg-neutral-600 absolute top-1/2 -mt-3 left-3'
@@ -362,20 +448,20 @@ const SearchForm: React.FC<Props> = props => {
                                                 >
                                                     <Minus className='w-4 h-4 fill-white' />
                                                 </button>
-
                                             </div>
+
                                             <Field
                                                 validate={(value: string) => validateRequied(value, "تاریخ برگشت را انتخاب کنید.")}
                                                 type='hidden'
                                                 name="returnDate"
                                                 value={values.returnDate}
                                             />
-
                                             {touched.returnDate && errors.returnDate && <div className='text-xs text-red-500'> {errors.returnDate as string}</div>}
                                         </div>
+
                                     ) : (
                                         <div
-                                            className='relative flex justify-center items-center border border-neutral-400 h-12 rounded-lg text-xs w-full cursor-pointer bg-white hover:bg-neutral-100'
+                                            className={`relative flex justify-center items-center border border-neutral-400 h-12 rounded-lg text-xs w-full cursor-pointer bg-white hover:bg-neutral-100 ${theme2 ? "lg:col-span-2" : ""}`}
                                             onClick={() => { setFieldValue("airTripType", 'RoundTrip', true); }}
                                         >
                                             <Calendar className="w-7 h-7 fill-neutral-600 top-1/2 -mt-3.5 right-3 absolute select-none pointer-events-none" />
@@ -383,18 +469,24 @@ const SearchForm: React.FC<Props> = props => {
                                         </div>
                                     )}
 
+                                    {!!theme2 && <SelectPassengers
+                                        values={values}
+                                        setFieldValue={setFieldValue}
+                                        wrapperClassNames='lg:col-span-2 shrink-0'
+                                    />}
+
+                                    <div className={`relative ${theme1 ? "col-span-2 md:col-span-4 lg:col-span-6" : theme2 ? "lg:col-span-1" : ""}`} >
+                                        <Button
+                                            color='blue'
+                                            type='submit'
+                                            className={`h-12 w-full ${theme1 ? "sm:w-40 mx-auto" : "font-semibold"}`}
+                                            loading={submitPending}
+                                        >
+                                            {t('search')}
+                                        </Button>
+                                    </div>
                                 </div>
 
-                                <div className='relative'>
-                                    <Button
-                                        color='blue'
-                                        type='submit'
-                                        className='h-11 w-full sm:w-40 mx-auto'
-                                        loading={submitPending}
-                                    >
-                                        {t('search')}
-                                    </Button>
-                                </div>
 
                             </div>
 

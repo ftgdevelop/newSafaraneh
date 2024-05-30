@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 
 type Props = {
     closeModal?: () => void;
+    className?:string;
 }
 
 const Logout: React.FC<Props> = props => {
@@ -28,7 +29,7 @@ const Logout: React.FC<Props> = props => {
             props.closeModal();
         }
 
-         if (!router.asPath.includes('/myaccount/booking/')){
+         if (router.asPath.includes('/myaccount')){
              router.replace("/");
          }
 
@@ -36,7 +37,7 @@ const Logout: React.FC<Props> = props => {
 
     return (
         <button
-            className='text-red-600 text-xs'
+            className={`text-red-600 text-xs ${props.className || ""}`}
             type='button'
             onClick={logout}
         >

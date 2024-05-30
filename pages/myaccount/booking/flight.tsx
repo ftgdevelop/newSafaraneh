@@ -5,7 +5,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Link from 'next/link';
 import Image from 'next/image';
-import { PortalDataType } from '@/modules/shared/types/common';
+import { WebSiteDataType } from '@/modules/shared/types/common';
 import { dateDiplayFormat, numberWithCommas } from '@/modules/shared/helpers';
 import { Airpalne2, ArrowRight, EmailGrayIcon, Lock, PhoneGrayIcon, RightCaret, TakeOff, Tik, WhatsappGrayIcon } from '@/modules/shared/components/ui/icons';
 import Skeleton from '@/modules/shared/components/ui/Skeleton';
@@ -18,7 +18,7 @@ import { DomesticFlightGetReserveByIdType } from '@/modules/flights/types/flight
 import DownloadPdfVoucher from '@/modules/flights/components/booking/DownloadPdfVoucher';
 
 
-const DomesticFlightReserveDetail: NextPage = ({ portalData }: { portalData?: PortalDataType }) => {
+const DomesticFlightReserveDetail: NextPage = ({ portalData }: { portalData?: WebSiteDataType }) => {
 
     const { t } = useTranslation('common');
     const { t: tPayment } = useTranslation('payment');
@@ -46,10 +46,11 @@ const DomesticFlightReserveDetail: NextPage = ({ portalData }: { portalData?: Po
 
     const [loginWithPassword, setLoginWithPassword] = useState<boolean>(true);
 
-    const phoneLink = portalData?.Phrases?.find(item => item.Keyword === "PhoneNumber")?.Value || "";
+
+    const phoneLink = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
     const phoneNumber = phoneLink?.replace("+98", "0");
-    const email = portalData?.Phrases?.find(item => item.Keyword === "Email")?.Value || "";
-    const whatsApp = portalData?.Phrases?.find(item => item.Keyword === "whatsapp")?.Value || "";
+    const email = portalData?.billing?.email || "";
+    const whatsApp = portalData?.social?.whatsapp || "";
 
     useEffect(() => {
 

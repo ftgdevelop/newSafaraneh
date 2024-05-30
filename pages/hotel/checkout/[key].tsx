@@ -23,6 +23,8 @@ import Link from 'next/link';
 import Skeleton from '@/modules/shared/components/ui/Skeleton';
 import { LeftCaret } from '@/modules/shared/components/ui/icons';
 import { UserInformation } from '@/modules/authentication/types/authentication';
+import { getTravelers } from '@/modules/shared/actions';
+import { TravelerItem } from '@/modules/shared/types/common';
 
 const Checkout: NextPage = () => {
 
@@ -36,7 +38,7 @@ const Checkout: NextPage = () => {
   const keySegment = pathSegments.find(item => item.includes('key='));
   const key = keySegment?.split("key=")[1];
 
-  const user : UserInformation = useAppSelector(state => state.authentication.isAuthenticated ? state.authentication.user : undefined);
+  const user : UserInformation | undefined = useAppSelector(state => state.authentication.isAuthenticated ? state.authentication.user : undefined);
 
   const [reserveInfo, setReserveInfo] = useState<DomesticHotelGetValidateResponse>();
   const [hotelInfo, setHotelInfo] = useState<DomesticHotelSummaryDetail>();
@@ -48,6 +50,9 @@ const Checkout: NextPage = () => {
   const [discountLoading, setDiscountLoading] = useState<boolean>(false);
 
   const [promoCode,setPromoCode] = useState<string>("");
+
+  const [travelers, setTravelers] = useState<TravelerItem[] | undefined>(undefined);
+  const [fetchingTravelersLoading, setFetchingTravelersLoading] = useState<boolean>(false);
 
   const [submitLoading,setSubmitLoading] = useState<boolean>(false);
 
@@ -231,6 +236,17 @@ const Checkout: NextPage = () => {
 
   }
 
+  const fetchTravelers = async () => {
+    setFetchingTravelersLoading(true);
+    const token = localStorage.getItem('Token') || "";
+    const response: any = await getTravelers(token, "fa-IR");
+    if (response.data?.result?.items) {
+      setTravelers(response.data?.result?.items);
+      setFetchingTravelersLoading(false);
+    }
+  }
+
+
   return (
     <>
       <Head>
@@ -296,6 +312,12 @@ const Checkout: NextPage = () => {
 
                     {reserveInfo?.rooms?.map((roomItem, roomIndex) => (
                       <RoomItemInformation
+                      
+                        fetchingTravelersLoading={fetchingTravelersLoading}
+                        travelers={travelers}
+                        fetchTravelers={fetchTravelers}
+                        clearTravelers={() => { setTravelers(undefined) }}
+
                         values={values}
                         errors={errors}
                         touched={touched}

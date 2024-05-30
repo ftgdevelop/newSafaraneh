@@ -5,6 +5,7 @@ import { useTranslation } from "next-i18next"
 import { Close } from "@/modules/shared/components/ui/icons";
 import LognWithPassword from "./LognWithPassword";
 import OTPLogin from "./OTPLogin";
+import { useAppSelector } from '@/modules/shared/hooks/use-store';
 
 type Props = {
     setDelayedOpen?: (value: SetStateAction<boolean>) => void;
@@ -18,6 +19,8 @@ const LoginSidebar: React.FC<Props> = props => {
 
     const { loginWithPassword, setLoginWithPassword, toggleLoginType } = props;
 
+    const loginToContinue = useAppSelector(state => state.authentication.loginToContinueReserve);
+
     const { t } = useTranslation('common');
 
     let setDelayedOpen: (state: boolean) => void;
@@ -26,6 +29,8 @@ const LoginSidebar: React.FC<Props> = props => {
     } else {
         setDelayedOpen = (state: boolean) => { return }
     }
+
+    const theme1 = process.env.THEME === "THEME1";
 
     return (
         <>
@@ -46,21 +51,36 @@ const LoginSidebar: React.FC<Props> = props => {
                         {t('sign-in-up')}
                     </Link>
                 </div>
-                <div className='px-5'>
-                    <div className='bg-blue-gradient text-white p-4 rounded-md'>
-                        <h6 className='mb-4 font-semibold'> {t('sign-in-h6')} </h6>
-                        <ul className='text-2xs list-disc rtl:pr-5 ltr:pl-5'>
-                            <li className='mb-1'> {t('sign-in-desc-list-1')} </li>
-                            <li className='mb-1'> {t('sign-in-desc-list-2')} </li>
-                            <li className='mb-1'> {t('sign-in-desc-list-3')} </li>
-                            <li className='mb-1'> {t('sign-in-desc-list-4')} </li>
-                            <li className='mb-1'> {t('sign-in-desc-list-5')} </li>
-                            <li className='mb-1'> {t('sign-in-desc-list-6')} </li>
-                        </ul>
-                    </div>
-                </div>
 
-                <hr className='my-10' />
+                {loginToContinue ? (
+                    <>
+                        <div className='px-5'>
+                            <div className='bg-blue-gradient text-white p-4 rounded-md'>
+                                <p className='text-center'>
+                                    برای ادامه باید وارد حساب کاربری خود شوید.
+                                </p>
+                            </div>
+                        </div>
+                        <hr className='my-10' />
+                    </>
+                ) : theme1 ? (
+                    <>
+                        <div className='px-5'>
+                            <div className='bg-blue-gradient text-white p-4 rounded-md'>
+                                <h6 className='mb-4 font-semibold'> {t('sign-in-h6')} </h6>
+                                <ul className='text-2xs list-disc rtl:pr-5 ltr:pl-5'>
+                                    <li className='mb-1'> {t('sign-in-desc-list-1')} </li>
+                                    <li className='mb-1'> {t('sign-in-desc-list-2')} </li>
+                                    <li className='mb-1'> {t('sign-in-desc-list-3')} </li>
+                                    <li className='mb-1'> {t('sign-in-desc-list-4')} </li>
+                                    <li className='mb-1'> {t('sign-in-desc-list-5')} </li>
+                                    <li className='mb-1'> {t('sign-in-desc-list-6')} </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <hr className='my-10' />
+                    </>
+                ) : null}
             </>)
             }
 

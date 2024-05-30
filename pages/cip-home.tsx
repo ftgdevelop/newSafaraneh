@@ -87,7 +87,7 @@ export async function getStaticProps(context: any) {
             props: {
                 ...await serverSideTranslations(context.locale, ['common']),
                 priceData: airportsAvailability?.data?.result || null,
-                airports: airportsList?.data.result.items || null,
+                airports: airportsList?.data?.result?.items || null,
                 content: contentData?.data?.Content || null
             },
         }

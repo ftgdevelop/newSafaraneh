@@ -21,7 +21,7 @@ import HotelsOnMap from '@/modules/domesticHotel/components/hotelsList/HotelsOnM
 import Image from 'next/image';
 import { getPageByUrl } from '@/modules/shared/actions';
 import Head from 'next/head';
-import { PortalDataType } from '@/modules/shared/types/common';
+import { WebSiteDataType } from '@/modules/shared/types/common';
 import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
 import AvailabilityTimeout from '@/modules/shared/components/AvailabilityTimeout';
 
@@ -49,7 +49,7 @@ type Props = {
     }[];
     Url?: string;
   };
-  portalData: PortalDataType;
+  portalData: WebSiteDataType;
 }
 
 const HotelList: NextPage<Props> = props => {
@@ -508,12 +508,7 @@ const HotelList: NextPage<Props> = props => {
     fallbackLocation = [firstHotelWithLocation.Latitude!, firstHotelWithLocation.Longitude!];
   }
 
-
-  let siteName = "";
-
-  if (portalData) {
-    siteName = portalData.Phrases.find(item => item.Keyword === "Name")?.Value || "";
-  }
+  let siteName = portalData?.billing.name || "";
 
   const canonicalUrl = pageData?.Url ? `${process.env.SITE_NAME}${pageData?.Url}` : "";
 

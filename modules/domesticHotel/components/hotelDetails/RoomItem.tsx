@@ -14,6 +14,8 @@ type Props = {
     rate: DomesticHotelRateItem;
     onSelectRoom: (bookingToken: string, count: number) => void;
     selectedRoomToken?: string;
+    roomsHasImage?: boolean;
+    nights?:number;
 }
 
 const RoomItem: React.FC<Props> = props => {
@@ -30,10 +32,10 @@ const RoomItem: React.FC<Props> = props => {
         return null;
     }
 
-    let image = <div className='bg-travel-pattern md:w-1/4 shrink-0 flex items-center justify-center bg-neutral-100 p-5 rtl:rounded-r-xl'><DefaultRoom className='fill-neutral-300 w-20 h-20' /></div>
+    let image: React.ReactNode = <div className={`${props.roomsHasImage?"":"max-sm:hidden"} bg-travel-pattern md:w-1/4 shrink-0 flex items-center justify-center bg-neutral-100 p-5 rtl:rounded-r-xl`}><DefaultRoom className='fill-neutral-400 w-24 h-24' /></div>
 
     if (room.image) {
-        image = <div className='bg-travel-pattern bg-neutral-300 w-full md:w-1/4 flex items-center justify-center max-md:rounded-t-xl md:rtl:rounded-r-xl md:ltr:rounded-l-xl'>
+        image = <div className={`${props.roomsHasImage?"":"max-sm:hidden"} bg-travel-pattern bg-neutral-300 w-full md:w-1/4 flex items-center justify-center max-md:rounded-t-xl md:rtl:rounded-r-xl md:ltr:rounded-l-xl`}>
             <Image
                 onContextMenu={(e) => e.preventDefault()}
                 className='h-36 w-full object-cover object-center max-md:rounded-t-xl md:rtl:rounded-r-xl md:ltr:rounded-l-xl'
@@ -44,6 +46,7 @@ const RoomItem: React.FC<Props> = props => {
             />
         </div>
     }
+
 
     const board = (code: string) => {
         switch (code) {
@@ -70,19 +73,19 @@ const RoomItem: React.FC<Props> = props => {
         switch (rate.cancellationPolicy.status) {
             case "NonRefundable":
                 cancellation = (
-                    <div className="mb-4 text-red-500">{tHotel("non-refundable")}</div>
+                    <div className="text-red-500 text-xs">{tHotel("non-refundable")}</div>
                 );
                 break;
             case "Refundable":
                 cancellation = (
-                    <div className="text-green-600 mb-4 flex items-center gap-1">
+                    <div className="text-green-600 flex text-xs items-center gap-1">
                         <Tik className='w-5 h-5 fill-current' />
                         {tHotel("refundable")}
                     </div>
                 );
                 break;
             default:
-                <div className="mb-4">{rate.cancellationPolicy.status}</div>;
+                <div className='text-xs'>{rate.cancellationPolicy.status}</div>;
         }
     }
 
@@ -132,26 +135,34 @@ const RoomItem: React.FC<Props> = props => {
     } else if (prices?.roomPrice && prices.roomPrice > 1000) {
         price = <>
             {(prices.boardPrice && (prices.boardPrice !== prices.roomPrice)) && <div>
-                <span className="bg-green-700 text-white px-2 py-1 mb-2 leading-4 rounded-xl text-xs inline-block">{calulateDiscount(prices.roomPrice, prices.boardPrice)}% {tHotel('discount')}</span>
+                <span className="bg-green-700 text-white px-2 py-1 leading-4 rounded-xl text-xs inline-block">{calulateDiscount(prices.roomPrice, prices.boardPrice)}% {tHotel('discount')}</span>
             </div>}
             {prices.roomPrice && (
                 <>
-                    {prices.boardPrice && (prices.roomPrice < prices.boardPrice) && (
-                        <div className="line-through font-semibold text-neutral-500">
-                            {numberWithCommas(prices.boardPrice * count)} {t("rial")}
-                        </div>
-                    )}
-
                     <Tooltip
-                        className='whitespace-nowrap'
+                        className={rate.availablityType === 'Offline' ? "" : "whitespace-nowrap"}
                         position='end'
-                        title={<>
-                            {numberWithCommas(prices.roomPrice * count)} {t("rial")}
-                            <small className='block'> {tHotel("Avg-per-night")} </small>
-                        </>}
+                        title={rate.availablityType === 'Offline' ? (
+                            <div className='w-60'>
+                                قیمت نهایی پس از پردازش و تایید از طرف رزرواسیون مشخص می شود
+                            </div>
+                        ):(
+                            <>
+                                {numberWithCommas(prices.roomPrice * count /(props.nights || 1))} {t("rial")}
+                                <small className='block'> {tHotel("Avg-per-night")} </small>
+                            </>
+                        )}
                     >
-                        <div className="text-lg font-semibold">
-                            {numberWithCommas(prices.roomPrice * count)} {t("rial")}
+                        <div className="text-lg my-1 leading-4 font-semibold flex flex-col items-end lg:flex-row gap-x-1.5 lg:items-center">
+                            {prices.boardPrice && (prices.roomPrice < prices.boardPrice) && (
+                                <div className="my-0.5 line-through font-semibold text-xs text-neutral-500">
+                                    {numberWithCommas(prices.boardPrice * count)} {t("rial")}
+                                </div>
+                            )}
+                            <div className='my-0.5'>
+                                {numberWithCommas(prices.roomPrice * count)} {t("rial")}
+                                <InfoCircle className='fill-amber-500 w-5 h-5 inline-block rtl:mr-0.5 ltr:ml-0.5' />
+                            </div>
                         </div>
                     </Tooltip>
                 </>
@@ -186,24 +197,31 @@ const RoomItem: React.FC<Props> = props => {
     return (
         <div className='bg-white border border-neutral-300 rounded-xl mt-4 md:flex'>
             {image}
-            <div className='p-4 grid grid-cols-1 sm:grid-cols-2 leading-5 text-sm grow gap-5'>
-                <div className='sm:flex flex-col gap-2'>
+            <div className='p-3.5 grid grid-cols-1 sm:grid-cols-5 leading-5 text-sm grow gap-1'>
+                <div
+                    className='flex gap-2 flex-wrap justify-between sm:col-span-5'
+                >
+                    <div className='flex gap-x-3 gap-y-1 items-center flex-wrap'>
+                        <h3 className='text-lg md:text-xl font-semibold'> {room.name}</h3>
+                        <span className='text-sm text-green-600'> ({board(rate.board.code)}) </span>
+                        {/* <Tooltip
+                            title={<> <b> {rate.board.code} </b> ({board(rate.board.code)}) </>}
+                            position='start'
+                            className='flex gap-2 items-center font-semibold'
+                        >
+                            <Restaurant className='w-5 h-5 fill-emerald-700' />
+                            {board(rate.board.code)}
+                        </Tooltip>                         */}
+                    </div>
+                    {cancellation}
+                </div>
 
-                    <h3 className='text-lg md:text-xl font-semibold'> {room.name}</h3>
+                <div className='flex flex-col gap-1 sm:col-span-2'>
                     {rate.view && (
                         <div>
                             {rate.view.name}
                         </div>
                     )}
-
-                    <Tooltip
-                        title={<> <b> {rate.board.code} </b> ({board(rate.board.code)}) </>}
-                        position='start'
-                        className='flex gap-2 items-center font-semibold'
-                    >
-                        <Restaurant className='w-5 h-5 fill-emerald-700' />
-                        {board(rate.board.code)}
-                    </Tooltip>
 
                     {room.capacity.count && (
                         <div className="flex gap-2 items-center">
@@ -211,8 +229,6 @@ const RoomItem: React.FC<Props> = props => {
                             {room.capacity.count} نفر
                         </div>
                     )}
-
-                    {cancellation}
 
                     {room.capacity?.extraBed ? (
                         <div className="flex gap-2 items-center">
@@ -229,14 +245,14 @@ const RoomItem: React.FC<Props> = props => {
                     </div>}
 
                 </div>
-                <footer className='self-stretch md:self-end flex justify-between sm:justify-end items-end gap-5 xl:gap-10'>
+                <footer className='self-stretch md:self-end flex justify-between sm:justify-end items-end gap-5 xl:gap-10 sm:col-span-3'>
 
                     {rate.availablityType === "Completion" || <div dir='ltr'>
                         <label className="mb-1 block" dir="rtl" htmlFor={`counter-${rate.bookingToken}`} > تعداد </label>
                         <Quantity disabled={!!selectedRoomToken} inputId={`counter-${rate.bookingToken}`} min={1} max={rate.available} onChange={setCount} />
                     </div>}
 
-                    <div className='rtl:text-left ltr:text-right'>
+                    <div className='flex flex-col items-end'>
 
                         {price}
 

@@ -26,7 +26,8 @@ export const Header = {
     Payment: process.env.PROJECT_SERVER_PAYMENT,
     Flight: process.env.PROJECT_SERVER_FLIGHT,
     Crm:process.env.PROJECT_SERVER_CRM,
-    Cip: process.env.PROJECT_SERVER_CIP
+    Cip: process.env.PROJECT_SERVER_CIP,
+    Traveler : process.env.PROJECT_SERVER_TRAVELER
   };
 
   export const Identity = {
@@ -47,7 +48,8 @@ export const Header = {
     Register:"/api/services/app/Account/Register",
     ChangePassword:"/api/services/app/Account/ChangePassword",
     SendEmailActivation:"/api/services/app/Account/SendEmailActivation",
-    ActivateEmail:"/api/services/app/Account/ActivateEmail"
+    ActivateEmail:"/api/services/app/Account/ActivateEmail",
+    GetSiteAllSettings:"/api/services/app/TenantSettings/GetAllSettings"
   };
 
 export const Flight = {
@@ -81,7 +83,6 @@ export const Flight = {
     GetDomesticHotelDetails:"/api/services/app/Accommodation/Get",
     GetScore: "/v2/Comment/GetScore",
     GetPageByUrl: "/v2/Page/GetPageByUrl",
-    GetPortal: "/v2/Portal/GetPortal",
     InsertComment : '/v2/Comment/InsertComment',
     AvailabilityByHotelId:"/api/services/app/Booking/AvailabilityByHotelId",
     GetRooms:"/api/services/app/Booking/GetRoom",
@@ -124,6 +125,12 @@ export const Flight = {
     GetReserveById:"/api/services/app/Reserve/Get",
     Confirm:"/api/services/app/BookingCip/Confirm",
     GetVoucherPdf:"/api/services/app/Reserve/GetVoucherPdf"
+  }
+
+  export const Traveler = {
+    Create:"/api/services/app/Passenger/Create",
+    GetAll:"/api/services/app/Passenger/GetAll",
+    Delete:"/api/services/app/Passenger/Delete"
   }
   
   export const ServerStatus = {
