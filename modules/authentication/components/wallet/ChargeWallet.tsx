@@ -11,6 +11,7 @@ import Loading from '@/modules/shared/components/ui/Loading';
 import { useRouter } from 'next/router';
 import { useAppDispatch } from '@/modules/shared/hooks/use-store';
 import { setReduxError } from '@/modules/shared/store/errorSlice';
+import { ServerAddress } from '@/enum/url';
 
 const ChargeWallet: React.FC = () => {
 
@@ -75,7 +76,7 @@ const ChargeWallet: React.FC = () => {
         const response: any = await makeDepositToken(params, token);
 
         if (response.status == 200) {
-            router.push(`https://payline.samita.com/fa/User/Payment/PaymentRequest?tokenId=${response.data.result.tokenId}`);
+            router.push(`https://${ServerAddress.Payment}/fa/User/Payment/PaymentRequest?tokenId=${response.data.result.tokenId}`);
         } else {
             dispatch(setReduxError({
                 title: t('error'),

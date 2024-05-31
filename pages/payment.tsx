@@ -24,6 +24,7 @@ import { CipGetReserveById } from '@/modules/cip/actions';
 import { flightGetReserveById } from '@/modules/flights/actions';
 import { DomesticFlightGetReserveByIdType } from '@/modules/flights/types/flights';
 import Aside from '@/modules/flights/components/shared/Aside';
+import { ServerAddress } from '@/enum/url';
 
 
 const Payment: NextPage = () => {
@@ -172,7 +173,7 @@ const Payment: NextPage = () => {
     const response = await makeToken(params);
     if (response.status == 200) {
       window.location.replace(
-        `https://payline.samita.com/fa/Reserves/Payment/PaymentRequest?tokenId=${response.data.result.tokenId}`
+        `https://${ServerAddress.Payment}/fa/Reserves/Payment/PaymentRequest?tokenId=${response.data.result.tokenId}`
       );
     } else {
       dispatch(setReduxError({
