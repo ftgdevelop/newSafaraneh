@@ -48,12 +48,26 @@ const LoginSidebar: React.FC<Props> = props => {
                     >
                         <Close className='w-6 h-6 fill-neutral-400' />
                     </button>
-                    {!!theme1 && <Link
-                        href="/signin"
-                        className='text-sm hover:text-blue-600 p-3 px-5'
-                    >
-                        {t('sign-in-up')}
-                    </Link>}
+
+                    {!!theme1 && (
+                        <div className='flex items-center px-5 gap-1 text-sm'>
+                            <Link
+                                href="/signin"
+                                className='text-sm hover:text-blue-600 py-3'
+                            >
+                                ورود
+                            </Link>
+                            یا
+                            <Link
+                                href="/register"
+                                className='text-sm hover:text-blue-600 py-3'
+                            >
+                                ثبت نام
+                            </Link>
+
+                        </div>
+                    )}
+
                 </div>
 
                 {loginToContinue ? (
@@ -84,7 +98,7 @@ const LoginSidebar: React.FC<Props> = props => {
                         </div>
                         <hr className='my-10' />
                     </>
-                ) : (theme2 && props.logo) ? 
+                ) : (theme2 && props.logo) ?
                     <Image
                         src={props.logo}
                         alt={props.siteName || ""}
@@ -92,20 +106,22 @@ const LoginSidebar: React.FC<Props> = props => {
                         height={120}
                         className='mx-auto mb-5 sm:mb-8'
                     />
-                : null}
+                    : null}
             </>)
             }
 
-            {loginWithPassword ? (
-                <LognWithPassword
-                    onCloseLogin={() => { setDelayedOpen(false) }}
-                />
-            ) : (
-                <OTPLogin
-                    onCloseLogin={() => { setDelayedOpen(false) }}
-                    onBackToLoginWithPassword={() => { setLoginWithPassword(true) }}
-                />
-            )}
+            {
+                loginWithPassword ? (
+                    <LognWithPassword
+                        onCloseLogin={() => { setDelayedOpen(false) }}
+                    />
+                ) : (
+                    <OTPLogin
+                        onCloseLogin={() => { setDelayedOpen(false) }}
+                        onBackToLoginWithPassword={() => { setLoginWithPassword(true) }}
+                    />
+                )
+            }
 
             <div className='px-5 text-center'>
                 {!!loginWithPassword && (
