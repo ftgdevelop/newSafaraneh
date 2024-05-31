@@ -246,7 +246,7 @@ const SearchForm: React.FC<Props> = props => {
 
 
             {theme2 ? (
-                <div className="col-span-1 md:col-span-3">
+                <div className="relative z-20 col-span-1 md:col-span-3">
                 <AutoCompleteZoom
                     defaultListLabel="محبوب ترین ها"
                     label="نام شهر، هتل یا منطقه"
@@ -267,7 +267,7 @@ const SearchForm: React.FC<Props> = props => {
                         </div>
                     ), [])}
                     icon="location"
-                    inputClassName={`w-full leading-4 border rounded-lg border-neutral-400 py-0.5 text-md h-12 flex flex-col justify-center`}
+                    inputClassName={`w-full bg-white leading-4 border rounded-lg border-neutral-400 py-0.5 text-md h-12 flex flex-col justify-center`}
                     placeholder={t('search-hotel-or-city')}
                     min={2}
                     value={selectedDestination}

@@ -62,7 +62,10 @@ const Header: React.FC<Props> = props => {
                     <TravelServices logo={logo} siteName={siteName} className="rtl:float-right ltr:float-left" />
                 )}
 
-                <HeaderAuthentication />
+                <HeaderAuthentication
+                    logo={logo}
+                    siteName={siteName}
+                />
 
                 {!userIsAuthenticated && !theme2 && <TrackOrder />}
 
