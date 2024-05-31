@@ -6,6 +6,7 @@ import { Close } from "@/modules/shared/components/ui/icons";
 import LognWithPassword from "./LognWithPassword";
 import OTPLogin from "./OTPLogin";
 import { useAppSelector } from '@/modules/shared/hooks/use-store';
+import Image from 'next/image';
 
 type Props = {
     setDelayedOpen?: (value: SetStateAction<boolean>) => void;
@@ -13,6 +14,8 @@ type Props = {
     setLoginWithPassword: (value: SetStateAction<boolean>) => void;
     toggleLoginType: () => void;
     isNotModal?: boolean;
+    logo?: string;
+    siteName?: string;
 }
 
 const LoginSidebar: React.FC<Props> = props => {
@@ -31,6 +34,7 @@ const LoginSidebar: React.FC<Props> = props => {
     }
 
     const theme1 = process.env.THEME === "THEME1";
+    const theme2 = process.env.THEME === "THEME2";
 
     return (
         <>
@@ -44,12 +48,12 @@ const LoginSidebar: React.FC<Props> = props => {
                     >
                         <Close className='w-6 h-6 fill-neutral-400' />
                     </button>
-                    <Link
+                    {!!theme1 && <Link
                         href="/signin"
                         className='text-sm hover:text-blue-600 p-3 px-5'
                     >
                         {t('sign-in-up')}
-                    </Link>
+                    </Link>}
                 </div>
 
                 {loginToContinue ? (
@@ -80,7 +84,15 @@ const LoginSidebar: React.FC<Props> = props => {
                         </div>
                         <hr className='my-10' />
                     </>
-                ) : null}
+                ) : (theme2 && props.logo) ? 
+                    <Image
+                        src={props.logo}
+                        alt={props.siteName || ""}
+                        width={120}
+                        height={120}
+                        className='mx-auto mb-5 sm:mb-8'
+                    />
+                : null}
             </>)
             }
 
