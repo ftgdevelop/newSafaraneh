@@ -4,7 +4,7 @@ import { i18n, useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { PageDataType, WebSiteDataType } from '@/modules/shared/types/common';
-import { DomesticAccomodationType, DomesticHotelDetailType, EntitySearchResultItemType, HotelAllDataRooms, HotelScoreDataType } from '@/modules/domesticHotel/types/hotel';
+import { DomesticAccomodationType, DomesticHotelDetailType, EntitySearchResultItemType, HotelScoreDataType } from '@/modules/domesticHotel/types/hotel';
 import { useRouter } from 'next/router';
 import BackToList from '@/modules/domesticHotel/components/hotelDetails/BackToList';
 import { CalendarError, Phone } from '@/modules/shared/components/ui/icons';
@@ -32,7 +32,6 @@ type Props = {
     score?: HotelScoreDataType;
     page?: PageDataType;
     hotel?: DomesticHotelDetailType;
-    rooms?: {result: HotelAllDataRooms};
   };
   portalData: WebSiteDataType;
   error410?: "true";
@@ -139,8 +138,6 @@ const HotelDetail: NextPage<Props> = props => {
       script_detail_2_Url = `${configWebsiteUrl}/en/hotels/${hotelData.CityName.replace(/ /g, "-")}`;
     }
   }
-
-  const startingPrice = allData.rooms?.result?.availabilities[0]?.rates[0]?.price || 0;
 
 
   return (
@@ -259,7 +256,7 @@ const HotelDetail: NextPage<Props> = props => {
             __html: `{
             "@context": "https://schema.org/",
             "@type": "Hotel",
-            "priceRange": "شروع قیمت ها از ${startingPrice} ریال",
+            "priceRange": "قیمت موجود نیست",
             "telephone":"${hotelData.Tel || "تلفن ثبت نشده است."}",
             "image": "${hotelData.Gallery && hotelData.Gallery[0]?.Image || hotelData?.ImageUrl || ""}",
             "url": "${configWebsiteUrl}${hotelData.Url}",

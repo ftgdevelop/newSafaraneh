@@ -50,7 +50,7 @@ const Header: React.FC<Props> = props => {
 
                 <Link href="/" className={`block ${theme1 ? "md:rtl:float-right md:ltr:float-left md:rtl:ml-5 md:ltr:mr-5" : theme2 ?"py-3":""}`}>
                     {logo ? (
-                        <Image src={logo} alt={siteName} width={115} height={48} onContextMenu={e => { e.preventDefault() }} className="h-12 mx-auto" />
+                        <Image src={logo} alt={siteName} width={115} height={48} onContextMenu={e => { e.preventDefault() }} className="h-12 mx-auto object-contain" />
                     ) : (
                         <div className="text-center text-xl font-bold text-white bg-neutral-500 px-3 py-1.5 leading-5 rounded-xl"> NO <br /> LOGO </div>
                     )}
@@ -62,7 +62,10 @@ const Header: React.FC<Props> = props => {
                     <TravelServices logo={logo} siteName={siteName} className="rtl:float-right ltr:float-left" />
                 )}
 
-                <HeaderAuthentication />
+                <HeaderAuthentication
+                    logo={logo}
+                    siteName={siteName}
+                />
 
                 {!userIsAuthenticated && !theme2 && <TrackOrder />}
 
