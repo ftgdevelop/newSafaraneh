@@ -146,3 +146,21 @@ label.mbsc-form-control-wrapper .mbsc-textfield {
   height: 2.5rem;
   border: 1px solid #d4d4d4;
 }
+
+.moboscroll-time-picker-wrapper {
+  &.hasError {
+    .mbsc-textfield-inner .mbsc-textfield {
+      border: 1px solid #ef4444;
+    }
+  }
+  .mbsc-textfield-inner .mbsc-textfield {
+    border: 1px solid #d4d4d4;
+    border-radius: 6px;
+    height: 40px;
+  }
+  .mbsc-form-control-wrapper{
+    &:after, &:before{
+      display: none;
+    }
+  }
+}
