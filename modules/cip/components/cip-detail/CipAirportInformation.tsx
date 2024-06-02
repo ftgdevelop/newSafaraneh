@@ -1,6 +1,6 @@
 import DatePicker from "@/modules/shared/components/ui/DatePicker";
 import FormikField from "@/modules/shared/components/ui/FormikField"
-import TimePicker from "@/modules/shared/components/ui/TimePicker";
+import TimePickerMobiscroll from "@/modules/shared/components/ui/TimePickerMobiscroll";
 import { validateRequied } from "@/modules/shared/helpers/validation";
 import { FormikErrors, FormikTouched } from "formik";
 
@@ -108,11 +108,12 @@ const CipAirportInformation: React.FC<Props> = props => {
                     validateFunction={(value: string) => validateRequied(value, "لطفا تاریخ پرواز را وارد نمایید")}
                 />
 
-                <TimePicker
+                <TimePickerMobiscroll 
+                    label="ساعت پرواز"
+                    value={values.flightTime}
+                    setFieldValue={setFieldValue}
                     id="flightTime"
                     name="flightTime"
-                    setFieldValue={setFieldValue}
-                    label="ساعت پرواز"
                     errorText={errors.flightTime as string}
                     isTouched={touched.flightTime}
                     validateFunction={(value: string) => validateRequied(value, "لطفا ساعت پرواز را وارد نمایید")}
