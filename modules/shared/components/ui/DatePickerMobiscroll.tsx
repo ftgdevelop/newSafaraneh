@@ -35,11 +35,6 @@ const DatePickerMobiscroll: React.FC<Props> = props => {
 
     const [value, setValue] = useState<string>(props.value || "");
 
-    const datePickerRef = useRef<any>(null);
-
-    // const [start, setStart] = useState<any>(null);
-    // const [end, setEnd] = useState<any>(null);
-
     const [instance, setInstance] = useState<any>(null);
 
     useEffect(() => {
@@ -80,7 +75,6 @@ const DatePickerMobiscroll: React.FC<Props> = props => {
         <div className={`mobiscroll-datepicker-wrapper ${props.inputStyle} ${locale === localeFa ? 'persian-datepicker-wrapper' : ''}`} >
 
             <MobiscrollDatepicker
-                ref={datePickerRef}
                 onInit={(_, inst) => { setInstance(inst) }}
                 cssClass={`mobi-date-picker ${locale === localeFa ? 'persian-date-picker' : ''}`}
                 controls={['calendar']}
