@@ -53,6 +53,14 @@ export interface DistancePointType {
     DistanceText?: string;
     DistanceValue?: number;
 }
+export interface DomesticHotelRichSnippets {
+    rating?: {
+        ratingValue:number;
+        reviewCount:number;
+        worstRating:number;
+        bestRating:number;
+      }
+}
 
 export interface DomesticHotelDetailType {
     HotelId?: number;
