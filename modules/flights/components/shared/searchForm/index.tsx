@@ -37,6 +37,20 @@ const SearchForm: React.FC<Props> = props => {
 
     const [submitPending, setSubmitPending] = useState<boolean>(false);
 
+    const renderOption = useCallback((option: AirportAutoCompleteType, direction: "ltr" | "rtl" | undefined) => (
+        <div className={`px-3 py-2 flex gap-3 hover:bg-neutral-800 hover:text-white items-center ${!direction ? "" : direction === 'rtl' ? "rtl" : "ltr"}`}>
+            {option.airportType === 'City' ? (
+                <Location className="w-5 h-5 fill-current" />
+            ) : (
+                <Travel className="w-5 h-5 fill-current" />
+            )}
+            <div className="leading-5">
+                <div className='text-xs'>{option.city.name || option.name}</div>
+                <div className='text-3xs'>{option.airportType === 'City' ? "همه فرودگاه ها" : option.name}</div>
+            </div>
+        </div>
+    ), []);
+
     const submitHandle = (values: FlightSeachFormValue) => {
 
         if (!values.originCode || !values.destinationCode) return;
@@ -216,19 +230,7 @@ const SearchForm: React.FC<Props> = props => {
                                                 noResultMessage={t('NoResultsFound')}
                                                 createTextFromOptionsObject={(item: AirportAutoCompleteType) => item.airportType === 'City' ? item.city.name || item.name : item.city.name + " - " + item.name}
                                                 acceptLanguage="fa-IR"
-                                                renderOption={useCallback((option: AirportAutoCompleteType, direction: "ltr" | "rtl" | undefined) => (
-                                                    <div className={`px-3 py-2 flex gap-3 hover:bg-neutral-800 hover:text-white items-center ${!direction ? "" : direction === 'rtl' ? "rtl" : "ltr"}`}>
-                                                        {option.airportType === 'City' ? (
-                                                            <Location className="w-5 h-5 fill-current" />
-                                                        ) : (
-                                                            <Travel className="w-5 h-5 fill-current" />
-                                                        )}
-                                                        <div className="leading-5">
-                                                            <div className='text-xs'>{option.city.name || option.name}</div>
-                                                            <div className='text-3xs'>{option.airportType === 'City' ? "همه فرودگاه ها" : option.name}</div>
-                                                        </div>
-                                                    </div>
-                                                ), [])}
+                                                renderOption={renderOption}
                                                 icon="location"
                                                 inputClassName={`w-full bg-white rtl:pl-3 truncate block leading-4 border rounded-lg border-neutral-400 py-0.5 text-md h-12 flex flex-col justify-center`}
                                                 placeholder="مبدا"
@@ -236,13 +238,13 @@ const SearchForm: React.FC<Props> = props => {
                                                 url={`${ServerAddress.Type}${ServerAddress.Flight}${Flight.AirportSearch}`}
                                                 onChangeHandle={
 
-                                                    useCallback((v: AirportAutoCompleteType | undefined) => {
+                                                    (v: AirportAutoCompleteType | undefined) => {
                                                         setLocations(prevState => ([
                                                             v,
                                                             prevState[1]
                                                         ]))
                                                         setFieldValue("originCode", v?.code || "", true);
-                                                    }, [])
+                                                    }
                                                 }
 
                                                 value={locations[0]}
@@ -257,30 +259,17 @@ const SearchForm: React.FC<Props> = props => {
                                                 inputClassName='w-full text-left border border-neutral-400 h-12 rounded-lg focus:border-neutral-900 outline-none'
                                                 type="flight"
                                                 createTextFromOptionsObject={(item: AirportAutoCompleteType) => item.airportType === 'City' ? item.city.name || item.name : item.city.name + " - " + item.name}
-                                                renderOption={useCallback((option: AirportAutoCompleteType, direction: "ltr" | "rtl" | undefined) => (
-                                                    <div className={`px-3 py-2 flex gap-3 hover:bg-neutral-800 hover:text-white items-center ${!direction ? "" : direction === 'rtl' ? "rtl" : "ltr"}`}>
-                                                        {option.airportType === 'City' ? (
-                                                            <Location className="w-5 h-5 fill-current" />
-                                                        ) : (
-                                                            <Travel className="w-5 h-5 fill-current" />
-                                                        )}
-                                                        <div className="leading-5">
-                                                            <div className='text-xs'>{option.city.name || option.name}</div>
-                                                            <div className='text-3xs'>{option.airportType === 'City' ? "همه فرودگاه ها" : option.name}</div>
-                                                        </div>
-                                                    </div>
-                                                ), [])}
+                                                renderOption={renderOption}
                                                 min={3}
                                                 url={`${ServerAddress.Type}${ServerAddress.Flight}${Flight.AirportSearch}`}
                                                 onChangeHandle={
-
-                                                    useCallback((v: AirportAutoCompleteType | undefined) => {
+                                                    (v: AirportAutoCompleteType | undefined) => {
                                                         setLocations(prevState => ([
                                                             v,
                                                             prevState[1]
                                                         ]))
                                                         setFieldValue("originCode", v?.code || "", true);
-                                                    }, [])
+                                                    }
                                                 }
 
                                                 value={locations[0]}
@@ -307,19 +296,7 @@ const SearchForm: React.FC<Props> = props => {
                                                 noResultMessage={t('NoResultsFound')}
                                                 createTextFromOptionsObject={(item: AirportAutoCompleteType) => item.airportType === 'City' ? item.city.name || item.name : item.city.name + " - " + item.name}
                                                 acceptLanguage="fa-IR"
-                                                renderOption={useCallback((option: AirportAutoCompleteType, direction: "ltr" | "rtl" | undefined) => (
-                                                    <div className={`px-3 py-2 flex gap-3 hover:bg-neutral-800 hover:text-white items-center ${!direction ? "" : direction === 'rtl' ? "rtl" : "ltr"}`}>
-                                                        {option.airportType === 'City' ? (
-                                                            <Location className="w-5 h-5 fill-current" />
-                                                        ) : (
-                                                            <Travel className="w-5 h-5 fill-current" />
-                                                        )}
-                                                        <div className="leading-5">
-                                                            <div className='text-xs'>{option.city.name || option.name}</div>
-                                                            <div className='text-3xs'>{option.airportType === 'City' ? "همه فرودگاه ها" : option.name}</div>
-                                                        </div>
-                                                    </div>
-                                                ), [])}
+                                                renderOption={renderOption}
                                                 icon="location"
                                                 inputClassName={`w-full bg-white rtl:pl-3 truncate block leading-4 border rounded-lg border-neutral-400 py-0.5 text-md h-12 flex flex-col justify-center`}
                                                 placeholder="مقصد"
@@ -327,13 +304,13 @@ const SearchForm: React.FC<Props> = props => {
                                                 url={`${ServerAddress.Type}${ServerAddress.Flight}${Flight.AirportSearch}`}
                                                 onChangeHandle={
 
-                                                    useCallback((v: AirportAutoCompleteType | undefined) => {
+                                                    (v: AirportAutoCompleteType | undefined) => {
                                                         setLocations(prevState => ([
                                                             prevState[0],
                                                             v
                                                         ]))
                                                         setFieldValue("destinationCode", v?.code || "", true);
-                                                    }, [])
+                                                    }
                                                 }
 
                                                 value={locations[1]}
@@ -348,30 +325,18 @@ const SearchForm: React.FC<Props> = props => {
                                                 inputClassName='w-full text-left border border-neutral-400 h-12 rounded-lg focus:border-neutral-900 outline-none'
                                                 type="flight"
                                                 createTextFromOptionsObject={(item: AirportAutoCompleteType) => item.airportType === 'City' ? item.city.name || item.name : item.city.name + " - " + item.name}
-                                                renderOption={useCallback((option: AirportAutoCompleteType, direction: "ltr" | "rtl" | undefined) => (
-                                                    <div className={`px-3 py-2 flex gap-3 hover:bg-neutral-800 hover:text-white items-center ${!direction ? "" : direction === 'rtl' ? "rtl" : "ltr"}`}>
-                                                        {option.airportType === 'City' ? (
-                                                            <Location className="w-5 h-5 fill-current" />
-                                                        ) : (
-                                                            <Travel className="w-5 h-5 fill-current" />
-                                                        )}
-                                                        <div className="leading-5">
-                                                            <div className='text-xs'>{option.city.name || option.name}</div>
-                                                            <div className='text-3xs'>{option.airportType === 'City' ? "همه فرودگاه ها" : option.name}</div>
-                                                        </div>
-                                                    </div>
-                                                ), [])}
+                                                renderOption={renderOption}
                                                 min={3}
                                                 url={`${ServerAddress.Type}${ServerAddress.Flight}${Flight.AirportSearch}`}
                                                 onChangeHandle={
 
-                                                    useCallback((v: AirportAutoCompleteType | undefined) => {
+                                                    (v: AirportAutoCompleteType | undefined) => {
                                                         setLocations(prevState => ([
                                                             prevState[0],
                                                             v
                                                         ]))
                                                         setFieldValue("destinationCode", v?.code || "", true);
-                                                    }, [])
+                                                    }
                                                 }
 
                                                 value={locations[1]}
@@ -440,6 +405,7 @@ const SearchForm: React.FC<Props> = props => {
                                     <div className={`${theme2 ? "sm:col-span-2 lg:col-span-1 xl:col-span-2" : ""}`} >
                                         <div className='relative'>
                                             <DatePickerMobiscroll
+                                                minDate={ dateFormat(new Date()) }
                                                 inputStyle='theme1'
                                                 onChange={a => {
                                                     setFieldValue("departureDate", a.value, true)
