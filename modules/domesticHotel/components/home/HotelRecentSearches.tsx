@@ -1,8 +1,8 @@
-import RecentSearchItem from "@/modules/home/components/RecentSearchItem";
 import { HotelRecentSearchItem } from "../../types/hotel";
 import { useEffect, useState } from "react";
 import { dateDiplayFormat } from "@/modules/shared/helpers";
 import { i18n, useTranslation } from "next-i18next";
+import RecentSearches from "@/modules/home/components/RecentSearches";
 
 const HotelRecentSearches: React.FC = () => {
 
@@ -22,23 +22,35 @@ const HotelRecentSearches: React.FC = () => {
         return null
     }
 
-    const slicedItems: {
+    const theme1 = process.env.THEME === "THEME1";
+    const theme2 = process.env.THEME === "THEME2";
+
+    const transformedItems: {
         title: string;
         subtitle: string;
         url: string;
-    }[] = items.slice(0, 5).map(item => {
+    }[] = items.map(item => {
+        
+        let subtitle = "";
 
-        const checkinDay = dateDiplayFormat({ date: item.dates[0], format: "d", locale: i18n?.language });
-        const checkoutMonth = dateDiplayFormat({ date: item.dates[1], format: "m", locale: i18n?.language });
-        const checkoutDay = dateDiplayFormat({ date: item.dates[1], format: "d", locale: i18n?.language });
-        const checkinMonth = dateDiplayFormat({ date: item.dates[0], format: "m", locale: i18n?.language });
+        if(theme1){
+            const checkinDay = dateDiplayFormat({ date: item.dates[0], format: "d", locale: i18n?.language });
+            const checkoutMonth = dateDiplayFormat({ date: item.dates[1], format: "m", locale: i18n?.language });
+            const checkoutDay = dateDiplayFormat({ date: item.dates[1], format: "d", locale: i18n?.language });
+            const checkinMonth = dateDiplayFormat({ date: item.dates[0], format: "m", locale: i18n?.language });
 
-        let subtitle: string;
+            if (checkinMonth === checkoutMonth) {
+                subtitle = t("checkinTillCheckout", { checkinDay: checkinDay, checkoutDay: checkoutDay, month: checkinMonth });
+            } else {
+                subtitle = `${checkinDay} ${checkinMonth} تا ${checkoutDay} ${checkoutMonth}`;
+            }
+        }
+        
+        if(theme2){
+            const checkin = dateDiplayFormat({ date: item.dates[0], format: "ddd dd mm", locale: i18n?.language });
+            const checkout = dateDiplayFormat({ date: item.dates[1], format: "ddd dd mm", locale: i18n?.language });
 
-        if (checkinMonth === checkoutMonth) {
-            subtitle = t("checkinTillCheckout", { checkinDay: checkinDay, checkoutDay: checkoutDay, month: checkinMonth });
-        } else {
-            subtitle = `${checkinDay} ${checkinMonth} تا ${checkoutDay} ${checkoutMonth}`;
+            subtitle = checkin + " - " + checkout;
         }
 
         return ({
@@ -49,30 +61,13 @@ const HotelRecentSearches: React.FC = () => {
     })
 
     return (
-        <>
-            <div className="flex gap-2 mb-4 my-3">
-
-                <strong className="font-semibold text-md"> جستجوهای اخیر </strong>
-                {/* <span className="text-xs"> ({items.length}) </span> */}
-                <button
-                    type="button"
-                    className="text-red-500 ountline-none text-xs"
-                    onClick={() => { localStorage.removeItem("hotelRecentSearches"); setItems([]); }}
-                >
-                    حذف
-                </button>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-3 pb-3">
-                {slicedItems.map((item, index) => <RecentSearchItem
-                    key={index}
-                    model={item}
-                    type="hotel"
-                />)}
-            </div>
-
-        </>
+        <RecentSearches
+            items={transformedItems}
+            type="hotel"
+            clearItems={() => { localStorage.removeItem("hotelRecentSearches"); setItems([]); }}
+        />
     )
+
 }
 
 export default HotelRecentSearches;
