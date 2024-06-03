@@ -1,5 +1,5 @@
 import '@mobiscroll/react/dist/css/mobiscroll.min.css';
-import { Datepicker as MobiscrollDatepicker, setOptions, localeFa, localeEn } from '@mobiscroll/react';
+import { Datepicker as MobiscrollDatepicker, setOptions, localeFa, localeEn, MbscDateType } from '@mobiscroll/react';
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'next-i18next';
 
@@ -13,6 +13,7 @@ type Props = {
     setFieldValue: any;
     locale?: any;
     initialvalue?: string;
+    min?:MbscDateType;
     label?:string;
     labelIsSimple?:boolean;
     errorText?: string;
@@ -129,7 +130,7 @@ const DatePicker: React.FC<Props> = props => {
                         inputStyle: 'box',
                         placeholder: 'انتخاب تاریخ'
                     }}
-                    min={new Date()}
+                    min={props.min || undefined}
                     marked={marked}
                     value={value}
                     showRangeLabels={false}
