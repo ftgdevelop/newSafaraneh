@@ -1,8 +1,8 @@
-import RecentSearchItem from "@/modules/home/components/RecentSearchItem";
 import { useEffect, useState } from "react";
 import { dateDiplayFormat } from "@/modules/shared/helpers";
 import { i18n } from "next-i18next";
 import { CipRecentSearchItem } from "../../types/cip";
+import RecentSearches from "@/modules/home/components/RecentSearches";
 
 const CipRecentSearches: React.FC = () => {
 
@@ -19,45 +19,30 @@ const CipRecentSearches: React.FC = () => {
     if (!items.length) {
         return null
     }
+    const theme1 = process.env.THEME === "THEME1";
+    const theme2 = process.env.THEME === "THEME2";
 
     const slicedItems: {
         title: string;
         subtitle: string;
         url: string;
-    }[] = items.slice(0, 5).map(item => {
+    }[] = items.map(item => {
 
         return ({
             title: item.airportName,
-            subtitle: dateDiplayFormat({ date: item.flightDate, format: "dd mm", locale: i18n?.language }),
+            subtitle: theme1 ? dateDiplayFormat({ date: item.flightDate, format: "dd mm", locale: i18n?.language }) : theme2 ?  dateDiplayFormat({ date: item.flightDate, format: "ddd dd mm", locale: i18n?.language }) : "",
             url: item.url
         })
     })
 
     return (
-        <>
-            <div className="flex gap-2 mb-4 my-3">
-
-                <strong className="font-semibold text-md"> جستجوهای اخیر </strong>
-                {/* <span className="text-xs"> ({items.length}) </span> */}
-                <button
-                    type="button"
-                    className="text-red-500 ountline-none text-xs"
-                    onClick={() => { localStorage.removeItem("cipRecentSearches"); setItems([]); }}
-                >
-                    حذف
-                </button>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-3 pb-3">
-                {slicedItems.map((item, index) => <RecentSearchItem
-                    key={index}
-                    model={item}
-                    type="cip"
-                />)}
-            </div>
-
-        </>
+        <RecentSearches
+            items={slicedItems}
+            clearItems={() => { localStorage.removeItem("cipRecentSearches"); setItems([]); }}
+            type="cip"
+        />
     )
+
 }
 
 export default CipRecentSearches;
