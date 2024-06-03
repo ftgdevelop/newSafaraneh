@@ -2,6 +2,7 @@ import {useState} from 'react';
 import { i18n, useTranslation } from 'next-i18next';
 import axios from 'axios';
 import { Ticket } from '@/modules/shared/components/ui/icons';
+import { ServerAddress } from '@/enum/url';
 
 type Props = {
     reserveId: string;
@@ -22,7 +23,7 @@ const DownloadPdfVoucher: React.FC<Props> = props => {
 
         try {
             const response = await axios.get(
-                `https://hotelv2.safaraneh.com/api/services/app/Reserve/GetVoucherPdf?ReserveId=${props.reserveId}&Username=${props.username}`,
+                `https://${ServerAddress.Hotel_Availability}/api/services/app/Reserve/GetVoucherPdf?ReserveId=${props.reserveId}&Username=${props.username}`,
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -36,7 +37,7 @@ const DownloadPdfVoucher: React.FC<Props> = props => {
                 
                 setLoading(false);
 
-                const url = `https://hotelv2.safaraneh.com/File/DownloadTempFile?filename=${response.data.result.fileName}.pdf&fileType=${response.data.result.fileType}&fileToken=${response.data.result.fileToken}`;
+                const url = `https://${ServerAddress.Hotel_Availability}/File/DownloadTempFile?filename=${response.data.result.fileName}.pdf&fileType=${response.data.result.fileType}&fileToken=${response.data.result.fileToken}`;
                 let a = document.createElement('a');
                 a.href = url;
                 a.click();
