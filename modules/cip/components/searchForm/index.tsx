@@ -14,6 +14,7 @@ import { CipAutoCompleteType, CipRecentSearchItem } from '../../types/cip';
 import AutoCompleteZoom from '@/modules/shared/components/ui/AutoCompleteZoom';
 import DatePickerMobiscroll from '@/modules/shared/components/ui/DatePickerMobiscroll';
 import { localeFa } from '@mobiscroll/react';
+import { dateFormat } from '@/modules/shared/helpers';
 
 type SearchFormValues = {
     airportUrl: string;
@@ -39,6 +40,13 @@ const SearchForm: React.FC<Props> = props => {
     const [submitPending, setSubmitPending] = useState<boolean>(false);
 
     const [selectedAirportName, setSelectedAirportName] = useState<string>("");
+
+    const renderOption = useCallback((option: CipAutoCompleteType, direction: "ltr" | "rtl" | undefined) => (
+        <div className={`px-3 py-2 flex gap-3 hover:bg-neutral-800 hover:text-white items-center ${!direction ? "" : direction === 'rtl' ? "rtl" : "ltr"}`}>
+            <Location className="w-5 h-5 fill-current" />
+            <div className='text-xs'>{option.name}</div>
+        </div>
+    ), []);
 
     const submitHandle = (values: SearchFormValues) => {
 
@@ -136,12 +144,7 @@ const SearchForm: React.FC<Props> = props => {
                                             //checkTypingLanguage
                                             noResultMessage={t('NoResultsFound')}
                                             createTextFromOptionsObject={(item: CipAutoCompleteType) => item.name || ""}
-                                            renderOption={useCallback((option: CipAutoCompleteType, direction: "ltr" | "rtl" | undefined) => (
-                                                <div className={`px-3 py-2 flex gap-3 hover:bg-blue-50 items-center ${!direction ? "" : direction === 'rtl' ? "rtl" : "ltr"}`}>
-                                                    <Location className="w-5 h-5 fill-current" />
-                                                    <div className='text-xs'>{option.name}</div>
-                                                </div>
-                                            ), [])}
+                                            renderOption={renderOption}
                                             acceptLanguage="fa-IR"
                                             icon="location"
                                             inputClassName={`w-full bg-white truncate leading-4 border rounded-lg border-neutral-400 py-0.5 text-md h-12 flex flex-col justify-center`}
@@ -149,10 +152,10 @@ const SearchForm: React.FC<Props> = props => {
                                             min={3}
                                             url={`${ServerAddress.Type}${ServerAddress.Cip}${Cip.SearchAirport}`}
                                             onChangeHandle={
-                                                useCallback((v: CipAutoCompleteType | undefined) => {
+                                                (v: CipAutoCompleteType | undefined) => {
                                                     setFieldValue("airportUrl", v?.url || "", true);
                                                     setSelectedAirportName(v?.name || "")
-                                                }, [])
+                                                }
                                             }
                                         />
 
@@ -181,19 +184,14 @@ const SearchForm: React.FC<Props> = props => {
                                             type="cip"
                                             icon='location'
                                             createTextFromOptionsObject={(item: CipAutoCompleteType) => item.name || ""}
-                                            renderOption={useCallback((option: CipAutoCompleteType, direction: "ltr" | "rtl" | undefined) => (
-                                                <div className={`px-3 py-2 flex gap-3 hover:bg-neutral-800 hover:text-white items-center ${!direction ? "" : direction === 'rtl' ? "rtl" : "ltr"}`}>
-                                                    <Location className="w-5 h-5 fill-current" />
-                                                    <div className='text-xs'>{option.name}</div>
-                                                </div>
-                                            ), [])}
+                                            renderOption={renderOption}
                                             min={3}
                                             url={`${ServerAddress.Type}${ServerAddress.Cip}${Cip.SearchAirport}`}
                                             onChangeHandle={
-                                                useCallback((v: CipAutoCompleteType | undefined) => {
+                                                (v: CipAutoCompleteType | undefined) => {
                                                     setFieldValue("airportUrl", v?.url || "", true);
                                                     setSelectedAirportName(v?.name || "")
-                                                }, [])
+                                                }
                                             }
                                         />
                                         <Field
@@ -245,6 +243,7 @@ const SearchForm: React.FC<Props> = props => {
                                         /> */}
 
                                         <DatePickerMobiscroll
+                                            minDate={dateFormat(new Date())}
                                             inputStyle='theme1'
                                             onChange={a => {
                                                 setFieldValue("flightDate", a.value, true)
