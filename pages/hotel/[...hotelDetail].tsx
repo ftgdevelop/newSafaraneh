@@ -4,7 +4,7 @@ import { i18n, useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { PageDataType, WebSiteDataType } from '@/modules/shared/types/common';
-import { DomesticAccomodationType, DomesticHotelDetailType, EntitySearchResultItemType, HotelScoreDataType } from '@/modules/domesticHotel/types/hotel';
+import { DomesticAccomodationType, DomesticHotelDetailType, DomesticHotelRichSnippets, EntitySearchResultItemType, HotelScoreDataType } from '@/modules/domesticHotel/types/hotel';
 import { useRouter } from 'next/router';
 import BackToList from '@/modules/domesticHotel/components/hotelDetails/BackToList';
 import { CalendarError, Phone } from '@/modules/shared/components/ui/icons';
@@ -32,6 +32,7 @@ type Props = {
     score?: HotelScoreDataType;
     page?: PageDataType;
     hotel?: DomesticHotelDetailType;
+    richSnippets?: DomesticHotelRichSnippets;
   };
   portalData: WebSiteDataType;
   error410?: "true";
@@ -91,7 +92,7 @@ const HotelDetail: NextPage<Props> = props => {
     return null;
   }
 
-  const { accommodation, hotel: hotelData, page: pageData, score: hotelScoreData } = allData;
+  const { accommodation, hotel: hotelData, page: pageData, score: hotelScoreData, richSnippets } = allData;
 
   const accommodationData = accommodation?.result;
 
@@ -277,10 +278,10 @@ const HotelDetail: NextPage<Props> = props => {
             },
             "aggregateRating": {
               "@type": "AggregateRating",
-              "ratingValue": "${hotelScoreData?.Satisfaction || '100'}",
-              "reviewCount": "${hotelScoreData?.CommentCount || '1'}",
-              "worstRating": "0",
-              "bestRating": "100"
+              "ratingValue": "${richSnippets?.rating?.ratingValue || '100'}",
+              "reviewCount": "${richSnippets?.rating?.reviewCount || '1'}",
+              "worstRating": "${richSnippets?.rating?.worstRating || '0'}",
+              "bestRating": "${richSnippets?.rating?.bestRating || '100'}"
             }
           }`,
           }}

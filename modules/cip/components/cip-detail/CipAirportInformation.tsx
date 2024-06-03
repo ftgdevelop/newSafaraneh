@@ -97,6 +97,7 @@ const CipAirportInformation: React.FC<Props> = props => {
                 />
 
                 <DatePicker
+                    min={new Date()}
                     setFieldValue={setFieldValue}
                     label="تاریخ پرواز"
                     errorText={errors.flightDate as string}
