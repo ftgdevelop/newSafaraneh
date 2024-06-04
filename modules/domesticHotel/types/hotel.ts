@@ -59,7 +59,8 @@ export interface DomesticHotelRichSnippets {
         reviewCount:number;
         worstRating:number;
         bestRating:number;
-      }
+    },
+    priceRange?: string;
 }
 
 export interface DomesticHotelDetailType {

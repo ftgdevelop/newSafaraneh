@@ -257,7 +257,7 @@ const HotelDetail: NextPage<Props> = props => {
             __html: `{
             "@context": "https://schema.org/",
             "@type": "Hotel",
-            "priceRange": "قیمت موجود نیست",
+            "priceRange": "${richSnippets?.priceRange || "قیمت موجود نیست"}",
             "telephone":"${hotelData.Tel || "تلفن ثبت نشده است."}",
             "image": "${hotelData.Gallery && hotelData.Gallery[0]?.Image || hotelData?.ImageUrl || ""}",
             "url": "${configWebsiteUrl}${hotelData.Url}",
