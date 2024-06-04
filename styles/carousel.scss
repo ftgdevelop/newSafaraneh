@@ -39,3 +39,24 @@
         background-color: #111;
     }
 }
+
+
+.THEME2{
+    .slick-arrow {
+        border-radius: 50%;
+        width: 30px;
+        fill: #1668e3;
+        background-color: #fff;
+        background-clip: content-box;
+        box-shadow: 0 0 4px 0 #00000069;
+        &:hover {
+            background-color: #ecf4fd;
+        }
+        &.slick-prev {
+            left: -7px;
+        }
+        &.slick-next {
+            right: -7px;
+        }
+    }
+}
