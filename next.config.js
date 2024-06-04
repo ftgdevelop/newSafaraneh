@@ -42,7 +42,7 @@ const nextConfig = {
   env: {
     PROJECT: "SAFARANEH",
     SITE_NAME: 'https://www.safaraneh.com',
-    THEME: "THEME2",
+    THEME: "THEME1",
     PROJECT_SERVER_TYPE: "https://",
     PROJECT_SERVER_USER: "",
     
