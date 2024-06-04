@@ -64,6 +64,7 @@ const config: Config = {
           700: '#0d5ab9',
           800: '#0a468f',
           900: '#072f5f',
+          950: '#04172f'
         },
 
         'body-background': 'var(--body-background)'

@@ -15,6 +15,7 @@ import CipRecentSearches from '@/modules/cip/components/home/CipRecentSearches';
 
 type Props = {
   modules: ("domesticHotel" | "domesticFlight" | "cip")[];
+  innerElement?: React.ReactNode;
 }
 
 const Banner: React.FC<Props> = props => {
@@ -98,9 +99,10 @@ const Banner: React.FC<Props> = props => {
 
         <Tab
           items={items}
-          wrapperClassName={`sm:rounded-lg ${theme2 ? "sm:border sm:border-neutral-300" : "px-5 pt-3 sm:p-5 bg-white"}`}
+          wrapperClassName={`${theme2 ? "mb-6 sm:rounded-2xl sm:border sm:border-neutral-300" : "sm:rounded-lg px-5 pt-3 sm:p-5 bg-white"}`}
           tabLinksCenter={theme2}
           tabLinksBold={theme2}
+          innerElement={props.innerElement}
         />
 
       </div>
