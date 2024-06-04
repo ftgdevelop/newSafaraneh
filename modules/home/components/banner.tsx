@@ -93,7 +93,7 @@ const Banner: React.FC<Props> = props => {
         onContextMenu={(e) => e.preventDefault()}
         className='absolute top-0 left-0 w-full h-full object-cover object-center z-10 max-sm:hidden'
       />}
-      <div className="max-w-container mx-auto pt-5 sm:px-3 sm:py-10 sm:pb-28 relative z-20">
+      <div className={`max-w-container mx-auto pt-5 sm:px-3 relative z-20 ${theme1 ? "sm:py-10 sm:pb-28" :theme2?"pb-5 sm:pb-8": ""}`}>
 
         {!!theme1 && <h1 className="text-white drop-shadow-lg text-center font-bold text-xl sm:text-4xl mb-6 sm:mb-10" > {tHome("Plan-your-trip")} </h1>}
 

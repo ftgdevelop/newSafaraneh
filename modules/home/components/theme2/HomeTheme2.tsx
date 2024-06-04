@@ -1,6 +1,7 @@
 import { BlogItemType } from "@/modules/blogs/types/blog";
 import Banner from "../banner";
 import LoginLinkBanner from "./LoginLinkBanner";
+import BeyondTypicalStays from "./BeyondTypicalStays";
 
 type Props = {
     siteName: string;
@@ -17,6 +18,9 @@ const HomeTheme2: React.FC<Props> = props => {
                 modules={props.modules}
                 innerElement = {<LoginLinkBanner />}
             />
+
+            <BeyondTypicalStays />
+            
         </>
     )
 }
