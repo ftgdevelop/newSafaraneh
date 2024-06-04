@@ -11,11 +11,12 @@ type Props = {
     wrapperClassName?: string;
     tabLinksCenter?: boolean;
     tabLinksBold?: boolean;
+    innerElement?:React.ReactNode;
 }
 
 const Tab: React.FC<Props> = props => {
 
-    const { items, style2, style3 } = props;
+    const { items, style2, style3, innerElement } = props;
 
     const router = useRouter();
 
@@ -61,7 +62,7 @@ const Tab: React.FC<Props> = props => {
                 </Fragment>)}
             </div>
 
-            {!!items.some(item => item.children2) && <br />}
+            {innerElement || null}
 
             {items.map(item => <Fragment key={item.key}>
                 {activetabKey === item.key ? item.children2 : null}
