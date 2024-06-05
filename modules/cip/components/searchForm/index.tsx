@@ -14,6 +14,7 @@ import { CipAutoCompleteType, CipRecentSearchItem } from '../../types/cip';
 import AutoCompleteZoom from '@/modules/shared/components/ui/AutoCompleteZoom';
 import DatePickerMobiscroll from '@/modules/shared/components/ui/DatePickerMobiscroll';
 import { localeFa } from '@mobiscroll/react';
+import { dateFormat } from '@/modules/shared/helpers';
 
 type SearchFormValues = {
     airportUrl: string;
@@ -39,6 +40,13 @@ const SearchForm: React.FC<Props> = props => {
     const [submitPending, setSubmitPending] = useState<boolean>(false);
 
     const [selectedAirportName, setSelectedAirportName] = useState<string>("");
+
+    const renderOption = useCallback((option: CipAutoCompleteType, direction: "ltr" | "rtl" | undefined) => (
+        <div className={`px-3 py-2 flex gap-3 hover:bg-neutral-800 hover:text-white items-center ${!direction ? "" : direction === 'rtl' ? "rtl" : "ltr"}`}>
+            <Location className="w-5 h-5 fill-current" />
+            <div className='text-xs'>{option.name}</div>
+        </div>
+    ), []);
 
     const submitHandle = (values: SearchFormValues) => {
 
@@ -126,7 +134,7 @@ const SearchForm: React.FC<Props> = props => {
                             <div className={`grid grid-cols-1 md:grid-cols-4 ${theme1 ? "lg:grid-cols-5" : "lg:grid-cols-6"} gap-3 gap-y-5 z-[2] relative`}>
 
                                 {theme2 ? (
-                                    <div className="lg:col-span-2">
+                                    <div className="lg:col-span-2 relative z-[2]">
                                         <AutoCompleteZoom
                                             //defaultListLabel="محبوب ترین ها"
                                             label="جستجوی نام فرودگاه یا شهر"
@@ -136,23 +144,18 @@ const SearchForm: React.FC<Props> = props => {
                                             //checkTypingLanguage
                                             noResultMessage={t('NoResultsFound')}
                                             createTextFromOptionsObject={(item: CipAutoCompleteType) => item.name || ""}
-                                            renderOption={useCallback((option: CipAutoCompleteType, direction: "ltr" | "rtl" | undefined) => (
-                                                <div className={`px-3 py-2 flex gap-3 hover:bg-blue-50 items-center ${!direction ? "" : direction === 'rtl' ? "rtl" : "ltr"}`}>
-                                                    <Location className="w-5 h-5 fill-current" />
-                                                    <div className='text-xs'>{option.name}</div>
-                                                </div>
-                                            ), [])}
+                                            renderOption={renderOption}
                                             acceptLanguage="fa-IR"
                                             icon="location"
-                                            inputClassName={`w-full leading-4 border rounded-lg border-neutral-400 py-0.5 text-md h-12 flex flex-col justify-center`}
+                                            inputClassName={`w-full bg-white truncate leading-4 border rounded-lg border-neutral-400 py-0.5 text-md h-12 flex flex-col justify-center`}
                                             placeholder="جستجوی نام فرودگاه یا شهر"
                                             min={3}
                                             url={`${ServerAddress.Type}${ServerAddress.Cip}${Cip.SearchAirport}`}
                                             onChangeHandle={
-                                                useCallback((v: CipAutoCompleteType | undefined) => {
+                                                (v: CipAutoCompleteType | undefined) => {
                                                     setFieldValue("airportUrl", v?.url || "", true);
                                                     setSelectedAirportName(v?.name || "")
-                                                }, [])
+                                                }
                                             }
                                         />
 
@@ -162,6 +165,7 @@ const SearchForm: React.FC<Props> = props => {
                                             name="airportUrl"
                                             value={values.airportUrl}
                                         />
+                                        
                                         {touched.airportUrl && errors.airportUrl && <div className='text-xs text-red-500'> {errors.airportUrl as string}</div>}
 
                                     </div>
@@ -180,19 +184,14 @@ const SearchForm: React.FC<Props> = props => {
                                             type="cip"
                                             icon='location'
                                             createTextFromOptionsObject={(item: CipAutoCompleteType) => item.name || ""}
-                                            renderOption={useCallback((option: CipAutoCompleteType, direction: "ltr" | "rtl" | undefined) => (
-                                                <div className={`px-3 py-2 flex gap-3 hover:bg-neutral-800 hover:text-white items-center ${!direction ? "" : direction === 'rtl' ? "rtl" : "ltr"}`}>
-                                                    <Location className="w-5 h-5 fill-current" />
-                                                    <div className='text-xs'>{option.name}</div>
-                                                </div>
-                                            ), [])}
+                                            renderOption={renderOption}
                                             min={3}
                                             url={`${ServerAddress.Type}${ServerAddress.Cip}${Cip.SearchAirport}`}
                                             onChangeHandle={
-                                                useCallback((v: CipAutoCompleteType | undefined) => {
+                                                (v: CipAutoCompleteType | undefined) => {
                                                     setFieldValue("airportUrl", v?.url || "", true);
                                                     setSelectedAirportName(v?.name || "")
-                                                }, [])
+                                                }
                                             }
                                         />
                                         <Field
@@ -209,6 +208,7 @@ const SearchForm: React.FC<Props> = props => {
                                     name='airlineName'
                                     value={values.airlineName}
                                     setFieldValue={setFieldValue}
+                                    className={theme2 ? "relative z-[1]" : ""}
                                     fieldClassName='w-full border border-neutral-400 h-12 rounded-lg focus:border-neutral-900 outline-none'
                                     label='نام ایرلاین'
                                 />
@@ -216,6 +216,7 @@ const SearchForm: React.FC<Props> = props => {
                                     name='flightNumber'
                                     value={values.flightNumber}
                                     setFieldValue={setFieldValue}
+                                    className={theme2 ? "relative z-[1]" : ""}
                                     fieldClassName='w-full ltr text-left border border-neutral-400 h-12 rounded-lg focus:border-neutral-900 outline-none'
                                     label='شماره پرواز'
                                 />
@@ -242,6 +243,7 @@ const SearchForm: React.FC<Props> = props => {
                                         /> */}
 
                                         <DatePickerMobiscroll
+                                            minDate={dateFormat(new Date())}
                                             inputStyle='theme1'
                                             onChange={a => {
                                                 setFieldValue("flightDate", a.value, true)

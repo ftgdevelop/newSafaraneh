@@ -11,11 +11,12 @@ type Props = {
     wrapperClassName?: string;
     tabLinksCenter?: boolean;
     tabLinksBold?: boolean;
+    innerElement?:React.ReactNode;
 }
 
 const Tab: React.FC<Props> = props => {
 
-    const { items, style2, style3 } = props;
+    const { items, style2, style3, innerElement } = props;
 
     const router = useRouter();
 
@@ -23,11 +24,11 @@ const Tab: React.FC<Props> = props => {
 
     let tabClassName = (active: boolean) => {
         if (style2) {
-            return `shadow-normal basis-20 relative grow text-blue-700 border border-2 rounded py-3 transition-all ${active ? "bg-blue-50 font-semibold text-primary-700 border-primary-700" : "border-transparent text-neutral-600"}`
+            return `shadow-normal outline-none select-none basis-20 relative grow text-blue-700 border border-2 rounded py-3 transition-all ${active ? "bg-blue-50 font-semibold text-primary-700 border-primary-700" : "border-transparent text-neutral-600"}`
         } else if (style3) {
-            return `text-2xs sm:text-sm px-2 sm:px-5 py-1 sm:py-2 border-b-2 transition-all text-neutral-600 block grow ${active ? "border-red-600" : "border-transparent"}`;
+            return `outline-none select-none text-2xs sm:text-sm px-2 sm:px-5 py-1 sm:py-2 border-b-2 transition-all text-neutral-600 block grow ${active ? "border-red-600" : "border-transparent"}`;
         } else {
-            return `text-2xs sm:text-sm px-2 sm:px-5 py-1 sm:py-2 border-b-2 transition-all ${active ? "text-primary-700 border-primary-700" : "border-transparent text-neutral-600"}`;
+            return `outline-none select-none text-2xs sm:text-sm px-2 sm:px-5 py-1 sm:py-2 border-b-2 transition-all ${active ? "text-primary-700 border-primary-700" : "border-transparent text-neutral-600"}`;
         }
     }
 
@@ -61,7 +62,7 @@ const Tab: React.FC<Props> = props => {
                 </Fragment>)}
             </div>
 
-            {!!items.some(item => item.children2) && <br />}
+            {innerElement || null}
 
             {items.map(item => <Fragment key={item.key}>
                 {activetabKey === item.key ? item.children2 : null}

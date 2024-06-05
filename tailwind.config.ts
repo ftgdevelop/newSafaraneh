@@ -64,6 +64,7 @@ const config: Config = {
           700: '#0d5ab9',
           800: '#0a468f',
           900: '#072f5f',
+          950: '#04172f'
         },
 
         'body-background': 'var(--body-background)'
@@ -72,7 +73,8 @@ const config: Config = {
       width: {
         '850':'850px',
         '520':'520px',
-        '480':'480px'
+        '480':'480px',
+        '400': '400px'
       },
       maxWidth: {
         container: 'var(--container-max-width)'
