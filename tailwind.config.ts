@@ -9,6 +9,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      scale: {
+        '20': '0.2',
+      },
       fontFamily: {
         'samim': ['samim', 'sans-serif'],
         'vazir': ['vazir', 'sans-serif']
@@ -61,6 +64,7 @@ const config: Config = {
           700: '#0d5ab9',
           800: '#0a468f',
           900: '#072f5f',
+          950: '#04172f'
         },
 
         'body-background': 'var(--body-background)'
@@ -69,7 +73,8 @@ const config: Config = {
       width: {
         '850':'850px',
         '520':'520px',
-        '480':'480px'
+        '480':'480px',
+        '400': '400px'
       },
       maxWidth: {
         container: 'var(--container-max-width)'
@@ -93,12 +98,14 @@ const config: Config = {
         '2xs': '12px',
         xs: '13px',
         sm: '14px',
+        md: '15px',
         '2xl': '22px',
         '3xl': '24px',
         '4xl': '28px',
         '5xl': '40px'
       },
       gridTemplateColumns: {
+        '13': 'repeat(13, minmax(0, 1fr))',
         '14': 'repeat(14, minmax(0, 1fr))',
       },
       rotate: {

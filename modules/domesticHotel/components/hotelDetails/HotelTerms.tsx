@@ -26,7 +26,7 @@ const HotelTerms: React.FC<Props> = props => {
 
     return (
         <div id="terms_section" className="max-w-container mx-auto px-3 sm:px-5 pt-7 md:pt-10">
-            <h2 className='text-lg lg:text-3xl font-semibold mb-3 md:mb-7'> {t("terms")} </h2>
+            <h3 className='text-lg lg:text-3xl font-semibold mb-3 md:mb-7'> {t("terms")} </h3>
 
             <div className='p-3 sm:p-5 lg:p-7 bg-white rounded-xl'>
                 <strong className='block text-sm md:text-base font-semibold mb-5'>{tHotel("hotel-terms")}</strong>

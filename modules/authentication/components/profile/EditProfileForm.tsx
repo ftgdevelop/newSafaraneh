@@ -42,14 +42,14 @@ const EditProfileForm: React.FC<Props> = props => {
 
     if (userAuthentication?.isAuthenticated) {
         initialValues = {
-            gender: user.gender === false ? false : true,
-            firstname: user.firstName || "",
-            lastname: user.lastName || "",
+            gender: user?.gender === false ? false : true,
+            firstname: user?.firstName || "",
+            lastname: user?.lastName || "",
             timezone: "",
-            nationalId: user.nationalId || "",
-            birthDay: user.birthDay ? dateFormat(new Date(user.birthDay)) : "",
-            nationalityId: user.nationalityId || "",
-            isNewsLetter: user.isNewsletter || false,
+            nationalId: user?.nationalId || "",
+            birthDay: user?.birthDay ? dateFormat(new Date(user.birthDay)) : "",
+            nationalityId: user?.nationalityId || "",
+            isNewsLetter: user?.isNewsletter || false,
         }
     }
 
@@ -234,7 +234,7 @@ const EditProfileForm: React.FC<Props> = props => {
                                         labelIsSimple
                                         max={maximumBirthDate}
                                         min={minimumBirthDate}
-                                        initialValue={user.birthDay ? dateFormat(new Date(user.birthDay)) : ""}
+                                        initialValue={user?.birthDay ? dateFormat(new Date(user?.birthDay)) : ""}
                                         shamsi={true}
                                         label="تاریخ تولد"
                                         descending
@@ -251,7 +251,7 @@ const EditProfileForm: React.FC<Props> = props => {
                             <CheckboxSwitch
                                 onChange={value => { subscribeNewsLetter(value) }}
                                 className="mb-5"
-                                initialChecked={user.isNewsletter || false}
+                                initialChecked={user?.isNewsletter || false}
                             />
 
 

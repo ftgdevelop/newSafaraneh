@@ -21,17 +21,17 @@ const Contact: NextPage = ({portalData }: { portalData?: WebSiteDataType}) => {
     let longitude, latitude;
 
     if(portalData){
-        latitude = portalData.billing.latitude||"";
-        longitude = portalData.billing.longitude || "";
+        latitude = portalData.billing?.latitude||"";
+        longitude = portalData.billing?.longitude || "";
     }
 
     const tel = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
 
     const email = portalData?.billing.email ||"";
 
-    const instagramLink = portalData?.social.instagram || "";
-    const linkedinLink = portalData?.social.linkedin || "";
-    const twitterLink = portalData?.social.x || "";
+    const instagramLink = portalData?.social?.instagram || "";
+    const linkedinLink = portalData?.social?.linkedin || "";
+    const twitterLink = portalData?.social?.x || "";
 
     return (
         <>
@@ -77,29 +77,42 @@ const Contact: NextPage = ({portalData }: { portalData?: WebSiteDataType}) => {
                             <b className="font-semibold text-lg">{portalData.billing.zipCode}</b>
                         </div>}
 
-                        <h5 className="text-2xl pt-5 font-semibold">ما را در شبکه اجتماعی دنبال کنید</h5>
-                        <div className="flex pt-2 max-lg:pb-10 gap-4">
-                            {instagramLink && <Link href={instagramLink}>
-                                <Image src={instagram} alt='instagram' width={30} height={30} />
-                            </Link> }
-                            {twitterLink && <Link href={twitterLink}>
-                                <Image src={twitter} alt='twitter' width={30} height={30} />
-                            </Link>}
-                            {linkedinLink && <Link href={linkedinLink}>
-                                <Image src={linkden} alt='linkedin' width={30} height={30} />
-                            </Link>}
-                        </div>
-                    </div>
-                    <div>
-                        <h5 className="text-xl font-semibold mb-5">آدرس ما بر روی نقشه</h5>
-                      
-                        {!!(latitude && longitude) && <LeafletNoSsr
-                            className='h-80 w-full rounded-xl'
-                            location={[+latitude, +longitude]}
-                            zoom={15}
-                        />}
+                        {
+                            !!(instagramLink || twitterLink || linkedinLink) && (
+                                <>
+                                    <h5 className="text-2xl pt-5 font-semibold">ما را در شبکه اجتماعی دنبال کنید</h5>
+                                    <div className="flex pt-2 max-lg:pb-10 gap-4">
+                                        {instagramLink && <Link href={instagramLink}>
+                                            <Image src={instagram} alt='instagram' width={30} height={30} />
+                                        </Link> }
+                                        {twitterLink && <Link href={twitterLink}>
+                                            <Image src={twitter} alt='twitter' width={30} height={30} />
+                                        </Link>}
+                                        {linkedinLink && <Link href={linkedinLink}>
+                                            <Image src={linkden} alt='linkedin' width={30} height={30} />
+                                        </Link>}
+                                    </div>
+                                </>
+                            )
+                        }
 
                     </div>
+                    {!!(longitude && latitude) && (
+                        <>
+                            <div>
+                                <h5 className="text-xl font-semibold mb-5">آدرس ما بر روی نقشه</h5>
+                            
+                                <LeafletNoSsr
+                                    className='h-80 w-full rounded-xl'
+                                    location={[+latitude, +longitude]}
+                                    zoom={15}
+                                />
+
+                            </div>
+                        </>
+                    )
+
+                    }
                 </div>
             </div>
         </>

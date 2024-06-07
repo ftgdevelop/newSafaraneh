@@ -159,7 +159,7 @@ const CipReserverInformation: React.FC<Props> = props => {
                     name='reserver.email'
                     isTouched={touched.reserver?.email}
                     label={t('email')}
-                    validateFunction={(value: string) => validateEmail({ value: value, reqiredMessage: t('enter-email-address'), invalidMessage: t('invalid-email') })}
+                    validateFunction={(value: string) => validateEmail({ value: value, invalidMessage: t('invalid-email') })}
                     value={values.reserver.email}
                 />
 

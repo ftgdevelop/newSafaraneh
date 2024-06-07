@@ -29,7 +29,7 @@ const EmailActivationForm = () => {
 
     if (userAuthentication?.isAuthenticated) {
         initialValues = {
-            emailAddress: user.emailAddress || ""
+            emailAddress: user?.emailAddress || ""
         }
     }
 
@@ -136,7 +136,7 @@ const EmailActivationForm = () => {
 
                             <div className="grid sm:grid-cols-4 gap-3 mb-2 lg:w-1/2">
                                 <FormikField
-                                    disabled={!!user.isEmailConfirmed}
+                                    disabled={!!user?.isEmailConfirmed}
                                     labelIsSimple
                                     showRequiredStar
                                     className="font-sans sm:col-span-3"
@@ -148,11 +148,11 @@ const EmailActivationForm = () => {
                                     label={t('email')}
                                     validateFunction={(value: string) => validateEmail({ value: value, reqiredMessage: "ایمیل خود را وارد نمایید!", invalidMessage: t('invalid-email') })}
                                     value={values.emailAddress!}
-                                    showNotConfirmedBadge={user?.emailAddress && !user.isEmailConfirmed}
+                                    showNotConfirmedBadge={!!user?.emailAddress && !user.isEmailConfirmed}
                                 />
 
                                 <div>
-                                    {user.isEmailConfirmed ? (
+                                    {user?.isEmailConfirmed ? (
                                         <span className="text-green-700 text-xs inline-flex items-center sm:mt-8">
                                             <Tik className="fill-current w-4 h-4 rtl:ml-1 ltr:mr-1" />
                                              تایید شده

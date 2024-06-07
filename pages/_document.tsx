@@ -32,7 +32,7 @@ export default function Document() {
           strategy="beforeInteractive"
         />}
       </Head>
-      <body className={`${process.env.THEME === "THEME2" ?"theme-2 text-stone-900 rtl:font-vazir":"text-neutral-700 rtl:font-samim" } bg-body-background`} >
+      <body className={`${process.env.THEME === "THEME2" ?"theme-2 text-stone-900 rtl:font-vazir":"theme-1 text-neutral-700 rtl:font-samim" } bg-body-background`} >
 
         {!!portalGoogleAnalytic && (
           <>

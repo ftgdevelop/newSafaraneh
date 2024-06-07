@@ -4,7 +4,7 @@ import { i18n, useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { PageDataType, WebSiteDataType } from '@/modules/shared/types/common';
-import { DomesticAccomodationType, DomesticHotelDetailType, EntitySearchResultItemType, HotelAllDataRooms, HotelScoreDataType } from '@/modules/domesticHotel/types/hotel';
+import { DomesticAccomodationType, DomesticHotelDetailType, DomesticHotelRichSnippets, EntitySearchResultItemType, HotelScoreDataType } from '@/modules/domesticHotel/types/hotel';
 import { useRouter } from 'next/router';
 import BackToList from '@/modules/domesticHotel/components/hotelDetails/BackToList';
 import { CalendarError, Phone } from '@/modules/shared/components/ui/icons';
@@ -32,7 +32,7 @@ type Props = {
     score?: HotelScoreDataType;
     page?: PageDataType;
     hotel?: DomesticHotelDetailType;
-    rooms?: {result: HotelAllDataRooms};
+    richSnippets?: DomesticHotelRichSnippets;
   };
   portalData: WebSiteDataType;
   error410?: "true";
@@ -92,7 +92,7 @@ const HotelDetail: NextPage<Props> = props => {
     return null;
   }
 
-  const { accommodation, hotel: hotelData, page: pageData, score: hotelScoreData } = allData;
+  const { accommodation, hotel: hotelData, page: pageData, score: hotelScoreData, richSnippets } = allData;
 
   const accommodationData = accommodation?.result;
 
@@ -116,10 +116,10 @@ const HotelDetail: NextPage<Props> = props => {
   if (portalData) {
 
     tel = portalData.billing.telNumber || portalData?.billing.phoneNumber || "";    
-    twitter = portalData.social.x || "";
-    siteLogo = portalData.billing.logo?.value ||"";
-    siteName = portalData.billing.name || "";
-    siteURL = portalData.billing.website || "";
+    twitter = portalData.social?.x || "";
+    siteLogo = portalData.billing?.logo?.value ||"";
+    siteName = portalData.billing?.name || "";
+    siteURL = portalData.billing?.website || "";
   }
 
   if (!hotelData) {
@@ -139,8 +139,6 @@ const HotelDetail: NextPage<Props> = props => {
       script_detail_2_Url = `${configWebsiteUrl}/en/hotels/${hotelData.CityName.replace(/ /g, "-")}`;
     }
   }
-
-  const startingPrice = allData.rooms?.result?.availabilities[0]?.rates[0]?.price || 0;
 
 
   return (
@@ -259,7 +257,7 @@ const HotelDetail: NextPage<Props> = props => {
             __html: `{
             "@context": "https://schema.org/",
             "@type": "Hotel",
-            "priceRange": "شروع قیمت ها از ${startingPrice} ریال",
+            "priceRange": "${richSnippets?.priceRange || "قیمت موجود نیست"}",
             "telephone":"${hotelData.Tel || "تلفن ثبت نشده است."}",
             "image": "${hotelData.Gallery && hotelData.Gallery[0]?.Image || hotelData?.ImageUrl || ""}",
             "url": "${configWebsiteUrl}${hotelData.Url}",
@@ -268,7 +266,7 @@ const HotelDetail: NextPage<Props> = props => {
             "address": {
               "@type": "PostalAddress",
               "addressLocality": "${hotelData.CityName || "شهر ثبت نشده است"}",
-              "addressCountry":"${portalData.billing.countryName || "کشور ثبت نشده است"}",
+              "addressCountry":"IR",
               "postalCode":"${portalData.billing.zipCode || "کد پستی  وجود ندارد"}",
               "streetAddress": "${hotelData?.Address || "آدرس وجود ندارد"}"
             },
@@ -280,43 +278,14 @@ const HotelDetail: NextPage<Props> = props => {
             },
             "aggregateRating": {
               "@type": "AggregateRating",
-              "ratingValue": "${hotelScoreData?.Satisfaction || '100'}",
-              "reviewCount": "${hotelScoreData?.CommentCount || '1'}",
-              "worstRating": "0",
-              "bestRating": "100"
+              "ratingValue": "${richSnippets?.rating?.ratingValue || '100'}",
+              "reviewCount": "${richSnippets?.rating?.reviewCount || '1'}",
+              "worstRating": "${richSnippets?.rating?.worstRating || '0'}",
+              "bestRating": "${richSnippets?.rating?.bestRating || '100'}"
             }
           }`,
           }}
         />
-
-        <script
-          id="script_detail_0"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: `{
-            "@context": "http://schema.org",
-            "@type": "Organization",
-            "name": "${siteName || process.env.PROJECT}",
-            "alternateName": "${process.env.PROJECT || siteName}",
-            "url": "${configWebsiteUrl}",
-            "logo": "${siteLogo}",
-            "contactPoint": [{
-              "@type": "ContactPoint",
-            "telephone": "${tel}",
-            "contactType": "customer service",
-            "areaServed": "IR",
-            "availableLanguage": "Persian"
-          }, {
-              "@type": "ContactPoint",
-            "telephone": "${tel}",
-            "contactType": "sales",
-            "areaServed": "IR",
-            "availableLanguage": "Persian"
-          }]
-        }`,
-          }}
-        />
-
 
       </Head>
 

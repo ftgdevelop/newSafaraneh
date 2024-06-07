@@ -45,7 +45,7 @@ const nextConfig = {
   env: {
     PROJECT: "1STSAFAR",
     SITE_NAME: 'https://www.1stsafar.com',
-    THEME: "THEME1",
+    THEME: "THEME2",
     PROJECT_SERVER_TYPE: "https://",
     PROJECT_SERVER_USER: "",
 
@@ -70,7 +70,7 @@ const nextConfig = {
     PROJECT_SERVER_NATIONALITY: "",
     PORT: '',
     //PROJECT_MODULES: "Flight Hotel CIP Blog ForeignFlight ForeignHotel",
-    PROJECT_MODULES: "DomesticFlight DomesticHotel CIP",
+    PROJECT_MODULES: "DomesticHotel",
     // DEFAULT_lAN:"US",
     // LANGUAGES:["US","NO","FA"]
 

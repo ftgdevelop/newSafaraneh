@@ -8,10 +8,14 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useAppSelector } from '@/modules/shared/hooks/use-store';
+import { WebSiteDataType } from '@/modules/shared/types/common';
 
-const ForgetPassword: NextPage = () => {
+const ForgetPassword: NextPage = ({ portalData }: { portalData?: WebSiteDataType }) => {
 
     const { t } = useTranslation('common');
+
+    const logo = portalData?.billing.logo?.value;
+    const siteName = portalData?.billing.name || process.env.PROJECT;
 
     const router = useRouter();
 
@@ -47,6 +51,8 @@ const ForgetPassword: NextPage = () => {
                             setLoginWithPassword={setLoginWithPassword}
                             toggleLoginType={() => { setLoginWithPassword(prevState => !prevState) }}
                             isNotModal
+                            logo={logo}
+                            siteName={siteName}
                         />
                     </div>
                     <div className='md:col-span-2'>

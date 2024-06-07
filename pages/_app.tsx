@@ -11,7 +11,7 @@ import '../styles/carousel.scss';
 import '../styles/mobiscroll.scss';
 import '../styles/globals.scss';
 import '../styles/leaflet.css';
-import '../styles/modernDatePicker.scss';
+// import '../styles/modernDatePicker.scss';
 
 import { store } from '../modules/shared/store';
 import { WebSiteDataType } from '@/modules/shared/types/common';
@@ -42,26 +42,25 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
     if (locale) {
       router.push(router.asPath, router.asPath, { locale: locale });
     }
-    console.log("_app mounted!")
   }, []);
 
 
   const tel = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
-  const instagram = portalData?.social.instagram || "";
-  const facebook = portalData?.social.facebook || "";
-  const linkedin = portalData?.social.linkedin || "";
-  const twitter = portalData?.social.x || "";
+  const instagram = portalData?.social?.instagram || "";
+  const facebook = portalData?.social?.facebook || "";
+  const linkedin = portalData?.social?.linkedin || "";
+  const twitter = portalData?.social?.x || "";
 
   const logo = portalData?.billing.logo?.value ||"";
   const siteName = portalData?.billing.name || "";
   const favIconLink = portalData?.billing.favIcon?.value || "";
 
-  const portalTitle = portalData?.website.title || "";
-  const portalKeywords = portalData?.metaTags.keyword || "";
-  const portalDescription = portalData?.metaTags.description || "";
+  const portalTitle = portalData?.website?.title || "";
+  const portalKeywords = portalData?.metaTags?.keyword || "";
+  const portalDescription = portalData?.metaTags?.description || "";
   
-  const portalEnamadMetaTag = portalData?.metaTags.enamad || "";
-  const enamadElement = portalData?.website.enamad || "";
+  const portalEnamadMetaTag = portalData?.metaTags?.enamad || "";
+  const enamadElement = portalData?.website?.enamad || "";
 
   let canonicalUrl = "";
   if(typeof router !== 'undefined'){
@@ -85,21 +84,13 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
     <Provider store={store}>
       <Head>
 
-
-
-
-
-
-        {/* TODO: _-_-_S_T_A_R_T_-_-_ delete when mobiscroll is activated */}
-        <link
+        {/* _-_-_S_T_A_R_T_-_-_ delete when mobiscroll is activated */}
+        {/* <link
           rel="stylesheet"
           type="text/css"
           href="https://cdn2.safaraneh.com/libs/react-modern-calendar-datepicker/3.1.6/css/datepicker.min.css"
-        />
-        {/* TODO: _-_-_E_N_D_-_-_ delete when mobiscroll is activated */}
-
-
-
+        /> */}
+        {/* _-_-_E_N_D_-_-_ delete when mobiscroll is activated */}
 
         <meta name="robots" content="noindex" />
         <meta name="theme-color" content="#0a438b" />

@@ -7,6 +7,7 @@ import Image from "next/image";
 import TrackOrder from "./TrackOrder";
 import HeaderAuthentication from "@/modules/authentication/components/HeaderAuthentication";
 import { useAppSelector } from "../../hooks/use-store";
+import Navigation from "./Navigation";
 
 type Props = {
     logo: string;
@@ -23,8 +24,10 @@ const Header: React.FC<Props> = props => {
 
     const theme2 = process.env.THEME === "THEME2";
 
+    const theme1 = process.env.THEME === "THEME1";
+
     return (
-        <header className="bg-white z-30 relative">
+        <header className={`bg-white z-30 relative ${theme2 ? "border-b border-neutral-300" : ""}`}>
 
             {/* {process.env.PROJECT === "SAFARANEH" && <div>
                 <a
@@ -43,19 +46,26 @@ const Header: React.FC<Props> = props => {
                 </a>
             </div>} */}
 
-            <div className="max-w-container mx-auto px-3 md:px-5 py-3 clearfix relative">
+            <div className={`max-w-container mx-auto relative ${theme2 ? "md:flex gap-2 justify-between items-center md:px-3" : theme1 ? "clearfix py-3 px-3 md:px-5" : ""}`}>
 
-                <Link href="/" className="block md:rtl:float-right md:ltr:float-left md:rtl:ml-5 md:ltr:mr-5">
+                <Link href="/" className={`block ${theme1 ? "md:rtl:float-right md:ltr:float-left md:rtl:ml-5 md:ltr:mr-5" : theme2 ?"py-3":""}`}>
                     {logo ? (
-                        <Image src={logo} alt={siteName} width={115} height={48} onContextMenu={e => { e.preventDefault() }} className="h-12 mx-auto" />
+                        <Image src={logo} alt={siteName} width={115} height={48} onContextMenu={e => { e.preventDefault() }} className="h-12 mx-auto object-contain" />
                     ) : (
                         <div className="text-center text-xl font-bold text-white bg-neutral-500 px-3 py-1.5 leading-5 rounded-xl"> NO <br /> LOGO </div>
                     )}
                 </Link>
 
-                <TravelServices logo={logo} siteName={siteName} className="rtl:float-right ltr:float-left" />
+                {theme2 ? (
+                    <Navigation />
+                ) : (
+                    <TravelServices logo={logo} siteName={siteName} className="rtl:float-right ltr:float-left" />
+                )}
 
-                <HeaderAuthentication />
+                <HeaderAuthentication
+                    logo={logo}
+                    siteName={siteName}
+                />
 
                 {!userIsAuthenticated && !theme2 && <TrackOrder />}
 

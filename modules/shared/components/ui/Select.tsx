@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { DownCaretThick } from "./icons";
 
 type Props = {
     items: { label: string, value: string }[];
@@ -9,6 +10,7 @@ type Props = {
     wrapperClassName?: string;
     placeholder?:string;
     h10?:boolean;
+    buttonClassName?:string;
 }
 
 const Select: React.FC<Props> = props => {
@@ -46,10 +48,7 @@ const Select: React.FC<Props> = props => {
         <div className={`relative ${props.wrapperClassName || ""}`} ref={wrapperRef}>
 
             <div
-                className={`
-                bg-white rounded border px-3 ${props.h10?"h-10":"h-12"} justify-center flex flex-col leading-5 text-sm select-none cursor-pointer ${props.className || "border-neutral-400"}
-                before:w-2.5 before:h-2.5 before:inline-block ${open ? "before:-rotate-135" : "before:rotate-45"} before:absolute before:border-b-2 before:border-r-2 before:carret-down before:absolute before:border-neutral-500 rtl:before:left-3 ltr:before:right-3 before:top-1/2 before:-mt-1.5
-                `}
+                className={`${props.buttonClassName || ""} bg-white relative rounded border px-3 ${props.h10?"h-10":"h-12"} justify-center flex flex-col leading-5 text-sm select-none cursor-pointer ${props.className || "border-neutral-400"}`}
                 onClick={() => { setOpen(true) }}
             >
                 {props.label ? (
@@ -58,6 +57,8 @@ const Select: React.FC<Props> = props => {
                     </label>
                 ) : null}
                 {props.items.find(item => item.value === value)?.label || props.placeholder || null}
+
+                <DownCaretThick className={`pointer-events-none w-3 h-3 fill-current top-1/2 -translate-y-1/2 absolute rtl:left-3 ltr:right-3 transition-all ${open?"rotate-180":""}`} />
             </div>
 
             <div className={`absolute z-10 top-full rtl:right-0 ltr:left-0 bg-white min-w-full max-h-64 overflow-auto shadow transition-all ${open ? "visible opacity-100 mt-0" : "invisible opacity-0 mt-1"}`}>
