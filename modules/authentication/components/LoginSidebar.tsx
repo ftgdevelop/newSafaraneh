@@ -125,19 +125,32 @@ const LoginSidebar: React.FC<Props> = props => {
 
             <div className='px-5 text-center'>
                 {!!loginWithPassword && (
-                    <Link
-                        className='text-sm text-blue-700 hover:text-blue-600 block mx-auto mb-4'
-                        href="/forget"
-                    >
-                        {t("forget-password")}
-                    </Link>
+                    <>
+                        <div className='block mx-auto mb-4 text-sm' >
+                        قبلا ثبت‌نام نکرده‌اید؟
+                            <Link
+                                className='text-blue-700 hover:text-blue-600 rtl:mr-2 ltr:ml-2'
+                                href="/register"
+                            >
+                                ثبت‌نام کنید
+                            </Link>
+                        </div>
+
+                        <Link
+                            className='text-sm text-blue-700 hover:text-blue-600 block mx-auto mb-4'
+                            href="/forget"
+                        >
+                            {t("forget-password")}
+                        </Link>
+                    </>
                 )}
+
                 <button
                     type='button'
                     className='text-sm text-blue-700 hover:text-blue-600'
                     onClick={toggleLoginType}
                 >
-                    {loginWithPassword ? t("sign-in-up") : t("sign-in-with-password")}
+                    {loginWithPassword ? "ورود با رمز یکبار مصرف" : t("sign-in-with-password")}
 
                 </button>
             </div>

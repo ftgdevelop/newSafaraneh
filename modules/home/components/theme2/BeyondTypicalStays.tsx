@@ -83,11 +83,13 @@ const BeyondTypicalStays : React.FC = () => {
     return(
         <section className="max-w-container m-auto px-3 max-xl:p-5" >
             <h2 className="font-semibold text-md md:text-2xl mb-5">
-                فراتر از اقامت معمولی خود بروید
+                اقامت مورد علاقه جدید خود را انتخاب کنید
             </h2>
 
-
-                <Slider {...settings}>
+            <div className="-mx-2">
+                <Slider 
+                    {...settings}
+                >
 
                     {cities.map(city => (
                         <div key={city.name} className='sm:px-2 rtl:rtl'>
@@ -103,7 +105,7 @@ const BeyondTypicalStays : React.FC = () => {
                                     alt={city.name}
                                     width={232}
                                     height={314}
-                                    className='col-span-5 h-80'
+                                    className='col-span-5 h-80 w-full'
                                 />
                                 <b className='absolute bottom-0 font-bold text-white p-3 leading-5'> {city.name} </b>
                             </a>
@@ -112,6 +114,9 @@ const BeyondTypicalStays : React.FC = () => {
                     ))}
 
                 </Slider>
+            </div>
+
+
 
         </section>
     )
