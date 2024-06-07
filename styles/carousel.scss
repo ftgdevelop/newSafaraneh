@@ -42,6 +42,13 @@
 
 
 .THEME2{
+    .slick-slider {
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .slick-list {
+        margin: 0;
+    }
     .slick-arrow {
         border-radius: 50%;
         width: 30px;
@@ -53,10 +60,15 @@
             background-color: #ecf4fd;
         }
         &.slick-prev {
-            left: -7px;
+            left: -9px;
         }
         &.slick-next {
-            right: -7px;
+            right: -9px;
         }
+        opacity: 0;
+        transition: all .1s linear;
+    }
+    .slick-slider:hover .slick-arrow {
+        opacity: 1;
     }
 }
