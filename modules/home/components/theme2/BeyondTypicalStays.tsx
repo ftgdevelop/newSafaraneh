@@ -81,7 +81,7 @@ const BeyondTypicalStays : React.FC = () => {
     };
 
     return(
-        <section className="max-w-container m-auto px-3 max-xl:p-5" >
+        <section className="max-w-container m-auto px-3 max-xl:p-5 mb-5 sm:mb-10" >
             <h2 className="font-semibold text-md md:text-2xl mb-5">
                 اقامت مورد علاقه جدید خود را انتخاب کنید
             </h2>

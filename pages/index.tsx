@@ -223,7 +223,7 @@ export const getStaticProps = async (context: any) => {
 
   return ({
     props: {
-      ...await serverSideTranslations(context.locale, ['common', 'home']),
+      ...await serverSideTranslations(context.locale, ['common', 'home','hotel']),
       context: context,
       blogs: recentBlogPost?.data || null
     }

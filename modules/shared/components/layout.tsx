@@ -93,6 +93,8 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     showHeaderAndFooter = false;
   }
 
+  const theme1 = process.env.THEME === "THEME1";
+
   return (
 
     <div className={`wrapper leading-7 ${process.env.THEME || ""} lang-${locale} ${locale !== "en" ? "rtl" : ""} ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`} >
@@ -107,7 +109,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
           <main id="main" className={`min-h-desktop-main relative ${isHeaderUnderMain ? "z-50" : "z-10"}`}>
             {props.children}
           </main>
-          <Footer logo={props.logo} siteName={props.siteName} contactInfo={props.contactInfo} enamadElement={props.enamadElement || undefined} />
+          {!!theme1 && <Footer logo={props.logo} siteName={props.siteName} contactInfo={props.contactInfo} enamadElement={props.enamadElement || undefined} />}
         </>
       ) : (
         <main id="main" >

@@ -2,6 +2,10 @@ import { BlogItemType } from "@/modules/blogs/types/blog";
 import Banner from "../banner";
 import LoginLinkBanner from "./LoginLinkBanner";
 import BeyondTypicalStays from "./BeyondTypicalStays";
+import RecommendedHotels from "./RecommendedHotels";
+import LargeBanner from "./LargeBanner";
+import TrendingDestinations from "./TrendingDestinations";
+import WeekendDeals from "./WeekendDeals";
 
 type Props = {
     siteName: string;
@@ -20,6 +24,14 @@ const HomeTheme2: React.FC<Props> = props => {
             />
 
             <BeyondTypicalStays />
+
+            <RecommendedHotels />
+
+            <LargeBanner />
+
+            <TrendingDestinations />
+
+            <WeekendDeals />
             
         </>
     )
