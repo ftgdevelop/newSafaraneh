@@ -2,6 +2,7 @@ import Pagination from "@/modules/shared/components/ui/Pagination";
 import { PricedHotelItem } from "../../types/hotel";
 import HotelListItem from "./HotelListItem";
 import { useEffect, useState } from "react";
+import HotelListItemTheme2 from "./HotelListItemTheme2";
 
 type Props = {
     hotels: PricedHotelItem[];
@@ -49,7 +50,7 @@ const HotelsList: React.FC<Props> = props => {
             />}
             
             <div>
-                {hotels.slice(firstItemIndex, lastItem).map((hotel, index) => <HotelListItem index={index} key={hotel.HotelId} hotel={hotel} />)}
+                {hotels.slice(firstItemIndex, lastItem).map((hotel, index) => theme2 ? <HotelListItemTheme2 index={index} key={hotel.HotelId} hotel={hotel} /> :<HotelListItem index={index} key={hotel.HotelId} hotel={hotel} />)}
             </div>
 
             <Pagination
