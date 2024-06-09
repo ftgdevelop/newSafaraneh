@@ -219,7 +219,8 @@ const Home: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], portalD
 
 export const getStaticProps = async (context: any) => {
 
-  const recentBlogPost: any = process.env.PROJECT_MODULES?.includes("Blog") ? await getBlogs({ page: 1, per_page: 4 }) : null;
+  const theme2 = process.env.THEME === "THEME2";
+  const recentBlogPost: any = process.env.PROJECT_MODULES?.includes("Blog") ? await getBlogs({ page: 1, per_page: theme2 ? 5 : 4 }) : null;
 
   return ({
     props: {

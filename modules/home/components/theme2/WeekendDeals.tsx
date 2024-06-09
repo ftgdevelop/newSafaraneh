@@ -254,6 +254,8 @@ const WeekendDeals: React.FC = () => {
                             key={hotel.hotelId}
                             hotel={hotel}
                             priceLoading={pricesLoading}
+                            checkin={checkin}
+                            checkout={checkout}
                         />
                     ))}
 

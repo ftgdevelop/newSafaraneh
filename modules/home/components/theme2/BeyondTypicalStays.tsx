@@ -105,7 +105,7 @@ const BeyondTypicalStays : React.FC = () => {
                                     alt={city.name}
                                     width={232}
                                     height={314}
-                                    className='col-span-5 h-80 w-full'
+                                    className='col-span-5 h-80 w-full object-cover'
                                 />
                                 <b className='absolute bottom-0 font-bold text-white p-3 leading-5'> {city.name} </b>
                             </a>

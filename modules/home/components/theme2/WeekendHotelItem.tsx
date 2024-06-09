@@ -18,13 +18,15 @@ type Props = {
         salePrice?: number;
     },
     priceLoading: boolean;
+    checkin: string;
+    checkout: string;
 }
 
 const WeekendHotelItem: React.FC<Props> = props => {
 
     const { t } = useTranslation("common");
 
-    const { hotel } = props;
+    const { hotel} = props;
 
     let tag = "معمولی";
 
@@ -103,8 +105,8 @@ const WeekendHotelItem: React.FC<Props> = props => {
     return (
         <div className='sm:px-2 rtl:rtl'>
             <a
-                href={hotel.url}
-                className='block'
+                href={`${hotel.url}/location-${hotel.hotelId}/checkin-${props.checkin}/checkout-${props.checkout}`}
+                className='block outline-none'
                 target='_blank'
                 title={hotel.name}
             >
@@ -129,8 +131,6 @@ const WeekendHotelItem: React.FC<Props> = props => {
                 <p className="mb-2 text-xs"> {hotel.city} </p>
 
                 {priceBlock}
-
-                {/* <Rating number={hotel.rating} /> */}
 
             </a>
         </div>

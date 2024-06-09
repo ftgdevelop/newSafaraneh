@@ -4,7 +4,7 @@ import Image from "next/image"
 const LargeBanner = () => {
     return (
         <section
-            className="max-w-container m-auto px-3 max-xl:p-5 mb-5 sm:mb-10"
+            className="max-w-container m-auto px-3 max-xl:p-5 mb-5 sm:mb-10 hidden md:block"
         >
             <div className="relative">
                 <Image

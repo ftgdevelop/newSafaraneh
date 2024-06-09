@@ -6,6 +6,7 @@ import RecommendedHotels from "./RecommendedHotels";
 import LargeBanner from "./LargeBanner";
 import TrendingDestinations from "./TrendingDestinations";
 import WeekendDeals from "./WeekendDeals";
+import RecentBlogs from "./RecentBlogs";
 
 type Props = {
     siteName: string;
@@ -32,6 +33,8 @@ const HomeTheme2: React.FC<Props> = props => {
             <TrendingDestinations />
 
             <WeekendDeals />
+
+            <RecentBlogs blogs={props.blogs} />
             
         </>
     )
