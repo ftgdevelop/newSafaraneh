@@ -23,42 +23,50 @@ const PriceRange: React.FC<Props> = props => {
         MaxPrice
     ]
 
-    
+    if(!MinPrice || !MaxPrice || MinPrice === MaxPrice){
+        return null;
+    }
 
     return (
-        <div className="text-xs pt-2 pb-2 space-y-2">
-            <div className="flex justify-between items-center">
-                <h2 className="text-sm font-semibold mb-2">مبلغ</h2>
-                {
-                PriceRangeFilter?.max || PriceRangeFilter?.min ?         
-                    <button type="button" className="text-3xs bg-red-500 text-white pl-2 pr-2 rounded"
-                    onClick={() => null} 
-                    >
-                        حذف
-                    </button> : 
-                    <p></p>
-                }    
-            </div>
-            <div className="grid grid-cols-2 text-xs w-full content-center">
-                <p>حداقل</p>
-                <Select
-                    items={PriceItems.map(item => ({ label: `${item.toLocaleString()} ریال`, value: item.toString() }))}
-                    placeholder="حداقل"
-                    value={PriceRangeFilter?.min?.toString() || '0'}
-                    onChange={e => null}
-                    className="col-span-2 text-xs whitespace-nowrap h-fit p-1" />
-            </div>
+        <>
+            {
+                busData ?
+                    <div className="text-xs pt-2 pb-2 space-y-2">
+                        <div className="flex justify-between items-center">
+                            <h2 className="text-sm font-semibold mb-2">مبلغ</h2>
+                            {
+                                PriceRangeFilter?.max || PriceRangeFilter?.min ?
+                                    <button type="button" className="text-3xs bg-red-500 text-white pl-2 pr-2 rounded"
+                                        onClick={() => null}
+                                    >
+                                        حذف
+                                    </button> :
+                                    <p></p>
+                            }
+                        </div>
+                        <div className="grid grid-cols-2 text-xs w-full content-center">
+                            <p>حداقل</p>
+                            <Select
+                                items={PriceItems.map(item => ({ label: `${item.toLocaleString()} ریال`, value: item.toString() }))}
+                                placeholder="حداقل"
+                                value={PriceRangeFilter?.min?.toString() || '0'}
+                                onChange={e => null}
+                                className="col-span-2 text-xs whitespace-nowrap h-fit p-1" />
+                        </div>
 
-            <div className="grid grid-cols-2 text-xs w-full content-center">
-                <p>حداکثر</p>
-                <Select
-                    items={PriceItems.map(item => ({ label: `${item.toLocaleString()} ریال`, value: item.toString() }))}
-                    placeholder="حداکثر"
-                    value={PriceRangeFilter?.max?.toString() || '0'}
-                    onChange={e => dispatch(setPriceRange({ min: +e, max: PriceRangeFilter?.max }))}
-                    className="col-span-2 text-xs whitespace-nowrap h-fit p-1" />
-            </div>
-        </div>
+                        <div className="grid grid-cols-2 text-xs w-full content-center">
+                            <p>حداکثر</p>
+                            <Select
+                                items={PriceItems.map(item => ({ label: `${item.toLocaleString()} ریال`, value: item.toString() }))}
+                                placeholder="حداکثر"
+                                value={PriceRangeFilter?.max?.toString() || '0'}
+                                onChange={e => dispatch(setPriceRange({ min: +e, max: PriceRangeFilter?.max }))}
+                                className="col-span-2 text-xs whitespace-nowrap h-fit p-1" />
+                        </div> 
+                    </div>:
+                <p></p>
+    }
+        </>    
     )
 }
 

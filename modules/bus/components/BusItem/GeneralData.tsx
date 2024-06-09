@@ -2,6 +2,9 @@ import { Airpalne, RightCaret } from "@/modules/shared/components/ui/icons";
 import { dateDiplayFormat, dateFormat } from "@/modules/shared/helpers";
 import Image from "next/image";
 import { BusItemType } from "../../types";
+import { useState } from "react";
+import SeatInfo from "./SeatInfo";
+import BusDeatil from "./BusDetail";
 
 type Props = {
     busData: BusItemType
@@ -9,6 +12,7 @@ type Props = {
 const GeneralData: React.FC<Props> = props => {
     const today = dateFormat(new Date())
     const { busData } = props
+    const [detailOpen, setDetailOpen] = useState(false)    
     
     const depratureTime = busData.departureDateTime.split('T')[1].split(':').slice(0,2).join(':')
     return (
@@ -48,11 +52,14 @@ const GeneralData: React.FC<Props> = props => {
                 <span className="w-6 h-6 bg-body-background rounded-full absolute -left-3 -bottom-2"></span>
             </div>
                 
+                {
+                detailOpen && <BusDeatil busToken={busData.token} />
+                }
                     
                 <button type="submit" className="text-xs max-sm:text-2xs bg-gray-100 text-gray-500 flex w-full justify-center"
-                    onClick={e => null}>
-                     اطلاعات بیشتر
-                    <span><RightCaret className={`w-5 mt-1 fill-gray-500 rotate-90`} /></span>
+                    onClick={e => setDetailOpen(prev => !prev)}>
+                     {!detailOpen ? 'اطلاعات بیشتر' : 'بستن اطلاعات بیشتر'}
+                    <span><RightCaret className={`w-5 mt-1 fill-gray-500  ${detailOpen ? '-rotate-90' : 'rotate-90'}`} /></span>
                 </button>
         </div>
     )

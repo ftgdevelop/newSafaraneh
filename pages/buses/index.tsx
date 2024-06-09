@@ -22,7 +22,7 @@ const Buses: NextPage<any> = ({data}) => {
     
     const fetchKey = async () => {
         const busData = {
-            departureTime: "2024-06-04",
+            departureTime: "2024-06-13",
             destinationCode: "34",
             originCode: "825"
         }

@@ -113,6 +113,11 @@ export const Flight = {
     MakeDepositToken:"/api/services/app/UserDepositBankGateway/MakeToken",
     ConfirmByDeposit:"/api/services/app/DepositReserve/ConfirmByDeposit"
   };
+  
+  export const Bus = {
+    AvailabilityKey: '/busdomestic.safaraneh.com/api/services/app/BookingBus/Availability',
+    BusList: '/busdomestic.safaraneh.com/api/services/app/BookingBus/GetAvailability?key='
+  }
 
   export const Cip = {
     SearchAirport: "/api/services/app/Airport/Search",
@@ -132,6 +137,7 @@ export const Flight = {
     GetAll:"/api/services/app/Passenger/GetAll",
     Delete:"/api/services/app/Passenger/Delete"
   }
+
   
   export const ServerStatus = {
     Success: 1,

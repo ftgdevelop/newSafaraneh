@@ -13,8 +13,8 @@ const PriceInfo: React.FC<Props> = props => {
                     {props.busData?.salePrice.toLocaleString()}
                     </p>
                     <button
-                        type="button"
-                        className="px-5 w-full h-8 leading-6 text-sm mt-2 text-nowrap bg-blue-700 text-white rounded"
+                    type="button"
+                    className={`px-5 h-8 leading-6 text-sm mt-2 text-nowrap text-white rounded ${props.busData.capacity ? 'bg-blue-700': 'bg-gray-400 cursor-not-allowed'}`}
                         
                     >
                         انتخاب صندلی
