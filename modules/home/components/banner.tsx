@@ -47,7 +47,7 @@ const Banner: React.FC<Props> = props => {
           {!!theme1 && <RecentSearches />}
         </>
         ),
-        children2: theme2 && <RecentSearches />
+        children2: theme2 && <div className='max-sm:px-5' ><RecentSearches /></div>
       }
     )
   }
@@ -62,7 +62,7 @@ const Banner: React.FC<Props> = props => {
           {!!theme1 && <FlightRecentSearches />}
         </>
       ),
-      children2: theme2 && <FlightRecentSearches  />
+      children2: theme2 && <div className='max-sm:px-5' ><FlightRecentSearches  /></div>
     })
   }
 
@@ -76,7 +76,7 @@ const Banner: React.FC<Props> = props => {
           {!!theme1 && <CipRecentSearches />}
         </>
       ),
-      children2: theme2 && <CipRecentSearches />
+      children2: theme2 && <div className='max-sm:px-5'><CipRecentSearches /></div>
     })
 
   }
