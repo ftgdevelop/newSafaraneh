@@ -281,6 +281,7 @@ export interface DomesticHotelAvailability {
 export interface SearchHotelItem {
     HotelId?: number;
     HotelName?: string;
+    BriefDescription?: string;
     HotelTypeName?: string;
     HotelTypeId?: number;
     CityName?: string;
