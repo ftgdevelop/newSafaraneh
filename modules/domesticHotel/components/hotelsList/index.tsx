@@ -35,16 +35,18 @@ const HotelsList: React.FC<Props> = props => {
         }
     });
 
+    const theme2 = process.env.THEME === "THEME2";
+
     return (
         <>
 
-            <Pagination
+            {!theme2 && <Pagination
                 onChange={(page: number) => { setCurrentPage(page) }}
                 itemsPerPage={10}
                 totalItems={hotels?.length || 0}
                 currentPage={currentPage}
                 wrapperClassName="mb-4"
-            />
+            />}
             
             <div>
                 {hotels.slice(firstItemIndex, lastItem).map((hotel, index) => <HotelListItem index={index} key={hotel.HotelId} hotel={hotel} />)}
