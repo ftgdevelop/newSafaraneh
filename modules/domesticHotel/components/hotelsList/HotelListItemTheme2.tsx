@@ -201,7 +201,7 @@ const HotelListItemTheme2: React.FC<Props> = props => {
 
                     {rate}
 
-                    <div className="rtl:text-left ltr:text-right">
+                    <div className="rtl:text-left ltr:text-right max-sm:pb-3">
                         {priceBlock}
                     </div>
 
