@@ -19,11 +19,7 @@ const PriceInfo: React.FC<Props> = props => {
                     >
                         انتخاب صندلی
                     </button>
-                {
-                    props?.busData?.capacity < 10 ?
-                        <p className="text-3xs text-red-600">{props.busData?.capacity} صندلی باقیمانده</p> :
-                        <p></p>
-                }
+                    <p className="text-3xs text-red-600">{props.busData?.capacity} صندلی باقیمانده</p>
             </div>
         </div>
     )

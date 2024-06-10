@@ -45,7 +45,7 @@ const GeneralData: React.FC<Props> = props => {
                         ساعت حرکت {depratureTime}
                     </span>
                 </div>
-                <Airpalne className="w-14 relative bottom-5 left-3 fill-gray-300 hidden max-sm:inline -rotate-90 ltr:rotate-90" />        
+                <Airpalne className="w-14 relative bottom-5 left-3 fill-gray-300 hidden max-sm:inline -rotate-90 ltr:rotate-90" />    
                 <p className="text-lg max-sm:text-sm font-bold text-center">
                     {busData.source.city.name}
                 </p>

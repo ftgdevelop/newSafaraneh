@@ -5,6 +5,7 @@ import SearchData from "@/modules/bus/components/BusList/SearchData";
 import SortBuses from "@/modules/bus/components/BusList/SortBuses";
 import SidebarFilters from "@/modules/bus/components/sidebar/SidebarFilters";
 import { SidebarFilterChange } from "@/modules/bus/templates/SidebarFilterChange";
+import { SortCapacity, SortHightestPrice, SortTime } from "@/modules/bus/templates/SortBus";
 import { BusItemType } from "@/modules/bus/types";
 import { RootState } from "@/modules/shared/store";
 import { NextPage } from "next";
@@ -17,12 +18,13 @@ const Buses: NextPage<any> = ({data}) => {
     const [key, setKey] = useState()
     const [busList, setBusList] = useState<any>()
     const [busInFilter, setBusInFilter] = useState<BusItemType[]>()
+    const [sortBus, setSortBus] = useState<'Time'| 'LowestPrice'| 'HighestPrice'>('LowestPrice')
 
     const SidebarFilter = useSelector((state: RootState) => state.busFilters.filterOption)
     
     const fetchKey = async () => {
         const busData = {
-            departureTime: "2024-06-13",
+            departureTime: "2024-06-14",
             destinationCode: "34",
             originCode: "825"
         }
@@ -81,10 +83,18 @@ const Buses: NextPage<any> = ({data}) => {
             <div className="w-3/4 max-lg:w-full">
                 <SearchData />
                 <ChangeDay />
-                <SortBuses />
+                <SortBuses sortBus={sortBus} changeSortBus={(e: any) => setSortBus(e)} />
 
                 {
-                    busInFilter?.map((item ,index) => <BusItem busData={item} key={index} />)
+                    busInFilter?.sort((a, b) => SortCapacity(a, b))
+                        .sort((a: BusItemType, b: BusItemType): any => {
+                            if (sortBus == "HighestPrice") return SortHightestPrice(a, b)
+                            else if (sortBus == "Time") return SortTime(a, b)
+                            else {
+                                return a.capacity && a.boardPrice - b.boardPrice
+                            }
+                        })
+                    ?.map((item, index) => <BusItem busData={item} key={index} />)
                 }
                 
             </div>

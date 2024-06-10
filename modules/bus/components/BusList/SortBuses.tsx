@@ -1,9 +1,16 @@
-const SortBuses: React.FC = () => {
+type Props = {
+    sortBus: string,
+    changeSortBus: any
+}
+
+const SortBuses: React.FC<Props> = (props) => {
+    const {sortBus, changeSortBus} = props
     const SortItem = (value: string, sortValue: string) => {
         return (
-            <button type="button" className={`border-1 text-sm text-blue-700 text-center h-fit w-full p-1 cursor-pointer max-sm:text-2xs shadow-md
-             hover:border-blue-800 duration-100 whitespace-nowrap rounded-sm bg-white`}
-                onClick={() => null}>
+            <button type="button" className={`border-1 text-sm text-center h-fit w-full p-1 cursor-pointer max-sm:text-2xs shadow-md
+             hover:border-blue-800 ${sortBus == sortValue ? 'border-blue-800 bg-blue-100 text-blue-900' : 'bg-white text-blue-700'}
+              duration-100 whitespace-nowrap rounded-sm`}
+                onClick={() => changeSortBus(sortValue)}>
                 {value}
             </button>
         )
