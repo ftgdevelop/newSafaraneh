@@ -40,8 +40,6 @@ const HeaderAuthentication: React.FC<Props> = props => {
 
     const [delayedOpen, setDelayedOpen] = useState<boolean>(false);
 
-    const [loginWithPassword, setLoginWithPassword] = useState<boolean>(false);
-
     useEffect(() => {
         if (open) {
             setTimeout(() => { setDelayedOpen(true) }, 100);
@@ -190,10 +188,7 @@ const HeaderAuthentication: React.FC<Props> = props => {
                         />
                     ) : (
                         <LoginSidebar
-                            loginWithPassword={loginWithPassword}
                             setDelayedOpen={setDelayedOpen}
-                            setLoginWithPassword={setLoginWithPassword}
-                            toggleLoginType={() => { setLoginWithPassword(prevState => !prevState) }}
                             logo={props.logo}
                             siteName= {props.siteName}
                         />

@@ -191,17 +191,7 @@ const RegisterForm: React.FC = () => {
                                 {t('create-account')}
                             </Button>
 
-                            <p className='text-sm text-center my-4'>
-                                حساب کاربری دارید؟
-                                <Link
-                                    href={'/signin'}
-                                    className='text-blue-500 mx-1'
-                                >
-                                    {t('sign-in')}
-                                </Link>
-                            </p>
-
-                            <p className='text-neutral-400 text-2xs'>
+                            <p className='text-neutral-400 text-2xs mt-6'>
                                 با ثبت نام شما در وب سایت ما قوانین و مقررات و همچنین شرایط مربوط به حفظ حریم خصوصی توسط شما تایید می شود.
                             </p>
 

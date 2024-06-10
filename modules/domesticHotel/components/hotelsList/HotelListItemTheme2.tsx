@@ -1,14 +1,14 @@
 import { PricedHotelItem } from "../../types/hotel";
 import Image from "next/image";
-import { DefaultRoom, InfoCircle, Location } from "@/modules/shared/components/ui/icons";
+import { DefaultRoom, InfoCircle, Location, Verified } from "@/modules/shared/components/ui/icons";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import Rating from "@/modules/shared/components/ui/Rating";
-import HotelScore from "../shared/HotelScore";
 import { useRouter } from 'next/router';
 import { addSomeDays, dateFormat, getDatesDiff, numberWithCommas } from "@/modules/shared/helpers";
 import Tooltip from "@/modules/shared/components/ui/Tooltip";
 import Skeleton from "@/modules/shared/components/ui/Skeleton";
+import GuestRating from "@/modules/shared/components/ui/GuestRating";
 
 type Props = {
     hotel: PricedHotelItem;
@@ -40,23 +40,32 @@ const HotelListItemTheme2: React.FC<Props> = props => {
 
     let rate: React.ReactNode = null;
     if (!hotel.ratesInfo) {
-        rate = null;
+        rate = <div />;
     } else if (hotel.ratesInfo === "loading") {
-        rate = <Skeleton />
+        rate = <Skeleton className="mt-1" />
+    } else if (!hotel.ratesInfo?.Satisfaction) {
+        rate = <div />;
     } else {
-        rate = <HotelScore
-            reviews={hotel.ratesInfo.TotalRowCount}
-            score={hotel.ratesInfo.Satisfaction}
-            small
-            className="text-md"
+        rate = <GuestRating
+            rating={hotel.ratesInfo?.Satisfaction}
+            reviewCount={hotel.ratesInfo.TotalRowCount}
+            wrapperClassName="mt-1"
         />
     }
 
     let priceBlock: React.ReactNode = null;
 
-    if (hotel.priceInfo === "notPriced" || hotel.priceInfo === 'loading') {
+    if (hotel.priceInfo === "notPriced") {
 
         priceBlock = null;
+
+    }else if (hotel.priceInfo === 'loading') {
+        
+        priceBlock = <div dir="ltr">
+            <Skeleton className="w-16" />
+            <Skeleton className="w-28 my-2" />
+            <Skeleton className="w-20" />
+        </div>
 
     } else if (hotel.priceInfo === "need-to-inquire") {
 
@@ -146,15 +155,37 @@ const HotelListItemTheme2: React.FC<Props> = props => {
 
             <div className="md:col-span-3 p-3 max-md:pb-0">
 
-                <div className="font-bold text-neutral-700 rtl:ml-2 ltr:mr-2" > {hotel.HotelCategoryName} {hotel.HotelName} {hotel.CityName} </div>
-
-                {!!hotel.HotelRating && <Rating number={hotel.HotelRating} inline className="align-middle rtl:ml-2 ltr:mr-2" />}
+                <div className="font-bold text-neutral-700 rtl:ml-2 ltr:mr-2 inline-block" > {hotel.HotelCategoryName} {hotel.HotelName} {hotel.CityName} </div>
 
                 <span className="bg-blue-50 rounded-xl leading-6 text-2xs px-2 select-none">
                     {hotel.HotelTypeName}
                 </span>
 
-                {!!hotel.Address && <p className="text-xs leading-4 my-2 text-neutral-400"><Location className="w-4 h-4 fill-neutral-400 inline-block" /> {hotel.Address} </p>}
+                {!!hotel.HotelRating && (
+                    <>
+                        <br />
+                        <Rating number={hotel.HotelRating} inline />
+                    </>
+                )}
+
+
+                {!!hotel.Address && <p className="text-xs leading-4 mb-2 text-neutral-400"><Location className="w-4 h-4 fill-neutral-400 inline-block" /> {hotel.Address} </p>}
+
+                {hotel.Facilities?.slice(0,3).map(facility => (<span className="text-xs rtl:ml-2">
+                    {facility.Image ? (
+                        <Image 
+                        src={facility.Image}
+                        alt={facility.ImageAlt||""}
+                        title={facility.ImageTitle||""}
+                        width={15}
+                        height={15}
+                        className="object-contain inline-block"
+                    />
+                    ) : (
+                        <Verified className="w-5 h-5 fill-neutral-400 inline-block" />
+                    )}
+                    {" " + facility.Title}
+                </span>))}
 
                 {!!hotel.IsCovid && (
                     <span className="bg-blue-50 rounded-xl leading-6 text-2xs px-2 select-none">اطلاعات ایمنی کووید-۱۹</span>
@@ -166,10 +197,10 @@ const HotelListItemTheme2: React.FC<Props> = props => {
                 </div>}
 
 
-                <div className="flex flex-col sm:flex-row gap-4 sm:justify-between">
-                    <div>
-                        {rate}
-                    </div>
+                <div className="flex flex-col sm:flex-row gap-4 sm:justify-between sm:items-end">
+
+                    {rate}
+
                     <div className="rtl:text-left ltr:text-right">
                         {priceBlock}
                     </div>
