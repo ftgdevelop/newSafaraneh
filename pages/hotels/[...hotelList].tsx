@@ -24,7 +24,7 @@ import Head from 'next/head';
 import { WebSiteDataType } from '@/modules/shared/types/common';
 import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
 import AvailabilityTimeout from '@/modules/shared/components/AvailabilityTimeout';
-import LoginLinkBanner from '@/modules/domesticHotel/components/hotelsList/LoginLinkBanner';
+import LoginLinkBanner from '@/modules/shared/components/theme2/LoginLinkBanner';
 
 type Props = {
   searchHotelsData?: {
@@ -719,7 +719,7 @@ const HotelList: NextPage<Props> = props => {
               />
             </div>
 
-            {!!theme2 && <LoginLinkBanner />}
+            {!!theme2 && <LoginLinkBanner message='وقتی وارد سیستم شوید همیشه بهترین قیمت‌های ما را دریافت خواهید کرد!' />}
 
             {!!props.searchHotelsData?.Hotels && <HotelsList
               hotels={filteredHotels}
