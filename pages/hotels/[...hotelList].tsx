@@ -24,6 +24,7 @@ import Head from 'next/head';
 import { WebSiteDataType } from '@/modules/shared/types/common';
 import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
 import AvailabilityTimeout from '@/modules/shared/components/AvailabilityTimeout';
+import LoginLinkBanner from '@/modules/domesticHotel/components/hotelsList/LoginLinkBanner';
 
 type Props = {
   searchHotelsData?: {
@@ -512,6 +513,9 @@ const HotelList: NextPage<Props> = props => {
 
   const canonicalUrl = pageData?.Url ? `${process.env.SITE_NAME}${pageData?.Url}` : "";
 
+  const theme1 = process.env.THEME === "THEME1";
+  const theme2 = process.env.THEME === "THEME2";
+
   return (
 
     <>
@@ -563,7 +567,7 @@ const HotelList: NextPage<Props> = props => {
         description={t("GetTheLatestPriceAndAvailabilityForYourSearchTo", { destination: cityName, dates: `${dateDiplayFormat({ date: checkin, locale: locale, format: "dd mm" })} - ${dateDiplayFormat({ date: checkout, locale: locale, format: "dd mm" })}` })}
       />}
 
-      <div className='max-w-container mx-auto px-5 py-4' ref={searchFormWrapperRef}>
+      <div className={`max-w-container mx-auto ${theme2?"px-3":"px-5"} py-4`} ref={searchFormWrapperRef}>
 
         <ModalPortal
           show={showChangeDateModal}
@@ -614,32 +618,69 @@ const HotelList: NextPage<Props> = props => {
         </ModalPortal>
 
 
-        {!!showOnlyForm && (
-          <div
-            className='fixed bg-black/75 backdrop-blur-sm top-0 bottom-0 right-0 left-0 z-[1]'
-            onClick={() => { setShowOnlyForm(false) }}
-          />
-        )}
-        <SearchForm wrapperClassName='pb-4 relative z-[2]' defaultDates={domesticHotelDefaultDates} defaultDestination={defaultDestination} />
+        <div className={`grid gap-4 grid-cols-1 ${theme2 ? "lg:grid-cols-13" : "lg:grid-cols-4"}`}>
+
+          {!!showOnlyForm && (
+            <div
+              className='fixed bg-black/75 backdrop-blur-sm top-0 bottom-0 right-0 left-0 z-[1]'
+              onClick={() => { setShowOnlyForm(false) }}
+            />
+          )}
+
+          <div className={theme2 ? "lg:col-span-11" : "lg:col-span-4"}>
+
+            <SearchForm wrapperClassName="relative z-[2]" defaultDates={domesticHotelDefaultDates} defaultDestination={defaultDestination} />
+
+            {(fetchPercentage === 100) || <ProgressBarWithLabel
+              className="mt-4"
+              label={progressBarLabel}
+              percentage={fetchPercentage}
+            />}
+          </div>
+
+          {!!theme2 && (
+            <div className='hidden lg:block col-span-2 row-span-2'>
+              <div className='sticky top-5'>
+                <Image
+                  src={"/images/del/adv.png"}
+                  alt='adv'
+                  width={100}
+                  height={1000}
+                  className='w-full mb-5'
+                />
+                <Image
+                  src={"/images/del/adv.png"}
+                  alt='adv'
+                  width={100}
+                  height={1000}
+                  className='w-full'
+                />
+              </div>
+            </div>
+          )}
 
 
-        {(fetchPercentage === 100) || <ProgressBarWithLabel
-          className='mb-4'
-          label={progressBarLabel}
-          percentage={fetchPercentage}
-        />}
-
-        <div className='grid lg:grid-cols-4 gap-4'>
-
-          <div className='col-span-1'>
+          <div className={`col-span-1 ${theme2 ? "lg:col-span-3" : ""}`}>
 
             <button type='button' className='relative block w-full lg:mb-5' onClick={() => { setShowMap(true) }}>
-              <Image src="/images/map-cover.svg" alt="showMap" className='block border w-full h-24 rounded-xl object-cover' width={354} height={100} />
-              <span className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 py-1 border-1 border-blue-600 rounded font-semibold select-none leading-5 text-xs whitespace-nowrap'>
-                {tHotel('viewHotelsOnMap', { cityName: entity?.EntityName || cityName })}
-              </span>
-            </button>
+              {theme2 ? (
+                <div className='border border-neutral-300 rounded-xl overflow-hidden'>
+                  <Image src="/images/staticmap.png" alt="showMap" className='block w-full h-28 object-cover' width={354} height={100} />
+                  <div className='p-2 bg-white text-blue-600 text-sm'>
+                    مشاهده روی نقشه
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <Image src="/images/map-cover.svg" alt="showMap" className='block border w-full h-24 rounded-xl object-cover' width={354} height={100} />
+                  <span className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 py-1 border-1 border-blue-600 rounded font-semibold select-none leading-5 text-xs whitespace-nowrap'>
+                    {tHotel('viewHotelsOnMap', { cityName: entity?.EntityName || cityName })}
+                  </span>
+                </>
+              )}
 
+
+            </button>
 
             <DomesticHotelListSideBar
               allHotels={hotels.length}
@@ -650,7 +691,7 @@ const HotelList: NextPage<Props> = props => {
 
           </div>
 
-          <div className='lg:col-span-3'>
+          <div className={`${theme2 ? "lg:col-span-8" : "lg:col-span-3"}`}>
 
             <div className='flex justify-between mb-4 items-center'>
 
@@ -678,6 +719,8 @@ const HotelList: NextPage<Props> = props => {
               />
             </div>
 
+            {!!theme2 && <LoginLinkBanner />}
+
             {!!props.searchHotelsData?.Hotels && <HotelsList
               hotels={filteredHotels}
             />}
@@ -689,7 +732,7 @@ const HotelList: NextPage<Props> = props => {
             )}
 
             {props.faq && props.faq?.items?.length > 0 && (
-              <div className='bg-white p-5 rounded-lg mt-10'>
+              <div className={`mt-10 ${theme1?"bg-white p-5 rounded-lg":""}`}>
                 <h5 className='font-semibold text-lg'>{t('faq')}</h5>
                 {props.faq.items.filter(faq => (faq.answer && faq.question)).map(faq => (
                   <Accordion
@@ -705,6 +748,8 @@ const HotelList: NextPage<Props> = props => {
               </div>
             )}
           </div>
+
+
         </div>
 
       </div>

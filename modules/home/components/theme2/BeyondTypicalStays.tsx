@@ -81,7 +81,7 @@ const BeyondTypicalStays : React.FC = () => {
     };
 
     return(
-        <section className="max-w-container m-auto px-3 max-xl:p-5" >
+        <section className="max-w-container m-auto px-3 max-xl:p-5 mb-5 sm:mb-10" >
             <h2 className="font-semibold text-md md:text-2xl mb-5">
                 اقامت مورد علاقه جدید خود را انتخاب کنید
             </h2>
@@ -105,7 +105,7 @@ const BeyondTypicalStays : React.FC = () => {
                                     alt={city.name}
                                     width={232}
                                     height={314}
-                                    className='col-span-5 h-80 w-full'
+                                    className='col-span-5 h-80 w-full object-cover'
                                 />
                                 <b className='absolute bottom-0 font-bold text-white p-3 leading-5'> {city.name} </b>
                             </a>
