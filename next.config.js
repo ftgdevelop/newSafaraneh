@@ -69,8 +69,8 @@ const nextConfig = {
     PROJECT_SERVER_TENANTID: "1040",
     PROJECT_SERVER_NATIONALITY: "",
     PORT: '',
-    //PROJECT_MODULES: "Flight Hotel CIP Blog ForeignFlight ForeignHotel",
-    PROJECT_MODULES: "DomesticHotel",
+    //PROJECT_MODULES: "DomesticHotel DomesticFlight CIP Blog ForeignFlight ForeignHotel",
+    PROJECT_MODULES: "DomesticHotel DomesticFlight CIP Blog",
     // DEFAULT_lAN:"US",
     // LANGUAGES:["US","NO","FA"]
 
