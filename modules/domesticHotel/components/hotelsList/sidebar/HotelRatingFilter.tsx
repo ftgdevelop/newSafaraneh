@@ -79,6 +79,8 @@ const HotelRatingFilter: React.FC = () => {
         setValues(initialValues);
     },[initialValues.length]);
     
+    const theme2 = process.env.THEME === "THEME2";
+
     return (
         <>
             <div className="flex justify-between items-start mb-2 mt-4 border-t border-neutral-300 pt-5">
@@ -94,7 +96,7 @@ const HotelRatingFilter: React.FC = () => {
                 </button>}
             </div>
 
-            <div dir="ltr" className="flex justify-between mb-3">
+            <div dir="ltr" className="flex flex-wrap gap-0.5 mb-3">
                 {options.map(item => (
                     <button
                         key={item}
@@ -105,7 +107,7 @@ const HotelRatingFilter: React.FC = () => {
                         onClick={() => { toggleItem(item) }}
                         className={`border ${item ? "text-xs" : "text-3xs"} ${values.includes(item) ? "bg-blue-600 text-white" : "bg-white text-neutral-500"} border-neutral-300 rounded px-1 whitespace-nowrap flex gap-0.5 leading-4 items-center h-8`}
                     >
-                        {item ? <>{item} <Star className={`w-3.5 h-3.5 ${values.includes(item) ? "fill-current" : "fill-amber-500"}`} /> </> : tHotel('unrated')}
+                        {item ? <>{item} <Star className={`w-3.5 h-3.5 ${values.includes(item) ? "fill-current" :theme2? "fill-neutral-700" : "fill-amber-500"}`} /> </> : tHotel('unrated')}
                     </button>
                 ))}
 

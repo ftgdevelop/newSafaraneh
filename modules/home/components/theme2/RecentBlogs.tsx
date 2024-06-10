@@ -9,6 +9,10 @@ type Props = {
 
 const RecentBlogs: React.FC<Props> = props => {
 
+    if (!props.blogs?.length || !process.env.PROJECT_MODULES?.includes("Blog")) {
+        return null
+    }
+
     return (
         <section className="max-w-container m-auto px-3 max-xl:p-5 mb-5 sm:mb-12" >
 
