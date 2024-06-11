@@ -1,5 +1,4 @@
 user-agent: *
-Disallow:
 Disallow: /bin/
 Disallow: /Errors/*
 Disallow: /errors/*
