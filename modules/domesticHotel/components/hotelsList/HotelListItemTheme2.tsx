@@ -123,10 +123,15 @@ const HotelListItemTheme2: React.FC<Props> = props => {
         )
     }
 
+    let url = hotel.Url! + searchInfo;
+    if (process.env.LocaleInUrl === "off"){
+        url = url.replace("/fa","");
+    }
+    
     return (
         <Link
             target="_blank"
-            href={hotel.Url! + searchInfo}
+            href={url}
             key={hotel.CityId}
             className="grid xs:grid-cols-4 mb-4 border border-neutral-200 bg-white rounded-2xl overflow-hidden relative"
         >

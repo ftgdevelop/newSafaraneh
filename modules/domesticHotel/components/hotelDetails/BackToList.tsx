@@ -20,7 +20,7 @@ const BackToList: React.FC<Props> = props => {
 
     let listUrl;
 
-    if (i18n?.language === "fa") {
+    if (i18n?.language === "fa" && process.env.LocaleInUrl !== "off") {
         listUrl = `/fa/hotels/هتل-های-${cityName}`;
     } else if (i18n?.language === "ar") {
         listUrl = `/hotels/فنادق-${props.cityName}`;
