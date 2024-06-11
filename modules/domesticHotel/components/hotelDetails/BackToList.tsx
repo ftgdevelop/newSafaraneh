@@ -12,6 +12,8 @@ type Props = {
 
 const BackToList: React.FC<Props> = props => {
 
+    const theme2 = process.env.THEME === "THEME2";
+
     const { checkin, checkout, cityName } = props;
 
     const { t : tHotel } = useTranslation('hotel');
@@ -31,8 +33,8 @@ const BackToList: React.FC<Props> = props => {
     }
 
     return (
-        <Link href={listUrl} className="text-blue-700 text-sm flex gap-2 items-center">
-            <ArrowRight className="ltr:rotate-180 w-5 h-5 fill-current" /> {tHotel('seeHotelsIn', { city: cityName })}
+        <Link href={listUrl} className={`text-blue-700 text-sm flex gap-2 items-center ${theme2?"shadow-normal rounded-full hover:bg-blue-100 w-8 h-8 items-center justify-center":""}`}>
+            <ArrowRight className="ltr:rotate-180 w-5 h-5 fill-current" /> {!theme2 && tHotel('seeHotelsIn', { city: cityName })}
         </Link>
     )
 }
