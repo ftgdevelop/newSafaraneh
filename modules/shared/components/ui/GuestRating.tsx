@@ -2,6 +2,7 @@ type Props = {
     wrapperClassName?: string;
     reviewCount: number;
     rating: number;
+    large?:boolean;
 }
 
 const GuestRating : React.FC<Props> = props => {
@@ -25,8 +26,8 @@ const GuestRating : React.FC<Props> = props => {
             <span className={`block flex items-center justify-center w-8 h-8 rounded text-md font-bold ${props.rating > 70 ? "bg-green-700 text-white" : "bg-neutral-300"}`}>
                 {props.rating}
             </span>
-            <div className="text-2xs leading-5">
-                <div className="text-sm font-semibold"> {tag} </div>
+            <div className={`leading-5 ${props.large?"text-sm":"text-2xs"}`}>
+                <div className={`${props.large?"text-xl":"text-sm"} font-semibold`}> {tag} </div>
                 ({props.reviewCount} نظر)
             </div>
 
