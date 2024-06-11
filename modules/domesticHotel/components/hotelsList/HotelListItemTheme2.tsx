@@ -128,7 +128,7 @@ const HotelListItemTheme2: React.FC<Props> = props => {
             target="_blank"
             href={hotel.Url! + searchInfo}
             key={hotel.CityId}
-            className="grid md:grid-cols-4 mb-4 border border-neutral-200 bg-white rounded-2xl overflow-hidden relative"
+            className="grid xs:grid-cols-4 mb-4 border border-neutral-200 bg-white rounded-2xl overflow-hidden relative"
         >
             <div className="bg-travel-pattern">
                 {hotel.ImageUrl ? (
@@ -139,7 +139,7 @@ const HotelListItemTheme2: React.FC<Props> = props => {
                         height={200}
                         onContextMenu={(e) => e.preventDefault()}
                         priority={!props.index}
-                        className="object-cover h-full w-full max-lg:rounded-t-lg lg:rtl:rounded-r-lg lg:ltr:rounded-l-lg"
+                        className="object-cover h-full w-full"
                     />
                 ) : (
                     <div
@@ -153,7 +153,7 @@ const HotelListItemTheme2: React.FC<Props> = props => {
             {!!hotel.IsPromotion && <span className="absolute bg-green-600 text-white right-3 top-3 rounded-xl leading-4 text-2xs py-1 px-2 select-none pointer-events-none"> پیشنهاد ویژه </span>}
 
 
-            <div className="md:col-span-3 p-3 max-md:pb-0">
+            <div className="xs:col-span-3 p-3 max-xs:pb-0">
 
                 <div className="font-bold text-neutral-700 rtl:ml-2 ltr:mr-2 inline-block" > {hotel.HotelCategoryName} {hotel.HotelName} {hotel.CityName} </div>
 

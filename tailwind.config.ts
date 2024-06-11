@@ -9,6 +9,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        'xs': '500px'
+      },
       scale: {
         '20': '0.2',
       },
