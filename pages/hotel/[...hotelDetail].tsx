@@ -4,7 +4,7 @@ import { i18n, useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { PageDataType, WebSiteDataType } from '@/modules/shared/types/common';
-import { DomesticAccomodationType, DomesticHotelDetailType, EntitySearchResultItemType, HotelScoreDataType } from '@/modules/domesticHotel/types/hotel';
+import { DomesticAccomodationType, DomesticHotelDetailType, DomesticHotelRichSnippets, EntitySearchResultItemType, HotelScoreDataType } from '@/modules/domesticHotel/types/hotel';
 import { useRouter } from 'next/router';
 import BackToList from '@/modules/domesticHotel/components/hotelDetails/BackToList';
 import { CalendarError, Phone } from '@/modules/shared/components/ui/icons';
@@ -32,6 +32,7 @@ type Props = {
     score?: HotelScoreDataType;
     page?: PageDataType;
     hotel?: DomesticHotelDetailType;
+    richSnippets?: DomesticHotelRichSnippets;
   };
   portalData: WebSiteDataType;
   error410?: "true";
@@ -91,7 +92,7 @@ const HotelDetail: NextPage<Props> = props => {
     return null;
   }
 
-  const { accommodation, hotel: hotelData, page: pageData, score: hotelScoreData } = allData;
+  const { accommodation, hotel: hotelData, page: pageData, score: hotelScoreData, richSnippets } = allData;
 
   const accommodationData = accommodation?.result;
 
@@ -130,7 +131,9 @@ const HotelDetail: NextPage<Props> = props => {
 
   let script_detail_2_Url;
   if (hotelData.CityName) {
-    if (i18n && i18n.language === "fa") {
+    if (process.env.LocaleInUrl === "off"){
+      script_detail_2_Url = `${configWebsiteUrl}/hotels/${hotelData.CityName.replace(/ /g, "-")}`;
+    } else if (i18n && i18n.language === "fa") {
       script_detail_2_Url = `${configWebsiteUrl}/fa/hotels/هتل-های-${hotelData.CityName.replace(/ /g, "-")}`;
     } else if (i18n && i18n.language === "ar") {
       script_detail_2_Url = `${configWebsiteUrl}/ar/hotels/فنادق-${hotelData.CityName.replace(/ /g, "-")}`;
@@ -256,7 +259,7 @@ const HotelDetail: NextPage<Props> = props => {
             __html: `{
             "@context": "https://schema.org/",
             "@type": "Hotel",
-            "priceRange": "قیمت موجود نیست",
+            "priceRange": "${richSnippets?.priceRange || "قیمت موجود نیست"}",
             "telephone":"${hotelData.Tel || "تلفن ثبت نشده است."}",
             "image": "${hotelData.Gallery && hotelData.Gallery[0]?.Image || hotelData?.ImageUrl || ""}",
             "url": "${configWebsiteUrl}${hotelData.Url}",
@@ -277,10 +280,10 @@ const HotelDetail: NextPage<Props> = props => {
             },
             "aggregateRating": {
               "@type": "AggregateRating",
-              "ratingValue": "${hotelScoreData?.Satisfaction || '100'}",
-              "reviewCount": "${hotelScoreData?.CommentCount || '1'}",
-              "worstRating": "0",
-              "bestRating": "100"
+              "ratingValue": "${richSnippets?.rating?.ratingValue || '100'}",
+              "reviewCount": "${richSnippets?.rating?.reviewCount || '1'}",
+              "worstRating": "${richSnippets?.rating?.worstRating || '0'}",
+              "bestRating": "${richSnippets?.rating?.bestRating || '100'}"
             }
           }`,
           }}
@@ -443,7 +446,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const allData: any = await getDomesticHotelDetailsByUrl("/" + locale + url, locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR");
 
-  if (!allData?.data?.result?.hotel) {
+  if (!allData?.data?.result?.hotel && process.env.LocaleInUrl !== "off") {
 
 
     if (locale === "fa") {

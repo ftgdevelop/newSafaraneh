@@ -76,7 +76,7 @@ const ChargeWallet: React.FC = () => {
         const response: any = await makeDepositToken(params, token);
 
         if (response.status == 200) {
-            router.push(`https://${ServerAddress.Payment}/fa/User/Payment/PaymentRequest?tokenId=${response.data.result.tokenId}`);
+            router.push(`https://${ServerAddress.Payment}${process.env.LocaleInUrl==="off"?"":"/fa"}/User/Payment/PaymentRequest?tokenId=${response.data.result.tokenId}`);
         } else {
             dispatch(setReduxError({
                 title: t('error'),

@@ -1,5 +1,4 @@
-import { SetStateAction } from 'react';
-import Link from "next/link";
+import { SetStateAction, useState } from 'react';
 import { useTranslation } from "next-i18next"
 
 import { Close } from "@/modules/shared/components/ui/icons";
@@ -7,12 +6,11 @@ import LognWithPassword from "./LognWithPassword";
 import OTPLogin from "./OTPLogin";
 import { useAppSelector } from '@/modules/shared/hooks/use-store';
 import Image from 'next/image';
+import RegisterForm from './RegisterForm';
+import ForgetPasswordForm from './ForgetPasswordForm';
 
 type Props = {
     setDelayedOpen?: (value: SetStateAction<boolean>) => void;
-    loginWithPassword: boolean;
-    setLoginWithPassword: (value: SetStateAction<boolean>) => void;
-    toggleLoginType: () => void;
     isNotModal?: boolean;
     logo?: string;
     siteName?: string;
@@ -20,7 +18,7 @@ type Props = {
 
 const LoginSidebar: React.FC<Props> = props => {
 
-    const { loginWithPassword, setLoginWithPassword, toggleLoginType } = props;
+    const [formType, setFormType] = useState<"otp" | "login" | "register" | "forget">("otp");
 
     const loginToContinue = useAppSelector(state => state.authentication.loginToContinueReserve);
 
@@ -49,7 +47,7 @@ const LoginSidebar: React.FC<Props> = props => {
                         <Close className='w-6 h-6 fill-neutral-400' />
                     </button>
 
-                    {!!theme1 && (
+                    {/* {!!theme1 && (
                         <div className='flex items-center px-5 gap-1 text-sm'>
                             <Link
                                 href="/signin"
@@ -66,7 +64,7 @@ const LoginSidebar: React.FC<Props> = props => {
                             </Link>
 
                         </div>
-                    )}
+                    )} */}
 
                 </div>
 
@@ -111,35 +109,98 @@ const LoginSidebar: React.FC<Props> = props => {
             }
 
             {
-                loginWithPassword ? (
+                formType === 'login' ? (
                     <LognWithPassword
                         onCloseLogin={() => { setDelayedOpen(false) }}
                     />
+                ) : formType === 'register' ? (
+                    <RegisterForm />
+                ) : formType === 'forget' ? (
+                    <div className='px-5'>
+                        <ForgetPasswordForm 
+                            portalName={props.siteName || ""}
+                        />
+                    </div>
                 ) : (
                     <OTPLogin
                         onCloseLogin={() => { setDelayedOpen(false) }}
-                        onBackToLoginWithPassword={() => { setLoginWithPassword(true) }}
+                        onBackToLoginWithPassword={() => { setFormType('login') }}
                     />
                 )
             }
 
             <div className='px-5 text-center'>
-                {!!loginWithPassword && (
-                    <Link
-                        className='text-sm text-blue-700 hover:text-blue-600 block mx-auto mb-4'
-                        href="/forget"
-                    >
-                        {t("forget-password")}
-                    </Link>
-                )}
-                <button
-                    type='button'
-                    className='text-sm text-blue-700 hover:text-blue-600'
-                    onClick={toggleLoginType}
-                >
-                    {loginWithPassword ? t("sign-in-up") : t("sign-in-with-password")}
+                {formType === 'login' && (
+                    <>
+                        <div className='block mx-auto mb-4 text-sm' >
+                            قبلا ثبت‌نام نکرده‌اید؟
+                            <button
+                                className='text-blue-700 hover:text-blue-600 rtl:mr-2 ltr:ml-2'
+                                type="button"
+                                onClick={() => { setFormType('register') }}
+                            >
+                                ثبت‌نام کنید
+                            </button>
+                        </div>
 
-                </button>
+                        <button
+                            className='text-sm text-blue-700 hover:text-blue-600 block mx-auto mb-4'
+                            type="button"
+                            onClick={() => { setFormType('forget') }}
+                        >
+                            {t("forget-password")}
+                        </button>
+
+                        <button
+                            type='button'
+                            className='text-sm text-blue-700 hover:text-blue-600'
+                            onClick={() => { setFormType('otp') }}
+                        >
+                            ورود با رمز یکبار مصرف
+
+                        </button>
+
+                    </>
+                )}
+
+                {formType === 'register' && (
+                    <>
+                        <div className='block mx-auto mb-4 text-sm' >
+                            حساب کاربری دارید؟
+                            <button
+                                className='text-blue-700 hover:text-blue-600 rtl:mr-2 ltr:ml-2'
+                                type="button"
+                                onClick={() => { setFormType('login') }}
+                            >
+                                {t('sign-in')}
+                            </button>
+                        </div>
+
+                        <button
+                            type='button'
+                            className='text-sm text-blue-700 hover:text-blue-600'
+                            onClick={() => { setFormType('otp') }}
+                        >
+                            ورود با رمز یکبار مصرف
+
+                        </button>
+
+                    </>
+                )}
+
+                {!!(formType === 'otp') && (
+                    <button
+                        type='button'
+                        className='text-sm text-blue-700 hover:text-blue-600'
+                        onClick={() => { setFormType('login') }}
+                    >
+                        {t("sign-in-with-password")}
+
+                    </button>
+                )}
+
+
+
             </div>
         </>
     )
