@@ -44,6 +44,7 @@ const nextConfig = {
   i18n,
   env: {
     PROJECT: "1STSAFAR",
+    LocaleInUrl : "off",
     SITE_NAME: 'https://www.1stsafar.com',
     THEME: "THEME2",
     PROJECT_SERVER_TYPE: "https://",
