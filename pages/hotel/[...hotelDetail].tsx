@@ -131,7 +131,9 @@ const HotelDetail: NextPage<Props> = props => {
 
   let script_detail_2_Url;
   if (hotelData.CityName) {
-    if (i18n && i18n.language === "fa") {
+    if (process.env.LocaleInUrl === "off"){
+      script_detail_2_Url = `${configWebsiteUrl}/hotels/${hotelData.CityName.replace(/ /g, "-")}`;
+    } else if (i18n && i18n.language === "fa") {
       script_detail_2_Url = `${configWebsiteUrl}/fa/hotels/هتل-های-${hotelData.CityName.replace(/ /g, "-")}`;
     } else if (i18n && i18n.language === "ar") {
       script_detail_2_Url = `${configWebsiteUrl}/ar/hotels/فنادق-${hotelData.CityName.replace(/ /g, "-")}`;
@@ -444,7 +446,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const allData: any = await getDomesticHotelDetailsByUrl("/" + locale + url, locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR");
 
-  if (!allData?.data?.result?.hotel) {
+  if (!allData?.data?.result?.hotel && process.env.LocaleInUrl !== "off") {
 
 
     if (locale === "fa") {
