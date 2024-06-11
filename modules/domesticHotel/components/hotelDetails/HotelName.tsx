@@ -8,6 +8,7 @@ import Rating from "@/modules/shared/components/ui/Rating";
 import Image from 'next/image';
 import Attractions from './Attractions';
 import HotelMap from './HotelMap';
+import GuestRating from '@/modules/shared/components/ui/GuestRating';
 
 type Props = {
     hotelData?: DomesticHotelDetailType;
@@ -20,6 +21,9 @@ type Props = {
 const HotelName: React.FC<Props> = props => {
 
     const { hotelData } = props;
+
+    const theme1 = process.env.THEME === "THEME1";
+    const theme2 = process.env.THEME === "THEME2";
 
     const { t: tHotel } = useTranslation('hotel');
 
@@ -35,14 +39,25 @@ const HotelName: React.FC<Props> = props => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 p-3 sm:p-5 lg:p-7 bg-white rounded-b-xl">
             <div className="lg:col-span-2 pt-3">
-                <h1 className="font-semibold text-2xl lg:text-4xl mb-3 sm:mb-4 lg:mb-5"> {hotelData.HotelCategoryName + " " + hotelData.HotelName + " " +hotelData.CityName} </h1>
+                <h1 className="font-semibold text-2xl lg:text-4xl mb-3 sm:mb-4 lg:mb-5"> {hotelData.HotelCategoryName + " " + hotelData.HotelName + " " + hotelData.CityName} </h1>
                 {!!hotelData.HotelRating && <Rating number={hotelData.HotelRating} className="mb-3" />}
                 <p className="text-neutral-500 text-sm mb-3 sm:mb-6"><Location className="w-4 h-4 fill-current inline-block align-middle" /> {hotelData.Address}</p>
-                <HotelScore
-                    reviews={props.scoreData?.CommentCount}
-                    score={props.scoreData?.Satisfaction}
-                    className="text-md lg:text-lg font-semibold"
-                />
+                {theme1 ? (
+                    <HotelScore
+                        reviews={props.scoreData?.CommentCount}
+                        score={props.scoreData?.Satisfaction}
+                        className="text-md lg:text-lg font-semibold"
+                    />
+                ) : (theme2 && props.scoreData?.CommentCount && props.scoreData.Satisfaction) ? (
+                    <GuestRating
+                        rating={props.scoreData?.Satisfaction}
+                        reviewCount={props.scoreData?.CommentCount}
+                        large
+                    />
+                ) : (
+                    null
+                )}
+
             </div>
 
             {(hotelData.Latitude && hotelData.Longitude) ? (
