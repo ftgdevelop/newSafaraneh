@@ -25,6 +25,7 @@ import NotFound from '@/modules/shared/components/ui/NotFound';
 import { useEffect, useRef, useState } from 'react';
 import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
 import AvailabilityTimeout from '@/modules/shared/components/AvailabilityTimeout';
+import LoginLinkBanner from '@/modules/shared/components/theme2/LoginLinkBanner';
 
 type Props = {
   allData: {
@@ -369,6 +370,10 @@ const HotelDetail: NextPage<Props> = props => {
       <div className="max-w-container mx-auto px-3 sm:px-5" id="hotel_intro">
 
         <HotelName hotelData={hotelData} scoreData={hotelScoreData} />
+
+        <LoginLinkBanner
+          message='با ورود به حساب کاربری از تخفیف رزرو این هتل استفاده کنید'
+        />
 
 
         <div ref={searchFormWrapperRef} className='pt-5'>
