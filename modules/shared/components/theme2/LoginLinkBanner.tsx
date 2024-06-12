@@ -1,10 +1,16 @@
+import { openLoginForm } from "@/modules/authentication/store/authenticationSlice";
 import Button from "@/modules/shared/components/ui/Button"
 import { Verified } from "@/modules/shared/components/ui/icons";
-import { useAppSelector } from "@/modules/shared/hooks/use-store";
+import { useAppDispatch, useAppSelector } from "@/modules/shared/hooks/use-store";
 
-const LoginLinkBanner = () => {
+type Props = {
+    message:string;
+}
+const LoginLinkBanner:React.FC<Props> = props => {
     
     const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
+
+    const dispatch = useAppDispatch();
 
     if (isAuthenticated){
         return null;
@@ -16,14 +22,15 @@ const LoginLinkBanner = () => {
                 <Verified 
                     className="w-10 h-10 fill-current shrink-0"
                 />
-                10٪ یا بیشتر در بیش از 100000 هتل با قیمت اعضا صرفه جویی کنید. همچنین، با اضافه کردن هتل به پرواز، اعضا تا 30٪ صرفه جویی می کنند
+                {props.message}
             </p>
 
             <Button
-                href="/register"
+                type="button"
                 className="h-10 px-5 text-xs whitespace-nowrap"
+                onClick={()=>{dispatch(openLoginForm())}}
             >
-                ثبت نام
+                وارد شوید
             </Button>
         </div>
     )

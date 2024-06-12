@@ -29,7 +29,6 @@ const ForgetPassword: NextPage = ({ portalData }: { portalData?: WebSiteDataType
 
     const type = router.query?.type || "";
 
-    const [loginWithPassword, setLoginWithPassword] = useState<boolean>(type === "withPassword" ? true : false);
 
     return (
         <>
@@ -47,9 +46,6 @@ const ForgetPassword: NextPage = ({ portalData }: { portalData?: WebSiteDataType
                 <div className='grid gap-4 md:grid-cols-3'>
                     <div className='border border-neutral-300 bg-white rounded-md mb-4 py-6'>
                         <LoginSidebar
-                            loginWithPassword={loginWithPassword}
-                            setLoginWithPassword={setLoginWithPassword}
-                            toggleLoginType={() => { setLoginWithPassword(prevState => !prevState) }}
                             isNotModal
                             logo={logo}
                             siteName={siteName}

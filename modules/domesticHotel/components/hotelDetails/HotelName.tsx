@@ -1,4 +1,3 @@
-import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 
 import { DomesticHotelDetailType } from "@/modules/domesticHotel/types/hotel";
@@ -8,6 +7,8 @@ import Rating from "@/modules/shared/components/ui/Rating";
 import Image from 'next/image';
 import Attractions from './Attractions';
 import HotelMap from './HotelMap';
+import GuestRating from '@/modules/shared/components/ui/GuestRating';
+import HotelMapButton from './HotelMapButton';
 
 type Props = {
     hotelData?: DomesticHotelDetailType;
@@ -21,7 +22,8 @@ const HotelName: React.FC<Props> = props => {
 
     const { hotelData } = props;
 
-    const { t: tHotel } = useTranslation('hotel');
+    const theme1 = process.env.THEME === "THEME1";
+    const theme2 = process.env.THEME === "THEME2";
 
     const [showMap, setShowMap] = useState<boolean>(false);
 
@@ -33,28 +35,34 @@ const HotelName: React.FC<Props> = props => {
 
     return (
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 p-3 sm:p-5 lg:p-7 bg-white rounded-b-xl">
+        <div className={`grid grid-cols-1 lg:grid-cols-3 gap-5 bg-white rounded-b-xl ${theme1?" p-3 sm:p-5 xl:p-7":"pt-14 pb-5"}`}>
             <div className="lg:col-span-2 pt-3">
-                <h1 className="font-semibold text-2xl lg:text-4xl mb-3 sm:mb-4 lg:mb-5"> {hotelData.HotelCategoryName + " " + hotelData.HotelName + " " +hotelData.CityName} </h1>
+                <h1 className="font-semibold text-2xl lg:text-4xl mb-3 sm:mb-4 lg:mb-5"> {hotelData.HotelCategoryName + " " + hotelData.HotelName + " " + hotelData.CityName} </h1>
                 {!!hotelData.HotelRating && <Rating number={hotelData.HotelRating} className="mb-3" />}
                 <p className="text-neutral-500 text-sm mb-3 sm:mb-6"><Location className="w-4 h-4 fill-current inline-block align-middle" /> {hotelData.Address}</p>
-                <HotelScore
-                    reviews={props.scoreData?.CommentCount}
-                    score={props.scoreData?.Satisfaction}
-                    className="text-md lg:text-lg font-semibold"
-                />
+                {theme1 ? (
+                    <HotelScore
+                        reviews={props.scoreData?.CommentCount}
+                        score={props.scoreData?.Satisfaction}
+                        className="text-md lg:text-lg font-semibold"
+                    />
+                ) : (theme2 && props.scoreData?.CommentCount && props.scoreData.Satisfaction) ? (
+                    <GuestRating
+                        rating={props.scoreData?.Satisfaction}
+                        reviewCount={props.scoreData?.CommentCount}
+                        large
+                    />
+                ) : (
+                    null
+                )}
+
             </div>
 
-            {(hotelData.Latitude && hotelData.Longitude) ? (
-                <button type='button' className='lg:col-span-1 relative' onClick={() => { setShowMap(true) }}>
-                    <Image src="/images/map-cover.svg" alt="showMap" className='block w-full h-full object-cover' width={354} height={173} />
-                    <span className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-5 py-1 border-2 border-blue-600 rounded font-semibold select-none leading-5 text-sm'>
-                        {tHotel('viewOnMap')}
-                    </span>
-                </button>
-            ) : (
-                <div className="lg:col-span-1" />
-            )}
+            <HotelMapButton 
+                onClick={() => { setShowMap(true) }}
+                Latitude={hotelData.Latitude}
+                Longitude={hotelData.Longitude}
+            />
 
             <div className='hidden lg:block lg:col-span-2'>
                 <strong className='block font-semibold text-md lg:text-lg mb-3'>امکانات محبوب هتل</strong>

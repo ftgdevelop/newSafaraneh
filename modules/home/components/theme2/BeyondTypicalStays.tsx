@@ -1,9 +1,10 @@
-import { LeftCaret, RightCaret} from "@/modules/shared/components/ui/icons";
+import { LeftCaret, RightCaret } from "@/modules/shared/components/ui/icons";
 import { useTranslation } from "next-i18next";
 import Image from "next/image";
+import Link from "next/link";
 import Slider from "react-slick";
 
-const BeyondTypicalStays : React.FC = () => {
+const BeyondTypicalStays: React.FC = () => {
 
     const { t: tHome } = useTranslation('home');
 
@@ -80,38 +81,52 @@ const BeyondTypicalStays : React.FC = () => {
         ]
     };
 
-    return(
-        <section className="max-w-container m-auto px-3 max-xl:p-5" >
+    return (
+        <section className="max-w-container m-auto px-3 max-xl:p-5 mb-5 sm:mb-10" >
             <h2 className="font-semibold text-md md:text-2xl mb-5">
-                فراتر از اقامت معمولی خود بروید
+                اقامت مورد علاقه جدید خود را انتخاب کنید
             </h2>
 
+            <div className="-mx-2">
+                <Slider
+                    {...settings}
+                >
 
-                <Slider {...settings}>
+                    {cities.map(city => {
 
-                    {cities.map(city => (
-                        <div key={city.name} className='sm:px-2 rtl:rtl'>
-                            <a 
-                                href={city.url} 
-                                className='rounded-2xl relative block overflow-hidden before:absolute before:bg-gradient-to-t from-black/75 before:to-trabsparent before:h-24 before:left-0 before:right-0 before:bottom-0' 
-                                target='_blank' 
-                                title={city.name}
-                            >
-                                <Image
-                                    onContextMenu={e => { e.preventDefault() }}
-                                    src={city.imageUrl}
-                                    alt={city.name}
-                                    width={232}
-                                    height={314}
-                                    className='col-span-5 h-80'
-                                />
-                                <b className='absolute bottom-0 font-bold text-white p-3 leading-5'> {city.name} </b>
-                            </a>
-                        </div>
+                        let url = city.url;
 
-                    ))}
+                        if (process.env.LocaleInUrl === "off") {
+                            url = url.replace("fa", "");
+                        }
+
+                        return (
+                            <div key={city.name} className='sm:px-2 rtl:rtl'>
+                                <Link
+                                    href={url}
+                                    className='rounded-2xl relative block overflow-hidden before:absolute before:bg-gradient-to-t from-black/75 before:to-trabsparent before:h-24 before:left-0 before:right-0 before:bottom-0'
+                                    target='_blank'
+                                    title={city.name}
+                                >
+                                    <Image
+                                        onContextMenu={e => { e.preventDefault() }}
+                                        src={city.imageUrl}
+                                        alt={city.name}
+                                        width={232}
+                                        height={314}
+                                        className='col-span-5 h-80 w-full object-cover'
+                                    />
+                                    <b className='absolute bottom-0 font-bold text-white p-3 leading-5'> {city.name} </b>
+                                </Link>
+                            </div>
+                        )
+                    }
+                    )}
 
                 </Slider>
+            </div>
+
+
 
         </section>
     )

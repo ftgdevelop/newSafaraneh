@@ -1,11 +1,13 @@
 import ForgetPasswordForm from '@/modules/authentication/components/ForgetPasswordForm';
 import BreadCrumpt from '@/modules/shared/components/ui/BreadCrumpt';
+import { RightCaretBold } from '@/modules/shared/components/ui/icons';
 import { WebSiteDataType } from '@/modules/shared/types/common';
 import type { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const ForgetPassword: NextPage = ({ portalData }: { portalData?: WebSiteDataType }) => {
 
@@ -33,8 +35,12 @@ const ForgetPassword: NextPage = ({ portalData }: { portalData?: WebSiteDataType
                 />
 
                 <div className='grid gap-4 md:grid-cols-3'>
-                    
-                    <div>
+
+                    <div className='border border-neutral-300 bg-white rounded-md mb-4 p-5 sm:py-10'>
+                        <Link href="/signin" className='text-blue-700 hover:text-blue-500 text-sm inline-block mb-5'>
+                            <RightCaretBold className='w-5 h-5 fill-current inline-block rtl:ml-1 ltr:mr-1 ' />
+                            برگشت به صفحه ورود
+                        </Link>
                         <ForgetPasswordForm portalName={portalName} />
                     </div>
 

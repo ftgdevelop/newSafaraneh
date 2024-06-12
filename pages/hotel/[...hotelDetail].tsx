@@ -25,6 +25,7 @@ import NotFound from '@/modules/shared/components/ui/NotFound';
 import { useEffect, useRef, useState } from 'react';
 import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
 import AvailabilityTimeout from '@/modules/shared/components/AvailabilityTimeout';
+import LoginLinkBanner from '@/modules/shared/components/theme2/LoginLinkBanner';
 
 type Props = {
   allData: {
@@ -131,7 +132,9 @@ const HotelDetail: NextPage<Props> = props => {
 
   let script_detail_2_Url;
   if (hotelData.CityName) {
-    if (i18n && i18n.language === "fa") {
+    if (process.env.LocaleInUrl === "off"){
+      script_detail_2_Url = `${configWebsiteUrl}/hotels/${hotelData.CityName.replace(/ /g, "-")}`;
+    } else if (i18n && i18n.language === "fa") {
       script_detail_2_Url = `${configWebsiteUrl}/fa/hotels/هتل-های-${hotelData.CityName.replace(/ /g, "-")}`;
     } else if (i18n && i18n.language === "ar") {
       script_detail_2_Url = `${configWebsiteUrl}/ar/hotels/فنادق-${hotelData.CityName.replace(/ /g, "-")}`;
@@ -368,6 +371,10 @@ const HotelDetail: NextPage<Props> = props => {
 
         <HotelName hotelData={hotelData} scoreData={hotelScoreData} />
 
+        <LoginLinkBanner
+          message='با ورود به حساب کاربری از تخفیف رزرو این هتل استفاده کنید'
+        />
+
 
         <div ref={searchFormWrapperRef} className='pt-5'>
           {!!showOnlyForm && (
@@ -444,7 +451,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const allData: any = await getDomesticHotelDetailsByUrl("/" + locale + url, locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR");
 
-  if (!allData?.data?.result?.hotel) {
+  if (!allData?.data?.result?.hotel && process.env.LocaleInUrl !== "off") {
 
 
     if (locale === "fa") {
