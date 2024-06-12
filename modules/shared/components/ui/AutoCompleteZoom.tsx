@@ -51,6 +51,9 @@ function AutoCompleteZoom<T>(props: PropsWithChildren<Props<T>>) {
     useEffect(()=>{
         if (open && inputRef.current){
             inputRef.current.select();
+            if (window && window.innerWidth < 650){
+                wrapperRef.current?.scrollIntoView({ behavior: "smooth" });
+            }
         }
     },[open]);
 
