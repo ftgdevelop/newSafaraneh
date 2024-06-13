@@ -57,8 +57,8 @@ const nextConfig = {
     
     PROJECT_SERVER_HOTEL_WP:"performance.1stsafar.com",
     PROJECT_SERVER_HOTEL_MAIN: "api.1stsafar.com",
-    PROJECT_SERVER_HOTEL_DATA: "hoteldomesticdata.safaraneh.com",
-    PROJECT_SERVER_HOTEL_AVAILABILITY: "hotelv4.safaraneh.com",
+    PROJECT_SERVER_HOTEL_DATA: "hoteldomesticdata.1stsafar.com",
+    PROJECT_SERVER_HOTEL_AVAILABILITY: "hotelv4.1stsafar.com",
     PROJECT_SERVER_COORDINATOR:"coordinator.1stsafar.com",
     //PROJECT_SERVER_BLOG :"panel.safaraneh.com",
     PROJECT_SERVER_TRAVELER:"traveller.safaraneh.com",
