@@ -61,6 +61,8 @@ type Props = {
 
 const ReserverInformation: React.FC<Props> = props => {
 
+    const theme1 = process.env.THEME === "THEME1";
+
     const { t } = useTranslation('common');
 
     const { errors, touched, setFieldValue, values } = props;
@@ -95,8 +97,8 @@ const ReserverInformation: React.FC<Props> = props => {
                 {t('reserver-information')}
             </h4>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-2 gap-y-5">
-                <div role="group" className="md:col-span-2 lg:col-span-1 leading-4" >
+            <div className={`grid gap-x-2 gap-y-5 ${theme1?" md:grid-cols-2 lg:grid-cols-3":"grid-cols-1"}`}>
+                <div role="group" className={`leading-4 ${theme1?"md:col-span-2 lg:col-span-1":""}`} >
                     <label className='block text-xs mb-1' > جنسیت </label>
                     <label className='inline-flex items-center gap-1 rtl:ml-4 ltr:mr-4'>
                         <Field

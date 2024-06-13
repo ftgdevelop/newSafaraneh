@@ -174,11 +174,11 @@ const RoomItemTheme2: React.FC<Props> = props => {
         bookBtn = (
             <Button
                 onClick={() => {
-                    rate.bookingToken ? props.onSelectRoom(rate.bookingToken, count) : undefined;
+                    (rate.bookingToken && !props.selectedRoomToken) ? props.onSelectRoom(rate.bookingToken, count) : undefined;
                 }}
                 loading={!!selectedRoomToken && selectedRoomToken === rate.bookingToken}
                 disabled={!!selectedRoomToken && selectedRoomToken !== rate.bookingToken}
-                className='block w-full h-10 lg:w-44 px-5'
+                className='block h-10 w-32 px-5'
             >
                 {prices?.roomPrice && prices.roomPrice < 1000 ?
                     "درخواست رزرو"
