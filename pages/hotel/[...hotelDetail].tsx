@@ -41,6 +41,10 @@ type Props = {
 
 const HotelDetail: NextPage<Props> = props => {
 
+  const theme2 = process.env.THEME === "THEME2";
+
+  const theme1 = process.env.THEME === "THEME1";
+
   const { portalData, allData } = props;
 
   const { t } = useTranslation('common');
@@ -341,7 +345,7 @@ const HotelDetail: NextPage<Props> = props => {
       </ModalPortal>
 
       <div className="max-w-container mx-auto px-3 sm:px-5 pt-5">
-        <div className='bg-white p-3'>
+        <div className={theme1 ? "bg-white p-3" : "mb-4"}>
           {!!hotelData.IsCovid && <div className='bg-emerald-700 leading-4 p-3 sm:p-4 text-white text-xs sm:text-sm rounded-md flex flex-wrap gap-2 items-center m-1 mb-3'>
             <Phone className='w-5 h-5 sm:w-6 sm:h-6 fill-current block' />
             جهت رزرو با شماره <a dir="ltr" href={`tel:${tel?.replace("021", "+9821") || "+982126150051"}`} className='underline text-sm sm:text-base'> {tel || "02126150051"} </a> تماس بگیرید.
@@ -371,9 +375,9 @@ const HotelDetail: NextPage<Props> = props => {
 
         <HotelName hotelData={hotelData} scoreData={hotelScoreData} />
 
-        <LoginLinkBanner
+        {theme2 && <LoginLinkBanner
           message='با ورود به حساب کاربری از تخفیف رزرو این هتل استفاده کنید'
-        />
+        />}
 
 
         <div ref={searchFormWrapperRef} className='pt-5'>
