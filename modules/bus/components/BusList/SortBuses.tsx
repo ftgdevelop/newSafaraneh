@@ -8,7 +8,7 @@ const SortBuses: React.FC<Props> = (props) => {
     const SortItem = (value: string, sortValue: string) => {
         return (
             <button type="button" className={`border-1 text-sm text-center h-fit w-full p-1 cursor-pointer max-sm:text-2xs shadow-md
-             hover:border-blue-800 ${sortBus == sortValue ? 'border-blue-800 bg-blue-100 text-blue-900' : 'bg-white text-blue-700'}
+             hover:border-blue-800 ${sortBus == sortValue ? 'border-blue-800 shadow-blue bg-blue-100/50 text-blue-900' : 'bg-white text-blue-700'}
               duration-100 whitespace-nowrap rounded-sm`}
                 onClick={() => changeSortBus(sortValue)}>
                 {value}

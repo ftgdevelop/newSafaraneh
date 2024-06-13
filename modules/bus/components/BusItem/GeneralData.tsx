@@ -53,7 +53,7 @@ const GeneralData: React.FC<Props> = props => {
             </div>
                 
                 {
-                detailOpen && <BusDeatil busToken={busData.token} />
+                detailOpen && <BusDeatil busToken={busData.token} busCapacity={busData.capacity} />
                 }
                     
                 <button type="submit" className="text-xs max-sm:text-2xs bg-gray-100 text-gray-500 flex w-full justify-center"

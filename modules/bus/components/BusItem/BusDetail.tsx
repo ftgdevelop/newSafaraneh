@@ -1,7 +1,7 @@
 import { useState } from "react";
 import SeatInfo from "./SeatInfo";
 
-const BusDeatil: React.FC<any> = ({busToken}) => {
+const BusDeatil: React.FC<any> = ({busToken, busCapacity}) => {
     const [seatInfoOn, setSeatInfoOn] = useState(true)
     return (
         <div>
@@ -13,7 +13,7 @@ const BusDeatil: React.FC<any> = ({busToken}) => {
             </ul>
             {
                 seatInfoOn ? 
-                    <SeatInfo BusToken={busToken} /> :
+                    <SeatInfo busToken={busToken} busCapacity={busCapacity} /> :
                     <div className="p-5 space-y-3">
                         <div className="grid grid-cols-5 w-full text-xs">
                             <p className="bg-white p-2 max-sm:p-1 text-center">10% جریمه</p>

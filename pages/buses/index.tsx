@@ -7,6 +7,7 @@ import SidebarFilters from "@/modules/bus/components/sidebar/SidebarFilters";
 import { SidebarFilterChange } from "@/modules/bus/templates/SidebarFilterChange";
 import { SortCapacity, SortHightestPrice, SortTime } from "@/modules/bus/templates/SortBus";
 import { BusItemType } from "@/modules/bus/types";
+import Pagination from "@/modules/shared/components/ui/Pagination";
 import { RootState } from "@/modules/shared/store";
 import { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -14,7 +15,11 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-const Buses: NextPage<any> = ({data}) => {
+const Buses: NextPage<any> = ({ data }) => {
+    const [page, setPage] = useState(1)
+    const firstItemIndex = (page - 1) * 10;
+    const lastItem = page * 10;
+
     const [key, setKey] = useState()
     const [busList, setBusList] = useState<any>()
     const [busInFilter, setBusInFilter] = useState<BusItemType[]>()
@@ -24,7 +29,7 @@ const Buses: NextPage<any> = ({data}) => {
     
     const fetchKey = async () => {
         const busData = {
-            departureTime: "2024-06-14",
+            departureTime: "2024-06-17",
             destinationCode: "34",
             originCode: "825"
         }
@@ -86,6 +91,17 @@ const Buses: NextPage<any> = ({data}) => {
                 <SortBuses sortBus={sortBus} changeSortBus={(e: any) => setSortBus(e)} />
 
                 {
+                    busInFilter?.length ?
+                        <Pagination
+                        totalItems={busInFilter?.length || 0}
+                        itemsPerPage={10}
+                        onChange={setPage}
+                        currentPage={page}
+                        wrapperClassName="mt-5"
+                        /> : null
+                }
+
+                {
                     busInFilter?.sort((a, b) => SortCapacity(a, b))
                         .sort((a: BusItemType, b: BusItemType): any => {
                             if (sortBus == "HighestPrice") return SortHightestPrice(a, b)
@@ -93,10 +109,20 @@ const Buses: NextPage<any> = ({data}) => {
                             else {
                                 return a.capacity && a.boardPrice - b.boardPrice
                             }
-                        })
-                    ?.map((item, index) => <BusItem busData={item} key={index} />)
+                        }).slice(firstItemIndex, lastItem)
+                    ?.map((item, index) => <BusItem busData={item} key={item.token} />)
                 }
                 
+                {
+                    busInFilter?.length ?
+                        <Pagination
+                        totalItems={busInFilter?.length || 0}
+                        itemsPerPage={10}
+                        onChange={setPage}
+                        currentPage={page}
+                        wrapperClassName="mt-5"
+                        /> : null
+                }
             </div>
         </div>
     )
