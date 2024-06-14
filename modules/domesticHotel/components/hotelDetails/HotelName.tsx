@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import { DomesticHotelDetailType } from "@/modules/domesticHotel/types/hotel";
-import { Location } from "@/modules/shared/components/ui/icons";
+import { DomesticAccomodationFacilityType, DomesticHotelDetailType } from "@/modules/domesticHotel/types/hotel";
+import { Location, Verified } from "@/modules/shared/components/ui/icons";
 import HotelScore from "../shared/HotelScore";
 import Rating from "@/modules/shared/components/ui/Rating";
 import Image from 'next/image';
@@ -15,7 +15,8 @@ type Props = {
     scoreData?: {
         CommentCount?: number;
         Satisfaction?: number;
-    }
+    };
+    accomodationFacilities?: DomesticAccomodationFacilityType[];
 }
 
 const HotelName: React.FC<Props> = props => {
@@ -66,13 +67,26 @@ const HotelName: React.FC<Props> = props => {
 
             <div className='hidden lg:block lg:col-span-2'>
                 <strong className='block font-semibold text-md lg:text-lg mb-3'>امکانات محبوب هتل</strong>
-                <div className='grid grid-cols-2 lg:grid-cols-3 gap-2'>
-                    {hotelData.Facilities?.slice(0, 6).map(item => <div key={item.Keyword} className='text-sm text-neutral-500'>
-                        {item.Image && <Image src={item.Image} alt={item.ImageAlt || item.Title || ""} width={20} height={20} className='h-5 w-5 inline-block rtl:ml-2 ltr:mr-2' />}
-                        {item.Title}
-                    </div>)}
-                </div>
+                
+                {props.accomodationFacilities?.length || process.env.PROJECT === "1STSAFAR" ? (
+                    <>
+                    {props.accomodationFacilities?.filter(item => item.items.some(s => s.isImportant)).map(facilityItem => (
+                        <div key={facilityItem.keyword} className='text-sm inline-block gap-2 rtl:ml-5 border-2 border-green-600 font-semibold text-green-600 px-1 rounded' >
+                            {facilityItem.items.filter(i => i.isImportant).map(a => <span key={a.name}> <Verified className='w-6 h-6 fill-current inline-block' /> {a.name} </span>)}
+                        </div>
+                    ))}
+                    </>
+                ):(
+                    <div className='grid grid-cols-2 lg:grid-cols-3 gap-2'>
+                        {hotelData.Facilities?.slice(0, 6).map(item => <div key={item.Keyword} className='text-sm text-neutral-500'>
+                            {item.Image && <Image src={item.Image} alt={item.ImageAlt || item.Title || ""} width={20} height={20} className='h-5 w-5 inline-block rtl:ml-2 ltr:mr-2' />}
+                            {item.Title}
+                        </div>)}
+                    </div>
+                )}
+                
             </div>
+
             <div className='hidden lg:block lg:col-span-1'>
                 {!!hotelData.DistancePoints?.length && <Attractions isSmall attractions={hotelData.DistancePoints} />}
             </div>

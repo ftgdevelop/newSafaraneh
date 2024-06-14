@@ -26,6 +26,7 @@ import { useEffect, useRef, useState } from 'react';
 import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
 import AvailabilityTimeout from '@/modules/shared/components/AvailabilityTimeout';
 import LoginLinkBanner from '@/modules/shared/components/theme2/LoginLinkBanner';
+import AccommodationFacilities from '@/modules/domesticHotel/components/hotelDetails/AccommodationFacilities';
 
 type Props = {
   allData: {
@@ -373,7 +374,7 @@ const HotelDetail: NextPage<Props> = props => {
 
       <div className="max-w-container mx-auto px-3 sm:px-5" id="hotel_intro">
 
-        <HotelName hotelData={hotelData} scoreData={hotelScoreData} />
+        <HotelName hotelData={hotelData} scoreData={hotelScoreData} accomodationFacilities={accommodationData?.facilities} />
 
         {theme2 && <LoginLinkBanner
           message='با ورود به حساب کاربری از تخفیف رزرو این هتل استفاده کنید'
@@ -400,7 +401,14 @@ const HotelDetail: NextPage<Props> = props => {
 
       {!!hotelData.HotelId && <Rooms hotelId={hotelData.HotelId} />}
 
-      {!!hotelData.Facilities?.length && <HotelFacilities facilities={hotelData.Facilities} />}
+      {(process.env.PROJECT === "1STSAFAR" || accommodationData?.facilities?.length) ? (
+        <AccommodationFacilities facilities={accommodationData?.facilities} />
+      ) : hotelData.Facilities?.length ? (
+        <HotelFacilities facilities={hotelData.Facilities} />
+      ) :
+        null
+      }
+
 
       {!!(hotelData.Policies?.length || accommodationData?.instruction?.length || accommodationData?.mendatoryFee?.length) && <HotelTerms
         instruction={accommodationData?.instruction}
@@ -455,7 +463,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const allData: any = await getDomesticHotelDetailsByUrl("/" + locale + url, locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR");
 
-  if (!allData?.data?.result?.hotel && process.env.LocaleInUrl !== "off") {
+  if (allData?.data && !allData?.data?.result?.hotel && process.env.LocaleInUrl !== "off") {
 
 
     if (locale === "fa") {
