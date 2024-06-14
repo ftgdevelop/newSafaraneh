@@ -6,6 +6,18 @@
   .clearfix {
     @apply after:clear-both after:content-[''] after:table before:clear-both before:content-[''] before:table;
   }
+  .breakInsideAvoid{
+    break-inside:avoid;
+  }
+  .columnCount4 {
+    column-count: 4;
+  }
+  .columnCount3 {
+    column-count: 3;
+  }
+  .columnCount2 {
+    column-count: 2;
+  }
   .mirror {
     transform: scale(-1,1);
   }
@@ -77,6 +89,19 @@
           background: #888;
         }
       }
+    }
+    .before-checkmark::before{
+      content: "";
+      display: inline-block;
+      width: 17px;
+      height: 9px;
+      border-left: 2px solid;
+      border-bottom: 2px solid;
+      transform: rotate(-50deg) skewX(-11deg) scale(.75);
+      vertical-align: middle;
+      position: relative;
+      top: -2px;
+      margin-left:4px;      
     }
 
 }
