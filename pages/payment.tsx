@@ -162,7 +162,7 @@ const Payment: NextPage = () => {
 
     setGoToBankLoading(true);
 
-    const callbackUrl = window?.location?.origin + (i18n?.language === "fa" ? "/fa" : "en") + "/callback";
+    const callbackUrl = window?.location?.origin + (process.env.LocaleInUrl === "off"?"": i18n?.language === "fa" ? "/fa" : "/en") + "/callback";
 
     const params = {
       gatewayId: gatewayId,

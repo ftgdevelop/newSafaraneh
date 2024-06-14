@@ -77,7 +77,7 @@ const Home: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], portalD
             "url": "${configWebsiteUrl}",
             "potentialAction": {
             "@type": "SearchAction",
-            "target": "${configWebsiteUrl}/fa/hotels/?q={search_term_string}",
+            "target": "${configWebsiteUrl}${process.env.LocaleInUrl === "off"?"":"/fa"}/hotels/?q={search_term_string}",
             "query-input": "required name=search_term_string"
           }}`,
           }}

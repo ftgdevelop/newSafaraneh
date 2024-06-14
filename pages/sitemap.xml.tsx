@@ -24,7 +24,7 @@ function creareSiteMap(hotelsData:any,postsData:any, domesticFlightsData:any){
     for (let i = 0; i < domesticFlightsData.length; i++) {
       const flight = domesticFlightsData[i];
 
-      const domesticFlightURL = `${process.env.SITE_NAME}/fa/flights/${flight.slug}/`;
+      const domesticFlightURL = `${process.env.SITE_NAME}${process.env.LocaleInUrl === "off"?"":"/fa"}/flights/${flight.slug}/`;
       domesticFlightXML += `
         <url>
           <loc>${domesticFlightURL}</loc>
@@ -44,7 +44,7 @@ function creareSiteMap(hotelsData:any,postsData:any, domesticFlightsData:any){
         latestPost = postDate;
       }
 
-      const projectURL = `${process.env.SITE_NAME}/fa/blog/${post.slug}/`;
+      const projectURL = `${process.env.SITE_NAME}${process.env.LocaleInUrl === "off"?"":"/fa"}/blog/${post.slug}/`;
       projectsXML += `
         <url>
           <loc>${projectURL}</loc>
@@ -58,7 +58,7 @@ function creareSiteMap(hotelsData:any,postsData:any, domesticFlightsData:any){
   return `<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
       <url>
-        <loc>${process.env.SITE_NAME}/fa/</loc>
+        <loc>${process.env.SITE_NAME}${process.env.LocaleInUrl === "off"?"":"/fa"}/</loc>
         <lastmod>2021-02-03</lastmod>
         <priority>1.0</priority>
       </url>
