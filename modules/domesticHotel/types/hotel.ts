@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface EntitySearchResultItemType {
     name?: string;
     displayName?: string;
@@ -168,8 +170,35 @@ export interface DomesticAccomodationFacilityType{
         isFree?: boolean;
         name?: string;
         description?: any;
+        keyword: string;
     }[]
 }
+
+export interface DomesticAccomodationGalleryType{
+    filePath?: string;
+    fileTitleAttribute?: string;
+    fileAltAttribute?: string;
+}
+
+export interface DomesticAccomodationPolicyType{
+    title?:string;
+    keyword?: "check-in" | "check-out" | "cancellation" | "damage-policy" | "smoking" | "children-and-bed" | "pets";
+    name?:string;
+    value?:string;
+    description?: any;
+    guests: {
+        title?: string;
+        name?: string;
+        value?: string;
+        description?: React.ReactNode;
+      }[];
+    passengers: {
+        title?: string;
+        name?: string;
+        value?: string;
+        description?: React.ReactNode;
+      }[];
+  }
 
 export interface DomesticAccomodationType {
     type: "Hotel" | "Apartments" | "Guesthouse" | "Motel" | "TraditionalHouse" | "Ecolodge" | "TourismComplex" | "BoutiqueHotel" | "Pansion";
@@ -223,6 +252,8 @@ export interface DomesticAccomodationType {
     }[]
     id: number;
     facilities?: DomesticAccomodationFacilityType[];
+    galleries?: DomesticAccomodationGalleryType[];
+    policies?: DomesticAccomodationPolicyType[]
       
 }
 
