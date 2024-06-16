@@ -6,7 +6,7 @@ type Props = {
 
 const AccommodationFacilityIcon: React.FC<Props> = props => {
 
-    const className = "w-7 h-7 fill-current rtl:ml-2 ltr:mr-2 inline-block";
+    const className = "w-5 h-5 sm:w-7 sm:h-7 fill-current rtl:ml-1 ltr:mr-1 sm:rtl:ml-2 sm:ltr:mr-2 inline-block";
 
     switch (props.keyword) {
         case "accessibility":
