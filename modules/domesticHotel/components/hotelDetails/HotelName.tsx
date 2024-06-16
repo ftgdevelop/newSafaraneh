@@ -66,16 +66,16 @@ const HotelName: React.FC<Props> = props => {
                 Longitude={hotelData.Longitude}
             />
 
-            <div className='hidden lg:block lg:col-span-2'>
+            <div className='lg:col-span-2'>
                 <strong className='block font-semibold text-md lg:text-lg mb-3'>امکانات محبوب هتل</strong>
                 
                 {props.accomodationFacilities?.length || process.env.PROJECT === "1STSAFAR" ? (
 
-                    <div className='mb-5 flex flex-wrap gap-3'>
+                    <div className='mb-5 flex flex-wrap gap-1 sm:gap-3'>
                         {props.accomodationFacilities?.filter(item => item.items.some(s => s.isImportant)).map(facilityItem => (
                             <Fragment key={facilityItem.keyword} >
                                 {facilityItem.items.filter(i => i.isImportant).map(a => (
-                                    <span key={a.name} className='text-sm block border border-neutral-200 font-semibold text-neutral-500 p-1 sm:p-2 rounded whitespace-nowrap'>
+                                    <span key={a.name} className='text-xs sm:text-sm block border border-neutral-200 font-semibold text-neutral-500 px-1 sm:p-2 rounded whitespace-nowrap'>
                                         <AccommodationFacilityIcon keyword={a.keyword} />
                                         {a.name}
                                     </span>

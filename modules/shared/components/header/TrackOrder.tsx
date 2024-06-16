@@ -122,7 +122,7 @@ const TrackOrder: React.FC<Props> = props => {
                         onClick={() => { setDelayedOpen(false) }}
                     />
 
-                    <div className={`bg-white sm:rounded-md relative w-full sm:w-520 transition-all ${delayedOpen ? "scale-100 opacity-100" : "scale-50 opacity-0"}`}>
+                    <div className={`bg-white max-sm:h-screen sm:rounded-md relative w-full sm:w-520 transition-all ${delayedOpen ? "scale-100 opacity-100" : "scale-50 opacity-0"}`}>
                         <div className="border-b border-neutral-300 p-4 flex items-center justify-between font-semibold">
                             {t('retrieve-my-booking')}
                             <button
