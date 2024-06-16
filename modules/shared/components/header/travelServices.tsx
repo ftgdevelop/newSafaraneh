@@ -5,10 +5,11 @@ import { useState, useEffect, useRef } from "react";
 import { Menu, DownCaret, Home, Close, User, UserAdd,Wallet, Bed, Blog, Suitcase, Travel, Loading } from "../ui/icons";
 import Image from "next/image";
 import TrackOrder from "./TrackOrder";
-import { useAppSelector } from "../../hooks/use-store";
+import { useAppDispatch, useAppSelector } from "../../hooks/use-store";
 import { numberWithCommas } from "../../helpers";
 import Logout from "@/modules/authentication/components/Logout";
 import Skeleton from "../ui/Skeleton";
+import { setBodyScrollable } from "../../store/stylesSlice";
 
 type Props = {
     logo: string;
@@ -22,6 +23,8 @@ const TravelServices: React.FC<Props> = props => {
 
     const { logo, siteName } = props;
 
+    const dispatch = useAppDispatch();
+
     const userIsAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
     const userLoading = useAppSelector(state => state.authentication.getUserLoading);
 
@@ -31,6 +34,14 @@ const TravelServices: React.FC<Props> = props => {
     const [openMenu, setOpenMenu] = useState(false);
 
     const toggleMenu = () => { setOpenMenu(prevState => !prevState) }
+
+    useEffect(()=>{
+        if(openMenu){
+            dispatch(setBodyScrollable(false));
+        }else{
+            dispatch(setBodyScrollable(true));
+        }
+    },[openMenu]);
 
     const linkClassName = 'px-5 py-1 block my-2 transition-all duration-200 hover:text-blue-700';
     const linkWithIconClassName = linkClassName + ' ' + 'flex items-center gap-3';
@@ -61,7 +72,12 @@ const TravelServices: React.FC<Props> = props => {
         <div className={`absolute rtl:right-0 ltr:left-0 top-0 h-full flex flex-col justify-center md:relative md:top-auto md:right-auto md:left-auto md:h-auto ${props.className || ""}`}>
             <div className={`bg-black/50 backdrop-blur fixed left-0 right-0 top-0 bottom-0 block md:hidden transition-all duration-200 ${openMenu ? "opacity-100 visible" : "opacity-0 invisible"}`}></div>
             <div ref={wrapperRef}>
-                <button type="button" aria-label='Button to open navigation' className="text-sm p-3 md:px-0 md:py-2 text-blue-700 hover:text-blue-500 flex gap-1 items-center h-12" onClick={toggleMenu}>
+                <button 
+                    type="button" 
+                    aria-label='Button to open navigation' 
+                    className="text-sm p-3 md:px-0 md:py-2 text-blue-700 hover:text-blue-500 flex gap-1 items-center h-12" 
+                    onClick={toggleMenu}
+                >
                     <Menu className="w-8 h-8 fill-neutral-600 md:hidden" />
                     <span className="hidden md:block">
                         {t('TravelFacilities')}
