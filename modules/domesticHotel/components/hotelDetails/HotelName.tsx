@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 
 import { DomesticAccomodationFacilityType, DomesticHotelDetailType } from "@/modules/domesticHotel/types/hotel";
 import { Location, Verified } from "@/modules/shared/components/ui/icons";
@@ -9,6 +9,7 @@ import Attractions from './Attractions';
 import HotelMap from './HotelMap';
 import GuestRating from '@/modules/shared/components/ui/GuestRating';
 import HotelMapButton from './HotelMapButton';
+import AccommodationFacilityIcon from './AccommodationFacilityIcon';
 
 type Props = {
     hotelData?: DomesticHotelDetailType;
@@ -65,17 +66,24 @@ const HotelName: React.FC<Props> = props => {
                 Longitude={hotelData.Longitude}
             />
 
-            <div className='hidden lg:block lg:col-span-2'>
+            <div className='lg:col-span-2'>
                 <strong className='block font-semibold text-md lg:text-lg mb-3'>امکانات محبوب هتل</strong>
                 
                 {props.accomodationFacilities?.length || process.env.PROJECT === "1STSAFAR" ? (
-                    <>
-                    {props.accomodationFacilities?.filter(item => item.items.some(s => s.isImportant)).map(facilityItem => (
-                        <div key={facilityItem.keyword} className='text-sm inline-block gap-2 rtl:ml-5 border-2 border-green-600 font-semibold text-green-600 px-1 rounded' >
-                            {facilityItem.items.filter(i => i.isImportant).map(a => <span key={a.name}> <Verified className='w-6 h-6 fill-current inline-block' /> {a.name} </span>)}
-                        </div>
-                    ))}
-                    </>
+
+                    <div className='mb-5 flex flex-wrap gap-1 sm:gap-3'>
+                        {props.accomodationFacilities?.filter(item => item.items.some(s => s.isImportant)).map(facilityItem => (
+                            <Fragment key={facilityItem.keyword} >
+                                {facilityItem.items.filter(i => i.isImportant).map(a => (
+                                    <span key={a.name} className='text-xs sm:text-sm block border border-neutral-200 font-semibold text-neutral-500 px-1 sm:p-2 rounded whitespace-nowrap'>
+                                        <AccommodationFacilityIcon keyword={a.keyword} />
+                                        {a.name}
+                                    </span>
+                                ))}
+                            </Fragment>
+                        ))}
+                    </div>
+                    
                 ):(
                     <div className='grid grid-cols-2 lg:grid-cols-3 gap-2'>
                         {hotelData.Facilities?.slice(0, 6).map(item => <div key={item.Keyword} className='text-sm text-neutral-500'>

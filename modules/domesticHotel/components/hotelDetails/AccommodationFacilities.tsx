@@ -1,8 +1,9 @@
 import { useTranslation } from 'next-i18next';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { DomesticAccomodationFacilityType } from "@/modules/domesticHotel/types/hotel";
 import { DownCaret, Verified } from "@/modules/shared/components/ui/icons";
 import AccommodationFacilityItem from './AccommodationFacilitiyItem';
+import AccommodationFacilityIcon from './AccommodationFacilityIcon';
 
 type Props = {
     facilities?: DomesticAccomodationFacilityType[];
@@ -27,13 +28,18 @@ const AccommodationFacilities: React.FC<Props> = props => {
 
             <div className='p-5 lg:p-7 bg-white rounded-xl leading-5'>
 
-                <div className='mb-7'>
+                {/* <div className='mb-7 flex flex-wrap gap-4'>
                     {facilities.filter(item => item.items.some(s => s.isImportant)).map(facilityItem => (
-                        <div key={facilityItem.keyword} className='text-sm inline-block gap-2 py-0.5 rtl:ml-5 border-2 border-green-600 font-semibold text-green-600 px-1 rounded' >
-                            {facilityItem.items.filter(i => i.isImportant).map(a => <span key={a.name}> <Verified className='w-6 h-6 fill-current inline-block' /> {a.name} </span>)}
-                        </div>
+                        <Fragment key={facilityItem.keyword} >
+                            {facilityItem.items.filter(i => i.isImportant).map(a => (
+                            <span key={a.name} className='text-sm block border border-neutral-200 font-semibold text-neutral-500 p-1 sm:p-3 rounded whitespace-nowrap'>
+                                 <AccommodationFacilityIcon keyword={a.keyword} />
+                                 {a.name} 
+                            </span>
+                            ))}
+                        </Fragment>
                     ))}
-                </div>
+                </div> */}
 
                 <div className={`sm:columnCount2 md:columnCount3 xl:columnCount4`}>
 
@@ -43,7 +49,7 @@ const AccommodationFacilities: React.FC<Props> = props => {
 
                 </div>
 
-                <div className={`hidden md:block relative text-center before:absolute before:left-0 before:right-0 before:bottom-full ${open ? "before-h-0" : "before:h-18"} before:bg-gradient-to-b before:from-transparent before:to-white`}>
+                <div className={`relative text-center before:absolute before:left-0 before:right-0 before:bottom-full ${open ? "before-h-0" : "before:h-18"} before:bg-gradient-to-b before:from-transparent before:to-white`}>
                     <button type='button' className='text-xs inline-block mt-2' onClick={() => { setOpen(prevState => !prevState) }}>
                         {open ? " بستن " : " امکانات بیشتر "} <DownCaret className={`w-5 h-5 fill-current inline-block align-middle transition-all ${open ? "rotate-180" : ""}`} />
                     </button>

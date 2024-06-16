@@ -27,6 +27,7 @@ import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
 import AvailabilityTimeout from '@/modules/shared/components/AvailabilityTimeout';
 import LoginLinkBanner from '@/modules/shared/components/theme2/LoginLinkBanner';
 import AccommodationFacilities from '@/modules/domesticHotel/components/hotelDetails/AccommodationFacilities';
+import AccomodationPolicy from '@/modules/domesticHotel/components/hotelDetails/AccomodationPolicy';
 
 type Props = {
   allData: {
@@ -148,6 +149,33 @@ const HotelDetail: NextPage<Props> = props => {
     }
   }
 
+  let hotelImages : {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+    description: string;
+  }[] = [];
+
+  if ((process.env.PROJECT === "1STSAFAR" || accommodationData?.galleries?.length)) {
+    if(accommodationData?.galleries?.length){
+      hotelImages = accommodationData?.galleries?.map(item => ({
+        alt:item.fileAltAttribute || item.fileTitleAttribute || "" ,
+        description: item.fileTitleAttribute || item.fileAltAttribute || "",
+        src:item.filePath!,
+        width: 1000,
+        height: 700,
+      }))
+    }
+  } else if (hotelData.Gallery?.length) {
+    hotelImages = hotelData.Gallery.filter(item => item.Image).map(item => ({
+      src: item.Image! as string,
+      alt: item.Title || "",
+      width: 1000,
+      height: 700,
+      description: item.Alt || ""
+    }))
+  }
 
   return (
     <>
@@ -355,7 +383,7 @@ const HotelDetail: NextPage<Props> = props => {
           <BackToList checkin={checkin} checkout={checkout} cityId={hotelData.CityId} cityName={hotelData.CityName} />
         </div>
 
-        {!!hotelData.Gallery?.length && <Gallery images={hotelData.Gallery} hotelName={`${hotelData.HotelCategoryName} ${hotelData.HotelName} ${hotelData.CityName}`} />}
+        {!!hotelData.Gallery?.length && <Gallery images={hotelImages} hotelName={`${hotelData.HotelCategoryName} ${hotelData.HotelName} ${hotelData.CityName}`} />}
       </div>
 
       <AnchorTabs
@@ -409,12 +437,20 @@ const HotelDetail: NextPage<Props> = props => {
         null
       }
 
+      {(accommodationData?.policies?.length ||  process.env.PROJECT === "1STSAFAR" )?(
+        <>
+        <AccomodationPolicy policies={accommodationData?.policies} />
+        </>
+      ):(
+        <>
+          {!!(hotelData.Policies?.length || accommodationData?.instruction?.length || accommodationData?.mendatoryFee?.length) && <HotelTerms
+            instruction={accommodationData?.instruction}
+            mendatoryFee={accommodationData?.mendatoryFee}
+            policies={hotelData.Policies}
+          />}
+        </>
+      )}
 
-      {!!(hotelData.Policies?.length || accommodationData?.instruction?.length || accommodationData?.mendatoryFee?.length) && <HotelTerms
-        instruction={accommodationData?.instruction}
-        mendatoryFee={accommodationData?.mendatoryFee}
-        policies={hotelData.Policies}
-      />}
 
       {!!siteName && <HotelAbout siteName={siteName} siteUrl={siteURL} description={accommodationData?.description} />}
 

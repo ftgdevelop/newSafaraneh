@@ -1,12 +1,12 @@
-import { Bed2, Broom, BusinessCenter, Chair, CheckTag, Checks, Deck, Food, Forest, Gym, Internet, Kitchen, Languages, Pool, Reception, Security, Shop, Shower, Taxi, Tv } from "@/modules/shared/components/ui/icons";
+import { Balconi, Bed2, Broom, BusinessCenter, Chair, CheckTag, Checks, Deck, Disabled, Elevator, Food, Forest, Gym, Internet, Kitchen, Languages, NoSmoke, Parking, Pool, Reception, Sauna, Security, Shop, Shower, Taxi, Tennis, Tv, View } from "@/modules/shared/components/ui/icons";
 
 type Props = {
-    keyword: "cleaning-services" | "languages-spoken" | "safety-security" | "business-facilities" | "transport" | "outdoor-view" | "food-drink" | "common-areas" | "accessibility" | "room-amenities" | "media-technology" | "living-area" | "bedroom" | "kitchen" | "reception-services" | "miscellaneous" | "swimming-pool" | "wellness" | "shops" | "internet" | "room-features" | "bathroom";
+    keyword: "cleaning-services" | "languages-spoken" | "safety-security" | "business-facilities" | "transport" | "outdoor-view" | "food-drink" | "common-areas" | "accessibility" | "room-amenities" | "media-technology" | "living-area" | "bedroom" | "kitchen" | "reception-services" | "miscellaneous" | "swimming-pool" | "wellness" | "shops" | "internet" | "room-features" | "bathroom" | "parking" | "internet" | "view" | "outdoor-view" | "balcony" | "room-service" | "restaurant" | "disabled" | "non-smoking" | "lift" | "sauna" | "tennis-court" | string;
 }
 
 const AccommodationFacilityIcon: React.FC<Props> = props => {
 
-    const className = "w-6 h-6 fill-current rtl:ml-2 ltr:mr-2 inline-block";
+    const className = "w-5 h-5 sm:w-7 sm:h-7 fill-current rtl:ml-1 ltr:mr-1 sm:rtl:ml-2 sm:ltr:mr-2 inline-block";
 
     switch (props.keyword) {
         case "accessibility":
@@ -20,6 +20,7 @@ const AccommodationFacilityIcon: React.FC<Props> = props => {
         case "bedroom":
         case "room-amenities":
         case "room-features":
+        case "room-service":
             return (
                 <Bed2 className={className} />
             );
@@ -36,6 +37,7 @@ const AccommodationFacilityIcon: React.FC<Props> = props => {
                 <Deck className={className} />
             );
         case "food-drink":
+        case "restaurant":
             return (
                 <Food className={className} />
             )
@@ -90,11 +92,44 @@ const AccommodationFacilityIcon: React.FC<Props> = props => {
         case "reception-services":
             return (
                 <Reception className={className} />
+            );
+        case "balcony":
+            return (
+                <Balconi className={className} />
+            );
+        case "lift":
+            return (
+                <Elevator className={className} />
+            );
+        case "non-smoking":
+            return (
+                <NoSmoke className={className} />
+            );
+        case "sauna":
+            return (
+                <Sauna className={className} />
+            );
+        case "tennis-court":
+            return (
+                <Tennis className={className} />
+            );
+        case "parking":
+            return (
+                <Parking className={className} />
+            );
+        case "view":
+            return (
+                <View className={className} />
+            );
+        case "disabled":
+            return (
+                <Disabled className={className} />
             )
+
     }
 
     return (
-        null
+        <CheckTag className={className} />
     )
 }
 
