@@ -39,6 +39,12 @@ const Gallery: React.FC<Props> = props => {
         setOpen(true);
     }
 
+    if (!images.length){
+        return(
+            null
+        )
+    }
+
     return (
         <>
             <div id="pictures_section" className='grid grid-cols-1 md:grid-cols-4 gap-1 bg-white relative'>
