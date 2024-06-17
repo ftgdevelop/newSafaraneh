@@ -68,10 +68,15 @@ const SimilarHotelItem: React.FC<Props> = props => {
     };
 
 
+    let url = hotel.Url! + props.searchInfo;
+    if (process.env.LocaleInUrl === "off"){
+        url = url.replace("/fa","");
+    }
+
     return (
         <div className='bg-white border-2 border-white rounded-xl flex flex-col justify-between'>
             <div>
-                <Link href={hotel.Url! + props.searchInfo} target='_blank' title={hotel.HotelTypeName + " " +hotel.HotelName + " " + hotel.CityName}>
+                <Link href={url} target='_blank' title={hotel.HotelTypeName + " " +hotel.HotelName + " " + hotel.CityName}>
                     <Image
                         src={hotel.ImageUrl || "/images/default-hotel.JPG"}
                         alt={hotel.ImageAlt || hotel.ImageTitle || ""}
@@ -82,7 +87,7 @@ const SimilarHotelItem: React.FC<Props> = props => {
                     />
                 </Link>
                 <div className='p-3'>
-                    <Link href={hotel.Url! + props.searchInfo} target='_blank' className='block mb-2'>
+                    <Link href={url} target='_blank' className='block mb-2'>
                         <h3 className='font-semibold text-base'>
                             {hotel.HotelTypeName} {hotel.HotelName} {hotel.CityName}
                         </h3>
@@ -108,7 +113,7 @@ const SimilarHotelItem: React.FC<Props> = props => {
                 )}
 
                 <Button
-                    href={hotel.Url! + props.searchInfo}
+                    href={url}
                     className='text-sm font-semibold px-5 h-10 rounded-md inline-flex'
                 >
                     {buttonText}

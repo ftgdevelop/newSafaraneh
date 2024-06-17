@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Close, RightCaretBold } from "@/modules/shared/components/ui/icons";
+import { Close } from "@/modules/shared/components/ui/icons";
 import { Form, Formik } from "formik";
 import { useTranslation } from "next-i18next";
-import Link from "next/link";
 import PhoneInput from '@/modules/shared/components/ui/PhoneInput';
 import FormikField from '@/modules/shared/components/ui/FormikField';
 import { validateEmail } from '@/modules/shared/helpers/validation';
@@ -148,12 +147,7 @@ const ForgetPasswordForm: React.FC<Props> = props => {
     }
 
     return (
-        <div className='border border-neutral-300 bg-white rounded-md mb-4 p-5 sm:py-10'>
-            <Link href="/signin" className='text-blue-700 hover:text-blue-500 text-sm inline-block mb-5'>
-                <RightCaretBold className='w-5 h-5 fill-current inline-block rtl:ml-1 ltr:mr-1 ' />
-                برگشت به صفحه ورود
-            </Link>
-
+        <>
             <div className='text-lg mb-1'> {t('forget-password')} </div>
             <p className='text-neutral-500 text-xs mb-4'>
                 انتخاب یکی از روش های زیر:
@@ -355,7 +349,7 @@ const ForgetPasswordForm: React.FC<Props> = props => {
                 </ModalPortal>
             )}
 
-        </div>
+        </>
     )
 }
 

@@ -90,6 +90,8 @@ type Props = {
 
 const RoomItemInformation: React.FC<Props> = props => {
 
+  const theme1 = process.env.THEME === "THEME1";
+
   const { roomIndex, roomItem, errors, setFieldValue, touched, values } = props;
 
   const { t } = useTranslation('common');
@@ -107,7 +109,7 @@ const RoomItemInformation: React.FC<Props> = props => {
   }
 
   return (
-    <div className='bg-white border border-neutral-300 p-5 rounded-lg grid md:grid-cols-3 gap-2 mb-5' >
+    <div className={`bg-white border border-neutral-300 p-5 rounded-lg grid md:grid-cols-3 gap-2 mb-5 ${theme1?"":""}`} >
 
       <div className="flex justify-between text-sm items-start md:col-span-3">
         <h5 className='font-semibold text-xl mb-4'>

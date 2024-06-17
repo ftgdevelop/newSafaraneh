@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 
 import { DomesticHotelAvailability } from '@/modules/domesticHotel/types/hotel';
 import { useRouter } from 'next/router';
-import RoomItem from './RoomItem';
 import { addSomeDays, dateFormat, getDatesDiff } from '@/modules/shared/helpers';
 import { GetRooms, domesticHotelValidateRoom } from '../../actions';
 import { InfoCircle } from '@/modules/shared/components/ui/icons';
-import Skeleton from '@/modules/shared/components/ui/Skeleton';
+import RoomsListTheme1 from './RoomsListTheme1';
+import RoomsListTheme2 from './RoomsListTheme2';
 
 type Props = {
     hotelId: number;
@@ -87,6 +87,9 @@ const Rooms: React.FC<Props> = props => {
 
     const nights = getDatesDiff(new Date(checkout), new Date(checkin));
 
+    const theme1 = process.env.THEME === "THEME1";
+    const theme2 = process.env.THEME === "THEME2";
+
     return (
 
         <div id="rooms_section" className="max-w-container mx-auto px-3 sm:px-5 pt-7 md:pt-10">
@@ -103,46 +106,26 @@ const Rooms: React.FC<Props> = props => {
                         </div>
                     </div>
                 </div>
-            ) : availabilites ? (
-                <>
-                    <h2 className="text-lg lg:text-3xl font-semibold mb-3 md:mb-7"> {tHotel('choose-room')}  </h2>
-                    {availabilites.map(availability => {
-                        return availability.rates?.map(rateItem => (
-                            <RoomItem
-                                key={rateItem.bookingToken}
-                                rate={rateItem}
-                                room={availability.rooms![0]}
-                                onSelectRoom={selectRoomHandle}
-                                selectedRoomToken={selectedRoomToken}
-                                roomsHasImage={roomsHasImage || false}
-                                nights={nights}
-                            />
-                        ))
-                    })}
-                </>
             ) : (
                 <>
-                    <h2 className="text-lg lg:text-3xl font-semibold mb-3 md:mb-7" > {tHotel('choose-room')} </h2>
-                    {[1, 2, 3, 4, 5].map(item => (
-                        <div key={item} className='bg-white border border-neutral-300 rounded-xl mb-4 overflow-hidden grid grid-cols-4'>
-                            <Skeleton type='image' />
-                            <div className='col-span-3 p-4'>
-                                <div className='flex justify-between mb-4'>
-                                    <Skeleton className='w-40' />
-                                    <Skeleton className='w-20' />
-                                </div>
-                                <div className='flex justify-between mb-4'>
-                                    <Skeleton className='w-24' />
-                                    <Skeleton className='w-48' />
-                                </div>
-                                <div className='flex justify-between'>
-                                    <Skeleton className='w-20' />
-                                    <Skeleton className='w-60' />
-                                </div>
+                    <h2 className="text-lg lg:text-3xl font-semibold mb-3 md:mb-7"> {tHotel('choose-room')}  </h2>
 
-                            </div>
-                        </div>
-                    ))}
+                    {!!theme1 && <RoomsListTheme1
+                        availabilites={availabilites}
+                        selectRoomHandle={selectRoomHandle}
+                        selectedRoomToken={selectedRoomToken}
+                        roomsHasImage={roomsHasImage || false}
+                        nights={nights}
+                    />}
+
+                    {!!theme2 && <RoomsListTheme2
+                        availabilites={availabilites}
+                        selectRoomHandle={selectRoomHandle}
+                        selectedRoomToken={selectedRoomToken}
+                        roomsHasImage={roomsHasImage || false}
+                        nights={nights}
+                    />}
+
                 </>
             )}
         </div>
