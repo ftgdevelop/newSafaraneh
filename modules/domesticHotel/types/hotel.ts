@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface EntitySearchResultItemType {
     name?: string;
     displayName?: string;
@@ -158,6 +160,46 @@ export interface HotelScoreDataType {
     CommentCount?: number;
 }
 
+export interface DomesticAccomodationFacilityType{
+    name?: string;
+    description?: string;
+    keyword: "cleaning-services" | "languages-spoken" | "safety-security" | "business-facilities" | "transport" | "outdoor-view" | "food-drink" | "common-areas" | "accessibility" | "room-amenities" | "media-technology" | "living-area" | "bedroom" | "kitchen" | "reception-services" | "miscellaneous" | "swimming-pool" | "wellness" | "shops" | "internet" | "room-features" | "bathroom";
+    items: {
+        isAdditionalCharge?: boolean;
+        isImportant?: boolean;
+        isFree?: boolean;
+        name?: string;
+        description?: any;
+        keyword: string;
+    }[]
+}
+
+export interface DomesticAccomodationGalleryType{
+    filePath?: string;
+    fileTitleAttribute?: string;
+    fileAltAttribute?: string;
+}
+
+export interface DomesticAccomodationPolicyType{
+    title?:string;
+    keyword?: "check-in" | "check-out" | "cancellation" | "damage-policy" | "smoking" | "children-and-bed" | "pets";
+    name?:string;
+    value?:string;
+    description?: any;
+    guests: {
+        title?: string;
+        name?: string;
+        value?: string;
+        description?: React.ReactNode;
+      }[];
+    passengers: {
+        title?: string;
+        name?: string;
+        value?: string;
+        description?: React.ReactNode;
+      }[];
+  }
+
 export interface DomesticAccomodationType {
     type: "Hotel" | "Apartments" | "Guesthouse" | "Motel" | "TraditionalHouse" | "Ecolodge" | "TourismComplex" | "BoutiqueHotel" | "Pansion";
     rating?: number;
@@ -209,6 +251,10 @@ export interface DomesticAccomodationType {
         id: number;
     }[]
     id: number;
+    facilities?: DomesticAccomodationFacilityType[];
+    galleries?: DomesticAccomodationGalleryType[];
+    policies?: DomesticAccomodationPolicyType[]
+      
 }
 
 export interface AvailabilityByIdItem {

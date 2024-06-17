@@ -29,6 +29,7 @@ import SortFlights from "@/modules/flights/components/flightList/SortFlights";
 import { WebSiteDataType } from "@/modules/shared/types/common";
 import NotFound from "@/modules/shared/components/ui/NotFound";
 import AvailabilityTimeout from "@/modules/shared/components/AvailabilityTimeout";
+import Skeleton from "@/modules/shared/components/ui/Skeleton";
 
 
 type Airport = {
@@ -57,6 +58,7 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
     let [flightsInFilter, setFlightsInFilter] = useState<FlightType[]>()
     let [sortFlights, setSortFlights] = useState('LowestPrice')
     let [fetchDataCompelete, setFetchDataCompelte] = useState(false)
+    let [showSkeleton, setShowSkeleton] = useState(false);
 
     let [showSearchForm, setShowSearchForm] = useState<boolean>(false)
 
@@ -135,6 +137,7 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
 
         if (!codes) return;
 
+        setShowSkeleton(true);
         setShowSearchForm(false);
         setKey("");
 
@@ -205,6 +208,8 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
                 const token = localStorage.getItem('Token') || "";
 
                 const response: any = await GetFlightList({ key: key, currency: "IRR", token: token }, acceptLanguage);
+
+                setShowSkeleton(false);
 
                 if (response?.data?.result?.isCompleted) {
 
@@ -408,6 +413,28 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
                             className="mt-5"
                         />
                     }
+
+                    {!!showSkeleton && (
+                        <>
+                            {[1,2,3,4,5].map(skeletonItem => (
+                                <div className="bg-white border my-5 grid grid-cols-4" key={skeletonItem}>
+                                    <div className="col-span-3 p-5 rtl:border-l border-dotted border-neutral-300">
+                                        <Skeleton className="w-1/2" />
+                                        <Skeleton className="my-3 w-3/4" />
+                                        <Skeleton className="w-12" />
+                                    </div>
+                                    
+                                    <div className="rtl:ltr p-5">
+                                        <Skeleton className="w-2/3" />
+                                        <Skeleton className="my-3 w-full" />
+                                        <Skeleton className="w-1/3" />
+                                    </div>
+
+                                </div>
+                            ) )}
+                        </>
+                    ) }
+
                     {
                         flightsInFilter?.sort((a, b) => SortCapacity(a, b))
                             .sort((a: FlightType, b: FlightType): any => {

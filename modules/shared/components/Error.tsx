@@ -6,6 +6,8 @@ import { useAppDispatch, useAppSelector } from "../hooks/use-store";
 import { setReduxError } from '../store/errorSlice';
 import { ErrorIcon } from "./ui/icons";
 import ModalPortal from "./ui/ModalPortal";
+import { useEffect } from "react";
+import { setBodyScrollable } from "../store/stylesSlice";
 
 const Error: React.FC = () => {
 
@@ -14,6 +16,14 @@ const Error: React.FC = () => {
     const storedError = useAppSelector(state => state.error);
 
     const dispatch = useAppDispatch();
+
+    useEffect(()=>{
+        if(storedError?.isVisible){
+            dispatch(setBodyScrollable(false));
+        }else{
+            dispatch(setBodyScrollable(true));
+        }
+    },[storedError?.isVisible]);
 
     const closeHandler = () => {
         dispatch(setReduxError({
@@ -37,7 +47,7 @@ const Error: React.FC = () => {
         >
             <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-screen bg-black/50 backdrop-blur-sm z-50 flex justify-center items-center">
 
-                <div className="bg-white rounded-xl px-5 pt-10 pb-12 w-full max-w-md text-center">
+                <div className="bg-white max-sm:h-screen sm:rounded-xl px-5 pt-10 pb-12 w-full max-w-md text-center">
                     <ErrorIcon className="w-20 mx-auto fill-red-500 mb-3 md:mb-4" />
 
                     <h5 className="text-red-500 text-lg sm:text-2xl font-bold mb-1">
