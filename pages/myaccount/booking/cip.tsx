@@ -5,8 +5,8 @@ import DownloadPdfVoucher from "@/modules/cip/components/booking/DownloadPdfVouc
 import { CipGetReserveByIdResponse } from "@/modules/cip/types/cip"
 import Skeleton from "@/modules/shared/components/ui/Skeleton"
 import Tag from "@/modules/shared/components/ui/Tag"
-import { Child, DefaultRoom, EmailGrayIcon, Group, PhoneGrayIcon, RightCaret, Tik, Travel, User3, WhatsappGrayIcon } from "@/modules/shared/components/ui/icons"
-import { dateDiplayFormat, numberWithCommas } from "@/modules/shared/helpers"
+import { DefaultRoom, EmailGrayIcon, PhoneGrayIcon, RightCaret, Tik, Travel, WhatsappGrayIcon } from "@/modules/shared/components/ui/icons"
+import { dateDiplayFormat } from "@/modules/shared/helpers"
 import { useAppDispatch, useAppSelector } from "@/modules/shared/hooks/use-store"
 import { WebSiteDataType } from "@/modules/shared/types/common"
 import { GetServerSideProps, NextPage } from "next"
@@ -36,8 +36,6 @@ const CipReserveDetail: NextPage = ({ portalData }: { portalData?: WebSiteDataTy
     const [cipReserveInfo, setCipReserveInfo] = useState<CipGetReserveByIdResponse>();
     const [cipReserveInfoLoading, setCipReserveInfoLoading] = useState<boolean>(true);
     const [reserveNotFound, setReserveNotFound] = useState<boolean>(false);
-
-    const [loginWithPassword, setLoginWithPassword] = useState<boolean>(true);
 
 
     const [copied, setCopied] = useState<boolean>(false);
@@ -86,9 +84,6 @@ const CipReserveDetail: NextPage = ({ portalData }: { portalData?: WebSiteDataTy
                         <div className='border border-neutral-300 bg-white rounded-md mb-4 py-6'>
                             <LoginSidebar
                                 isNotModal
-                                loginWithPassword={loginWithPassword}
-                                setLoginWithPassword={setLoginWithPassword}
-                                toggleLoginType={() => { setLoginWithPassword(prevState => !prevState) }}
                             />
                         </div>
                     )}

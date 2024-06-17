@@ -27,7 +27,7 @@ const Header: React.FC<Props> = props => {
     const theme1 = process.env.THEME === "THEME1";
 
     return (
-        <header className={`bg-white z-30 relative ${theme2 ? "border-b border-neutral-300" : ""}`}>
+        <header className={`bg-white z-30 relative ${theme2 ? "border-b border-neutral-300 shadow-normal" : ""}`}>
 
             {/* {process.env.PROJECT === "SAFARANEH" && <div>
                 <a
@@ -52,7 +52,7 @@ const Header: React.FC<Props> = props => {
                     {logo ? (
                         <Image src={logo} alt={siteName} width={115} height={48} onContextMenu={e => { e.preventDefault() }} className="h-12 mx-auto object-contain" />
                     ) : (
-                        <div className="text-center text-xl font-bold text-white bg-neutral-500 px-3 py-1.5 leading-5 rounded-xl"> NO <br /> LOGO </div>
+                        <div className="text-center text-xl w-28 mx-auto font-bold text-white bg-neutral-500 px-3 py-1.5 leading-5 rounded-xl"> NO <br /> LOGO </div>
                     )}
                 </Link>
 

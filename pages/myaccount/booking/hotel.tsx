@@ -44,8 +44,6 @@ const DomesticHotelReserveDetail: NextPage = ({ portalData }: { portalData?: Web
 
     const [copied, setCopied] = useState<boolean>(false);
 
-    const [loginWithPassword, setLoginWithPassword] = useState<boolean>(true);
-
     const phoneLink = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
     const phoneNumber = phoneLink?.replace("+98", "0");
     const email = portalData?.billing?.email || "";
@@ -161,9 +159,6 @@ const DomesticHotelReserveDetail: NextPage = ({ portalData }: { portalData?: Web
                         <div className='border border-neutral-300 bg-white rounded-md mb-4 py-6'>
                             <LoginSidebar
                                 isNotModal
-                                loginWithPassword={loginWithPassword}
-                                setLoginWithPassword={setLoginWithPassword}
-                                toggleLoginType={() => { setLoginWithPassword(prevState => !prevState) }}
                             />
                         </div>
                     )}

@@ -34,6 +34,18 @@ const Footer: React.FC<Props> = props => {
 
     const linkClassNames = "block hover:text-blue-600 hover:underline";
 
+    const theme2 = process.env.THEME === "THEME2";
+
+    if(theme2){
+        return(
+            <footer className="border-t border-neutral-200" >
+                <div className="max-w-container mx-auto p-3 text-neutral-700 py-8 text-sm">
+                    کلیه حقوق این وبسایت محفوظ و متعلق به {siteName} است.
+                </div>
+            </footer>
+        )
+    }
+
     return (
         <>
             <footer>

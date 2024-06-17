@@ -63,6 +63,8 @@ const HotelNameFilter: React.FC = () => {
         setSubmitedName(initialFilteredName);
     },[initialFilteredName]);
 
+    const theme2 = process.env.THEME === "THEME2";
+
     return (
         <>
             <div className="flex justify-between items-start">
@@ -81,7 +83,7 @@ const HotelNameFilter: React.FC = () => {
             <div className='relative'>
 
                 <input
-                    className="border border-neutral-300 rounded px-3 h-10 block w-full rtl:pl-14 ltr:pr-14 outline-none focus:border-neutral-600"
+                    className="border border-neutral-300 rounded px-3 text-sm h-10 block w-full rtl:pl-14 ltr:pr-14 outline-none focus:border-neutral-600"
                     type="text"
                     placeholder={tHotel('search-hotel-name')}
                     name="hotelName"
@@ -94,7 +96,7 @@ const HotelNameFilter: React.FC = () => {
                     onClick={submitHandler}
                     type="button"
                     aria-label="filter hotel name"
-                    className="bg-blue-600 text-white rounded absolute rtl:left-1  ltr:right-1 top-1 bottom-1 aspect-square flex justify-center items-center"
+                    className={`absolute rtl:left-1 ltr:right-1 top-1 bottom-1 aspect-square flex justify-center items-center ${theme2?"":"bg-blue-600 text-white rounded"}`}
                 >
                     <Search className="w-7 h-7 fill-current" />
                 </button>

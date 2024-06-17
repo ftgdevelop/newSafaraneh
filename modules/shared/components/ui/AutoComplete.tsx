@@ -67,6 +67,8 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
         }
     }
 
+    const source = axios.CancelToken.source();
+
     const fetchData = async (val: string, acceptLanguage?: "fa-IR" | "en-US" | "ar-AE") => {
         setLoading(true);
 
@@ -77,6 +79,7 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
                 axiosParams = {
                     method: "post",
                     url: url,
+                    cancelToken: source.token,
                     data: {
                         query: val
                     },
@@ -90,6 +93,7 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
                 axiosParams = {
                     method: "post",
                     url: `${url}?input=${val}`,
+                    cancelToken: source.token,
                     headers: {
                         ...Header,
                         apikey: process.env.PROJECT_PORTAL_APIKEY,
@@ -100,6 +104,7 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
                 axiosParams = {
                     method: "post",
                     url: `${url}?input=${val}`,
+                    cancelToken: source.token,
                     headers: {
                         ...Header,
                         apikey: process.env.PROJECT_PORTAL_APIKEY,
@@ -122,7 +127,7 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
             }
 
         } catch (error: any) {
-            if (error.message) {
+            if (error.message && error.message !== "canceled") {
                 dispatch(setReduxError({
                     title: t('error'),
                     message: error.message,
@@ -150,6 +155,9 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
 
         return () => {
             clearTimeout(fetchTimeout);
+            if (source) {
+                source.cancel("canceled");
+            }
         }
 
     }, [text]);
