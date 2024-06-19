@@ -1,6 +1,7 @@
 import { UserInformation } from "@/modules/authentication/types/authentication";
 import FormikField from "@/modules/shared/components/ui/FormikField";
 import PhoneInput from "@/modules/shared/components/ui/PhoneInput";
+import RadioInputField from "@/modules/shared/components/ui/RadioInputField";
 import { validateEmail, validateNationalId, validateRequiedPersianAndEnglish } from "@/modules/shared/helpers/validation";
 import { useAppSelector } from "@/modules/shared/hooks/use-store";
 import { Field, FormikErrors, FormikTouched } from "formik";
@@ -99,11 +100,9 @@ const ReserverInformation: React.FC<Props> = props => {
 
             <div className={`grid gap-x-2 gap-y-5 ${theme1?" md:grid-cols-2 lg:grid-cols-3":"grid-cols-1"}`}>
                 <div role="group" className={`leading-4 ${theme1?"md:col-span-2 lg:col-span-1":""}`} >
-                    <label className='block text-xs mb-1' > جنسیت </label>
-                    <label className='inline-flex items-center gap-1 rtl:ml-4 ltr:mr-4'>
-                        <Field
-                            type="radio"
-                            className="text-xs"
+                    <label className='block text-xs mb-2' > جنسیت </label>
+                    <label className='inline-flex items-center gap-1 rtl:ml-4 ltr:mr-4 cursor-pointer'>
+                        <RadioInputField
                             onChange={(e: any) => {
                                 const val = e.target.checked;
                                 setFieldValue('reserver.gender', val);
@@ -115,10 +114,9 @@ const ReserverInformation: React.FC<Props> = props => {
                         />
                         مرد
                     </label>
-                    <label className='inline-flex items-center gap-1'>
-                        <Field
-                            type="radio"
-                            className="text-xs"
+                    <label className='inline-flex items-center gap-1 cursor-pointer'>
+
+                        <RadioInputField
                             onChange={(e: any) => {
                                 const val = !e.target.checked;
                                 setFieldValue('reserver.gender', val);
@@ -128,6 +126,7 @@ const ReserverInformation: React.FC<Props> = props => {
                             }}
                             checked={!values.reserver.gender}
                         />
+
                         زن
                     </label>
                 </div>
