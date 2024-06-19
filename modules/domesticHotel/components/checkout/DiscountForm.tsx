@@ -11,6 +11,8 @@ type Props = {
 
 const DiscountForm: React.FC<Props> = props => {
 
+    const theme1 = process.env.THEME === "THEME1";
+
     const [text, setText] = useState<string>("");
 
     const submitHandler = () => {
@@ -50,18 +52,18 @@ const DiscountForm: React.FC<Props> = props => {
     }
 
     return (
-        <div className='bg-white border border-neutral-300 p-5 rounded-lg mb-5'>
+        <div className={`mb-5 ${theme1?"bg-white border-neutral-300 border p-5 rounded-lg":""}`}>
 
             <h5 className='font-semibold text-xl mb-4'> کد تخفیف </h5>
 
-            <div className="relative sm:w-60">
+            <div className={`relative ${theme1?"sm:w-60":"sm:w-80"}`}>
                 <input
                     disabled={!!props.loading}
                     dir="ltr"
                     type="text"
                     onChange={e => { setText(e.target.value) }}
                     value={text}
-                    className='rounded-md h-10 w-full border border-neutral-300 rtl:pl-20 rtl:pr-2 ltr:pr-20 ltr:pl-2 outline-none font-mono text-xl tracking-widest placeholder:font-samim placeholder:text-sm placeholder:tracking-normal rtl:placeholder:text-right'
+                    className={`rounded-md w-full border border-neutral-300 rtl:pl-20 rtl:pr-2 ltr:pr-20 ltr:pl-2 outline-none font-mono text-xl tracking-widest placeholder:font-samim placeholder:text-sm placeholder:tracking-normal rtl:placeholder:text-right ${theme1?"h-10":"h-13"}`}
                     placeholder='افزودن کد تخفیف'
                     onKeyDown={e => {
                         if (e.code === "Enter") {
