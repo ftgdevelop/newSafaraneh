@@ -123,8 +123,8 @@ const AsideTheme2: React.FC<Props> = props => {
                         src={hotelInformation.image.url}
                         alt={hotelInformation?.image?.alt || hotelInformation.name}
                         title={hotelInformation?.image?.title}
-                        width={200}
-                        height={150}
+                        width={445}
+                        height={288}
                         className="w-full h-72 object-cover rounded-t-lg"
                     />
                 ) : (
@@ -232,7 +232,7 @@ const AsideTheme2: React.FC<Props> = props => {
                         }
 
                         return (
-                            <Fragment>
+                            <Fragment key={roomIndex}>
 
                                 <hr className="my-5" />
 
