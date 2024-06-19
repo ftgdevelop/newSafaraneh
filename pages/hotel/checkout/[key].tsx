@@ -247,8 +247,8 @@ const Checkout: NextPage = () => {
     const response: any = await getTravelers(token, "fa-IR");
     if (response.data?.result?.items) {
       setTravelers(response.data?.result?.items);
-      setFetchingTravelersLoading(false);
     }
+    setFetchingTravelersLoading(false);
   }
 
 

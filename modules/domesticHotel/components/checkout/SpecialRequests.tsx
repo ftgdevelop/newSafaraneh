@@ -4,11 +4,7 @@ import { DownCaret } from "@/modules/shared/components/ui/icons";
 import { useTranslation } from 'next-i18next';
 import { Field } from 'formik';
 
-type Props ={
-
-}
-
-const SpecialRequests:React.FC<Props> = () =>{
+const SpecialRequests:React.FC = () =>{
 
     const {t} = useTranslation('common');
 
@@ -18,6 +14,8 @@ const SpecialRequests:React.FC<Props> = () =>{
         setOpen(prevState=>!prevState);
     }
 
+    const theme2 = process.env.THEME === "THEME2";
+
     return(
                     
         <div className='pt-4'>
@@ -25,7 +23,7 @@ const SpecialRequests:React.FC<Props> = () =>{
         <button 
           type='button'
           onClick={toggleOpen}
-          className='text-blue-500 inline-flex gap-1 items-center text-sm font-semibold'
+          className='text-blue-500 inline-flex gap-1 items-center text-sm font-semibold outline-none'
         >
           <DownCaret className={`w-5 h-5 fill-current transition-all ${open?"-rotate-180":""}`} />
           {t('special-requests')}
@@ -36,7 +34,7 @@ const SpecialRequests:React.FC<Props> = () =>{
                 as="textarea"
                 name='specialRequest'
                 rows={4}
-                className='w-full border border-neutral-300 focus:border-blue-500 rounded-md px-2 py-1 text-sm outline-none'
+                className={`w-full border focus:border-blue-500 px-2 py-1 text-sm outline-none ${theme2 ? "focus:border-2 rounded-lg border-neutral-400" : "border-neutral-300 rounded-md"}`}
                 placeholder={t('special-requests-desc')}
             />
         )}
