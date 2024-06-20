@@ -25,11 +25,11 @@ const RecentBlogs: React.FC<Props> = props => {
                     <Link key={blog.id} href={`/blog/${blog.slug}`} title={blog.title.rendered} className={`sm:col-span-${index === 2 ? "2" : "1"}  lg:col-span-${index < 2 ? "3" : "2"}`}>
                         <Image
                             onContextMenu={e => { e.preventDefault() }}
-                            src={blog.images.medium}
+                            src={blog.images.large}
                             alt={blog.title.rendered}
                             title={blog.title.rendered}
-                            width={278}
-                            height={176}
+                            width={index > 1 ? 387 : 590}
+                            height={index > 1 ? 245 : 374}
                             className='w-full rounded-2xl mb-2 block'
                         />
                         <div className='text-sm'> {blog.date} </div>

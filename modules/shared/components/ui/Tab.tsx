@@ -3,29 +3,30 @@ import { TabItem } from '@/modules/shared/types/common';
 import React, { Fragment, useState } from 'react';
 import { Tik } from './icons';
 import { useRouter } from 'next/router';
+import RadioInputField from './RadioInputField';
 
 type Props = {
     items: TabItem[];
-    style2?: boolean;
-    style3?: boolean;
+    style?: "1" | "2" | "3" | "radioStyle";
+    radioStyle?: boolean;
     wrapperClassName?: string;
     tabLinksCenter?: boolean;
     tabLinksBold?: boolean;
-    innerElement?:React.ReactNode;
+    innerElement?: React.ReactNode;
 }
 
 const Tab: React.FC<Props> = props => {
 
-    const { items, style2, style3, innerElement } = props;
+    const { items, style, innerElement } = props;
 
     const router = useRouter();
 
     const [activetabKey, setActiveTabKey] = useState(items[0].key);
 
     let tabClassName = (active: boolean) => {
-        if (style2) {
+        if (style === '2') {
             return `shadow-normal outline-none select-none basis-20 relative grow text-blue-700 border border-2 rounded py-3 transition-all ${active ? "bg-blue-50 font-semibold text-primary-700 border-primary-700" : "border-transparent text-neutral-600"}`
-        } else if (style3) {
+        } else if (style === '3') {
             return `outline-none select-none text-2xs sm:text-sm px-2 sm:px-5 py-1 sm:py-2 border-b-2 transition-all text-neutral-600 block grow ${active ? "border-red-600" : "border-transparent"}`;
         } else {
             return `outline-none select-none text-2xs sm:text-sm px-2 sm:px-5 py-1 sm:py-2 border-b-2 transition-all ${active ? "text-primary-700 border-primary-700" : "border-transparent text-neutral-600"}`;
@@ -35,27 +36,45 @@ const Tab: React.FC<Props> = props => {
     return (
         <>
             <div className={props.wrapperClassName || ""}>
-                <div className={`${style2 ? "flex gap-4" : style3 ? "flex border-b border-neutral-200" : "border-b border-neutral-200 sm:px-5"} ${props.tabLinksCenter?"text-center":""} ${props.tabLinksBold?"font-bold":""}`}>
-                    {items.map(item => <button
-                        type="button"
-                        key={item.key}
-                        onClick={() => {
-                            if (item.href) {
-                                router.push(item.href);
-                            } else {
-                                setActiveTabKey(item.key);
-                            }
-                        }}
-                        className={tabClassName(activetabKey === item.key)}
-                    >
-                        {!!(style2 && activetabKey === item.key) && (
-                            <Tik className='w-5 h-5 fill-white bg-blue-700 rounded-full absolute -top-2 rtl:-left-2 ltr:-right-2 border border-2 border-blue-700' />
-                        )}
+                {style === 'radioStyle' ? (
+                    <>
+                        {items.map(item => (
+                            <label className='flex items-center mb-2 gap-1 rtl:ml-4 ltr:mr-4 cursor-pointer' key={item.key}>
+                                <RadioInputField                                    
+                                    checked={activetabKey === item.key}
+                                    onChange={(e:any) => {
+                                        if(e.target.checked){
+                                            setActiveTabKey(item.key);
+                                        }
+                                    }}
+                                />
+                                {item.label}
+                            </label>))}
+                    </>
+                ) : (
+                    <div className={`${style === '2' ? "flex gap-4" : style === '3' ? "flex border-b border-neutral-200" : "border-b border-neutral-200 sm:px-5"} ${props.tabLinksCenter ? "text-center" : ""} ${props.tabLinksBold ? "font-bold" : ""}`}>
+                        {items.map(item => <button
+                            type="button"
+                            key={item.key}
+                            onClick={() => {
+                                if (item.href) {
+                                    router.push(item.href);
+                                } else {
+                                    setActiveTabKey(item.key);
+                                }
+                            }}
+                            className={tabClassName(activetabKey === item.key)}
+                        >
+                            {!!(style === '2' && activetabKey === item.key) && (
+                                <Tik className='w-5 h-5 fill-white bg-blue-700 rounded-full absolute -top-2 rtl:-left-2 ltr:-right-2 border border-2 border-blue-700' />
+                            )}
 
-                        {item.label}
+                            {item.label}
 
-                    </button>)}
-                </div>
+                        </button>)}
+                    </div>
+                )}
+
 
                 {items.map(item => <Fragment key={item.key}>
                     {activetabKey === item.key ? item.children : null}

@@ -19,6 +19,8 @@ type Props = {
 
 const OnlinePayment: React.FC<Props> = props => {
 
+    const theme1 = process.env.THEME === "THEME1";
+
     const { t } = useTranslation('common');
     const { t: tPayment } = useTranslation('payment');
 
@@ -61,8 +63,8 @@ const OnlinePayment: React.FC<Props> = props => {
 
         if (second > 0) {
             return (
-                <div className='bg-white p-4 border border-neutral-300 rounded-md mb-4 border-t-2 border-t-orange-400 mt-8'>
-                    <h6 className='text-orange-400 font-semibold mb-1'> درخواست رزرو تایید شد </h6>
+                <div className={`bg-white p-4 border mb-4 mt-8 ${theme1 ? "border-neutral-300 rounded-md border-t-2 border-t-orange-400" : "border-green-600 rounded-xl"}`}>
+                    <h6 className={`font-semibold ${theme1 ? "text-orange-400 mb-1" : "mb-2 text-green-600"}`}> درخواست رزرو تایید شد </h6>
                     <p className='text-xs'>
                         <span> خواهشمند است حداکثر ظرف مدت </span>
                         {days ? <b> <span className='font-mono'> {days} </span> روز </b> : null}

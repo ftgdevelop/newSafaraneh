@@ -1,5 +1,3 @@
-import { Field } from "formik";
-
 type Props ={
     onChange: (e:any) => void;
     checked?: boolean;
@@ -8,7 +6,7 @@ type Props ={
 const RadioInputField: React.FC<Props> = props => {
     return(
         <>
-            <Field
+            <input
                 type="radio"
                 className="absolute opacity-0 invisible peer"
                 onChange = {props.onChange}
