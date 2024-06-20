@@ -127,8 +127,8 @@ const OnlinePayment: React.FC<Props> = props => {
         <div className='pt-10'>
 
             {type === 'HotelDomestic' && remaindSeconds < 1 && (
-                <div className='border p-4 border-neutral-300 rounded border-t-4 border-t-red-500 text-xs'>
-                    <h6 className='text-red-600 text-sm font-semibold'> اخطار! </h6>
+                <div className={`border p-4 ${theme1?"text-xs border-neutral-300 rounded border-t-4 border-t-red-500":"text-sm border-red-600 rounded-xl"}`}>
+                    <h6 className='text-red-600 text-sm font-semibold mb-1'> اخطار! </h6>
                     <p>
                         درخواست رزرو تایید شد ولی به علت عدم پرداخت در مهلت تعیین شده لغو گردید.
                     </p>
