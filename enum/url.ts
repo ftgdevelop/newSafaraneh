@@ -27,7 +27,8 @@ export const Header = {
     Flight: process.env.PROJECT_SERVER_FLIGHT,
     Crm:process.env.PROJECT_SERVER_CRM,
     Cip: process.env.PROJECT_SERVER_CIP,
-    Traveler : process.env.PROJECT_SERVER_TRAVELER
+    Traveler: process.env.PROJECT_SERVER_TRAVELER,
+    Bus: process.env.PROJECT_SERVER_BUS
   };
 
   export const Identity = {
@@ -115,8 +116,10 @@ export const Flight = {
   };
   
   export const Bus = {
-    AvailabilityKey: '/busdomestic.safaraneh.com/api/services/app/BookingBus/Availability',
-    BusList: '/busdomestic.safaraneh.com/api/services/app/BookingBus/GetAvailability?key='
+    AvailabilityKey: '/api/services/app/BookingBus/Availability',
+    BusList: '/api/services/app/BookingBus/GetAvailability',
+    BusSearch: '/api/services/app/Terminal/Search',
+    BusSeat: '/api/services/app/BookingBus/GetBusSeat?DepartureKey='
   }
 
   export const Cip = {
