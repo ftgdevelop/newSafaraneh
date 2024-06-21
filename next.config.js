@@ -65,11 +65,12 @@ const nextConfig = {
     PROJECT_SERVER_TRAVELER:"traveller.safaraneh.com",
     PROJECT_SERVER_CIP:"cip.safaraneh.com",
     PROJECT_SERVER_FLIGHT: "flightdomestic.safaraneh.com",
+    PROJECT_SERVER_BUS: "busdomestic.safaraneh.com",
     PROJECT_SERVER_TENANTID: "1040",
     PROJECT_SERVER_NATIONALITY: "",
     PORT: '',
 
-    PROJECT_MODULES: "DomesticFlight DomesticHotel CIP Blog Buses ForeignFlight ForeignHotel",
+    PROJECT_MODULES: "DomesticFlight DomesticHotel CIP Blog Bus ForeignFlight ForeignHotel",
 
     // DEFAULT_lAN:"US",
     // LANGUAGES:["US","NO","FA"]
