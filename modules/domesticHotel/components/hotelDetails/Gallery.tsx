@@ -1,5 +1,4 @@
 import { ImageGallery } from '@/modules/shared/components/ui/icons';
-import { DomesticHotelDetailType } from '@/modules/domesticHotel/types/hotel';
 import { useTranslation } from 'next-i18next';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -11,7 +10,13 @@ import "yet-another-react-lightbox/plugins/thumbnails.css";
 import "yet-another-react-lightbox/plugins/captions.css";
 
 type Props = {
-    images?: DomesticHotelDetailType['Gallery'];
+    images?: {
+        src: string;
+        alt: string;
+        width: number;
+        height: number;
+        description: string;
+    }[];
     hotelName?:string;
 }
 
@@ -29,27 +34,25 @@ const Gallery: React.FC<Props> = props => {
         </div>
     }
 
-    const slides = images.filter(item => item.Image).map(item => ({
-        src: item.Image! as string,
-        alt: item.Title || "",
-        width: 1000,
-        height: 700,
-        description: item.Alt
-    }));
-
     const openLightBox = (index?: number) => {
         setSlideIndex(index || 0);
         setOpen(true);
     }
 
+    if (!images.length){
+        return(
+            null
+        )
+    }
+
     return (
         <>
             <div id="pictures_section" className='grid grid-cols-1 md:grid-cols-4 gap-1 bg-white relative'>
-                {slides.slice(0, 5).map((slide, index) => (
+                {images.slice(0, 5).map((slide, index) => (
                     <Image
                         key={slide.src}
                         priority={!index}
-                        //onContextMenu={(e)=> e.preventDefault()}
+                        onContextMenu={(e)=> e.preventDefault()}
                         src={slide.src}
                         alt={index?slide.alt : props.hotelName || slide.alt}
                         width={index ? 287 : 401}
@@ -61,7 +64,7 @@ const Gallery: React.FC<Props> = props => {
 
                 <span className='text-xs absolute bottom-3 rtl:left-3 ltr:right-3 bg-black/75 text-white px-5 py-2 rounded-lg pointer-events-none flex gap-2 items-center'>
                     <ImageGallery className='w-6 h-6 fill-current' />
-                    +{slides.length} {tHotel("picture")}
+                    +{images.length} {tHotel("picture")}
                 </span>
 
             </div>
@@ -70,7 +73,7 @@ const Gallery: React.FC<Props> = props => {
                 index={slideIndex}
                 open={open}
                 close={() => setOpen(false)}
-                slides={slides}
+                slides={images}
                 plugins={[Thumbnails, Captions]}
                 captions={{ descriptionTextAlign: 'center' }}
                 thumbnails={{ width: 80, height: 50 }}

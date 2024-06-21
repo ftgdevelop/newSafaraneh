@@ -26,6 +26,9 @@ type Props = {
 
 const FormikField: React.FC<Props> = props => {
 
+    const theme1 = process.env.THEME === "THEME1";
+    const theme2 = process.env.THEME === "THEME2";
+
     const [labelUp, setLabelUp] = useState<boolean>(false);
     const [isPassword, setIsPassword] = useState<boolean>(props.isPassword || false);
 
@@ -58,6 +61,45 @@ const FormikField: React.FC<Props> = props => {
         </button>
     }
 
+    const labelClassNames = ["z-10 select-none pointer-events-none block leading-4"];
+
+    if (props.labelIsSmall){
+        labelClassNames.push ("mb-2 text-sm");
+    }else if(props.labelIsSimple){        
+        labelClassNames.push ("mb-3 text-base");
+    }else {
+        
+        labelClassNames.push(`absolute px-2 transition-all duration-300 -translate-y-1/2 rtl:right-1 ltr:left-1 ${theme1?"bg-white":theme2?"":""}`);
+
+        if(labelUp){
+        
+            labelClassNames.push(`${theme2?"top-3.5 text-2xs":"top-0 text-xs"}`);
+        
+        }else{
+        
+            labelClassNames.push("top-1/2 text-sm");
+        
+        }
+    }
+
+    const inputClassNames : string[] = [`w-full px-3 bg-white border outline-none ${theme2?"h-13 pt-4 leading-4":"h-10"}`];
+
+    if(props.errorText && props.isTouched){
+        inputClassNames.push(`border-red-500 ${theme2?"border-2":""}`);
+    }else{
+        inputClassNames.push(`${theme2?"border-neutral-400 focus:border-2":"border-neutral-300"} focus:border-blue-500`);
+    }
+
+    if (props.groupStart){
+        inputClassNames.push("rtl:rounded-r-md ltr:rounded-l-md");
+    }else{
+        inputClassNames.push("rounded-md")
+    }
+
+    if(props.fieldClassName){
+        inputClassNames.push(props.fieldClassName);
+    }
+
     return (
         <div className={`${props.errorText ? "has-validation-error" : ""} ${props.className || ""}`}>
             <div className='relative'>
@@ -65,7 +107,7 @@ const FormikField: React.FC<Props> = props => {
                     {!!props.label && (
                         <label
                             htmlFor={props.id}
-                            className={`z-10 select-none pointer-events-none block leading-4 ${ props.labelIsSmall ? "mb-2": props.labelIsSimple ? "mb-3" : "absolute px-2 bg-white transition-all duration-300 -translate-y-1/2 rtl:right-1 ltr:left-1"} ${ props.labelIsSmall?"text-sm": props.labelIsSimple ? "text-base" : labelUp ? "top-0 text-xs" : "top-1/2 text-sm"}`}
+                            className={labelClassNames.join(" ")}
                         >
                             {!!(props.labelIsSimple && props.showRequiredStar) && <span className='text-red-600'>* </span>}
                             {props.label}
@@ -88,7 +130,7 @@ const FormikField: React.FC<Props> = props => {
                         id={props.id}
                         name={props.name}
                         autoComplete="off"
-                        className={`${props.fieldClassName || ""} h-10 px-3 bg-white border ${props.errorText && props.isTouched ? "border-red-500" : "border-neutral-300 focus:border-blue-500"} outline-none ${props.groupStart?"rtl:rounded-r-md ltr:rounded-l-md":"rounded-md"} w-full`}
+                        className={inputClassNames.join(" ")}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => {
                             props.setFieldValue(props.name, e.target.value, true);
                             if (props.onChange) {

@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 
-import { DomesticHotelDetailType } from "@/modules/domesticHotel/types/hotel";
-import { Location } from "@/modules/shared/components/ui/icons";
+import { DomesticAccomodationFacilityType, DomesticHotelDetailType } from "@/modules/domesticHotel/types/hotel";
+import { Location, Verified } from "@/modules/shared/components/ui/icons";
 import HotelScore from "../shared/HotelScore";
 import Rating from "@/modules/shared/components/ui/Rating";
 import Image from 'next/image';
@@ -9,13 +9,15 @@ import Attractions from './Attractions';
 import HotelMap from './HotelMap';
 import GuestRating from '@/modules/shared/components/ui/GuestRating';
 import HotelMapButton from './HotelMapButton';
+import AccommodationFacilityIcon from './AccommodationFacilityIcon';
 
 type Props = {
     hotelData?: DomesticHotelDetailType;
     scoreData?: {
         CommentCount?: number;
         Satisfaction?: number;
-    }
+    };
+    accomodationFacilities?: DomesticAccomodationFacilityType[];
 }
 
 const HotelName: React.FC<Props> = props => {
@@ -64,15 +66,44 @@ const HotelName: React.FC<Props> = props => {
                 Longitude={hotelData.Longitude}
             />
 
-            <div className='hidden lg:block lg:col-span-2'>
+            {
+                props.accomodationFacilities?.length 
+                || 
+                (process.env.PROJECT !== "1STSAFAR" && hotelData.Facilities?.length)
+            ? (
+            <div className='lg:col-span-2'>
+                
                 <strong className='block font-semibold text-md lg:text-lg mb-3'>امکانات محبوب هتل</strong>
-                <div className='grid grid-cols-2 lg:grid-cols-3 gap-2'>
-                    {hotelData.Facilities?.slice(0, 6).map(item => <div key={item.Keyword} className='text-sm text-neutral-500'>
-                        {item.Image && <Image src={item.Image} alt={item.ImageAlt || item.Title || ""} width={20} height={20} className='h-5 w-5 inline-block rtl:ml-2 ltr:mr-2' />}
-                        {item.Title}
-                    </div>)}
-                </div>
+                
+                {props.accomodationFacilities?.length || process.env.PROJECT === "1STSAFAR" ? (
+
+                    <div className='mb-5 flex flex-wrap gap-1 sm:gap-3'>
+                        {props.accomodationFacilities?.filter(item => item.items.some(s => s.isImportant)).map(facilityItem => (
+                            <Fragment key={facilityItem.keyword} >
+                                {facilityItem.items.filter(i => i.isImportant).map(a => (
+                                    <span key={a.name} className='text-xs sm:text-sm block border border-neutral-200 font-semibold text-neutral-500 px-1 sm:p-2 rounded whitespace-nowrap'>
+                                        <AccommodationFacilityIcon keyword={a.keyword} />
+                                        {a.name}
+                                    </span>
+                                ))}
+                            </Fragment>
+                        ))}
+                    </div>
+                    
+                ):(
+                    <div className='grid grid-cols-2 lg:grid-cols-3 gap-2'>
+                        {hotelData.Facilities?.slice(0, 6).map(item => <div key={item.Keyword} className='text-sm text-neutral-500'>
+                            {item.Image && <Image src={item.Image} alt={item.ImageAlt || item.Title || ""} width={20} height={20} className='h-5 w-5 inline-block rtl:ml-2 ltr:mr-2' />}
+                            {item.Title}
+                        </div>)}
+                    </div>
+                )}
+                
             </div>
+            ):(
+                <div className='lg:col-span-2' />
+            )}
+
             <div className='hidden lg:block lg:col-span-1'>
                 {!!hotelData.DistancePoints?.length && <Attractions isSmall attractions={hotelData.DistancePoints} />}
             </div>

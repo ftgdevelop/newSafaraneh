@@ -25,9 +25,9 @@ type Props<T> = {
     noResultMessage?: string;
     checkTypingLanguage?: boolean;
     type: "hotel" | "flight" | "cip";
-    sortListFunction?: (a:T, b:T) => 1 | -1;
-    defaultListLabel?:string;
-    label?:string;
+    sortListFunction?: (a: T, b: T) => 1 | -1;
+    defaultListLabel?: string;
+    label?: string;
 }
 
 function AutoCompleteZoom<T>(props: PropsWithChildren<Props<T>>) {
@@ -47,15 +47,14 @@ function AutoCompleteZoom<T>(props: PropsWithChildren<Props<T>>) {
 
     const [open, setOpen] = useState<boolean>(false);
 
-
-    useEffect(()=>{
-        if (open && inputRef.current){
+    useEffect(() => {
+        if (open && inputRef.current) {
             inputRef.current.select();
-            if (window && window.innerWidth < 650){
+            if (window && window.innerWidth < 650) {
                 wrapperRef.current?.scrollIntoView({ behavior: "smooth" });
             }
         }
-    },[open]);
+    }, [open]);
 
     const [errorText, setErrorText] = useState<string>("");
     const [items, setItems] = useState<T[]>([]);
@@ -82,7 +81,10 @@ function AutoCompleteZoom<T>(props: PropsWithChildren<Props<T>>) {
         }
     }
 
+    const source = axios.CancelToken.source();
+
     const fetchData = async (val: string, acceptLanguage?: "fa-IR" | "en-US" | "ar-AE") => {
+
         setLoading(true);
 
         try {
@@ -92,6 +94,7 @@ function AutoCompleteZoom<T>(props: PropsWithChildren<Props<T>>) {
                 axiosParams = {
                     method: "post",
                     url: url,
+                    cancelToken: source.token,
                     data: {
                         query: val
                     },
@@ -105,6 +108,7 @@ function AutoCompleteZoom<T>(props: PropsWithChildren<Props<T>>) {
                 axiosParams = {
                     method: "post",
                     url: `${url}?input=${val}`,
+                    cancelToken: source.token,
                     headers: {
                         ...Header,
                         apikey: process.env.PROJECT_PORTAL_APIKEY,
@@ -115,6 +119,7 @@ function AutoCompleteZoom<T>(props: PropsWithChildren<Props<T>>) {
                 axiosParams = {
                     method: "post",
                     url: `${url}?input=${val}`,
+                    cancelToken: source.token,
                     headers: {
                         ...Header,
                         apikey: process.env.PROJECT_PORTAL_APIKEY,
@@ -137,7 +142,8 @@ function AutoCompleteZoom<T>(props: PropsWithChildren<Props<T>>) {
             }
 
         } catch (error: any) {
-            if (error.message) {
+
+            if (error.message && error.message !== "canceled") {
                 dispatch(setReduxError({
                     title: t('error'),
                     message: error.message,
@@ -156,7 +162,7 @@ function AutoCompleteZoom<T>(props: PropsWithChildren<Props<T>>) {
         let fetchTimeout: ReturnType<typeof setTimeout>;
 
         const valueText = value ? createTextFromOptionsObject(value) : "";
-        
+
         setErrorText("");
 
         if (text.length >= min && valueText !== text) {
@@ -165,6 +171,9 @@ function AutoCompleteZoom<T>(props: PropsWithChildren<Props<T>>) {
 
         return () => {
             clearTimeout(fetchTimeout);
+            if (source) {
+                source.cancel("canceled");
+            }
         }
 
     }, [text]);
@@ -211,23 +220,23 @@ function AutoCompleteZoom<T>(props: PropsWithChildren<Props<T>>) {
         if (items?.length) {
             data = items;
         }
-        if( props.sortListFunction){
+        if (props.sortListFunction) {
             data?.sort(props.sortListFunction);
         }
 
         listElement = <>
-        {(props.defaultList?.length && props.defaultListLabel && !items?.length) && (
-            <div className='px-4 pt-6 pb-2 font-semibold text-neutral-400'>
-                {props.defaultListLabel}
-            </div>
-        )}
-        {data?.map((item, index) => <div
-            key={index}
-            onClick={selectItemHandle.bind(null, item)}
-            className="cursor-pointer transition-all"
-        >
-            {props.renderOption && props.renderOption(item, direction)}
-        </div>)}
+            {(props.defaultList?.length && props.defaultListLabel && !items?.length) && (
+                <div className='px-4 pt-6 pb-2 font-semibold text-neutral-400'>
+                    {props.defaultListLabel}
+                </div>
+            )}
+            {data?.map((item, index) => <div
+                key={index}
+                onClick={selectItemHandle.bind(null, item)}
+                className="cursor-pointer transition-all"
+            >
+                {props.renderOption && props.renderOption(item, direction)}
+            </div>)}
         </>
     }
 
@@ -244,11 +253,11 @@ function AutoCompleteZoom<T>(props: PropsWithChildren<Props<T>>) {
     useEffect(() => {
         if (props.value) {
             setValue(props.value);
-            setText(propsValueText||"");
+            setText(propsValueText || "");
             if (items.length) {
                 setItems([]);
             }
-        }else{
+        } else {
             setValue(undefined);
             setText("");
         }
@@ -315,41 +324,41 @@ function AutoCompleteZoom<T>(props: PropsWithChildren<Props<T>>) {
 
             <button
                 type='button'
-                onClick={()=>{setOpen(true)}}
+                onClick={() => { setOpen(true) }}
                 className={inputClassNames.join(" ")}
             >
                 {!!props.label && (
                     <label
-                        className={`block truncate max-w-full ${text? "text-2xs" : ""}`}
+                        className={`block truncate max-w-full ${text ? "text-2xs" : ""}`}
                     >
                         {props.label}
                     </label>
-                ) }
+                )}
                 {iconElement}
                 {text}
             </button>
 
-            <div className={`absolute z-[1] shadow-normal bg-white rounded-lg top-0 rtl:right-0 ltr:left-0 min-w-full sm:w-96 ${open?"transition-all rtl:origin-top-right ltr:origin-top-left scale-100 opacity-100" : "scale-20 opacity-0"}`}>
+            <div className={`absolute z-[1] shadow-normal bg-white rounded-lg top-0 rtl:right-0 ltr:left-0 min-w-full sm:w-96 ${open ? "transition-all rtl:origin-top-right ltr:origin-top-left scale-100 opacity-100" : "scale-20 opacity-0"}`}>
                 <div className='relative'>
                     <input
                         autoComplete="off"
                         id={props.inputId || undefined}
                         type="text"
-                        onChange={e => {setText(e.target.value)}}
+                        onChange={e => { setText(e.target.value) }}
                         value={text}
-                        className={`w-full font-bold text-xl xl:text-3xl px-5 truncate py-3 leading-10 outline-none placeholder:text-neutral-500 rounded-t-lg border-b border-neutral-200 ${value?"rtl:pl-12 ltr:pr-12":""}`}
+                        className={`w-full font-bold text-xl xl:text-3xl px-5 truncate py-3 leading-10 outline-none placeholder:text-neutral-500 rounded-t-lg border-b border-neutral-200 ${value ? "rtl:pl-12 ltr:pr-12" : ""}`}
                         placeholder={props.placeholder || ""}
                         ref={inputRef}
                     />
 
                     {loading && <span className={`animate-spin block border-2 border-neutral-400 rounded-full border-r-transparent border-t-transparent  w-6 h-6 absolute top-1/2 -mt-3.5 ${!direction ? "ltr:right-3 rtl:left-3" : direction === 'rtl' ? "left-3" : "right-3"}`} />}
                     {!!value && (
-                    <span 
-                        onClick={() => {resetInput(); inputRef.current?.focus();}} 
-                        className={`absolute bg-white top-2/4 -mt-3.5 cursor-pointer ${!direction ? "ltr:right-3 rtl:left-3" : direction === 'rtl' ? "left-3" : "right-3"}`}
-                    >
-                        <Close className="w-7" />
-                    </span>
+                        <span
+                            onClick={() => { resetInput(); inputRef.current?.focus(); }}
+                            className={`absolute bg-white top-2/4 -mt-3.5 cursor-pointer ${!direction ? "ltr:right-3 rtl:left-3" : direction === 'rtl' ? "left-3" : "right-3"}`}
+                        >
+                            <Close className="w-7" />
+                        </span>
                     )}
                 </div>
                 <div className='min-w-full sm:w-72 rtl:right-0 ltr:left-0 top-full text-sm max-h-64 overflow-auto styled-scrollbar'>

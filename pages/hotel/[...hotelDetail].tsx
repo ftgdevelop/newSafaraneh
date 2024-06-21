@@ -26,6 +26,8 @@ import { useEffect, useRef, useState } from 'react';
 import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
 import AvailabilityTimeout from '@/modules/shared/components/AvailabilityTimeout';
 import LoginLinkBanner from '@/modules/shared/components/theme2/LoginLinkBanner';
+import AccommodationFacilities from '@/modules/domesticHotel/components/hotelDetails/AccommodationFacilities';
+import AccomodationPolicy from '@/modules/domesticHotel/components/hotelDetails/AccomodationPolicy';
 
 type Props = {
   allData: {
@@ -40,6 +42,10 @@ type Props = {
 }
 
 const HotelDetail: NextPage<Props> = props => {
+
+  const theme2 = process.env.THEME === "THEME2";
+
+  const theme1 = process.env.THEME === "THEME1";
 
   const { portalData, allData } = props;
 
@@ -116,9 +122,9 @@ const HotelDetail: NextPage<Props> = props => {
 
   if (portalData) {
 
-    tel = portalData.billing.telNumber || portalData?.billing.phoneNumber || "";    
+    tel = portalData.billing.telNumber || portalData?.billing.phoneNumber || "";
     twitter = portalData.social?.x || "";
-    siteLogo = portalData.billing?.logo?.value ||"";
+    siteLogo = portalData.billing?.logo?.value || "";
     siteName = portalData.billing?.name || "";
     siteURL = portalData.billing?.website || "";
   }
@@ -132,7 +138,7 @@ const HotelDetail: NextPage<Props> = props => {
 
   let script_detail_2_Url;
   if (hotelData.CityName) {
-    if (process.env.LocaleInUrl === "off"){
+    if (process.env.LocaleInUrl === "off") {
       script_detail_2_Url = `${configWebsiteUrl}/hotels/${hotelData.CityName.replace(/ /g, "-")}`;
     } else if (i18n && i18n.language === "fa") {
       script_detail_2_Url = `${configWebsiteUrl}/fa/hotels/هتل-های-${hotelData.CityName.replace(/ /g, "-")}`;
@@ -143,6 +149,84 @@ const HotelDetail: NextPage<Props> = props => {
     }
   }
 
+  let hotelImages: {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+    description: string;
+  }[] = [];
+
+  if ((process.env.PROJECT === "1STSAFAR" || accommodationData?.galleries?.length)) {
+    if (accommodationData?.galleries?.length) {
+      hotelImages = accommodationData?.galleries?.map(item => ({
+        alt: item.fileAltAttribute || item.fileTitleAttribute || "",
+        description: item.fileTitleAttribute || item.fileAltAttribute || "",
+        src: item.filePath!,
+        width: 1000,
+        height: 700,
+      }))
+    }
+  } else if (hotelData.Gallery?.length) {
+    hotelImages = hotelData.Gallery.filter(item => item.Image).map(item => ({
+      src: item.Image! as string,
+      alt: item.Title || "",
+      width: 1000,
+      height: 700,
+      description: item.Alt || ""
+    }))
+  }
+
+  const anchorTabsItems: { id: string, title: string }[] = [];
+
+  if (hotelImages?.length) {
+    anchorTabsItems.push({ id: "pictures_section", title: tHotel('pictures') });
+  }
+
+  anchorTabsItems.push(
+    { id: "hotel_intro", title: tHotel('hotel-intro') },
+    { id: "rooms_section", title: tHotel('choose-room') }
+  );
+
+  if (
+    accommodationData?.facilities?.length
+    ||
+    (hotelData.Facilities?.length && process.env.PROJECT !== "1STSAFAR")
+  ) {
+    anchorTabsItems.push(
+      { id: "amenities_section", title: tHotel('hotel-facilities') }
+    )
+  }
+
+  if (
+    accommodationData?.policies?.length
+    ||
+    (process.env.PROJECT !== "1STSAFAR" && (hotelData.Policies?.length || accommodationData?.instruction?.length || accommodationData?.mendatoryFee?.length))
+  ) {
+    anchorTabsItems.push(
+      { id: "terms_section", title: t('terms') }
+    );
+  }
+
+  if(siteName && accommodationData?.description){
+    anchorTabsItems.push(
+      { id: "about_section", title: tHotel('about-hotel') }
+    );
+  }
+
+  anchorTabsItems.push(
+    { id: "attractions_section", title: tHotel('attraction') }
+  );
+
+  if (process.env.PROJECT !== "1STSAFAR") {
+    anchorTabsItems.push(
+      { id: "reviews_section", title: tHotel('suggestion') }
+    );
+  }
+
+  anchorTabsItems.push(
+    { id: "similarhotels_section", title: tHotel('similar-hotels') }
+  );
 
   return (
     <>
@@ -341,7 +425,7 @@ const HotelDetail: NextPage<Props> = props => {
       </ModalPortal>
 
       <div className="max-w-container mx-auto px-3 sm:px-5 pt-5">
-        <div className='bg-white p-3'>
+        <div className={theme1 ? "bg-white p-3" : "mb-4"}>
           {!!hotelData.IsCovid && <div className='bg-emerald-700 leading-4 p-3 sm:p-4 text-white text-xs sm:text-sm rounded-md flex flex-wrap gap-2 items-center m-1 mb-3'>
             <Phone className='w-5 h-5 sm:w-6 sm:h-6 fill-current block' />
             جهت رزرو با شماره <a dir="ltr" href={`tel:${tel?.replace("021", "+9821") || "+982126150051"}`} className='underline text-sm sm:text-base'> {tel || "02126150051"} </a> تماس بگیرید.
@@ -350,30 +434,20 @@ const HotelDetail: NextPage<Props> = props => {
           <BackToList checkin={checkin} checkout={checkout} cityId={hotelData.CityId} cityName={hotelData.CityName} />
         </div>
 
-        {!!hotelData.Gallery?.length && <Gallery images={hotelData.Gallery} hotelName={`${hotelData.HotelCategoryName} ${hotelData.HotelName} ${hotelData.CityName}`} />}
+        {!!hotelImages?.length && <Gallery images={hotelImages} hotelName={`${hotelData.HotelCategoryName} ${hotelData.HotelName} ${hotelData.CityName}`} />}
       </div>
 
       <AnchorTabs
-        items={[
-          { id: "pictures_section", title: tHotel('pictures') },
-          { id: "hotel_intro", title: tHotel('hotel-intro') },
-          { id: "rooms_section", title: tHotel('choose-room') },
-          { id: "amenities_section", title: tHotel('hotel-facilities') },
-          { id: "terms_section", title: t('terms') },
-          { id: "about_section", title: tHotel('about-hotel') },
-          { id: "attractions_section", title: tHotel('attraction') },
-          { id: "reviews_section", title: tHotel('suggestion') },
-          { id: "similarhotels_section", title: tHotel('similar-hotels') }
-        ]}
+        items={anchorTabsItems}
       />
 
       <div className="max-w-container mx-auto px-3 sm:px-5" id="hotel_intro">
 
-        <HotelName hotelData={hotelData} scoreData={hotelScoreData} />
+        <HotelName hotelData={hotelData} scoreData={hotelScoreData} accomodationFacilities={accommodationData?.facilities} />
 
-        <LoginLinkBanner
+        {theme2 && <LoginLinkBanner
           message='با ورود به حساب کاربری از تخفیف رزرو این هتل استفاده کنید'
-        />
+        />}
 
 
         <div ref={searchFormWrapperRef} className='pt-5'>
@@ -396,13 +470,28 @@ const HotelDetail: NextPage<Props> = props => {
 
       {!!hotelData.HotelId && <Rooms hotelId={hotelData.HotelId} />}
 
-      {!!hotelData.Facilities?.length && <HotelFacilities facilities={hotelData.Facilities} />}
+      {(process.env.PROJECT === "1STSAFAR" || accommodationData?.facilities?.length) ? (
+        <AccommodationFacilities facilities={accommodationData?.facilities} />
+      ) : hotelData.Facilities?.length ? (
+        <HotelFacilities facilities={hotelData.Facilities} />
+      ) :
+        null
+      }
 
-      {!!(hotelData.Policies?.length || accommodationData?.instruction?.length || accommodationData?.mendatoryFee?.length) && <HotelTerms
-        instruction={accommodationData?.instruction}
-        mendatoryFee={accommodationData?.mendatoryFee}
-        policies={hotelData.Policies}
-      />}
+      {(accommodationData?.policies?.length || process.env.PROJECT === "1STSAFAR") ? (
+        <>
+          <AccomodationPolicy policies={accommodationData?.policies} />
+        </>
+      ) : (
+        <>
+          {!!(hotelData.Policies?.length || accommodationData?.instruction?.length || accommodationData?.mendatoryFee?.length) && <HotelTerms
+            instruction={accommodationData?.instruction}
+            mendatoryFee={accommodationData?.mendatoryFee}
+            policies={hotelData.Policies}
+          />}
+        </>
+      )}
+
 
       {!!siteName && <HotelAbout siteName={siteName} siteUrl={siteURL} description={accommodationData?.description} />}
 
@@ -415,7 +504,7 @@ const HotelDetail: NextPage<Props> = props => {
         </div>
       )}
 
-      {!!pageData?.Id && <Comments hotelScoreData={hotelScoreData} pageId={pageData.Id} />}
+      {!!(pageData?.Id && process.env.PROJECT !== "1STSAFAR") && <Comments hotelScoreData={hotelScoreData} pageId={pageData.Id} />}
 
       {!!hotelData.Similars && <SimilarHotels similarHotels={hotelData.Similars} />}
 
@@ -439,10 +528,10 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   let checkin = dateFormat(new Date());
   let checkout = dateFormat(addSomeDays(new Date()));
 
-  const checkinSegment = query.hotelDetail.find((s:string) => s.includes("checkin"));
-  const checkoutSegment = query.hotelDetail.find((s:string) => s.includes("checkout"));
-  
-  if(checkinSegment && checkinSegment){
+  const checkinSegment = query.hotelDetail.find((s: string) => s.includes("checkin"));
+  const checkoutSegment = query.hotelDetail.find((s: string) => s.includes("checkout"));
+
+  if (checkinSegment && checkinSegment) {
     checkin = dateFormat(new Date(checkinSegment.split("checkin-")[1]));
     checkout = dateFormat(new Date(checkoutSegment.split("checkout-")[1]));
   }
@@ -451,7 +540,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const allData: any = await getDomesticHotelDetailsByUrl("/" + locale + url, locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR");
 
-  if (!allData?.data?.result?.hotel && process.env.LocaleInUrl !== "off") {
+  if (allData?.data && !allData?.data?.result?.hotel && process.env.LocaleInUrl !== "off") {
 
 
     if (locale === "fa") {

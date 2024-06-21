@@ -8,6 +8,7 @@ import { numberWithCommas } from "@/modules/shared/helpers";
 import Quantity from "@/modules/shared/components/ui/Quantity";
 import { TravelerItem } from "@/modules/shared/types/common";
 import FormerTravelers from "@/modules/shared/components/FormerTravelers";
+import RadioInputField from "@/modules/shared/components/ui/RadioInputField";
 
 type Props = {
   roomIndex: number;
@@ -90,6 +91,8 @@ type Props = {
 
 const RoomItemInformation: React.FC<Props> = props => {
 
+  const theme1 = process.env.THEME === "THEME1";
+
   const { roomIndex, roomItem, errors, setFieldValue, touched, values } = props;
 
   const { t } = useTranslation('common');
@@ -107,9 +110,9 @@ const RoomItemInformation: React.FC<Props> = props => {
   }
 
   return (
-    <div className='bg-white border border-neutral-300 p-5 rounded-lg grid md:grid-cols-3 gap-2 mb-5' >
+    <div className={`bg-white border border-neutral-300 p-5 rounded-lg grid gap-x-2 gap-y-4 mb-5 ${theme1?"md:grid-cols-3":""}`} >
 
-      <div className="flex justify-between text-sm items-start md:col-span-3">
+      <div className={`flex justify-between text-sm items-start ${theme1?"md:col-span-3":""}`}>
         <h5 className='font-semibold text-xl mb-4'>
           <Bed className='w-5 h-5 fill-current inline-block align-middle rtl:ml-2 ltr:mr-2' /> {tHotel('room')} {roomIndex + 1} - {roomItem.name}
         </h5>
@@ -126,11 +129,9 @@ const RoomItemInformation: React.FC<Props> = props => {
 
 
       <div role="group" className="leading-4" >
-        <label className='block text-xs mb-1' > جنسیت </label>
-        <label className='inline-flex items-center gap-1 rtl:ml-4 ltr:mr-4'>
-          <Field
-            type="radio"
-            className="text-xs"
+        <label className='block text-xs mb-2' > جنسیت </label>
+        <label className='inline-flex items-center gap-1 rtl:ml-4 ltr:mr-4 cursor-pointer'>
+          <RadioInputField 
             onChange={(e: any) => {
               const val = e.target.checked;
               setFieldValue(`passengers.${roomIndex}.gender`, val);
@@ -138,14 +139,12 @@ const RoomItemInformation: React.FC<Props> = props => {
                 props.disableSyncedPassenger();
               }
             }}
-            checked={values.passengers[roomIndex]?.gender}
+            checked={values.passengers[roomIndex]?.gender}          
           />
           مرد
         </label>
-        <label className='inline-flex items-center gap-1'>
-          <Field
-            type="radio"
-            className="text-xs"
+        <label className='inline-flex items-center gap-1 cursor-pointer'>
+          <RadioInputField
             onChange={(e: any) => {
               const val = !e.target.checked;
               setFieldValue(`passengers.${roomIndex}.gender`, val);
@@ -199,7 +198,7 @@ const RoomItemInformation: React.FC<Props> = props => {
       />
 
       {!!roomItem.extraBed && (
-        <div className='md:col-span-3 border-t border-neutral-300 pt-4 mt-4 flex gap-4 justify-between items-center'>
+        <div className={`border-t border-neutral-300 pt-4 mt-4 flex gap-4 justify-between items-center ${theme1?"md:col-span-3":""}`}>
 
           <strong className="flex flex-wrap gap-1 md:gap-2 items-center font-semibold text-sm">
             تخت اضافه

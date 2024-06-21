@@ -20,6 +20,7 @@ const config: Config = {
         'vazir': ['vazir', 'sans-serif']
       },
       spacing: {
+        '13': '3.25rem',
         '18': '4.5rem',
         '4.5': '1.125rem',
         '2px': '2px',
