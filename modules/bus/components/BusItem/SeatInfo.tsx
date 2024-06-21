@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { GetBusesSeat } from "../../actions/indext";
 import { LoadingIcon } from "yet-another-react-lightbox";
+import Loading from "@/modules/shared/components/ui/Loading";
 
 type Props = {
     busToken: string,
@@ -64,8 +65,8 @@ const SeatInfo: React.FC<Props> = (props) => {
                         </g>
                     </svg>
                 
-            <div className={`border-t-2 grow border-b-2 border-gray-300 grid grid-cols-${SeatRow.toString()} max-sm:block rounded
-                max-sm:border-x-2  place-content-center py-1 max-sm:px-2`}>
+            <div className={`grow border-gray-300 grid grid-cols-${SeatRow.toString()} max-sm:block rounded
+                ${+SeatRow ? 'border-b-2 border-t-2 max-sm:border-x-2' : 'border-0'}  place-content-center py-1 max-sm:py-5 max-sm:px-2`}>
             {
                 BusSeat?.seats?.length ? 
                     BusSeat.seats.map((row: any) => 
@@ -84,7 +85,7 @@ const SeatInfo: React.FC<Props> = (props) => {
                             }
                         </ul>
                     )
-                    : <LoadingIcon/>
+                    : <Loading className="my-5" />
             }
                 </div>
                 <svg

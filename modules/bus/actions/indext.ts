@@ -1,6 +1,6 @@
 import axios from "axios"
 import { AvailibilityParams } from "../types"
-import { ServerAddress } from "@/enum/url"
+import { Bus, ServerAddress } from "@/enum/url"
 
 const Headers = {
     'Content-Type': 'application/json',
@@ -13,7 +13,7 @@ const url = "https://busdomestic.safaraneh.com"
 
 export const GetAvailabilityKey = async (params: AvailibilityParams) => {
     try {
-        const response = await axios.post('https://busdomestic.safaraneh.com/api/services/app/BookingBus/Availability', params,{
+        const response = await axios.post(`${ServerAddress.Type}${ServerAddress.Bus}${Bus.AvailabilityKey}`, params,{
             headers: Headers
         })
         return response
@@ -24,7 +24,7 @@ export const GetAvailabilityKey = async (params: AvailibilityParams) => {
 export const GetBusList = async (key: string) => {
     
     try {
-        const response = await axios.get(`https://busdomestic.safaraneh.com/api/services/app/BookingBus/GetAvailability?key=${key}`, 
+        const response = await axios.get(`${ServerAddress.Type}${ServerAddress.Bus}${Bus.BusList}?key=${key}`, 
             {
                headers: Headers 
             }
@@ -38,7 +38,7 @@ export const GetBusList = async (key: string) => {
 export const GetBusesSeat = async (BusToken: string) => {
     let encoded = encodeURIComponent(BusToken)
     try {
-        const response = await axios.get(`${url}/api/services/app/BookingBus/GetBusSeat?DepartureKey=${encoded}`, {
+        const response = await axios.get(`${ServerAddress.Type}${ServerAddress.Bus}${Bus.BusSeat}${encoded}`, {
             headers:Headers
         })
         return response

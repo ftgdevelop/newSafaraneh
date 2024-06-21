@@ -1,8 +1,11 @@
 import { RightCaret } from "@/modules/shared/components/ui/icons";
 import { dateDiplayFormat, dateFormat } from "@/modules/shared/helpers";
+import SearchBus from "../../shared/searchForm/SearchBus";
+import { useRouter } from "next/router";
 
 const ChangeDay: React.FC = () => {
     const today = dateFormat(new Date())
+    const query = useRouter().query
 
     return (
         <>
@@ -15,7 +18,7 @@ const ChangeDay: React.FC = () => {
                     <RightCaret className="w-5 fill-gray-400 ltr:rotate-180" />
                         روز قبل
                     </button>
-                    <p className="pr-2 pl-2 p-1 w-full whitespace-nowrap text-center">{dateDiplayFormat({ date:today, locale: 'fa', format: 'ddd dd mm' }) ||
+                    <p className="pr-2 pl-2 p-1 w-full whitespace-nowrap text-center">{dateDiplayFormat({ date: (query.departureTime as string), locale: 'fa', format: 'ddd dd mm' }) ||
                         dateDiplayFormat({date:today, locale:'fa',format:'ddd dd mm'})}</p>
                     <button type="button" className="flex hover:bg-gray-100 duration-200 p-1 pr-2 pl-2 w-full justify-center items-center cursor-pointer whitespace-nowrap"
                        onClick={() => null}>

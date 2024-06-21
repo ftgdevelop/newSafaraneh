@@ -21,14 +21,20 @@ export type BusItemType = {
             name: string;
         }
         id: number;
-        name: string
+        name: string,
+        province: {
+            name: string
+        }
     }
     source: {
         city: {
             name: string;
         }
         id: number;
-        name: string
+        name: string;
+        province: {
+            name: string
+        }
     }
     office: {
         picture: {
@@ -38,5 +44,19 @@ export type BusItemType = {
         nameLong: string
         code: string
         id: number
+    }
+}
+
+export type BusAutocompleteType = {
+    id: number,
+    name: string,
+    country: {
+        name: string
+    },
+    province: {
+        name: string
+    },
+    city: {
+        name: string
     }
 }

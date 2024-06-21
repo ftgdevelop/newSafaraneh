@@ -16,7 +16,6 @@ const BusComponies: React.FC<Props> = props => {
             busComponies.push(bus)
         }
     })
-    console.log(busData)
     const BusComponiesFliter = useSelector((state: RootState) => state.busFilters.filterOption.busComponies)
     const dispatch = useDispatch()
 

@@ -5,6 +5,7 @@ import { BusItemType } from "../../types";
 import { useState } from "react";
 import SeatInfo from "./SeatInfo";
 import BusDeatil from "./BusDetail";
+import { useRouter } from "next/router";
 
 type Props = {
     busData: BusItemType
@@ -12,7 +13,8 @@ type Props = {
 const GeneralData: React.FC<Props> = props => {
     const today = dateFormat(new Date())
     const { busData } = props
-    const [detailOpen, setDetailOpen] = useState(false)    
+    const [detailOpen, setDetailOpen] = useState(false)   
+    const query = useRouter().query
     
     const depratureTime = busData.departureDateTime.split('T')[1].split(':').slice(0,2).join(':')
     return (
@@ -31,12 +33,14 @@ const GeneralData: React.FC<Props> = props => {
                         </span>
                     </span>
                 </div>
-
-                <p className="text-lg max-sm:text-sm font-bold text-center">
-                     {busData.destination.city.name}
-                </p>
+                <div className="text-center ">
+                    <p className="text-lg max-sm:text-sm font-bold text-center">
+                     {busData.source.city.name || busData.source.province.name}
+                    </p>
+                    <span className="text-2xs">{busData.source.name}</span>
+                </div>    
                 <div className="text-center max-sm:hidden col-span-2">
-                    <p className="text-xs text-gray-500">{dateDiplayFormat({ date: today, locale: 'fa', format: 'ddd dd mm' }) || 
+                    <p className="text-xs text-gray-500">{dateDiplayFormat({ date: (query.departureTime as string), locale: 'fa', format: 'ddd dd mm' }) || 
                     dateDiplayFormat({ date: today, locale: 'fa', format: 'ddd dd mm' })}</p>
                     <span className="border-t-1 border-gray-200 block m-3 ml-5 mr-5 border-dashed h-1 relative">
                         <Airpalne className="w-12 fill-gray-200 -rotate-90 ltr:rotate-90 absolute -left-7 -bottom-1 ltr:right-0 ltr:-top-2" />
@@ -45,10 +49,13 @@ const GeneralData: React.FC<Props> = props => {
                         ساعت حرکت {depratureTime}
                     </span>
                 </div>
-                <Airpalne className="w-14 relative bottom-5 left-3 fill-gray-300 hidden max-sm:inline -rotate-90 ltr:rotate-90" />    
-                <p className="text-lg max-sm:text-sm font-bold text-center">
-                    {busData.source.city.name}
-                </p>
+                <Airpalne className="w-14 relative bottom-5 left-3 fill-gray-300 hidden max-sm:inline -rotate-90 ltr:rotate-90" />  
+                <div className="text-center">
+                    <p className="text-lg max-sm:text-sm font-bold text-center">
+                        {busData.destination.city.name || busData.destination.province.name}
+                    </p>
+                    <span className="text-2xs">{busData.destination.name}</span>
+                </div>
                 <span className="w-6 h-6 bg-body-background rounded-full absolute -left-3 -bottom-2"></span>
             </div>
                 
