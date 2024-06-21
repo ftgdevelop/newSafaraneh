@@ -33,9 +33,12 @@ export const busSlice = createSlice({
         },
         setPriceRange: (state, action) => {
             state.filterOption.priceRange = action.payload
+        },
+        setSearchChangeOn: (state, action) => {
+            state.SearchChangeOn = action.payload
         }
     }
 })
 
-export const { setBusComponies, setTime, setPriceRange } = busSlice.actions;
+export const { setBusComponies, setTime, setPriceRange, setSearchChangeOn } = busSlice.actions;
 export default busSlice.reducer;
