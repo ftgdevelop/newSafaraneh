@@ -5,7 +5,6 @@ import parse from 'html-react-parser';
 
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import Goftino from "./Goftino";
 
 const GoToTop = dynamic(() => import('./GoToTop'), {
     ssr: false
@@ -24,6 +23,8 @@ type Props = {
         facebook?: string;
     }
     enamadElement?: any;
+    samandehi?: string;
+    onlineChat?: string;
 }
 
 const Footer: React.FC<Props> = props => {
@@ -36,8 +37,8 @@ const Footer: React.FC<Props> = props => {
 
     const theme2 = process.env.THEME === "THEME2";
 
-    if(theme2){
-        return(
+    if (theme2) {
+        return (
             <footer className="border-t border-neutral-200" >
                 <div className="max-w-container mx-auto p-3 text-neutral-700 py-8 text-sm">
                     کلیه حقوق این وبسایت محفوظ و متعلق به {siteName} است.
@@ -70,25 +71,21 @@ const Footer: React.FC<Props> = props => {
                         <Image src='/images/footer/resaneh.png' className="h-12 sm:h-18 object-contain" alt='' width={60} height={72} />
                     </a> */}
 
-                        <a
-                            href="https://logo.samandehi.ir/Verify.aspx?id=238809&p=uiwkxlaomcsimcsiobpdpfvl"
+                        {!!props.samandehi && <a
+                            href={props.samandehi}
                             target="_blank"
                             title="logo-samandehi"
                             aria-label="samandehi"
-                        //className={`unset-img ${styles.nemads}`}
                         >
                             <img
                                 id="nbqergvjoeukoeukesgtsizp"
                                 alt="logo-samandehi"
                                 title="logo-samandehi"
                                 src="https://logo.samandehi.ir/logo.aspx?id=238809&p=odrfqftiaqgwaqgwlymabsiy"
-                                // layout="fill"
-                                // className={`unset-img ${styles.nemads}`}
                                 width="70"
                                 height="75"
-                            //layout="fixed"
                             />
-                        </a>
+                        </a>}
 
                     </div>
 
@@ -155,7 +152,13 @@ const Footer: React.FC<Props> = props => {
                     }}
                 />
 
-                <Goftino />
+
+                {props.onlineChat ? <script
+                    id="script_footer_16"
+                    dangerouslySetInnerHTML={{
+                        __html: `${props.onlineChat}`,
+                    }}
+                /> : null}
 
 
             </footer>
