@@ -87,7 +87,7 @@ const TravelServices: React.FC<Props> = props => {
 
                 <div className={menuWrapperClassNames}  >
                     <div className="md:hidden border-b border-neutral-200 p-5 flex justify-between items-center">
-                        {!!logo && <Link onClick={()=>{setOpenMenu(false)}} href="/" className="block">
+                        {!!logo && <Link prefetch={false} onClick={()=>{setOpenMenu(false)}} href="/" className="block">
                             <Image src={logo} alt={siteName} width={115} height={48} />
                         </Link>}
                         <button aria-label={t('close')} type="button" onClick={() => { setOpenMenu(false) }}>
@@ -96,7 +96,7 @@ const TravelServices: React.FC<Props> = props => {
                     </div>
                     <nav className="py-3 max-h-mobile-nav overflow-auto md:max-h-none">
                         
-                        <Link onClick={()=>{setOpenMenu(false)}} href="/" className={`${linkWithIconClassName} md:hidden`}>
+                        <Link prefetch={false} onClick={()=>{setOpenMenu(false)}} href="/" className={`${linkWithIconClassName} md:hidden`}>
                             <Home className={iconClassName} />
                             {t('home')}
                         </Link>
@@ -108,12 +108,12 @@ const TravelServices: React.FC<Props> = props => {
                             </div>
                         ) : userIsAuthenticated ? (
                             <>
-                                <Link onClick={()=>{setOpenMenu(false)}} href="/myaccount/profile" className={`${linkWithIconClassName} md:hidden`}>
+                                <Link prefetch={false} onClick={()=>{setOpenMenu(false)}} href="/myaccount/profile" className={`${linkWithIconClassName} md:hidden`}>
                                     <User className={iconClassName} />
                                     حساب کاربری
                                 </Link>
                                 
-                                <Link onClick={()=>{setOpenMenu(false)}} href="/myaccount/wallet" className={`${linkWithIconClassName} md:hidden`}>
+                                <Link prefetch={false} onClick={()=>{setOpenMenu(false)}} href="/myaccount/wallet" className={`${linkWithIconClassName} md:hidden`}>
                                     <Wallet className={iconClassName} />
 
                                     {depositBalanceLoading ? (
@@ -132,12 +132,12 @@ const TravelServices: React.FC<Props> = props => {
                             </>
                         ) : (
                             <>
-                                <Link onClick={()=>{setOpenMenu(false)}} href="/signin" className={`${linkWithIconClassName} md:hidden`}>
+                                <Link prefetch={false} onClick={()=>{setOpenMenu(false)}} href="/signin" className={`${linkWithIconClassName} md:hidden`}>
                                     <User className={iconClassName} />
                                     {t('sign-in')}
                                 </Link>
                                 
-                                <Link onClick={()=>{setOpenMenu(false)}} href="/register" className={`${linkWithIconClassName} md:hidden`}>
+                                <Link prefetch={false} onClick={()=>{setOpenMenu(false)}} href="/register" className={`${linkWithIconClassName} md:hidden`}>
                                     <UserAdd className={iconClassName} />
                                     {t('create-account')}
                                 </Link>
@@ -148,6 +148,7 @@ const TravelServices: React.FC<Props> = props => {
                         )}
 
                         {!!(process.env.PROJECT_MODULES?.includes("DomesticHotel")) && <Link 
+                            prefetch={false}
                             onClick={()=>{setOpenMenu(false)}} 
                             href='/hotels-home' 
                             className={`max-sm:border-t max-sm:border-neutral-300 max-sm:mt-3 max-sm:pt-3 ${linkWithIconClassName}`} 
@@ -157,6 +158,7 @@ const TravelServices: React.FC<Props> = props => {
                         </Link>}
 
                         {!!(process.env.PROJECT_MODULES?.includes("DomesticFlight")) &&  <Link 
+                            prefetch={false}
                             onClick={()=>{setOpenMenu(false)}} 
                             href="/flights-home"
                             className={linkWithIconClassName} 
@@ -166,6 +168,7 @@ const TravelServices: React.FC<Props> = props => {
                         </Link>}
 
                         {!!(process.env.PROJECT_MODULES?.includes("ForeignHotel")) && <Link 
+                            prefetch={false}
                             onClick={()=>{setOpenMenu(false)}} 
                             //</nav>href='/hotels-foreign-home' 
                             href="https://tickets.safaraneh.com/fa/hotels-foreign-home"
@@ -176,6 +179,7 @@ const TravelServices: React.FC<Props> = props => {
                         </Link>}
 
                         {!!(process.env.PROJECT_MODULES?.includes("ForeignFlight")) && <Link 
+                            prefetch={false}
                             onClick={()=>{setOpenMenu(false)}} 
                             //href='/flight-foreign-home' 
                             href="https://tickets.safaraneh.com/fa/flights-foreign-home"
@@ -186,6 +190,7 @@ const TravelServices: React.FC<Props> = props => {
                         </Link>}
 
                         {process.env.PROJECT_MODULES?.includes("CIP") && <Link 
+                            prefetch={false}
                             onClick={()=>{setOpenMenu(false)}} 
                             //href='/cip' 
                             href="/cip-home"
@@ -195,18 +200,18 @@ const TravelServices: React.FC<Props> = props => {
                             {t('cip')}
                         </Link>}
                         
-                        {!!(process.env.PROJECT_MODULES?.includes("Blog")) && <Link onClick={()=>{setOpenMenu(false)}} shallow href='/blog' className={`border-b border-neutral-200 md:border-none mb-5 md:mb-0 pb-5 md:pb-0 ${linkWithIconClassName}`}>
+                        {!!(process.env.PROJECT_MODULES?.includes("Blog")) && <Link prefetch={false} onClick={()=>{setOpenMenu(false)}} shallow href='/blog' className={`border-b border-neutral-200 md:border-none mb-5 md:mb-0 pb-5 md:pb-0 ${linkWithIconClassName}`}>
                             <Blog className={iconClassName} />
                             {t('blog')}
                         </Link>}
                         
                         <div>
-                            <Link onClick={()=>{setOpenMenu(false)}} href='/organizational-reservation' className={linkClassName} > {t('organizational-reservation')} </Link>
-                            <Link onClick={()=>{setOpenMenu(false)}} href='/contact' className={linkClassName} > {t('contact-us')} </Link>
-                            <Link onClick={()=>{setOpenMenu(false)}} href='/privacy' className={linkClassName} > {t('privacy')} </Link>
-                            <Link onClick={()=>{setOpenMenu(false)}} href='/faq' className={linkClassName} > {t('faq')} </Link>
-                            <Link onClick={()=>{setOpenMenu(false)}} href='/terms' className={linkClassName} > {t('terms')} </Link>
-                            <Link onClick={()=>{setOpenMenu(false)}} href='/about' className={linkClassName} > {t('about-us')} </Link>
+                            <Link prefetch={false} onClick={()=>{setOpenMenu(false)}} href='/organizational-reservation' className={linkClassName} > {t('organizational-reservation')} </Link>
+                            <Link prefetch={false} onClick={()=>{setOpenMenu(false)}} href='/contact' className={linkClassName} > {t('contact-us')} </Link>
+                            <Link prefetch={false} onClick={()=>{setOpenMenu(false)}} href='/privacy' className={linkClassName} > {t('privacy')} </Link>
+                            <Link prefetch={false} onClick={()=>{setOpenMenu(false)}} href='/faq' className={linkClassName} > {t('faq')} </Link>
+                            <Link prefetch={false} onClick={()=>{setOpenMenu(false)}} href='/terms' className={linkClassName} > {t('terms')} </Link>
+                            <Link prefetch={false} onClick={()=>{setOpenMenu(false)}} href='/about' className={linkClassName} > {t('about-us')} </Link>
                         </div>
                     </nav>
                 </div>
