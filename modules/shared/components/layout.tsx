@@ -20,7 +20,7 @@ type Props = {
     twitter?: string;
     facebook?: string;
   }
-  enamadElement?: any;
+  enamad?: any;
   samandehi?: string;
   onlineChat?: string;
 }
@@ -113,7 +113,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             logo={props.logo} 
             siteName={props.siteName} 
             contactInfo={props.contactInfo} 
-            enamadElement={props.enamadElement || undefined} 
+            enamad={props.enamad || undefined} 
             onlineChat={props.onlineChat}
             samandehi={props.samandehi}
           />
