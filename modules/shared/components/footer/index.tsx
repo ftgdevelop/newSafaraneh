@@ -46,7 +46,7 @@ const Footer: React.FC<Props> = props => {
         )
     }
 
-    const phoneNumber = props.contactInfo.emergencyNumber || props.contactInfo.tel;
+    const phoneNumber = props.contactInfo.emergencyNumber;
 
     return (
         <>
