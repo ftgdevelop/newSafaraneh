@@ -1,23 +1,13 @@
 import type { NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import Banner from '@/modules/home/components/banner'
-import ModulesBanner from '@/modules/home/components/modules-banner';
-import SuggestedHotels from '@/modules/home/components/SuggestedHotels';
-import PopularCities from '@/modules/home/components/PopularCities';
-import BeachHotels from '@/modules/home/components/BeachHotels';
-import Unknowns from '@/modules/home/components/Unknowns';
 import { getBlogs } from '@/modules/blogs/actions';
-import RecentBlogs from '@/modules/home/components/RecentBlogs';
 import { BlogItemType } from '@/modules/blogs/types/blog';
-import AboutSummary from '@/modules/home/components/AboutSummary';
-import HomeFAQ from '@/modules/home/components/HomeFAQ';
-import Newsletter from '@/modules/home/components/Newsletter';
-import Services from '@/modules/home/components/Services';
 import { WebSiteDataType } from '@/modules/shared/types/common';
 import Head from 'next/head';
 import HomeTheme1 from '@/modules/home/components/theme1/HomeTheme1';
 import HomeTheme2 from '@/modules/home/components/theme2/HomeTheme2';
+import HomeTheme3 from '@/modules/home/components/theme3/HomeTheme3';
 
 const Home: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], portalData?: WebSiteDataType }) => {
 
@@ -29,9 +19,9 @@ const Home: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], portalD
 
   const configWebsiteUrl = process.env.SITE_NAME || "";
 
-  const theme2 = process.env.THEME === "THEME2";
-
   const theme1 = process.env.THEME === "THEME1";
+  const theme2 = process.env.THEME === "THEME2";
+  const theme3 = process.env.THEME === "THEME3";
 
   return (
     <>
@@ -77,7 +67,7 @@ const Home: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], portalD
             "url": "${configWebsiteUrl}",
             "potentialAction": {
             "@type": "SearchAction",
-            "target": "${configWebsiteUrl}${process.env.LocaleInUrl === "off"?"":"/fa"}/hotels/?q={search_term_string}",
+            "target": "${configWebsiteUrl}${process.env.LocaleInUrl === "off" ? "" : "/fa"}/hotels/?q={search_term_string}",
             "query-input": "required name=search_term_string"
           }}`,
           }}
@@ -213,6 +203,14 @@ const Home: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], portalD
         blogs={blogs}
       />}
 
+      {!!theme3 && <HomeTheme3
+        modules={["domesticHotel", "domesticFlight", "cip"]}
+        logo={logo}
+        siteName={siteName}
+        blogs={blogs}
+      />}
+
+
     </>
   )
 }
@@ -224,7 +222,7 @@ export const getStaticProps = async (context: any) => {
 
   return ({
     props: {
-      ...await serverSideTranslations(context.locale, ['common', 'home','hotel']),
+      ...await serverSideTranslations(context.locale, ['common', 'home', 'hotel']),
       context: context,
       blogs: recentBlogPost?.data || null
     }

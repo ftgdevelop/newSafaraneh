@@ -27,6 +27,7 @@ const RangePicker: React.FC<Props> = props => {
 
     const { t } = useTranslation('common');
 
+    const theme3 = process.env.THEME === "THEME3";
     const [locale, setLocale] = useState<any>(localeFa);
 
     const [values, setValues] = useState<[string | null, string | null]>(props.value || [null, null]);
@@ -80,12 +81,12 @@ const RangePicker: React.FC<Props> = props => {
 
     if (values && values[0]) {
         startFormated = dateDiplayFormat({date:values[0], format:"yyyy/mm/dd", locale:locale === localeFa ? "fa": "en" });
-        start = dateDiplayFormat({date:values[0], format:"ddd dd mm", locale:locale === localeFa ? "fa": "en" });
+        start = dateDiplayFormat({date:values[0], format:theme3 ? "yyyy/mm/dd" : "ddd dd mm", locale:locale === localeFa ? "fa": "en" });
     }
 
     if (values && values[1]) {
         endFormated = dateDiplayFormat({date:values[1], format:"yyyy/mm/dd", locale:locale === localeFa ? "fa": "en" });
-        end = dateDiplayFormat({date:values[1], format:"ddd dd mm", locale:locale === localeFa ? "fa": "en" });
+        end = dateDiplayFormat({date:values[1], format:theme3 ? "yyyy/mm/dd" : "ddd dd mm", locale:locale === localeFa ? "fa": "en" });
     }
 
     return (
@@ -94,23 +95,23 @@ const RangePicker: React.FC<Props> = props => {
             <div className='grid grid-cols-2'>
 
                 <div className='relative'>
-                    <label htmlFor='checkin_date' className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5 pointer-events-none">
+                    {!theme3 && <label htmlFor='checkin_date' className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5 pointer-events-none">
                         {t('checkin-date')}
-                    </label>
+                    </label>}
                     <Calendar className='w-5 h-5 fill-current absolute  rtl:right-2 ltr:left-2 top-1/2 -mt-2.5 z-10 pointer-events-none' />
                     <input 
                         id="checkin_date" 
-                        className={`border w-full h-12 border-neutral-400 rtl:rounded-r-lg ltr:rounded-l-lg rtl:pr-10 ltr:pl-10 pt-5 leading-4 rtl:border-l-0 ltr:border-r-0 ${locale === localeEn ? "font-sans" : ""}`} 
+                        className={`border w-full h-12 border-neutral-400 rtl:rounded-r-lg ltr:rounded-l-lg rtl:pr-10 ltr:pl-10 ${theme3?"":"pt-5 leading-4"} rtl:border-l-0 ltr:border-r-0 ${locale === localeEn ? "font-sans" : ""}`} 
                         value={start} 
                         readOnly 
                     />
                 </div>
                 <div className='relative'>
-                    <label htmlFor='checkout_date' className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5 pointer-events-none">
+                    {!theme3 &&<label htmlFor='checkout_date' className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5 pointer-events-none">
                         {t('checkout-date')}
-                    </label>
+                    </label>}
                     <Calendar className='w-5 h-5 fill-current absolute rtl:right-2 ltr:left-2 top-1/2 -mt-2.5 z-10 pointer-events-none' />
-                    <input id="checkout_date" className='border w-full h-12 border-neutral-400 rtl:rounded-l-lg ltr:rounded-r-lg rtl:pr-10 ltr:pl-10 pt-5 leading-4' value={end} readOnly />
+                    <input id="checkout_date" className={`border w-full h-12 border-neutral-400 rtl:rounded-l-lg ltr:rounded-r-lg rtl:pr-10 ltr:pl-10 ${theme3?"":"pt-5 leading-4"}`} value={end} readOnly />
                 </div>
 
             </div>
