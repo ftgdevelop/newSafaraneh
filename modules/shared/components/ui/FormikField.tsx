@@ -22,6 +22,7 @@ type Props = {
     isPassword?: boolean;
     showNotConfirmedBadge?: boolean;
     disabled?:boolean;
+    heightClassName?: string;
 }
 
 const FormikField: React.FC<Props> = props => {
@@ -82,7 +83,15 @@ const FormikField: React.FC<Props> = props => {
         }
     }
 
-    const inputClassNames : string[] = [`w-full px-3 bg-white border outline-none ${theme2?"h-13 pt-4 leading-4":"h-10"}`];
+    const inputClassNames : string[] = ["w-full px-3 bg-white border outline-none"];
+    
+    if(props.heightClassName){
+        inputClassNames.push(props.heightClassName);
+    } else if(theme2){
+        inputClassNames.push(`h-13 pt-4 leading-4`);
+    }else{
+        inputClassNames.push("h-10");
+    }
 
     if(props.errorText && props.isTouched){
         inputClassNames.push(`border-red-500 ${theme2?"border-2":""}`);

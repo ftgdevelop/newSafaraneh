@@ -304,7 +304,10 @@ footer img[src*=trustseal], footer img[src*='logo.samandehi'] {
   }
 }
 
+
 .gap-slider .slick-slide > div{
-  padding-left: 7px;
-  padding-right: 7px;
+  @media screen and (min-width : 641px) {    
+    padding-left: 7px;
+    padding-right: 7px;
+  }
 }
