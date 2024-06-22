@@ -22,7 +22,7 @@ type Props = {
         twitter?: string;
         facebook?: string;
     }
-    enamadElement?: any;
+    enamad?: any;
     samandehi?: string;
     onlineChat?: string;
 }
@@ -61,7 +61,11 @@ const Footer: React.FC<Props> = props => {
                         <Image src='/images/footer/tandis-05.png' className="h-11 sm:h-18 object-contain" alt='' width={62} height={72} />
 
 
-                        {!!props.enamadElement && parse(props.enamadElement)}
+                        {!!props.enamad && (
+                            <a className="footer-enamad" referrerPolicy="origin" target="_blank" href={props.enamad}>
+                                <img referrerPolicy="origin" src={"/images/enamad.png"} alt="enamad" />
+                            </a>
+                        )}
 
                         {/* <a href="#" aria-label="نماد اعتماد">
                         <Image src='/images/footer/enamad.png' className="h-12 sm:h-18 object-contain" alt='' width={43} height={72} />

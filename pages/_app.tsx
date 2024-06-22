@@ -60,7 +60,7 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
   const portalDescription = portalData?.metaTags?.description || "";
   
   const portalEnamadMetaTag = portalData?.metaTags?.enamad || "";
-  const enamadElement = portalData?.website?.enamad || "";
+  const enamad = portalData?.website?.enamad || "";
   const samandehi = portalData?.website.samandehi || ";"
   const onlineChat = portalData?.website.onlineChat || "";
 
@@ -158,7 +158,7 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
         }
         logo={logo}
         siteName={siteName}
-        enamadElement={enamadElement}
+        enamad={enamad}
         onlineChat={onlineChat}
         samandehi={samandehi}
       >
