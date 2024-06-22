@@ -66,6 +66,8 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
   
   const portalEnamadMetaTag = portalData?.metaTags?.enamad || "";
   const enamadElement = portalData?.website?.enamad || "";
+  const samandehi = portalData?.website.samandehi || ";"
+  const onlineChat = portalData?.website.onlineChat || "";
 
   let canonicalUrl = "";
   if(typeof router !== 'undefined'){
@@ -162,6 +164,8 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
         logo={logo}
         siteName={siteName}
         enamadElement={enamadElement}
+        onlineChat={onlineChat}
+        samandehi={samandehi}
       >
 
         <Component {...pageProps} portalData={portalData} />

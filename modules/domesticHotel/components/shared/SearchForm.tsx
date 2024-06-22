@@ -28,6 +28,8 @@ const SearchForm: React.FC<Props> = props => {
     const { defaultDestination } = props;
 
     const { t } = useTranslation('common');
+  
+    const theme3 = process.env.THEME === "THEME3";
 
     const router = useRouter();
     const routerPath = router.asPath;
@@ -252,7 +254,7 @@ const SearchForm: React.FC<Props> = props => {
     const theme2 = process.env.THEME === "THEME2";
 
     return (
-        <div className={`domestic-hotel-search-form grid grid-cols-1 md:grid-cols-7 gap-2 ${props.wrapperClassName || ""}`}>
+        <div className={`domestic-hotel-search-form grid grid-cols-1 ${theme3 ? "md:grid-cols-8" : "md:grid-cols-7"} gap-2 ${props.wrapperClassName || ""}`}>
 
 
             {theme2 ? (
@@ -279,9 +281,9 @@ const SearchForm: React.FC<Props> = props => {
                 </div>
             ) : (
                 <div className="relative z-20 col-span-1 md:col-span-3">
-                    <label htmlFor="destination" className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5">
+                    {!theme3 && <label htmlFor="destination" className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5">
                         {t('searchHotelDestination')}
-                    </label>
+                    </label>}
                     <AutoComplete
                         type="hotel"
                         defaultList={defaultDestinations}
@@ -292,7 +294,7 @@ const SearchForm: React.FC<Props> = props => {
                         acceptLanguage="fa-IR"
                         renderOption={renderOption}
                         icon="location"
-                        inputClassName={`w-full outline-none border rounded-lg border-neutral-400 pt-4 h-12 text-sm text-neutral-500 placeholder:text-neutral-500 focus:border-neutral-900`}
+                        inputClassName={`w-full outline-none border rounded-lg border-neutral-400 ${theme3?"":"pt-4"} h-12 text-sm text-neutral-500 placeholder:text-neutral-500 focus:border-neutral-900`}
                         placeholder={t('search-hotel-or-city')}
                         min={2}
                         value={selectedDestination}
@@ -303,7 +305,7 @@ const SearchForm: React.FC<Props> = props => {
             )}
 
 
-            <div className="col-span-1 md:col-span-3 relative z-10">
+            <div className={`col-span-1 md:col-span-3 relative z-10`}>
 
                 {/* TODO: delete when mobiscroll is activated */}
                 {/* <div className="modernCalendar-dates-wrapper grid grid-cols-2 gap-2">
@@ -353,11 +355,12 @@ const SearchForm: React.FC<Props> = props => {
 
             </div>
 
-            <div className="col-span-1 md:col-span-1 pt-5 md:pt-0">
+            <div className={`col-span-1 pt-5 md:pt-0 ${theme3?"md:col-span-2":"md:col-span-1"}`}>
                 <Button
+                    color={theme3 ? "secondary" : undefined}
                     loading={submitLoading}
                     onClick={submitHandler}
-                    className='h-12 block w-full sm:max-w-64 mx-auto'
+                    className={`h-12 block w-full mx-auto ${theme3?"font-semibold":"sm:max-w-64"}`}
                 >
                     {t('search')}
                 </Button>
