@@ -15,6 +15,7 @@ type Props = {
     logo: string;
     siteName: string;
     contactInfo: {
+        emergencyNumber?:string;
         tel?: string;
         instagram?: string;
         linkedin?: string;
@@ -44,6 +45,8 @@ const Footer: React.FC<Props> = props => {
             </footer>
         )
     }
+
+    const phoneNumber = props.contactInfo.emergencyNumber || props.contactInfo.tel;
 
     return (
         <>
@@ -120,10 +123,10 @@ const Footer: React.FC<Props> = props => {
                         )}
                     </Link>
 
-                    {!!props.contactInfo.tel && <div className="flex gap-4 justify-center mb-4">
+                    {!!phoneNumber && <div className="flex gap-4 justify-center mb-4">
                         {t('support')}
-                        <a href={`tel:${props.contactInfo.tel}`} className="text-lg font-semibold" dir="ltr">
-                            {props.contactInfo.tel.replace("+98", "0")}
+                        <a href={`tel:${phoneNumber}`} className="text-lg font-semibold" dir="ltr">
+                            {phoneNumber.replace("+98", "0")}
                         </a>
                     </div>}
 
