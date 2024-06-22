@@ -55,6 +55,7 @@ export interface WebSiteDataType {
         enamad?: string;
     };
     website: {
+        onlineChat?: string;
         scripts?: string;
         title?: string;
         enamad?: string;
