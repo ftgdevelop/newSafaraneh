@@ -14,6 +14,7 @@ type Props = {
   logo: string;
   siteName: string;
   contactInfo: {
+    emergencyNumber?: string;
     tel?: string;
     instagram?: string;
     linkedin?: string;
@@ -22,7 +23,7 @@ type Props = {
   }
   enamad?: any;
   samandehi?: string;
-  onlineChat?: string;
+  scripts?: string;
 }
 
 const Layout: React.FC<PropsWithChildren<Props>> = props => {
@@ -114,9 +115,16 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             siteName={props.siteName} 
             contactInfo={props.contactInfo} 
             enamad={props.enamad || undefined} 
-            onlineChat={props.onlineChat}
             samandehi={props.samandehi}
           />
+
+          {props.scripts ? <script
+              id="script_footer_api_scripts"
+              dangerouslySetInnerHTML={{
+                  __html: `${props.scripts}`,
+              }}
+          /> : null}
+
         </>
       ) : (
         <main id="main" >

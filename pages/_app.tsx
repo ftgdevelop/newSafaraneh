@@ -51,6 +51,7 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
 
 
   const tel = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
+  const emergencyNumber = portalData?.billing.emergencyNumber || "";
   const instagram = portalData?.social?.instagram || "";
   const facebook = portalData?.social?.facebook || "";
   const linkedin = portalData?.social?.linkedin || "";
@@ -67,7 +68,7 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
   const portalEnamadMetaTag = portalData?.metaTags?.enamad || "";
   const enamad = portalData?.website?.enamad || "";
   const samandehi = portalData?.website.samandehi || ";"
-  const onlineChat = portalData?.website.onlineChat || "";
+  const scripts = portalData?.website.scripts || "";
 
   let canonicalUrl = "";
   if(typeof router !== 'undefined'){
@@ -155,6 +156,7 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
         contactInfo={
           {
             tel: tel,
+            emergencyNumber:emergencyNumber,
             instagram: instagram,
             linkedin: linkedin,
             twitter: twitter,
@@ -164,8 +166,8 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
         logo={logo}
         siteName={siteName}
         enamad={enamad}
-        onlineChat={onlineChat}
         samandehi={samandehi}
+        scripts={scripts}
       >
 
         <Component {...pageProps} portalData={portalData} />
