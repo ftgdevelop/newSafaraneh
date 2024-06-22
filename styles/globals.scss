@@ -50,6 +50,13 @@
   .bg-travel-pattern {
     background-image: url("/images/pattern.png");
   }
+  
+  .bg-theme3-banner {
+    background-image: url("/images/home/theme3/hero.jpg");
+  }
+  .theme3-transparent-bg {
+    background-color: #112359ed;
+  }
 
   input.noStyleInputNumber::-webkit-outer-spin-button,
   input.noStyleInputNumber::-webkit-inner-spin-button {
@@ -196,6 +203,35 @@
   --container-max-width: 1224px;
 
   --body-background: #fff;
+}
+
+.theme-3 {
+  --color-primary-50: #eaeefb;
+  --color-primary-100: #d5ddf6;
+  --color-primary-200: #aabbee;
+  --color-primary-300: #8099e5;
+  --color-primary-400: #4166d8;
+  --color-primary-500: #274dbe;
+  --color-primary-600: #1d388c;
+  --color-primary-700: #162b6a;
+  --color-primary-800: #0d1a3f;
+  --color-primary-900: #09112a;
+
+
+  --color-secondary-50: #fef4e6;
+  --color-secondary-100: #fde9ce;
+  --color-secondary-200: #fddfb5;
+  --color-secondary-300: #fcd49c;
+  --color-secondary-400: #fabe6b;
+  --color-secondary-500: #f9a939;
+  --color-secondary-600: #f89c1b;
+  --color-secondary-700: #df8507;
+  --color-secondary-800: #ad6705;
+  --color-secondary-900: #633b03;
+
+  --container-max-width: 1200px;
+
+  --body-background: #f8f8f8;
 }
 body {
   color: rgb(var(--foreground-rgb));

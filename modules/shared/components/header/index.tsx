@@ -8,6 +8,7 @@ import TrackOrder from "./TrackOrder";
 import HeaderAuthentication from "@/modules/authentication/components/HeaderAuthentication";
 import { useAppSelector } from "../../hooks/use-store";
 import Navigation from "./Navigation";
+import HeaderStyle3 from "./HeaderStyle3";
 
 type Props = {
     logo: string;
@@ -25,7 +26,13 @@ const Header: React.FC<Props> = props => {
     const theme2 = process.env.THEME === "THEME2";
 
     const theme1 = process.env.THEME === "THEME1";
+    
+    const theme3 = process.env.THEME === "THEME3";
 
+    if (theme3){
+        return <HeaderStyle3 logo={logo} siteName={siteName} />
+    }
+    
     return (
         <header className={`bg-white z-30 relative ${theme2 ? "border-b border-neutral-300 shadow-normal" : ""}`}>
 
