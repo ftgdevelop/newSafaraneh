@@ -7,7 +7,7 @@ import { LeftCircle, RightCircle } from '@/modules/shared/components/ui/icons';
 
 const SuggestedHotels: React.FC = () => {
 
-    const { t:tHome } = useTranslation('home');
+    const { t: tHome } = useTranslation('home');
 
     const hotels: {
         imageUrl: string;
@@ -123,27 +123,27 @@ const SuggestedHotels: React.FC = () => {
                 {tHome('suggested-hotels')}
             </h2>
 
-            <Slider {...settings}>
+            <Slider {...settings} className='gap-slider'>
                 {hotels.map(hotel => (
-                    <div className='sm:px-2 rtl:rtl' key={hotel.name}>
-                        <a href={(LocaleInUrl?"/fa/":"/")+hotel.url} className='block bg-white rounded-lg overflow-hidden' target='_blank'>
-                            <Image
-                                onContextMenu={e => { e.preventDefault() }}
-                                src={hotel.imageUrl}
-                                alt={hotel.alt}
-                                width={272}
-                                height={142}
-                                className='w-full h-auto'
-                            />
-                            <div className='p-3'>
-                                <h2 className='mb-1 text-sm font-semibold'>
-                                    {hotel.name}
-                                </h2>
-                                {!!hotel.rating && <Rating number={hotel.rating} />}
-                            </div>
 
-                        </a>
-                    </div>
+                    <a key={hotel.name} href={(LocaleInUrl ? "/fa/" : "/") + hotel.url} className='rtl:rtl block bg-white rounded-lg overflow-hidden' target='_blank'>
+                        <Image
+                            onContextMenu={e => { e.preventDefault() }}
+                            src={hotel.imageUrl}
+                            alt={hotel.alt}
+                            width={272}
+                            height={142}
+                            className='w-full h-auto'
+                        />
+                        <div className='p-3'>
+                            <h2 className='mb-1 text-sm font-semibold'>
+                                {hotel.name}
+                            </h2>
+                            {!!hotel.rating && <Rating number={hotel.rating} minimal />}
+                        </div>
+
+                    </a>
+
                 ))}
             </Slider>
         </>

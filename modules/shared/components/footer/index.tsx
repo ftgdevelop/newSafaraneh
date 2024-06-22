@@ -46,7 +46,7 @@ const Footer: React.FC<Props> = props => {
         )
     }
 
-    const phoneNumber = props.contactInfo.emergencyNumber || props.contactInfo.tel;
+    const phoneNumber = props.contactInfo.emergencyNumber;
 
     return (
         <>
@@ -64,7 +64,14 @@ const Footer: React.FC<Props> = props => {
 
                         {!!props.enamad && (
                             <a className="footer-enamad" referrerPolicy="origin" target="_blank" href={props.enamad}>
-                                <img referrerPolicy="origin" src={"/images/enamad.png"} alt="enamad" />
+                                <Image 
+                                    referrerPolicy="origin" 
+                                    src={"/images/enamad.png"} 
+                                    alt="enamad"
+                                    width={75}
+                                    height={75}
+                                    className="object-contain"
+                                 />
                             </a>
                         )}
 
