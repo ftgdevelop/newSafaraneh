@@ -14,6 +14,7 @@ type Props = {
   logo: string;
   siteName: string;
   contactInfo: {
+    emergencyNumber?: string;
     tel?: string;
     instagram?: string;
     linkedin?: string;
