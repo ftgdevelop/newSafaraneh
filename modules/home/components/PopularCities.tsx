@@ -116,11 +116,9 @@ const PopularCities: React.FC = () => {
                                     className='col-span-5 h-auto'
                                 />
                                 <div className="col-span-4 p-2 text-xs">
-                                    <div className='mb-3'>
                                         رزرو هتل در
                                         <b className='text-sm'> {city.name} </b>
-                                    </div>
-                                    <small className='text-3xs'>بیش از {city.quantity} هتل</small>
+                                    <small className='text-3xs block mt-3'>بیش از {city.quantity} هتل</small>
                                 </div>
                             </a>
                         </div>
