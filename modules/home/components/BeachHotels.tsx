@@ -104,28 +104,26 @@ const BeachHotels: React.FC = () => {
             </h2>
 
 
-                <Slider {...settings}>
+                <Slider {...settings} className='gap-slider'>
 
                     {hotels.map(hotel => (
-                        <div className='sm:px-2 rtl:rtl' key={hotel.name}>
-                            <a href={hotel.url} className='outline-none block bg-white rounded-lg overflow-hidden' target='_blank' title={hotel.name}>
-                                <Image
-                                    onContextMenu={e => { e.preventDefault() }}
-                                    src={hotel.imageUrl}
-                                    alt={`رزرو ${hotel.name}`}
-                                    width={376}
-                                    height={183}
-                                    className='w-full h-auto'
-                                />
-                                <div className='p-3'>
-                                    <h2 className='mb-1 text-sm font-semibold'>
-                                        {hotel.name}
-                                    </h2>
-                                    {!!hotel.rating && <Rating number={hotel.rating} />}
-                                </div>
+                        <a key={hotel.name} href={hotel.url} className='rtl:rtl outline-none block bg-white rounded-lg overflow-hidden' target='_blank' title={hotel.name}>
+                            <Image
+                                onContextMenu={e => { e.preventDefault() }}
+                                src={hotel.imageUrl}
+                                alt={`رزرو ${hotel.name}`}
+                                width={376}
+                                height={183}
+                                className='w-full h-auto'
+                            />
+                            <div className='p-3'>
+                                <h2 className='mb-1 text-sm font-semibold'>
+                                    {hotel.name}
+                                </h2>
+                                {!!hotel.rating && <Rating number={hotel.rating} minimal />}
+                            </div>
 
-                            </a>
-                        </div>
+                        </a>
                     ))}
                 </Slider>
 

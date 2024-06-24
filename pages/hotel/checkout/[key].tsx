@@ -25,6 +25,7 @@ import { ArrowRight } from '@/modules/shared/components/ui/icons';
 import { UserInformation } from '@/modules/authentication/types/authentication';
 import { getTravelers } from '@/modules/shared/actions';
 import { TravelerItem } from '@/modules/shared/types/common';
+import AsideTheme2 from '@/modules/domesticHotel/components/shared/AsideTheme2';
 
 const Checkout: NextPage = () => {
 
@@ -42,7 +43,7 @@ const Checkout: NextPage = () => {
   const keySegment = pathSegments.find(item => item.includes('key='));
   const key = keySegment?.split("key=")[1];
 
-  const user : UserInformation | undefined = useAppSelector(state => state.authentication.isAuthenticated ? state.authentication.user : undefined);
+  const user: UserInformation | undefined = useAppSelector(state => state.authentication.isAuthenticated ? state.authentication.user : undefined);
 
   const [reserveInfo, setReserveInfo] = useState<DomesticHotelGetValidateResponse>();
   const [hotelInfo, setHotelInfo] = useState<DomesticHotelSummaryDetail>();
@@ -53,12 +54,12 @@ const Checkout: NextPage = () => {
   const [discountData, setDiscountData] = useState<any>();
   const [discountLoading, setDiscountLoading] = useState<boolean>(false);
 
-  const [promoCode,setPromoCode] = useState<string>("");
+  const [promoCode, setPromoCode] = useState<string>("");
 
   const [travelers, setTravelers] = useState<TravelerItem[] | undefined>(undefined);
   const [fetchingTravelersLoading, setFetchingTravelersLoading] = useState<boolean>(false);
 
-  const [submitLoading,setSubmitLoading] = useState<boolean>(false);
+  const [submitLoading, setSubmitLoading] = useState<boolean>(false);
 
   let backUrl: string = "";
   const checkinDate = reserveInfo?.checkin && new Date(reserveInfo.checkin);
@@ -86,7 +87,7 @@ const Checkout: NextPage = () => {
         const hotelId = response.data.result.accommodationId;
 
         if (!hotelId) return;
-        
+
         const hotelDataResponse: { data?: { result?: DomesticHotelSummaryDetail } } = await getDomesticHotelSummaryDetailById(hotelId);
         if (hotelDataResponse.data?.result) {
           setHotelInfo(hotelDataResponse.data.result);
@@ -110,7 +111,7 @@ const Checkout: NextPage = () => {
       image: {
         url: hotelInfo.picture?.path,
         alt: hotelInfo.picture?.altAttribute || hotelInfo.displayName || "",
-        title:  hotelInfo.picture?.titleAttribute || hotelInfo.displayName || "",
+        title: hotelInfo.picture?.titleAttribute || hotelInfo.displayName || "",
       },
       name: hotelInfo.displayName || hotelInfo.name || "",
       rating: hotelInfo.rating,
@@ -176,7 +177,7 @@ const Checkout: NextPage = () => {
       const username = reserveResponse.data.result.username;
 
       if (discountData?.isValid && promoCode) {
-        await registerDiscountCode({ discountPromoCode: promoCode , reserveId: id.toString(), username: username });
+        await registerDiscountCode({ discountPromoCode: promoCode, reserveId: id.toString(), username: username });
       }
 
       if (reserveResponse.data.result.rooms.every((x: any) => x.availablityType === "Online")) {
@@ -209,7 +210,7 @@ const Checkout: NextPage = () => {
       lastName: user?.lastName || "",
       email: user?.emailAddress || "",
       nationalId: user?.nationalId || "",
-      phoneNumber: user?.phoneNumber || ""     
+      phoneNumber: user?.phoneNumber || ""
     },
     passengers: reserveInfo?.rooms.map((_, index) => ({
       gender: true,
@@ -246,8 +247,8 @@ const Checkout: NextPage = () => {
     const response: any = await getTravelers(token, "fa-IR");
     if (response.data?.result?.items) {
       setTravelers(response.data?.result?.items);
-      setFetchingTravelersLoading(false);
     }
+    setFetchingTravelersLoading(false);
   }
 
 
@@ -270,8 +271,8 @@ const Checkout: NextPage = () => {
         />}
 
         {backUrl ? (
-          <Link href={backUrl} className={`text-sm text-blue-500 mb-4 inline-block  ${theme2?"mt-1 shadow-normal rounded-full hover:bg-blue-100 w-8 h-8 flex items-center justify-center":""}`}> 
-            <ArrowRight className='inline-block align-middle w-5 h-5 fill-current ltr:rotate-180' /> {!!theme1 && "برگشت به انتخاب اتاق"} 
+          <Link href={backUrl} className={`text-sm text-blue-500 mb-4 inline-block  ${theme2 ? "mt-1 shadow-normal rounded-full hover:bg-blue-100 w-8 h-8 flex items-center justify-center" : ""}`}>
+            <ArrowRight className='inline-block align-middle w-5 h-5 fill-current ltr:rotate-180' /> {!!theme1 && "برگشت به انتخاب اتاق"}
           </Link>
         ) : (
           <Skeleton className='mt-2 mb-3 w-60' />
@@ -294,11 +295,11 @@ const Checkout: NextPage = () => {
               }
               return (
 
-                <Form className={`md:grid ${theme1?"md:grid-cols-12 lg:grid-cols-3 gap-4" : "md:grid-cols-12 md:gap-5 lg:gap-20"}`} autoComplete='off' >
+                <Form className={`md:grid ${theme1 ? "md:grid-cols-12 lg:grid-cols-3 gap-4" : "md:grid-cols-12 md:gap-5 lg:gap-20"}`} autoComplete='off' >
 
-                  <div className={`${theme1?"md:col-span-7 lg:col-span-2":"md:col-span-7"}`}>
+                  <div className={`${theme1 ? "md:col-span-7 lg:col-span-2" : "md:col-span-7"}`}>
 
-                    <div className={`${theme1?"bg-white border border-neutral-300 p-5 rounded-lg":""}`}>
+                    <div className={`${theme1 ? "bg-white border border-neutral-300 p-5 rounded-lg" : ""}`}>
 
                       <ReserverInformation
                         errors={errors}
@@ -318,7 +319,7 @@ const Checkout: NextPage = () => {
 
                     {reserveInfo?.rooms?.map((roomItem, roomIndex) => (
                       <RoomItemInformation
-                      
+
                         fetchingTravelersLoading={fetchingTravelersLoading}
                         travelers={travelers}
                         fetchTravelers={fetchTravelers}
@@ -350,18 +351,31 @@ const Checkout: NextPage = () => {
 
                   </div>
 
-                  <div className={`${theme1?"md:col-span-5 lg:col-span-1":"md:col-span-5"}`}>
+                  <div className={`${theme1 ? "md:col-span-5 lg:col-span-1" : "md:col-span-5"}`}>
 
-                    <Aside
-                      hotelInformation={hotelInformation}
-                      reserveInformation={reserveInformation}
-                      hasSubmit
-                      submitLoading={submitLoading}
-                      roomExtraBed={roomsExtraBed}
-                      discountLoading={discountLoading}
-                      discountResponse={discountData?.isValid ? discountData : undefined}
-                    />
-{/* 
+                    {theme1 ? (
+                      <Aside
+                        hotelInformation={hotelInformation}
+                        reserveInformation={reserveInformation}
+                        hasSubmit
+                        submitLoading={submitLoading}
+                        roomExtraBed={roomsExtraBed}
+                        discountLoading={discountLoading}
+                        discountResponse={discountData?.isValid ? discountData : undefined}
+                      />
+                    ) : (
+                      <AsideTheme2
+                        hotelInformation={hotelInformation}
+                        reserveInformation={reserveInformation}
+                        hasSubmit
+                        submitLoading={submitLoading}
+                        roomExtraBed={roomsExtraBed}
+                        discountLoading={discountLoading}
+                        discountResponse={discountData?.isValid ? discountData : undefined}
+                      />
+                    )}
+
+                    {/* 
                     <div className='bg-white p-4 border border-neutral-300 rounded-md mb-4 border-t-2 border-t-orange-400'>
                       {hotelInfo ? (
                         <>
@@ -399,7 +413,7 @@ const Checkout: NextPage = () => {
                       )}
 
                     </div> */}
-                    
+
                   </div>
                 </Form>
               )
@@ -433,7 +447,11 @@ const Checkout: NextPage = () => {
             </div>
 
             <div className='md:col-span-5 lg:col-span-1'>
-              <Aside />
+              {
+                theme2 ? <AsideTheme2 />
+                  :
+                  <Aside />
+              }
             </div>
           </div>
         )}

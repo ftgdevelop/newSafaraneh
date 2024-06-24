@@ -31,11 +31,9 @@ const Banner: React.FC<Props> = props => {
 
   const items: TabItem[] = [];
 
-
-  const theme2 = process.env.THEME === "THEME2";
-
   const theme1 = process.env.THEME === "THEME1";
-
+  const theme2 = process.env.THEME === "THEME2";
+  const theme3 = process.env.THEME === "THEME3";
 
   if (props.modules.includes('domesticHotel') && process.env.PROJECT_MODULES?.includes("DomesticHotel")) {
     items.push(
@@ -43,7 +41,7 @@ const Banner: React.FC<Props> = props => {
         key: '1',
         label: (<div className='text-center'> {!!theme1 && <Apartment className='w-6 h-6 fill-current block mx-auto mb-1' />} {t('domestic-hotel')} </div>),
         children: (<>
-          <SearchForm wrapperClassName={`${theme2?"p-5":"py-5"}`} defaultDates={domesticHotelDefaultDates} />
+          <SearchForm wrapperClassName={`${theme3 ? "py-3 sm:py-14" :theme2 ? "p-5" : "py-5"}`} defaultDates={domesticHotelDefaultDates} />
           {!!theme1 && <RecentSearches />}
         </>
         ),
@@ -58,11 +56,11 @@ const Banner: React.FC<Props> = props => {
       label: (<div className='text-center'> {!!theme1 && <Travel className='w-6 h-6 fill-current block mx-auto mb-1' />} {t('domestic-flight')} </div>),
       children: (
         <>
-          <FlightSearch wrapperClassName={theme2?"p-5":"py-5"} />
+          <FlightSearch wrapperClassName={theme2 ? "p-5" : "py-5"} />
           {!!theme1 && <FlightRecentSearches />}
         </>
       ),
-      children2: theme2 && <div className='max-sm:px-5' ><FlightRecentSearches  /></div>
+      children2: theme2 && <div className='max-sm:px-5' ><FlightRecentSearches /></div>
     })
   }
 
@@ -72,7 +70,7 @@ const Banner: React.FC<Props> = props => {
       label: (<div className='text-center'> {!!theme1 && <Suitcase className='w-6 h-6 fill-current block mx-auto mb-1' />} {t('cip')} </div>),
       children: (
         <>
-          <CipSearchForm wrapperClassName={theme2?"p-5":"py-5"} />
+          <CipSearchForm wrapperClassName={theme2 ? "p-5" : "py-5"} />
           {!!theme1 && <CipRecentSearches />}
         </>
       ),
@@ -81,10 +79,17 @@ const Banner: React.FC<Props> = props => {
 
   }
 
-
+  const tabs = <Tab
+    style={theme3 ? "almosafer-home" : "1"}
+    items={items}
+    wrapperClassName={`${theme3 ? "" :theme2 ? "mb-6 sm:rounded-2xl sm:border sm:border-neutral-300" : "sm:rounded-lg px-5 pt-3 sm:p-5 bg-white"}`}
+    tabLinksCenter={theme2}
+    tabLinksBold={theme2}
+    innerElement={props.innerElement}
+  />;
 
   return (
-    <div className={`relative ${theme1 ? "bg-cyan-800/50" : ""}`}>
+    <div className={`relative ${theme1 ? "bg-cyan-800/50" : theme3 ? "md:bg-theme3-banner md:bg-cover md:bg-center" : ""}`}>
       {!!theme1 && <Image
         src='/images/home/banner.jpg'
         alt="blue sky"
@@ -93,19 +98,26 @@ const Banner: React.FC<Props> = props => {
         onContextMenu={(e) => e.preventDefault()}
         className='absolute top-0 left-0 w-full h-full object-cover object-center z-10 max-sm:hidden'
       />}
-      <div className={`max-w-container mx-auto pt-5 sm:px-3 relative z-20 ${theme1 ? "sm:py-10 sm:pb-28" :theme2?"pb-5 sm:pb-8": ""}`}>
 
-        {!!theme1 && <h1 className="text-white drop-shadow-lg text-center font-bold text-xl sm:text-4xl mb-6 sm:mb-10" > {tHome("Plan-your-trip")} </h1>}
+      {!!theme3 && (
+        <div className='max-md:hidden max-w-container mx-auto px-3 md:px-5 py-6 md:pt-24 md:pb-10  text-white'>
+          <h2 className='text-xl lg:text-5xl font-bold mb-4'> سفر بعدی خود را رزرو کنید! </h2>
+          <p className='text-base'>  از بین بیش از 1.5 میلیون هتل و بیش از 450  ایرلاین انتخاب کنید </p>
+        </div>
+      )}
 
-        <Tab
-          items={items}
-          wrapperClassName={`${theme2 ? "mb-6 sm:rounded-2xl sm:border sm:border-neutral-300" : "sm:rounded-lg px-5 pt-3 sm:p-5 bg-white"}`}
-          tabLinksCenter={theme2}
-          tabLinksBold={theme2}
-          innerElement={props.innerElement}
-        />
+      {theme3?(
+        tabs
+      ):(
+        <div className={`pt-5 max-w-container mx-auto sm:px-3 relative z-20 ${theme1 ? "sm:py-10 sm:pb-28" : theme2 ? "pb-5 sm:pb-8" : ""}`}>
 
-      </div>
+          {!!theme1 && <h1 className="text-white drop-shadow-lg text-center font-bold text-xl sm:text-4xl mb-6 sm:mb-10" > {tHome("Plan-your-trip")} </h1>}
+
+          {tabs}
+
+        </div>
+      )}
+
     </div>
   )
 }

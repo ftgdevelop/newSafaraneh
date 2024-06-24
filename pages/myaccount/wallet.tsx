@@ -97,7 +97,7 @@ const Wallet: NextPage = () => {
                                 ) : !userIsAuthenticated ? (
                                     null
                                 ) : (user?.isEmailConfirmed || user?.isPhoneNumberConfirmed) ? (
-                                    <Tab style3 items={tabItems} />
+                                    <Tab style = "3" items={tabItems} />
                                 ) : (
                                     <div className='text-sm bg-amber-50 rounded border border-amber-500 p-5'>
                                         <p className='mb-3'> برای دسترسی به کیف پول خود باید حساب خود را تأیید کنید. </p>

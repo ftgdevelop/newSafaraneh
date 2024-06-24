@@ -38,6 +38,9 @@ const PhoneInput: React.FC<Props> = props => {
 
     const { t } = useTranslation('common');
 
+    const theme1 = process.env.THEME === "THEME1";
+    const theme2 = process.env.THEME === "THEME2";
+
     const codeRef = useRef<HTMLDivElement>(null);
 
     let initialCountry: CountryObject | undefined = undefined;
@@ -156,13 +159,43 @@ const PhoneInput: React.FC<Props> = props => {
     const expectedLength = country?.format?.replaceAll(" ", '')?.replaceAll('+', "")?.replaceAll("(", "")?.replaceAll(")", "")?.replaceAll('-', "")?.length;
     const expectedTotalLength = expectedLength ? expectedLength + country.dialCode.length : undefined;
 
+    const labelClassNames:string[] = [`select-none pointer-events-none block leading-4`];
+    
+    if (props.labelIsSimple){
+        labelClassNames.push("mb-3 text-base");
+    }else{
+        labelClassNames.push("z-10 absolute px-2 bg-white transition-all duration-300 -translate-y-1/2 right-1");
+
+        if (labelUp){
+            labelClassNames.push(`${theme2?"top-3.5 text-2xs":"top-0 text-xs"}`);
+        }else{
+            labelClassNames.push("top-1/2 text-sm");
+        }
+    }
+
+
+    const inputClassNames : string[] = [`border ${theme1?"h-10":theme2?"h-13":""} px-22 rounded-l-md col-span-2 px-2 outline-none`];
+
+    if(errorText && isTouched){
+        inputClassNames.push(`border-red-500 ${theme2?"border-2":""}`);
+    }else{
+        inputClassNames.push(`${theme2?"border-neutral-400 focus:border-2":"border-neutral-300"} focus:border-blue-500`);
+    }
+
+    const inputClassNames2 : string[] = [`border ${theme1?"h-10":theme2?"h-13":""} ${!props.labelIsSimple && theme2 ? "pt-4 leading-4" : ""} px-2 col-span-3 border-l-0 rounded-r-md outline-none`];
+
+    if(errorText && isTouched){
+        inputClassNames2.push(`border-red-500 ${theme2?"border-2":""}`);
+    }else{
+        inputClassNames2.push(`${theme2?"border-neutral-400 focus:border-2":"border-neutral-300"} focus:border-blue-500`);
+    }
     return (
         <div className={props.className || ""}>
             <div className='relative'>
                 <div className='flex justify-between items-start'>
                     {!!props.label ? (
                         <label
-                            className={`select-none pointer-events-none block leading-4 ${props.labelIsSimple ? "mb-3" : "z-10 absolute px-2 bg-white transition-all duration-300 -translate-y-1/2 right-1"} ${props.labelIsSimple ? "text-base" : labelUp ? "top-0 text-xs" : "top-1/2 text-sm"}`}
+                            className={labelClassNames.join(" ")}
                         >
                             {!!(props.labelIsSimple && props.showRequiredStar) && <span className='text-red-600'>* </span>}
                             {props.label}
@@ -187,7 +220,7 @@ const PhoneInput: React.FC<Props> = props => {
                     </div>}
 
                     <Field
-                        className={`h-10 border ${errorText && isTouched ? "border-red-500" : "border-neutral-300 focus:border-blue-500"} px-22 rounded-l-md col-span-2 px-2 outline-none`}
+                        className={inputClassNames.join(" ")}
                         type='text'
                         autoComplete="off"
                         disabled={props.disabled}
@@ -205,7 +238,7 @@ const PhoneInput: React.FC<Props> = props => {
                         onChange={(e: any) => { if (["0", "۰", "٠"].includes(e.target.value[0])) return; setPhoneNumberValue(e.target.value) }}
                         value={phoneNumberValue}
                         maxLength={expectedLength || 15}
-                        className={`h-10 border ${errorText && isTouched ? "border-red-500" : "border-neutral-300 focus:border-blue-500"} px-2 col-span-3 border-l-none rounded-r-md outline-none`}
+                        className={inputClassNames2.join(" ")}
                     />
 
                     <Field

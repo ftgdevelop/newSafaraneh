@@ -20,6 +20,7 @@ const config: Config = {
         'vazir': ['vazir', 'sans-serif']
       },
       spacing: {
+        '13': '3.25rem',
         '18': '4.5rem',
         '4.5': '1.125rem',
         '2px': '2px',
@@ -55,6 +56,18 @@ const config: Config = {
           700: 'var(--color-primary-700)',
           800: 'var(--color-primary-800)',
           900: 'var(--color-primary-900)',
+        },
+        secondary: {
+          50: 'var(--color-secondary-50)',
+          100: 'var(--color-secondary-100)',
+          200: 'var(--color-secondary-200)',
+          300: 'var(--color-secondary-300)',
+          400: 'var(--color-secondary-400)',
+          500: 'var(--color-secondary-500)',
+          600: 'var(--color-secondary-600)',
+          700: 'var(--color-secondary-700)',
+          800: 'var(--color-secondary-800)',
+          900: 'var(--color-secondary-900)',
         },
         blue: {
           50: '#ebf2f9',
@@ -93,7 +106,8 @@ const config: Config = {
       },
       borderWidth: {
         '1':'1px',
-        '3': '3px'
+        '3': '3px',
+        '5' : '5px'
       },
       fontSize: {
         '4xs':'10px',
@@ -105,7 +119,7 @@ const config: Config = {
         '2xl': '22px',
         '3xl': '24px',
         '4xl': '28px',
-        '5xl': '40px'
+        '5xl': '38px'
       },
       gridTemplateColumns: {
         '13': 'repeat(13, minmax(0, 1fr))',

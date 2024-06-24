@@ -9,7 +9,7 @@ type Props = {
 
 const Steps: React.FC<Props> = props => {
     return (
-        <div className={`flex flex-wrap flex-col md:flex-row gap-2 md:justify-between md:items-center ${props.className}`}>
+        <div className={`max-sm:hidden flex flex-wrap flex-col md:flex-row gap-2 md:justify-between md:items-center ${props.className}`}>
             {props.items.map((item, index) => (
                 <Fragment key={item.label}>
 

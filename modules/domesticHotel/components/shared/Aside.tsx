@@ -193,12 +193,12 @@ const Aside: React.FC<Props> = props => {
                         let cancellation = null;
                         switch (roomItem.cancellationPolicyStatus) {
                             case "NonRefundable":
-                                cancellation = <div className="margin-bottom-5 text-red">{t("non-refundable")}</div>;
+                                cancellation = <div className="margin-bottom-5 text-sm text-red/600">{tHotel("non-refundable")}</div>;
                                 break;
                             case "Refundable":
-                                cancellation = <div className="text-green margin-bottom-5">
-                                    <Tik className="w-3 h-4 fill-green-600" />
-                                    {t("refundable")}
+                                cancellation = <div className="text-green-600 text-sm margin-bottom-5 flex gap-1 items-center">
+                                    <Tik className="w-4 h-4 fill-green-600" />
+                                    {tHotel("refundable")}
                                 </div>;
                                 break;
                             default:
