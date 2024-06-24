@@ -18,10 +18,15 @@ import { WebSiteDataType } from '@/modules/shared/types/common';
 import { getPortal } from '@/modules/shared/actions/portalActions';
 import Layout from '@/modules/shared/components/layout';
 import { GTM_ID } from '@/modules/shared/helpers';
+import dynamic from 'next/dynamic';
 
 type TProps = Pick<AppProps, "Component" | "pageProps"> & {
   portalData?: WebSiteDataType;
 };
+
+const ElmahLogError = dynamic(() => import('../modules/shared/components/ElmahLogError'), {
+  ssr: false
+});
 
 function MyApp({ Component, pageProps, portalData }: TProps) {
   const router = useRouter();
@@ -168,6 +173,8 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
         <Component {...pageProps} portalData={portalData} />
 
       </Layout>
+
+      <ElmahLogError />
 
     </Provider>
   )
