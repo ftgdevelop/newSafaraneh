@@ -103,33 +103,31 @@ const Unknowns: React.FC = () => {
                 ناشناخته ها
             </h2>
 
-                <Slider {...settings}>
+                <Slider {...settings} className='gap-slider'>
 
                     {items.map(item => (
-                        <div className='sm:px-2 rtl:rtl' key={item.title}>
-                            <a href={item.url} className='block bg-white rounded-lg overflow-hidden' target='_blank' title={item.title}>
-                                <div className='relative'>
-                                    <Image
-                                        onContextMenu={e => { e.preventDefault() }}
-                                        src={item.imageUrl}
-                                        alt={`رزرو ${item.title}`}
-                                        width={272}
-                                        height={142}
-                                        className='w-full h-auto'
-                                    />
-                                    <div className='absolute bottom-3 px-5'>
-                                        <span className='bg-primary-800 text-white px-5 pt-2 pb-3 inline-block leading-4 text-sm rounded-lg'> {item.location} </span>
-                                    </div>
+                        <a key={item.title} href={item.url} className='rtl:rtl block bg-white rounded-lg overflow-hidden' target='_blank' title={item.title}>
+                            <div className='relative'>
+                                <Image
+                                    onContextMenu={e => { e.preventDefault() }}
+                                    src={item.imageUrl}
+                                    alt={`رزرو ${item.title}`}
+                                    width={272}
+                                    height={142}
+                                    className='w-full h-auto'
+                                />
+                                <div className='absolute bottom-3 px-5'>
+                                    <span className='bg-primary-800 text-white px-5 pt-2 pb-3 inline-block leading-4 text-sm rounded-lg'> {item.location} </span>
                                 </div>
-                                <div className='p-3'>
-                                    <h2 className='mb-1 text-sm font-semibold'>
-                                        {item.title}
-                                    </h2>
-                                    <div className="text-sm text-blue-700 rtl:text-left ltr:text-right">{t('more-details')}</div>
-                                </div>
+                            </div>
+                            <div className='p-3'>
+                                <h2 className='mb-1 text-sm font-semibold'>
+                                    {item.title}
+                                </h2>
+                                <div className="text-sm text-blue-700 rtl:text-left ltr:text-right">{t('more-details')}</div>
+                            </div>
 
-                            </a>
-                        </div>
+                        </a>
                     ))}
 
                 </Slider>

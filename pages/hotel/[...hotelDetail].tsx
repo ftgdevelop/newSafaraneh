@@ -122,9 +122,9 @@ const HotelDetail: NextPage<Props> = props => {
 
   if (portalData) {
 
-    tel = portalData.billing.telNumber || portalData?.billing.phoneNumber || "";    
+    tel = portalData.billing.telNumber || portalData?.billing.phoneNumber || "";
     twitter = portalData.social?.x || "";
-    siteLogo = portalData.billing?.logo?.value ||"";
+    siteLogo = portalData.billing?.logo?.value || "";
     siteName = portalData.billing?.name || "";
     siteURL = portalData.billing?.website || "";
   }
@@ -138,7 +138,7 @@ const HotelDetail: NextPage<Props> = props => {
 
   let script_detail_2_Url;
   if (hotelData.CityName) {
-    if (process.env.LocaleInUrl === "off"){
+    if (process.env.LocaleInUrl === "off") {
       script_detail_2_Url = `${configWebsiteUrl}/hotels/${hotelData.CityName.replace(/ /g, "-")}`;
     } else if (i18n && i18n.language === "fa") {
       script_detail_2_Url = `${configWebsiteUrl}/fa/hotels/هتل-های-${hotelData.CityName.replace(/ /g, "-")}`;
@@ -149,7 +149,7 @@ const HotelDetail: NextPage<Props> = props => {
     }
   }
 
-  let hotelImages : {
+  let hotelImages: {
     src: string;
     alt: string;
     width: number;
@@ -158,11 +158,11 @@ const HotelDetail: NextPage<Props> = props => {
   }[] = [];
 
   if ((process.env.PROJECT === "1STSAFAR" || accommodationData?.galleries?.length)) {
-    if(accommodationData?.galleries?.length){
+    if (accommodationData?.galleries?.length) {
       hotelImages = accommodationData?.galleries?.map(item => ({
-        alt:item.fileAltAttribute || item.fileTitleAttribute || "" ,
+        alt: item.fileAltAttribute || item.fileTitleAttribute || "",
         description: item.fileTitleAttribute || item.fileAltAttribute || "",
-        src:item.filePath!,
+        src: item.filePath!,
         width: 1000,
         height: 700,
       }))
@@ -176,6 +176,57 @@ const HotelDetail: NextPage<Props> = props => {
       description: item.Alt || ""
     }))
   }
+
+  const anchorTabsItems: { id: string, title: string }[] = [];
+
+  if (hotelImages?.length) {
+    anchorTabsItems.push({ id: "pictures_section", title: tHotel('pictures') });
+  }
+
+  anchorTabsItems.push(
+    { id: "hotel_intro", title: tHotel('hotel-intro') },
+    { id: "rooms_section", title: tHotel('choose-room') }
+  );
+
+  if (
+    accommodationData?.facilities?.length
+    ||
+    (hotelData.Facilities?.length && process.env.PROJECT !== "1STSAFAR")
+  ) {
+    anchorTabsItems.push(
+      { id: "amenities_section", title: tHotel('hotel-facilities') }
+    )
+  }
+
+  if (
+    accommodationData?.policies?.length
+    ||
+    (process.env.PROJECT !== "1STSAFAR" && (hotelData.Policies?.length || accommodationData?.instruction?.length || accommodationData?.mendatoryFee?.length))
+  ) {
+    anchorTabsItems.push(
+      { id: "terms_section", title: t('terms') }
+    );
+  }
+
+  if(siteName && accommodationData?.description){
+    anchorTabsItems.push(
+      { id: "about_section", title: tHotel('about-hotel') }
+    );
+  }
+
+  anchorTabsItems.push(
+    { id: "attractions_section", title: tHotel('attraction') }
+  );
+
+  if (process.env.PROJECT !== "1STSAFAR") {
+    anchorTabsItems.push(
+      { id: "reviews_section", title: tHotel('suggestion') }
+    );
+  }
+
+  anchorTabsItems.push(
+    { id: "similarhotels_section", title: tHotel('similar-hotels') }
+  );
 
   return (
     <>
@@ -383,21 +434,11 @@ const HotelDetail: NextPage<Props> = props => {
           <BackToList checkin={checkin} checkout={checkout} cityId={hotelData.CityId} cityName={hotelData.CityName} />
         </div>
 
-        {!!hotelData.Gallery?.length && <Gallery images={hotelImages} hotelName={`${hotelData.HotelCategoryName} ${hotelData.HotelName} ${hotelData.CityName}`} />}
+        {!!hotelImages?.length && <Gallery images={hotelImages} hotelName={`${hotelData.HotelCategoryName} ${hotelData.HotelName} ${hotelData.CityName}`} />}
       </div>
 
       <AnchorTabs
-        items={[
-          { id: "pictures_section", title: tHotel('pictures') },
-          { id: "hotel_intro", title: tHotel('hotel-intro') },
-          { id: "rooms_section", title: tHotel('choose-room') },
-          { id: "amenities_section", title: tHotel('hotel-facilities') },
-          { id: "terms_section", title: t('terms') },
-          { id: "about_section", title: tHotel('about-hotel') },
-          { id: "attractions_section", title: tHotel('attraction') },
-          { id: "reviews_section", title: tHotel('suggestion') },
-          { id: "similarhotels_section", title: tHotel('similar-hotels') }
-        ]}
+        items={anchorTabsItems}
       />
 
       <div className="max-w-container mx-auto px-3 sm:px-5" id="hotel_intro">
@@ -437,11 +478,11 @@ const HotelDetail: NextPage<Props> = props => {
         null
       }
 
-      {(accommodationData?.policies?.length ||  process.env.PROJECT === "1STSAFAR" )?(
+      {(accommodationData?.policies?.length || process.env.PROJECT === "1STSAFAR") ? (
         <>
-        <AccomodationPolicy policies={accommodationData?.policies} />
+          <AccomodationPolicy policies={accommodationData?.policies} />
         </>
-      ):(
+      ) : (
         <>
           {!!(hotelData.Policies?.length || accommodationData?.instruction?.length || accommodationData?.mendatoryFee?.length) && <HotelTerms
             instruction={accommodationData?.instruction}
@@ -463,7 +504,7 @@ const HotelDetail: NextPage<Props> = props => {
         </div>
       )}
 
-      {!!pageData?.Id && <Comments hotelScoreData={hotelScoreData} pageId={pageData.Id} />}
+      {!!(pageData?.Id && process.env.PROJECT !== "1STSAFAR") && <Comments hotelScoreData={hotelScoreData} pageId={pageData.Id} />}
 
       {!!hotelData.Similars && <SimilarHotels similarHotels={hotelData.Similars} />}
 
@@ -487,10 +528,10 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   let checkin = dateFormat(new Date());
   let checkout = dateFormat(addSomeDays(new Date()));
 
-  const checkinSegment = query.hotelDetail.find((s:string) => s.includes("checkin"));
-  const checkoutSegment = query.hotelDetail.find((s:string) => s.includes("checkout"));
-  
-  if(checkinSegment && checkinSegment){
+  const checkinSegment = query.hotelDetail.find((s: string) => s.includes("checkin"));
+  const checkoutSegment = query.hotelDetail.find((s: string) => s.includes("checkout"));
+
+  if (checkinSegment && checkinSegment) {
     checkin = dateFormat(new Date(checkinSegment.split("checkin-")[1]));
     checkout = dateFormat(new Date(checkoutSegment.split("checkout-")[1]));
   }

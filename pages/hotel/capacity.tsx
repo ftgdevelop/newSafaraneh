@@ -73,6 +73,8 @@ const Capacity: NextPage = () => {
     };
   }, []);
 
+  const theme1 = process.env.THEME === "THEME1";
+
   return (
     <>
       <Head>
@@ -81,7 +83,7 @@ const Capacity: NextPage = () => {
 
       <div className='max-w-container mx-auto px-5 py-4'>
 
-        <Steps
+        {!!theme1 && <Steps
           className='py-3 mb-2'
           items={[
             { label: t('completing-information'), status: 'done' },
@@ -89,7 +91,7 @@ const Capacity: NextPage = () => {
             { label: t('confirm-pay'), status: 'up-comming' },
             { label: t('complete-purchase'), status: 'up-comming' }
           ]}
-        />
+        />}
 
         <div className='py-16 flex flex-col gap-5 items-center'>
 

@@ -205,6 +205,7 @@ const SearchForm: React.FC<Props> = props => {
                                 )}
 
                                 <FormikField
+                                    heightClassName="h-10"
                                     name='airlineName'
                                     value={values.airlineName}
                                     setFieldValue={setFieldValue}
@@ -213,6 +214,7 @@ const SearchForm: React.FC<Props> = props => {
                                     label='نام ایرلاین'
                                 />
                                 <FormikField
+                                    heightClassName="h-10"
                                     name='flightNumber'
                                     value={values.flightNumber}
                                     setFieldValue={setFieldValue}

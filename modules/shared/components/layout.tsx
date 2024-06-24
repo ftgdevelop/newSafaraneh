@@ -1,7 +1,7 @@
 import Header from "./header";
 import Footer from "./footer";
 import Error from './Error';
-import { PropsWithChildren, useEffect, useState } from "react";
+import { PropsWithChildren, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useAppDispatch, useAppSelector } from "../hooks/use-store";
 import PageLoadingBar from "./ui/PageLoadingBar";
@@ -14,13 +14,16 @@ type Props = {
   logo: string;
   siteName: string;
   contactInfo: {
+    emergencyNumber?: string;
     tel?: string;
     instagram?: string;
     linkedin?: string;
     twitter?: string;
     facebook?: string;
   }
-  enamadElement?: any;
+  enamad?: any;
+  samandehi?: string;
+  scripts?: string;
 }
 
 const Layout: React.FC<PropsWithChildren<Props>> = props => {
@@ -38,7 +41,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     dispatch(setProgressLoading(true));
     setTimeout(removeLoading, 4000);
   }
-  const removeLoading = () => { dispatch(setProgressLoading(false))}
+  const removeLoading = () => { dispatch(setProgressLoading(false)) }
 
 
   useEffect(() => {
@@ -107,7 +110,21 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
           <main id="main" className={`min-h-desktop-main relative ${isHeaderUnderMain ? "z-50" : "z-10"}`}>
             {props.children}
           </main>
-          <Footer logo={props.logo} siteName={props.siteName} contactInfo={props.contactInfo} enamadElement={props.enamadElement || undefined} />
+          <Footer 
+            logo={props.logo} 
+            siteName={props.siteName} 
+            contactInfo={props.contactInfo} 
+            enamad={props.enamad || undefined} 
+            samandehi={props.samandehi}
+          />
+
+          {props.scripts ? <script
+              id="script_footer_api_scripts"
+              dangerouslySetInnerHTML={{
+                  __html: `${props.scripts}`,
+              }}
+          /> : null}
+
         </>
       ) : (
         <main id="main" >

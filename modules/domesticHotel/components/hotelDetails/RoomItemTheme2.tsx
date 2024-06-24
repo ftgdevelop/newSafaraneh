@@ -31,7 +31,11 @@ const RoomItemTheme2: React.FC<Props> = props => {
         return null;
     }
 
-    let image: React.ReactNode = <div className={`${props.roomsHasImage ? "" : "max-sm:hidden"} bg-travel-pattern md:w-1/4 shrink-0 flex items-center justify-center bg-neutral-100 p-5 rtl:rounded-r-xl`}><DefaultRoom className='fill-neutral-400 w-24 h-24' /></div>
+    let image: React.ReactNode = <div
+        className={`${props.roomsHasImage ? "" : "max-sm:hidden"} bg-travel-pattern flex items-center justify-center bg-neutral-100 p-5 rounded-t-xl`}
+    >
+        <DefaultRoom className='fill-neutral-400 w-24 h-24' />
+    </div>
 
     if (room.image) {
         image = <Image
@@ -178,7 +182,7 @@ const RoomItemTheme2: React.FC<Props> = props => {
                 }}
                 loading={!!selectedRoomToken && selectedRoomToken === rate.bookingToken}
                 disabled={!!selectedRoomToken && selectedRoomToken !== rate.bookingToken}
-                className='block h-10 w-32 px-5'
+                className='block h-10 w-40 px-5'
             >
                 {prices?.roomPrice && prices.roomPrice < 1000 ?
                     "درخواست رزرو"

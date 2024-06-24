@@ -66,7 +66,13 @@ const HotelName: React.FC<Props> = props => {
                 Longitude={hotelData.Longitude}
             />
 
+            {
+                props.accomodationFacilities?.length 
+                || 
+                (process.env.PROJECT !== "1STSAFAR" && hotelData.Facilities?.length)
+            ? (
             <div className='lg:col-span-2'>
+                
                 <strong className='block font-semibold text-md lg:text-lg mb-3'>امکانات محبوب هتل</strong>
                 
                 {props.accomodationFacilities?.length || process.env.PROJECT === "1STSAFAR" ? (
@@ -94,6 +100,9 @@ const HotelName: React.FC<Props> = props => {
                 )}
                 
             </div>
+            ):(
+                <div className='lg:col-span-2' />
+            )}
 
             <div className='hidden lg:block lg:col-span-1'>
                 {!!hotelData.DistancePoints?.length && <Attractions isSmall attractions={hotelData.DistancePoints} />}

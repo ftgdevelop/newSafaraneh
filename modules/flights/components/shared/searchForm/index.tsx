@@ -127,6 +127,7 @@ const SearchForm: React.FC<Props> = props => {
 
     const theme1 = process.env.THEME === "THEME1";
     const theme2 = process.env.THEME === "THEME2";
+    const theme3 = process.env.THEME === "THEME3";
 
     return (
         <div className={`text-sm ${props.wrapperClassName || ""}`}>
@@ -151,7 +152,7 @@ const SearchForm: React.FC<Props> = props => {
 
                         <Form autoComplete='off' >
                             <div className=''>
-                                <div className={`flex gap-3 ${theme2 ? "flex-row" : "flex-col md:flex-row md:justify-between"} mb-4 z-[3] relative`}>
+                                <div className={`flex gap-3 ${(theme2 || theme3) ? "flex-row" : "flex-col md:flex-row md:justify-between"} mb-4 z-[3] relative`}>
 
                                     {theme2 ? (
                                         <Select
@@ -216,9 +217,9 @@ const SearchForm: React.FC<Props> = props => {
 
                                 </div>
 
-                                <div className={`text-neutral-800 grid gap-3 gap-y-4 z-[2] relative ${theme1 ? "grid-cols-2 md:grid-cols-4 lg:grid-cols-6" : theme2 ? "grid-cols-1 sm:grid-cols-6 lg:grid-cols-5 xl:grid-cols-13" : ""}`}>
+                                <div className={`text-neutral-800 grid gap-3 gap-y-4 z-[2] relative ${theme1 ? "grid-cols-2 md:grid-cols-4 lg:grid-cols-6" : (theme2 || theme3) ? "grid-cols-1 sm:grid-cols-6 lg:grid-cols-5 xl:grid-cols-13" : ""}`}>
 
-                                    <div className={`relative ${theme1 ? "col-span-2 sm:col-span-1 lg:col-span-2" : theme2 ? "sm:col-span-3 lg:col-span-1 xl:col-span-3" : ""}`}>
+                                    <div className={`relative ${theme1 ? "col-span-2 sm:col-span-1 lg:col-span-2" : (theme2 || theme3) ? "sm:col-span-3 lg:col-span-1 xl:col-span-3" : ""}`}>
 
                                         {theme2 ? (
                                             <AutoCompleteZoom
@@ -285,7 +286,7 @@ const SearchForm: React.FC<Props> = props => {
 
                                     </div>
 
-                                    <div className={`relative ${theme1 ? "col-span-2 sm:col-span-1 lg:col-span-2" : theme2 ? "sm:col-span-3 lg:col-span-1 xl:col-span-3" : ""}`}>
+                                    <div className={`relative ${theme1 ? "col-span-2 sm:col-span-1 lg:col-span-2" : (theme2 || theme3) ? "sm:col-span-3 lg:col-span-1 xl:col-span-3" : ""}`}>
                                         {theme2 ? (
                                             <AutoCompleteZoom
                                                 defaultListLabel="محبوب ترین ها"
@@ -402,7 +403,7 @@ const SearchForm: React.FC<Props> = props => {
                                         {touched.departureDate && errors.departureDate && <div className='text-xs text-red-500'> {errors.departureDate as string}</div>}
                                     </div> */}
 
-                                    <div className={`${theme2 ? "sm:col-span-2 lg:col-span-1 xl:col-span-2" : ""}`} >
+                                    <div className={`${(theme2 || theme3) ? "sm:col-span-2 lg:col-span-1 xl:col-span-2" : ""}`} >
                                         <div className='relative'>
                                             <DatePickerMobiscroll
                                                 minDate={ dateFormat(new Date()) }
@@ -477,7 +478,7 @@ const SearchForm: React.FC<Props> = props => {
                                         // </div>
 
 
-                                        <div className={`${theme2 ? "sm:col-span-2 lg:col-span-1 xl:col-span-2" : ""}`} >
+                                        <div className={`${(theme2 || theme3) ? "sm:col-span-2 lg:col-span-1 xl:col-span-2" : ""}`} >
                                             <div className='relative'>
                                                 <DatePickerMobiscroll
                                                     inputStyle='theme1'
@@ -526,13 +527,13 @@ const SearchForm: React.FC<Props> = props => {
                                         </div>
                                     )}
 
-                                    {!!theme2 && <SelectPassengers
+                                    {!!(theme2 || theme3) && <SelectPassengers
                                         values={values}
                                         setFieldValue={setFieldValue}
                                         wrapperClassNames='sm:col-span-2 lg:col-span-1 xl:col-span-2 shrink-0'
                                     />}
 
-                                    <div className={`relative ${theme1 ? "col-span-2 md:col-span-4 lg:col-span-6" : theme2 ? "sm:col-span-6 lg:col-span-5 xl:col-span-1" : ""}`} >
+                                    <div className={`relative ${theme1 ? "col-span-2 md:col-span-4 lg:col-span-6" : (theme2 || theme3) ? "sm:col-span-6 lg:col-span-5 xl:col-span-1" : ""}`} >
                                         <Button
                                             color='blue'
                                             type='submit'
