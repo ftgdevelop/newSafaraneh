@@ -51,11 +51,43 @@ type Props = {
     Url?: string;
   };
   portalData: WebSiteDataType;
+  delete:any;
 }
 
 const HotelList: NextPage<Props> = props => {
 
   const { pageData, faq, searchHotelsData, portalData } = props;
+
+  useEffect(()=>{
+
+    const fetchData = async () => {
+        
+        const url = `/${locale}/hotels/${props.delete![0]}`;
+    
+        const acceptLanguage = locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR";
+      
+        const searchHotelsResponse: {
+          data?: {
+            Hotels: SearchHotelItem[];
+            Content?: string;
+          };
+        } = await SearchHotels({ url: url, cityId: +props.delete.find((item: string) => item.includes("location-"))?.split("location-")[1] }, acceptLanguage);
+      
+      
+        const pageResponse: any = await getPageByUrl(url, acceptLanguage);
+      
+      
+        let faqResponse: any;
+        if (searchHotelsResponse?.data?.Hotels[0]?.CityId) {
+          faqResponse = await GetCityFaqById(searchHotelsResponse?.data?.Hotels[0].CityId, acceptLanguage);
+        }
+    } 
+
+    fetchData();
+
+
+    
+  },[]);
 
   const searchFormWrapperRef = useRef<HTMLDivElement>(null);
 
@@ -810,7 +842,8 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
       searchHotelsData: searchHotelsResponse?.data || null,
       faq: faqResponse?.data?.result || null,
-      pageData: pageResponse?.data || null
+      pageData: pageResponse?.data || null,
+      delete: query.hotelList || null
     },
   })
 }
