@@ -62,7 +62,7 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
   
   const portalEnamadMetaTag = portalData?.metaTags?.enamad || "";
   const enamad = portalData?.website?.enamad || "";
-  const samandehi = portalData?.website.samandehi || ";"
+  const samandehi = portalData?.website.samandehi || "";
   const scripts = portalData?.website.scripts || "";
 
   let canonicalUrl = "";
