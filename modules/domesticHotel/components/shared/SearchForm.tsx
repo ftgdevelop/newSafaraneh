@@ -168,8 +168,10 @@ const SearchForm: React.FC<Props> = props => {
             case "Hotel":
                 const hotelDetailsResponse = await getDomesticHotelSummaryDetailById(selectedDestination.id!, i18n?.language === "en" ? "en-US" : "fa-IR");
 
-                if (hotelDetailsResponse.data?.result?.url) {
-                    url = hotelDetailsResponse.data.result.url;
+                if (hotelDetailsResponse.data?.result) {
+                    if(hotelDetailsResponse.data.result.url){
+                        url = hotelDetailsResponse.data.result.url;
+                    }
                 } else {
                     let message = "";
                     if (hotelDetailsResponse.response) {
@@ -196,6 +198,15 @@ const SearchForm: React.FC<Props> = props => {
         let urlSegment = "";
         if (selectedDestination.id) {
             urlSegment = `/location-${selectedDestination.id}`;
+        }
+
+        if(!url){
+            dispatch(setReduxError({
+                title: t('error'),
+                message: "متاسفانه برای این مقصد اطلاعاتی یافت نشد!",
+                isVisible: true
+            }))
+            return;
         }
 
         url += `${urlSegment}/checkin-${dates[0]}/checkout-${dates[1]}`;
