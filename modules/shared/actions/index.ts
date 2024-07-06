@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-import { Header, ServerAddress, Hotel, Reserve, Traveler } from "../../../enum/url";
+import { Header, ServerAddress, Reserve, Traveler, Cms } from "../../../enum/url";
 import { ReserveType } from '../types/common';
 
 export const getPageByUrl = async (url: string, acceptLanguage: string = "fa-IR") => {
     try {
         let response = await axios.get(
-            `${ServerAddress.Type}${ServerAddress.Hotel_Main}${Hotel.GetPageByUrl}?url=${url}&isNewVisitor=true`,
+            `${ServerAddress.Type}${ServerAddress.CMS}${Cms.GetByUrl}?Url=${url}`,
             {
                 headers: {
                     ...Header,
