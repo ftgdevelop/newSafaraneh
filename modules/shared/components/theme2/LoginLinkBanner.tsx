@@ -17,10 +17,10 @@ const LoginLinkBanner:React.FC<Props> = props => {
     }
 
     return(
-        <div className="bg-blue-950 text-white mb-6 rounded-2xl p-5 flex flex-col md:flex-row justify-between gap-5 text-xs md:text-md font-semibold items-center max-sm:mx-5" >
-            <p className="flex gap-3 md:items-center">
+        <div className="bg-blue-950 text-white mb-6 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row justify-between gap-5 text-xs md:text-md font-semibold items-center max-sm:mx-5" >
+            <p className="max-sm:text-center flex gap-3 md:items-center">
                 <Verified 
-                    className="w-10 h-10 fill-current shrink-0"
+                    className="w-10 h-10 fill-current shrink-0 hidden sm:block"
                 />
                 {props.message}
             </p>

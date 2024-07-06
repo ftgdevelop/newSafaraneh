@@ -323,45 +323,90 @@ export interface DomesticHotelAvailability {
 
 }[]
 
-
-export interface SearchHotelItem {
-    HotelId?: number;
-    HotelName?: string;
-    BriefDescription?: string;
-    HotelTypeName?: string;
-    HotelTypeId?: number;
-    CityName?: string;
-    CityId?: number;
-    HotelRating?: number;
-    Address?: string;
-    Latitude?: number;
-    Longitude?: number;
-    Zoom?: number;
-    Priority?: number;
-    Url?: string;
-    IsPromotion?: true;
-    IsCovid?: true;
-    ImageAlt?: string;
-    ImageTitle?: string;
-    ImageUrl?: string;
-    HotelCategoryName?: string;
-    HotelEntityName?: string;
-    CityEntityName?: string;
-    Facilities?: {
-        FacilityId?: number;
-        Title?: string;
-        Image?: string;
-        ImageUrl?: string;
-        Keyword?: string;
-        ImageAlt?: string;
-        ImageTitle?: string;
-        CssClass?: string;
-        Description?: string;
-        IsSpecial?: boolean;
+export interface SearchAccomodationItem {  
+    id: number;  
+    type: "Hotel" | "Apartments" | "Guesthouse" | "Motel" | "TraditionalHouse" | "Ecolodge" | "TourismComplex" | "BoutiqueHotel" | "Pansion" ;
+    typeStr?: string;
+    displayOrder?: number;
+    rating?: number;
+    cityId?: number;
+    name?: string;
+    displayName?: string;
+    address?: string;
+    checkinTime?: string;
+    checkoutTime?: string;
+    instruction?: any;
+    briefDescription?: string;
+    description?: string;
+    mendatoryFee?: string;
+    alertNote?: string;
+    telNumber?: string;
+    isPromotion?: boolean;
+    url?: string;
+    pageTitle?: string;
+    metaKeyword?: string;
+    metaDescription?: string;
+    minRoomPrice?: number;
+    maxRoomPrice?: number;
+    lastModificationTime?: string;
+    city?: {
+        title?:string;
+        type?: string;
+        isActive: boolean;
+        parentId?: number;
+        name?:string;
+        searchValue?:string;
+        displayName?:string;
+        id: number;
+    };
+    coordinates?: {
+        latitude: number;
+        longitude: number;
+    };
+    picture?: {
+        path?:string;
+        altAttribute?:string;
+        titleAttribute?:string;
+    };
+    faqs?: {
+        title?:	string;
+        isActive: boolean;
+        priority: number;
+        entity?: {
+            title?: string;
+            type?:string;
+            isActive: boolean
+            parentId?: number;
+            name?: string;
+            searchValue?: string;
+            displayName?: string;
+            id: number;
+        };
+        question?: string;
+        answer?: string;
+        id: number;
     }[];
+    facilities?: {
+        name?:string;
+        description?:string;
+        keyword?: string;
+        id:number;
+        items?: {
+            isAdditionalCharge: boolean;
+            isImportant: boolean;
+            isFree: boolean;
+            name?: string;
+            description?:	string;
+            keyword?: string;
+            id: number;
+        }[];
+    }[];
+    //toDo: set types
+    policies: any;
+    galleries: any;
 }
 
-export interface PricedHotelItem extends SearchHotelItem {
+export interface PricedHotelItem extends SearchAccomodationItem {
     ratesInfo?: "loading" | { Satisfaction: number; TotalRowCount: number; };
     priceInfo: "loading" | "notPriced" | "need-to-inquire" | { boardPrice: number; salePrice: number; };
 }
