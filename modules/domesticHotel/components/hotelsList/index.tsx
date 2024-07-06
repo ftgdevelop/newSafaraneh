@@ -52,7 +52,7 @@ const HotelsList: React.FC<Props> = props => {
             />}
 
             <div>
-                {hotels.slice(firstItemIndex, lastItem).map((hotel, index) => theme3 ? <HotelListItemTheme3 index={index} key={hotel.HotelId} hotel={hotel} /> : theme2 ? <HotelListItemTheme2 index={index} key={hotel.HotelId} hotel={hotel} /> : <HotelListItem index={index} key={hotel.HotelId} hotel={hotel} />)}
+                {hotels.slice(firstItemIndex, lastItem).map((hotel, index) => theme3 ? <HotelListItemTheme3 index={index} key={hotel.id} hotel={hotel} /> : theme2 ? <HotelListItemTheme2 index={index} key={hotel.id} hotel={hotel} /> : <HotelListItem index={index} key={hotel.id} hotel={hotel} />)}
             </div>
 
             <Pagination

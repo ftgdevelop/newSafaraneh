@@ -123,7 +123,7 @@ const HotelListItemTheme2: React.FC<Props> = props => {
         )
     }
 
-    let url = hotel.Url! + searchInfo;
+    let url = hotel.url! + searchInfo;
     if (process.env.LocaleInUrl === "off"){
         url = url.replace("/fa","");
     }
@@ -132,14 +132,13 @@ const HotelListItemTheme2: React.FC<Props> = props => {
         <Link
             target="_blank"
             href={url}
-            key={hotel.CityId}
             className="grid xs:grid-cols-4 mb-4 border border-neutral-200 bg-white rounded-2xl overflow-hidden relative"
         >
             <div className="bg-travel-pattern">
-                {hotel.ImageUrl ? (
+                {hotel.picture?.path ? (
                     <Image
-                        src={hotel.ImageUrl}
-                        alt={hotel.ImageAlt || hotel.HotelName!}
+                        src={hotel.picture.path}
+                        alt={hotel.picture.altAttribute || hotel.picture.titleAttribute || hotel.displayName ||""}
                         width={288}
                         height={200}
                         onContextMenu={(e) => e.preventDefault()}
@@ -155,28 +154,28 @@ const HotelListItemTheme2: React.FC<Props> = props => {
                 )}
             </div>
 
-            {!!hotel.IsPromotion && <span className="absolute bg-green-600 text-white right-3 top-3 rounded-xl leading-4 text-2xs py-1 px-2 select-none pointer-events-none"> پیشنهاد ویژه </span>}
+            {!!hotel.isPromotion && <span className="absolute bg-green-600 text-white right-3 top-3 rounded-xl leading-4 text-2xs py-1 px-2 select-none pointer-events-none"> پیشنهاد ویژه </span>}
 
 
             <div className="xs:col-span-3 p-3 max-xs:pb-0">
 
-                <div className="font-bold text-neutral-700 rtl:ml-2 ltr:mr-2 inline-block" > {hotel.HotelCategoryName} {hotel.HotelName} {hotel.CityName} </div>
+                <div className="font-bold text-neutral-700 rtl:ml-2 ltr:mr-2 inline-block" > {hotel.displayName || hotel.name} </div>
 
-                <span className="bg-blue-50 rounded-xl leading-6 text-2xs px-2 select-none">
-                    {hotel.HotelTypeName}
-                </span>
+                {!!hotel.typeStr && <span className="bg-blue-50 rounded-xl leading-6 text-2xs px-2 select-none">
+                    {hotel.typeStr}
+                </span>}
 
-                {!!hotel.HotelRating && (
+                {!!hotel.rating && (
                     <>
                         <br />
-                        <Rating number={hotel.HotelRating} inline />
+                        <Rating number={hotel.rating} inline />
                     </>
                 )}
 
 
-                {!!hotel.Address && <p className="text-xs leading-4 mb-2 text-neutral-400"><Location className="w-4 h-4 fill-neutral-400 inline-block" /> {hotel.Address} </p>}
+                {!!hotel.address && <p className="text-xs leading-4 mb-2 text-neutral-400"><Location className="w-4 h-4 fill-neutral-400 inline-block" /> {hotel.address} </p>}
 
-                {hotel.Facilities?.slice(0,3).map(facility => (<span className="text-xs rtl:ml-2">
+                {/* {hotel.facilities?.slice(0,3).map(facility => (<span className="text-xs rtl:ml-2">
                     {facility.Image ? (
                         <Image 
                         src={facility.Image}
@@ -190,11 +189,11 @@ const HotelListItemTheme2: React.FC<Props> = props => {
                         <Verified className="w-5 h-5 fill-neutral-400 inline-block" />
                     )}
                     {" " + facility.Title}
-                </span>))}
+                </span>))} */}
 
-                {!!hotel.IsCovid && (
+                {/* {!!hotel.IsCovid && (
                     <span className="bg-blue-50 rounded-xl leading-6 text-2xs px-2 select-none">اطلاعات ایمنی کووید-۱۹</span>
-                )}
+                )} */}
 
                 {hotel.priceInfo === "notPriced" && <div className="bg-red-100 px-4 py-1 my-1">
                     <h5 className="text-red-600 text-sm font-semibold"> <InfoCircle className="w-4 h-4 fill-current inline-block" /> {tHotel("you-missed-this-deal")}</h5>
