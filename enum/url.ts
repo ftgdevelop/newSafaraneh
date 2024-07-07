@@ -19,7 +19,6 @@ export const Header = {
     CMS: process.env.PROJECT_SERVER_CMS,
     Identity: process.env.PROJECT_SERVER_IDENTITY,
     Hotel_WP: process.env.PROJECT_SERVER_HOTEL_WP,
-    Hotel_Main: process.env.PROJECT_SERVER_HOTEL_MAIN,
     Hotel_Data: process.env.PROJECT_SERVER_HOTEL_DATA,
     Hotel_Availability: process.env.PROJECT_SERVER_HOTEL_AVAILABILITY,
     Coordinator: process.env.PROJECT_SERVER_COORDINATOR,
