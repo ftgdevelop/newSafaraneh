@@ -9,7 +9,7 @@ const CipAirportsList: React.FC<{ airports: AirportDetailType[] }> = ({ airports
 
     return (
         <>
-            <h2 className="mt-5 text-lg sm:text-3xl">رزرو تشریفات فرودگاهی CIP</h2>
+            <h2 className="mt-10 text-lg sm:text-3xl">رزرو تشریفات فرودگاهی CIP</h2>
 
             {airports?.map(airport =>
                 <div className="sm:grid sm:grid-cols-3 w-full mt-8 rounded-md overflow-hidden shadow-md" key={airport.id}>

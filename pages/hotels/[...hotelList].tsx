@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { AvailabilityByHotelId, GetCityFaqById, SearchHotels, getEntityNameByLocation, getRates } from '@/modules/domesticHotel/actions';
+import { AvailabilityByHotelId, GetCityFaqById, SearchAccomodation, getEntityNameByLocation, getRates } from '@/modules/domesticHotel/actions';
 import type { GetServerSideProps, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { EntitySearchResultItemType, PricedHotelItem, SearchHotelItem, SortTypes } from '@/modules/domesticHotel/types/hotel';
+import { EntitySearchResultItemType, PricedHotelItem, SearchAccomodationItem, SortTypes } from '@/modules/domesticHotel/types/hotel';
 import SearchForm from '@/modules/domesticHotel/components/shared/SearchForm';
 import HotelsList from '@/modules/domesticHotel/components/hotelsList';
 import { addSomeDays, checkDateIsAfterDate, dateDiplayFormat, dateFormat } from '@/modules/shared/helpers';
@@ -14,7 +14,7 @@ import parse from 'html-react-parser';
 import Accordion from '@/modules/shared/components/ui/Accordion';
 import { CalendarError, QuestionCircle } from '@/modules/shared/components/ui/icons';
 import DomesticHotelListSideBar from '@/modules/domesticHotel/components/hotelsList/sidebar';
-import { setFacilityFilterOptions, setGuestPointFilterOptions, setTypeFilterOptions, setPriceFilterRange } from '@/modules/domesticHotel/store/domesticHotelSlice';
+import { setGuestPointFilterOptions, setTypeFilterOptions, setPriceFilterRange } from '@/modules/domesticHotel/store/domesticHotelSlice';
 import { useAppDispatch } from '@/modules/shared/hooks/use-store';
 import { useRouter } from 'next/router';
 import HotelsOnMap from '@/modules/domesticHotel/components/hotelsList/HotelsOnMap';
@@ -27,10 +27,6 @@ import AvailabilityTimeout from '@/modules/shared/components/AvailabilityTimeout
 import LoginLinkBanner from '@/modules/shared/components/theme2/LoginLinkBanner';
 
 type Props = {
-  searchHotelsData?: {
-    Hotels: SearchHotelItem[];
-    Content?: string;
-  };
   faq?: {
     items: {
       title: string;
@@ -43,19 +39,22 @@ type Props = {
     totalCount: number;
   },
   pageData: {
-    PageTitle?: string;
-    MetaTags?: {
-      Content?: string;
-      Name?: string;
-    }[];
-    Url?: string;
+    title?: string;
+    pageTitle?: string;
+    metaKeyword?: string;
+    metaDescription?: string;
+    url?: string;
   };
   portalData: WebSiteDataType;
+  accomodations?: SearchAccomodationItem[];
+  urlll:string;
 }
 
 const HotelList: NextPage<Props> = props => {
 
-  const { pageData, faq, searchHotelsData, portalData } = props;
+  const { pageData, faq, portalData, accomodations } = props;
+
+  const isSafaraneh = process.env.PROJECT === "SAFARANEH";
 
   const searchFormWrapperRef = useRef<HTMLDivElement>(null);
 
@@ -95,15 +94,25 @@ const HotelList: NextPage<Props> = props => {
   const [showOnlyForm, setShowOnlyForm] = useState<boolean>(false);
 
   let hotelIds: (undefined | number)[] = [];
-  if (searchHotelsData) {
-    hotelIds = searchHotelsData.Hotels?.map(hotel => hotel.HotelId) || [];
+  if (accomodations?.length) {
+    hotelIds = accomodations?.map(hotel => hotel.id) || [];
   }
 
   let cityId: number;
-  if (searchHotelsData?.Hotels[0]?.CityId) {
-    cityId = searchHotelsData.Hotels[0].CityId;
+  if (accomodations && accomodations[0]?.city?.id) {
+    cityId = accomodations[0]?.city?.id;
   }
 
+
+  // delete this useEffect:
+  useEffect(()=>{
+    if(!props.urlll) return;
+    const fetch = async (u:string) => {
+      const searchAccomodationResponse: any = await SearchAccomodation({ url: u }, acceptLanguage);
+      debugger;
+    }
+    fetch(props.urlll);
+  },[props.urlll]);
 
   const today = dateFormat(new Date());
   const tomorrow = dateFormat(addSomeDays(new Date()));
@@ -182,54 +191,53 @@ const HotelList: NextPage<Props> = props => {
     dispatch(setGuestPointFilterOptions(optionsArray));
 
   }
+  // const saveFacilityOptions = (hotelItems: SearchHotelItem[]) => {
 
-  const saveFacilityOptions = (hotelItems: SearchHotelItem[]) => {
+  //   const options: { keyword: string, label: string, count: number }[] = [];
 
-    const options: { keyword: string, label: string, count: number }[] = [];
+  //   for (let i = 0; i < hotelItems.length; i++) {
+  //     const hotelItemFacilities = hotelItems[i].Facilities;
 
-    for (let i = 0; i < hotelItems.length; i++) {
-      const hotelItemFacilities = hotelItems[i].Facilities;
+  //     if (!hotelItemFacilities?.length) continue;
 
-      if (!hotelItemFacilities?.length) continue;
+  //     for (let j = 0; j < hotelItemFacilities.length; j++) {
+  //       const facilityItem = hotelItemFacilities[j];
 
-      for (let j = 0; j < hotelItemFacilities.length; j++) {
-        const facilityItem = hotelItemFacilities[j];
+  //       const updatingOptionItem = options.find(item => item.keyword === facilityItem.Keyword);
 
-        const updatingOptionItem = options.find(item => item.keyword === facilityItem.Keyword);
+  //       if (!facilityItem.Keyword) continue;
 
-        if (!facilityItem.Keyword) continue;
+  //       if (updatingOptionItem) {
+  //         updatingOptionItem.count = updatingOptionItem.count + 1;
+  //       } else {
+  //         options.push({ keyword: facilityItem.Keyword, label: facilityItem.Title || "", count: 1 })
+  //       }
 
-        if (updatingOptionItem) {
-          updatingOptionItem.count = updatingOptionItem.count + 1;
-        } else {
-          options.push({ keyword: facilityItem.Keyword, label: facilityItem.Title || "", count: 1 })
-        }
+  //     }
+  //   }
 
-      }
-    }
+  //   dispatch(setFacilityFilterOptions(options));
 
-    dispatch(setFacilityFilterOptions(options));
+  // }
 
-  }
+  const saveHotelType = (hotelItems: SearchAccomodationItem[]) => {
 
-  const saveHotelType = (hotelItems: SearchHotelItem[]) => {
-
-    const options: { id: number, label: string, count: number }[] = [];
+    const options: { id: string, label: string, count: number }[] = [];
 
     for (let i = 0; i < hotelItems.length; i++) {
 
       const hotelItem = hotelItems[i];
 
-      if (!hotelItem.HotelTypeId) {
+      if (!hotelItem.type) {
         continue;
       }
 
-      const updatingOptionItem = options.find(item => item.id === hotelItem.HotelTypeId);
+      const updatingOptionItem = options.find(item => item.id === hotelItem.type);
 
       if (updatingOptionItem) {
         updatingOptionItem.count = updatingOptionItem.count + 1
       } else {
-        options.push({ id: hotelItem.HotelTypeId, label: hotelItem.HotelTypeName || "", count: 1 })
+        options.push({ id: hotelItem.type, label: hotelItem.typeStr || "", count: 1 })
       }
     }
 
@@ -238,23 +246,21 @@ const HotelList: NextPage<Props> = props => {
   }
 
   useEffect(() => {
-    if (searchHotelsData?.Hotels) {
+    if (accomodations) {
 
-      saveHotelType(searchHotelsData.Hotels);
-
-      saveFacilityOptions(searchHotelsData.Hotels);
+      saveHotelType(accomodations);
 
     }
-  }, [searchHotelsData?.Hotels]);
+  }, [accomodations]);
 
 
-  const firstHotelName = searchHotelsData?.Hotels[0]?.HotelName;
+  const firstHotelName = accomodations && accomodations[0]?.displayName;
 
   useEffect(() => {
 
-    const fetchRates = async () => {
+    setFetchPercentage(10);
 
-      setFetchPercentage(10);
+    const fetchRates = async () => {
 
       setRatesLoading(true);
       setRatesData(undefined);
@@ -272,7 +278,10 @@ const HotelList: NextPage<Props> = props => {
       setRatesLoading(false);
     }
 
-    fetchRates();
+    if(isSafaraneh){
+      fetchRates();
+    }
+
 
     const fetchPrices = async () => {
       setPricesLoading(true);
@@ -312,13 +321,13 @@ const HotelList: NextPage<Props> = props => {
     }
   }, [checkin, checkout]);
 
-  const hotels: PricedHotelItem[] = searchHotelsData?.Hotels?.map(hotel => {
+  const hotels: PricedHotelItem[] = accomodations?.map(hotel => {
 
-    const HotelRateData = ratesData?.find(item => item.HotelId === hotel.HotelId);
-    const ratesInfo = HotelRateData ? { Satisfaction: HotelRateData.Satisfaction, TotalRowCount: HotelRateData.TotalRowCount } : (ratesLoading || !ratesData) ? "loading" : undefined;
+    const HotelRateData = ratesData?.find(item => item.HotelId === hotel.id);
+    const ratesInfo = !isSafaraneh ? undefined : HotelRateData ? { Satisfaction: HotelRateData.Satisfaction, TotalRowCount: HotelRateData.TotalRowCount } : (ratesLoading || !ratesData) ? "loading" : undefined;
 
 
-    const hotelPriceData = pricesData?.find(item => item.id === hotel.HotelId);
+    const hotelPriceData = pricesData?.find(item => item.id === hotel.id);
 
     let priceInfo: "loading" | "notPriced" | "need-to-inquire" | { boardPrice: number, salePrice: number };
 
@@ -341,27 +350,31 @@ const HotelList: NextPage<Props> = props => {
 
   useEffect(() => {
 
-    if (ratesData && pricesData) {
-
-      setFetchPercentage(99.99);
-
-      setTimeout(() => { setFetchPercentage(100) }, 1000);
-
-    } else if (ratesData || pricesData) {
-
-      setTimeout(() => { setFetchPercentage(60) }, 1000);
-
+    if (isSafaraneh){
+      if ( ratesData && pricesData) {
+        setFetchPercentage(99.99);
+        setTimeout(() => { setFetchPercentage(100) }, 1000);  
+      } else if (ratesData || pricesData) {
+        setTimeout(() => { setFetchPercentage(60) }, 1000);
+      }
+    }else{
+      if ( pricesData) {
+        setFetchPercentage(99.99);
+        setTimeout(() => { setFetchPercentage(100) }, 1000);  
+      } else {
+        setFetchPercentage(70)
+      }
     }
 
   }, [ratesData, pricesData]);
 
   let progressBarLabel = "";
 
-  if (!pricesData) {
+  if (!pricesData || !isSafaraneh) {
     progressBarLabel = tHotel('getting-the-best-prices-and-availability');
   }
 
-  if (!ratesData) {
+  if (!ratesData && isSafaraneh) {
     progressBarLabel = tHotel('getting-guest-ratings');
   }
 
@@ -376,18 +389,18 @@ const HotelList: NextPage<Props> = props => {
 
         case "priority":
 
-          if (!a.Priority || !b.Priority) return 1;
-          return (b.Priority - a.Priority);
+          if (!a.displayOrder || !b.displayOrder) return 1;
+          return (b.displayOrder - a.displayOrder);
 
         case "name":
 
-          if (!a.HotelName || !b.HotelName) return 1;
+          if (!a.displayName || !b.displayName) return 1;
 
           const farsiAlphabet = ["آ", "ا", "ب", "پ", "ت", "ث", "ج", "چ", "ح", "خ", "د", "ذ", "ر", "ز", "س", "ش", "ص", "ض", "ط", "ظ", "ع", "غ", "ف", "ق", "ک", "گ", "ل", "م", "ن", "و", "ه", "ی",
             "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
 
-          const x = a.HotelName.toLowerCase().trim();
-          const y = b.HotelName.toLowerCase().trim();
+          const x = a.displayName.toLowerCase().trim();
+          const y = b.displayName.toLowerCase().trim();
 
           for (let i = 0; i < y.length; i++) {
             if (farsiAlphabet.indexOf(y[i]) < farsiAlphabet.indexOf(x[i])) {
@@ -400,8 +413,8 @@ const HotelList: NextPage<Props> = props => {
 
         case "starRate":
 
-          if (!a.HotelRating || !b.HotelRating) return 1;
-          return (a.HotelRating - b.HotelRating);
+          if (!a.rating || !b.rating) return 1;
+          return (a.rating - b.rating);
 
         case "price":
 
@@ -428,7 +441,7 @@ const HotelList: NextPage<Props> = props => {
     });
   }
 
-  const cityName = hotels && hotels[0]?.CityName || "";
+  const cityName = hotels && hotels[0]?.city?.name || "";
 
   const domesticHotelDefaultDates: [string, string] = [checkin, checkout];
 
@@ -454,15 +467,15 @@ const HotelList: NextPage<Props> = props => {
       return false;
     }
 
-    if (filteredName && (!hotelItem.HotelName || !hotelItem.HotelName.includes(decodeURI(filteredName)))) {
+    if (filteredName && (!hotelItem.displayName || !hotelItem.displayName.includes(decodeURI(filteredName)))) {
       return false;
     }
 
-    if (filteredRating.length && !filteredRating.some(item => +item === hotelItem.HotelRating)) {
+    if (filteredRating.length && !filteredRating.some(item => +item === hotelItem.rating)) {
       return false;
     }
 
-    if (filteredHotelType.length && !filteredHotelType.some(item => +item === hotelItem.HotelTypeId)) {
+    if (filteredHotelType.length && !filteredHotelType.some(item => item === hotelItem.type)) {
       return false;
     }
 
@@ -476,7 +489,7 @@ const HotelList: NextPage<Props> = props => {
     }
 
     if (filteredFacility.length && !filteredFacility.some(item => {
-      const hotelsFacilities = hotelItem.Facilities?.map(facilityItem => facilityItem.Keyword);
+      const hotelsFacilities = hotelItem.facilities?.map(facilityItem => facilityItem.keyword);
       const decodedItem = decodeURI(item);
       return (hotelsFacilities?.includes(decodedItem));
     })) {
@@ -504,14 +517,14 @@ const HotelList: NextPage<Props> = props => {
   })
 
   let fallbackLocation: [number, number] | undefined;
-  const firstHotelWithLocation = hotels.find(hotel => (hotel.Latitude && hotel.Longitude));
+  const firstHotelWithLocation = hotels.find(hotel => (hotel.coordinates?.latitude && hotel.coordinates.longitude));
   if (firstHotelWithLocation) {
-    fallbackLocation = [firstHotelWithLocation.Latitude!, firstHotelWithLocation.Longitude!];
+    fallbackLocation = [firstHotelWithLocation.coordinates?.latitude!, firstHotelWithLocation.coordinates?.longitude!];
   }
 
   let siteName = portalData?.billing.name || "";
 
-  const canonicalUrl = pageData?.Url ? `${process.env.SITE_NAME}${pageData?.Url}` : "";
+  const canonicalUrl = pageData?.url ? `${process.env.SITE_NAME}${pageData?.url}` : "";
 
   const theme1 = process.env.THEME === "THEME1";
   const theme2 = process.env.THEME === "THEME2";
@@ -520,11 +533,10 @@ const HotelList: NextPage<Props> = props => {
 
     <>
       <Head>
-        {!!pageData?.PageTitle && <title>{pageData.PageTitle?.replaceAll("{0}", siteName)}</title>}
+        {!!pageData?.pageTitle && <title>{pageData?.pageTitle?.replaceAll("{0}", siteName)}</title>}
 
-        {!!pageData?.MetaTags && pageData.MetaTags.map(item => (
-          <meta name={item.Name} content={item.Content?.replaceAll("{0}", siteName)} key={item.Name} />
-        ))}
+        <meta name="description" content={pageData?.metaDescription?.replaceAll("{0}", siteName)} />
+        <meta name="keywords" content={pageData?.metaKeyword?.replaceAll("{0}", siteName)} />
 
         {!!canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
 
@@ -567,7 +579,7 @@ const HotelList: NextPage<Props> = props => {
         description={t("GetTheLatestPriceAndAvailabilityForYourSearchTo", { destination: cityName, dates: `${dateDiplayFormat({ date: checkin, locale: locale, format: "dd mm" })} - ${dateDiplayFormat({ date: checkout, locale: locale, format: "dd mm" })}` })}
       />}
 
-      <div className={`max-w-container mx-auto ${theme2?"px-3":"px-5"} py-4`} ref={searchFormWrapperRef}>
+      <div className={`max-w-container mx-auto ${theme2 ? "px-3" : "px-5"} py-4`} ref={searchFormWrapperRef}>
 
         <ModalPortal
           show={showChangeDateModal}
@@ -721,18 +733,13 @@ const HotelList: NextPage<Props> = props => {
 
             {!!theme2 && <LoginLinkBanner message='وقتی وارد سیستم شوید همیشه بهترین قیمت‌های ما را دریافت خواهید کرد!' />}
 
-            {!!props.searchHotelsData?.Hotels && <HotelsList
+            {!!accomodations && <HotelsList
               hotels={filteredHotels}
             />}
 
-            {!!props.searchHotelsData?.Content && (
-              <div className='text-sm text-justify mt-6 inserted-content'>
-                {parse(props.searchHotelsData.Content)}
-              </div>
-            )}
 
             {props.faq && props.faq?.items?.length > 0 && (
-              <div className={`mt-10 ${theme1?"bg-white p-5 rounded-lg":""}`}>
+              <div className={`mt-10 ${theme1 ? "bg-white p-5 rounded-lg" : ""}`}>
                 <h5 className='font-semibold text-lg'>{t('faq')}</h5>
                 {props.faq.items.filter(faq => (faq.answer && faq.question)).map(faq => (
                   <Accordion
@@ -763,15 +770,15 @@ const HotelList: NextPage<Props> = props => {
         sortBy={sortFactor}
         closeMapModal={() => { setShowMap(false) }}
         hotels={filteredHotels.map(hotel => ({
-          id: hotel.HotelId,
-          latitude: hotel.Latitude,
-          longitude: hotel.Longitude,
-          name: hotel.HotelCategoryName + " " + hotel.HotelName + " " + hotel.CityName,
-          rating: hotel.HotelRating,
-          url: hotel.Url + searchInfo,
+          id: hotel.id,
+          latitude: hotel.coordinates?.latitude,
+          longitude: hotel.coordinates?.longitude,
+          name: hotel.displayName || hotel.name || "",
+          rating: hotel.rating,
+          url: hotel.url + searchInfo,
           price: hotel.priceInfo,
           guestRate: hotel.ratesInfo,
-          imageUrl: hotel.ImageUrl
+          imageUrl: hotel.picture?.path
         }))}
       />}
 
@@ -789,28 +796,23 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const acceptLanguage = locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR";
 
-  const searchHotelsResponse: {
-    data?: {
-      Hotels: SearchHotelItem[];
-      Content?: string;
-    };
-  } = await SearchHotels({ url: url, cityId: +query.hotelList.find((item: string) => item.includes("location-"))?.split("location-")[1] }, acceptLanguage);
+  const searchAccomodationResponse: any = await SearchAccomodation({ url: url }, acceptLanguage);
 
 
   const pageResponse: any = await getPageByUrl(url, acceptLanguage);
 
-
   let faqResponse: any;
-  if (searchHotelsResponse?.data?.Hotels[0]?.CityId) {
-    faqResponse = await GetCityFaqById(searchHotelsResponse?.data?.Hotels[0].CityId, acceptLanguage);
+  if (searchAccomodationResponse?.data?.result[0]?.city?.id) {
+    faqResponse = await GetCityFaqById(searchAccomodationResponse.data.result[0].city.id, acceptLanguage);
   }
 
   return ({
     props: {
       ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
-      searchHotelsData: searchHotelsResponse?.data || null,
+      accomodations: searchAccomodationResponse?.data?.result || null,
       faq: faqResponse?.data?.result || null,
-      pageData: pageResponse?.data || null
+      pageData: pageResponse?.data?.result || null,
+      urlll: encodeURIComponent(url)
     },
   })
 }
