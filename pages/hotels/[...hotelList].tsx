@@ -54,6 +54,8 @@ const HotelList: NextPage<Props> = props => {
 
   const { pageData, faq, portalData, accomodations } = props;
 
+  const isSafaraneh = process.env.PROJECT === "SAFARANEH";
+
   const searchFormWrapperRef = useRef<HTMLDivElement>(null);
 
   type RatesResponseItem = {
@@ -256,9 +258,9 @@ const HotelList: NextPage<Props> = props => {
 
   useEffect(() => {
 
-    const fetchRates = async () => {
+    setFetchPercentage(10);
 
-      setFetchPercentage(10);
+    const fetchRates = async () => {
 
       setRatesLoading(true);
       setRatesData(undefined);
@@ -276,7 +278,10 @@ const HotelList: NextPage<Props> = props => {
       setRatesLoading(false);
     }
 
-    fetchRates();
+    if(isSafaraneh){
+      fetchRates();
+    }
+
 
     const fetchPrices = async () => {
       setPricesLoading(true);
@@ -319,7 +324,7 @@ const HotelList: NextPage<Props> = props => {
   const hotels: PricedHotelItem[] = accomodations?.map(hotel => {
 
     const HotelRateData = ratesData?.find(item => item.HotelId === hotel.id);
-    const ratesInfo = HotelRateData ? { Satisfaction: HotelRateData.Satisfaction, TotalRowCount: HotelRateData.TotalRowCount } : (ratesLoading || !ratesData) ? "loading" : undefined;
+    const ratesInfo = !isSafaraneh ? undefined : HotelRateData ? { Satisfaction: HotelRateData.Satisfaction, TotalRowCount: HotelRateData.TotalRowCount } : (ratesLoading || !ratesData) ? "loading" : undefined;
 
 
     const hotelPriceData = pricesData?.find(item => item.id === hotel.id);
@@ -345,27 +350,31 @@ const HotelList: NextPage<Props> = props => {
 
   useEffect(() => {
 
-    if (ratesData && pricesData) {
-
-      setFetchPercentage(99.99);
-
-      setTimeout(() => { setFetchPercentage(100) }, 1000);
-
-    } else if (ratesData || pricesData) {
-
-      setTimeout(() => { setFetchPercentage(60) }, 1000);
-
+    if (isSafaraneh){
+      if ( ratesData && pricesData) {
+        setFetchPercentage(99.99);
+        setTimeout(() => { setFetchPercentage(100) }, 1000);  
+      } else if (ratesData || pricesData) {
+        setTimeout(() => { setFetchPercentage(60) }, 1000);
+      }
+    }else{
+      if ( pricesData) {
+        setFetchPercentage(99.99);
+        setTimeout(() => { setFetchPercentage(100) }, 1000);  
+      } else {
+        setFetchPercentage(70)
+      }
     }
 
   }, [ratesData, pricesData]);
 
   let progressBarLabel = "";
 
-  if (!pricesData) {
+  if (!pricesData || !isSafaraneh) {
     progressBarLabel = tHotel('getting-the-best-prices-and-availability');
   }
 
-  if (!ratesData) {
+  if (!ratesData && isSafaraneh) {
     progressBarLabel = tHotel('getting-guest-ratings');
   }
 

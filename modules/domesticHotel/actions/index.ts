@@ -103,7 +103,7 @@ export const getRates = async (ids: number[], acceptLanguage: string = 'fa-IR') 
             data: {
                 HotelIds: ids,
             },
-            url: `${ServerAddress.Type}${ServerAddress.Hotel_Main}${Hotel.getRates}`,
+            url: `${ServerAddress.Type}api.safaraneh.com${Hotel.getRates}`,
             headers: {
                 ...Header,
                 "Accept-Language": acceptLanguage,
@@ -178,7 +178,7 @@ export const insertComment = async (param: any, acceptLanguage: string = 'fa-IR'
 
     try {
         let response = await axios.post(
-            `${ServerAddress.Type}${ServerAddress.Hotel_Main}${Hotel.InsertComment}`,
+            `${ServerAddress.Type}api.safaraneh.com${Hotel.InsertComment}`,
             param,
             {
                 headers: {

@@ -65,6 +65,17 @@ export interface DomesticHotelRichSnippets {
     priceRange?: string;
 }
 
+export interface DomesticHotelRichSheet {
+    title?: string;
+    url?: string;
+    pageTitle?: string;
+    metaKeyword?: string;
+    metaDescription?: string;
+    priority: number;
+    id: number;
+
+}
+
 export interface DomesticHotelDetailType {
     HotelId?: number;
     HotelName?: string;
