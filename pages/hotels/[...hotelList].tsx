@@ -48,6 +48,7 @@ type Props = {
   portalData: WebSiteDataType;
   accomodations?: SearchAccomodationItem[];
   urlll:string;
+  lll: string;
 }
 
 const HotelList: NextPage<Props> = props => {
@@ -108,8 +109,13 @@ const HotelList: NextPage<Props> = props => {
   useEffect(()=>{
     if(!props.urlll) return;
     const fetch = async (u:string) => {
-      const searchAccomodationResponse: any = await SearchAccomodation({ url: u }, acceptLanguage);
-      debugger;
+      const searchParameters : { url: string; EntityId?:string;} = {
+        url:u
+      }    
+      if (props.lll){
+        searchParameters.EntityId = props.lll
+      }
+      const searchAccomodationResponse: any = await SearchAccomodation(searchParameters, acceptLanguage);
     }
     fetch(props.urlll);
   },[props.urlll]);
@@ -794,10 +800,18 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const url = `/${locale}/hotels/${query.hotelList![0]}`;
 
+  const locationId =  query.hotelList.find((x:string) => x.includes("location-"))?.split("location-")[1];
+  
+  const searchParameters : { url: string; EntityId?:string;} = {
+    url:url
+  }
+  
   const acceptLanguage = locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR";
+  if (locationId){
+    searchParameters.EntityId = locationId
+  }
 
-  const searchAccomodationResponse: any = await SearchAccomodation({ url: url }, acceptLanguage);
-
+  const searchAccomodationResponse: any = await SearchAccomodation(searchParameters, acceptLanguage);
 
   const pageResponse: any = await getPageByUrl(url, acceptLanguage);
 
@@ -812,7 +826,8 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       accomodations: searchAccomodationResponse?.data?.result || null,
       faq: faqResponse?.data?.result || null,
       pageData: pageResponse?.data?.result || null,
-      urlll: encodeURIComponent(url)
+      urlll: encodeURIComponent(url),
+      lll: locationId || ""
     },
   })
 }

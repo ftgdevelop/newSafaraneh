@@ -1,9 +1,8 @@
 import { useTranslation } from 'next-i18next';
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import { DomesticAccomodationFacilityType } from "@/modules/domesticHotel/types/hotel";
-import { DownCaret, Verified } from "@/modules/shared/components/ui/icons";
+import { DownCaret } from "@/modules/shared/components/ui/icons";
 import AccommodationFacilityItem from './AccommodationFacilitiyItem';
-import AccommodationFacilityIcon from './AccommodationFacilityIcon';
 
 type Props = {
     facilities?: DomesticAccomodationFacilityType[];
@@ -17,7 +16,7 @@ const AccommodationFacilities: React.FC<Props> = props => {
 
     const { t: tHotel } = useTranslation('hotel');
 
-    if (!facilities) {
+    if (!facilities || !facilities.length) {
         return null;
     }
 
