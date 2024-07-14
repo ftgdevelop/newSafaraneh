@@ -52,8 +52,9 @@ const nextConfig = {
     PROJECT_SERVER_APIKEY: '602d3109-6e40-4653-42a4-08dbc10a4f4a',
     PROJECT_PORTAL_APIKEY: '92ba7928-ab01-4011-be49-5bed7556ae2a',
     
+    PROJECT_SERVER_CMS:"cms2.safaraneh.com",
+    
     PROJECT_SERVER_HOTEL_WP:"wp.safaraneh.com",
-    PROJECT_SERVER_HOTEL_MAIN: "api.safaraneh.com",
     PROJECT_SERVER_HOTEL_DATA: "hoteldomesticdata.safaraneh.com",
     PROJECT_SERVER_HOTEL_AVAILABILITY: "hotelv5.safaraneh.com",
     PROJECT_SERVER_COORDINATOR:"coordinator.safaraneh.com",
