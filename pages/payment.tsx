@@ -239,6 +239,11 @@ const Payment: NextPage = () => {
     }
   }
   if (domesticHotelReserveData) {
+
+    if(domesticHotelReserveData.status !== "Pending"){
+      router.push(`/hotel/capacity?reserveId=${domesticHotelReserveData.id}&username=${domesticHotelReserveData.username}`);
+    }
+
     domesticHotelReserveInformation = {
       reserveId: domesticHotelReserveData.id,
       checkin: domesticHotelReserveData.checkin,
