@@ -180,7 +180,7 @@ const Checkout: NextPage = () => {
         await registerDiscountCode({ discountPromoCode: promoCode, reserveId: id.toString(), username: username });
       }
 
-      if (reserveResponse.data.result.rooms.every((x: any) => x.availablityType === "Online")) {
+      if (reserveResponse.data.result.status === "Pending") {
         router.push(`/payment?reserveId=${id}&username=${username}`);
       } else {
         router.push(`/hotel/capacity?reserveId=${id}&username=${username}`);
