@@ -74,8 +74,10 @@ export async function getStaticProps(context: any) {
         )
     }
 
+    const isSafaraneh = process.env.PROJECT === "SAFARANEH";
+
     const [contentData, airportsList, airportsAvailability] = await Promise.all<any>([
-        GetCipAirPortListforContent(),
+        isSafaraneh ? GetCipAirPortListforContent() : null,
         GetAirportsList(),
         GetAirportsAvailability([
             "IKA", "THR", "KIH", "MHD", "KSH", "AWH", "TBZ", "RAS"
