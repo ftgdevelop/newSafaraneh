@@ -550,14 +550,14 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const allData: any = await getDomesticHotelDetailsByUrl("/" + locale + url, locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR");
 
-  if (allData?.data && !allData?.data?.result?.hotel && process.env.LocaleInUrl !== "off") {
+  if (allData?.data && (!allData?.data?.result?.hotel && !allData?.data?.result?.accommodation) && process.env.LocaleInUrl !== "off") {
 
 
     if (locale === "fa") {
 
       const allData_Ar: any = await getDomesticHotelDetailsByUrl("/ar" + url, "ar-AE");
 
-      if (allData_Ar?.data?.result?.hotel) {
+      if (allData_Ar?.data?.result?.hotel || allData_Ar?.data?.result?.accommodation) {
 
         return ({
           redirect: {
@@ -572,7 +572,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
         const allData_En: any = await getDomesticHotelDetailsByUrl("/en" + url, "en-US");
 
-        if (allData_En?.data?.result?.hotel) {
+        if (allData_En?.data?.result?.hotel || allData_En?.data?.result?.accommodation) {
 
           return ({
             redirect: {
@@ -603,7 +603,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
       const allData_Fa: any = await getDomesticHotelDetailsByUrl("/fa" + url, "fa-IR");
 
-      if (allData_Fa?.data?.result?.hotel) {
+      if (allData_Fa?.data?.result?.hotel || allData_Fa?.data?.result?.accommodation ) {
 
         return ({
           redirect: {
@@ -618,7 +618,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
         const allData_Ar: any = await getDomesticHotelDetailsByUrl("/ar" + url, "ar-AE");
 
-        if (allData_Ar?.data?.result?.hotel) {
+        if (allData_Ar?.data?.result?.hotel || allData_Ar?.data?.result?.accommodation) {
 
           return ({
             redirect: {
@@ -648,7 +648,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
       const allData_Fa: any = await getDomesticHotelDetailsByUrl("/fa" + url, "fa-IR");
 
-      if (allData_Fa?.data?.result?.hotel) {
+      if (allData_Fa?.data?.result?.hotel || allData_Fa?.data?.result?.accommodation) {
 
         return ({
           redirect: {
@@ -663,7 +663,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
         const allData_En: any = await getDomesticHotelDetailsByUrl("/en" + url, "en_US");
 
-        if (allData_En?.data?.result?.hotel) {
+        if (allData_En?.data?.result?.hotel || allData_En?.data?.result?.accommodation) {
 
           return ({
             redirect: {
