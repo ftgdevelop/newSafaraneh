@@ -113,7 +113,12 @@ const HotelDetail: NextPage<Props> = props => {
     return null;
   }
 
-  const { accommodation, hotel: hotelData, page: pageData, score: hotelScoreData, richSnippets, sheet } = allData;
+  const accommodation = allData?.accommodation;
+  const hotelData = allData?.hotel;
+  const pageData = allData?.page;
+  const hotelScoreData = allData?.score;
+  const sheet = allData?.sheet;
+  const richSnippets = allData?.richSnippets;
 
   const accommodationData = accommodation?.result;
 
