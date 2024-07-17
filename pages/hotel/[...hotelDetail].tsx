@@ -49,7 +49,7 @@ const HotelDetail: NextPage<Props> = props => {
 
   const theme1 = process.env.THEME === "THEME1";
 
-  const isSafaraneh = process.env.PROJECT === "SAFARANEH";
+  const isSafaraneh = process.env.PROJECT === "SAFARANEH" || process.env.PROJECT === "IRANHOTEL";
 
   const { portalData, allData } = props;
 
@@ -224,7 +224,7 @@ const HotelDetail: NextPage<Props> = props => {
     );
   }
 
-  if (pageData?.Id && process.env.PROJECT === "SAFARANEH") {
+  if (pageData?.Id && isSafaraneh) {
     anchorTabsItems.push(
       { id: "reviews_section", title: tHotel('suggestion') }
     );
@@ -512,7 +512,7 @@ const HotelDetail: NextPage<Props> = props => {
         </div>
       )}
 
-      {!!(pageData?.Id && process.env.PROJECT === "SAFARANEH") && <Comments hotelScoreData={hotelScoreData} pageId={pageData.Id} />}
+      {!!(pageData?.Id && isSafaraneh) && <Comments hotelScoreData={hotelScoreData} pageId={pageData.Id} />}
 
       {!!(isSafaraneh && hotelData?.Similars) && <SimilarHotels similarHotels={hotelData.Similars} />}
 
@@ -533,7 +533,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const { locale, query } = context;
 
-  const isSafaraneh = process.env.PROJECT === "SAFARANEH";
+  const isSafaraneh = process.env.PROJECT === "SAFARANEH" || process.env.PROJECT === "IRANHOTEL";
 
   let checkin = dateFormat(new Date());
   let checkout = dateFormat(addSomeDays(new Date()));
