@@ -22,6 +22,7 @@ export interface WebSiteDataType {
         email?: string;
         telNumber?: string;
         phoneNumber?: string;
+        emergencyNumber?: string;
         faxNumber?: string;
         countryName?: string;
         provinceName?: string;
@@ -55,6 +56,7 @@ export interface WebSiteDataType {
         enamad?: string;
     };
     website: {
+        onlineChat?: string;
         scripts?: string;
         title?: string;
         enamad?: string;

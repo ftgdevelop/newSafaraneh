@@ -1,11 +1,9 @@
 import Link from "next/link";
 
 import { useTranslation } from "next-i18next";
-import parse from 'html-react-parser';
 
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import Goftino from "./Goftino";
 
 const GoToTop = dynamic(() => import('./GoToTop'), {
     ssr: false
@@ -17,13 +15,15 @@ type Props = {
     logo: string;
     siteName: string;
     contactInfo: {
+        emergencyNumber?:string;
         tel?: string;
         instagram?: string;
         linkedin?: string;
         twitter?: string;
         facebook?: string;
     }
-    enamadElement?: any;
+    enamad?: any;
+    samandehi?: string;
 }
 
 const Footer: React.FC<Props> = props => {
@@ -36,8 +36,8 @@ const Footer: React.FC<Props> = props => {
 
     const theme2 = process.env.THEME === "THEME2";
 
-    if(theme2){
-        return(
+    if (theme2) {
+        return (
             <footer className="border-t border-neutral-200" >
                 <div className="max-w-container mx-auto p-3 text-neutral-700 py-8 text-sm">
                     کلیه حقوق این وبسایت محفوظ و متعلق به {siteName} است.
@@ -45,6 +45,8 @@ const Footer: React.FC<Props> = props => {
             </footer>
         )
     }
+
+    const phoneNumber = props.contactInfo.emergencyNumber;
 
     return (
         <>
@@ -60,7 +62,18 @@ const Footer: React.FC<Props> = props => {
                         <Image src='/images/footer/tandis-05.png' className="h-11 sm:h-18 object-contain" alt='' width={62} height={72} />
 
 
-                        {!!props.enamadElement && parse(props.enamadElement)}
+                        {!!props.enamad && (
+                            <a className="footer-enamad" referrerPolicy="origin" target="_blank" href={props.enamad}>
+                                <Image 
+                                    referrerPolicy="origin" 
+                                    src={"/images/enamad.png"} 
+                                    alt="enamad"
+                                    width={75}
+                                    height={75}
+                                    className="object-contain"
+                                 />
+                            </a>
+                        )}
 
                         {/* <a href="#" aria-label="نماد اعتماد">
                         <Image src='/images/footer/enamad.png' className="h-12 sm:h-18 object-contain" alt='' width={43} height={72} />
@@ -70,25 +83,21 @@ const Footer: React.FC<Props> = props => {
                         <Image src='/images/footer/resaneh.png' className="h-12 sm:h-18 object-contain" alt='' width={60} height={72} />
                     </a> */}
 
-                        <a
-                            href="https://logo.samandehi.ir/Verify.aspx?id=238809&p=uiwkxlaomcsimcsiobpdpfvl"
+                        {!!props.samandehi && <a
+                            href={props.samandehi}
                             target="_blank"
                             title="logo-samandehi"
                             aria-label="samandehi"
-                        //className={`unset-img ${styles.nemads}`}
                         >
                             <img
                                 id="nbqergvjoeukoeukesgtsizp"
                                 alt="logo-samandehi"
                                 title="logo-samandehi"
                                 src="https://logo.samandehi.ir/logo.aspx?id=238809&p=odrfqftiaqgwaqgwlymabsiy"
-                                // layout="fill"
-                                // className={`unset-img ${styles.nemads}`}
                                 width="70"
                                 height="75"
-                            //layout="fixed"
                             />
-                        </a>
+                        </a>}
 
                     </div>
 
@@ -121,10 +130,10 @@ const Footer: React.FC<Props> = props => {
                         )}
                     </Link>
 
-                    {!!props.contactInfo.tel && <div className="flex gap-4 justify-center mb-4">
+                    {!!phoneNumber && <div className="flex gap-4 justify-center mb-4">
                         {t('support')}
-                        <a href={`tel:${props.contactInfo.tel}`} className="text-lg font-semibold" dir="ltr">
-                            {props.contactInfo.tel.replace("+98", "0")}
+                        <a href={`tel:${phoneNumber}`} className="text-lg font-semibold" dir="ltr">
+                            {phoneNumber.replace("+98", "0")}
                         </a>
                     </div>}
 
@@ -144,19 +153,6 @@ const Footer: React.FC<Props> = props => {
                     </div>
 
                 </div>
-
-                {/* <!-- Yektanet --> */}
-                <script
-                    id="script_footer_15"
-                    dangerouslySetInnerHTML={{
-                        __html: `
-          !function (t, e, n) { t.yektanetAnalyticsObject = n, t[n] = t[n] || function () { t[n].q.push(arguments) }, t[n].q = t[n].q || []; var a = new Date, r = a.getFullYear().toString() + "0" + a.getMonth() + "0" + a.getDate() + "0" + a.getHours(), c = e.getElementsByTagName("script")[0], s = e.createElement("script"); s.id = "ua-script-GHp3ZhOz"; s.dataset.analyticsobject = n; s.async = 1; s.type = "text/javascript"; s.src = "/static/scripts/rg.complete.js?v=" + r, c.parentNode.insertBefore(s, c) }(window, document, "yektanet");
-        `,
-                    }}
-                />
-
-                <Goftino />
-
 
             </footer>
 

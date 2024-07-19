@@ -132,7 +132,7 @@ const HotelListItem: React.FC<Props> = props => {
         button = (
             <Button
                 hasArrow
-                href={hotel.Url+searchInfo}
+                href={hotel.url+searchInfo}
                 target="_blank"
                 className="rounded-lg h-10 px-5 text-sm w-full md:w-48 max-w-full mt-3"
             >
@@ -142,15 +142,12 @@ const HotelListItem: React.FC<Props> = props => {
     }
 
     return (
-        <div
-            key={hotel.CityId}
-            className="grid md:grid-cols-12 mb-4 border border-neutral-200 bg-white rounded-lg relative"
-        >
-            <Link target="_blank" href={hotel.Url!+searchInfo} className="md:col-span-12 lg:col-span-4 bg-travel-pattern">
-                {hotel.ImageUrl ? (
+        <div className="grid md:grid-cols-12 mb-4 border border-neutral-200 bg-white rounded-lg relative" >
+            <Link target="_blank" href={hotel.url!+searchInfo} className="md:col-span-12 lg:col-span-4 bg-travel-pattern">
+                {hotel.picture?.path ? (
                     <Image
-                        src={hotel.ImageUrl}
-                        alt={hotel.ImageAlt || hotel.HotelName!}
+                        src={hotel.picture.path}
+                        alt={hotel.picture.altAttribute || hotel.picture.titleAttribute || hotel.displayName!}
                         width={288}
                         height={200}
                         onContextMenu={(e)=> e.preventDefault()}
@@ -166,25 +163,26 @@ const HotelListItem: React.FC<Props> = props => {
                 )}
             </Link>
 
-            {!!hotel.IsPromotion && <span className="absolute bg-green-600 text-white right-3 top-3 rounded-xl leading-4 text-2xs py-1 px-2 select-none pointer-events-none"> پیشنهاد ویژه </span>}
+            {!!hotel.isPromotion && <span className="absolute bg-green-600 text-white right-3 top-3 rounded-xl leading-4 text-2xs py-1 px-2 select-none pointer-events-none"> پیشنهاد ویژه </span>}
 
 
             <div className="md:col-span-7 lg:col-span-5 p-3 max-md:pb-0">
-                <Link target="_blank" href={hotel.Url! + searchInfo} className="font-bold text-neutral-700 rtl:ml-2 ltr:mr-2" > {hotel.HotelCategoryName} {hotel.HotelName} {hotel.CityName} </Link>
+                <Link target="_blank" href={hotel.url! + searchInfo} className="font-bold text-neutral-700 rtl:ml-2 ltr:mr-2" > {hotel.displayName || hotel.name} </Link>
 
-                {!!hotel.HotelRating && <Rating number={hotel.HotelRating} inline className="align-middle rtl:ml-2 ltr:mr-2" />}
+                {!!hotel.rating && <Rating number={hotel.rating} inline className="align-middle rtl:ml-2 ltr:mr-2" />}
 
-                <span className="bg-blue-50 rounded-xl leading-6 text-2xs px-2 select-none">
-                    {hotel.HotelTypeName}
-                </span>
+                {!!hotel.typeStr && <span className="bg-blue-50 rounded-xl leading-6 text-2xs px-2 select-none">
+                    {hotel.typeStr}
+                </span>}
 
-                {!!hotel.Address && <p className="text-xs leading-4 my-2 text-neutral-400"><Location className="w-4 h-4 fill-neutral-400 inline-block" /> {hotel.Address} </p>}
+                {!!hotel.address && <p className="text-xs leading-4 my-2 text-neutral-400"><Location className="w-4 h-4 fill-neutral-400 inline-block" /> {hotel.address} </p>}
 
                 {rate}
 
-                {!!hotel.IsCovid && (
+                
+                {/* {!!hotel.IsCovid && (
                     <span className="bg-blue-50 rounded-xl leading-6 text-2xs px-2 select-none">اطلاعات ایمنی کووید-۱۹</span>
-                )}
+                )} */}
 
                 {hotel.priceInfo === "notPriced" && <div className="bg-red-100 px-4 py-1 my-1">
                     <h5 className="text-red-600 text-sm font-semibold"> <InfoCircle className="w-4 h-4 fill-current inline-block" /> {tHotel("you-missed-this-deal")}</h5>

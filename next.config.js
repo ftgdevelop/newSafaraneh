@@ -55,6 +55,7 @@ const nextConfig = {
     PROJECT_SERVER_APIKEY: 'e8fad1497a1244f29f15cde4a242baf0',
     PROJECT_PORTAL_APIKEY: 'b4fa99cc-3dfd-40a5-8bcf-53acdc2dbd84',
     
+    PROJECT_SERVER_CMS:"cms2.safaraneh.com",
     PROJECT_SERVER_HOTEL_WP:"performance.1stsafar.com",
     PROJECT_SERVER_HOTEL_MAIN: "api.1stsafar.com",
     PROJECT_SERVER_HOTEL_DATA: "hoteldomesticdata.1stsafar.com",

@@ -16,9 +16,9 @@ export const Header = {
 
   export const ServerAddress = {
     Type: process.env.PROJECT_SERVER_TYPE,
+    CMS: process.env.PROJECT_SERVER_CMS,
     Identity: process.env.PROJECT_SERVER_IDENTITY,
     Hotel_WP: process.env.PROJECT_SERVER_HOTEL_WP,
-    Hotel_Main: process.env.PROJECT_SERVER_HOTEL_MAIN,
     Hotel_Data: process.env.PROJECT_SERVER_HOTEL_DATA,
     Hotel_Availability: process.env.PROJECT_SERVER_HOTEL_AVAILABILITY,
     Coordinator: process.env.PROJECT_SERVER_COORDINATOR,
@@ -29,6 +29,10 @@ export const Header = {
     Cip: process.env.PROJECT_SERVER_CIP,
     Traveler : process.env.PROJECT_SERVER_TRAVELER
   };
+
+  export const Cms = {
+    GetByUrl: "/api/services/app/Page/GetByUrl",
+  }
 
   export const Identity = {
     SendOTP: "/api/services/app/OTP/SendOTP",
@@ -82,7 +86,6 @@ export const Flight = {
     GetHotelSummaryDetailById: "/api/services/app/Accommodation/Get",
     GetDomesticHotelDetails:"/api/services/app/Accommodation/Get",
     GetScore: "/v2/Comment/GetScore",
-    GetPageByUrl: "/v2/Page/GetPageByUrl",
     InsertComment : '/v2/Comment/InsertComment',
     AvailabilityByHotelId:"/api/services/app/Booking/AvailabilityByHotelId",
     GetRooms:"/api/services/app/Booking/GetRoom",
@@ -94,7 +97,8 @@ export const Flight = {
     GetValidate:"/api/services/app/Booking/GetValidate",
     PreReserve: "/api/services/app/Booking/PreReserve",
     GetReserveById: "/api/services/app/Reserve/Get",
-    Confirm:"/api/services/app/Booking/Confirm"
+    Confirm:"/api/services/app/Booking/Confirm",
+    SearchAccomodations:"/api/services/app/Accommodation/GetAll"
   };
 
   export const Reserve = {

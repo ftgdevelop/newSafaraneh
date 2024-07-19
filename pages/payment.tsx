@@ -7,6 +7,7 @@ import Head from 'next/head';
 import { getReserveFromCoordinator } from '@/modules/shared/actions';
 import { useRouter } from 'next/router';
 import DomesticHotelAside from '@/modules/domesticHotel/components/shared/Aside';
+import DomesticHotelAside2 from '@/modules/domesticHotel/components/shared/AsideTheme2';
 import { domesticHotelGetReserveById, getDomesticHotelSummaryDetailById } from '@/modules/domesticHotel/actions';
 import { AsideHotelInfoType, AsideReserveInfoType, DomesticHotelGetReserveByIdData, DomesticHotelSummaryDetail } from '@/modules/domesticHotel/types/hotel';
 import { getDatesDiff } from '@/modules/shared/helpers';
@@ -28,6 +29,9 @@ import { ServerAddress } from '@/enum/url';
 
 
 const Payment: NextPage = () => {
+
+  const theme2 = process.env.THEME === "THEME2";
+  const theme1 = process.env.THEME === "THEME1";
 
   const { t } = useTranslation('common');
 
@@ -235,6 +239,11 @@ const Payment: NextPage = () => {
     }
   }
   if (domesticHotelReserveData) {
+
+    if(domesticHotelReserveData.status !== "Pending"){
+      router.push(`/hotel/capacity?reserveId=${domesticHotelReserveData.id}&username=${domesticHotelReserveData.username}`);
+    }
+
     domesticHotelReserveInformation = {
       reserveId: domesticHotelReserveData.id,
       checkin: domesticHotelReserveData.checkin,
@@ -348,34 +357,39 @@ const Payment: NextPage = () => {
 
       <div className='max-w-container mx-auto px-5 py-4'>
 
-        <Steps
+        {!!theme1 && <Steps
           className='py-3 mb-2'
           items={[
             { label: t('bank-gateway-page'), status: 'done' },
             { label: t('confirm-pay'), status: 'active' },
             { label: t('complete-purchase'), status: 'up-comming' }
           ]}
-        />
+        />}
 
-        <div className='grid gap-4 md:grid-cols-3'>
+        <div className={`grid gap-4 ${theme2 ? "md:gap-14 md:grid-cols-12" : "md:grid-cols-3"}`}>
 
-          <div className='md:col-span-2'>
-            <div className='bg-white rounded-lg border border-neutral-300 mb-4 p-4'>
+          <div className={`${theme2?"md:col-span-7":"md:col-span-2"}`}>
+            <div className={`mb-4 ${theme1 ? "bg-white rounded-lg border border-neutral-300 p-4" : ""}`}>
               <h2 className='text-2xl mt-4 mb-8'> چگونه می خواهید پرداخت کنید؟ </h2>
 
               <Tab
-                style2
+                style = {theme1?'2':'radioStyle'}
                 items={tabItems}
               />
             </div>
 
           </div>
 
-          <div>
+          <div className={theme2 ? "md:col-span-5" : ""}>
 
-            {type === 'HotelDomestic' ? (
-              <DomesticHotelAside hotelInformation={domesticHotelInformation} reserveInformation={domesticHotelReserveInformation} />
-            ) : type === 'Cip' ? (
+            {type === 'HotelDomestic' ? (<>
+              {theme2? (
+                <DomesticHotelAside2 hotelInformation={domesticHotelInformation} reserveInformation={domesticHotelReserveInformation} />
+              ):(
+                <DomesticHotelAside hotelInformation={domesticHotelInformation} reserveInformation={domesticHotelReserveInformation} />
+              )}
+
+            </>) : type === 'Cip' ? (
               <CipAside
                 loading={cipReserveInfoLoading}
                 reserveInfo={cipReserveInfo}
@@ -389,30 +403,33 @@ const Payment: NextPage = () => {
               />
             ) : null}
 
-            <div className='flex gap-5 bg-white border border-neutral-300 rounded p-4 mb-1' >
- 
-                <img
-                  src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNiIgdmlld0JveD0iMCAwIDI0IDI2Ij4KICAgIDxwYXRoIGZpbGw9IiMxREFDMDgiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iTTExLjA1OC4xODhjLjM4Ni0uMjUgMS40OTgtLjI1IDEuODg0IDAgMy4zOSAyLjE5NyA2LjQ1IDMuMzM0IDkuNjc1IDMuNTMuOTUxLjA0IDEuMzY1LjQ3MSAxLjM2NSAxLjM3NCAwIC41NjkuMDQxIDYuNTUgMCA4LjcwOCAwIC43NDUtLjA4MyAxLjUzLS4yOSAyLjMxNS0uNDU1IDEuODA0LTEuNDQ3IDMuNDktMy4xIDUuMDYtMi4xMSAyLTguMzk0IDQuODI1LTguNjI0IDQuODI1LS4xNjYgMC02LjQ1LTIuODI0LTguNTYtNC44MjUtMS42NTMtMS41Ny0yLjY0NS0zLjI1Ni0zLjEtNS4wNmE5LjA4OSA5LjA4OSAwIDAgMS0uMjktMi4zMTVjLS4wNDEtMi4xNTcgMC04LjEzOSAwLTguNzA4IDAtLjkwMy40MTQtMS4zMzQgMS4zNjUtMS4zNzMgMy4yMjUtLjE5NyA2LjI4NS0xLjMzNCA5LjY3NS0zLjUzMXpNOS41MTEgMTYuOTM5Yy41NC41MjYgMS40MTQuNTI2IDEuOTU0IDBsNi4xMy01Ljk3NGMuNTQtLjUyNi41NC0xLjM3OCAwLTEuOTA0YTEuNDA3IDEuNDA3IDAgMCAwLTEuOTU0IDBsLTUuMTM5IDUuMDM2LTIuMTQzLTIuMDlhMS40MDcgMS40MDcgMCAwIDAtMS45NTQgMCAxLjMyMiAxLjMyMiAwIDAgMCAwIDEuOTA1bDMuMTA2IDMuMDI3eiIvPgo8L3N2Zz4K"
-                />
-   
-              <div>
-                <strong className='text-green-600 font-semibold'>٪۱۰۰ ایمن</strong>
-                <p className='text-xs'>ما از رمزگذاری 256 بیتی SSL استفاده می کنیم</p>
-              </div>
-            </div>
+            {!!theme1 && (
+              <>
+                <div className='flex gap-5 bg-white border border-neutral-300 rounded p-4 mb-1' >
+    
+                    <img
+                      src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNiIgdmlld0JveD0iMCAwIDI0IDI2Ij4KICAgIDxwYXRoIGZpbGw9IiMxREFDMDgiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iTTExLjA1OC4xODhjLjM4Ni0uMjUgMS40OTgtLjI1IDEuODg0IDAgMy4zOSAyLjE5NyA2LjQ1IDMuMzM0IDkuNjc1IDMuNTMuOTUxLjA0IDEuMzY1LjQ3MSAxLjM2NSAxLjM3NCAwIC41NjkuMDQxIDYuNTUgMCA4LjcwOCAwIC43NDUtLjA4MyAxLjUzLS4yOSAyLjMxNS0uNDU1IDEuODA0LTEuNDQ3IDMuNDktMy4xIDUuMDYtMi4xMSAyLTguMzk0IDQuODI1LTguNjI0IDQuODI1LS4xNjYgMC02LjQ1LTIuODI0LTguNTYtNC44MjUtMS42NTMtMS41Ny0yLjY0NS0zLjI1Ni0zLjEtNS4wNmE5LjA4OSA5LjA4OSAwIDAgMS0uMjktMi4zMTVjLS4wNDEtMi4xNTcgMC04LjEzOSAwLTguNzA4IDAtLjkwMy40MTQtMS4zMzQgMS4zNjUtMS4zNzMgMy4yMjUtLjE5NyA2LjI4NS0xLjMzNCA5LjY3NS0zLjUzMXpNOS41MTEgMTYuOTM5Yy41NC41MjYgMS40MTQuNTI2IDEuOTU0IDBsNi4xMy01Ljk3NGMuNTQtLjUyNi41NC0xLjM3OCAwLTEuOTA0YTEuNDA3IDEuNDA3IDAgMCAwLTEuOTU0IDBsLTUuMTM5IDUuMDM2LTIuMTQzLTIuMDlhMS40MDcgMS40MDcgMCAwIDAtMS45NTQgMCAxLjMyMiAxLjMyMiAwIDAgMCAwIDEuOTA1bDMuMTA2IDMuMDI3eiIvPgo8L3N2Zz4K"
+                    />
+      
+                  <div>
+                    <strong className='text-green-600 font-semibold'>٪۱۰۰ ایمن</strong>
+                    <p className='text-xs'>ما از رمزگذاری 256 بیتی SSL استفاده می کنیم</p>
+                  </div>
+                </div>
 
-            <div className='flex gap-5 bg-white border border-neutral-300 rounded p-4 mb-4' >
-     
-                <img
-                  src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMjAiIGhlaWdodD0iMjYiIHZpZXdCb3g9IjAgMCAyMCAyNiI+CiAgICA8ZGVmcz4KICAgICAgICA8cGF0aCBpZD0iYSIgZD0iTTc2LjMzMyAxNzEuMzc1di0zLjI1YzAtNC40ODgtMy43My04LjEyNS04LjMzMy04LjEyNXMtOC4zMzMgMy42MzctOC4zMzMgOC4xMjV2My4yNWMtLjkyMiAwLTEuNjY3LjcyNi0xLjY2NyAxLjYyNXYxMS4zNzVjMCAuODk5Ljc0NSAxLjYyNSAxLjY2NyAxLjYyNWgxNi42NjZjLjkyMiAwIDEuNjY3LS43MjYgMS42NjctMS42MjVWMTczYzAtLjg5OS0uNzQ1LTEuNjI1LTEuNjY3LTEuNjI1ek02OCAxNjMuMjVjMi43NTcgMCA1IDIuMTg3IDUgNC44NzV2My4yNUg2M3YtMy4yNWMwLTIuNjg4IDIuMjQzLTQuODc1IDUtNC44NzV6bS0yLjMzMiAxOC4wOGwtMi4zNi0yLjE4M2EuOTIuOTIgMCAwIDEgMC0xLjM3M2MuNDEtLjM4IDEuMDc0LS4zOCAxLjQ4NCAwbDEuNjMgMS41MDcgMy45MDUtMy42MzNjLjQxLS4zOCAxLjA3NS0uMzggMS40ODUgMGEuOTIuOTIgMCAwIDEgMCAxLjM3M2wtNC42NTkgNC4zMWMtLjQxLjM3OS0xLjA3NS4zNzktMS40ODUgMHoiLz4KICAgIDwvZGVmcz4KICAgIDx1c2UgZmlsbD0iIzFEQUMwOCIgZmlsbC1ydWxlPSJub256ZXJvIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNTggLTE2MCkiIHhsaW5rOmhyZWY9IiNhIi8+Cjwvc3ZnPgo="
-                />
+                <div className='flex gap-5 bg-white border border-neutral-300 rounded p-4 mb-4' >
+        
+                    <img
+                      src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMjAiIGhlaWdodD0iMjYiIHZpZXdCb3g9IjAgMCAyMCAyNiI+CiAgICA8ZGVmcz4KICAgICAgICA8cGF0aCBpZD0iYSIgZD0iTTc2LjMzMyAxNzEuMzc1di0zLjI1YzAtNC40ODgtMy43My04LjEyNS04LjMzMy04LjEyNXMtOC4zMzMgMy42MzctOC4zMzMgOC4xMjV2My4yNWMtLjkyMiAwLTEuNjY3LjcyNi0xLjY2NyAxLjYyNXYxMS4zNzVjMCAuODk5Ljc0NSAxLjYyNSAxLjY2NyAxLjYyNWgxNi42NjZjLjkyMiAwIDEuNjY3LS43MjYgMS42NjctMS42MjVWMTczYzAtLjg5OS0uNzQ1LTEuNjI1LTEuNjY3LTEuNjI1ek02OCAxNjMuMjVjMi43NTcgMCA1IDIuMTg3IDUgNC44NzV2My4yNUg2M3YtMy4yNWMwLTIuNjg4IDIuMjQzLTQuODc1IDUtNC44NzV6bS0yLjMzMiAxOC4wOGwtMi4zNi0yLjE4M2EuOTIuOTIgMCAwIDEgMC0xLjM3M2MuNDEtLjM4IDEuMDc0LS4zOCAxLjQ4NCAwbDEuNjMgMS41MDcgMy45MDUtMy42MzNjLjQxLS4zOCAxLjA3NS0uMzggMS40ODUgMGEuOTIuOTIgMCAwIDEgMCAxLjM3M2wtNC42NTkgNC4zMWMtLjQxLjM3OS0xLjA3NS4zNzktMS40ODUgMHoiLz4KICAgIDwvZGVmcz4KICAgIDx1c2UgZmlsbD0iIzFEQUMwOCIgZmlsbC1ydWxlPSJub256ZXJvIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNTggLTE2MCkiIHhsaW5rOmhyZWY9IiNhIi8+Cjwvc3ZnPgo="
+                    />
 
-              <div>
-                <strong className='text-green-600 font-semibold'>عملیات بانکی مورد اعتماد است</strong>
-                <p className='text-xs'> ما داده های کارت شما را ذخیره یا مشاهده نمی کنیم </p>
-              </div>
-            </div>
-
+                  <div>
+                    <strong className='text-green-600 font-semibold'>عملیات بانکی مورد اعتماد است</strong>
+                    <p className='text-xs'> ما داده های کارت شما را ذخیره یا مشاهده نمی کنیم </p>
+                  </div>
+                </div>
+              </>
+            )}
 
             {/* 
             <div className='bg-white p-4 border border-neutral-300 rounded-md mb-4 border-t-2 border-t-orange-400'>

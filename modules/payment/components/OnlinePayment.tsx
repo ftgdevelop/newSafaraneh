@@ -19,6 +19,8 @@ type Props = {
 
 const OnlinePayment: React.FC<Props> = props => {
 
+    const theme1 = process.env.THEME === "THEME1";
+
     const { t } = useTranslation('common');
     const { t: tPayment } = useTranslation('payment');
 
@@ -61,8 +63,8 @@ const OnlinePayment: React.FC<Props> = props => {
 
         if (second > 0) {
             return (
-                <div className='bg-white p-4 border border-neutral-300 rounded-md mb-4 border-t-2 border-t-orange-400 mt-8'>
-                    <h6 className='text-orange-400 font-semibold mb-1'> درخواست رزرو تایید شد </h6>
+                <div className={`bg-white p-4 border mb-4 mt-8 ${theme1 ? "border-neutral-300 rounded-md border-t-2 border-t-orange-400" : "border-green-600 rounded-xl"}`}>
+                    <h6 className={`font-semibold ${theme1 ? "text-orange-400 mb-1" : "mb-2 text-green-600"}`}> درخواست رزرو تایید شد </h6>
                     <p className='text-xs'>
                         <span> خواهشمند است حداکثر ظرف مدت </span>
                         {days ? <b> <span className='font-mono'> {days} </span> روز </b> : null}
@@ -125,8 +127,8 @@ const OnlinePayment: React.FC<Props> = props => {
         <div className='pt-10'>
 
             {type === 'HotelDomestic' && remaindSeconds < 1 && (
-                <div className='border p-4 border-neutral-300 rounded border-t-4 border-t-red-500 text-xs'>
-                    <h6 className='text-red-600 text-sm font-semibold'> اخطار! </h6>
+                <div className={`border p-4 ${theme1?"text-xs border-neutral-300 rounded border-t-4 border-t-red-500":"text-sm border-red-600 rounded-xl"}`}>
+                    <h6 className='text-red-600 text-sm font-semibold mb-1'> اخطار! </h6>
                     <p>
                         درخواست رزرو تایید شد ولی به علت عدم پرداخت در مهلت تعیین شده لغو گردید.
                     </p>

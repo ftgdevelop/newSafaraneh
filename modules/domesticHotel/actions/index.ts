@@ -19,24 +19,6 @@ export const getDomesticHotelSummaryDetailById = async (id: number, acceptLangua
     }
 }
 
-export const getScore = async (hotelId: number, acceptLanguage: string = 'fa-IR') => {
-    try {
-        let response = await axios.get(
-            `${ServerAddress.Type}${ServerAddress.Hotel_Main}${Hotel.GetScore}?pageId=${hotelId}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    apikey: process.env.PROJECT_SERVER_APIKEY,
-                    'Accept-Language': acceptLanguage,
-                },
-            },
-        )
-        return response
-    } catch (error) {
-        return error
-    }
-}
-
 export const getDomesticHotelDetailsByUrl = async (url: string, acceptLanguage: string = 'fa-IR') => {
     try {
         let response = await axios.get(
@@ -55,34 +37,32 @@ export const getDomesticHotelDetailsByUrl = async (url: string, acceptLanguage: 
     }
 }
 
-export const SearchHotels = async (parameters: {url: string; cityId?: number}, acceptLanguage: string = 'fa-IR') => {
+export const SearchAccomodation = async (parameters: {url: string; EntityId?: string}, acceptLanguage: string = 'fa-IR') => {
     try {
-        const params : any = {
-            IsInstant: null,
-            MaxPrice: 20000000,
-            PageNumber: 1,
-            PageSize: 500,
-            SortColumn: 'Priority',
-            SortDirection: 'Desc',
-            filterUrl: parameters.url
-        };
-
-        if (parameters.cityId){
-            params.CityId = parameters.cityId;
+        
+        const paramsArray :string[] = [];
+        if(parameters.EntityId){
+            paramsArray.push(`EntityId=${parameters.EntityId}`);
         }
 
-        const response = await axios({
-            method: "post",
-            data: params,
-            url: `${ServerAddress.Type}${ServerAddress.Hotel_Main}${Hotel.SearchHotels}`,
-            headers: {
-                ...Header,
-                apikey: process.env.PROJECT_PORTAL_APIKEY,
-                "Accept-Language": acceptLanguage
-            }
-        });
-        return (response)
-    } catch (error: any) {
+        if(parameters.url){
+            paramsArray.push(`Url=${parameters.url}`);
+        }
+
+        const requestUrl = ServerAddress.Type! + ServerAddress.Hotel_Data! + Hotel.SearchAccomodations+ "?" + paramsArray.join("&") ;
+
+        let response = await axios.get(
+            requestUrl,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    apikey: process.env.PROJECT_SERVER_APIKEY,
+                    'Accept-Language': acceptLanguage,
+                },
+            },
+        )
+        return response
+    } catch (error) {
         return error
     }
 }
@@ -123,7 +103,7 @@ export const getRates = async (ids: number[], acceptLanguage: string = 'fa-IR') 
             data: {
                 HotelIds: ids,
             },
-            url: `${ServerAddress.Type}${ServerAddress.Hotel_Main}${Hotel.getRates}`,
+            url: `${ServerAddress.Type}api.safaraneh.com${Hotel.getRates}`,
             headers: {
                 ...Header,
                 "Accept-Language": acceptLanguage,
@@ -198,7 +178,7 @@ export const insertComment = async (param: any, acceptLanguage: string = 'fa-IR'
 
     try {
         let response = await axios.post(
-            `${ServerAddress.Type}${ServerAddress.Hotel_Main}${Hotel.InsertComment}`,
+            `${ServerAddress.Type}api.safaraneh.com${Hotel.InsertComment}`,
             param,
             {
                 headers: {

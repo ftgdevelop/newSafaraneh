@@ -53,6 +53,10 @@ const HotelFacilityFilter: React.FC = () => {
         setValues(initialValues);
     },[initialValues.length]);
 
+    if (!options.length){
+        return null;
+    }
+
     return (
         <>
             <div className="flex justify-between items-start mb-2 mt-4 border-t border-neutral-300 pt-5">

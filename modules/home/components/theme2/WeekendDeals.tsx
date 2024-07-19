@@ -142,10 +142,8 @@ const WeekendDeals: React.FC = () => {
             daysToNextWednesday = 1;
             break;
         case (3):
-            daysToNextWednesday = 0;
-            break;
         case (4):
-            daysToNextWednesday = 6;
+            daysToNextWednesday = 0;
             break;
         case (5):
             daysToNextWednesday = 5;
@@ -155,7 +153,7 @@ const WeekendDeals: React.FC = () => {
     }
 
     const checkinDate = addSomeDays(today, daysToNextWednesday);
-    const checkoutDate = addSomeDays(checkinDate, 2);
+    const checkoutDate = addSomeDays(checkinDate, today.getDay() === 4 ? 1 : 2);
 
     const checkin = dateFormat(checkinDate);
     const checkout = dateFormat(checkoutDate);
