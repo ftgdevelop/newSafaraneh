@@ -43,10 +43,12 @@ const CipAirportInformation: React.FC<Props> = props => {
 
     const { setFieldValue, errors, touched, values } = props;
 
+    const theme2 = process.env.THEME === "THEME2";
+
     return (
         <div id="about-travel-section" className="py-2 sm:py-5">
-            <div className="bg-white rounded-lg p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 border border-neutral-300">
-                <strong className="font-semibold text-lg block sm:col-span-2 md:col-span-4 "> اطلاعات سفر </strong>
+            <div className={`grid grid-cols-1 sm:grid-cols-2 gap-4 ${theme2?"md:grid-cols-3":"md:grid-cols-4 border border-neutral-300 bg-white rounded-lg p-5"}`}>
+                <strong className={`font-semibold text-lg block sm:col-span-2 ${theme2?"md:col-span-3":"md:col-span-4"}`}> اطلاعات سفر </strong>
 
                 <FormikField
                     setFieldValue={setFieldValue}

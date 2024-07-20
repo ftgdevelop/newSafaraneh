@@ -1,5 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 import Link from 'next/link';
+import { useAppDispatch } from '../../hooks/use-store';
+import { setProgressLoading } from '../../store/stylesSlice';
 
 type Props = {
     onClick?:()=>void;
@@ -16,6 +18,8 @@ type Props = {
 
 const Button: React.FC<PropsWithChildren<Props>> = props => {
     
+    const dispatch = useAppDispatch();
+
     const {color} = props;
 
     const theme2 = process.env.THEME === "THEME2";
@@ -45,7 +49,12 @@ const Button: React.FC<PropsWithChildren<Props>> = props => {
     ) : null;
 
     if (props.href){
-        return <Link href={props.href} target={props.target} className={className}>
+        return <Link 
+            href={props.href} 
+            target={props.target} 
+            className={className}
+            onClick={() => {dispatch(setProgressLoading(true))}}
+        >
             {props.children}
             {arrow}
         </Link>
