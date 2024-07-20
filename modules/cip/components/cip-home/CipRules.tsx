@@ -1,8 +1,9 @@
 const CipRules = () => {
+    const theme2 = process.env.THEME === "THEME2";
     return (
         <>
         <h2 className="text-3xl mt-20 mb-5">قوانین و مقررات</h2>
-        <div className="bg-white p-6 pt-12 pb-12 rounded-md shadow-md ">
+        <div className={`${theme2?"":"bg-white p-6 pt-12 pb-12 rounded-md shadow-md"}`}>
             
             <p className="font-bold">بزرگسال</p>
             <ul className="text-sm max-sm:text-xs list-disc pr-10 pl-10 max-md:pr-2 max-md:pl-2">
