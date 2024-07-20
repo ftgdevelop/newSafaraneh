@@ -17,7 +17,17 @@ type Props = {
 const TimePickerMobiscroll: React.FC<Props> = props => {
 
     const [val, setVal] = useState<string>("");
+    
+    const theme2 = process.env.THEME === "THEME2";
 
+    const labelClassNames : string[] = ["pointer-events-none leading-4 px-2 absolute rtl:right-1 ltr:left-1 z-[1] -translate-y-1/2 bg-white"];
+
+    if(val){
+        labelClassNames.push(`${theme2?"top-3.5 text-2xs":"top-0 text-xs"}`);
+    }else{
+        labelClassNames.push("top-1/2 text-sm");
+    }
+    
     return (
         <div
             className={`moboscroll-time-picker-wrapper  ${props.errorText && props.isTouched ? "hasError" : ""}`}
@@ -25,7 +35,7 @@ const TimePickerMobiscroll: React.FC<Props> = props => {
             <div className="relative">
                 {props.label && (
                     <label
-                        className={`pointer-events-none px-2 absolute rtl:right-1 ltr:left-1 z-[1] -translate-y-1/2 bg-white ${val ? "top-0 text-xs" : "text-md top-1/2"}`}
+                        className={labelClassNames.join(" ")}
                     >
                         {props.label}
                     </label>
