@@ -126,7 +126,7 @@ const HotelDetail: NextPage<Props> = props => {
 
   if (portalData) {
 
-    tel = portalData.billing.telNumber || portalData?.billing.phoneNumber || "";
+    tel = portalData.billing?.telNumber || portalData?.billing?.phoneNumber || "";
     twitter = portalData.social?.x || "";
     siteLogo = portalData.billing?.logo?.value || "";
     siteName = portalData.billing?.name || "";
@@ -363,7 +363,7 @@ const HotelDetail: NextPage<Props> = props => {
               "@type": "PostalAddress",
               "addressLocality": "${accommodationData?.city?.name || "شهر ثبت نشده است"}",
               "addressCountry":"IR",
-              "postalCode":"${portalData.billing.zipCode || "کد پستی  وجود ندارد"}",
+              "postalCode":"${portalData?.billing?.zipCode || "کد پستی  وجود ندارد"}",
               "streetAddress": "${accommodationData.address || "آدرس وجود ندارد"}"
             },
             "checkinTime": "${accommodationData.policies?.find(x => x.keyword === "check-in")?.value || "14:00"}",

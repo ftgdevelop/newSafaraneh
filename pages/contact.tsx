@@ -25,9 +25,9 @@ const Contact: NextPage = ({portalData }: { portalData?: WebSiteDataType}) => {
         longitude = portalData.billing?.longitude || "";
     }
 
-    const tel = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
+    const tel = portalData?.billing?.telNumber || portalData?.billing?.phoneNumber || "";
 
-    const email = portalData?.billing.email ||"";
+    const email = portalData?.billing?.email ||"";
 
     const instagramLink = portalData?.social?.instagram || "";
     const linkedinLink = portalData?.social?.linkedin || "";
@@ -45,11 +45,11 @@ const Contact: NextPage = ({portalData }: { portalData?: WebSiteDataType}) => {
                     <div className="space-y-3">
                         <h5 className="text-xl font-semibold">با ما در ارتباط باشید</h5>
                         
-                        {!!portalData?.billing.address && <address className="not-italic">
+                        {!!portalData?.billing?.address && <address className="not-italic">
                             <p className="text-sm space-x-1 whitespace-nowrap max-xl:whitespace-normal">
                                 <b className="text-base">آدرس</b>
                                 <span className="font-semibold text-base">:</span> 
-                                {portalData?.billing.address}
+                                {portalData.billing.address}
                             </p>
                         </address>}
 
@@ -72,7 +72,7 @@ const Contact: NextPage = ({portalData }: { portalData?: WebSiteDataType}) => {
                             </Link>
                         </div>}
 
-                        {!!portalData?.billing.zipCode && <div className="flex gap-1">
+                        {!!portalData?.billing?.zipCode && <div className="flex gap-1">
                             <b>کد پستی</b>:
                             <b className="font-semibold text-lg">{portalData.billing.zipCode}</b>
                         </div>}

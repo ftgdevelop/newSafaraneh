@@ -31,12 +31,14 @@ const CipTransport: React.FC<Props> = props => {
     }
     const someTransportIsSelected = selectedTransport.some(item => item.count > 0);
 
+    const theme2 = process.env.THEME === "THEME2";
+
     return (
         <div className='py-2 md:py-5'>
 
             <strong className="font-semibold text-lg block mb-5"> تاکسی ویژه cip </strong>
 
-            <div className="bg-white rounded-lg border border-neutral-300 p-5 md:p-8">
+            <div className={theme2?"py-5":"bg-white rounded-lg border border-neutral-300 p-5 md:p-8"}>
                 {selectedTransport.sort((a, b) => a.id - b.id).map((item, index) => (
                     <div key={item.name} className="rounded-lg border border-neutral-300 p-3 md:p-4 mb-5 md:mb-8 flex gap-4 flex-col sm:flex-row sm:justify-between sm:items-center" >
                         <div className="flex gap-3 items-center">
