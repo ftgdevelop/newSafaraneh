@@ -25,6 +25,8 @@ const DatePickerSelect: React.FC<Props> = props => {
 
     const { min, max, shamsi, descending } = props;
 
+    const theme2 = process.env.THEME === "THEME2";
+
     const localizedInitialValue = props.initialValue ? persianNumbersToEnglish(dateDiplayFormat({ date: props.initialValue, locale: shamsi ? 'fa' : 'en', format: "YYYY-MM-DD" })) : "";
     const localalizedMin = persianNumbersToEnglish(dateDiplayFormat({ date: min, locale: shamsi ? 'fa' : 'en', format: "YYYY-MM-DD" }));
     const localalizedMax = persianNumbersToEnglish(dateDiplayFormat({ date: max, locale: shamsi ? 'fa' : 'en', format: "YYYY-MM-DD" }));
@@ -172,7 +174,15 @@ const DatePickerSelect: React.FC<Props> = props => {
         daysArray = [...daysArray].filter(item => item >= minDay);
     }
 
-    const selectClassName = `block grow focus:border-blue-500 h-10 px-0.5 text-sm bg-white border outline-none rounded-md ${props.errorText && props.isTouched ? "border-red-500" : "border-neutral-300 focus:border-blue-500"}`
+    let selectClassName = `block grow focus:border-blue-500 px-0.5 text-sm bg-white border outline-none rounded-md ${theme2?"h-13":"h-10"} `;
+
+    if (props.errorText && props.isTouched){
+        selectClassName += 'border-2 border-red-500';
+    }else if (theme2){
+        selectClassName += 'border-neutral-400 focus:border-2 focus:border-blue-500';
+    }else {
+        selectClassName += 'border-neutral-300 focus:border-blue-500';
+    }
 
     return (
         <div className={`relative ${props.shamsi ? "font-samim" : "font-sans"}`}>

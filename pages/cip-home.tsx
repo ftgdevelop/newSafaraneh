@@ -45,7 +45,7 @@ const CipHome: NextPage<any> = ({ content, airports, priceData, moduleDisabled }
 
             <CipGallery />
 
-            <div className="max-w-container m-auto pr-5 pl-5 max-md:p-3">
+            <div className="max-w-container m-auto p-5 max-md:p-3">
 
                 {!!content && <CipDescription content={content} />}
 
