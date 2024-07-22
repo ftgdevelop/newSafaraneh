@@ -11,7 +11,8 @@ export const getPageByUrl = async (url: string, acceptLanguage: string = "fa-IR"
                 headers: {
                     ...Header,
                     "Accept-Language": acceptLanguage,
-                    "Apikey": process.env.PROJECT_SERVER_APIKEY
+                    "Apikey": process.env.PROJECT_SERVER_APIKEY,
+                    "Tenantid": process.env.PROJECT_SERVER_TENANTID
                 }
             },
         )

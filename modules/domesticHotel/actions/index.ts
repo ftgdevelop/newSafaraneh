@@ -117,23 +117,6 @@ export const getRates = async (ids: number[], acceptLanguage: string = 'fa-IR') 
     }
 }
 
-export const GetCityFaqById = async (cityId: number, acceptLanguage: string = 'fa-IR') => {
-    try {
-        let response = await axios.get(
-            `${ServerAddress.Type}${ServerAddress.Hotel_Data}${Hotel.getCityFaqById}?EntityId=${cityId}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    apikey: process.env.PROJECT_SERVER_APIKEY,
-                    'Accept-Language': acceptLanguage
-                },
-            },
-        )
-        return response
-    } catch (error) {
-        return error
-    }
-}
 
 export const getEntityNameByLocation = async (cityId: number, acceptLanguage: string = 'fa-IR') => {
     try {
