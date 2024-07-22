@@ -272,6 +272,9 @@ const HotelList: NextPage<Props> = props => {
     const fetchPrices = async () => {
       setPricesLoading(true);
       setPricesData(undefined);
+      
+      if (!hotelIds?.length) return;
+
       const pricesResponse = await AvailabilityByHotelId({ checkin: checkin, checkout: checkout, ids: hotelIds as number[] }, acceptLanguage);
 
       if (pricesResponse.data?.result?.hotels) {
@@ -287,6 +290,9 @@ const HotelList: NextPage<Props> = props => {
     fetchPrices();
 
     const fetchEntityDetail = async (id: number) => {
+      
+      if (!id) return;
+
       const entityResponse: any = await getEntityNameByLocation(id, acceptLanguage);
 
       if (entityResponse?.data?.result) {
