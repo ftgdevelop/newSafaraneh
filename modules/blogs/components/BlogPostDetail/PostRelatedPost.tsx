@@ -15,7 +15,7 @@ const RelatedPost: NextPage<any> = ({Posts , Blog} : {Posts:BlogItemType[],Blog:
                 Posts &&
                 Posts.filter((item : any) => item.id !== Blog?.[0]?.id).slice(0, 3).map((post : any , index : any) => 
                     <Link href={`/blog/${post.slug}`} key={post.id} >
-                        <Image src={post.images.large} onContextMenu={(e) => e.preventDefault()}
+                        <Image src={post.images?.large} onContextMenu={(e) => e.preventDefault()}
                             width={300} height={160} alt="pic" className="rounded w-full" priority={!index} />
                         <div className="bg-white shadow-lg rounded-lg p-5 max-lg:p-3 relative bottom-10 mr-2 ml-2">
                             <Link href={`/blog/category/${post.categories[0]}`} className="text-red-500 text-xs mb-2 hover:text-red-300">
