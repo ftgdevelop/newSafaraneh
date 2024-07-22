@@ -45,6 +45,8 @@ type Props = {
   };
   portalData: WebSiteDataType;
   accomodations?: SearchAccomodationItem[];
+  url_delete?: string;
+  locationId_delete?:string;
 }
 
 const HotelList: NextPage<Props> = props => {
@@ -127,6 +129,30 @@ const HotelList: NextPage<Props> = props => {
 
     searchInfo = `/checkin-${checkin}/checkout-${checkout}`;
   }
+
+  //delete this useEffect and props:
+  useEffect(()=>{
+
+    const fetch = async (u:string,i:string) => {
+
+      const searchParameters : { url: string; EntityId?:string;} = {
+        url: u
+      }
+    
+      if (locationId){
+        searchParameters.EntityId = i
+      }
+
+      const searchAccomodationResponse: any = await SearchAccomodation(searchParameters, acceptLanguage);
+      const pageResponse: any = await getPageByUrl(u, acceptLanguage);
+      
+    }
+
+    if(props.url_delete){
+      fetch(props.url_delete, props.locationId_delete || "");
+    }
+
+  },[props.url_delete, props.locationId_delete]);
 
   const savePriceRange = (pricedItems: PricesResponseItem[]) => {
 
@@ -807,6 +833,8 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
       accomodations: searchAccomodationResponse?.data?.result || null,
       pageData: pageResponse?.data?.result || null,
+      url_delete:url || null,
+      locationId_delete:locationId || null
     },
   })
 }
