@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { AvailabilityByHotelId, GetCityFaqById, SearchAccomodation, getEntityNameByLocation, getRates } from '@/modules/domesticHotel/actions';
+import { AvailabilityByHotelId, SearchAccomodation, getEntityNameByLocation, getRates } from '@/modules/domesticHotel/actions';
 import type { GetServerSideProps, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { EntitySearchResultItemType, PricedHotelItem, SearchAccomodationItem, SortTypes } from '@/modules/domesticHotel/types/hotel';
@@ -27,33 +27,29 @@ import AvailabilityTimeout from '@/modules/shared/components/AvailabilityTimeout
 import LoginLinkBanner from '@/modules/shared/components/theme2/LoginLinkBanner';
 
 type Props = {
-  faq?: {
-    items: {
-      title: string;
-      isActive: boolean;
-      priority: number;
-      question: string;
-      answer: string;
-      id: number;
-    }[];
-    totalCount: number;
-  },
   pageData: {
     title?: string;
     pageTitle?: string;
     metaKeyword?: string;
     metaDescription?: string;
     url?: string;
+    widget?:{
+      content?:{
+        description?: string;
+      };
+      faqs?:{
+        question?: string;
+        answer?: string;
+      }[]
+    }
   };
   portalData: WebSiteDataType;
   accomodations?: SearchAccomodationItem[];
-  urlll:string;
-  lll: string;
 }
 
 const HotelList: NextPage<Props> = props => {
 
-  const { pageData, faq, portalData, accomodations } = props;
+  const { pageData, portalData, accomodations } = props;
 
   const isSafaraneh = process.env.PROJECT === "SAFARANEH";
 
@@ -103,22 +99,6 @@ const HotelList: NextPage<Props> = props => {
   if (accomodations && accomodations[0]?.city?.id) {
     cityId = accomodations[0]?.city?.id;
   }
-
-
-  // delete this useEffect:
-  useEffect(()=>{
-    if(!props.urlll) return;
-    const fetch = async (u:string) => {
-      const searchParameters : { url: string; EntityId?:string;} = {
-        url:u
-      }    
-      if (props.lll){
-        searchParameters.EntityId = props.lll
-      }
-      const searchAccomodationResponse: any = await SearchAccomodation(searchParameters, acceptLanguage);
-    }
-    fetch(props.urlll);
-  },[props.urlll]);
 
   const today = dateFormat(new Date());
   const tomorrow = dateFormat(addSomeDays(new Date()));
@@ -535,6 +515,7 @@ const HotelList: NextPage<Props> = props => {
   const theme1 = process.env.THEME === "THEME1";
   const theme2 = process.env.THEME === "THEME2";
 
+  const faqItems = pageData?.widget?.faqs || [];
   return (
 
     <>
@@ -546,7 +527,7 @@ const HotelList: NextPage<Props> = props => {
 
         {!!canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
 
-        {faq && faq.items.length !== 0 ? (
+        {faqItems.length !== 0 ? (
           <script
             id="script_hotel_1"
             type="application/ld+json"
@@ -555,7 +536,7 @@ const HotelList: NextPage<Props> = props => {
               {"@context":"https://schema.org",
                 "@type":"FAQPage",
                 "mainEntity":[
-                  ${faq.items.map(
+                  ${faqItems.map(
                 item => `{
                     "@type":"Question",
                     "name":"${item.question && item.question}",
@@ -743,25 +724,30 @@ const HotelList: NextPage<Props> = props => {
               hotels={filteredHotels}
             />}
 
+            {pageData?.widget?.content?.description ? (
+              <div className='py-10 text-justify'>
+                {parse(pageData.widget.content.description)}
+              </div>
+            ):null}
 
-            {props.faq && props.faq?.items?.length > 0 && (
+
+            {faqItems.length > 0 && (
               <div className={`mt-10 ${theme1 ? "bg-white p-5 rounded-lg" : ""}`}>
                 <h5 className='font-semibold text-lg'>{t('faq')}</h5>
-                {props.faq.items.filter(faq => (faq.answer && faq.question)).map(faq => (
+                {faqItems.filter(faq => (faq.answer && faq.question)).map(faq => (
                   <Accordion
-                    key={faq.id}
+                    key={faq.question}
                     title={(<>
                       <QuestionCircle className='w-5 h-5 mt-.5 rtl:ml-2 ltr:mr-2 fill-current inline-block' />
                       {faq.question}
                     </>)}
-                    content={parse(faq.answer)}
+                    content={parse(faq.answer!)}
                     WrapperClassName='mt-5'
                   />
                 ))}
               </div>
             )}
           </div>
-
 
         </div>
 
@@ -815,19 +801,12 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const pageResponse: any = await getPageByUrl(url, acceptLanguage);
 
-  let faqResponse: any;
-  if (searchAccomodationResponse?.data?.result[0]?.city?.id) {
-    faqResponse = await GetCityFaqById(searchAccomodationResponse.data.result[0].city.id, acceptLanguage);
-  }
 
   return ({
     props: {
       ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
       accomodations: searchAccomodationResponse?.data?.result || null,
-      faq: faqResponse?.data?.result || null,
       pageData: pageResponse?.data?.result || null,
-      urlll: encodeURIComponent(url),
-      lll: locationId || ""
     },
   })
 }

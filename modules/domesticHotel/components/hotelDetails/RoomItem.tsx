@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 
 import { DomesticHotelRateItem, DomesticHotelRoomItem } from '@/modules/domesticHotel/types/hotel';
-import { Bed, DefaultRoom, InfoCircle, Restaurant, Tik, User } from '@/modules/shared/components/ui/icons';
+import { Bed, DefaultRoom, InfoCircle, Tik, User } from '@/modules/shared/components/ui/icons';
 import { numberWithCommas } from '@/modules/shared/helpers';
 import Tooltip from '@/modules/shared/components/ui/Tooltip';
 import Quantity from '@/modules/shared/components/ui/Quantity';
@@ -32,10 +32,11 @@ const RoomItem: React.FC<Props> = props => {
         return null;
     }
 
-    let image: React.ReactNode = <div className={`${props.roomsHasImage?"":"max-sm:hidden"} bg-travel-pattern md:w-1/4 shrink-0 flex items-center justify-center bg-neutral-100 p-5 rtl:rounded-r-xl`}><DefaultRoom className='fill-neutral-400 w-24 h-24' /></div>
+    let image: React.ReactNode = props.roomsHasImage ? <div className="bg-travel-pattern md:w-1/4 shrink-0 flex items-center justify-center bg-neutral-100 p-5 rtl:rounded-r-xl"><DefaultRoom className='fill-neutral-400 w-24 h-24' /></div> : null;
 
     if (room.image) {
-        image = <div className={`${props.roomsHasImage?"":"max-sm:hidden"} bg-travel-pattern bg-neutral-300 w-full md:w-1/4 flex items-center justify-center max-md:rounded-t-xl md:rtl:rounded-r-xl md:ltr:rounded-l-xl`}>
+        image = props.roomsHasImage ? (
+        <div className="bg-travel-pattern bg-neutral-300 w-full md:w-1/4 flex items-center justify-center max-md:rounded-t-xl md:rtl:rounded-r-xl md:ltr:rounded-l-xl">
             <Image
                 onContextMenu={(e) => e.preventDefault()}
                 className='h-36 w-full object-cover object-center max-md:rounded-t-xl md:rtl:rounded-r-xl md:ltr:rounded-l-xl'
@@ -45,6 +46,7 @@ const RoomItem: React.FC<Props> = props => {
                 height="200"
             />
         </div>
+        ): null ;
     }
 
 
