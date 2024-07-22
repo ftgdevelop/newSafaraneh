@@ -18,12 +18,12 @@ const RecentBlogs: React.FC<Props> = props => {
 
                 {props.blogs?.map(blog => (
 
-                    <Link key={blog.id} href={`/blog/${blog.slug}`} title={blog.title.rendered}>
+                    <Link key={blog.id} href={`/blog/${blog.slug}`} title={blog.title?.rendered}>
                         <Image
                             onContextMenu={e => {e.preventDefault()}}
-                            src={blog.images.medium}
-                            alt={blog.title.rendered}
-                            title={blog.title.rendered}
+                            src={blog.images?.medium}
+                            alt={blog.title?.rendered}
+                            title={blog.title?.rendered}
                             width={278}
                             height={176}
                             className='w-full'
