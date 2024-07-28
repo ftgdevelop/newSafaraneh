@@ -1,5 +1,5 @@
 import Checkbox from "@/modules/shared/components/ui/Checkbox";
-import { FlightType } from "../../types/flights";
+import { FlightItemType } from "../../types/flights";
 import { useDispatch, useSelector } from "react-redux";
 import { setCabinClassFilter, setTicketTypeFilter } from "../../store/flightsSlice";
 import { RootState } from "@/modules/shared/store";
@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Skeleton from "@/modules/shared/components/ui/Skeleton";
 
-const TicketCobinType: React.FC<any> = ({ FlightsData }: { FlightsData: FlightType[] }) => {
+const TicketCobinType: React.FC<any> = ({ FlightsData }: { FlightsData: FlightItemType[] }) => {
     const economyCobinCount = FlightsData.filter(item => item.cabinClass.name == "Economy").length
     const businessCobinCount = FlightsData.filter(item => item.cabinClass.name == "Business").length
 

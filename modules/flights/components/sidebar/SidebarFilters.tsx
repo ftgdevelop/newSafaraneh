@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import TicketCobinType from "./TicketCobinType";
-import { FlightType } from "../../types/flights";
+import { FlightItemType } from "../../types/flights";
 import Skeleton from "@/modules/shared/components/ui/Skeleton";
 import FlightTime from "./FlightTime";
 import Airlines from "./Airlines";
 import PriceChange from "./PriceRange";
 
-const SidebarFilters: React.FC<any> = ({ FlightsData, flightsInFilterLengths }: {FlightsData: FlightType[], flightsInFilterLengths: number}) => {
+const SidebarFilters: React.FC<any> = ({ FlightsData, flightsInFilterLengths }: {FlightsData: FlightItemType[], flightsInFilterLengths: number}) => {
     const [OpenSidebar, setOpenSidebar] = useState<boolean>(false)
     
     useEffect(() => {

@@ -1,6 +1,6 @@
 import { GetAirportsByCode, GetAvailabilityKey, GetFlightList } from "@/modules/flights/actions";
 import FlightSidebarFilters from "@/modules/flights/components/sidebar/SidebarFilters";
-import { FlightType, FlightSearchDefaultValues, FlightSortFactorType } from "@/modules/flights/types/flights";
+import { FlightItemType, FlightSearchDefaultValues, FlightSortFactorType } from "@/modules/flights/types/flights";
 import { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useEffect, useState } from "react";
@@ -56,7 +56,7 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
     const { t: tFlight } = useTranslation("flight");
 
     const SidebarFilter = useSelector((state: RootState) => state.flightFilters.filterOption)
-    let [flightsInFilter, setFlightsInFilter] = useState<FlightType[]>()
+    let [flightsInFilter, setFlightsInFilter] = useState<FlightItemType[]>()
     let [sortFlights, setSortFlights] = useState<FlightSortFactorType>('LowestPrice')
     let [fetchDataCompelete, setFetchDataCompelte] = useState(false)
     let [showSkeleton, setShowSkeleton] = useState(false);
@@ -450,13 +450,13 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
 
                     {
                         flightsInFilter?.sort((a, b) => SortCapacity(a, b))
-                            .sort((a: FlightType, b: FlightType): any => {
+                            .sort((a: FlightItemType, b: FlightItemType): any => {
                                 if (sortFlights == "HighestPrice") return SortHightestPrice(a, b)
                                 else if (sortFlights == "Time") return SortTime(a, b)
                                 else {
                                     return a.capacity && a.adultPrice - b.adultPrice
                                 }
-                            }).slice(firstItemIndex, lastItem).map((flight: FlightType) =>
+                            }).slice(firstItemIndex, lastItem).map((flight: FlightItemType) =>
                                 <FlightItem passengers={passengers} flightData={flight} key={flight.flightKey} />
                             )
                     }

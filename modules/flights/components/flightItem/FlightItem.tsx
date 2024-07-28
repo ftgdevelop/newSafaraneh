@@ -1,4 +1,4 @@
-import { FlightType } from "../../types/flights";
+import { FlightItemType } from "../../types/flights";
 import { useState } from "react";
 import FlightDataItem from "./GeneralData";
 import FlightPurcheInfo from "./PriceInfo";
@@ -8,7 +8,7 @@ type PassengersType = {
     children:number;
     infants:number;
 }
-const FlightItem: React.FC<any> = ({ flightData,passengers } : {flightData : FlightType , passengers: PassengersType}) => {
+const FlightItem: React.FC<any> = ({ flightData,passengers } : {flightData : FlightItemType , passengers: PassengersType}) => {
     
     const [OpenDetail, setOpenDetail] = useState<boolean>(false)
     return (
