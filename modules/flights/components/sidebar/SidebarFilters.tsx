@@ -20,10 +20,12 @@ const SidebarFilters: React.FC<any> = ({ FlightsData, flightsInFilterLengths }: 
         }
     },[OpenSidebar])
 
+    const theme2 = process.env.THEME === "THEME2";
+
     return (
         <>
-            <div className={`w-1/4 h-fit max-lg:fixed max-lg:top-0 max-lg:-right-1 max-lg:overflow-y-auto p-4 pt-2 divide-y space-y-2 max-lg:w-2/5 max-md:w-3/5
-            max-sm:w-11/12 max-lg:h-screen bg-white border-1 border-gray-200 rounded max-lg:rounded-none z-20 duration-300 max-lg:border-0
+            <div className={`${theme2?"max-lg:bg-white max-lg:p-4 max-lg:pb-24 max-lg:z-20":"z-20 p-4 pt-2 divide-y bg-white border-1 border-gray-200 rounded max-lg:rounded-none max-lg:border-0"} 
+            max-lg:h-screen h-fit max-lg:fixed max-lg:top-0 max-lg:-right-1 max-lg:overflow-y-auto space-y-2 duration-300 
             ${OpenSidebar ? 'max-lg:translate-x-0' : 'max-lg:translate-x-full'}`}
             >
                 <div>

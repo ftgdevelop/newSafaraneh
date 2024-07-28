@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "@/modules/shared/hooks/use-store
 
 type Props = {
     message:string;
+    wrapperClassName?:string;
 }
 const LoginLinkBanner:React.FC<Props> = props => {
     
@@ -17,7 +18,7 @@ const LoginLinkBanner:React.FC<Props> = props => {
     }
 
     return(
-        <div className="bg-blue-950 text-white mb-6 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row justify-between gap-5 text-xs md:text-md font-semibold items-center max-sm:mx-5" >
+        <div className={`bg-blue-950 text-white mb-6 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row justify-between gap-5 text-xs md:text-md font-semibold items-center max-sm:mx-5 ${props.wrapperClassName||""}`} >
             <p className="max-sm:text-center flex gap-3 md:items-center">
                 <Verified 
                     className="w-10 h-10 fill-current shrink-0 hidden sm:block"

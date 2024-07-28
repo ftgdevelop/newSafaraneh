@@ -1,6 +1,6 @@
 import { GetAirportsByCode, GetAvailabilityKey, GetFlightList } from "@/modules/flights/actions";
 import FlightSidebarFilters from "@/modules/flights/components/sidebar/SidebarFilters";
-import { FlightType, FlightSearchDefaultValues } from "@/modules/flights/types/flights";
+import { FlightType, FlightSearchDefaultValues, FlightSortFactorType } from "@/modules/flights/types/flights";
 import { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useEffect, useState } from "react";
@@ -30,6 +30,7 @@ import { WebSiteDataType } from "@/modules/shared/types/common";
 import NotFound from "@/modules/shared/components/ui/NotFound";
 import AvailabilityTimeout from "@/modules/shared/components/AvailabilityTimeout";
 import Skeleton from "@/modules/shared/components/ui/Skeleton";
+import LoginLinkBanner from "@/modules/shared/components/theme2/LoginLinkBanner";
 
 
 type Airport = {
@@ -56,7 +57,7 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
 
     const SidebarFilter = useSelector((state: RootState) => state.flightFilters.filterOption)
     let [flightsInFilter, setFlightsInFilter] = useState<FlightType[]>()
-    let [sortFlights, setSortFlights] = useState('LowestPrice')
+    let [sortFlights, setSortFlights] = useState<FlightSortFactorType>('LowestPrice')
     let [fetchDataCompelete, setFetchDataCompelte] = useState(false)
     let [showSkeleton, setShowSkeleton] = useState(false);
 
@@ -315,6 +316,8 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
         fetchKey(routeCodes);
     }
 
+    const theme2 = process.env.THEME === "THEME2";
+
     return (
         <>
             <Head>
@@ -373,38 +376,46 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
 
             </ModalPortal>
 
-            <div className="max-w-container m-auto p-5 max-md:p-3 flex gap-5 relative">
+            <div className="max-w-container m-auto p-5 max-md:p-3 gap-5 relative grid grid-cols-1 lg:grid-cols-4">
+
+                {theme2 && (
+                    <SearchForm
+                        wrapperClassName="lg:col-span-4"
+                        defaultValues={defaultValues}
+                        research={research}
+                    />
+                )}
 
                 <FlightSidebarFilters FlightsData={departureList} flightsInFilterLengths={flightsInFilter?.length} />
 
-                <div className="w-3/4 max-lg:w-full">
+                <div className="lg:col-span-3">
 
-                    <SearchData
+                    {!theme2 && <SearchData
                         showSearchForm={() => { setShowSearchForm(true) }}
                         airports={airports}
-                    />
+                    />}
 
-                    <ChangeDay />
-                    {
-                        flightsInFilter?.length ?
-                            <SortFlights sortFlights={sortFlights} changeSortFlights={(e: string) => setSortFlights(e)} /> : null
-                    }
+                    <div className={theme2?"md:flex md:justify-between":""}>
 
+                        <ChangeDay />
 
+                        {!!flightsInFilter?.length && <SortFlights sortFactor={sortFlights}  setSortFactor={setSortFlights} /> }
+                        
+                    </div>
 
 
                     {!!query.returning && <p className="text-sm mt-5" > ابتدا از لیست زیر، بلیط رفت خود را انتخاب نمایید</p>}
 
 
-                    {
-                        departureList.length ? <Pagination
+                    {(!theme2 && departureList.length) && (
+                        <Pagination
                             totalItems={flightsInFilter?.length || 0}
                             itemsPerPage={10}
                             onChange={setPage}
                             currentPage={page}
                             wrapperClassName="mt-5"
-                        /> : null
-                    }
+                        />
+                    )}
 
                     {
                         !(loadingPercentage === 100) && <ProgressBarWithLabel
@@ -434,6 +445,8 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
                             ) )}
                         </>
                     ) }
+
+                    {!!theme2 && <LoginLinkBanner wrapperClassName="mt-3" message='وقتی وارد سیستم شوید همیشه بهترین قیمت‌های ما را دریافت خواهید کرد!' />}
 
                     {
                         flightsInFilter?.sort((a, b) => SortCapacity(a, b))

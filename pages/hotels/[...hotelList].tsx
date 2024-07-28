@@ -21,28 +21,13 @@ import HotelsOnMap from '@/modules/domesticHotel/components/hotelsList/HotelsOnM
 import Image from 'next/image';
 import { getPageByUrl } from '@/modules/shared/actions';
 import Head from 'next/head';
-import { WebSiteDataType } from '@/modules/shared/types/common';
+import { GetPageByUrlDataType, WebSiteDataType } from '@/modules/shared/types/common';
 import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
 import AvailabilityTimeout from '@/modules/shared/components/AvailabilityTimeout';
 import LoginLinkBanner from '@/modules/shared/components/theme2/LoginLinkBanner';
 
 type Props = {
-  pageData: {
-    title?: string;
-    pageTitle?: string;
-    metaKeyword?: string;
-    metaDescription?: string;
-    url?: string;
-    widget?:{
-      content?:{
-        description?: string;
-      };
-      faqs?:{
-        question?: string;
-        answer?: string;
-      }[]
-    }
-  };
+  pageData:GetPageByUrlDataType;
   portalData: WebSiteDataType;
   accomodations?: SearchAccomodationItem[];
 }

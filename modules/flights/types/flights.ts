@@ -290,3 +290,6 @@ export type FlightRecentSearchItem = {
   departureDate: string;
   returnDate: string;
 }
+
+
+export type FlightSortFactorType =  "LowestPrice" | "HighestPrice" | "Time";
