@@ -19,7 +19,7 @@ type Props = {
     accept?: string;
   }
   
-const about: NextPage<Props> = props => {
+const About: NextPage<Props> = props => {
     
     const {portalData, pageData} = props;
 
@@ -138,7 +138,7 @@ const about: NextPage<Props> = props => {
     )
 }
 
-export default about;
+export default About;
 
 export async function  getStaticProps (context: any)  {
     
