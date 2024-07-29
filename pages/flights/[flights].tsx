@@ -464,63 +464,59 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
                         <ModalPortal
                             selector="modal_portal"
                             show={!!selectedFlight}
-                            children={
-                                <div className={`fixed h-screen shadow-normal p-5 flex flex-col justify-between top-0 w-screen sm:w-400 pb-5 bg-white duration-200 transition-all overflow-auto rtl:left-0 ltr:right-0 ${delayedOpen ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-full"}`}>
+                        >
+                            <div className={`fixed h-screen shadow-normal p-5 flex flex-col justify-between top-0 w-screen sm:w-400 pb-5 bg-white duration-200 transition-all overflow-auto rtl:left-0 ltr:right-0 ${delayedOpen ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-full"}`}>
+                                <div>
+                                    <button
+                                        type="button"
+                                        className="flex items-center gap-2 mb-5"
+                                        onClick={() => { setDelayedOpen(false) }}
+                                    >
+                                        <Close className="w-6 h-6 fill-red-600" />
+                                        <span className="text-neutral-500 text-xs"> بازگشت به لیست پرواز </span>
+                                    </button>
 
-                                    <div>
-                                        <button
-                                            type="button"
-                                            className="flex items-center gap-2 mb-5"
-                                            onClick={() => { setDelayedOpen(false) }}
-                                        >
-                                            <Close className="w-6 h-6 fill-red-600" />
-                                            <span className="text-neutral-500 text-xs"> بازگشت به لیست پرواز </span>
-                                        </button>
-
-                                        {!!selectedFlight && <FlightDetailsTheme2
-                                            flight={selectedFlight}
-                                            passengers={passengers}
-                                        />}
-                                    </div>
-
-                                    {!!selectedFlight && <div className="rtl:text-left ltr:text-right">
-
-                                        {selectedFlight.capacity ? (
-                                            <div className="text-2xs text-red-600 block mt-1"> {selectedFlight.capacity} صندلی باقیمانده</div>
-                                        ) : (
-                                            <div className="text-base text-center font-semibold border border-red-300 rounded p-3 text-red-600 block mt-1">
-                                                ظرفیت  تکمیل است
-                                                <div className="mt-1 text-2xs">
-                                                    لطفا پرواز دیگری انتخاب کنید.
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {selectedFlightTotalPrice ? (
-                                            <div className="mt-1">
-                                                <span className="font-semibold text-lg md:text-xl">
-                                                    {numberWithCommas(selectedFlightTotalPrice)}
-                                                </span>
-                                                <span className="text-2xs font-semibold">
-                                                    ریال
-                                                </span>
-                                            </div>
-                                        ) : null}
-
-                                        {!!selectedFlight.capacity && <Button
-                                            onClick={() => { prereserveFlight(selectedFlight) }}
-                                            type="button"
-                                            className="w-full px-5 h-10 mt-2"
-                                            loading={prereserveLoading}
-                                        >
-                                            انتخاب
-                                        </Button>}
-                                    </div>}
-
-
+                                    {!!selectedFlight && <FlightDetailsTheme2
+                                        flight={selectedFlight}
+                                        passengers={passengers}
+                                    />}
                                 </div>
-                            }
-                        />
+
+                                {!!selectedFlight && <div className="rtl:text-left ltr:text-right">
+
+                                    {selectedFlight.capacity ? (
+                                        <div className="text-2xs text-red-600 block mt-1"> {selectedFlight.capacity} صندلی باقیمانده</div>
+                                    ) : (
+                                        <div className="text-base text-center font-semibold border border-red-300 rounded p-3 text-red-600 block mt-1">
+                                            ظرفیت  تکمیل است
+                                            <div className="mt-1 text-2xs">
+                                                لطفا پرواز دیگری انتخاب کنید.
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {selectedFlightTotalPrice ? (
+                                        <div className="mt-1">
+                                            <span className="font-semibold text-lg md:text-xl">
+                                                {numberWithCommas(selectedFlightTotalPrice)}
+                                            </span>
+                                            <span className="text-2xs font-semibold">
+                                                ریال
+                                            </span>
+                                        </div>
+                                    ) : null}
+
+                                    {!!selectedFlight.capacity && <Button
+                                        onClick={() => { prereserveFlight(selectedFlight) }}
+                                        type="button"
+                                        className="w-full px-5 h-10 mt-2"
+                                        loading={prereserveLoading}
+                                    >
+                                        انتخاب
+                                    </Button>}
+                                </div>}
+                            </div>
+                        </ModalPortal>
 
                         <div
                             className={`text-blue-600 ${showSearchFormTheme2 ? "hidden" : "lg:hidden"} text-xs border-b border-b-yellow-400 border-b-2 pb-2`}
