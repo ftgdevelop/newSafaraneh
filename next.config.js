@@ -58,7 +58,7 @@ const nextConfig = {
     PROJECT_SERVER_HOTEL_DATA: "hoteldomesticdata.safaraneh.com",
     PROJECT_SERVER_HOTEL_AVAILABILITY: "hotelv5.safaraneh.com",
     PROJECT_SERVER_COORDINATOR:"coordinator.safaraneh.com",
-    PROJECT_SERVER_BLOG :"panel.safaraneh.com",
+    PROJECT_SERVER_BLOG :"blogonline.ir/samita",
     PROJECT_SERVER_CRM:"crm.safaraneh.com",
     PROJECT_SERVER_PAYMENT: "payline.samita.com",
     PROJECT_SERVER_IDENTITY:"identity.safaraneh.com",
