@@ -1,4 +1,4 @@
-import { FlightType } from "../../types/flights";
+import { FlightItemType } from "../../types/flights";
 import { useRouter } from "next/router";
 import { numberWithCommas } from "@/modules/shared/helpers";
 import Button from "@/modules/shared/components/ui/Button";
@@ -13,7 +13,7 @@ type PassengersType = {
     children:number;
     infants:number;
 }
-const PriceInfo: React.FC<any> = ({ flightData, detail, passengers }: { flightData: FlightType, detail: boolean, passengers: PassengersType }) => {
+const PriceInfo: React.FC<any> = ({ flightData, detail, passengers }: { flightData: FlightItemType, detail: boolean, passengers: PassengersType }) => {
     
     const router = useRouter();
 

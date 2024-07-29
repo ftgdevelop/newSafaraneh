@@ -3,7 +3,7 @@ import type { GetServerSideProps, NextPage } from 'next';
 import { i18n, useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
-import { PageDataType, WebSiteDataType } from '@/modules/shared/types/common';
+import { HotelPageDataType, WebSiteDataType } from '@/modules/shared/types/common';
 import { DomesticAccomodationType, DomesticHotelDetailType, DomesticHotelRichSheet, DomesticHotelRichSnippets, EntitySearchResultItemType, HotelScoreDataType } from '@/modules/domesticHotel/types/hotel';
 import { useRouter } from 'next/router';
 import BackToList from '@/modules/domesticHotel/components/hotelDetails/BackToList';
@@ -36,7 +36,7 @@ type Props = {
     sheet:DomesticHotelRichSheet;
 
     score?: HotelScoreDataType;
-    page?: PageDataType;
+    page?: HotelPageDataType;
     hotel?: DomesticHotelDetailType;
   };
   portalData: WebSiteDataType;

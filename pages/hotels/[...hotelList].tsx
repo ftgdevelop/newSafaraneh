@@ -21,28 +21,13 @@ import HotelsOnMap from '@/modules/domesticHotel/components/hotelsList/HotelsOnM
 import Image from 'next/image';
 import { getPageByUrl } from '@/modules/shared/actions';
 import Head from 'next/head';
-import { WebSiteDataType } from '@/modules/shared/types/common';
+import { GetPageByUrlDataType, WebSiteDataType } from '@/modules/shared/types/common';
 import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
 import AvailabilityTimeout from '@/modules/shared/components/AvailabilityTimeout';
 import LoginLinkBanner from '@/modules/shared/components/theme2/LoginLinkBanner';
 
 type Props = {
-  pageData: {
-    title?: string;
-    pageTitle?: string;
-    metaKeyword?: string;
-    metaDescription?: string;
-    url?: string;
-    widget?:{
-      content?:{
-        description?: string;
-      };
-      faqs?:{
-        question?: string;
-        answer?: string;
-      }[]
-    }
-  };
+  pageData:GetPageByUrlDataType;
   portalData: WebSiteDataType;
   accomodations?: SearchAccomodationItem[];
 }
@@ -272,6 +257,9 @@ const HotelList: NextPage<Props> = props => {
     const fetchPrices = async () => {
       setPricesLoading(true);
       setPricesData(undefined);
+      
+      if (!hotelIds?.length) return;
+
       const pricesResponse = await AvailabilityByHotelId({ checkin: checkin, checkout: checkout, ids: hotelIds as number[] }, acceptLanguage);
 
       if (pricesResponse.data?.result?.hotels) {
@@ -287,6 +275,9 @@ const HotelList: NextPage<Props> = props => {
     fetchPrices();
 
     const fetchEntityDetail = async (id: number) => {
+      
+      if (!id) return;
+
       const entityResponse: any = await getEntityNameByLocation(id, acceptLanguage);
 
       if (entityResponse?.data?.result) {
