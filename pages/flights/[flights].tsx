@@ -1,14 +1,14 @@
-import { GetAirportsByCode, GetAvailabilityKey, GetFlightList } from "@/modules/flights/actions";
+import { GetAirportsByCode, GetAvailabilityKey, GetFlightList, validateFlight } from "@/modules/flights/actions";
 import FlightSidebarFilters from "@/modules/flights/components/sidebar/SidebarFilters";
 import { FlightItemType, FlightSearchDefaultValues, FlightSortFactorType } from "@/modules/flights/types/flights";
 import { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/modules/shared/store";
 import { SidebarFilterChange } from "@/modules/flights/templates/SidebarFilterChange";
 import { SortHightestPrice, SortCapacity, SortTime } from "@/modules/flights/templates/SortFlightItem";
-import { addSomeDays, checkDateIsAfterDate, dateFormat } from "@/modules/shared/helpers";
+import { addSomeDays, checkDateIsAfterDate, dateDiplayFormat, dateFormat, numberWithCommas } from "@/modules/shared/helpers";
 import { useRouter } from "next/router";
 import ProgressBarWithLabel from "@/modules/shared/components/ui/ProgressBarWithLabel";
 import { useTranslation } from "next-i18next";
@@ -31,6 +31,10 @@ import NotFound from "@/modules/shared/components/ui/NotFound";
 import AvailabilityTimeout from "@/modules/shared/components/AvailabilityTimeout";
 import Skeleton from "@/modules/shared/components/ui/Skeleton";
 import LoginLinkBanner from "@/modules/shared/components/theme2/LoginLinkBanner";
+import FlightItemTheme2 from "@/modules/flights/components/flightList/FlightItemTheme2";
+import FlightDetailsTheme2 from "@/modules/flights/components/flightList/FlightDetailsTheme2";
+import Button from "@/modules/shared/components/ui/Button";
+import { setReduxError } from "@/modules/shared/store/errorSlice";
 
 
 type Airport = {
@@ -61,7 +65,9 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
     let [fetchDataCompelete, setFetchDataCompelte] = useState(false)
     let [showSkeleton, setShowSkeleton] = useState(false);
 
-    let [showSearchForm, setShowSearchForm] = useState<boolean>(false)
+    let [showSearchForm, setShowSearchForm] = useState<boolean>(false);
+    const [showSearchFormTheme2, setShowSearchFormTheme2] = useState<boolean>(false);
+    const [selectedFlight, setSelectedFlight] = useState<FlightItemType | undefined>(undefined);
 
     const [page, setPage] = useState(1)
     const firstItemIndex = (page - 1) * 10;
@@ -71,6 +77,8 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
     const [departureList, setDepartureList] = useState<any>([]);
 
     const [loadingPercentage, setLoadingPercentage] = useState<number>(0);
+
+    const [prereserveLoading, setPrereserveLoading] = useState<boolean>(false);
 
     const [showChangeDateModal, setShowChangeDateModal] = useState<boolean>(false);
 
@@ -83,6 +91,30 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
         children: +(query.child || 0),
         infants: +(query.infant || 0)
     }
+    const allPassengers = passengers.adults + passengers.children + passengers.infants;
+
+    const [openDetail, setOpenDetail] = useState<boolean>(false);
+    const [delayedOpen, setDelayedOpen] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (openDetail) {
+            setTimeout(() => { setDelayedOpen(true) }, 100);
+        }
+    }, [openDetail]);
+
+    useEffect(() => {
+        if (!delayedOpen) {
+            setTimeout(() => { setOpenDetail(false); setSelectedFlight(undefined) }, 200);
+        }
+    }, [delayedOpen]);
+
+    useEffect(() => {
+        if (selectedFlight) {
+            setOpenDetail(true);
+        } else {
+            setDelayedOpen(false);
+        }
+    }, [selectedFlight?.flightKey])
 
 
     useEffect(() => {
@@ -195,6 +227,8 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
         if (query.flightType && !SidebarFilter.cabinClassOption.includes((query.flightType as string))) {
             dispatch(setCabinClassFilter(SidebarFilter.cabinClassOption.concat(query.flightType)))
         }
+        setSelectedFlight(undefined);
+
     }, [router.asPath]);
 
 
@@ -318,6 +352,53 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
 
     const theme2 = process.env.THEME === "THEME2";
 
+    let selectedFlightTotalPrice = 0;
+    if (selectedFlight) {
+        selectedFlightTotalPrice = passengers?.adults * selectedFlight.adultPrice + passengers?.children * selectedFlight.childPrice + passengers?.infants * selectedFlight.infantPrice;
+    }
+
+    const prereserveFlight = (flightData: FlightItemType) => {
+
+        if (!flightData?.capacity) return;
+
+        const urlParameters = router.query;
+
+        if (!flightData.hasReturn && urlParameters.returning) {
+            dispatch(setReduxError({
+                title: t('error'),
+                message: "در حال حاضر خرید این بلیط به صورت رفت و برگشت امکان پذیر نیست. اگر مایل به خرید این پرواز هستید لطفا به صورت بلیط رفت و برگشت مجزا برای خرید ان اقدام کنید",
+                isVisible: true
+            }));
+            return;
+        }
+
+        if (!urlParameters.returning) {
+            setPrereserveLoading(true);
+
+            const token = localStorage.getItem('Token') || "";
+
+            const validate = async (key: string) => {
+                const response: any = await validateFlight({ departureKey: key, token: token });
+                if (response?.data?.result?.preReserveKey) {
+                    router.push(
+                        `/flights/checkout?key=${response.data.result.preReserveKey}`
+                    );
+                } else {
+                    setPrereserveLoading(false);
+                    dispatch(setReduxError({
+                        title: t('error'),
+                        message: "لطفا پرواز دیگری را انتخاب کنید",
+                        isVisible: true
+                    }));
+
+                    return;
+                }
+            }
+            validate(flightData.flightKey);
+        }
+
+    }
+
     return (
         <>
             <Head>
@@ -379,11 +460,91 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
             <div className="max-w-container m-auto p-5 max-md:p-3 gap-5 relative grid grid-cols-1 lg:grid-cols-4">
 
                 {theme2 && (
-                    <SearchForm
-                        wrapperClassName="lg:col-span-4"
-                        defaultValues={defaultValues}
-                        research={research}
-                    />
+                    <>
+                        <ModalPortal
+                            selector="modal_portal"
+                            show={!!selectedFlight}
+                            children={
+                                <div className={`fixed h-screen shadow-normal p-5 flex flex-col justify-between top-0 w-screen sm:w-400 pb-5 bg-white duration-200 transition-all overflow-auto rtl:left-0 ltr:right-0 ${delayedOpen ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-full"}`}>
+
+                                    <div>
+                                        <button
+                                            type="button"
+                                            className="flex items-center gap-2 mb-5"
+                                            onClick={() => { setDelayedOpen(false) }}
+                                        >
+                                            <Close className="w-6 h-6 fill-red-600" />
+                                            <span className="text-neutral-500 text-xs"> بازگشت به لیست پرواز </span>
+                                        </button>
+
+                                        {!!selectedFlight && <FlightDetailsTheme2
+                                            flight={selectedFlight}
+                                            passengers={passengers}
+                                        />}
+                                    </div>
+
+                                    {!!selectedFlight && <div className="rtl:text-left ltr:text-right">
+
+                                        {selectedFlight.capacity ? (
+                                            <div className="text-2xs text-red-600 block mt-1"> {selectedFlight.capacity} صندلی باقیمانده</div>
+                                        ) : (
+                                            <div className="text-base text-center font-semibold border border-red-300 rounded p-3 text-red-600 block mt-1">
+                                                ظرفیت  تکمیل است
+                                                <div className="mt-1 text-2xs">
+                                                    لطفا پرواز دیگری انتخاب کنید.
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {selectedFlightTotalPrice ? (
+                                            <div className="mt-1">
+                                                <span className="font-semibold text-lg md:text-xl">
+                                                    {numberWithCommas(selectedFlightTotalPrice)}
+                                                </span>
+                                                <span className="text-2xs font-semibold">
+                                                    ریال
+                                                </span>
+                                            </div>
+                                        ) : null}
+
+                                        {!!selectedFlight.capacity && <Button
+                                            onClick={() => { prereserveFlight(selectedFlight) }}
+                                            type="button"
+                                            className="w-full px-5 h-10 mt-2"
+                                            loading={prereserveLoading}
+                                        >
+                                            انتخاب
+                                        </Button>}
+                                    </div>}
+
+
+                                </div>
+                            }
+                        />
+
+                        <div
+                            className={`text-blue-600 ${showSearchFormTheme2 ? "hidden" : "lg:hidden"} text-xs border-b border-b-yellow-400 border-b-2 pb-2`}
+                            onClick={() => { setShowSearchFormTheme2(true) }}
+                        >
+                            <h3 className="text-lg">
+                                {origin} به {destination}
+                            </h3>
+                            {!!defaultValues?.departureDate && dateDiplayFormat({ date: defaultValues.departureDate, format: "dd mm yyyy", locale: "fa" })} . {allPassengers} مسافر
+                        </div>
+
+                        <SearchForm
+                            wrapperClassName={`lg:col-span-4 ${showSearchFormTheme2 ? "" : "max-lg:hidden"}`}
+                            defaultValues={defaultValues}
+                            research={research}
+                        />
+
+                        <div
+                            className={`text-blue-600 mx-auto ${showSearchFormTheme2 ? "lg:hidden" : "hidden"}`}
+                            onClick={() => { setShowSearchFormTheme2(false) }}
+                        >
+                            بستن
+                        </div>
+                    </>
                 )}
 
                 <FlightSidebarFilters FlightsData={departureList} flightsInFilterLengths={flightsInFilter?.length} />
@@ -395,19 +556,19 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
                         airports={airports}
                     />}
 
-                    <div className={theme2?"md:flex md:justify-between":""}>
+                    <div className={theme2 ? "md:flex md:justify-between" : ""}>
 
                         <ChangeDay />
 
-                        {!!flightsInFilter?.length && <SortFlights sortFactor={sortFlights}  setSortFactor={setSortFlights} /> }
-                        
+                        {flightsInFilter?.length ? <SortFlights sortFactor={sortFlights} setSortFactor={setSortFlights} /> : null}
+
                     </div>
 
 
                     {!!query.returning && <p className="text-sm mt-5" > ابتدا از لیست زیر، بلیط رفت خود را انتخاب نمایید</p>}
 
 
-                    {(!theme2 && departureList.length) && (
+                    {!theme2 && !!departureList.length && (
                         <Pagination
                             totalItems={flightsInFilter?.length || 0}
                             itemsPerPage={10}
@@ -427,14 +588,14 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
 
                     {!!showSkeleton && (
                         <>
-                            {[1,2,3,4,5].map(skeletonItem => (
+                            {[1, 2, 3, 4, 5].map(skeletonItem => (
                                 <div className="bg-white border my-5 grid grid-cols-4" key={skeletonItem}>
                                     <div className="col-span-3 p-5 rtl:border-l border-dotted border-neutral-300">
                                         <Skeleton className="w-1/2" />
                                         <Skeleton className="my-3 w-3/4" />
                                         <Skeleton className="w-12" />
                                     </div>
-                                    
+
                                     <div className="rtl:ltr p-5">
                                         <Skeleton className="w-2/3" />
                                         <Skeleton className="my-3 w-full" />
@@ -442,9 +603,9 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
                                     </div>
 
                                 </div>
-                            ) )}
+                            ))}
                         </>
-                    ) }
+                    )}
 
                     {!!theme2 && <LoginLinkBanner wrapperClassName="mt-3" message='وقتی وارد سیستم شوید همیشه بهترین قیمت‌های ما را دریافت خواهید کرد!' />}
 
@@ -457,9 +618,20 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
                                     return a.capacity && a.adultPrice - b.adultPrice
                                 }
                             }).slice(firstItemIndex, lastItem).map((flight: FlightItemType) =>
-                                <FlightItem passengers={passengers} flightData={flight} key={flight.flightKey} />
+                                <Fragment key={flight.flightKey} >
+                                    {theme2 ? (
+                                        <FlightItemTheme2
+                                            flight={flight}
+                                            passengers={passengers}
+                                            onSelectFlight={() => { setSelectedFlight(flight) }}
+                                        />
+                                    ) : (
+                                        <FlightItem passengers={passengers} flightData={flight} />
+                                    )}
+                                </Fragment>
                             )
                     }
+
                     {
                         departureList.length ? <Pagination
                             totalItems={flightsInFilter?.length || 0}
@@ -469,9 +641,6 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
                             wrapperClassName="mt-5"
                         /> : null
                     }
-
-
-
 
                     {
                         fetchDataCompelete && !departureList.length &&
