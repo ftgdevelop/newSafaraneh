@@ -32,7 +32,8 @@ const nextConfig = {
       'trustseal.enamad.ir',
       'logo.samandehi.ir',
       'www.facebook.com',
-      'cdn.mehrbooking.net'
+      'cdn.mehrbooking.net',
+      'blogonline.ir'
     ],
     formats: ['image/avif', 'image/webp'],
   },
