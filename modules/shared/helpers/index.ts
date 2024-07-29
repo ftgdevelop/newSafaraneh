@@ -22,8 +22,8 @@ export const dateDiplayFormat = ({ date, format, locale }: { date: string; forma
     let m = dateObject.getMinutes().toString().padStart(2, '0');
 
     if (format === "HH:mm"){
-        const h = dateObject.toLocaleString(locale, { hour: "2-digit" });
-        const m = dateObject.toLocaleString(locale, { minute: "2-digit" });
+        const h = dateObject.toLocaleString(locale, { hour: "2-digit" }).padStart(2, '0');
+        const m = dateObject.toLocaleString(locale, { minute: "2-digit" }).padStart(2, '0');
         return(h+":"+m);
     }
 

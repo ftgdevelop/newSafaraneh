@@ -1,8 +1,8 @@
 import { useRouter } from "next/router"
-import { FlightType } from "../../types/flights"
+import { FlightItemType } from "../../types/flights"
 import { dateDiplayFormat, dateFormat } from "@/modules/shared/helpers"
 
-const FlightDetailItem: React.FC<any> = ({ FlightsData }: { FlightsData: FlightType }) => {
+const FlightDetailItem: React.FC<any> = ({ FlightsData }: { FlightsData: FlightItemType }) => {
     
     const arrivalTime = FlightsData?.arrivalTime?.split('T')[1].split(":").slice(0,2).join(":")
     const departureTime = FlightsData?.departureTime?.split('T')[1].split(":").slice(0, 2).join(":")

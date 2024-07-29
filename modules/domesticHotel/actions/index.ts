@@ -86,6 +86,7 @@ export const AvailabilityByHotelId = async (params: {
                 ...Header,
                 "Accept-Language": acceptLanguage,
                 Currency: "IRR",
+                TenantId: process.env.PROJECT_SERVER_TENANTID,
                 Apikey: process.env.PROJECT_SERVER_APIKEY
             }
         });

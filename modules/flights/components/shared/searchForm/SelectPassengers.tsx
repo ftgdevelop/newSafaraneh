@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
 import Quantity from '@/modules/shared/components/ui/Quantity';
 import { FormikErrors } from 'formik';
-import { DownCaretThick } from '@/modules/shared/components/ui/icons';
+import { DownCaretThick, User } from '@/modules/shared/components/ui/icons';
 import Button from '@/modules/shared/components/ui/Button';
 
 type Props = {
@@ -47,7 +47,7 @@ const SelectPassengers: React.FC<Props> = props => {
 
     const theme2 = process.env.THEME === "THEME2";
 
-    const buttonClassNames: string[] = ['flex rounded justify-between items-center', 'rounded-md', 'border', 'bg-white', 'px-3', `${theme2 ? "w-full h-12 border-neutral-400" : "h-10 w-28"}`, 'ltr:text-left', 'rtl:text-right'];
+    const buttonClassNames: string[] = ['flex rounded items-center', 'rounded-md', 'border', 'bg-white', 'px-3', `${theme2 ? "gap-1.5 w-full h-12 border-neutral-400" : "justify-between h-10 w-28"}`, 'ltr:text-left', 'rtl:text-right'];
 
     const boxClassNames = `bg-white absolute w-60 z-[1] top-full left-0 right-0 shadow border mt-1 rounded ${theme2 ? "p-2 scale-20" : ""} invisible opacity-0`
     const openBoxClassNames = `bg-white absolute w-60 z-[1] top-full left-0 right-0 shadow border mt-1 rounded transition-all visible opacity-100 ${theme2 ? "p-2 rtl:origin-top-right ltr:origin-top-left scale-100" : " "}`
@@ -60,10 +60,14 @@ const SelectPassengers: React.FC<Props> = props => {
                 className={buttonClassNames.join(" ")}
                 onClick={() => { setShow(prevState => !prevState) }}
             >
-                <span>
+                {!!theme2 && <User className='w-6 h-6 fill-current' /> }
+
+                
+                <div className='leading-4'>
+                    {!!theme2 && <label className='block text-2xs mb-0.5'> مسافران </label> }
                     {text}
-                </span>
-                <DownCaretThick className={`w-3.5 h-3.5 fill-current transition-all ${show ? "rotate-180" : ""}`} />
+                </div>
+                {!theme2 && <DownCaretThick className={`w-3.5 h-3.5 fill-current transition-all ${show ? "rotate-180" : ""}`} />}
             </button>
 
             <div className={show ? openBoxClassNames : boxClassNames}>
