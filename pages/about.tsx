@@ -8,8 +8,25 @@ import honor3 from '../public/images/about/download (2).png';
 import honor4 from '../public/images/about/download (3).png';
 import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
 import Head from "next/head";
+import { getPageByUrl } from "@/modules/shared/actions";
+import { useEffect } from "react";
+import { GetPageByUrlDataType, WebSiteDataType } from "@/modules/shared/types/common";
 
-const about: NextPage = () => {
+type Props = {
+    portalData?: WebSiteDataType;
+    pageData?:GetPageByUrlDataType;    
+    url : string;
+    accept?: string;
+  }
+  
+const About: NextPage<Props> = props => {
+    
+    const {portalData, pageData} = props;
+
+    
+    const siteName = portalData?.billing?.name || "";
+
+    
     const list1 = [
         'برنامه‌ریزی و اجرای سفر رئیس جمهور ونزوئلا و هیئت همراه به تهران جهت اجلاس اوپک گازی',
         'برنامه‌ریزی و اجرای سفر وزیر تجارت و صنایع عمان و هیئت تجاری همراه به تهران',
@@ -42,11 +59,29 @@ const about: NextPage = () => {
         'کسب لوح تقدیر از جانب ریاست محترم دانشگاه آزاد اسلامی واحد تهران غرب به دلیل برگزاری جشنواره گردشگری خوراک'
     ]
 
+    useEffect(()=>{
+        const fetch = async () => {        
+            const pageResponse: any = await getPageByUrl(props.url, props.accept);
+        }
+
+        fetch();
+
+    },[]);
+
+    
+    const siteTitle = pageData?.pageTitle?.replaceAll("{0}", siteName) || "درباره ما";
+    const description = pageData?.metaDescription?.replaceAll("{0}", siteName) ;
+    const keywords = pageData?.metaKeyword?.replaceAll("{0}", siteName);
+
+
     return (
         <>
             <Head>
-                <title>درباره ما</title>
+                <title> {siteTitle} </title>
+                {!!description && <meta name="description" content={description} />}
+                {!!keywords && <meta name="keywords" content={keywords} />}
             </Head>
+            
             <div className="max-w-container m-auto p-5 max-sm:p-3">
             <BreadCrumpt items={[{ label: 'درباره ما' }]} />
             <h2 className="text-3xl font-bold mt-10">درباره ما</h2>
@@ -103,13 +138,25 @@ const about: NextPage = () => {
     )
 }
 
-export default about;
+export default About;
 
 export async function  getStaticProps (context: any)  {
+    
+    const { locale} = context;
+
+    const acceptLanguage = locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR";
+
+    const url = `/${locale}/about`;
+    
+    const pageResponse: any = await getPageByUrl(url, acceptLanguage);
+
     return (
         {
             props: {
                 ...await serverSideTranslations(context.locale, ['common']),
+                pageData: pageResponse?.data?.result || null,
+                url : url || null,
+                accept: acceptLanguage || null
             },
 
         }
