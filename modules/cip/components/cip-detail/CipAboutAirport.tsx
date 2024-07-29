@@ -9,6 +9,8 @@ type Props = {
 const CipAboutAirport: React.FC<Props> = props => {
     const { content, siteName, siteUrl } = props;
 
+    const theme2 = process.env.THEME === "THEME2";
+
     if (!content) {
         return null;
     }
@@ -21,7 +23,7 @@ const CipAboutAirport: React.FC<Props> = props => {
         <div className='py-2 md:py-5'>
             <strong className="block font-semibold text-lg mb-5"> درباره فرودگاه </strong>
 
-            <div className='bg-white inserted-content rounded-lg border border-neutral-300 text-justify p-3 md:p-8 text-sm sm:text-base sm:leading-8 pb-2 sm:pb-5'>
+            <div className={`inserted-content text-justify text-sm sm:text-base sm:leading-8 ${theme2?"py-5":"bg-white rounded-lg border border-neutral-300 p-3 md:p-8 pb-2 sm:pb-5"}`}>
                 {parse(editedContent)}
             </div>
         </div>

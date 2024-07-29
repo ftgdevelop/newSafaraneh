@@ -3,7 +3,7 @@ import { Datepicker as MobiscrollDatepicker, setOptions, localeFa, localeEn, Pag
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'next-i18next';
 
-import { ArrowLeft, Calendar, CalendarToggle } from './icons';
+import { ArrowLeft, Calendar, CalendarFill, CalendarToggle } from './icons';
 import { dateDiplayFormat } from '../../helpers';
 
 type Props = {
@@ -27,6 +27,7 @@ const RangePicker: React.FC<Props> = props => {
 
     const { t } = useTranslation('common');
 
+    const theme2 = process.env.THEME === "THEME2";
     const theme3 = process.env.THEME === "THEME3";
     const [locale, setLocale] = useState<any>(localeFa);
 
@@ -98,7 +99,13 @@ const RangePicker: React.FC<Props> = props => {
                     {!theme3 && <label htmlFor='checkin_date' className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5 pointer-events-none">
                         {t('checkin-date')}
                     </label>}
-                    <Calendar className='w-5 h-5 fill-current absolute  rtl:right-2 ltr:left-2 top-1/2 -mt-2.5 z-10 pointer-events-none' />
+                    
+                    {theme2 ?(
+                        <CalendarFill className='w-5 h-5 fill-current absolute  rtl:right-2 ltr:left-2 top-1/2 -mt-2.5 z-10 pointer-events-none' />
+                    ):(
+                        <Calendar className='w-5 h-5 fill-current absolute  rtl:right-2 ltr:left-2 top-1/2 -mt-2.5 z-10 pointer-events-none' />
+                    )}
+                    
                     <input 
                         id="checkin_date" 
                         className={`border w-full h-12 border-neutral-400 rtl:rounded-r-lg ltr:rounded-l-lg rtl:pr-10 ltr:pl-10 ${theme3?"":"pt-5 leading-4"} rtl:border-l-0 ltr:border-r-0 ${locale === localeEn ? "font-sans" : ""}`} 
@@ -110,7 +117,13 @@ const RangePicker: React.FC<Props> = props => {
                     {!theme3 &&<label htmlFor='checkout_date' className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5 pointer-events-none">
                         {t('checkout-date')}
                     </label>}
-                    <Calendar className='w-5 h-5 fill-current absolute rtl:right-2 ltr:left-2 top-1/2 -mt-2.5 z-10 pointer-events-none' />
+                    
+                    {theme2 ?(
+                        <CalendarFill className='w-5 h-5 fill-current absolute rtl:right-2 ltr:left-2 top-1/2 -mt-2.5 z-10 pointer-events-none' />
+                    ):(
+                        <Calendar className='w-5 h-5 fill-current absolute rtl:right-2 ltr:left-2 top-1/2 -mt-2.5 z-10 pointer-events-none' />
+                    )}
+
                     <input id="checkout_date" className={`border w-full h-12 border-neutral-400 rtl:rounded-l-lg ltr:rounded-r-lg rtl:pr-10 ltr:pl-10 ${theme3?"":"pt-5 leading-4"}`} value={end} readOnly />
                 </div>
 

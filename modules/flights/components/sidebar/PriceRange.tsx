@@ -1,11 +1,11 @@
 import Select from "@/modules/shared/components/ui/Select";
-import { FlightType } from "../../types/flights";
+import { FlightItemType } from "../../types/flights";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/modules/shared/store";
 import { setPriceRangeFilter } from "../../store/flightsSlice";
 import Skeleton from "@/modules/shared/components/ui/Skeleton";
 
-const PriceChange: React.FC<any> = ({ FlightsData }: { FlightsData: FlightType[] }) => {
+const PriceChange: React.FC<any> = ({ FlightsData }: { FlightsData: FlightItemType[] }) => {
     const priceFilter = useSelector((state : RootState) => state.flightFilters.filterOption.priceRangeOption)
     const dispatch = useDispatch()
     

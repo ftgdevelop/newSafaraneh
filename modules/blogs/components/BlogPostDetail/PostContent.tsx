@@ -16,7 +16,7 @@ const ContentPost: NextPage<any> = ({ content, recentBlogs, CategoriesNames }) =
                 <p>تگ ها:</p>
                 {
                     content &&
-                    content.tags_names.map((tag: any, index: any) =>
+                    content.tags_names?.map((tag: any, index: any) =>
                         <Link href={`/blog/tag/${content.tags[index]}`}
                             className="hover:text-blue-500 duration-200" key={tag}> #{tag}
                         </Link>)

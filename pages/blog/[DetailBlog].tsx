@@ -34,7 +34,7 @@ const DetailBlog: NextPage<any> = ({ BlogPost, CategoriesName, recentBlogs, modu
     }
 
     //data={BlogPost?.[0].title?.rendered} page="بلاگ" category={[BlogPost?.[0].categories_names[0], BlogPost?.[0].categories[0]]} />
-    const category: string = BlogPost?.[0]?.categories_names[0] || ""
+    const category: string = BlogPost?.[0]?.categories_names?.[0] || ""
 
     const CategoryId : string = BlogPost?.[0]?.categories[0].toString() || ""
     const PostTitle : string = BlogPost?.[0]?.title?.rendered || ""

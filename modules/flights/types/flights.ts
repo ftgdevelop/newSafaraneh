@@ -1,4 +1,4 @@
-export interface FlightType {
+export interface FlightItemType {
     adultPrice: number;
     childPrice: number;
     infantPrice: number;
@@ -7,10 +7,12 @@ export interface FlightType {
         name?: string;
     }
     airline?: {
+        code?: string;
         name?: string;
         picture?: {
             path?: string;
             altAttribute?: string;
+            titleAttribute?: string;
         }
     }
     airCraft: {
@@ -25,9 +27,6 @@ export interface FlightType {
             name?: string;
         }
         name?: string;
-        cobinClass?: {
-            name?: string;
-        }
         flightType?: string;
     }
     departureAirport?: {
@@ -39,13 +38,11 @@ export interface FlightType {
             name?: string;
         }
         name?: string;
-        cobinClass?: {
-            name?: string;
-        }
         flightType?: string;
     }
     cabinClass: {
         name: string;
+        code?: string;
     }
     id?: number;
     departureTime?: string;
@@ -290,3 +287,6 @@ export type FlightRecentSearchItem = {
   departureDate: string;
   returnDate: string;
 }
+
+
+export type FlightSortFactorType =  "LowestPrice" | "HighestPrice" | "Time";

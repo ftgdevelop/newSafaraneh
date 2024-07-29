@@ -1,11 +1,11 @@
 import { Airpalne, ArrowLeft, RightCaret } from "@/modules/shared/components/ui/icons"
 import Image from "next/image"
 import FlightDetailItem from "./FlightDetail"
-import { FlightType } from "../../types/flights"
+import { FlightItemType } from "../../types/flights"
 import { useRouter } from "next/router"
 import { dateDiplayFormat, dateFormat } from "@/modules/shared/helpers"
 
-const FlightDataItem: React.FC<any> = ({flightData , detail , changeOpenDetail} : {flightData : FlightType, detail : boolean, changeOpenDetail : any}) => {
+const FlightDataItem: React.FC<any> = ({flightData , detail , changeOpenDetail} : {flightData : FlightItemType, detail : boolean, changeOpenDetail : any}) => {
 
     const arrivalTime = flightData?.arrivalTime?.split('T')[1].split(":").slice(0,2).join(":")
     const departureTime = flightData?.departureTime?.split('T')[1].split(":").slice(0, 2).join(":")    

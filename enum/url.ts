@@ -92,7 +92,6 @@ export const Flight = {
     ValidateRoom:"/api/services/app/Booking/Validate",
     SearchHotels:"/v2/Hotel/SearchHotels",
     getRates:"/v2/Comment/Rates",
-    getCityFaqById:"/api/services/app/Faq/GetAll",
     GetEntityNameByLocation: "/api/services/app/Entity/Get",
     GetValidate:"/api/services/app/Booking/GetValidate",
     PreReserve: "/api/services/app/Booking/PreReserve",
