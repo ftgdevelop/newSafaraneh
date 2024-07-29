@@ -197,7 +197,7 @@ const FlightsHome: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], 
       />}
 
       {!!theme2 && <HomeTheme2
-        modules={["domesticHotel"]}
+        modules={["domesticFlight"]}
         logo={logo}
         siteName={siteName}
         blogs={blogs}

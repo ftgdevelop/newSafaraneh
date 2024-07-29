@@ -80,7 +80,7 @@ const Banner: React.FC<Props> = props => {
   }
 
   const tabs = <Tab
-    style={theme3 ? "almosafer-home" : "1"}
+    style={theme2 ? "expedia-home" : theme3 ? "almosafer-home" : "1"}
     items={items}
     wrapperClassName={`${theme3 ? "" :theme2 ? "mb-6 sm:rounded-2xl sm:border sm:border-neutral-300" : "sm:rounded-lg px-5 pt-3 sm:p-5 bg-white"}`}
     tabLinksCenter={theme2}
