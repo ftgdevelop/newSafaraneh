@@ -2,10 +2,10 @@ import Checkbox from "@/modules/shared/components/ui/Checkbox";
 import { RootState } from "@/modules/shared/store";
 import { useDispatch, useSelector } from "react-redux";
 import { setFlightTimeFilter } from "../../store/flightsSlice";
-import { FlightType } from "../../types/flights";
+import { FlightItemType } from "../../types/flights";
 import Skeleton from "@/modules/shared/components/ui/Skeleton";
 
-const FlightTime: React.FC<any> = ({FlightsData} : {FlightsData: FlightType[]}) => {
+const FlightTime: React.FC<any> = ({FlightsData} : {FlightsData: FlightItemType[]}) => {
     const FlightTimeFilter = useSelector((state: RootState) => state.flightFilters.filterOption.flightTimeOption)
     const dispatch = useDispatch()
 

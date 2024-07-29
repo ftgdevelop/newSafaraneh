@@ -10,7 +10,7 @@ const TitlePost: NextPage<any> = ({ BlogPost }) => {
                 <div className="text-center absolute z-20 w-full p-4">
                     <Link href={`/blog/category/${BlogPost?.[0]?.categories[0]}`}
                         className="bg-white text-sm text-red-600 p-3 rounded-2xl hover:text-white hover:bg-red-600 duration-300">
-                    {BlogPost?.[0]?.categories_names[0]}</Link>
+                    {BlogPost?.[0]?.categories_names?.[0]}</Link>
                     <p
                         className="font-bold text-4xl max-sm:text-xl text-white mt-8 leading-10 text-center">
                         {BlogPost?.[0]?.title.rendered}

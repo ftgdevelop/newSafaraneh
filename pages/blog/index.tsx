@@ -70,10 +70,10 @@ export const getStaticProps: GetStaticProps = async (context: any) => {
       props: {
         ...await serverSideTranslations(context.locale, ['common']),
         NewBlogs: Blogdata?.data || null,
-        Cities: Cities?.data || null,
-        Categories: Categories?.data || null,
-        Categories2: Categories2?.data || null,
-        Categories3: Categories3?.data || null
+        Cities: Cities?.data?.code ? [] : Cities?.data || null,
+        Categories: Categories?.data?.code ? [] : Categories?.data || null,
+        Categories2: Categories2?.data?.code ? [] : Categories2?.data || null,
+        Categories3: Categories3?.data?.code ? [] : Categories3?.data || null
         },
         revalidate: 12 * 60 * 60 //12 Hours
     })

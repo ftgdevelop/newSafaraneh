@@ -21,14 +21,14 @@ const NewBlog: NextPage<Props> = (props) => {
                     <div className="grid grid-cols-3 gap-4 mt-10 max-sm:grid-cols-1">
                             
                         <Link href={`blog/${blog.slug}`}>
-                            <Image src={blog.images.large} onContextMenu={(e) => e.preventDefault()}
-                            alt={blog.title.rendered} height={100} width={300} className="rounded-md max-sm:mr-2 w-full" />
+                            <Image src={blog.images?.large} onContextMenu={(e) => e.preventDefault()}
+                            alt={blog.title?.rendered} height={100} width={300} className="rounded-md max-sm:mr-2 w-full" />
                         </Link>
     
                     <div className="w-full col-span-2 rounded p-5 border-gray-200 border-2 max-sm:border-0 max-sm:p-2 max-sm:pt-0 max-sm:mb-6">
-                        <Link href={`/blog/category/${blog.categories[0]}`} className="pr-2 max-sm:text-xs text-red-600 block hover:text-red-400 duration-300">
+                        {!!blog.categories_names?.length && <Link href={`/blog/category/${blog.categories[0]}`} className="pr-2 max-sm:text-xs text-red-600 block hover:text-red-400 duration-300">
                                 {blog.categories_names[0]}
-                        </Link>
+                        </Link>}
                         <Link href={`/blog/${blog.slug}`} className="leading-9 font-bold text-lg max-sm:text-base p-2 pt-1 hover:text-blue-900 block duration-300">
                             {blog.title.rendered}
                         </Link>
