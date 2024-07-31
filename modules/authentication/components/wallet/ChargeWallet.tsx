@@ -76,7 +76,7 @@ const ChargeWallet: React.FC = () => {
         const response: any = await makeDepositToken(params, token);
 
         if (response.status == 200) {
-            router.push(`https://${ServerAddress.Payment}${process.env.LocaleInUrl==="off"?"":"/fa"}/User/Payment/PaymentRequest?tokenId=${response.data.result.tokenId}`);
+            router.push(`https://${ServerAddress.Payment}/fa/User/Payment/PaymentRequest?tokenId=${response.data.result.tokenId}`);
         } else {
             dispatch(setReduxError({
                 title: t('error'),
@@ -88,6 +88,8 @@ const ChargeWallet: React.FC = () => {
         }
 
     }
+    
+    const theme2 = process.env.THEME === "THEME2";
 
     return (
 
@@ -119,7 +121,7 @@ const ChargeWallet: React.FC = () => {
                                     validateFunction={(value: string) => validateRequied(value, "لطفا مبلغ را وارد کنید")}
                                     value={values.amount}
                                 />
-                                <select className='border rtl:rounded-l-md ltr:rounded-r-md border-neutral-300 w-1/4 h-10 outline-none'>
+                                <select className={`border rtl:rounded-l-md ltr:rounded-r-md border-neutral-300 w-1/4 outline-none ${theme2?"h-13 border-neutral-400 focus:border-2 focus:border-blue-500":"h-10"}`}>
                                     <option value={"IRR"}>
                                         ریال
                                     </option>

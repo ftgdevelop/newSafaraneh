@@ -36,10 +36,12 @@ const TravelServices: React.FC<Props> = props => {
     const toggleMenu = () => { setOpenMenu(prevState => !prevState) }
 
     useEffect(()=>{
-        if(openMenu){
-            dispatch(setBodyScrollable(false));
-        }else{
-            dispatch(setBodyScrollable(true));
+        if(window && window.innerWidth < 750){
+            if(openMenu){
+                dispatch(setBodyScrollable(false));
+            }else{
+                dispatch(setBodyScrollable(true));
+            }
         }
     },[openMenu]);
 
