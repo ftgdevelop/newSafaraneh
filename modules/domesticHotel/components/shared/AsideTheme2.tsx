@@ -197,8 +197,8 @@ const AsideTheme2: React.FC<Props> = props => {
                                 cancellation = <div className="margin-bottom-5 text-red">{t("non-refundable")}</div>;
                                 break;
                             case "Refundable":
-                                cancellation = <div className="text-green margin-bottom-5">
-                                    <Tik className="w-3 h-4 fill-green-600" />
+                                cancellation = <div className="text-green-600 margin-bottom-5">
+                                    <Tik className="w-5 h-5 fill-green-600 inline-block rtl:ml-1 ltr:mr-1" />
                                     {t("refundable")}
                                 </div>;
                                 break;

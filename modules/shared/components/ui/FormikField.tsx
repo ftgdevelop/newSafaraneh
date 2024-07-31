@@ -92,8 +92,10 @@ const FormikField: React.FC<Props> = props => {
     }else{
         inputClassNames.push("h-10");
     }
-
-    inputClassNames.push("pt-4 leading-4");
+    
+    if(!props.labelIsSimple){
+        inputClassNames.push("pt-4 leading-4");
+    }
 
     if(props.errorText && props.isTouched){
         inputClassNames.push(`border-red-500 ${theme2?"border-2":""}`);
