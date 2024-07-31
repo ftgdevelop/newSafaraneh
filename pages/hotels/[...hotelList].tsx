@@ -12,7 +12,7 @@ import Select from '@/modules/shared/components/ui/Select';
 import Skeleton from '@/modules/shared/components/ui/Skeleton';
 import parse from 'html-react-parser';
 import Accordion from '@/modules/shared/components/ui/Accordion';
-import { CalendarError, QuestionCircle } from '@/modules/shared/components/ui/icons';
+import { CalendarError, ErrorIcon, QuestionCircle } from '@/modules/shared/components/ui/icons';
 import DomesticHotelListSideBar from '@/modules/domesticHotel/components/hotelsList/sidebar';
 import { setGuestPointFilterOptions, setTypeFilterOptions, setPriceFilterRange } from '@/modules/domesticHotel/store/domesticHotelSlice';
 import { useAppDispatch } from '@/modules/shared/hooks/use-store';
@@ -455,6 +455,11 @@ const HotelList: NextPage<Props> = props => {
   }
 
   const urlSegments = router.asPath.split("/");
+  const defaultDestinationIdSegment = urlSegments.find(item => item.includes('location'));
+  if(defaultDestinationIdSegment){
+    const defaultDestinationId = defaultDestinationIdSegment.split("-")[1];
+    defaultDestination.id = +defaultDestinationId;
+  }
 
   const filteredAvailability = urlSegments.find(item => item.includes('available'));
   const filteredName = urlSegments.find(item => item.includes('name-'))?.split("name-")[1];
@@ -583,59 +588,66 @@ const HotelList: NextPage<Props> = props => {
         description={t("GetTheLatestPriceAndAvailabilityForYourSearchTo", { destination: cityName, dates: `${dateDiplayFormat({ date: checkin, locale: locale, format: "dd mm" })} - ${dateDiplayFormat({ date: checkout, locale: locale, format: "dd mm" })}` })}
       />}
 
-      <div className={`max-w-container mx-auto ${theme2 ? "px-3" : "px-5"} py-4`} ref={searchFormWrapperRef}>
+      <ModalPortal
+        show={showChangeDateModal}
+        selector='modal_portal'
+      >
+        <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-screen bg-black/50 backdrop-blur-sm z-50 flex justify-center items-center">
 
-        <ModalPortal
-          show={showChangeDateModal}
-          selector='modal_portal'
-        >
-          <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-screen bg-black/50 backdrop-blur-sm z-50 flex justify-center items-center">
+          <div className="bg-white max-sm:mx-3 rounded-xl px-5 pt-10 pb-12 w-full max-w-md text-center">
 
-            <div className="bg-white max-sm:mx-3 rounded-xl px-5 pt-10 pb-12 w-full max-w-md text-center">
+            <CalendarError className="w-6 h-6 sm:w-10 sm:h-10 fill-neutral-400 mb-3 md:mb-4 inline-block" />
 
-              <CalendarError className="w-6 h-6 sm:w-10 sm:h-10 fill-neutral-400 mb-3 md:mb-4 inline-block" />
+            <h5 className="text-md sm:text-xl font-semibold mb-4">
+              {t("DatesAreExpired")}
+            </h5>
 
-              <h5 className="text-md sm:text-xl font-semibold mb-4">
-                {t("DatesAreExpired")}
-              </h5>
-
-              <div className="text-neutral-500 mb-4 md:mb-7 leading-7 text-sm text-center">
-                {t("SorryTheDatesYouEnteredAreExpiredChooseDifferentDatesToViewHotelOptions")}.
-              </div>
-
-
-              <button
-                type="button"
-                className="max-w-full w-32 cursor-pointer bg-primary-700 hover:bg-primary-600 text-white h-10 px-5 rounded-md"
-                onClick={() => {
-                  setShowChangeDateModal(false);
-                  setShowOnlyForm(true);
-                  searchFormWrapperRef.current?.scrollIntoView({ behavior: 'smooth' });
-                }}
-              >
-                {t('ChangeDates')}
-              </button>
-
-              <br />
-
-              <button
-                type='button'
-                className='text-blue-500 mt-3'
-                onClick={() => { setShowChangeDateModal(false) }}
-              >
-                {t("ContinueAnyway")}
-              </button>
-
-
+            <div className="text-neutral-500 mb-4 md:mb-7 leading-7 text-sm text-center">
+              {t("SorryTheDatesYouEnteredAreExpiredChooseDifferentDatesToViewHotelOptions")}.
             </div>
+
+
+            <button
+              type="button"
+              className="max-w-full w-32 cursor-pointer bg-primary-700 hover:bg-primary-600 text-white h-10 px-5 rounded-md"
+              onClick={() => {
+                setShowChangeDateModal(false);
+                setShowOnlyForm(true);
+                searchFormWrapperRef.current?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              {t('ChangeDates')}
+            </button>
+
+            <br />
+
+            <button
+              type='button'
+              className='text-blue-500 mt-3'
+              onClick={() => { setShowChangeDateModal(false) }}
+            >
+              {t("ContinueAnyway")}
+            </button>
+
 
           </div>
 
-        </ModalPortal>
+        </div>
 
+      </ModalPortal>
 
-        <div className={`grid gap-4 grid-cols-1 ${theme2 ? "lg:grid-cols-13" : "lg:grid-cols-4"}`}>
+      <div className={`max-w-container mx-auto ${theme2 ? "px-3 lg:grid lg:grid-cols-13 lg:gap-4" : "px-5"} py-4`} ref={searchFormWrapperRef}>
 
+        <div className={theme2?"lg:col-span-11":""}>
+
+          <SearchForm wrapperClassName="relative z-[2] mb-4" defaultDates={domesticHotelDefaultDates} defaultDestination={defaultDestination} />
+
+          {(fetchPercentage === 100 || accomodations?.length === 0) || <ProgressBarWithLabel
+            className="mt-4 mb-4"
+            label={progressBarLabel}
+            percentage={fetchPercentage}
+          />}
+          
           {!!showOnlyForm && (
             <div
               className='fixed bg-black/75 backdrop-blur-sm top-0 bottom-0 right-0 left-0 z-[1]'
@@ -643,19 +655,113 @@ const HotelList: NextPage<Props> = props => {
             />
           )}
 
-          <div className={theme2 ? "lg:col-span-11" : "lg:col-span-4"}>
+          <div className="grid gap-4 grid-cols-1 lg:grid-cols-4">
 
-            <SearchForm wrapperClassName="relative z-[2]" defaultDates={domesticHotelDefaultDates} defaultDestination={defaultDestination} />
+            <div>
 
-            {(fetchPercentage === 100) || <ProgressBarWithLabel
-              className="mt-4"
-              label={progressBarLabel}
-              percentage={fetchPercentage}
-            />}
+              <button type='button' className='relative block w-full lg:mb-5' onClick={() => { setShowMap(true) }}>
+                {theme2 ? (
+                  <div className='border border-neutral-300 rounded-xl overflow-hidden'>
+                    <Image src="/images/staticmap.png" alt="showMap" className='block w-full h-28 object-cover' width={354} height={100} />
+                    <div className='p-2 bg-white text-blue-600 text-sm'>
+                      مشاهده روی نقشه
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <Image src="/images/map-cover.svg" alt="showMap" className='block border w-full h-24 rounded-xl object-cover' width={354} height={100} />
+                    <span className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 py-1 border-1 border-blue-600 rounded font-semibold select-none leading-5 text-xs whitespace-nowrap'>
+                      {tHotel('viewHotelsOnMap', { cityName: entity?.EntityName || cityName })}
+                    </span>
+                  </>
+                )}
+
+
+              </button>
+
+              <DomesticHotelListSideBar
+                allHotels={hotels.length}
+                filteredHotels={filteredHotels.length}
+                priceIsFetched={!!pricesData}
+                scoreIsFetched={!!ratesData}
+              />
+
+            </div>
+
+            <div className="lg:col-span-3" >
+              {accomodations?.length ? (
+                <>
+                  <div className='flex justify-between mb-4 items-center'>
+      
+                    {hotels.length > 0 && pricesData && cityName ? (
+                      <div className='text-sm max-sm:hidden'>
+                        <b> {hotels.length} </b> هتل در <b> {entity?.EntityName || cityName} </b> پیدا کردیم
+                      </div>
+                    ) : (
+                      <Skeleton className='w-52 max-sm:hidden' />
+                    )}
+      
+                    <Select
+                      items={[
+                        { value: "priority", label: tHotel("priority") },
+                        { value: "price", label: tHotel("lowest-price") },
+                        { value: "starRate", label: tHotel("highest-star-rating") },
+                        { value: "name", label: tHotel("hotel-name") },
+                        { value: "gueatRate", label: tHotel("highest-guest-rating") }
+                      ]}
+                      value={sortFactor}
+                      onChange={type => { setSortFactor(type as SortTypes) }}
+                      label={t('sortBy')}
+                      wrapperClassName='max-sm:grow sm:w-52'
+      
+                    />
+                  </div>
+      
+                  {!!theme2 && <LoginLinkBanner message='وقتی وارد سیستم شوید همیشه بهترین قیمت‌های ما را دریافت خواهید کرد!' />}
+      
+                  {!!accomodations && <HotelsList
+                    hotels={filteredHotels}
+                  />}
+                </>
+              ):(
+                <div className='flex flex-col items-center justify-center text-red-500 font-semibold'>
+                  <ErrorIcon className='block w-14 h-14 mx-auto mb-2 fill-current' />
+                  متاسفانه برای این مقصد هتلی یافت نشد!
+              </div>
+              )}
+
+
+              {pageData?.widget?.content?.description ? (
+                <div className='py-10 text-justify'>
+                  {parse(pageData.widget.content.description)}
+                </div>
+              ):null}
+
+
+              {faqItems.length > 0 && (
+                <div className={`mt-10 ${theme1 ? "bg-white p-5 rounded-lg" : ""}`}>
+                  <h5 className='font-semibold text-lg'>{t('faq')}</h5>
+                  {faqItems.filter(faq => (faq.answer && faq.question)).map(faq => (
+                    <Accordion
+                      key={faq.question}
+                      title={(<>
+                        <QuestionCircle className='w-5 h-5 mt-.5 rtl:ml-2 ltr:mr-2 fill-current inline-block' />
+                        {faq.question}
+                      </>)}
+                      content={parse(faq.answer!)}
+                      WrapperClassName='mt-5'
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+
           </div>
 
-          {!!theme2 && (
-            <div className='hidden lg:block col-span-2 row-span-2'>
+        </div>
+
+        {!!theme2 && (
+            <div className='hidden lg:block col-span-2'>
               <div className='sticky top-5'>
                 <Image
                   src={"/images/del/adv.png"}
@@ -675,98 +781,6 @@ const HotelList: NextPage<Props> = props => {
             </div>
           )}
 
-
-          <div className={`col-span-1 ${theme2 ? "lg:col-span-3" : ""}`}>
-
-            <button type='button' className='relative block w-full lg:mb-5' onClick={() => { setShowMap(true) }}>
-              {theme2 ? (
-                <div className='border border-neutral-300 rounded-xl overflow-hidden'>
-                  <Image src="/images/staticmap.png" alt="showMap" className='block w-full h-28 object-cover' width={354} height={100} />
-                  <div className='p-2 bg-white text-blue-600 text-sm'>
-                    مشاهده روی نقشه
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <Image src="/images/map-cover.svg" alt="showMap" className='block border w-full h-24 rounded-xl object-cover' width={354} height={100} />
-                  <span className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 py-1 border-1 border-blue-600 rounded font-semibold select-none leading-5 text-xs whitespace-nowrap'>
-                    {tHotel('viewHotelsOnMap', { cityName: entity?.EntityName || cityName })}
-                  </span>
-                </>
-              )}
-
-
-            </button>
-
-            <DomesticHotelListSideBar
-              allHotels={hotels.length}
-              filteredHotels={filteredHotels.length}
-              priceIsFetched={!!pricesData}
-              scoreIsFetched={!!ratesData}
-            />
-
-          </div>
-
-          <div className={`${theme2 ? "lg:col-span-8" : "lg:col-span-3"}`}>
-
-            <div className='flex justify-between mb-4 items-center'>
-
-              {hotels.length > 0 && pricesData && cityName ? (
-                <div className='text-sm max-sm:hidden'>
-                  <b> {hotels.length} </b> هتل در <b> {entity?.EntityName || cityName} </b> پیدا کردیم
-                </div>
-              ) : (
-                <Skeleton className='w-52 max-sm:hidden' />
-              )}
-
-              <Select
-                items={[
-                  { value: "priority", label: tHotel("priority") },
-                  { value: "price", label: tHotel("lowest-price") },
-                  { value: "starRate", label: tHotel("highest-star-rating") },
-                  { value: "name", label: tHotel("hotel-name") },
-                  { value: "gueatRate", label: tHotel("highest-guest-rating") }
-                ]}
-                value={sortFactor}
-                onChange={type => { setSortFactor(type as SortTypes) }}
-                label={t('sortBy')}
-                wrapperClassName='max-sm:grow sm:w-52'
-
-              />
-            </div>
-
-            {!!theme2 && <LoginLinkBanner message='وقتی وارد سیستم شوید همیشه بهترین قیمت‌های ما را دریافت خواهید کرد!' />}
-
-            {!!accomodations && <HotelsList
-              hotels={filteredHotels}
-            />}
-
-            {pageData?.widget?.content?.description ? (
-              <div className='py-10 text-justify'>
-                {parse(pageData.widget.content.description)}
-              </div>
-            ):null}
-
-
-            {faqItems.length > 0 && (
-              <div className={`mt-10 ${theme1 ? "bg-white p-5 rounded-lg" : ""}`}>
-                <h5 className='font-semibold text-lg'>{t('faq')}</h5>
-                {faqItems.filter(faq => (faq.answer && faq.question)).map(faq => (
-                  <Accordion
-                    key={faq.question}
-                    title={(<>
-                      <QuestionCircle className='w-5 h-5 mt-.5 rtl:ml-2 ltr:mr-2 fill-current inline-block' />
-                      {faq.question}
-                    </>)}
-                    content={parse(faq.answer!)}
-                    WrapperClassName='mt-5'
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-
-        </div>
 
       </div>
 
