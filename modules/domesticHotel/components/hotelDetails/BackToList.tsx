@@ -14,7 +14,7 @@ const BackToList: React.FC<Props> = props => {
 
     const theme2 = process.env.THEME === "THEME2";
 
-    const { checkin, checkout, cityName } = props;
+    const { checkin, checkout, cityName, cityId} = props;
 
     const { t : tHotel } = useTranslation('hotel');
 
@@ -23,9 +23,12 @@ const BackToList: React.FC<Props> = props => {
     if (i18n?.language === "fa" && process.env.LocaleInUrl !== "off") {
         listUrl = `/fa/hotels/هتل-های-${cityName}`;
     } else if (i18n?.language === "ar") {
-        listUrl = `/hotels/فنادق-${props.cityName}`;
+        listUrl = `/hotels/فنادق-${cityName}`;
     } else {
-        listUrl = `/hotels/هتل-های-${props.cityName}`;
+        listUrl = `/hotels/هتل-های-${cityName}`;
+    }
+    if (cityId){
+        listUrl += `/location${cityId}`
     }
 
     if (checkin && checkout) {
