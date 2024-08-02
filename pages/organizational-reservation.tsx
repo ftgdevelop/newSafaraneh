@@ -7,7 +7,6 @@ import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
 import { WebSiteDataType } from "@/modules/shared/types/common";
 import { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import Head from "next/head";
 
 const Organizational: NextPage<any> = ({portalData}: {portalData: WebSiteDataType}) => {
 
@@ -16,9 +15,6 @@ const Organizational: NextPage<any> = ({portalData}: {portalData: WebSiteDataTyp
 
     return (
         <div className="bg-white">
-            <Head>
-                <title>رزرو های سازمانی</title>
-            </Head>
             <div className="max-w-container m-auto p-5 relative max-sm:p-3">
             <BreadCrumpt items={[{ label: 'رزرو های سازمانی' }]} />
                 <Section1 />
