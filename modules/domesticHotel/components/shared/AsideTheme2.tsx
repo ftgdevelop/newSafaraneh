@@ -272,7 +272,7 @@ const AsideTheme2: React.FC<Props> = props => {
                         return (
                             <div
                                 key={roomIndex}
-                                className="flex gap-3 mb-4 pb-3 overflow-x-scroll styled-scrollbar select-none"
+                                className="flex gap-3 mb-4 pb-3 overflow-x-auto styled-scrollbar select-none"
                             >
                                 {room.nightly?.filter(n => (n.date && n.amount)).map(night => (
                                     <div
