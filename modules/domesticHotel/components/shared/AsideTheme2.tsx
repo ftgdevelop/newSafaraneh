@@ -78,31 +78,31 @@ const AsideTheme2: React.FC<Props> = props => {
     if (!reserveInformation) {
         return (
             <>
-            <div className='border border-neutral-300 bg-white rounded-xl mb-4'>
-                <Skeleton type='image' className="h-36 sm:h-60 rounded-t-xl" />
+                <div className='border border-neutral-300 bg-white rounded-xl mb-4'>
+                    <Skeleton type='image' className="h-36 sm:h-60 rounded-t-xl" />
 
-                <div className="p-5">
+                    <div className="p-5">
 
-                    <Skeleton className='mb-3 w-2/3' />
-                    <Skeleton className='mb-3 w-1/3 my-4' />
-                    <Skeleton className='w-full' />
+                        <Skeleton className='mb-3 w-2/3' />
+                        <Skeleton className='mb-3 w-1/3 my-4' />
+                        <Skeleton className='w-full' />
 
-                    <hr className="my-6"/>
+                        <hr className="my-6" />
 
-                    <Skeleton className='mb-3 w-1/3 my-4' />
-                    <Skeleton className='mb-3 w-2/3' />
-                    <Skeleton className='w-1/2' />
+                        <Skeleton className='mb-3 w-1/3 my-4' />
+                        <Skeleton className='mb-3 w-2/3' />
+                        <Skeleton className='w-1/2' />
 
-                    <hr className="my-6"/>
+                        <hr className="my-6" />
 
-                    <Skeleton className='mb-3 w-1/3 my-4' />
-                    <Skeleton className='mb-3 w-2/3' />
+                        <Skeleton className='mb-3 w-1/3 my-4' />
+                        <Skeleton className='mb-3 w-2/3' />
+
+                    </div>
 
                 </div>
 
-            </div>
-
-            <Skeleton className='mb-3 w-full mt-6 rounded-xl' type='button' />
+                <Skeleton className='mb-3 w-full mt-6 rounded-xl' type='button' />
 
             </>
         )
@@ -264,6 +264,48 @@ const AsideTheme2: React.FC<Props> = props => {
 
             <div className="bg-white p-5 rounded-xl border border-neutral-300 mb-4 text-sm">
                 <h5 className="font-semibold text-lg mb-3"> جزییات قیمت </h5>
+
+                {reserveInformation.rooms.map((room, roomIndex) => {
+
+                    if (room.nightly?.length && room.nightly.length > 1) {
+
+                        return (
+                            <div
+                                key={roomIndex}
+                                className="flex gap-3 mb-4 pb-3 overflow-x-scroll styled-scrollbar select-none"
+                            >
+                                {room.nightly?.filter(n => (n.date && n.amount)).map(night => (
+                                    <div
+                                        key={roomIndex + (night.date || "")}
+                                        className="border rounded-lg text-xs bg-white whitespace-nowrap"
+                                    >
+                                        <header className="bg-neutral-200 p-2 leading-4 rounded-t-lg">
+                                            {dateDiplayFormat({
+                                                date: night.date!,
+                                                format: "ddd dd mm",
+                                                locale: "fa"
+                                            })}
+                                        </header>
+                                        <div className="p-2">
+                                            {!!night.board && <div className="text-neutral-400 text-xs line-through">
+                                                {numberWithCommas(night.board)} ریال
+                                            </div>}
+
+                                            {!!night.amount && <div className="font-semibold text-md">
+                                                {numberWithCommas(night.amount)} ریال
+                                            </div>}
+                                        </div>
+
+                                    </div>
+                                ))}
+                            </div>
+                        )
+                    } else {
+                        return null
+                    }
+
+                })}
+
                 {reserveInformation.salePrice && reserveInformation.salePrice > 500000 ? (
                     <>
                         {(hasDiscount || !!activeExtraBedPrice || !!reserveInformation.promoCodePrice || !!promoCodePrice) && (

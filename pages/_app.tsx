@@ -14,10 +14,11 @@ import '../styles/leaflet.css';
 // import '../styles/modernDatePicker.scss';
 
 import { store } from '../modules/shared/store';
-import { WebSiteDataType } from '@/modules/shared/types/common';
+import { GetPageByUrlDataType, WebSiteDataType } from '@/modules/shared/types/common';
 import { getPortal } from '@/modules/shared/actions/portalActions';
 import Layout from '@/modules/shared/components/layout';
 import { GTM_ID } from '@/modules/shared/helpers';
+import { getPageByUrl } from '@/modules/shared/actions';
 
 
 // const ElmahLogError = dynamic(() => import('../modules/shared/components/ElmahLogError'), {
@@ -26,9 +27,10 @@ import { GTM_ID } from '@/modules/shared/helpers';
 
 type TProps = Pick<AppProps, "Component" | "pageProps"> & {
   portalData?: WebSiteDataType;
+  pageData?: GetPageByUrlDataType
 };
 
-function MyApp({ Component, pageProps, portalData }: TProps) {
+function MyApp({ Component, pageProps, portalData, pageData }: TProps) {
   const router = useRouter();
 
   const { locale } = router;
@@ -64,6 +66,14 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
   const portalTitle = portalData?.website?.title || "";
   const portalKeywords = portalData?.metaTags?.keyword || "";
   const portalDescription = portalData?.metaTags?.description || "";
+
+  const pageTitle = pageData?.pageTitle?.replaceAll("{0}", siteName) || "";
+  const pageDescription = pageData?.metaDescription?.replaceAll("{0}", siteName) || "";
+  const pageKeywords = pageData?.metaKeyword?.replaceAll("{0}", siteName) || "";
+
+  const title = pageTitle || portalTitle;
+  const description = pageDescription || portalDescription;
+  const keywords = pageKeywords || portalKeywords; 
   
   const portalEnamadMetaTag = portalData?.metaTags?.enamad || "";
   const enamad = portalData?.website?.enamad || "";
@@ -87,7 +97,6 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
       canonicalUrl = process.env.SITE_NAME + (i18n?.language ? `/${i18n?.language}` : "") + path
     }
   }
-  
   return (
     <Provider store={store}>
       <Head>
@@ -135,9 +144,9 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
 
         <link rel="shortcut icon" href={favIconLink} />
 
-        {!!portalTitle && <title>{portalTitle}</title>}
-        {!!portalKeywords && <meta name="keywords" content={portalKeywords} />}
-        {!!portalDescription && <meta name="description" content={portalDescription} />}
+        {!!title && <title>{title}</title>}
+        {!!keywords && <meta name="keywords" content={keywords} />}
+        {!!description && <meta name="description" content={description} />}
 
         {!!portalEnamadMetaTag && <meta name='enamad' content={portalEnamadMetaTag} />}
 
@@ -185,10 +194,26 @@ MyApp.getInitialProps = async (
 ): Promise<any> => {
   const ctx = await App.getInitialProps(context);
 
-  //const portalData = await getPortal(context?.router?.locale === "ar" ? "ar-AE" : context?.router?.locale=== "en" ? "en-US" : "fa-IR");
-  const portalData = await getPortal("fa-IR");
+  let url = context.router?.asPath || "/";
+  
+  const locale = context.router?.locale || "";
 
-  return { ...ctx, portalData: portalData?.data?.result || null };
+  if (locale){
+    url = "/" + locale + url;
+  }
+
+  const acceptLanguage = locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR";
+
+  const [portalData, pageResponse] = await Promise.all<any>([
+    await getPortal("fa-IR"),
+    getPageByUrl(url, acceptLanguage)
+]) 
+
+  return {
+    ...ctx,
+    portalData: portalData?.data?.result || null,
+    pageData: pageResponse?.data?.result || null
+  };
 };
 
 export default appWithTranslation(MyApp);
