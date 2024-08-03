@@ -25,8 +25,8 @@ const RecentBlogs: React.FC<Props> = props => {
                     <Link key={blog.id} href={`/blog/${blog.slug}`} title={blog.title.rendered} className={`sm:col-span-${index === 2 ? "2" : "1"}  lg:col-span-${index < 2 ? "3" : "2"}`}>
                         <Image
                             onContextMenu={e => { e.preventDefault() }}
-                            src={blog.images.large}
-                            alt={blog.title.rendered}
+                            src={blog.images?.large}
+                            alt={blog.title?.rendered}
                             title={blog.title.rendered}
                             width={index > 1 ? 387 : 590}
                             height={index > 1 ? 245 : 374}

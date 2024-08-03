@@ -706,7 +706,7 @@ const HotelList: NextPage<Props> = props => {
 
 
               {pageData?.widget?.content?.description ? (
-                <div className='py-10 text-justify'>
+                <div className='py-10 text-justify inserted-content'>
                   {parse(pageData.widget.content.description)}
                 </div>
               ):null}
