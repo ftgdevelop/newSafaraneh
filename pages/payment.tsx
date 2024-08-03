@@ -255,7 +255,7 @@ const Payment: NextPage = () => {
         cancellationPolicyStatus: roomItem.cancellationPolicyStatus,
         bed: roomItem.bed,
         pricing: roomItem.pricing,
-
+        nightly: roomItem.nightly
       })),
       salePrice: domesticHotelReserveData.rooms.reduce((totalPrice: number, roomItem: any) => {
         const roomItemPrice = roomItem.pricing.find(

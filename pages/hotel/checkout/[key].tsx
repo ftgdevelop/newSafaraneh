@@ -136,7 +136,8 @@ const Checkout: NextPage = () => {
         cancellationPolicyStatus: roomItem.cancellationPolicyStatus,
         bed: roomItem.bed,
         extraBed: roomItem.extraBed,
-        pricing: roomItem.pricing
+        pricing: roomItem.pricing,
+        nightly : roomItem.nightly
       })),
 
       salePrice: reserveInfo.rooms.reduce((totalPrice: number, roomItem: DomesticHotelGetValidateResponse['rooms'][0]) => {
