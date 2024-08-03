@@ -450,8 +450,8 @@ export interface DomesticHotelGetValidateResponse {
         boardCode: "Undefined" | "BB" | "FB" | "HB" | "RO" | "Hour6" | "Hour10";
         boardExtra?: string;
         nightly: {
-            date: string;
-            amount: number;
+            date?: string;
+            amount?: number;
             board?: number;
         }[],
         pricing: {
@@ -502,6 +502,11 @@ export interface AsideReserveInfoType {
             ageCategoryType: "ADL" | "CHD" | "INF";
             type: "Room" | "RoomBoard" | "ExtraBed" | "HalfCharge" | "RoomNet" | "Markup" | "Commission" | "PromoCode";
         }[];
+        nightly?: {
+            date?: string;
+            amount?: number;
+            board?: number;
+        }[]
     }[]
     salePrice: number;
     boardPrice: number;
@@ -566,6 +571,11 @@ export interface DomesticHotelGetReserveByIdData {
             isShow: boolean;
             ageCategoryType: "ADL" | "CHD" | "INF";
             type: "Room" | "RoomBoard" | "ExtraBed" | "HalfCharge" | "RoomNet" | "Markup" | "Commission" | "PromoCode";
+        }[];
+        nightly?:{
+            date?: string;
+            mount?: number;
+            board?: number;
         }[];
         extraBed: number;
         maxInfantAge: number;
