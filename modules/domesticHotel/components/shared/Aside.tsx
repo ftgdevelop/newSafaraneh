@@ -127,7 +127,7 @@ const Aside: React.FC<Props> = props => {
                         <div className="grid grid-cols-4 gap-x-3 gap-y-2">
                             {hotelInformation.image.url ? (
                                 <Image
-                                    onContextMenu={(e)=> e.preventDefault()}
+                                    onContextMenu={(e) => e.preventDefault()}
                                     src={hotelInformation.image.url}
                                     alt={hotelInformation?.image?.alt || hotelInformation.name}
                                     title={hotelInformation?.image?.title}
@@ -165,7 +165,7 @@ const Aside: React.FC<Props> = props => {
 
                     {!!reserveInformation.reserveId && (
                         <div className='border border-2 border-dashed border-blue-100 text-blue-800 text-lg font-semibold p-2 mt-4 flex items-center justify-center gap-2'>
-                                {t('tracking-code')} : {reserveInformation.reserveId}
+                            {t('tracking-code')} : {reserveInformation.reserveId}
                         </div>
                     )}
 
@@ -258,6 +258,47 @@ const Aside: React.FC<Props> = props => {
 
                     <div className="border-t border-neutral-300 mt-4 pt-4 text-sm">
 
+                        {reserveInformation.rooms.map((room, roomIndex) => {
+
+                            if (room.nightly?.length && room.nightly.length > 1) {
+
+                                return (
+                                    <div
+                                        key={roomIndex}
+                                        className="flex gap-3 mb-4 pb-3 overflow-x-auto styled-scrollbar select-none"
+                                    >
+                                        {room.nightly?.filter(n => (n.date && n.amount)).map(night => (
+                                            <div
+                                                key={roomIndex + (night.date || "")}
+                                                className="border rounded-lg text-xs bg-white whitespace-nowrap"
+                                            >
+                                                <header className="bg-neutral-200 p-2 leading-4 rounded-t-lg">
+                                                    {dateDiplayFormat({
+                                                        date: night.date!,
+                                                        format: "ddd dd mm",
+                                                        locale: "fa"
+                                                    })}
+                                                </header>
+                                                <div className="p-2">
+                                                    {!!night.board && <div className="text-neutral-400 text-xs line-through">
+                                                        {numberWithCommas(night.board)} ریال
+                                                    </div>}
+
+                                                    {!!night.amount && <div className="font-semibold text-md">
+                                                        {numberWithCommas(night.amount)} ریال
+                                                    </div>}
+                                                </div>
+
+                                            </div>
+                                        ))}
+                                    </div>
+                                )
+                            } else {
+                                return null
+                            }
+
+                        })}
+
                         {reserveInformation.salePrice && reserveInformation.salePrice > 500000 ? (
                             <>
                                 {(hasDiscount || !!activeExtraBedPrice || !!reserveInformation.promoCodePrice || !!promoCodePrice) && (
@@ -266,34 +307,30 @@ const Aside: React.FC<Props> = props => {
                                         <span>{numberWithCommas(reserveInformation.boardPrice)} {t('rial')} </span>
                                     </div>
                                 )}
-        
+
                                 {!!activeExtraBedPrice && (
                                     <div className="flex items-center justify-between">
                                         {tHotel("extra-bed")} (x{activeExtraBedCount})
                                         <span>{numberWithCommas(activeExtraBedPrice)} {t('rial')} </span>
                                     </div>
                                 )}
-        
+
                                 {!!hasDiscount && (
                                     <div className="flex items-center justify-between">
                                         {t("site-discount")}
                                         <span>{numberWithCommas(reserveInformation.boardPrice - reserveInformation.salePrice)} {t('rial')}</span>
-        
+
                                     </div>
                                 )}
-        
-        
                                 {!!discountLoading && (
                                     <Skeleton className="my-1" />
                                 )}
-        
                                 {!!promoCodePrice && (
                                     <div className="flex items-center justify-between">
                                         کد تخفیف
                                         <span>{numberWithCommas(promoCodePrice)} {t('rial')}</span>
                                     </div>
                                 )}
-        
                                 {!!reserveInformation.salePrice && (
                                     <div className="flex items-center justify-between">
                                         {t("price-paid")}
@@ -307,7 +344,7 @@ const Aside: React.FC<Props> = props => {
                                     </div>
                                 )}
                             </>
-                        ):(
+                        ) : (
                             <span className='text-xs font-semibold text-red-500'>قیمت نیازمند استعلام است </span>
                         )}
 
