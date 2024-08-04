@@ -1,7 +1,7 @@
 version: '3'
 services:
-  main_1stsafar_service:
-    image: main_1stsafar_image
+  main_safarlife_service:
+    image: main_safarlife_image
     restart: always
     build: ./
     command: 'yarn start -p 2086'
