@@ -43,7 +43,7 @@ const nextConfig = {
   swcMinify: true,
   i18n,
   env: {
-    PROJECT: "1STSAFAR",
+    PROJECT: "SAFARLIFE",
     LocaleInUrl : "off",
     SITE_NAME: 'https://www.safarlife.com',
     THEME: "THEME2",

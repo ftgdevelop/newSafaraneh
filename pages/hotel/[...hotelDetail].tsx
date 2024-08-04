@@ -161,7 +161,7 @@ const HotelDetail: NextPage<Props> = props => {
     description: string;
   }[] = [];
 
-  if ((process.env.PROJECT === "1STSAFAR" || accommodationData?.galleries?.length)) {
+  if ((process.env.PROJECT === "SAFARLIFE" || accommodationData?.galleries?.length)) {
     if (accommodationData?.galleries?.length) {
       hotelImages = accommodationData?.galleries?.map(item => ({
         alt: item.fileAltAttribute || item.fileTitleAttribute || "",
