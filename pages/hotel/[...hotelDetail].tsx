@@ -92,10 +92,7 @@ const HotelDetail: NextPage<Props> = props => {
     }
   }, [checkin, checkout]);
 
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
   if (props.error410) {
     return (
       <NotFound code={410} />

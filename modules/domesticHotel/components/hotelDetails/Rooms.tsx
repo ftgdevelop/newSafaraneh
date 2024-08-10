@@ -5,7 +5,7 @@ import { DomesticHotelAvailability, DomesticHotelRateItem } from '@/modules/dome
 import { useRouter } from 'next/router';
 import { addSomeDays, dateFormat, getDatesDiff } from '@/modules/shared/helpers';
 import { GetRooms, domesticHotelValidateRoom } from '../../actions';
-import { InfoCircle } from '@/modules/shared/components/ui/icons';
+import { Close, InfoCircle } from '@/modules/shared/components/ui/icons';
 import RoomsListTheme1 from './RoomsListTheme1';
 import RoomsListTheme2 from './RoomsListTheme2';
 import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
@@ -122,15 +122,22 @@ const Rooms: React.FC<Props> = props => {
             selector='modal_portal'
         >
 
-                <div className='fixed left-0 right-0 top-0 bottom-0 bg-black/50 backdrop-blur'
-                    onClick={() => { setOpenCalendar(false) }}
-                />
+            <div className='fixed left-0 right-0 top-0 bottom-0 bg-black/50 backdrop-blur'
+                onClick={() => { setOpenCalendar(false) }}
+            />
 
-                <div className={`fixed sm:rounded-md flex flex-col gap-4 items-center top-0 left-0 sm:top-1/2 sm:left-1/2 sm:-translate-y-1/2 sm:-translate-x-1/2 max-h-screen overflow-y-auto p-6 w-screen h-screen sm:h-auto sm:w-550 bg-white duration-200 transition-all ${openCalendar ? "scale-100 opacity-100" : "scale-90 opacity-0"}`} >
-                    <PriceCalendar
-                        calendar={openedCalendarRoom?.calendar}
-                    />
-                </div>
+            <div className={`fixed sm:rounded-md flex flex-col gap-4 items-center top-0 left-0 sm:top-1/2 sm:left-1/2 sm:-translate-y-1/2 sm:-translate-x-1/2 max-h-screen overflow-y-auto p-1 sm:p-6 w-screen h-screen sm:h-auto sm:w-550 bg-white duration-200 transition-all ${openCalendar ? "scale-100 opacity-100" : "scale-90 opacity-0"}`} >
+                <button
+                    type='button'
+                    className='sm:hidden'
+                    onClick={() => { setOpenCalendar(false) }}
+                >
+                    <Close className='w-7 h-7 fill-neutral-400' />
+                </button>
+                <PriceCalendar
+                    calendar={openedCalendarRoom?.calendar}
+                />
+            </div>
 
         </ModalPortal>
 
@@ -167,6 +174,7 @@ const Rooms: React.FC<Props> = props => {
                         selectedRoomToken={selectedRoomToken}
                         roomsHasImage={roomsHasImage || false}
                         nights={nights}
+                        onShowPriceCalendar={setOpenedCalendarRoom}
                     />}
 
                 </>

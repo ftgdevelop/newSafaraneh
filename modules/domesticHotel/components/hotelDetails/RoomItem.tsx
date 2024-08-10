@@ -169,7 +169,7 @@ const RoomItem: React.FC<Props> = props => {
                         </div>
                     </Tooltip>
 
-                    {!!props.onShowPriceCalendar && <button 
+                    {!!props.onShowPriceCalendar && !!rate.calendar && <button 
                         type='button'
                         onClick={props.onShowPriceCalendar}
                         className='text-xs text-blue-600 flex gap-1 mb-2 cursor-pointer'
@@ -235,7 +235,7 @@ const RoomItem: React.FC<Props> = props => {
                         </div>
                     )}
 
-                    {room.capacity.count && (
+                    {!!room.capacity.count && (
                         <div className="flex gap-2 items-center">
                             <User className='w-5 h-5 fill-neutral-400' />
                             {room.capacity.count} نفر
