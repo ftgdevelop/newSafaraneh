@@ -1,13 +1,15 @@
 import { i18n, useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 
-import { DomesticHotelAvailability } from '@/modules/domesticHotel/types/hotel';
+import { DomesticHotelAvailability, DomesticHotelRateItem } from '@/modules/domesticHotel/types/hotel';
 import { useRouter } from 'next/router';
 import { addSomeDays, dateFormat, getDatesDiff } from '@/modules/shared/helpers';
 import { GetRooms, domesticHotelValidateRoom } from '../../actions';
-import { InfoCircle } from '@/modules/shared/components/ui/icons';
+import { Close, InfoCircle } from '@/modules/shared/components/ui/icons';
 import RoomsListTheme1 from './RoomsListTheme1';
 import RoomsListTheme2 from './RoomsListTheme2';
+import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
+import PriceCalendar from './PriceCalendar';
 
 type Props = {
     hotelId: number;
@@ -21,6 +23,29 @@ const Rooms: React.FC<Props> = props => {
     const { asPath } = router;
 
     const { t: tHotel } = useTranslation('hotel');
+
+    const [openedCalendarRoom, setOpenedCalendarRoom ] = useState<DomesticHotelRateItem | undefined>(undefined);
+    const [openCalendar, setOpenCalendar ] = useState<boolean>(false);
+
+    useEffect(() => {
+        let timeOut: any;
+        if (openedCalendarRoom) {
+            timeOut = setTimeout(() => { setOpenCalendar(true) }, 50);
+        }
+
+        return (() => { setOpenCalendar(false); clearTimeout(timeOut); })
+    }, [openedCalendarRoom]);
+    
+    useEffect(() => {
+        let timeOut: any;
+        if (!openCalendar) {
+            timeOut = setTimeout(() => { setOpenedCalendarRoom(undefined) }, 100);         
+        }
+
+        return (() => { clearTimeout(timeOut); })
+    }, [openCalendar]);
+
+
 
     const [availabilites, setAvailabilities] = useState<DomesticHotelAvailability[] | undefined>();
 
@@ -91,6 +116,30 @@ const Rooms: React.FC<Props> = props => {
     const theme2 = process.env.THEME === "THEME2";
 
     return (
+    <>
+        <ModalPortal
+            show={!!openedCalendarRoom}
+            selector='modal_portal'
+        >
+
+            <div className='fixed left-0 right-0 top-0 bottom-0 bg-black/50 backdrop-blur'
+                onClick={() => { setOpenCalendar(false) }}
+            />
+
+            <div className={`fixed sm:rounded-md flex flex-col gap-4 items-center top-0 left-0 sm:top-1/2 sm:left-1/2 sm:-translate-y-1/2 sm:-translate-x-1/2 max-h-screen overflow-y-auto p-1 sm:p-6 w-screen h-screen sm:h-auto sm:w-550 bg-white duration-200 transition-all ${openCalendar ? "scale-100 opacity-100" : "scale-90 opacity-0"}`} >
+                <button
+                    type='button'
+                    className='sm:hidden'
+                    onClick={() => { setOpenCalendar(false) }}
+                >
+                    <Close className='w-7 h-7 fill-neutral-400' />
+                </button>
+                <PriceCalendar
+                    calendar={openedCalendarRoom?.calendar}
+                />
+            </div>
+
+        </ModalPortal>
 
         <div id="rooms_section" className="max-w-container mx-auto px-3 sm:px-5 pt-7 md:pt-10">
 
@@ -116,6 +165,7 @@ const Rooms: React.FC<Props> = props => {
                         selectedRoomToken={selectedRoomToken}
                         roomsHasImage={roomsHasImage || false}
                         nights={nights}
+                        onShowPriceCalendar={setOpenedCalendarRoom}
                     />}
 
                     {!!theme2 && <RoomsListTheme2
@@ -124,12 +174,13 @@ const Rooms: React.FC<Props> = props => {
                         selectedRoomToken={selectedRoomToken}
                         roomsHasImage={roomsHasImage || false}
                         nights={nights}
+                        onShowPriceCalendar={setOpenedCalendarRoom}
                     />}
 
                 </>
             )}
         </div>
-
+    </>
     )
 }
 

@@ -302,6 +302,13 @@ export interface DomesticHotelRateItem {
     supplierType: "Safaraneh" | "Snapp" | "ChannelLead" | "HotelYar" | "Eghamat24";
     available: number;
     description?: string;
+    calendar?: {
+        [date: string]: {
+            amount: number;
+            board: number;
+            type?: "Completion" | "Online" | "Offline" | "Request" | null;
+        };
+    };
     cancellationPolicy?: {
         status: "Refundable" | "NonRefundable" | "Unknown" | "CallSupport";
         fees: {
