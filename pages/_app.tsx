@@ -67,6 +67,9 @@ function MyApp({ Component, pageProps, portalData, pageData }: TProps) {
   const portalKeywords = portalData?.metaTags?.keyword || "";
   const portalDescription = portalData?.metaTags?.description || "";
 
+  const portalAuthor = portalData?.metaTags.author || "";
+  const portalCreator = portalData?.metaTags.creator || "";
+
   const pageTitle = pageData?.pageTitle?.replaceAll("{0}", siteName) || "";
   const pageDescription = pageData?.metaDescription?.replaceAll("{0}", siteName) || "";
   const pageKeywords = pageData?.metaKeyword?.replaceAll("{0}", siteName) || "";
@@ -113,12 +116,13 @@ function MyApp({ Component, pageProps, portalData, pageData }: TProps) {
         <meta name="theme-color" content="#0a438b" />
         <meta charSet="utf-8" />
 
-        <meta name="author" content="safaraneh.com" />
+        {!!portalAuthor && <meta name="author" content={portalAuthor} />}
+        {!!portalCreator && <meta name="creator" content={portalCreator} />}
+
         <meta name="copyright" content="safaraneh.com" />
         <meta name="cache-control" content="cache" />
         <meta name="content-language" content="fa" />
         <meta name="content-type" content="text/html;UTF-8" />
-        <meta name="creator" content="safaraneh.com" />
         <meta name="DC.Language" content="fa" />
         <meta name="DC.Type" content="Text,Image" />
         <meta name="DC.Creator" content="safaraneh.com" />
@@ -197,8 +201,8 @@ MyApp.getInitialProps = async (
   let url = context.router?.asPath || "/";
   
   const locale = context.router?.locale || "";
-
-  if (locale){
+  
+  if(locale && process.env.LocaleInUrl !== "off"){
     url = "/" + locale + url;
   }
 
