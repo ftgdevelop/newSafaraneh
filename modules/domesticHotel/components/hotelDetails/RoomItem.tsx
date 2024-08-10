@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 
 import { DomesticHotelRateItem, DomesticHotelRoomItem } from '@/modules/domesticHotel/types/hotel';
-import { Bed, DefaultRoom, InfoCircle, Tik, User } from '@/modules/shared/components/ui/icons';
+import { Bed, Calendar, DefaultRoom, InfoCircle, Tik, User } from '@/modules/shared/components/ui/icons';
 import { numberWithCommas } from '@/modules/shared/helpers';
 import Tooltip from '@/modules/shared/components/ui/Tooltip';
 import Quantity from '@/modules/shared/components/ui/Quantity';
@@ -16,6 +16,7 @@ type Props = {
     selectedRoomToken?: string;
     roomsHasImage?: boolean;
     nights?:number;
+    onShowPriceCalendar?: () => void;
 }
 
 const RoomItem: React.FC<Props> = props => {
@@ -167,6 +168,15 @@ const RoomItem: React.FC<Props> = props => {
                             </div>
                         </div>
                     </Tooltip>
+
+                    {!!props.onShowPriceCalendar && !!rate.calendar && <button 
+                        type='button'
+                        onClick={props.onShowPriceCalendar}
+                        className='text-xs text-blue-600 flex gap-1 mb-2 cursor-pointer'
+                    >
+                        <Calendar className='w-4 h-4 fill-current' />
+                        نمایش تقویم قیمتی
+                    </button>}
                 </>
             )}
         </>
@@ -225,7 +235,7 @@ const RoomItem: React.FC<Props> = props => {
                         </div>
                     )}
 
-                    {room.capacity.count && (
+                    {!!room.capacity.count && (
                         <div className="flex gap-2 items-center">
                             <User className='w-5 h-5 fill-neutral-400' />
                             {room.capacity.count} نفر
