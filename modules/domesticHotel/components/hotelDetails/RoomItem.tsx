@@ -107,16 +107,6 @@ const RoomItem: React.FC<Props> = props => {
         )?.amount,
     };
 
-    const nightly = [];
-    if (rate.nightly.items) {
-        for (const [key, value] of Object.entries(rate.nightly.items)) {
-            nightly.push({
-                date: key,
-                amount: count * value.amount,
-                board: count * value.board,
-            });
-        }
-    }
 
     const calulateDiscount = (sale: number, board: number) => {
         let discountPercentage, fixedDiscountPercentage;
@@ -172,7 +162,7 @@ const RoomItem: React.FC<Props> = props => {
                     {!!props.onShowPriceCalendar && !!rate.calendar && <button 
                         type='button'
                         onClick={props.onShowPriceCalendar}
-                        className='text-xs text-blue-600 flex gap-1 mb-2 cursor-pointer'
+                        className='text-xs text-blue-600 flex items-center gap-1 mb-2 cursor-pointer'
                     >
                         <Calendar className='w-4 h-4 fill-current' />
                         نمایش تقویم قیمتی

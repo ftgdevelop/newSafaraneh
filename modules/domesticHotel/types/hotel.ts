@@ -330,7 +330,13 @@ export interface DomesticHotelRateItem {
     nightly: {
         totalPrice: number;
         averagePrice: number;
-        items: unknown;
+        items: {
+            [date: string]: {
+                amount: number;
+                board: number;
+                type?: "Completion" | "Online" | "Offline" | "Request" | null;
+            }; 
+        }[];
     }
 }
 
