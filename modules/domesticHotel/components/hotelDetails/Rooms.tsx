@@ -25,6 +25,7 @@ const Rooms: React.FC<Props> = props => {
     const { t: tHotel } = useTranslation('hotel');
 
     const [openedCalendarRoom, setOpenedCalendarRoom ] = useState<DomesticHotelRateItem | undefined>(undefined);
+    const [openedCalendarRoomName, setOpenedCalendarRoomName] = useState<string>("");
     const [openCalendar, setOpenCalendar ] = useState<boolean>(false);
 
     useEffect(() => {
@@ -115,6 +116,11 @@ const Rooms: React.FC<Props> = props => {
     const theme1 = process.env.THEME === "THEME1";
     const theme2 = process.env.THEME === "THEME2";
 
+    let selectedNights :string[] = [];
+    if(openedCalendarRoom?.nightly?.items){
+        selectedNights = Object.keys(openedCalendarRoom?.nightly?.items).map(key => (key));
+    }
+
     return (
     <>
         <ModalPortal
@@ -129,14 +135,22 @@ const Rooms: React.FC<Props> = props => {
             <div className={`fixed sm:rounded-md flex flex-col gap-4 items-center top-0 left-0 sm:top-1/2 sm:left-1/2 sm:-translate-y-1/2 sm:-translate-x-1/2 max-h-screen overflow-y-auto p-1 sm:p-6 w-screen h-screen sm:h-auto sm:w-550 bg-white duration-200 transition-all ${openCalendar ? "scale-100 opacity-100" : "scale-90 opacity-0"}`} >
                 <button
                     type='button'
-                    className='sm:hidden'
+                    className='sm:hidden mt-3'
                     onClick={() => { setOpenCalendar(false) }}
                 >
                     <Close className='w-7 h-7 fill-neutral-400' />
                 </button>
+
+                <strong className='font-semibold text-lg'>
+                    {openedCalendarRoomName}
+                </strong>
+
                 <PriceCalendar
                     calendar={openedCalendarRoom?.calendar}
+                    selectedDates={selectedNights}
+                    roomName={openedCalendarRoomName}
                 />
+
             </div>
 
         </ModalPortal>
@@ -165,7 +179,12 @@ const Rooms: React.FC<Props> = props => {
                         selectedRoomToken={selectedRoomToken}
                         roomsHasImage={roomsHasImage || false}
                         nights={nights}
-                        onShowPriceCalendar={setOpenedCalendarRoom}
+                        onShowPriceCalendar={
+                            (name:string, rate:DomesticHotelRateItem) => {
+                                setOpenedCalendarRoom(rate);
+                                setOpenedCalendarRoomName(name);
+                            }
+                        }
                     />}
 
                     {!!theme2 && <RoomsListTheme2
@@ -174,7 +193,12 @@ const Rooms: React.FC<Props> = props => {
                         selectedRoomToken={selectedRoomToken}
                         roomsHasImage={roomsHasImage || false}
                         nights={nights}
-                        onShowPriceCalendar={setOpenedCalendarRoom}
+                        onShowPriceCalendar={
+                            (name:string, rate:DomesticHotelRateItem) => {
+                                setOpenedCalendarRoom(rate);
+                                setOpenedCalendarRoomName(name);
+                            }
+                        }
                     />}
 
                 </>
