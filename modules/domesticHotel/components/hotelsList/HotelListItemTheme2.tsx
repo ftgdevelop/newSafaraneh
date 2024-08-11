@@ -155,6 +155,7 @@ const HotelListItemTheme2: React.FC<Props> = props => {
             </div>
 
             {!!hotel.isPromotion && <span className="absolute bg-green-600 text-white right-3 top-3 rounded-xl leading-4 text-2xs py-1 px-2 select-none pointer-events-none"> پیشنهاد ویژه </span>}
+            {!!hotel.promotions?.length && <span className="absolute bg-red-600 text-white right-3 bottom-3 rounded-xl leading-4 text-2xs py-1 px-2 select-none pointer-events-none"> پیشنهاد ویژه </span> }
 
 
             <div className="xs:col-span-3 p-3 max-xs:pb-0">
@@ -174,6 +175,15 @@ const HotelListItemTheme2: React.FC<Props> = props => {
 
 
                 {!!hotel.address && <p className="text-xs leading-4 mb-2 text-neutral-400"><Location className="w-4 h-4 fill-neutral-400 inline-block" /> {hotel.address} </p>}
+
+                {hotel.promotions?.map(promotion => (
+                    <span
+                        key={promotion.name}
+                        className="bg-white border px-1 py-1 leading-5 rtl:ml-1 ltr:mr-1 mb-1 inline-block text-xs text-neutral-500 rounded"
+                    >
+                        {promotion.name}
+                    </span>
+                ))}
 
                 {/* {hotel.facilities?.slice(0,3).map(facility => (<span className="text-xs rtl:ml-2">
                     {facility.Image ? (

@@ -427,6 +427,10 @@ export interface SearchAccomodationItem {
 export interface PricedHotelItem extends SearchAccomodationItem {
     ratesInfo?: "loading" | { Satisfaction: number; TotalRowCount: number; };
     priceInfo: "loading" | "notPriced" | "need-to-inquire" | { boardPrice: number; salePrice: number; };
+    promotions?:{
+        name?:string;
+        description?:string;
+    }[];
 }
 
 export type SortTypes = "priority" | "price" | "starRate" | "name" | "gueatRate";
