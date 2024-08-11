@@ -302,6 +302,13 @@ export interface DomesticHotelRateItem {
     supplierType: "Safaraneh" | "Snapp" | "ChannelLead" | "HotelYar" | "Eghamat24";
     available: number;
     description?: string;
+    calendar?: {
+        [date: string]: {
+            amount: number;
+            board: number;
+            type?: "Completion" | "Online" | "Offline" | "Request" | null;
+        };
+    };
     cancellationPolicy?: {
         status: "Refundable" | "NonRefundable" | "Unknown" | "CallSupport";
         fees: {
@@ -323,7 +330,13 @@ export interface DomesticHotelRateItem {
     nightly: {
         totalPrice: number;
         averagePrice: number;
-        items: unknown;
+        items: {
+            [date: string]: {
+                amount: number;
+                board: number;
+                type?: "Completion" | "Online" | "Offline" | "Request" | null;
+            }; 
+        }[];
     }
 }
 
@@ -420,6 +433,10 @@ export interface SearchAccomodationItem {
 export interface PricedHotelItem extends SearchAccomodationItem {
     ratesInfo?: "loading" | { Satisfaction: number; TotalRowCount: number; };
     priceInfo: "loading" | "notPriced" | "need-to-inquire" | { boardPrice: number; salePrice: number; };
+    promotions?:{
+        name?:string;
+        description?:string;
+    }[];
 }
 
 export type SortTypes = "priority" | "price" | "starRate" | "name" | "gueatRate";

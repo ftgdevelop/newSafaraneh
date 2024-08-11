@@ -14,7 +14,7 @@ import parse from 'html-react-parser';
 import Accordion from '@/modules/shared/components/ui/Accordion';
 import { CalendarError, ErrorIcon, QuestionCircle } from '@/modules/shared/components/ui/icons';
 import DomesticHotelListSideBar from '@/modules/domesticHotel/components/hotelsList/sidebar';
-import { setGuestPointFilterOptions, setTypeFilterOptions, setPriceFilterRange } from '@/modules/domesticHotel/store/domesticHotelSlice';
+import { setGuestPointFilterOptions, setTypeFilterOptions, setPriceFilterRange, setPromotionsFilterOptions } from '@/modules/domesticHotel/store/domesticHotelSlice';
 import { useAppDispatch } from '@/modules/shared/hooks/use-store';
 import { useRouter } from 'next/router';
 import HotelsOnMap from '@/modules/domesticHotel/components/hotelsList/HotelsOnMap';
@@ -51,6 +51,10 @@ const HotelList: NextPage<Props> = props => {
     id: number;
     salePrice: number;
     boardPrice: number;
+    promotions?:{
+      name?:string;
+      description?:string;
+    }[];
   }
 
   const dispatch = useAppDispatch();
@@ -216,6 +220,38 @@ const HotelList: NextPage<Props> = props => {
 
   }
 
+
+
+  const saveOffersOptions = (hotelItems: PricedHotelItem[]) => {
+
+    const options: { keyword: string, label: string, count: number }[] = [];
+
+    for (let i = 0; i < hotelItems.length; i++) {
+
+      const hotelItemPromotions = hotelItems[i].promotions;
+
+      if (!hotelItemPromotions?.length) continue;
+
+      for (let j = 0; j < hotelItemPromotions.length; j++) {
+        const promotionItem = hotelItemPromotions[j];
+
+        const updatingOptionItem = options.find(item => item.keyword === promotionItem.name);
+
+        if (!promotionItem.name) continue;
+
+        if (updatingOptionItem) {
+          updatingOptionItem.count = updatingOptionItem.count + 1;
+        } else {
+          options.push({ keyword: promotionItem.name, label: promotionItem.name || "", count: 1 })
+        }
+
+      }
+    }
+
+    dispatch(setPromotionsFilterOptions(options));
+
+  }
+
   useEffect(() => {
     if (accomodations) {
 
@@ -267,6 +303,8 @@ const HotelList: NextPage<Props> = props => {
         setPricesData(pricesResponse.data.result.hotels);
 
         savePriceRange(pricesResponse.data.result.hotels);
+
+        saveOffersOptions(pricesResponse.data.result.hotels);
 
       }
       setPricesLoading(false);
@@ -321,7 +359,8 @@ const HotelList: NextPage<Props> = props => {
     return ({
       ...hotel,
       ratesInfo: ratesInfo,
-      priceInfo: priceInfo
+      priceInfo: priceInfo,
+      promotions: hotelPriceData?.promotions
     })
   }) || [];
 
@@ -441,6 +480,7 @@ const HotelList: NextPage<Props> = props => {
   const filteredGuestPoints = urlSegments.find(item => item.includes('guestrate'))?.split("guestrate-")[1]?.split(",") || [];
   const filteredHotelType = urlSegments.find(item => item.includes('type'))?.split("type-")[1]?.split(",") || [];
   const filteredFacility = urlSegments.find(item => item.includes('amenities'))?.split("amenities-")[1]?.split(",") || [];
+  const filteredPromotion = urlSegments.find(item => item.includes('promotions'))?.split("promotions-")[1]?.split(",") || [];
   const filteredPrice = urlSegments.find(item => item.includes('price'))?.split("price-")[1]?.split(",") || [];
 
   const filteredHotels = hotels.filter(hotelItem => {
@@ -477,6 +517,15 @@ const HotelList: NextPage<Props> = props => {
     })) {
       return false;
     }
+
+    if (filteredPromotion.length && !filteredPromotion.some(item => {
+      const hotelsPromotion = hotelItem.promotions?.map(promotionItem => promotionItem.name);
+      const decodedItem = decodeURI(item);
+      return (hotelsPromotion?.includes(decodedItem));
+    })) {
+      return false;
+    }
+
 
     if (
       filteredPrice.length &&
@@ -657,7 +706,7 @@ const HotelList: NextPage<Props> = props => {
                 allHotels={hotels.length}
                 filteredHotels={filteredHotels.length}
                 priceIsFetched={!!pricesData}
-                scoreIsFetched={!!ratesData}
+                scoreIsFetched={!ratesLoading}
               />
 
             </div>
