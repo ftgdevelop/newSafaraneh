@@ -8,7 +8,7 @@ type Props = {
     selectedRoomToken?: string;
     roomsHasImage?: boolean;
     nights?: number;
-    onShowPriceCalendar?: (rate:DomesticHotelRateItem) => void;
+    onShowPriceCalendar?: (name:string, rate:DomesticHotelRateItem) => void;
 
 }
 
@@ -54,7 +54,7 @@ const RoomsListTheme1 : React.FC<Props> = props => {
                     nights={props.nights}
                     onShowPriceCalendar={() =>{
                         if(props.onShowPriceCalendar){
-                            props.onShowPriceCalendar(rateItem)
+                            props.onShowPriceCalendar(availability.rooms?.[0].name || "" ,rateItem)
                         }
                     }}
                 />

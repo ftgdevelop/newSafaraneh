@@ -4,6 +4,7 @@ type DomesticHotel = {
     filterOptions:{
         typeFilterOptions: {label:string, id:number, count: number}[],
         facilityFilterOptions: {label:string, keyword:string, count: number}[],
+        promotionFilterOptions: {label:string, keyword:string, count: number}[],
         guestPointFilterOptions: {label:string, value:[number, number], count: number}[],
         priceFilterRange?: {min: number, max:number}
     }
@@ -13,6 +14,7 @@ const initialState: DomesticHotel = {
     filterOptions:{
         typeFilterOptions: [],
         facilityFilterOptions:[],
+        promotionFilterOptions:[],
         guestPointFilterOptions: []
     }
 };
@@ -27,6 +29,9 @@ export const domesticHotelSlice = createSlice({
         setFacilityFilterOptions: (state, action)=>{
             state.filterOptions.facilityFilterOptions = action.payload
         },
+        setPromotionsFilterOptions: (state, action)=>{
+            state.filterOptions.promotionFilterOptions = action.payload
+        },
         setGuestPointFilterOptions: (state, action)=>{
             state.filterOptions.guestPointFilterOptions = action.payload
         },
@@ -36,6 +41,6 @@ export const domesticHotelSlice = createSlice({
     }
 });
 
-export const { setFacilityFilterOptions, setGuestPointFilterOptions, setPriceFilterRange, setTypeFilterOptions } = domesticHotelSlice.actions
+export const { setFacilityFilterOptions, setPromotionsFilterOptions,setGuestPointFilterOptions, setPriceFilterRange, setTypeFilterOptions } = domesticHotelSlice.actions
 
 export default domesticHotelSlice.reducer;
