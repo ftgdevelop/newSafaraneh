@@ -1,5 +1,5 @@
 import { DomesticHotelRateItem } from "../../types/hotel";
-import { numberWithCommas } from "@/modules/shared/helpers";
+import { dateFormat, numberWithCommas } from "@/modules/shared/helpers";
 
 import '@mobiscroll/react/dist/css/mobiscroll.min.css';
 import { Datepicker as MobiscrollDatepicker, localeFa, MbscCalendarLabel } from '@mobiscroll/react';
@@ -77,6 +77,7 @@ const PriceCalendar: React.FC<Props> = props => {
             select="range"
             value={value}
             showRangeLabels={false}
+            min = {dateFormat(new Date())}
         /> 
     );
 }
