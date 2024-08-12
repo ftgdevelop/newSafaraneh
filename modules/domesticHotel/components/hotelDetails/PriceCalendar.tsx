@@ -1,5 +1,5 @@
 import { DomesticHotelRateItem } from "../../types/hotel";
-import { numberWithCommas } from "@/modules/shared/helpers";
+import { dateFormat, numberWithCommas } from "@/modules/shared/helpers";
 
 import '@mobiscroll/react/dist/css/mobiscroll.min.css';
 import { Datepicker as MobiscrollDatepicker, localeFa, MbscCalendarLabel } from '@mobiscroll/react';
@@ -42,11 +42,27 @@ const PriceCalendar: React.FC<Props> = props => {
     let labels : MbscCalendarLabel[] = [];
 
     if (calendarArray){
-        labels = calendarArray.map(item => ({
-            title: item.amount ? numberWithCommas(item.amount)?.toString() : undefined,
-            textColor: '#555',
-            date: item.date
-        }))
+        labels = calendarArray.map(item => {
+            
+            let title = "قیمت نامشخص";
+            let textColor = "#bbbbbb";
+
+            if(item.amount){
+                title = numberWithCommas(item.amount)?.toString();
+                textColor = "#555"; 
+            }
+
+            if(item.type === "Completion"){
+                title = "ظرفیت تکمیل";
+                textColor = "red";
+            }
+
+            return ({
+                title: title,
+                textColor: textColor,
+                date: item.date
+            })
+        })
     }else{
         debugger;
     }
@@ -61,6 +77,7 @@ const PriceCalendar: React.FC<Props> = props => {
             select="range"
             value={value}
             showRangeLabels={false}
+            min = {dateFormat(new Date())}
         /> 
     );
 }
