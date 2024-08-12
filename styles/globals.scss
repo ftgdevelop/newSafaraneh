@@ -321,3 +321,10 @@ footer img[src*=trustseal], footer img[src*='logo.samandehi'] {
     padding-right: 7px;
   }
 }
+
+.bg-caret{
+  background-image: url('/images/down-carret.svg');
+  background-size: 25px;
+  background-repeat: no-repeat;
+  background-position: right;
+}

@@ -7,6 +7,7 @@ import HotelAvailabilityFilter from "./HotelAvailabilityFilter";
 import HotelFacilityFilter from "./HotelFacilityFilter";
 import HotelGuestPointFilter from "./HotelGuestPointFilter";
 import HotelTypeFilter from "./HotelTypeFilter";
+import HotelPromotionFilter from "./HotelPromotionFilter";
 
 type Props = {
     allHotels: number;
@@ -75,6 +76,19 @@ const HotelFilters: React.FC<Props> = props => {
                 )}
 
                 <HotelTypeFilter />
+
+                {props.priceIsFetched ? <HotelPromotionFilter /> : (
+                    <>
+                        <label className="font-semibold text-sm mb-2 mt-4 border-t border-neutral-300 pt-5 block">
+                            آفرها
+                        </label>
+                        <Skeleton className="mb-4" />
+                        <Skeleton className="mb-4" />
+                        <Skeleton className="mb-4" />
+                        <Skeleton className="mb-4" />
+                        <Skeleton className="mb-4" />
+                    </>
+                )}
 
             </div>
 
