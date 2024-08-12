@@ -14,7 +14,7 @@ const ModulesBanner: React.FC = () => {
       <div className='grid grid-cols-1 md:grid-cols-2 gap-3 mb-6 md:mb-10'>
 
         {!!(process.env. PROJECT_MODULES?.includes("DomesticHotel")) && <Link
-          href='/hotels/هتل-های-شیراز'
+          href='/hotels/هتل-های-شیراز/location-215'
           className={`${linkClassName} ${process.env. PROJECT_MODULES?.includes("CIP")?"md:row-span-2":""}`}
         >
           <div className='absolute top-0 right-0 left-0 p-5 text-white'>
@@ -62,7 +62,7 @@ const ModulesBanner: React.FC = () => {
         </Link>}
 
 
-        {!!(process.env. PROJECT_MODULES?.includes("DomesticHotel")) && <Link href='/hotels/هتل-های-تهران' className={linkClassName}>
+        {!!(process.env. PROJECT_MODULES?.includes("DomesticHotel")) && <Link href='/hotels/هتل-های-تهران/location-164' className={linkClassName}>
 
           <div className='absolute top-0 right-0 left-0 p-5 text-white'>
             <h2 className='bg-black/25 text-sm md:text-lg px-3 py-1 mb-2 rounded inline-block font-bold'>

@@ -180,6 +180,7 @@ label.mbsc-form-control-wrapper .mbsc-textfield {
   }
   &.mbsc-datepicker-inline{
     width: 100%;
+    height: auto;
   }
   body &{
     border: 0 none !important;
@@ -194,7 +195,7 @@ label.mbsc-form-control-wrapper .mbsc-textfield {
       width: 55px;
     }
     @media screen and (min-width:650px) {
-      width: 65px;
+      width: 70px;
       margin-bottom: 5px;
     }
     font-family: 'samim';
@@ -235,7 +236,7 @@ label.mbsc-form-control-wrapper .mbsc-textfield {
   .mbsc-calendar-text {
     padding: 0;
     margin: 0;
-    font-size: 10px;
+    font-size: 9px;
     @media screen and (min-width:650px) {
       font-size: 12px;
     }
@@ -258,5 +259,8 @@ label.mbsc-form-control-wrapper .mbsc-textfield {
 
   .mbsc-calendar-slide{
     padding: 0;
+  }
+  .mbsc-calendar-title-wrapper .mbsc-calendar-button {
+    pointer-events: none;
   }
 }
