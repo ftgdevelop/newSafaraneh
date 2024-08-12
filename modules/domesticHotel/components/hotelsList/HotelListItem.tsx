@@ -143,7 +143,7 @@ const HotelListItem: React.FC<Props> = props => {
 
     return (
         <div className="grid md:grid-cols-12 mb-4 border border-neutral-200 bg-white rounded-lg relative" >
-            <Link target="_blank" href={hotel.url!+searchInfo} className="md:col-span-12 lg:col-span-4 bg-travel-pattern lg:rtl:rounded-r-lg lg:ltr:rounded-l-lg">
+            <Link target="_blank" href={hotel.url!+searchInfo} className="relative md:col-span-12 lg:col-span-4 bg-travel-pattern lg:rtl:rounded-r-lg lg:ltr:rounded-l-lg">
                 {hotel.picture?.path ? (
                     <Image
                         src={hotel.picture.path}
@@ -161,11 +161,13 @@ const HotelListItem: React.FC<Props> = props => {
                         <DefaultRoom className="fill-neutral-300 w-32 h-32" />
                     </div>
                 )}
+
+                {!!hotel.isPromotion && <span className="absolute bg-green-600 text-white right-3 top-3 rounded-xl leading-4 text-2xs py-1 px-2 select-none pointer-events-none"> پیشنهاد ویژه </span>}
+
+                {!!hotel.promotions?.length && <span className="absolute bg-red-600 text-white right-3 bottom-3 rounded-xl leading-4 text-2xs py-1 px-2 select-none pointer-events-none"> پیشنهاد ویژه </span> }
+
             </Link>
 
-            {!!hotel.isPromotion && <span className="absolute bg-green-600 text-white right-3 top-3 rounded-xl leading-4 text-2xs py-1 px-2 select-none pointer-events-none"> پیشنهاد ویژه </span>}
-
-            {!!hotel.promotions?.length && <span className="absolute bg-red-600 text-white right-3 bottom-3 rounded-xl leading-4 text-2xs py-1 px-2 select-none pointer-events-none"> پیشنهاد ویژه </span> }
 
 
             <div className="md:col-span-7 lg:col-span-5 p-3 max-md:pb-0">
