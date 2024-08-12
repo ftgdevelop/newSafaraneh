@@ -260,4 +260,7 @@ label.mbsc-form-control-wrapper .mbsc-textfield {
   .mbsc-calendar-slide{
     padding: 0;
   }
+  .mbsc-calendar-title-wrapper .mbsc-calendar-button {
+    pointer-events: none;
+  }
 }

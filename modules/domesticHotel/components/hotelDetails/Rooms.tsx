@@ -10,6 +10,7 @@ import RoomsListTheme1 from './RoomsListTheme1';
 import RoomsListTheme2 from './RoomsListTheme2';
 import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
 import PriceCalendar from './PriceCalendar';
+import RoomDetailFooter from './RoomDetailFooter';
 
 type Props = {
     hotelId: number;
@@ -150,6 +151,13 @@ const Rooms: React.FC<Props> = props => {
                     selectedDates={selectedNights}
                     roomName={openedCalendarRoomName}
                 />
+
+                {!!openedCalendarRoom && <RoomDetailFooter
+                    onSelectRoom={selectRoomHandle}
+                    rate={openedCalendarRoom}
+                    nights={nights}
+                    selectedRoomToken={selectedRoomToken}
+                />}
 
             </div>
 
