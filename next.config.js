@@ -71,7 +71,7 @@ const nextConfig = {
     PROJECT_SERVER_NATIONALITY: "",
     PORT: '',
     //PROJECT_MODULES: "DomesticHotel DomesticFlight CIP Blog ForeignFlight ForeignHotel",
-    PROJECT_MODULES: "DomesticHotel DomesticFlight CIP",
+    PROJECT_MODULES: "DomesticHotel",
     // DEFAULT_lAN:"US",
     // LANGUAGES:["US","NO","FA"]
 
