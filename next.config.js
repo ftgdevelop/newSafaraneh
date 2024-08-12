@@ -66,7 +66,7 @@ const nextConfig = {
     PROJECT_SERVER_PAYMENT: "payline.safarlife.com",
     PROJECT_SERVER_IDENTITY:"identity.safarlife.com",
     PROJECT_SERVER_CIP:"cip.safarlife.com",
-    PROJECT_SERVER_FLIGHT: "flightdomestic.safaraneh.com",
+    PROJECT_SERVER_FLIGHT: "flightdomestic.safarlife.com",
     PROJECT_SERVER_TENANTID: "1040",
     PROJECT_SERVER_NATIONALITY: "",
     PORT: '',
