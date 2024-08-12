@@ -176,7 +176,7 @@ const HotelListItemTheme3: React.FC<Props> = props => {
 
                 {!!hotel.address && <p className="text-xs leading-4 mb-2 text-neutral-500"> {hotel.address} </p>}
 
-                {hotel.facilities?.slice(0, 3).map(facility => (<span className="text-xs rtl:ml-2">
+                {hotel.facilities?.slice(0, 3).map(facility => (<span key={facility.id} className="text-xs rtl:ml-2">
                     {/* {facility.Image ? (
                         <Image
                             src={facility.Image}

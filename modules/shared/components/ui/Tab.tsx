@@ -21,7 +21,7 @@ const Tab: React.FC<Props> = props => {
 
     const router = useRouter();
 
-    const [activetabKey, setActiveTabKey] = useState(items[0].key);
+    const [activetabKey, setActiveTabKey] = useState(items[0]?.key);
 
     let tabClassName = (active: boolean) => {
         if(style === 'almosafer-home'){
