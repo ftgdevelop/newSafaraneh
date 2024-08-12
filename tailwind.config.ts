@@ -26,6 +26,7 @@ const config: Config = {
         '2px': '2px',
         '5px': '5px',
         '550': '550px',
+        '600': '600px',
         '480': '480px'
       },
       keyframes: {

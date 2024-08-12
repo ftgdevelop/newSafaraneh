@@ -42,11 +42,27 @@ const PriceCalendar: React.FC<Props> = props => {
     let labels : MbscCalendarLabel[] = [];
 
     if (calendarArray){
-        labels = calendarArray.map(item => ({
-            title: item.amount ? numberWithCommas(item.amount)?.toString() : undefined,
-            textColor: '#555',
-            date: item.date
-        }))
+        labels = calendarArray.map(item => {
+            
+            let title = "قیمت نامشخص";
+            let textColor = "#bbbbbb";
+
+            if(item.amount){
+                title = numberWithCommas(item.amount)?.toString();
+                textColor = "#555"; 
+            }
+
+            if(item.type === "Completion"){
+                title = "ظرفیت تکمیل";
+                textColor = "red";
+            }
+
+            return ({
+                title: title,
+                textColor: textColor,
+                date: item.date
+            })
+        })
     }else{
         debugger;
     }
