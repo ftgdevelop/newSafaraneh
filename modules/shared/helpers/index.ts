@@ -6,13 +6,14 @@ export const numberWithCommas = (x: number) => {
     }
 }
 
-export const dateDiplayFormat = ({ date, format, locale }: { date: string; format?: "m" | "d" | "HH:mm"| "dd mm"| "ddd dd mm" | "dd mm yyyy" | "yyyy/mm/dd" | "YYYY-MM-DD" | "yyyy/mm/dd h:m" , locale?: string }): string => {
+export const dateDiplayFormat = ({ date, format, locale }: { date: string; format?: "weekDayNumber" | "m" | "d" | "HH:mm"| "dd mm"| "ddd dd mm" | "dd mm yyyy" | "yyyy/mm/dd" | "YYYY-MM-DD" | "yyyy/mm/dd h:m" , locale?: string }): string => {
 
     if (!date) return "";
 
     const dateObject = new Date(date);
     const day = dateObject.toLocaleString(locale, { day: "numeric" });
     const weekDay = dateObject.toLocaleString(locale, { weekday: 'short' });
+    const weekDayNumber = dateObject.getDay();
     const month = dateObject.toLocaleString(locale, { month: "long" });
     const day2digit = dateObject.toLocaleString(locale, { day: "2-digit" })
     const month2digit = dateObject.toLocaleString(locale, { month: "2-digit" });
@@ -50,10 +51,14 @@ export const dateDiplayFormat = ({ date, format, locale }: { date: string; forma
         return (`${day} ${month}`)
     }
     if (format === "d"){
-        return (day)
+        return (day2digit)
     }
     if (format === "m"){
         return (month)
+    }
+
+    if(format === "weekDayNumber"){
+        return weekDayNumber.toString()
     }
 
     return date;

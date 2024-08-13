@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 
 import { DomesticHotelRateItem, DomesticHotelRoomItem } from '@/modules/domesticHotel/types/hotel';
-import { Bed, DefaultRoom, InfoCircle, Tik, User } from '@/modules/shared/components/ui/icons';
+import { Bed, Calendar, DefaultRoom, InfoCircle, Tik, User } from '@/modules/shared/components/ui/icons';
 import { numberWithCommas } from '@/modules/shared/helpers';
 import Tooltip from '@/modules/shared/components/ui/Tooltip';
 import Quantity from '@/modules/shared/components/ui/Quantity';
@@ -16,6 +16,7 @@ type Props = {
     selectedRoomToken?: string;
     roomsHasImage?: boolean;
     nights?:number;
+    onOpenRoom?: () => void;
 }
 
 const RoomItem: React.FC<Props> = props => {
@@ -106,16 +107,6 @@ const RoomItem: React.FC<Props> = props => {
         )?.amount,
     };
 
-    const nightly = [];
-    if (rate.nightly.items) {
-        for (const [key, value] of Object.entries(rate.nightly.items)) {
-            nightly.push({
-                date: key,
-                amount: count * value.amount,
-                board: count * value.board,
-            });
-        }
-    }
 
     const calulateDiscount = (sale: number, board: number) => {
         let discountPercentage, fixedDiscountPercentage;
@@ -167,6 +158,15 @@ const RoomItem: React.FC<Props> = props => {
                             </div>
                         </div>
                     </Tooltip>
+
+                    {!!props.onOpenRoom && !!rate.calendar && <button 
+                        type='button'
+                        onClick={props.onOpenRoom}
+                        className='text-xs text-blue-600 flex items-center gap-1 mb-2 cursor-pointer'
+                    >
+                        <Calendar className='w-4 h-4 fill-current' />
+                        نمایش تقویم قیمتی
+                    </button>}
                 </>
             )}
         </>
@@ -225,7 +225,7 @@ const RoomItem: React.FC<Props> = props => {
                         </div>
                     )}
 
-                    {room.capacity.count && (
+                    {!!room.capacity.count && (
                         <div className="flex gap-2 items-center">
                             <User className='w-5 h-5 fill-neutral-400' />
                             {room.capacity.count} نفر

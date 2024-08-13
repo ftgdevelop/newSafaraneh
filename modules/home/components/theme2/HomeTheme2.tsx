@@ -21,7 +21,7 @@ const HomeTheme2: React.FC<Props> = props => {
         <>
             <Banner
                 modules={props.modules}
-                innerElement = {<LoginLinkBanner message="10٪ یا بیشتر در بیش از 100000 هتل با قیمت اعضا صرفه جویی کنید. همچنین، با اضافه کردن هتل به پرواز، اعضا تا 30٪ صرفه جویی می کنند" />}
+                //innerElement = {<LoginLinkBanner message="10٪ یا بیشتر در بیش از 100000 هتل با قیمت اعضا صرفه جویی کنید. همچنین، با اضافه کردن هتل به پرواز، اعضا تا 30٪ صرفه جویی می کنند" />}
             />
 
             <BeyondTypicalStays />
@@ -30,9 +30,9 @@ const HomeTheme2: React.FC<Props> = props => {
 
             <LargeBanner />
 
-            <TrendingDestinations />
+            {/* <TrendingDestinations />
 
-            <WeekendDeals />
+            <WeekendDeals /> */}
 
             <RecentBlogs blogs={props.blogs} />
             

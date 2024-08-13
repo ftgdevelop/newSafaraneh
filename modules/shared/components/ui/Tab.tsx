@@ -10,7 +10,6 @@ type Props = {
     style?: "1" | "2" | "3" | "radioStyle" | "almosafer-home" | "expedia-home";
     radioStyle?: boolean;
     wrapperClassName?: string;
-    tabLinksCenter?: boolean;
     tabLinksBold?: boolean;
     innerElement?: React.ReactNode;
 }
@@ -21,7 +20,7 @@ const Tab: React.FC<Props> = props => {
 
     const router = useRouter();
 
-    const [activetabKey, setActiveTabKey] = useState(items[0].key);
+    const [activetabKey, setActiveTabKey] = useState(items[0]?.key);
 
     let tabClassName = (active: boolean) => {
         if(style === 'almosafer-home'){
@@ -87,7 +86,7 @@ const Tab: React.FC<Props> = props => {
                             </label>))}
                     </>
                 ) : (
-                    <div className={`${style === '2' ? "flex gap-4" : style === '3' ? "flex border-b border-neutral-200" : "border-b border-neutral-200 sm:px-5"} ${props.tabLinksCenter ? "text-center" : ""} ${props.tabLinksBold ? "font-bold" : ""}`}>
+                    <div className={`${style === '2' ? "flex gap-4" : style === '3' ? "flex border-b border-neutral-200" : "border-b border-neutral-200 sm:px-5"} ${props.tabLinksBold ? "font-bold" : ""}`}>
                         {items.map(item => <button
                             type="button"
                             key={item.key}

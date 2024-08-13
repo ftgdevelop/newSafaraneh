@@ -1,46 +1,45 @@
-import React, { useState, useEffect } from "react";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 
-import { useAppSelector } from "@/modules/shared/hooks/use-store";
 import CheckboxGroup from "@/modules/shared/components/ui/CheckboxGroup";
+import { useAppSelector } from "@/modules/shared/hooks/use-store";
 
-const HotelGuestPointFilter: React.FC = () => {
+const HotelPromotionFilter: React.FC = () => {
 
     const router = useRouter();
-    const { t: tHotel } = useTranslation('hotel');
     const { t } = useTranslation('common');
 
-    const savedOptions = useAppSelector(state => state.domesticHotelFilter.filterOptions.guestPointFilterOptions);
+    const savedOptions = useAppSelector(state => state.domesticHotelFilter.filterOptions.promotionFilterOptions);
 
-    const options: { value: string, label: React.ReactNode }[] = savedOptions.filter(item => +item.value[0] >= 50).map(item => ({
+    const options: { value: string, label: React.ReactNode }[] = savedOptions.map(item => ({
         label: (<div className="flex justify-between grow"> {item.label}  <span> ({item.count}) </span></div>),
-        value: item.value[0] + "-" + item.value[1]
-    }))
+        value: item.keyword
+    }));
 
     let initialValues: string[] = [];
 
-    const urlGuestPointSegment = router.asPath.split("/").find(item => item.includes('guestrate-'));
-    if (urlGuestPointSegment) {
-        initialValues = urlGuestPointSegment.split('guestrate-')[1].split("/")[0].split(",").map(item => decodeURI(item));
+    const urlHotelPromotionSegment = router.asPath.split("/").find(item => item.includes('promotions-'));
+    if (urlHotelPromotionSegment) {
+        initialValues = urlHotelPromotionSegment.split('promotions-')[1].split("/")[0].split(",").map(item => decodeURI(item));
     }
 
     const [values, setValues] = useState<string[]>(initialValues);
 
     useEffect(() => {
         const path = router.asPath;
-        if (path.includes('/guestrate-')) {
+        if (path.includes('/promotions-')) {
 
-            const paramsArray = path.split("/").filter(item => !item.includes('guestrate'));
+            const paramsArray = path.split("/").filter(item => !item.includes('promotions'));
             if (values.length) {
-                paramsArray.push("guestrate-" + values.join(","));
+                paramsArray.push("promotions-" + values.join(","));
             }
 
             router.push(paramsArray.join("/"), undefined, { shallow: true });
 
         } else {
             if (values.length) {
-                router.push(path + "/guestrate-" + values.join(","), undefined, { shallow: true });
+                router.push(path + "/promotions-" + values.join(","), undefined, { shallow: true });
             }
         }
     }, [values.length]);
@@ -54,14 +53,14 @@ const HotelGuestPointFilter: React.FC = () => {
     },[initialValues.length]);
 
     if (!options.length){
-        return null;
+        return null
     }
 
     return (
-        <div className="mb-2 mt-4 border-t border-neutral-300 pt-5">
-            <div className="flex justify-between items-start">
+        <>
+            <div className="flex justify-between items-start mb-2 mt-4 border-t border-neutral-300 pt-5">
                 <label className="font-semibold text-sm">
-                    {tHotel('guest-rating')}
+                    آفرها
                 </label>
                 {!!values.length && (<button
                     onClick={resetFilter}
@@ -78,8 +77,8 @@ const HotelGuestPointFilter: React.FC = () => {
                 values={values}
             />
 
-        </div>
+        </>
     )
 }
 
-export default HotelGuestPointFilter;
+export default HotelPromotionFilter;
