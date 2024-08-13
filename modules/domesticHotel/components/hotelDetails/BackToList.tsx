@@ -28,7 +28,7 @@ const BackToList: React.FC<Props> = props => {
         listUrl = `/hotels/هتل-های-${cityName}`;
     }
     if (cityId){
-        listUrl += `/location${cityId}`
+        listUrl += `/location-${cityId}`
     }
 
     if (checkin && checkout) {
