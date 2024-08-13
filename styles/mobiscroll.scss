@@ -216,7 +216,10 @@ label.mbsc-form-control-wrapper .mbsc-textfield {
     }
     &.mbsc-range-day-end{
       border-left: 1px solid #007aff;
-      border-radius: 5px 0 0 5px;
+    }
+    &.mbsc-range-day-end.mbsc-range-day-start{
+      border: 1px solid #007aff;
+      border-radius: 5px;
     }
   }
   .mbsc-ios.mbsc-range-day:after{

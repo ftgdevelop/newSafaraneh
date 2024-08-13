@@ -40,7 +40,7 @@ const Footer: React.FC<Props> = props => {
         return (
             <footer className="border-t border-neutral-200" >
                 <div className="max-w-container mx-auto p-3 text-neutral-700 py-8 text-sm">
-                    کلیه حقوق این وبسایت محفوظ و متعلق به {siteName} است.
+                    کلیۀ حقوق این وبسایت محفوظ و متعلق به گروه لایف است.
                 </div>
             </footer>
         )
