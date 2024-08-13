@@ -33,6 +33,7 @@ const nextConfig = {
       'logo.samandehi.ir',
       'www.facebook.com',
       'cdn.mehrbooking.net',
+      'iranhotel.app',
       'blogonline.ir'
     ],
     formats: ['image/avif', 'image/webp'],
@@ -42,7 +43,7 @@ const nextConfig = {
   i18n,
   env: {
     PROJECT: "IRANHOTEL",
-    SITE_NAME: 'https://www.iranhotel.ir',
+    SITE_NAME: 'https://www.iranhotel.app',
     THEME: "THEME1",
     PROJECT_SERVER_TYPE: "https://",
     PROJECT_SERVER_USER: "",
