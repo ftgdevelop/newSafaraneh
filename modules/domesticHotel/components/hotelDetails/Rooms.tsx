@@ -1,7 +1,7 @@
 import { i18n, useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 
-import { DomesticHotelAvailability, DomesticHotelRateItem } from '@/modules/domesticHotel/types/hotel';
+import { DomesticHotelAvailability, DomesticHotelRateItem, DomesticHotelRoomItem } from '@/modules/domesticHotel/types/hotel';
 import { useRouter } from 'next/router';
 import { addSomeDays, dateFormat, getDatesDiff } from '@/modules/shared/helpers';
 import { GetRooms, domesticHotelValidateRoom } from '../../actions';
@@ -11,6 +11,9 @@ import RoomsListTheme2 from './RoomsListTheme2';
 import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
 import PriceCalendar from './PriceCalendar';
 import RoomDetailFooter from './RoomDetailFooter';
+import Tab from '@/modules/shared/components/ui/Tab';
+import { TabItem } from '@/modules/shared/types/common';
+import RoomFacilities from './RoomFacilities';
 
 type Props = {
     hotelId: number;
@@ -25,23 +28,28 @@ const Rooms: React.FC<Props> = props => {
 
     const { t: tHotel } = useTranslation('hotel');
 
-    const [openedCalendarRoom, setOpenedCalendarRoom ] = useState<DomesticHotelRateItem | undefined>(undefined);
-    const [openedCalendarRoomName, setOpenedCalendarRoomName] = useState<string>("");
+    type OpenedRoom = {
+        rate: DomesticHotelRateItem;
+        room?: DomesticHotelRoomItem;
+    }
+    
+    const [openedRoom, setOpenedRoom ] = useState<OpenedRoom | undefined>();
+    
     const [openCalendar, setOpenCalendar ] = useState<boolean>(false);
 
     useEffect(() => {
         let timeOut: any;
-        if (openedCalendarRoom) {
+        if (openedRoom?.rate.bookingToken) {
             timeOut = setTimeout(() => { setOpenCalendar(true) }, 50);
         }
 
         return (() => { setOpenCalendar(false); clearTimeout(timeOut); })
-    }, [openedCalendarRoom]);
+    }, [openedRoom?.rate.bookingToken]);
     
     useEffect(() => {
         let timeOut: any;
         if (!openCalendar) {
-            timeOut = setTimeout(() => { setOpenedCalendarRoom(undefined) }, 100);         
+            timeOut = setTimeout(() => { setOpenedRoom(undefined) }, 100);         
         }
 
         return (() => { clearTimeout(timeOut); })
@@ -118,14 +126,39 @@ const Rooms: React.FC<Props> = props => {
     const theme2 = process.env.THEME === "THEME2";
 
     let selectedNights :string[] = [];
-    if(openedCalendarRoom?.nightly?.items){
-        selectedNights = Object.keys(openedCalendarRoom?.nightly?.items).map(key => (key));
+    if(openedRoom?.rate?.nightly?.items){
+        selectedNights = Object.keys(openedRoom.rate.nightly.items).map(key => (key));
+    }
+
+    let selectedRoomDetailTabItems : TabItem[] = [];
+    if (openedRoom){
+        selectedRoomDetailTabItems.push({
+            key : "calendar",
+            label : "تقویم قیمتی اتاق",
+            children : <PriceCalendar
+                calendar={openedRoom?.rate?.calendar}
+                selectedDates={selectedNights}
+                roomName={openedRoom?.room?.name || ""}
+            />
+
+        })
+    }
+
+    if(openedRoom?.room?.facilities?.length){
+        selectedRoomDetailTabItems.push({
+            key : "facilities",
+            label : "امکانات اتاق",
+            children : <RoomFacilities 
+                facilityItems={openedRoom.room.facilities}
+            />
+
+        })
     }
 
     return (
     <>
         <ModalPortal
-            show={!!openedCalendarRoom}
+            show={!!openedRoom}
             selector='modal_portal'
         >
 
@@ -143,18 +176,17 @@ const Rooms: React.FC<Props> = props => {
                 </button>
 
                 <strong className='font-semibold text-lg'>
-                    {openedCalendarRoomName}
+                    {openedRoom?.room?.name}
                 </strong>
 
-                <PriceCalendar
-                    calendar={openedCalendarRoom?.calendar}
-                    selectedDates={selectedNights}
-                    roomName={openedCalendarRoomName}
+                <Tab 
+                    items={selectedRoomDetailTabItems}  
+                    wrapperClassName='self-stretch'
                 />
 
-                {!!openedCalendarRoom && <RoomDetailFooter
+                {!!(openedRoom?.rate) && <RoomDetailFooter
                     onSelectRoom={selectRoomHandle}
-                    rate={openedCalendarRoom}
+                    rate={openedRoom.rate}
                     nights={nights}
                     selectedRoomToken={selectedRoomToken}
                 />}
@@ -187,12 +219,7 @@ const Rooms: React.FC<Props> = props => {
                         selectedRoomToken={selectedRoomToken}
                         roomsHasImage={roomsHasImage || false}
                         nights={nights}
-                        onShowPriceCalendar={
-                            (name:string, rate:DomesticHotelRateItem) => {
-                                setOpenedCalendarRoom(rate);
-                                setOpenedCalendarRoomName(name);
-                            }
-                        }
+                        onOpenRoom={setOpenedRoom}
                     />}
 
                     {!!theme2 && <RoomsListTheme2
@@ -201,12 +228,7 @@ const Rooms: React.FC<Props> = props => {
                         selectedRoomToken={selectedRoomToken}
                         roomsHasImage={roomsHasImage || false}
                         nights={nights}
-                        onShowPriceCalendar={
-                            (name:string, rate:DomesticHotelRateItem) => {
-                                setOpenedCalendarRoom(rate);
-                                setOpenedCalendarRoomName(name);
-                            }
-                        }
+                        onOpenRoom={setOpenedRoom}
                     />}
 
                 </>
