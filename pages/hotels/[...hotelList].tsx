@@ -555,7 +555,19 @@ const HotelList: NextPage<Props> = props => {
 
   let siteName = portalData?.billing.name || "";
 
-  const canonicalUrl = pageData?.url ? `${process.env.SITE_NAME}${pageData?.url}` : "";
+  let envSiteName = process.env.SITE_NAME;
+  
+  if (process.env.SITE_NAME?.includes("iranhotel")){
+    envSiteName = "https://www.iranhotel.app";
+  }
+
+  let pageUrl = pageData?.url;
+
+  if(pageUrl && process.env.LocaleInUrl === "off"){
+    pageUrl = pageUrl.replace("fa/","");    
+  }
+
+  const canonicalUrl = pageUrl ? `${envSiteName}${pageUrl}` : "";
 
   const theme1 = process.env.THEME === "THEME1";
   const theme2 = process.env.THEME === "THEME2";
