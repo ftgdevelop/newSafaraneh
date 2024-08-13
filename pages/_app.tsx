@@ -46,6 +46,18 @@ function MyApp({ Component, pageProps, portalData, pageData }: TProps) {
     }
   }, []);
 
+  useEffect(()=>{
+    const fetchPortalData = async () => {
+      const response = await getPortal("fa-IR");
+      if(response){
+        debugger;
+      }
+    }
+
+    fetchPortalData();
+
+  },[]);
+
 
   const tel = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
   const emergencyNumber = portalData?.billing.emergencyNumber || "";
