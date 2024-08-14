@@ -15,7 +15,7 @@ type Props = {
     logo: string;
     siteName: string;
     contactInfo: {
-        emergencyNumber?:string;
+        emergencyNumber?: string;
         tel?: string;
         instagram?: string;
         linkedin?: string;
@@ -39,9 +39,28 @@ const Footer: React.FC<Props> = props => {
     if (theme2) {
         return (
             <footer className="border-t border-neutral-200" >
-                <div className="max-w-container mx-auto p-3 text-neutral-700 py-8 text-sm">
-                    کلیۀ حقوق این وبسایت محفوظ و متعلق به گروه لایف است.
+                <div className="max-w-container mx-auto p-3 text-neutral-700 py-3 text-sm flex justify-between items-center gap-2">
+                    
+                    <p>
+                        کلیۀ حقوق این وبسایت محفوظ و متعلق به گروه لایف است.
+                    </p>
+
+                    {!!props.enamad && (
+                        <a className="footer-enamad" referrerPolicy="origin" target="_blank" href={props.enamad}>
+                            <Image
+                                referrerPolicy="origin"
+                                src={"/images/enamad.png"}
+                                alt="enamad"
+                                width={75}
+                                height={75}
+                                className="object-contain"
+                            />
+                        </a>
+                    )}
+
                 </div>
+
+
             </footer>
         )
     }
@@ -64,14 +83,14 @@ const Footer: React.FC<Props> = props => {
 
                         {!!props.enamad && (
                             <a className="footer-enamad" referrerPolicy="origin" target="_blank" href={props.enamad}>
-                                <Image 
-                                    referrerPolicy="origin" 
-                                    src={"/images/enamad.png"} 
+                                <Image
+                                    referrerPolicy="origin"
+                                    src={"/images/enamad.png"}
                                     alt="enamad"
                                     width={75}
                                     height={75}
                                     className="object-contain"
-                                 />
+                                />
                             </a>
                         )}
 
