@@ -171,6 +171,9 @@ label.mbsc-form-control-wrapper .mbsc-textfield {
 
 
 .mbsc-datepicker.price-calendar {
+  body &{
+    margin-top: 0;
+  }
   .mbsc-calendar-cell-inner{
     display: flex;
     flex-direction: column;

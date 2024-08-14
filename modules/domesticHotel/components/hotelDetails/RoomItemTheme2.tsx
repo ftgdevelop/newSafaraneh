@@ -16,7 +16,7 @@ type Props = {
     selectedRoomToken?: string;
     roomsHasImage?: boolean;
     nights?: number;
-    onShowPriceCalendar?: () => void;
+    onOpenRoom?: () => void;
 }
 
 const RoomItemTheme2: React.FC<Props> = props => {
@@ -155,9 +155,9 @@ const RoomItemTheme2: React.FC<Props> = props => {
                         </div>
 
                     </Tooltip>
-                    {!!props.onShowPriceCalendar && !!rate.calendar && <button 
+                    {!!props.onOpenRoom && !!rate.calendar && <button 
                         type='button'
-                        onClick={props.onShowPriceCalendar}
+                        onClick={props.onOpenRoom}
                         className='text-xs text-blue-600 flex items-center gap-1 mb-2 cursor-pointer'
                     >
                         <Calendar className='w-4 h-4 fill-current' />
