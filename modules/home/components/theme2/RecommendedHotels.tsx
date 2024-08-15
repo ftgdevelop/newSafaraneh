@@ -3,7 +3,12 @@ import { useTranslation } from "next-i18next";
 import Image from "next/image";
 import Slider from "react-slick";
 
-const RecommendedHotels: React.FC = () => {
+type Props ={
+    sectionTitle?: string;
+    sectionSubtitle?: string;
+}
+
+const RecommendedHotels: React.FC<Props> = props => {
 
     const { t: tHome } = useTranslation('home');
 
@@ -143,11 +148,11 @@ const RecommendedHotels: React.FC = () => {
     return (
         <section className="max-w-container m-auto px-3 max-xl:p-5 mb-5 sm:mb-12" >
             <h2 className="font-semibold text-md md:text-2xl mb-2">
-                هتل های پیشنهادی برای شما
+                {props.sectionTitle}
             </h2>
-            <p className="text-xs md:text-sm mb-3">
-                بر اساس مواردی که اخیرا دیده اید
-            </p>
+            { props.sectionSubtitle && <p className="text-xs md:text-sm mb-3">
+                {props.sectionSubtitle}
+            </p>}
 
             <div className="-mx-2">
                 <Slider
