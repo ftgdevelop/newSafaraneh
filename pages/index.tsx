@@ -8,8 +8,9 @@ import Head from 'next/head';
 import HomeTheme1 from '@/modules/home/components/theme1/HomeTheme1';
 import HomeTheme2 from '@/modules/home/components/theme2/HomeTheme2';
 import HomeTheme3 from '@/modules/home/components/theme3/HomeTheme3';
+import { getStrapiPages } from '@/modules/shared/actions/strapiActions';
 
-const Home: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], portalData?: WebSiteDataType }) => {
+const Home: NextPage<{ blogs?: BlogItemType[], portalData?: WebSiteDataType, homeSections: any }> = ({ blogs, portalData, homeSections }) => {
 
   const logo = portalData?.billing.logo?.value || "";
   const siteName = portalData?.billing.name || "";
@@ -197,6 +198,7 @@ const Home: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], portalD
       />}
 
       {!!theme2 && <HomeTheme2
+        sections={homeSections}
         modules={["domesticHotel", "domesticFlight", "cip"]}
         logo={logo}
         siteName={siteName}
@@ -218,13 +220,18 @@ const Home: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], portalD
 export const getStaticProps = async (context: any) => {
 
   const theme2 = process.env.THEME === "THEME2";
-  const recentBlogPost: any = process.env.PROJECT_MODULES?.includes("Blog") ? await getBlogs({ page: 1, per_page: theme2 ? 5 : 4 }) : null;
+
+  const [recentBlogPost, strapiResponse] = await Promise.all<any>([
+    process.env.PROJECT_MODULES?.includes("Blog") ? await getBlogs({ page: 1, per_page: theme2 ? 5 : 4 }) : null ,
+    await getStrapiPages('home')
+  ]) 
 
   return ({
     props: {
       ...await serverSideTranslations(context.locale, ['common', 'home', 'hotel']),
       context: context,
-      blogs: recentBlogPost?.data || null
+      blogs: recentBlogPost?.data || null,
+      homeSections : strapiResponse?.data?.data[0]?.attributes?.Sections || null
     }
   })
 };

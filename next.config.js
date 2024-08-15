@@ -68,6 +68,7 @@ const nextConfig = {
     PROJECT_SERVER_CIP:"cip.safarlife.com",
     PROJECT_SERVER_FLIGHT: "flightdomestic.safarlife.com",
     PROJECT_SERVER_TENANTID: "1040",
+    PROJECT_SERVER_STRAPI:"strapi.safarlife.com",
     PROJECT_SERVER_NATIONALITY: "",
     PORT: '',
     //PROJECT_MODULES: "DomesticHotel DomesticFlight CIP Blog ForeignFlight ForeignHotel",
