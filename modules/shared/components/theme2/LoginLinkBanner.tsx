@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "@/modules/shared/hooks/use-store
 type Props = {
     message:string;
     wrapperClassName?:string;
+    btnText?: string;
 }
 const LoginLinkBanner:React.FC<Props> = props => {
     
@@ -31,7 +32,7 @@ const LoginLinkBanner:React.FC<Props> = props => {
                 className="h-10 px-5 text-xs whitespace-nowrap"
                 onClick={()=>{dispatch(openLoginForm())}}
             >
-                وارد شوید
+                {props.btnText || "وارد شوید"}
             </Button>
         </div>
     )

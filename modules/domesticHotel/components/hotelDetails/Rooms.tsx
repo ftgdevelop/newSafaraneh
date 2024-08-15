@@ -131,7 +131,7 @@ const Rooms: React.FC<Props> = props => {
     }
 
     let selectedRoomDetailTabItems : TabItem[] = [];
-    if (openedRoom){
+    if (openedRoom?.rate?.calendar){
         selectedRoomDetailTabItems.push({
             key : "calendar",
             label : "تقویم قیمتی اتاق",

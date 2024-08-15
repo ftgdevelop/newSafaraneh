@@ -4,7 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import Slider from "react-slick";
 
-const BeyondTypicalStays: React.FC = () => {
+type Props = {
+    sectionTitle?: string;
+}
+
+const BeyondTypicalStays: React.FC<Props> = props => {
 
     const { t: tHome } = useTranslation('home');
 
@@ -84,7 +88,7 @@ const BeyondTypicalStays: React.FC = () => {
     return (
         <section className="max-w-container m-auto px-3 max-xl:p-5 mb-5 sm:mb-10" >
             <h2 className="font-semibold text-md md:text-2xl mb-5">
-                قصد سفر به کدام شهر را دارید؟
+                {props.sectionTitle}
             </h2>
 
             <div className="-mx-2">
