@@ -23,7 +23,7 @@ type Props = {
     logo: string;
     blogs?: BlogItemType[];
     modules: ("domesticHotel" | "domesticFlight" | "cip")[];
-    sections: SectionItem[]
+    sections?: SectionItem[]
 }
 
 const HomeTheme2: React.FC<Props> = props => {
