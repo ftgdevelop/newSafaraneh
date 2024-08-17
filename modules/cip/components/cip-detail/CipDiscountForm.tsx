@@ -61,7 +61,7 @@ const CipDiscountForm: React.FC<Props> = props => {
                     type="text"
                     onChange={e => { setText(e.target.value) }}
                     value={text}
-                    className='rounded-md h-10 w-full border border-neutral-300 rtl:pl-20 rtl:pr-2 ltr:pr-20 ltr:pl-2 outline-none font-mono text-xl tracking-widest placeholder:font-samim placeholder:text-sm placeholder:tracking-normal rtl:placeholder:text-right'
+                    className='rounded-md h-10 w-full border border-neutral-300 rtl:pl-20 rtl:pr-2 ltr:pr-20 ltr:pl-2 outline-none font-mono text-xl tracking-widest placeholder:font-iranyekan placeholder:text-sm placeholder:tracking-normal rtl:placeholder:text-right'
                     placeholder='افزودن کد تخفیف'
                     onKeyDown={e => {
                         if (e.code === "Enter") {
