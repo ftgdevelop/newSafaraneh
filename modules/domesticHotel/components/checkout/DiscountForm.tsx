@@ -63,7 +63,7 @@ const DiscountForm: React.FC<Props> = props => {
                     type="text"
                     onChange={e => { setText(e.target.value) }}
                     value={text}
-                    className={`rounded-md w-full border border-neutral-300 rtl:pl-20 rtl:pr-2 ltr:pr-20 ltr:pl-2 outline-none font-mono text-xl tracking-widest placeholder:font-samim placeholder:text-sm placeholder:tracking-normal rtl:placeholder:text-right ${theme1?"h-10":"h-13"}`}
+                    className={`rounded-md w-full border border-neutral-300 rtl:pl-20 rtl:pr-2 ltr:pr-20 ltr:pl-2 outline-none font-mono text-xl tracking-widest placeholder:font-iranyekan placeholder:text-sm placeholder:tracking-normal rtl:placeholder:text-right ${theme1?"h-10":"h-13"}`}
                     placeholder='افزودن کد تخفیف'
                     onKeyDown={e => {
                         if (e.code === "Enter") {
