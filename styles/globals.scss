@@ -122,6 +122,23 @@
 }
 
 @font-face {
+  font-family: 'iranyekan';
+  src: url('/fonts/iranyekan/iranyekanregular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'iranyekan';
+  src: url('/fonts/iranyekan/iranyekanmedium.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+@font-face {
   font-family: 'samim';
   src: url('/fonts/samim/Samim-FD.woff2') format('woff2');
   font-weight: normal;
@@ -253,7 +270,7 @@ body {
 }
 
 .yarl__slide_description {
-  font-family: 'samim';
+  font-family: 'iranyekan';
   font-size: 14px;
 }
 

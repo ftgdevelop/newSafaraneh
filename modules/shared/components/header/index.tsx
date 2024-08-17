@@ -64,7 +64,8 @@ const Header: React.FC<Props> = props => {
                 </Link>
 
                 {theme2 ? (
-                    <Navigation />
+                    null
+                    // <Navigation />
                 ) : (
                     <TravelServices logo={logo} siteName={siteName} className="rtl:float-right ltr:float-left" />
                 )}
