@@ -13,13 +13,13 @@ label.mbsc-form-control-wrapper .mbsc-textfield {
   }
 
   .persian-datepicker-wrapper & {
-    font-family: 'samim', sans-serif;
+    font-family: 'iranyekan', sans-serif;
   }
 }
 
 .persian-date-picker .mbsc-font,
 .mobi-date-picker-header {
-  font-family: 'samim', sans-serif;
+  font-family: 'iranyekan', sans-serif;
 }
 
 .red .mbsc-calendar-day-text {
@@ -171,6 +171,9 @@ label.mbsc-form-control-wrapper .mbsc-textfield {
 
 
 .mbsc-datepicker.price-calendar {
+  body &{
+    margin-top: 0;
+  }
   .mbsc-calendar-cell-inner{
     display: flex;
     flex-direction: column;
@@ -198,7 +201,7 @@ label.mbsc-form-control-wrapper .mbsc-textfield {
       width: 70px;
       margin-bottom: 5px;
     }
-    font-family: 'samim';
+    font-family: 'iranyekan';
     pointer-events: none;
     .mbsc-calendar-label-text{
       text-align: center;
@@ -216,7 +219,10 @@ label.mbsc-form-control-wrapper .mbsc-textfield {
     }
     &.mbsc-range-day-end{
       border-left: 1px solid #007aff;
-      border-radius: 5px 0 0 5px;
+    }
+    &.mbsc-range-day-end.mbsc-range-day-start{
+      border: 1px solid #007aff;
+      border-radius: 5px;
     }
   }
   .mbsc-ios.mbsc-range-day:after{
@@ -245,11 +251,11 @@ label.mbsc-form-control-wrapper .mbsc-textfield {
     margin-bottom: 22px;
     margin-top: 15px;
     font-size: 23px;
-    font-family: 'samim';
+    font-family: 'iranyekan';
     color: #ccc;
   }
   .mbsc-calendar-title {
-    font-family: 'samim';
+    font-family: 'iranyekan';
     font-weight: 600;
   }
   .mbsc-calendar-button.mbsc-button.mbsc-calendar-button-prev{

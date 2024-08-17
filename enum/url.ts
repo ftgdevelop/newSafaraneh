@@ -27,11 +27,16 @@ export const Header = {
     Flight: process.env.PROJECT_SERVER_FLIGHT,
     Crm:process.env.PROJECT_SERVER_CRM,
     Cip: process.env.PROJECT_SERVER_CIP,
-    Traveler : process.env.PROJECT_SERVER_TRAVELER
+    Traveler : process.env.PROJECT_SERVER_TRAVELER,
+    Strapi : process.env.PROJECT_SERVER_STRAPI
   };
 
   export const Cms = {
     GetByUrl: "/api/services/app/Page/GetByUrl",
+  }
+
+  export const Strapi = {
+    Pages:"/api/pages"
   }
 
   export const Identity = {
