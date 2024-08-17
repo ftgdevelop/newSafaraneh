@@ -1,5 +1,6 @@
 import Button from "@/modules/shared/components/ui/Button"
 import Image from "next/image"
+import parse from 'html-react-parser';
 
 type Props ={
     sectionTitle?: string;
@@ -7,6 +8,8 @@ type Props ={
     buttonText?: string;
     linkUrl?: string;
     imageAlt?: string;
+    imageTitle?: string;
+    imageUrl: string;
 }
 
 const LargeBanner : React.FC<Props> = props => {
@@ -16,8 +19,9 @@ const LargeBanner : React.FC<Props> = props => {
         >
             <div className="relative">
                 <Image
-                    src="/images/home/theme2/home-banner.jpg"
+                    src={props.imageUrl}
                     alt={props.imageAlt || ""}
+                    title={props.imageTitle}
                     width={1300}
                     height={500}
                     className="w-full min-h-72 object-cover rounded-2xl block"
@@ -28,7 +32,7 @@ const LargeBanner : React.FC<Props> = props => {
                         {props.sectionTitle}
                     </strong>
                     <p className="text-sm">
-                        {props.sectionDescription}
+                        {!!props.sectionDescription && parse(props.sectionDescription)}
                     </p>
                     <Button
                         target="_blank"
