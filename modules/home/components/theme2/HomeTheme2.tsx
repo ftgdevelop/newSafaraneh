@@ -54,7 +54,7 @@ const HomeTheme2: React.FC<Props> = props => {
     const strapiLinkBanner = props.sections?.find(section => section.Keyword === "link_banner");
     //const strapiLoginBanner = props.sections?.find(section => section.Keyword === "login_banner");
 
-    const strapiImagesMainUrl = (ServerAddress.Type || "https://") + ServerAddress.Strapi;
+    const strapiImagesMainUrl = ServerAddress.Strapi ? ((ServerAddress.Type || "https://") + ServerAddress.Strapi) : "";
 
     return (
         <>
@@ -68,7 +68,7 @@ const HomeTheme2: React.FC<Props> = props => {
                 items={strapiCities?.Items?.map(item => ({
                     name: item.Title || "",
                     url: item.Url || "",
-                    imageUrl: item.Image?.data?.attributes?.url ? strapiImagesMainUrl + item.Image.data.attributes.url : "",
+                    imageUrl: item.Image?.data?.attributes?.url ? (strapiImagesMainUrl + item.Image.data.attributes.url) : "",
                     imageAlt: item.ImageAlternative,
                     imageTitle: item.ImageTitle
                 }))}
@@ -93,7 +93,7 @@ const HomeTheme2: React.FC<Props> = props => {
                 sectionTitle={strapiLinkBanner?.Title}
                 sectionDescription={strapiLinkBanner?.Description}
                 imageAlt={strapiLinkBanner?.ImageAlternative}
-                imageUrl={strapiImagesMainUrl + (strapiLinkBanner?.Image?.data?.attributes?.url) || ""}
+                imageUrl={strapiLinkBanner?.Image?.data?.attributes?.url ? (strapiImagesMainUrl + strapiLinkBanner.Image.data.attributes.url) : ""}
             />
 
             {/* <TrendingDestinations />
