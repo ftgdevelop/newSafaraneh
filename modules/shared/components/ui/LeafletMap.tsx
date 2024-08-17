@@ -129,7 +129,7 @@ const LeafletMap: React.FC<Props> = props => {
         const iconHTML = ReactDOMServer.renderToString(<div>
 
             <div
-                className={`${colorClass} text-white px-2 py-0 rounded border-2 border-white shadow w-auto text-sm rtl:font-samim`}
+                className={`${colorClass} text-white px-2 py-0 rounded border-2 border-white shadow w-auto text-sm rtl:font-iranyekan`}
             >
                 <div
                     className='font-semibold whitespace-nowrap'

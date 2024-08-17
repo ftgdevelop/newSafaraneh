@@ -17,7 +17,8 @@ const config: Config = {
       },
       fontFamily: {
         'samim': ['samim', 'sans-serif'],
-        'vazir': ['vazir', 'sans-serif']
+        'vazir': ['vazir', 'sans-serif'],
+        'iranyekan' : ['iranyekan', 'sans-serif']
       },
       spacing: {
         '13': '3.25rem',
