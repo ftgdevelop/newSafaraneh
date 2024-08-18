@@ -1,11 +1,11 @@
 import { i18n, useTranslation } from 'next-i18next';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { DomesticHotelAvailability, DomesticHotelRateItem, DomesticHotelRoomItem } from '@/modules/domesticHotel/types/hotel';
 import { useRouter } from 'next/router';
-import { addSomeDays, dateFormat, getDatesDiff } from '@/modules/shared/helpers';
+import { addSomeDays, dateDiplayFormat, dateFormat, getDatesDiff } from '@/modules/shared/helpers';
 import { GetRooms, domesticHotelValidateRoom } from '../../actions';
-import { Close, InfoCircle } from '@/modules/shared/components/ui/icons';
+import { CheckTag, Close, InfoCircle } from '@/modules/shared/components/ui/icons';
 import RoomsListTheme1 from './RoomsListTheme1';
 import RoomsListTheme2 from './RoomsListTheme2';
 import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
@@ -14,9 +14,11 @@ import RoomDetailFooter from './RoomDetailFooter';
 import Tab from '@/modules/shared/components/ui/Tab';
 import { TabItem } from '@/modules/shared/types/common';
 import RoomFacilities from './RoomFacilities';
+import Skeleton from '@/modules/shared/components/ui/Skeleton';
 
 type Props = {
     hotelId: number;
+    hotelName?: string;
 }
 
 const Rooms: React.FC<Props> = props => {
@@ -32,10 +34,10 @@ const Rooms: React.FC<Props> = props => {
         rate: DomesticHotelRateItem;
         room?: DomesticHotelRoomItem;
     }
-    
-    const [openedRoom, setOpenedRoom ] = useState<OpenedRoom | undefined>();
-    
-    const [openCalendar, setOpenCalendar ] = useState<boolean>(false);
+
+    const [openedRoom, setOpenedRoom] = useState<OpenedRoom | undefined>();
+
+    const [openCalendar, setOpenCalendar] = useState<boolean>(false);
 
     useEffect(() => {
         let timeOut: any;
@@ -45,11 +47,11 @@ const Rooms: React.FC<Props> = props => {
 
         return (() => { setOpenCalendar(false); clearTimeout(timeOut); })
     }, [openedRoom?.rate.bookingToken]);
-    
+
     useEffect(() => {
         let timeOut: any;
         if (!openCalendar) {
-            timeOut = setTimeout(() => { setOpenedRoom(undefined) }, 100);         
+            timeOut = setTimeout(() => { setOpenedRoom(undefined) }, 100);
         }
 
         return (() => { clearTimeout(timeOut); })
@@ -58,6 +60,7 @@ const Rooms: React.FC<Props> = props => {
 
 
     const [availabilites, setAvailabilities] = useState<DomesticHotelAvailability[] | undefined>();
+    const [availabilitesLoading, setAvailabilitiesLoading] = useState<boolean>(false);
 
     const [selectedRoomToken, setSelectedRoomToken] = useState<string>();
 
@@ -77,8 +80,11 @@ const Rooms: React.FC<Props> = props => {
 
             const fetchRooms = async () => {
                 setAvailabilities(undefined);
+                setAvailabilitiesLoading(true);
 
                 const response: any = await GetRooms({ id: hotelId, checkin: checkin, checkout: checkout }, i18n?.language === "en" ? "en-US" : i18n?.language === "ar" ? "ar-AE" : "fa-IR");
+
+                setAvailabilitiesLoading(false);
 
                 if (response?.data?.result) {
                     setAvailabilities(response.data.result.availabilities);
@@ -125,17 +131,17 @@ const Rooms: React.FC<Props> = props => {
     const theme1 = process.env.THEME === "THEME1";
     const theme2 = process.env.THEME === "THEME2";
 
-    let selectedNights :string[] = [];
-    if(openedRoom?.rate?.nightly?.items){
+    let selectedNights: string[] = [];
+    if (openedRoom?.rate?.nightly?.items) {
         selectedNights = Object.keys(openedRoom.rate.nightly.items).map(key => (key));
     }
 
-    let selectedRoomDetailTabItems : TabItem[] = [];
-    if (openedRoom?.rate?.calendar){
+    let selectedRoomDetailTabItems: TabItem[] = [];
+    if (openedRoom?.rate?.calendar) {
         selectedRoomDetailTabItems.push({
-            key : "calendar",
-            label : "تقویم قیمتی اتاق",
-            children : <PriceCalendar
+            key: "calendar",
+            label: "تقویم قیمتی اتاق",
+            children: <PriceCalendar
                 calendar={openedRoom?.rate?.calendar}
                 selectedDates={selectedNights}
                 roomName={openedRoom?.room?.name || ""}
@@ -144,97 +150,150 @@ const Rooms: React.FC<Props> = props => {
         })
     }
 
-    if(openedRoom?.room?.facilities?.length){
+    if (openedRoom?.room?.facilities?.length) {
         selectedRoomDetailTabItems.push({
-            key : "facilities",
-            label : "امکانات اتاق",
-            children : <RoomFacilities 
+            key: "facilities",
+            label: "امکانات اتاق",
+            children: <RoomFacilities
                 facilityItems={openedRoom.room.facilities}
             />
 
         })
     }
 
-    return (
-    <>
-        <ModalPortal
-            show={!!openedRoom}
-            selector='modal_portal'
+    let promotionsBox: React.ReactNode = null;
+
+    if (availabilites?.[0]?.rooms && availabilites[0].rooms[0]?.promotions?.length) {
+
+        promotionsBox = <div
+            className='bg-white p-3 sm:p-5 sm:py-10 mb-5 border border-neutral-300 rounded-xl'
         >
+            <strong className='block font-semibold text-xl'>
+                نکات مهم  {props.hotelName || ""}                
+            </strong>
+            {
+                availabilites[0].rooms[0].promotions.flatMap(a => [a,a,a,a] ).map(promotion => {
 
-            <div className='fixed left-0 right-0 top-0 bottom-0 bg-black/50 backdrop-blur'
-                onClick={() => { setOpenCalendar(false) }}
-            />
+                    let startDate: string = "";
+                    let endDate: string = "";
 
-            <div className={`fixed sm:rounded-md flex flex-col gap-4 items-center top-0 left-0 sm:top-1/2 sm:left-1/2 sm:-translate-y-1/2 sm:-translate-x-1/2 max-h-screen overflow-y-auto p-1 sm:p-6 w-screen h-screen sm:h-auto sm:w-600 bg-white duration-200 transition-all ${openCalendar ? "scale-100 opacity-100" : "scale-90 opacity-0"}`} >
-                <button
-                    type='button'
-                    className='sm:hidden mt-3'
+                    if (promotion.endDate) {
+                        endDate = dateDiplayFormat({
+                            date: promotion.endDate,
+                            format: 'yyyy/mm/dd',
+                            locale: "fa"
+                        })
+                    }
+                    if (promotion.startDate) {
+                        startDate = dateDiplayFormat({
+                            date: promotion.startDate,
+                            format: 'yyyy/mm/dd',
+                            locale: "fa"
+                        })
+                    }
+
+                    return (
+                        <React.Fragment key={promotion.name} >
+                            <label className='block mb-3 mt-4 text-md font-semibold'> <CheckTag className='fill-current w-5 h-5 inline-block rtl:ml-1' /> {promotion.name} </label>
+                            <p className='text-xs mb-1'> {promotion.description} </p>
+
+                            {startDate && endDate ? (
+                                <p className='text-xs'>
+                                    مهلت استفاده از این طرح از تاریخ {startDate} تا {endDate} می‌باشد، لازم بذکر است که حتما می بایست روز ورود از تاریخ {startDate} تا {endDate} باشد.
+                                </p>
+                            ) : null}
+
+                        </React.Fragment>
+                    )
+                })
+            }
+
+        </div>
+    }
+
+    return (
+        <>
+            <ModalPortal
+                show={!!openedRoom}
+                selector='modal_portal'
+            >
+
+                <div className='fixed left-0 right-0 top-0 bottom-0 bg-black/50 backdrop-blur'
                     onClick={() => { setOpenCalendar(false) }}
-                >
-                    <Close className='w-7 h-7 fill-neutral-400' />
-                </button>
-
-                <strong className='font-semibold text-lg'>
-                    {openedRoom?.room?.name}
-                </strong>
-
-                <Tab 
-                    items={selectedRoomDetailTabItems}  
-                    wrapperClassName='self-stretch'
                 />
 
-                {!!(openedRoom?.rate) && <RoomDetailFooter
-                    onSelectRoom={selectRoomHandle}
-                    rate={openedRoom.rate}
-                    nights={nights}
-                    selectedRoomToken={selectedRoomToken}
-                />}
+                <div className={`fixed sm:rounded-md flex flex-col gap-4 items-center top-0 left-0 sm:top-1/2 sm:left-1/2 sm:-translate-y-1/2 sm:-translate-x-1/2 max-h-screen overflow-y-auto p-1 sm:p-6 w-screen h-screen sm:h-auto sm:w-600 bg-white duration-200 transition-all ${openCalendar ? "scale-100 opacity-100" : "scale-90 opacity-0"}`} >
+                    <button
+                        type='button'
+                        className='sm:hidden mt-3'
+                        onClick={() => { setOpenCalendar(false) }}
+                    >
+                        <Close className='w-7 h-7 fill-neutral-400' />
+                    </button>
 
-            </div>
+                    <strong className='font-semibold text-lg'>
+                        {openedRoom?.room?.name}
+                    </strong>
 
-        </ModalPortal>
+                    <Tab
+                        items={selectedRoomDetailTabItems}
+                        wrapperClassName='self-stretch'
+                    />
 
-        <div id="rooms_section" className="max-w-container mx-auto px-3 sm:px-5 pt-7 md:pt-10">
+                    {!!(openedRoom?.rate) && <RoomDetailFooter
+                        onSelectRoom={selectRoomHandle}
+                        rate={openedRoom.rate}
+                        nights={nights}
+                        selectedRoomToken={selectedRoomToken}
+                    />}
 
-            {(availabilites && availabilites.length === 0) ? (
-                <div className='bg-white rounded-xl p-3 sm:p-7'>
-                    <div className='bg-red-100 p-2 sm:p-4 flex gap-3 rounded'>
-                        <InfoCircle className='fill-red-600 w-5 h-5' />
-                        <div className='grow'>
-                            <h4 className='font-semibold text-red-600 mb-2 leading-6'> اتاقی موجود نیست! </h4>
-                            <p className='text-sm'>
-                                متاسفانه اتاقی در دسترس نیست ، لطفاً تاریخ دیگری را انتخاب کنید یا هتل دیگری جستجو نمایید.
-                            </p>
+                </div>
+
+            </ModalPortal>
+
+            <div id="rooms_section" className="max-w-container mx-auto px-3 sm:px-5 pt-7 md:pt-10">
+
+                {(availabilites && availabilites.length === 0) ? (
+                    <div className='bg-white rounded-xl p-3 sm:p-7'>
+                        <div className='bg-red-100 p-2 sm:p-4 flex gap-3 rounded'>
+                            <InfoCircle className='fill-red-600 w-5 h-5' />
+                            <div className='grow'>
+                                <h4 className='font-semibold text-red-600 mb-2 leading-6'> اتاقی موجود نیست! </h4>
+                                <p className='text-sm'>
+                                    متاسفانه اتاقی در دسترس نیست ، لطفاً تاریخ دیگری را انتخاب کنید یا هتل دیگری جستجو نمایید.
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            ) : (
-                <>
-                    <h2 className="text-lg lg:text-3xl font-semibold mb-3 md:mb-7"> {tHotel('choose-room')}  </h2>
+                ) : (
+                    <>
 
-                    {!!theme1 && <RoomsListTheme1
-                        availabilites={availabilites}
-                        selectRoomHandle={selectRoomHandle}
-                        selectedRoomToken={selectedRoomToken}
-                        roomsHasImage={roomsHasImage || false}
-                        nights={nights}
-                        onOpenRoom={setOpenedRoom}
-                    />}
+                        {promotionsBox}
 
-                    {!!theme2 && <RoomsListTheme2
-                        availabilites={availabilites}
-                        selectRoomHandle={selectRoomHandle}
-                        selectedRoomToken={selectedRoomToken}
-                        roomsHasImage={roomsHasImage || false}
-                        nights={nights}
-                        onOpenRoom={setOpenedRoom}
-                    />}
+                        <h2 className="text-lg lg:text-3xl font-semibold mb-3 md:mb-7"> {tHotel('choose-room')}  </h2>
 
-                </>
-            )}
-        </div>
-    </>
+                        {!!theme1 && <RoomsListTheme1
+                            availabilites={availabilites}
+                            selectRoomHandle={selectRoomHandle}
+                            selectedRoomToken={selectedRoomToken}
+                            roomsHasImage={roomsHasImage || false}
+                            nights={nights}
+                            onOpenRoom={setOpenedRoom}
+                        />}
+
+                        {!!theme2 && <RoomsListTheme2
+                            availabilites={availabilites}
+                            selectRoomHandle={selectRoomHandle}
+                            selectedRoomToken={selectedRoomToken}
+                            roomsHasImage={roomsHasImage || false}
+                            nights={nights}
+                            onOpenRoom={setOpenedRoom}
+                        />}
+
+                    </>
+                )}
+            </div>
+        </>
     )
 }
 
