@@ -119,7 +119,6 @@ const HotelDetail: NextPage<Props> = props => {
   const hotelScoreData = allData?.score;
   const sheet = allData?.sheet;
   const richSnippets = allData?.richSnippets;
-
   const accommodationData = accommodation?.result;
 
   let defaultDestination: EntitySearchResultItemType | undefined = undefined;
@@ -494,7 +493,7 @@ const HotelDetail: NextPage<Props> = props => {
 
       </div>
 
-      {!!accommodationData.id && <Rooms hotelId={accommodationData.id} />}
+      {!!accommodationData.id && <Rooms hotelName={accommodationData.displayName || ""} hotelId={accommodationData.id} />}
 
       {(!isSafaraneh || accommodationData?.facilities?.length) ? (
         <AccommodationFacilities facilities={accommodationData?.facilities} />
@@ -563,7 +562,12 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const url = encodeURI(`/hotel/${query.hotelDetail![0]}&checkin=${checkin}&checkout=${checkout}`);
 
-  const allData: any = await getDomesticHotelDetailsByUrl("/" + locale + url, locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR");
+  let localePart = "/" + locale;
+  if (process.env.LocaleInUrl === "off"){
+    localePart = "";
+  }
+
+  const allData: any = await getDomesticHotelDetailsByUrl( localePart + url, locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR");
 
   if (allData?.data && (!allData?.data?.result?.hotel && !allData?.data?.result?.accommodation) && process.env.LocaleInUrl !== "off") {
 
