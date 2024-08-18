@@ -155,7 +155,7 @@ const RoomItemTheme2: React.FC<Props> = props => {
                         </div>
 
                     </Tooltip>
-                    {!!(rate.calendar || room.facilities?.length) && <button 
+                    {!!(rate.calendar || room.facilities?.length || room.promotions?.length) && <button 
                         type='button'
                         onClick={props.onOpenRoom}
                         className='text-xs text-blue-600 flex items-center gap-1 mb-2 cursor-pointer'
@@ -224,6 +224,19 @@ const RoomItemTheme2: React.FC<Props> = props => {
                         </div>
                     ) : (
                         <div className="line-through text-neutral-500"> {tHotel('extra-bed')} </div>
+                    )}
+
+                    {!!(room.promotions?.length) && (
+                        <div>
+                            {room.promotions.map(promotion => (
+                                <span
+                                    key={promotion.name}
+                                    className='bg-white border px-1 py-1 leading-5 rtl:ml-1 ltr:mr-1 mb-1 inline-block text-xs text-neutral-500 rounded'
+                                >
+                                    {promotion.name} 
+                                </span>
+                            ))}
+                        </div>
                     )}
 
                     {rate.description && <div className='text-amber-600 flex gap-2'>
