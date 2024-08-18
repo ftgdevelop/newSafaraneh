@@ -163,21 +163,6 @@ const Rooms: React.FC<Props> = props => {
 
     let promotionsBox: React.ReactNode = null;
 
-    if (availabilitesLoading || 1 + 1 === 2) {
-        promotionsBox = <div
-            className='bg-white p-3 sm:p-5 mb-5 flex flex-col gap-5 border border-neutral-300 rounded-xl'
-        >
-            <Skeleton className='w-40' />
-            <Skeleton className='w-1/2' />
-            <Skeleton className='w-3/5' />
-            <Skeleton className='w-2/5' />
-            <Skeleton className='w-2/3' />
-            <Skeleton className='w-40' />
-            <Skeleton className='w-1/2' />
-            <Skeleton className='w-18' />
-
-        </div>
-    }
     if (availabilites?.[0]?.rooms && availabilites[0].rooms[0]?.promotions?.length) {
 
         promotionsBox = <div
