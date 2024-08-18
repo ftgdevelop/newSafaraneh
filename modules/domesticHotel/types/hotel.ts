@@ -289,6 +289,12 @@ export interface DomesticHotelRoomItem {
         extraBed: number;
     };
     id: number;
+    promotions?:{        
+        description?: string;
+        endDate?: string;
+        name?: string;
+        startDate?: string;
+    }[]
 }
 export interface DomesticHotelRateItem {
     pricing?: {
