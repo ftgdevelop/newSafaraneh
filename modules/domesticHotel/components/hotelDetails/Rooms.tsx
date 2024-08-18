@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 
 import { DomesticHotelAvailability, DomesticHotelRateItem, DomesticHotelRoomItem } from '@/modules/domesticHotel/types/hotel';
 import { useRouter } from 'next/router';
-import { addSomeDays, dateDiplayFormat, dateFormat, getDatesDiff } from '@/modules/shared/helpers';
+import { addSomeDays, dateFormat, getDatesDiff } from '@/modules/shared/helpers';
 import { GetRooms, domesticHotelValidateRoom } from '../../actions';
-import { CheckTag, Close, InfoCircle } from '@/modules/shared/components/ui/icons';
+import { Close, InfoCircle } from '@/modules/shared/components/ui/icons';
 import RoomsListTheme1 from './RoomsListTheme1';
 import RoomsListTheme2 from './RoomsListTheme2';
 import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
@@ -14,11 +14,10 @@ import RoomDetailFooter from './RoomDetailFooter';
 import Tab from '@/modules/shared/components/ui/Tab';
 import { TabItem } from '@/modules/shared/types/common';
 import RoomFacilities from './RoomFacilities';
-import Skeleton from '@/modules/shared/components/ui/Skeleton';
+import Promotions from './Promotions';
 
 type Props = {
     hotelId: number;
-    hotelName?: string;
 }
 
 const Rooms: React.FC<Props> = props => {
@@ -157,58 +156,17 @@ const Rooms: React.FC<Props> = props => {
             children: <RoomFacilities
                 facilityItems={openedRoom.room.facilities}
             />
-
         })
     }
 
-    let promotionsBox: React.ReactNode = null;
-
-    if (availabilites?.[0]?.rooms && availabilites[0].rooms[0]?.promotions?.length) {
-
-        promotionsBox = <div
-            className='bg-white p-3 sm:p-5 sm:py-10 mb-5 border border-neutral-300 rounded-xl'
-        >
-            <strong className='block font-semibold text-xl'>
-                نکات مهم  {props.hotelName || ""}                
-            </strong>
-            {
-                availabilites[0].rooms[0].promotions.flatMap(a => [a,a,a,a] ).map(promotion => {
-
-                    let startDate: string = "";
-                    let endDate: string = "";
-
-                    if (promotion.endDate) {
-                        endDate = dateDiplayFormat({
-                            date: promotion.endDate,
-                            format: 'yyyy/mm/dd',
-                            locale: "fa"
-                        })
-                    }
-                    if (promotion.startDate) {
-                        startDate = dateDiplayFormat({
-                            date: promotion.startDate,
-                            format: 'yyyy/mm/dd',
-                            locale: "fa"
-                        })
-                    }
-
-                    return (
-                        <React.Fragment key={promotion.name} >
-                            <label className='block mb-3 mt-4 text-md font-semibold'> <CheckTag className='fill-current w-5 h-5 inline-block rtl:ml-1' /> {promotion.name} </label>
-                            <p className='text-xs mb-1'> {promotion.description} </p>
-
-                            {startDate && endDate ? (
-                                <p className='text-xs'>
-                                    مهلت استفاده از این طرح از تاریخ {startDate} تا {endDate} می‌باشد، لازم بذکر است که حتما می بایست روز ورود از تاریخ {startDate} تا {endDate} باشد.
-                                </p>
-                            ) : null}
-
-                        </React.Fragment>
-                    )
-                })
-            }
-
-        </div>
+    if(openedRoom?.room?.promotions?.length){
+        selectedRoomDetailTabItems.push({
+            key: "promotions",
+            label: "آفرها",
+            children: <Promotions
+                promotions={openedRoom.room.promotions}
+            />
+        })
     }
 
     return (
@@ -266,10 +224,7 @@ const Rooms: React.FC<Props> = props => {
                         </div>
                     </div>
                 ) : (
-                    <>
-
-                        {promotionsBox}
-
+                    <>                    
                         <h2 className="text-lg lg:text-3xl font-semibold mb-3 md:mb-7"> {tHotel('choose-room')}  </h2>
 
                         {!!theme1 && <RoomsListTheme1
