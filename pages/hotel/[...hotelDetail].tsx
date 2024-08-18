@@ -479,7 +479,7 @@ const HotelDetail: NextPage<Props> = props => {
 
       </div>
 
-      {!!accommodationData.id && <Rooms hotelId={accommodationData.id} />}
+      {!!accommodationData.id && <Rooms hotelName={accommodationData.displayName || ""} hotelId={accommodationData.id} />}
 
       {(!isSafaraneh || accommodationData?.facilities?.length) ? (
         <AccommodationFacilities facilities={accommodationData?.facilities} />
