@@ -80,7 +80,7 @@ const HotelFilters: React.FC<Props> = props => {
                 {props.priceIsFetched ? <HotelPromotionFilter /> : (
                     <>
                         <label className="font-semibold text-sm mb-2 mt-4 border-t border-neutral-300 pt-5 block">
-                            آفرها
+                            هدایای رزرو
                         </label>
                         <Skeleton className="mb-4" />
                         <Skeleton className="mb-4" />
