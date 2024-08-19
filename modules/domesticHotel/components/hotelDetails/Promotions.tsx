@@ -41,10 +41,10 @@ const Promotions: React.FC<Props> = props => {
                                 <CheckTag className='fill-green-800 w-6 h-6 inline-block shrink-0' />
                                 <div>
                                     <label className='block mb-3 text-md font-semibold'> {promotion.name} </label>
-                                    <p className='text-xs mb-1'> {promotion.description} </p>
+                                    <p className='text-sm mb-1'> {promotion.description} </p>
 
                                     {startDate && endDate ? (
-                                        <p className='text-xs'>
+                                        <p className='text-sm'>
                                             مهلت استفاده از این طرح از تاریخ {startDate} تا {endDate} می‌باشد، لازم بذکر است که حتما می بایست روز ورود از تاریخ {startDate} تا {endDate} باشد.
                                         </p>
                                     ) : null}
