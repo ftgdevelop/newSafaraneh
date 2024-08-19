@@ -162,7 +162,7 @@ const Rooms: React.FC<Props> = props => {
     if(openedRoom?.room?.promotions?.length){
         selectedRoomDetailTabItems.push({
             key: "promotions",
-            label: "آفرها",
+            label: "هدایای رزرو",
             children: <Promotions
                 promotions={openedRoom.room.promotions}
             />

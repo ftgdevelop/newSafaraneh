@@ -174,8 +174,7 @@ const HotelDetail: NextPage<Props> = props => {
     description: string;
   }[] = [];
 
-  //TODO: edit this if condition:
-  if ((process.env.PROJECT === "1STSAFAR" || accommodationData?.galleries?.length) && 1+1===5) {
+  if ((process.env.PROJECT === "1STSAFAR" || accommodationData?.galleries?.length)) {
     if (accommodationData?.galleries?.length) {
       hotelImages = accommodationData?.galleries?.map(item => ({
         alt: item.fileAltAttribute || item.fileTitleAttribute || "",
