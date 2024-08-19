@@ -92,6 +92,14 @@ const HotelDetail: NextPage<Props> = props => {
     }
   }, [checkin, checkout]);
 
+  // useEffect(()=>{
+  //   //delete this useEffect
+  //   const todoDelete = async () => {
+  //     const allData: any = await getDomesticHotelDetailsByUrl("/" + locale + props.todoDeleteUrl, locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR");
+  //   }
+
+  //   todoDelete();
+  // },[]);
 
   if (props.error410) {
     return (
@@ -103,8 +111,13 @@ const HotelDetail: NextPage<Props> = props => {
     return null;
   }
 
-  const { accommodation, hotel: hotelData, page: pageData, score: hotelScoreData, richSnippets, sheet } = allData;
-
+  const accommodation = allData?.accommodation;
+  const hotelData = allData?.hotel;
+  const pageData = allData?.page; 
+  const hotelScoreData = allData?.score; 
+  const richSnippets = allData?.richSnippets; 
+  const sheet = allData?.sheet; 
+ 
   const accommodationData = accommodation?.result;
 
   let defaultDestination: EntitySearchResultItemType | undefined = undefined;
@@ -161,7 +174,8 @@ const HotelDetail: NextPage<Props> = props => {
     description: string;
   }[] = [];
 
-  if ((process.env.PROJECT === "1STSAFAR" || accommodationData?.galleries?.length)) {
+  //TODO: edit this if condition:
+  if ((process.env.PROJECT === "1STSAFAR" || accommodationData?.galleries?.length) && 1+1===5) {
     if (accommodationData?.galleries?.length) {
       hotelImages = accommodationData?.galleries?.map(item => ({
         alt: item.fileAltAttribute || item.fileTitleAttribute || "",
@@ -548,7 +562,12 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const url = encodeURI(`/hotel/${query.hotelDetail![0]}&checkin=${checkin}&checkout=${checkout}`);
 
-  const allData: any = await getDomesticHotelDetailsByUrl("/" + locale + url, locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR");
+  let localePart = "/" + locale;
+  if (process.env.LocaleInUrl === "off"){
+    localePart = "";
+  }
+
+  const allData: any = await getDomesticHotelDetailsByUrl( localePart + url, locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR");
 
   if (allData?.data && (!allData?.data?.result?.hotel && !allData?.data?.result?.accommodation) && process.env.LocaleInUrl !== "off") {
 
