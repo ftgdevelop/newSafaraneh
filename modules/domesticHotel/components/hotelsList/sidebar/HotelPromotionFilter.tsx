@@ -60,7 +60,7 @@ const HotelPromotionFilter: React.FC = () => {
         <>
             <div className="flex justify-between items-start mb-2 mt-4 border-t border-neutral-300 pt-5">
                 <label className="font-semibold text-sm">
-                    آفرها
+                    هدایای رزرو
                 </label>
                 {!!values.length && (<button
                     onClick={resetFilter}

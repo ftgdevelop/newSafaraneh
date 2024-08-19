@@ -184,7 +184,7 @@ const RoomItem: React.FC<Props> = props => {
                 }}
                 loading={!!selectedRoomToken && selectedRoomToken === rate.bookingToken}
                 disabled={!!selectedRoomToken && selectedRoomToken !== rate.bookingToken}
-                className='block w-full lg:w-44 h-8 px-5 rounded-md'
+                className='text-sm block w-full lg:w-44 h-8 px-5 rounded-md'
             >
                 {prices?.roomPrice && prices.roomPrice < 1000 ?
                     "درخواست رزرو"

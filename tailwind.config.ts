@@ -112,16 +112,16 @@ const config: Config = {
         '5' : '5px'
       },
       fontSize: {
-        '4xs':'10px',
-        '3xs':'11px',
-        '2xs': '12px',
-        xs: '13px',
-        sm: '14px',
-        md: '15px',
-        '2xl': '22px',
-        '3xl': '24px',
-        '4xl': '28px',
-        '5xl': '38px'
+        '4xs':'9px',
+        '3xs':'10px',
+        '2xs': '11px',
+        xs: '12px',
+        sm: '13px',
+        md: '14px',
+        '2xl': '20px',
+        '3xl': '22px',
+        '4xl': '25px',
+        '5xl': '30px'
       },
       gridTemplateColumns: {
         '13': 'repeat(13, minmax(0, 1fr))',
