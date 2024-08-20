@@ -92,6 +92,14 @@ const HotelDetail: NextPage<Props> = props => {
     }
   }, [checkin, checkout]);
 
+  // useEffect(()=>{
+  //   //delete this useEffect
+  //   const todoDelete = async () => {
+  //     const allData: any = await getDomesticHotelDetailsByUrl("/" + locale + props.todoDeleteUrl, locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR");
+  //   }
+
+  //   todoDelete();
+  // },[]);
 
   if (props.error410) {
     return (
@@ -484,7 +492,7 @@ const HotelDetail: NextPage<Props> = props => {
 
       </div>
 
-      {!!accommodationData.id && <Rooms hotelName={accommodationData.displayName || ""} hotelId={accommodationData.id} />}
+      {!!accommodationData.id && <Rooms hotelId={accommodationData.id} />}
 
       {(!isSafaraneh || accommodationData?.facilities?.length) ? (
         <AccommodationFacilities facilities={accommodationData?.facilities} />
