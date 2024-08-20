@@ -196,7 +196,7 @@ const SearchForm: React.FC<Props> = props => {
         }
 
         let urlSegment = "";
-        if (selectedDestination.id) {
+        if (selectedDestination.id && selectedDestination.type !== 'Hotel') {
             urlSegment = `/location-${selectedDestination.id}`;
         }
 
