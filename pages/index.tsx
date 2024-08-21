@@ -241,7 +241,8 @@ export const getStaticProps = async (context: any) => {
       context: context,
       blogs: recentBlogPost?.data || null,
       homeSections: strapi_generalData || null
-    }
+    },
+    revalidate: 3600
   })
 };
 
