@@ -511,7 +511,11 @@ const HotelDetail: NextPage<Props> = props => {
         />}
       </>
       ):(
-        <AccomodationPolicy policies={accommodationData?.policies} />
+        <AccomodationPolicy
+         policies={accommodationData?.policies} 
+         mendatoryFee={accommodationData?.mendatoryFee}
+
+        />
       )}
 
       {!!siteName && <HotelAbout siteName={siteName} siteUrl={siteURL} description={accommodationData?.description} />}
