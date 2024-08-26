@@ -87,8 +87,8 @@ const AccomodationPolicy: React.FC<Props> = props => {
 
                                         <tbody>
 
-                                            {policy.passengers.map((passenger) => (
-                                                <tr>
+                                            {policy.passengers.map((passenger, passengerIndex) => (
+                                                <tr key={passengerIndex}>
                                                     <td className='p-3 whitespace-nowrap text-center font-semibold'>
                                                         {passenger.name}
                                                     </td>
@@ -100,8 +100,8 @@ const AccomodationPolicy: React.FC<Props> = props => {
                                                     </td>
                                                 </tr>
                                             ))}
-                                            {policy.guests.map((guest) => (
-                                                <tr>
+                                            {policy.guests.map((guest, guestIndex ) => (
+                                                <tr key={guestIndex}>
                                                     <td className='p-3 whitespace-nowrap text-center font-semibold'>
                                                         {guest.name}
                                                     </td>
@@ -127,7 +127,7 @@ const AccomodationPolicy: React.FC<Props> = props => {
 
                         <div className='text-sm md:text-md font-semibold'>
                             <ReportIcon className='inline-block w-6 h-6 fill-neutral-500 rtl:ml-2 ltr:mr-2' />
-                            هزینه های اجباری
+                            قوانین کلی هتل
                         </div>
 
                         <div className='sm:col-span-2 md:col-span-3 lg:col-span-4 inserted-content'>
