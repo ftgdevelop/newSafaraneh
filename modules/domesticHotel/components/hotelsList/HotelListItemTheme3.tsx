@@ -162,7 +162,7 @@ const HotelListItemTheme3: React.FC<Props> = props => {
 
                 <div className="font-bold text-neutral-700 rtl:ml-2 ltr:mr-2 inline-block" > {hotel.displayName || hotel.name} </div>
 
-                {!!hotel.typeStr && <span className="bg-secondary-50 text-secondary-700 rounded-xl leading-6 text-2xs px-2 select-none">
+                {!!hotel.typeStr && <span className="bg-neutral-50 text-neutral-700 rounded-xl leading-6 text-2xs px-2 select-none">
                     {hotel.typeStr}
                 </span>}
 

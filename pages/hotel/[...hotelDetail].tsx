@@ -10,7 +10,6 @@ import BackToList from '@/modules/domesticHotel/components/hotelDetails/BackToLi
 import { CalendarError } from '@/modules/shared/components/ui/icons';
 import Gallery from '@/modules/domesticHotel/components/hotelDetails/Gallery';
 import HotelName from '@/modules/domesticHotel/components/hotelDetails/HotelName';
-import SearchForm from '@/modules/domesticHotel/components/shared/SearchForm';
 import HotelFacilities from '@/modules/domesticHotel/components/hotelDetails/HotelFacilities';
 import HotelTerms from '@/modules/domesticHotel/components/hotelDetails/HotelTerms';
 import HotelAbout from '@/modules/domesticHotel/components/hotelDetails/HotelAbout';
@@ -28,6 +27,11 @@ import AvailabilityTimeout from '@/modules/shared/components/AvailabilityTimeout
 import LoginLinkBanner from '@/modules/shared/components/theme2/LoginLinkBanner';
 import AccommodationFacilities from '@/modules/domesticHotel/components/hotelDetails/AccommodationFacilities';
 import AccomodationPolicy from '@/modules/domesticHotel/components/hotelDetails/AccomodationPolicy';
+import dynamic from 'next/dynamic';
+
+const SearchForm = dynamic(() => import('@/modules/domesticHotel/components/shared/SearchForm'), {
+  ssr: false
+});
 
 type Props = {
   allData: {
@@ -83,6 +87,29 @@ const HotelDetail: NextPage<Props> = props => {
   if (checkin && checkout) {
     defaultDates = [checkin, checkout];
   }
+
+  const [formIsInView,setFormIsInView] = useState<boolean>(false);
+  const checkFormIsInView = () => {
+    const targetTop = searchFormWrapperRef.current?.getBoundingClientRect().top;
+    const windowHeight = window.innerHeight || 0;
+
+    if (targetTop && targetTop < windowHeight) {
+        setFormIsInView(true);
+
+        document.removeEventListener('scroll', checkFormIsInView);
+        window.removeEventListener("resize", checkFormIsInView);
+
+    }
+}
+useEffect(() => {
+  document.addEventListener('scroll', checkFormIsInView);
+  window.addEventListener("resize", checkFormIsInView);
+
+  return (() => {
+      document.removeEventListener('scroll', checkFormIsInView);
+      window.removeEventListener("resize", checkFormIsInView);
+  });
+}, []);
 
   useEffect(() => {
     setShowOnlyForm(false);
@@ -172,18 +199,22 @@ const HotelDetail: NextPage<Props> = props => {
     width: number;
     height: number;
     description: string;
+    thumbnail: string;
   }[] = [];
 
-  //TODO: edit this if condition:
-  if ((process.env.PROJECT === "1STSAFAR" || accommodationData?.galleries?.length) && 1+1===5) {
+  if ((process.env.PROJECT === "1STSAFAR" || accommodationData?.galleries?.length)) {
     if (accommodationData?.galleries?.length) {
-      hotelImages = accommodationData?.galleries?.map(item => ({
-        alt: item.fileAltAttribute || item.fileTitleAttribute || "",
-        description: item.fileTitleAttribute || item.fileAltAttribute || "",
-        src: item.filePath!,
-        width: 1000,
-        height: 700,
-      }))
+      hotelImages = accommodationData?.galleries?.map(item => {
+        const thumbnail = item.sizes?.find(p => p.displaySize === 'mobile')?.filePath || item.filePath!;
+        return ({
+          alt: item.fileAltAttribute || item.fileTitleAttribute || "",
+          description: item.fileTitleAttribute || item.fileAltAttribute || "",
+          src: item.filePath!,
+          width: 1000,
+          height: 700,
+          thumbnail: thumbnail
+        })
+      })
     }
   } else if (isSafaraneh && hotelData?.Gallery?.length) {
     hotelImages = hotelData.Gallery.filter(item => item.Image).map(item => ({
@@ -191,7 +222,8 @@ const HotelDetail: NextPage<Props> = props => {
       alt: item.Title || "",
       width: 1000,
       height: 700,
-      description: item.Alt || ""
+      description: item.Alt || "",
+      thumbnail: item.Title || ""
     }))
   }
 
@@ -484,11 +516,11 @@ const HotelDetail: NextPage<Props> = props => {
           )}
           <h2 className='text-lg lg:text-3xl font-semibold mt-5 mb-3 md:mt-10 md:mb-7 relative z-[2]'>{t('change-search')}</h2>
 
-          <SearchForm
+          {!!formIsInView && <SearchForm
             defaultDestination={defaultDestination}
             defaultDates={defaultDates}
             wrapperClassName='relative z-[2]'
-          />
+          />}
         </div>
 
       </div>
@@ -512,7 +544,10 @@ const HotelDetail: NextPage<Props> = props => {
         />}
       </>
       ):(
-        <AccomodationPolicy policies={accommodationData?.policies} />
+        <AccomodationPolicy
+          policies={accommodationData?.policies} 
+          mendatoryFee={accommodationData?.mendatoryFee}
+        />
       )}
 
       {!!siteName && <HotelAbout siteName={siteName} siteUrl={siteURL} description={accommodationData?.description} />}

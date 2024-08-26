@@ -51,18 +51,6 @@ function MyApp({ Component, pageProps, portalData, pageData }: TProps) {
     }
   }, []);
 
-  //toDo: delet this useEffect:
-  useEffect(()=>{
-    const fetchPortalData = async () => {
-      const response = await getPortal("fa-IR");
-      if(response){
-      }
-    }
-
-    fetchPortalData();
-
-  },[]);
-
   const tel = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
   const emergencyNumber = portalData?.billing.emergencyNumber || "";
   const instagram = portalData?.social?.instagram || "";
@@ -231,7 +219,7 @@ MyApp.getInitialProps = async (
   const acceptLanguage = locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR";
 
   const [portalData, pageResponse] = await Promise.all<any>([
-    await getPortal("fa-IR"),
+    getPortal("fa-IR"),
     getPageByUrl(url, acceptLanguage)
 ]) 
 

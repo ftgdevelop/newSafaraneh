@@ -189,6 +189,10 @@ export interface DomesticAccomodationGalleryType{
     filePath?: string;
     fileTitleAttribute?: string;
     fileAltAttribute?: string;
+    sizes?:{
+        displaySize:"mobile"|"desktop";
+        filePath?: string;
+    }[];
 }
 
 export interface DomesticAccomodationPolicyType{

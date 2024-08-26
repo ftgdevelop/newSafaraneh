@@ -16,6 +16,7 @@ type Props = {
         width: number;
         height: number;
         description: string;
+        thumbnail: string;
     }[];
     hotelName?:string;
 }
@@ -50,13 +51,13 @@ const Gallery: React.FC<Props> = props => {
             <div id="pictures_section" className='grid grid-cols-1 md:grid-cols-4 gap-1 bg-white relative'>
                 {images.slice(0, 5).map((slide, index) => (
                     <Image
-                        key={slide.src}
+                        key={slide.thumbnail}
                         priority={!index}
                         onContextMenu={(e)=> e.preventDefault()}
-                        src={slide.src}
+                        src={slide.thumbnail}
                         alt={index?slide.alt : props.hotelName || slide.alt}
                         width={index ? 287 : 401}
-                        height={index ? 191 : 253}
+                        height={index ? 191 : 301}
                         onClick={() => { openLightBox(index); }}
                         className={`cursor-pointer w-full h-full object-cover ${index ? "hidden md:block md:col-span-1 md:row-span-1" : "md:col-span-2 md:row-span-2"}`}
                     />

@@ -159,7 +159,7 @@ const RangePicker: React.FC<Props> = props => {
                     value={values}
                 >
 
-                    <header className={`direction-root font-iranyekan mobi-date-picker-header px-5 py-3 border-b border-neutral-300  gap-5 text-sm hidden md:flex h-12 ${locale === localeEn ? "font-sans" : ""}`} >
+                    <header className={`direction-root ${theme2?"font-iranyekan":"font-samim"} mobi-date-picker-header px-5 py-3 border-b border-neutral-300  gap-5 text-sm hidden md:flex h-12 ${locale === localeEn ? "font-sans" : ""}`} >
 
                         <div className={`font-semibold text-sm border-b-2 border-transparent ${values && values[0] && !values[1] ? "border-blue-600" : ""}`}>
                             {startFormated}
@@ -173,7 +173,7 @@ const RangePicker: React.FC<Props> = props => {
 
                     </header>
 
-                    <footer className='direction-root font-iranyekan mobi-date-picker-footer flex justify-center gap-5 md:justify-between items-center px-5 py-4 border-t border-neutral-300'>
+                    <footer className={`direction-root ${theme2?"font-iranyekan":"font-samim"} mobi-date-picker-footer flex justify-center gap-5 md:justify-between items-center px-5 py-4 border-t border-neutral-300`}>
                         <button type='button' onClick={goToday} className='text-primary-700 text-sm'>
                             {t('goToToday')}
                         </button>

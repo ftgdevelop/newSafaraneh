@@ -9,12 +9,16 @@ import { Close, InfoCircle } from '@/modules/shared/components/ui/icons';
 import RoomsListTheme1 from './RoomsListTheme1';
 import RoomsListTheme2 from './RoomsListTheme2';
 import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
-import PriceCalendar from './PriceCalendar';
 import RoomDetailFooter from './RoomDetailFooter';
 import Tab from '@/modules/shared/components/ui/Tab';
 import { TabItem } from '@/modules/shared/types/common';
 import RoomFacilities from './RoomFacilities';
 import Promotions from './Promotions';
+import dynamic from 'next/dynamic';
+
+const PriceCalendar = dynamic(() => import('./PriceCalendar'), {
+    ssr: false
+  });
 
 type Props = {
     hotelId: number;
@@ -162,7 +166,7 @@ const Rooms: React.FC<Props> = props => {
     if(openedRoom?.room?.promotions?.length){
         selectedRoomDetailTabItems.push({
             key: "promotions",
-            label: "آفرها",
+            label: "هدایای رزرو",
             children: <Promotions
                 promotions={openedRoom.room.promotions}
             />
