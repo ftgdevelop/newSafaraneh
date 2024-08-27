@@ -688,7 +688,7 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
 
             {!!key && (
                 <AvailabilityTimeout
-                    minutes={10}
+                    minutes={20}
                     onRefresh={() => { window.location.reload() }}
                     type='flight'
                     description={tFlight("flightTimeoutMessage")}
