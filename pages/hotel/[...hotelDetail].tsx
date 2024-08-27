@@ -550,7 +550,7 @@ useEffect(() => {
         />
       )}
 
-      {!!siteName && <HotelAbout siteName={siteName} siteUrl={siteURL} description={accommodationData?.description} />}
+      {!!(siteName || theme2)  && <HotelAbout siteName={siteName || ""} siteUrl={siteURL} description={accommodationData?.description} />}
 
       {!!(isSafaraneh && hotelData?.DistancePoints?.length) && (
         <div id="attractions_section" className="max-w-container mx-auto px-3 sm:px-5 pt-7 md:pt-10">
