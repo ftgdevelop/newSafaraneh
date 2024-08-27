@@ -56,8 +56,9 @@ const Gallery: React.FC<Props> = props => {
                         onContextMenu={(e)=> e.preventDefault()}
                         src={slide.thumbnail}
                         alt={index?slide.alt : props.hotelName || slide.alt}
-                        width={index ? 287 : 401}
-                        height={index ? 191 : 301}
+                        width={index ? 287 : 384}
+                        height={index ? 191 : 288}
+                        sizes="(max-width: 767px) 100vw, 50vw"
                         onClick={() => { openLightBox(index); }}
                         className={`cursor-pointer w-full h-full object-cover ${index ? "hidden md:block md:col-span-1 md:row-span-1" : "md:col-span-2 md:row-span-2"}`}
                     />
