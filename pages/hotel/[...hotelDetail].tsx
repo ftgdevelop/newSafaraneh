@@ -258,7 +258,7 @@ useEffect(() => {
     );
   }
 
-  if(siteName && accommodationData?.description){
+  if(accommodationData?.description){
     anchorTabsItems.push(
       { id: "about_section", title: tHotel('about-hotel') }
     );
@@ -550,7 +550,7 @@ useEffect(() => {
         />
       )}
 
-      {!!(siteName || theme2)  && <HotelAbout siteName={siteName || ""} siteUrl={siteURL} description={accommodationData?.description} />}
+      <HotelAbout siteName={siteName || ""} siteUrl={siteURL} description={accommodationData?.description} />
 
       {!!(isSafaraneh && hotelData?.DistancePoints?.length) && (
         <div id="attractions_section" className="max-w-container mx-auto px-3 sm:px-5 pt-7 md:pt-10">
