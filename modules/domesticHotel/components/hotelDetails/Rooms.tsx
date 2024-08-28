@@ -122,8 +122,15 @@ const Rooms: React.FC<Props> = props => {
         });
 
         if (preReserveResponse.data?.result?.preReserveKey) {
+
+            const querySafarmarketId = router.query?.safarmarketId; 
+            let safarmarketId = "";
+            if(querySafarmarketId && process.env.SAFAR_MARKET_SITE_NAME){
+                safarmarketId = `?smid=${querySafarmarketId}`;
+            }
+            
             const key = preReserveResponse.data.result.preReserveKey;
-            router.push(`/hotel/checkout/key=${key}`);
+            router.push(`/hotel/checkout/key=${key}${safarmarketId}`);
         }
 
     }
