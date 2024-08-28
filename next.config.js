@@ -45,7 +45,7 @@ const nextConfig = {
     PROJECT: "SAMITA",
     SITE_NAME: 'https://www.samita.com',
     THEME: "THEME1",
-    SAFAR_MARKET_SITE_NAME: "",
+    SAFAR_MARKET_SITE_NAME: "samita",
     PROJECT_SERVER_TYPE: "https://",
     PROJECT_SERVER_USER: "",
 
