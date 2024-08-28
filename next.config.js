@@ -44,6 +44,7 @@ const nextConfig = {
     PROJECT: "SAFARANEH",
     SITE_NAME: 'https://www.safaraneh.com',
     THEME: "THEME1",
+    SAFAR_MARKET_SITE_NAME: "",
     PROJECT_SERVER_TYPE: "https://",
     PROJECT_SERVER_USER: "",
     
