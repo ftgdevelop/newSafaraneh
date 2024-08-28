@@ -59,18 +59,6 @@ const config: Config = {
           800: 'var(--color-primary-800)',
           900: 'var(--color-primary-900)',
         },
-        secondary: {
-          50: 'var(--color-secondary-50)',
-          100: 'var(--color-secondary-100)',
-          200: 'var(--color-secondary-200)',
-          300: 'var(--color-secondary-300)',
-          400: 'var(--color-secondary-400)',
-          500: 'var(--color-secondary-500)',
-          600: 'var(--color-secondary-600)',
-          700: 'var(--color-secondary-700)',
-          800: 'var(--color-secondary-800)',
-          900: 'var(--color-secondary-900)',
-        },
         blue: {
           50: '#ebf2f9',
           100: '#cfe3fc',
@@ -112,16 +100,16 @@ const config: Config = {
         '5' : '5px'
       },
       fontSize: {
-        '4xs':'9px',
-        '3xs':'10px',
-        '2xs': '11px',
-        xs: '12px',
-        sm: '13px',
-        md: '14px',
-        '2xl': '20px',
-        '3xl': '22px',
-        '4xl': '25px',
-        '5xl': '30px'
+        '4xs':'10px',
+        '3xs':'11px',
+        '2xs': '12px',
+        xs: '13px',
+        sm: '14px',
+        md: '15px',
+        '2xl': '22px',
+        '3xl': '23px',
+        '4xl': '28px',
+        '5xl': '34px'
       },
       gridTemplateColumns: {
         '13': 'repeat(13, minmax(0, 1fr))',

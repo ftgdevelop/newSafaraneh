@@ -368,7 +368,6 @@ const SearchForm: React.FC<Props> = props => {
 
             <div className={`col-span-1 pt-5 md:pt-0 ${theme3?"md:col-span-2":"md:col-span-1"}`}>
                 <Button
-                    color={theme3 ? "secondary" : undefined}
                     loading={submitLoading}
                     onClick={submitHandler}
                     className={`h-12 block w-full mx-auto ${theme3?"font-semibold":"sm:max-w-64"}`}

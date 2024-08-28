@@ -8,7 +8,7 @@ export default function Document() {
     <Html lang={i18n?.language} dir={(i18n?.language === "fa" || i18n?.language === "ar")  ? "rtl" : "ltr"}>
       <Head>
       </Head>
-      <body className={`font-iranyekan ${process.env.THEME === "THEME2" ?"theme-2 text-stone-900":process.env.THEME === "THEME3"? "theme-3 text-neutral-800" : "theme-1 text-neutral-700" } bg-body-background`} >
+      <body className={`${process.env.THEME === "THEME2" ?"font-iranyekan theme-2 text-stone-900":process.env.THEME === "THEME3"? "font-vazir theme-3 text-neutral-800" : "font-samim theme-1 text-neutral-700" } bg-body-background`} >
 
         <Main />
 
