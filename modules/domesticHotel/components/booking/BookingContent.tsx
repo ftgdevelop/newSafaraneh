@@ -99,7 +99,7 @@ const BookingContent: React.FC<Props> = props => {
                 </div>
                 :
                 <>
-                    {confirmStatus === "Issued" ?
+                    {(confirmStatus === "Issued" || confirmStatus === "ContactProvider") ?
                         <div className="border border-neutral-300 rounded-lg mb-4 bg-white">
                             <div className="bg-blue-400 text-white flex flex-col sm:flex-row sm:items-center sm:justify-between rounded-t-lg p-4 gap-3 font-semibold text-sm sm:text-base" >
                                 <div className="flex gap-2 items-center">
@@ -154,7 +154,7 @@ const BookingContent: React.FC<Props> = props => {
                 </>
             }
 
-            {confirmStatus === "Issued" && reserveId && username && (
+            {(confirmStatus === "Issued" || confirmStatus === "ContactProvider") && reserveId && username && (
                 <DownloadPdfVoucher
                     reserveId={reserveId}
                     username={username}
@@ -188,8 +188,8 @@ const BookingContent: React.FC<Props> = props => {
                                 cancellation = <div className="margin-bottom-5 text-red">{t("non-refundable")}</div>;
                                 break;
                             case "Refundable":
-                                cancellation = <div className="text-green margin-bottom-5">
-                                    <Tik className="w-6 h-6" />
+                                cancellation = <div className="text-green margin-bottom-5 text-green-600">
+                                    <Tik className="w-6 h-6 inline-block rtl:ml-1 ltr:mr-1 fill-current" />
                                     {t("refundable")}
                                 </div>;
                                 break;
