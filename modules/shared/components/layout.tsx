@@ -43,6 +43,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
   }
   const removeLoading = () => { dispatch(setProgressLoading(false)) }
 
+  const safarmarketHotelPixel = useAppSelector(state => state.safarmarket.hotel);
 
   useEffect(() => {
 
@@ -99,6 +100,8 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
   return (
 
     <div className={`wrapper leading-7 ${process.env.THEME || ""} lang-${locale} ${locale !== "en" ? "rtl" : ""} ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`} >
+      
+      {!!safarmarketHotelPixel && <img src={safarmarketHotelPixel} className="h-px w-px opacity-0 absolute pointer-events-none" />}
 
       <PageLoadingBar active={loading} />
 
