@@ -78,7 +78,7 @@ const Booking: NextPage = ({ portalData }: { portalData?: WebSiteDataType }) => 
 
                     dispatch(setReduxError({
                         title: t('error'),
-                        message: response.data.error.message,
+                        message: response?.data?.error?.message,
                         isVisible: true
                     }));
 
