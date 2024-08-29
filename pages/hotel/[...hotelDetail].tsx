@@ -28,6 +28,8 @@ import LoginLinkBanner from '@/modules/shared/components/theme2/LoginLinkBanner'
 import AccommodationFacilities from '@/modules/domesticHotel/components/hotelDetails/AccommodationFacilities';
 import AccomodationPolicy from '@/modules/domesticHotel/components/hotelDetails/AccomodationPolicy';
 import dynamic from 'next/dynamic';
+import { useAppDispatch } from '@/modules/shared/hooks/use-store';
+import { emptyReduxSafarmarket, setReduxSafarmarketPixel } from '@/modules/shared/store/safarmarketSlice';
 
 const SearchForm = dynamic(() => import('@/modules/domesticHotel/components/shared/SearchForm'), {
   ssr: false
@@ -48,6 +50,8 @@ type Props = {
 }
 
 const HotelDetail: NextPage<Props> = props => {
+
+  const dispatch = useAppDispatch();
 
   const theme2 = process.env.THEME === "THEME2";
 
@@ -101,11 +105,54 @@ const HotelDetail: NextPage<Props> = props => {
 
     }
 }
+
+const querySafarmarketId = router.query?.safarmarketId; 
+// "sm-test001"
+const utm_medium = router.query?.utm_medium; 
+// "redirection"
+const utm_source = router.query?.utm_source; 
+// "safarmarket"
+const utm_term = router.query?.utm_term; 
+// "hotel"
+
+useEffect(()=>{
+
+  if (!process.env.SAFAR_MARKET_SITE_NAME){
+    return;
+  }
+
+  let cookieSafarmarketId;
+  let cookies = decodeURIComponent(document.cookie).split(';');
+  for (const item of cookies){
+    if (item.includes("safarMarketHotelSmId=")){
+      cookieSafarmarketId =item.split("=")[1];
+    }
+  }
+
+  if(querySafarmarketId && utm_source && utm_source === "safarmarket"){
+    const expDate = new Date();
+    expDate.setTime(expDate.getTime() + (7*24*60*60*1000));
+    if (document){
+      document.cookie = `safarMarketHotelSmId=${querySafarmarketId}; expires=${expDate.toUTCString()};path=/`;
+    }
+  }
+
+  const smId = querySafarmarketId || cookieSafarmarketId;
+
+  if(smId){
+    dispatch(setReduxSafarmarketPixel({
+      type: "hotel",
+      pixel : `https://safarmarket.com/api/hotel/v1/pixel/${process.env.SAFAR_MARKET_SITE_NAME}/2/0/?smId=${smId}`
+    }));
+  }
+},[querySafarmarketId,utm_source]);
+
 useEffect(() => {
   document.addEventListener('scroll', checkFormIsInView);
   window.addEventListener("resize", checkFormIsInView);
 
   return (() => {
+    dispatch(emptyReduxSafarmarket());
       document.removeEventListener('scroll', checkFormIsInView);
       window.removeEventListener("resize", checkFormIsInView);
   });

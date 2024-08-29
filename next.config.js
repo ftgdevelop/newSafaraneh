@@ -48,6 +48,7 @@ const nextConfig = {
     LocaleInUrl : "off",
     SITE_NAME: 'https://www.safarlife.com',
     THEME: "THEME2",
+    SAFAR_MARKET_SITE_NAME: "",
     PROJECT_SERVER_TYPE: "https://",
     PROJECT_SERVER_USER: "",
 

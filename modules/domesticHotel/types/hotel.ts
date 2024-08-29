@@ -561,15 +561,26 @@ export interface DomesticHotelPrereserveParams {
     }[];
     specialRequest: string;
     preReserveKey: string;
+    metaSearchKey?: string;
+    metaSearchName?: "safarmarket"
 }
 
-export type DomesticHotelReserveStatus = "Undefined" | "Registered" | "Pending" | "Issued" | "Canceled" | "WebServiceCancel" | "PaymentSuccessful" | "WebServiceUnsuccessful" | "PriceChange" | "Unavailable" | "Refunded" | "Voided" | "InProgress" | "PaidBack" | "RefundInProgress" | "Changed" | "OnCredit";
+export type DomesticHotelReserveStatus = "Undefined" | "Registered" | "Pending" | "Issued" | "ContactProvider" | "Canceled" | "WebServiceCancel" | "PaymentSuccessful" | "WebServiceUnsuccessful" | "PriceChange" | "Unavailable" | "Refunded" | "Voided" | "InProgress" | "PaidBack" | "RefundInProgress" | "Changed" | "OnCredit";
 
 export interface DomesticHotelGetReserveByIdData {
     id: number;
     checkin: string;
     checkout: string;
     count: number;
+    accommodation?:{
+        name?: string;
+        displayName?: string;
+        rating?: number;
+        city?: {
+          name?: string;
+          id?: number
+        };
+    }
     accommodationId: number;
     totalPrice: number;
     totalBoardPrice: number;
@@ -625,7 +636,7 @@ export interface DomesticHotelGetReserveByIdData {
 export interface DomesticHotelConfirmType {
     isCompleted: boolean;
     reserve: {
-        status: "Undefined" | "Registered" | "Pending" | "Issued" | "Canceled" | "WebServiceCancel" | "PaymentSuccessful" | "WebServiceUnsuccessful" | "PriceChange" | "Unavailable" | "Refunded" | "Voided" | "InProgress" | "PaidBack" | "RefundInProgress" | "Changed" | "OnCredit";
+        status: "Undefined" | "Registered" | "Pending" | "Issued" | "Canceled" | "ContactProvider" | "WebServiceCancel" | "PaymentSuccessful" | "WebServiceUnsuccessful" | "PriceChange" | "Unavailable" | "Refunded" | "Voided" | "InProgress" | "PaidBack" | "RefundInProgress" | "Changed" | "OnCredit";
     }
 }
 
