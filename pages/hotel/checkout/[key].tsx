@@ -168,6 +168,22 @@ const Checkout: NextPage = () => {
 
   const submitHandler = async (params: any) => {
 
+    if(process.env.SAFAR_MARKET_SITE_NAME){
+      let cookieSafarmarketId;
+      let cookies = decodeURIComponent(document?.cookie).split(';');
+      for (const item of cookies){
+        if (item.includes("safarMarketHotelSmId=")){
+          cookieSafarmarketId =item.split("=")[1];
+        }
+      }
+
+      if(cookieSafarmarketId){
+        params.metaSearchName = 'safarmarket';
+        params.metaSearchKey = cookieSafarmarketId;
+      }
+
+    }
+
     setSubmitLoading(true);
 
     const token = localStorage.getItem('Token');

@@ -84,7 +84,7 @@ const BookingContent: React.FC<Props> = props => {
                         </div>
                     </div>
 
-                ) : confirmStatus === "Issued" ? (
+                ) : (confirmStatus === "Issued" || confirmStatus ==="ContactProvider") ? (
 
                     <div className="border border-neutral-300 rounded-lg mb-4 bg-white">
                         <div className="bg-blue-400 text-white flex flex-col sm:flex-row sm:items-center sm:justify-between rounded-t-lg p-4 gap-3 font-semibold text-sm sm:text-base" >
@@ -142,7 +142,7 @@ const BookingContent: React.FC<Props> = props => {
             </div>
 
 
-            {!!(confirmStatus === "Issued" && reserveId && username) && (
+            {!!((confirmStatus === "Issued" || confirmStatus === "ContactProvider") && reserveId && username) && (
                 <DownloadPdfVoucher
                     reserveId={reserveId}
                     username={username}

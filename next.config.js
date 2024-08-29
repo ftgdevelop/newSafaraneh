@@ -45,6 +45,7 @@ const nextConfig = {
     PROJECT: "MRBILET",
     SITE_NAME: 'https://www.mrbilet.ir',
     THEME: "THEME1",
+    SAFAR_MARKET_SITE_NAME: "",
     PROJECT_SERVER_TYPE: "https://",
     PROJECT_SERVER_USER: "",
     
