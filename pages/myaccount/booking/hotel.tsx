@@ -111,6 +111,7 @@ const DomesticHotelReserveDetail: NextPage = ({ portalData }: { portalData?: Web
                 break;
 
             case "Issued":
+            case 'ContactProvider':
                 StatusColor = "bg-[#1dac08] text-white";
                 break;
 
@@ -136,6 +137,7 @@ const DomesticHotelReserveDetail: NextPage = ({ portalData }: { portalData?: Web
         if (
             reserveData.status === "Canceled"
             || reserveData.status === "Issued"
+            || reserveData.status === "ContactProvider"
             || reserveData.status === "Registered"
             || reserveData.status === "Unavailable"
             || reserveData.status === "PaymentSuccessful"
@@ -259,7 +261,7 @@ const DomesticHotelReserveDetail: NextPage = ({ portalData }: { portalData?: Web
 
                                         {paymentLink}
 
-                                        {!!(reserveData.status === 'Issued' && reserveId && username) && (
+                                        {!!((reserveData.status === 'Issued' || reserveData.status === 'ContactProvider') && reserveId && username) && (
                                             <DownloadPdfVoucher
                                                 reserveId={reserveId}
                                                 username={username}
