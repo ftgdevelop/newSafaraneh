@@ -617,7 +617,7 @@ const HotelList: NextPage<Props> = props => {
       </Head>
 
       {!!pricesData && <AvailabilityTimeout
-        minutes={10}
+        minutes={20}
         onRefresh={() => { window.location.reload() }}
         type='hotel'
         description={t("GetTheLatestPriceAndAvailabilityForYourSearchTo", { destination: cityName, dates: `${dateDiplayFormat({ date: checkin, locale: locale, format: "dd mm" })} - ${dateDiplayFormat({ date: checkout, locale: locale, format: "dd mm" })}` })}

@@ -177,7 +177,7 @@ const CipReserveDetail: NextPage = ({ portalData }: { portalData?: WebSiteDataTy
                                         {dateDiplayFormat({ date: cipReserveInfo.flightTime, format: 'dd mm yyyy', locale: "fa" })}
                                     </div>
 
-                                    {(cipReserveInfo.status === 'Issued' && reserveId && username) ? (
+                                    {((cipReserveInfo.status === 'Issued' || cipReserveInfo.status === 'ContactProvider') && reserveId && username) ? (
                                         <DownloadPdfVoucher
                                             reserveId={reserveId}
                                             username={username}

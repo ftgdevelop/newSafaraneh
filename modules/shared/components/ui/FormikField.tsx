@@ -94,7 +94,7 @@ const FormikField: React.FC<Props> = props => {
     }
     
     if(!props.labelIsSimple){
-        inputClassNames.push("pt-4 leading-4");
+        inputClassNames.push(`leading-4 ${theme2?"pt-4":"pt-0"}`);
     }
 
     if(props.errorText && props.isTouched){

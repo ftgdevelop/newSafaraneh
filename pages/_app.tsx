@@ -220,7 +220,7 @@ MyApp.getInitialProps = async (
   const acceptLanguage = locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR";
 
   const [portalData, pageResponse] = await Promise.all<any>([
-    await getPortal("fa-IR"),
+    getPortal("fa-IR"),
     getPageByUrl(url, acceptLanguage)
 ]) 
 

@@ -46,6 +46,7 @@ const nextConfig = {
     PROJECT: "IRANHOTEL",
     SITE_NAME: 'https://www.iranhotel.app',
     THEME: "THEME1",
+    SAFAR_MARKET_SITE_NAME: "",
     PROJECT_SERVER_TYPE: "https://",
     PROJECT_SERVER_USER: "",
     
