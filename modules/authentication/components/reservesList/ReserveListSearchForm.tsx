@@ -16,6 +16,8 @@ const ReserveListSearchForm: React.FC<Props> = props => {
     const { t } = useTranslation('common');
 
     const [locale, setLocale] = useState<any>(localeFa);
+    
+    const theme2 = process.env.THEME === "THEME2";
 
     const initialValues = {
         FromReturnTime: "",
@@ -65,7 +67,7 @@ const ReserveListSearchForm: React.FC<Props> = props => {
                             <Field
                                 name="type"
                                 as="select"
-                                className='block w-full focus:border-blue-500 h-10 px-1 text-sm bg-white border outline-none rounded-lg border-neutral-300 focus:border-blue-500'
+                                className={`block w-full focus:border-blue-500 ${theme2?"h-13 border-neutral-400":"border-neutral-300 h-10"} px-1 text-sm bg-white border outline-none rounded-lg focus:border-blue-500`}
                             >
                                 <option value="">همه</option>
                                 <option value="HotelDomestic"> هتل داخلی </option>
@@ -135,7 +137,7 @@ const ReserveListSearchForm: React.FC<Props> = props => {
                         <div className='flex flex-col justify-end'>
                             <Button
                                 type='submit'
-                                className='px-5 h-10'
+                                className={`px-5 ${theme2?"h-13":"h-10"}`}
                             >
                                 جستجو
                             </Button>

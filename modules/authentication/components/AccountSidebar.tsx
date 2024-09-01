@@ -105,13 +105,13 @@ const AccountSidebar: React.FC<Props> = props => {
                         {t("hello")} {user?.firstName || t('dear-user')}
                     </h5>
 
-                    {!!user?.emailAddress && <div className={`font-sans ${theme1?"mb-2 sm:mb-5":theme2?"mb-1 text-sm":""}`}>
+                    {!!user?.emailAddress && <div className={`font-sans ${theme1?"mb-2":theme2?"mb-1 text-sm":""}`}>
                         {user.emailAddress}
                     </div>}
 
                     {!!theme1 && <Link
                         href="/myaccount/profile"
-                        className='text-xs text-red-600 inline-flex items-center gap-1 mb-5 sm:mb-10'
+                        className='text-xs text-red-600 inline-flex items-center gap-1 mb-2 sm:mb-10'
                     >
                         <EditBeautiful className='block fill-current' /> {t("edit-profile")}
                     </Link>}
@@ -119,14 +119,14 @@ const AccountSidebar: React.FC<Props> = props => {
                 </div>
 
                 {!!(user?.emailAddress && !user.isEmailConfirmed) && (
-                    <div className={`text-xs flex items-center gap-1 mb-5 ${theme1?"bg-[#f5e9ca] px-3 py-2 rounded border border-orange-300":theme2?"text-orange-400":""}`}>
+                    <div className={`text-xs flex items-center gap-1 mb-2 ${theme1?"bg-[#f5e9ca] px-3 py-2 rounded border border-orange-300":theme2?"text-orange-400":""}`}>
                         <InfoCircle className='w-5 h-5 fill-orange-400' />
                         {t("confirm-email")}
                     </div>
                 )}
 
                 {theme2 ? (
-                    <>
+                    <div className='mt-5'>
                         {sidebarItems.map(item => (
                             <Link
                                 key={item.url}
@@ -160,7 +160,7 @@ const AccountSidebar: React.FC<Props> = props => {
                                 }}
                             />
                         </div>
-                    </>
+                    </div>
                 ):(
                     <>
                         <Link
