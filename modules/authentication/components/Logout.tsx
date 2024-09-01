@@ -37,7 +37,7 @@ const Logout: React.FC<Props> = props => {
 
     return (
         <button
-            className={`text-red-600 text-xs ${props.className || ""}`}
+            className={`${props.className || "text-red-600 text-xs"}`}
             type='button'
             onClick={logout}
         >

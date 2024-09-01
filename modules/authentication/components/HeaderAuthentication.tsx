@@ -130,7 +130,7 @@ const HeaderAuthentication: React.FC<Props> = props => {
                                 </Link>
 
                                 <Logout
-                                    className='block w-full rtl:text-right ltr:text-left py-1.5 hover:bg-neutral-100 px-3'
+                                    className='block w-full rtl:text-right ltr:text-left py-1.5 hover:bg-neutral-100 px-3 text-red-600 text-xs'
                                     closeModal={()=>{setStyle2AuthCtxOpen(false);}}
                                 />
 

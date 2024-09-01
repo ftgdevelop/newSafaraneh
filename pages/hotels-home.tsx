@@ -7,8 +7,10 @@ import { WebSiteDataType } from '@/modules/shared/types/common';
 import Head from 'next/head';
 import HomeTheme1 from '@/modules/home/components/theme1/HomeTheme1';
 import HomeTheme2 from '@/modules/home/components/theme2/HomeTheme2';
+import HomeTheme3 from '@/modules/home/components/theme3/HomeTheme3';
+import { getStrapiPages } from '@/modules/shared/actions/strapiActions';
 
-const HotelsHomePage: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], portalData?: WebSiteDataType }) => {
+const Home: NextPage<{ blogs?: BlogItemType[], portalData?: WebSiteDataType, homeSections: any }> = ({ blogs, portalData, homeSections }) => {
 
   const logo = portalData?.billing.logo?.value || "";
   const siteName = portalData?.billing.name || "";
@@ -18,9 +20,9 @@ const HotelsHomePage: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[
 
   const configWebsiteUrl = process.env.SITE_NAME || "";
 
-  const theme2 = process.env.THEME === "THEME2";
-
   const theme1 = process.env.THEME === "THEME1";
+  const theme2 = process.env.THEME === "THEME2";
+  const theme3 = process.env.THEME === "THEME3";
 
   return (
     <>
@@ -66,7 +68,7 @@ const HotelsHomePage: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[
             "url": "${configWebsiteUrl}",
             "potentialAction": {
             "@type": "SearchAction",
-            "target": "${configWebsiteUrl}${process.env.LocaleInUrl === "off"?"":"/fa"}/hotels/?q={search_term_string}",
+            "target": "${configWebsiteUrl}${process.env.LocaleInUrl === "off" ? "" : "/fa"}/hotels/?q={search_term_string}",
             "query-input": "required name=search_term_string"
           }}`,
           }}
@@ -187,6 +189,7 @@ const HotelsHomePage: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[
           }}
         />
       </Head>
+
       {!!theme1 && <HomeTheme1
         modules={["domesticHotel"]}
         logo={logo}
@@ -195,6 +198,14 @@ const HotelsHomePage: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[
       />}
 
       {!!theme2 && <HomeTheme2
+        sections={homeSections}
+        modules={["domesticHotel"]}
+        logo={logo}
+        siteName={siteName}
+        blogs={blogs}
+      />}
+
+      {!!theme3 && <HomeTheme3
         modules={["domesticHotel"]}
         logo={logo}
         siteName={siteName}
@@ -207,15 +218,32 @@ const HotelsHomePage: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[
 
 export const getStaticProps = async (context: any) => {
 
-  const recentBlogPost: any = process.env.PROJECT_MODULES?.includes("Blog") ? await getBlogs({ page: 1, per_page: 4 }) : null;
+  const theme2 = process.env.THEME === "THEME2";
+  const hasStrapi = process.env.PROJECT_SERVER_STRAPI;
+
+  const [recentBlogPost, strapiResponse, strapiResponse2] = await Promise.all<any>([
+    process.env.PROJECT_MODULES?.includes("Blog") ? await getBlogs({ page: 1, per_page: theme2 ? 5 : 4 }) : null,
+    (hasStrapi && theme2) ? await getStrapiPages('filters[Page][$eq]=home&populate[Sections][populate][Items][populate]=*') : undefined,
+    (hasStrapi && theme2) ? await getStrapiPages('filters[Page][$eq]=home&populate[Sections][populate]=*') : undefined
+  ]);
+
+  const link_banner_data = strapiResponse2?.data?.data[0]?.attributes?.Sections.find((section: any) => section.Keyword === "link_banner")?.Image;
+  const strapi_generalData = strapiResponse?.data?.data[0]?.attributes?.Sections;
+  const strapi_generalData_link_banner_data = strapi_generalData?.find((section: any) => section.Keyword === "link_banner");
+
+  if (link_banner_data && strapi_generalData_link_banner_data) {
+    strapi_generalData_link_banner_data.Image = link_banner_data;
+  }
 
   return ({
     props: {
-      ...await serverSideTranslations(context.locale, ['common', 'home']),
+      ...await serverSideTranslations(context.locale, ['common', 'home', 'hotel']),
       context: context,
-      blogs: recentBlogPost?.data || null
-    }
+      blogs: recentBlogPost?.data || null,
+      homeSections: strapi_generalData || null
+    },
+    revalidate: 3600
   })
 };
 
-export default HotelsHomePage;
+export default Home;
