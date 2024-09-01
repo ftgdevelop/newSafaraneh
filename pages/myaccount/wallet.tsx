@@ -24,6 +24,8 @@ const Wallet: NextPage = () => {
 
     const { t } = useTranslation('common');
 
+    const theme1 = process.env.THEME === "THEME1";
+    
     const depositBalance = useAppSelector(state => state.authentication.balance);
     const depositBalanceLoading = useAppSelector(state => state.authentication.balanceLoading);
 
@@ -57,15 +59,15 @@ const Wallet: NextPage = () => {
                     بازگشت
                 </Link> 
 
-                <div className='md:grid md:gap-4 md:grid-cols-3'>
+                <div className={`grid ${theme1?"gap-4 md:grid-cols-3":"py-3 gap-6 md:grid-cols-4"}`}>
                     <div className='max-md:hidden'>
                         <AccountSidebar />
                     </div>
-                    <div className='md:col-span-2'>
+                    <div className={theme1?"md:col-span-2":"md:col-span-3"}>
                         <div className='border border-neutral-300 bg-white rounded-md mb-4'>
 
                             <div className='flex items-center gap-3 sm:gap-5 p-3 sm:p-5 border-b border-neutral-300'>
-                                <WalletBeautiful className='w-8 h-8 sm:w-12 sm:h-12' />
+                                {!!theme1 && <WalletBeautiful className='w-8 h-8 sm:w-12 sm:h-12' />}
                                 <div className='leading-5 sm:text-lg'>
                                     کیف پول
                                     <p className='text-2xs sm:text-xs mt-1'>

@@ -42,7 +42,7 @@ const AccomodationPolicy: React.FC<Props> = props => {
                     <hr className='hidden sm:block sm:col-span-3 md:col-span-4 lg:col-span-5 border-neutral-300' />
 
                     <div className='text-sm md:text-md font-semibold'>
-                        <Logout className='inline-block w-6 h-6 fill-neutral-500 rtl:ml-2 ltr:mr-2' />
+                        <Logout className='inline-block w-6 h-6 fill-neutral-500 rtl:ml-2 ltr:mr-2 text-red-600 text-xs' />
                         خروج
                     </div>
                     <div className='sm:col-span-2 md:col-span-3 lg:col-span-4 max-sm:text-left' > {checkoutTime} </div>
