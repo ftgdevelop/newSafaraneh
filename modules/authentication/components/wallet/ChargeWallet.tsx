@@ -121,7 +121,7 @@ const ChargeWallet: React.FC = () => {
                                     validateFunction={(value: string) => validateRequied(value, "لطفا مبلغ را وارد کنید")}
                                     value={values.amount}
                                 />
-                                <select className={`border rtl:rounded-l-md ltr:rounded-r-md border-neutral-300 w-1/4 outline-none ${theme2?"h-13 border-neutral-400 focus:border-2 focus:border-blue-500":"h-10"}`}>
+                                <select className={`border rtl:rounded-l-md ltr:rounded-r-md border-neutral-300 w-1/4 outline-none ${theme2?"px-3 h-13 border-neutral-400 focus:border-2 focus:border-blue-500":"h-10"}`}>
                                     <option value={"IRR"}>
                                         ریال
                                     </option>
@@ -134,7 +134,7 @@ const ChargeWallet: React.FC = () => {
                                 <h5 className='text-xl mb-5'>
                                     {tPayment('please-choose-pay-panel')}
                                 </h5>
-                                <div className='bg-neutral-50 p-2 sm:p-4 text-xs rounded flex items-center gap-2'>
+                                <div className={`p-2 rounded flex items-center ${theme2?"text-md gap-5 sm:p-6 bg-neutral-100 border border-neutral-300":"text-xs gap-2 sm:p-4 bg-neutral-50"}`}>
                                     <img
                                         src={bankList.image.path}
                                         alt={bankList.image.altAttribute}
@@ -148,7 +148,7 @@ const ChargeWallet: React.FC = () => {
                                             key={index}
                                             type='button'
                                             onClick={() => { setGatewayId(bank.id) }}
-                                            className={`border border-3 px-4 py-3 text-sm grow text-center rounded-sm text-blue-700 select-none outline-none border-blue-500 disabled:border-neutral-400 disabled:bg-neutral-200 disabled:grayscale ${gatewayId === bank.id ? "bg-blue-100" : "bg-blue-50"}`}
+                                            className={`border px-4 py-3 text-sm ${theme2?"grow-0 min-w-28 rounded-xl":"border-3 grow"} text-center rounded-sm text-blue-700 select-none outline-none border-blue-500 disabled:border-neutral-400 disabled:bg-neutral-200 disabled:grayscale ${gatewayId === bank.id ? "bg-blue-100" : "bg-blue-50"}`}
                                         >
                                             <img
                                                 className="block mx-auto mb-1"

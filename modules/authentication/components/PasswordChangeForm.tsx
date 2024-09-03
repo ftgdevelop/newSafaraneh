@@ -13,6 +13,8 @@ const PasswordChangeForm: React.FC = () => {
 
     const dispatch = useAppDispatch();
 
+    const theme2 = process.env.THEME === "THEME2";
+
     const [submitLoading, setSubmitLoading] = useState<boolean>(false);
 
     const submitHandler = async (values: {
@@ -97,6 +99,7 @@ const PasswordChangeForm: React.FC = () => {
                                 isPassword
                                 labelIsSimple
                                 showRequiredStar
+                                showRequiredStarEnd={theme2}
                                 className="mb-5"
                                 setFieldValue={setFieldValue}
                                 errorText={errors.currentPassword as string}
@@ -112,6 +115,7 @@ const PasswordChangeForm: React.FC = () => {
                                 isPassword
                                 labelIsSimple
                                 showRequiredStar
+                                showRequiredStarEnd={theme2}
                                 className="mb-5"
                                 setFieldValue={setFieldValue}
                                 errorText={errors.newPassword as string}
@@ -127,6 +131,7 @@ const PasswordChangeForm: React.FC = () => {
                                 isPassword
                                 labelIsSimple
                                 showRequiredStar
+                                showRequiredStarEnd={theme2}
                                 className="mb-5"
                                 setFieldValue={setFieldValue}
                                 errorText={errors.repeatPassword as string}

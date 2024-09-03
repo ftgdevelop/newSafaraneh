@@ -32,10 +32,10 @@ const Profile: NextPage = ({ portalData }: { portalData?: WebSiteDataType }) => 
 
                 <div className={`grid ${theme1?"gap-4 md:grid-cols-3":"py-3 gap-6 md:grid-cols-4"}`}>
                     <div>
-                        <AccountSidebar />
+                        <AccountSidebar logoUrl={portalData?.billing?.logo?.value} />
                     </div>
                     <div className={theme1?"md:col-span-2":"md:col-span-3"}>
-                        <div className='border border-neutral-300 bg-white rounded-md mb-4'>
+                        <div className={`border border-neutral-300 bg-white ${theme2?"rounded-xl":"rounded-md"} mb-4`}>
 
                             {!!theme1 && <div className='flex items-center gap-5 whitespace-nowrap p-5 border-b border-neutral-300'>
                                 <User2 className='w-12 h-12' />
