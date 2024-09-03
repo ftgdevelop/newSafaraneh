@@ -122,7 +122,7 @@ const AccountSidebar: React.FC<Props> = props => {
 
                     {!!theme1 && <Link
                         href="/myaccount/profile"
-                        className='text-xs text-red-600 inline-flex items-center gap-1 mb-5 sm:mb-10'
+                        className='text-xs text-red-600 inline-flex items-center gap-1 mb-2 sm:mb-10'
                     >
                         <EditBeautiful className='block fill-current' /> {t("edit-profile")}
                     </Link>}
@@ -152,7 +152,7 @@ const AccountSidebar: React.FC<Props> = props => {
                     )}
 
                 {!!(user?.emailAddress && !user.isEmailConfirmed) && (
-                    <div className={`text-xs flex items-center gap-1 mb-5 ${theme1?"bg-[#f5e9ca] px-3 py-2 rounded border border-orange-300":theme2?"text-orange-400":""}`}>
+                    <div className={`text-xs flex items-center gap-1 mb-2 ${theme1?"bg-[#f5e9ca] px-3 py-2 rounded border border-orange-300":theme2?"text-orange-400":""}`}>
                         <InfoCircle className='w-5 h-5 fill-orange-400' />
                         {t("confirm-email")}
                     </div>
@@ -170,6 +170,7 @@ const AccountSidebar: React.FC<Props> = props => {
                             height={80}
                             className='mb-4' 
                         /> }
+
                         {sidebarItems.map(item => (
                             <Link
                                 key={item.url}
