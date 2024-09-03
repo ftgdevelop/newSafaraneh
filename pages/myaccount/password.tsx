@@ -6,8 +6,9 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import AccountSidebar from '@/modules/authentication/components/AccountSidebar';
 import PasswordChangeForm from '@/modules/authentication/components/PasswordChangeForm';
 import { Lock2 } from '@/modules/shared/components/ui/icons';
+import { WebSiteDataType } from '@/modules/shared/types/common';
 
-const Password: NextPage = () => {
+const Password: NextPage = ({ portalData }: { portalData?: WebSiteDataType }) => {
 
     const router = useRouter();
 
@@ -26,7 +27,7 @@ const Password: NextPage = () => {
 
                 <div className={`grid ${theme1?"gap-4 md:grid-cols-3":"py-3 gap-6 md:grid-cols-4"}`}>
                     <div className='max-md:hidden'>
-                        <AccountSidebar />
+                        <AccountSidebar logoUrl={portalData?.billing?.logo?.value} />
                     </div>
                     <div className={theme1?"md:col-span-2":"md:col-span-3"}>
                         <div className='border border-neutral-300 bg-white rounded-md mb-4'>
