@@ -1,13 +1,17 @@
 import { SetStateAction } from 'react';
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
-import { CalendarBeautiful, UserBeautiful, Close, EditBeautiful, LeftCaret, WalletBeautiful, User, InfoCircle, User2, Lock2, List, CreditCard, Settings } from '@/modules/shared/components/ui/icons';
+import { CalendarBeautiful, UserBeautiful, Close, EditBeautiful, LeftCaret, WalletBeautiful, User, InfoCircle, User2, Lock2, List, CreditCard, Settings, CheckTag } from '@/modules/shared/components/ui/icons';
 import { useAppSelector } from '@/modules/shared/hooks/use-store';
 import Logout from './Logout';
+import Loading from '@/modules/shared/components/ui/Loading';
+import { numberWithCommas } from '@/modules/shared/helpers';
+import Image from 'next/image';
 
 type Props = {
     setDelayedOpen?: (value: SetStateAction<boolean>) => void;
     isInModal?: boolean;
+    logoUrl?: string;
 }
 
 const AccountSidebar: React.FC<Props> = props => {
@@ -18,6 +22,9 @@ const AccountSidebar: React.FC<Props> = props => {
     
     const theme2 = process.env.THEME === "THEME2";
     const theme1 = process.env.THEME === "THEME1";
+
+    const balance = useAppSelector(state => state.authentication.balance);
+    const balanceLoading = useAppSelector(state => state.authentication.balanceLoading);
 
     const user = useAppSelector(state => state.authentication.user);
 
@@ -52,12 +59,12 @@ const AccountSidebar: React.FC<Props> = props => {
             title: "پروفایل" ,
             description: t('visit-edit-account-informaion') 
         },
-        {
-            url:"/myaccount/wallet" ,
-            icon: <CreditCard className='w-7 h-7 fill-current' /> ,
-            title: "کیف پول" ,
-            description: "مشاهده و افزایش اعتبار کیف پول" 
-        },
+        // {
+        //     url:"/myaccount/wallet" ,
+        //     icon: <CreditCard className='w-7 h-7 fill-current' /> ,
+        //     title: "کیف پول" ,
+        //     description: "مشاهده و افزایش اعتبار کیف پول" 
+        // },
         {
             url:"/myaccount/booking" ,
             icon: <List className='w-7 h-7 fill-current rtl:mirror' /> ,
@@ -105,9 +112,13 @@ const AccountSidebar: React.FC<Props> = props => {
                         {t("hello")} {user?.firstName || t('dear-user')}
                     </h5>
 
-                    {!!user?.emailAddress && <div className={`font-sans ${theme1?"mb-2 sm:mb-5":theme2?"mb-1 text-sm":""}`}>
+                    {user?.emailAddress ? <div className={`font-sans ${theme1?"mb-2":theme2?"mb-1 text-sm":""}`}>
                         {user.emailAddress}
-                    </div>}
+                    </div> : user?.phoneNumber ? (
+                        <div dir="ltr" className={`rtl:text-right font-sans ${theme1?"mb-2":theme2?"mb-1 text-sm":""}`}>
+                            {user.phoneNumber}
+                        </div>
+                    ): null}
 
                     {!!theme1 && <Link
                         href="/myaccount/profile"
@@ -118,6 +129,28 @@ const AccountSidebar: React.FC<Props> = props => {
 
                 </div>
 
+                    {theme2  &&(
+                        <Link
+                            href="/myaccount/wallet"
+                            className='bg-white border border-neutral-300 p-3 pt-6 mt-6 mb-4 rounded-xl block text-xs text-center'
+                         >
+                            {balanceLoading ? <Loading /> :(
+                                <>
+                                    اعتبار کیف پول
+                                    <div className='text-2xl font-semibold mb-5 mt-1'>
+                                        {balance ? numberWithCommas(balance) : 0} ریال
+                                    </div>
+                                    <div className='flex items-center justify-between'>
+                                        <p>
+                                            مشاهده و افزایش اعتبار کیف پول
+                                        </p>
+                                        <LeftCaret className='w-5 h-5 fill-current' />
+                                    </div>
+                                </>
+                            )}
+                        </Link>
+                    )}
+
                 {!!(user?.emailAddress && !user.isEmailConfirmed) && (
                     <div className={`text-xs flex items-center gap-1 mb-5 ${theme1?"bg-[#f5e9ca] px-3 py-2 rounded border border-orange-300":theme2?"text-orange-400":""}`}>
                         <InfoCircle className='w-5 h-5 fill-orange-400' />
@@ -126,7 +159,17 @@ const AccountSidebar: React.FC<Props> = props => {
                 )}
 
                 {theme2 ? (
-                    <>
+                    <div className='mt-5'>
+                        <p className='text-xs mb-4'>
+                            اطلاعات کاربری و اولویت ها ترجیحات خود را مدیریت کنید.
+                        </p>
+                        {!!props.logoUrl&& <Image
+                            src={props.logoUrl}
+                            alt='logo'
+                            width={80}
+                            height={80}
+                            className='mb-4' 
+                        /> }
                         {sidebarItems.map(item => (
                             <Link
                                 key={item.url}
@@ -160,7 +203,7 @@ const AccountSidebar: React.FC<Props> = props => {
                                 }}
                             />
                         </div>
-                    </>
+                    </div>
                 ):(
                     <>
                         <Link
