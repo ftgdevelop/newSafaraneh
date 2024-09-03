@@ -19,6 +19,7 @@ type Props = {
     labelIsSimple?: boolean;
     labelIsSmall?:boolean;
     showRequiredStar?: boolean;
+    showRequiredStarEnd?: boolean;
     isPassword?: boolean;
     showNotConfirmedBadge?: boolean;
     disabled?:boolean;
@@ -122,8 +123,10 @@ const FormikField: React.FC<Props> = props => {
                             htmlFor={props.id}
                             className={labelClassNames.join(" ")}
                         >
-                            {!!(props.labelIsSimple && props.showRequiredStar) && <span className='text-red-600'>* </span>}
+                            {!!(props.labelIsSimple && props.showRequiredStar && !props.showRequiredStarEnd) && <span className='text-red-600'>* </span>}
                             {props.label}
+                            {!!(props.labelIsSimple && props.showRequiredStar && props.showRequiredStarEnd) && <span className='text-red-600'>* </span>}
+
                         </label>
                     )}
                     {props.showNotConfirmedBadge && (
