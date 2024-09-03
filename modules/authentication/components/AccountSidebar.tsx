@@ -114,7 +114,7 @@ const AccountSidebar: React.FC<Props> = props => {
 
                     {user?.emailAddress ? <div className={`font-sans ${theme1?"mb-2":theme2?"mb-1 text-sm":""}`}>
                         {user.emailAddress}
-                    </div> : user?.phoneNumber ? (
+                    </div> : user?.phoneNumber && theme2 ? (
                         <div dir="ltr" className={`rtl:text-right font-sans ${theme1?"mb-2":theme2?"mb-1 text-sm":""}`}>
                             {user.phoneNumber}
                         </div>
@@ -136,13 +136,13 @@ const AccountSidebar: React.FC<Props> = props => {
                          >
                             {balanceLoading ? <Loading /> :(
                                 <>
-                                    اعتبار کیف پول
+                                    موجودی کیف پول
                                     <div className='text-2xl font-semibold mb-5 mt-1'>
                                         {balance ? numberWithCommas(balance) : 0} ریال
                                     </div>
                                     <div className='flex items-center justify-between'>
                                         <p>
-                                            مشاهده و افزایش اعتبار کیف پول
+                                            مشاهده و افزایش موجودی کیف پول
                                         </p>
                                         <LeftCaret className='w-5 h-5 fill-current' />
                                     </div>
@@ -196,7 +196,7 @@ const AccountSidebar: React.FC<Props> = props => {
                         ))}
                         <div className='py-5 text-center'>
                             <Logout
-                                className='text-red-500 text-md'
+                                className='text-blue-500 text-md hover:bg-blue-50 rounded-full inline-block pb-1 px-10'
                                 closeModal={() => {
                                     if (setDelayedOpen) {
                                         setDelayedOpen(false)

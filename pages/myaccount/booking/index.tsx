@@ -7,7 +7,7 @@ import Skeleton from '@/modules/shared/components/ui/Skeleton';
 import { CalendarBeautiful, ErrorCircle } from '@/modules/shared/components/ui/icons';
 import { useAppDispatch } from '@/modules/shared/hooks/use-store';
 import { setReduxError } from '@/modules/shared/store/errorSlice';
-import { ReserveType, UserReserveListItem } from '@/modules/shared/types/common';
+import { ReserveType, UserReserveListItem, WebSiteDataType } from '@/modules/shared/types/common';
 import type { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -15,7 +15,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-const Profile: NextPage = () => {
+const Profile: NextPage = ({ portalData }: { portalData?: WebSiteDataType }) => {
 
     const { t } = useTranslation('common');
     const router = useRouter();
@@ -142,7 +142,7 @@ const Profile: NextPage = () => {
 
                 <div className={`grid ${theme1?"gap-4 md:grid-cols-3":"py-3 gap-6 md:grid-cols-4"}`}>
                     <div className='max-lg:hidden'>
-                        <AccountSidebar />
+                        <AccountSidebar logoUrl={portalData?.billing?.logo?.value} />
                     </div>
                     <div className={theme1?"md:col-span-2":"md:col-span-3"}>
                         <div className='border border-neutral-300 bg-white rounded-md mb-4'>
