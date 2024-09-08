@@ -37,7 +37,7 @@ const HotelName: React.FC<Props> = props => {
 
     return (
 
-        <div className={`grid grid-cols-1 lg:grid-cols-3 gap-5 bg-white rounded-b-xl ${theme1?" p-3 -mt-6 pt-12 sm:p-5 xl:p-7 xl:pt-16":"pt-14 pb-5"}`}>
+        <div className={`grid grid-cols-1 lg:grid-cols-3 gap-5 bg-white rounded-b-xl ${theme1?" p-3 -mt-6 pt-12 sm:p-5 xl:p-7 xl:pt-16":"pt-3 pb-5"}`}>
             <div className="lg:col-span-2 pt-3">
                 <h1 className="font-semibold text-2xl lg:text-4xl mb-3 sm:mb-4 lg:mb-5"> {accomodationData.displayName || accomodationData.name} </h1>
                 {!!(accomodationData.rating) && <Rating number={accomodationData.rating} className="mb-3" />}

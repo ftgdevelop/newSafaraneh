@@ -28,6 +28,8 @@ const RoomDetailFooter: React.FC<Props> = props => {
         return null;
     }
 
+    const isSafarLife = process.env.SITE_NAME === 'https://www.safarlife.com';
+
     const prices = {
         roomPrice: rate.pricing?.find(
             (item) => item.type === "Room" && item.ageCategoryType === "ADL"
@@ -114,7 +116,7 @@ const RoomDetailFooter: React.FC<Props> = props => {
                 {prices?.roomPrice && prices.roomPrice < 1000 ?
                     "درخواست رزرو"
                     : rate.availablityType === "Online" ?
-                        tHotel("online-reserve")
+                    isSafarLife ? "رزرو آنی" : tHotel("online-reserve")
                         : tHotel("room-reserve")}
             </Button>
 

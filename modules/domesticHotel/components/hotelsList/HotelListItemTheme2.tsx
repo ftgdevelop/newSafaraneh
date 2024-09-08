@@ -1,7 +1,6 @@
 import { PricedHotelItem } from "../../types/hotel";
 import Image from "next/image";
-import { DefaultRoom, InfoCircle, Location, Verified } from "@/modules/shared/components/ui/icons";
-import Link from "next/link";
+import {DefaultRoomTheme2, InfoCircle, Location } from "@/modules/shared/components/ui/icons";
 import { useTranslation } from "next-i18next";
 import Rating from "@/modules/shared/components/ui/Rating";
 import { useRouter } from 'next/router';
@@ -9,6 +8,8 @@ import { addSomeDays, dateFormat, getDatesDiff, numberWithCommas } from "@/modul
 import Tooltip from "@/modules/shared/components/ui/Tooltip";
 import Skeleton from "@/modules/shared/components/ui/Skeleton";
 import GuestRating from "@/modules/shared/components/ui/GuestRating";
+import Button from "@/modules/shared/components/ui/Button";
+import Link from "next/link";
 
 type Props = {
     hotel: PricedHotelItem;
@@ -69,7 +70,7 @@ const HotelListItemTheme2: React.FC<Props> = props => {
 
     } else if (hotel.priceInfo === "need-to-inquire") {
 
-        priceBlock = <div className="whitespace-nowrap text-red-500 text-xs"> قیمت نیازمند استعلام است </div>
+        priceBlock = <div className="whitespace-nowrap text-red-500 text-xs leading-4"> قیمت نیازمند استعلام است </div>
 
     } else {
 
@@ -127,14 +128,36 @@ const HotelListItemTheme2: React.FC<Props> = props => {
     if (process.env.LocaleInUrl === "off"){
         url = url.replace("/fa","");
     }
+
+
+    let button: React.ReactNode = null;
+
+    if (hotel.priceInfo === "notPriced") {
+        button = null;
+    } else if (hotel.priceInfo === 'loading') {
+        button = null;
+    } else {
+        button = (
+            <Button
+                href={hotel.url+searchInfo}
+                target="_blank"
+                className="rounded-full h-10 px-5 text-sm w-full md:w-48 max-w-full mt-2"
+            >
+                {hotel.priceInfo === "need-to-inquire" ? "درخواست رزرو" :"مشاهده و رزرو"}
+            </Button>
+        )
+    }
+
+    const isSafarLife = process.env.SITE_NAME === 'https://www.safarlife.com';
     
     return (
-        <Link
-            target="_blank"
-            href={url}
+        <div
             className="grid xs:grid-cols-4 mb-4 border border-neutral-200 bg-white rounded-2xl overflow-hidden relative"
         >
-            <div className="bg-travel-pattern">
+            <Link 
+                href={hotel.url+searchInfo}
+                target="_blank"
+            >
                 {hotel.picture?.path ? (
                     <Image
                         src={hotel.picture.path}
@@ -149,10 +172,10 @@ const HotelListItemTheme2: React.FC<Props> = props => {
                     <div
                         className="bg-neutral-100 flex items-center justify-center h-full max-lg:rounded-t-lg lg:rtl:rounded-r-lg lg:ltr:rounded-l-lg"
                     >
-                        <DefaultRoom className="fill-neutral-300 w-32 h-32" />
+                        <DefaultRoomTheme2 className="fill-neutral-300 w-32 h-32" />
                     </div>
                 )}
-            </div>
+            </Link>
 
             {!!hotel.isPromotion && <span className="absolute bg-green-600 text-white right-3 top-3 rounded-xl leading-4 text-2xs py-1 px-2 select-none pointer-events-none"> پیشنهاد ویژه </span>}
             {!!hotel.promotions?.length && <span className="absolute bg-red-600 text-white right-3 bottom-3 rounded-xl leading-4 text-2xs py-1 px-2 select-none pointer-events-none"> پیشنهاد ویژه </span> }
@@ -160,7 +183,13 @@ const HotelListItemTheme2: React.FC<Props> = props => {
 
             <div className="xs:col-span-3 p-3 max-xs:pb-0">
 
-                <div className="font-bold text-neutral-700 rtl:ml-2 ltr:mr-2 inline-block" > {hotel.displayName || hotel.name} </div>
+                <Link 
+                    href={hotel.url+searchInfo}
+                    target="_blank"
+                    className="font-bold text-neutral-700 rtl:ml-2 ltr:mr-2 inline-block" 
+                > 
+                    {hotel.displayName || hotel.name} 
+                </Link>
 
                 {!!hotel.typeStr && <span className="bg-blue-50 rounded-xl leading-6 text-2xs px-2 select-none">
                     {hotel.typeStr}
@@ -206,8 +235,13 @@ const HotelListItemTheme2: React.FC<Props> = props => {
                 )} */}
 
                 {hotel.priceInfo === "notPriced" && <div className="bg-red-100 px-4 py-1 my-1">
-                    <h5 className="text-red-600 text-sm font-semibold"> <InfoCircle className="w-4 h-4 fill-current inline-block" /> {tHotel("you-missed-this-deal")}</h5>
-                    <p className="text-xs">{tHotel("we-dont-have-any-available-rooms-for-these-dates")}</p>
+                    <h5 className="text-red-600 text-sm font-semibold"> 
+                        <InfoCircle className="w-4 h-4 fill-current inline-block rtl:ml-1 ltr:mr-1" />
+                        {isSafarLife ? "امکان رزرو این هتل وجود ندارد": tHotel("you-missed-this-deal")}
+                    </h5>
+                    <p className="text-xs">
+                        {isSafarLife ? "ممکن است با تغییر تاریخ، تعداد نفرات و یا دیگر مقادیر جستجو، هتل قابل رزرو باشد." : tHotel("we-dont-have-any-available-rooms-for-these-dates")}
+                    </p>
                 </div>}
 
 
@@ -217,13 +251,14 @@ const HotelListItemTheme2: React.FC<Props> = props => {
 
                     <div className="rtl:text-left ltr:text-right max-sm:pb-3">
                         {priceBlock}
+                        {button}
                     </div>
 
                 </div>
 
             </div>
 
-        </Link>
+        </div>
     )
 }
 
