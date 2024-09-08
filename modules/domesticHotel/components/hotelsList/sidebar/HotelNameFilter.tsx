@@ -85,7 +85,7 @@ const HotelNameFilter: React.FC = () => {
                 <input
                     className="border border-neutral-300 rounded px-3 text-sm h-10 block w-full rtl:pl-14 ltr:pr-14 outline-none focus:border-neutral-600"
                     type="text"
-                    placeholder={tHotel('search-hotel-name')}
+                    placeholder={theme2? "جستجوی نام هتل" : tHotel('search-hotel-name')}
                     name="hotelName"
                     onChange={(e: ChangeEvent<HTMLInputElement>) => { setEnteredName(e.target.value) }}
                     value={enteredName}
