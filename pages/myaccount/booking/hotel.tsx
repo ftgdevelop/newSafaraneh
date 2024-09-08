@@ -11,7 +11,7 @@ import { WebSiteDataType } from '@/modules/shared/types/common';
 import { DomesticHotelGetReserveByIdData, DomesticHotelSummaryDetail } from '@/modules/domesticHotel/types/hotel';
 import { dateDiplayFormat, getDatesDiff, numberWithCommas } from '@/modules/shared/helpers';
 
-import { Bed, DefaultRoom, Directions, Email, EmailGrayIcon, Location, Lock, Phone, PhoneGrayIcon, RightCaret, Tik, User, WhatsappGrayIcon } from '@/modules/shared/components/ui/icons';
+import { Bed, DefaultRoom, DefaultRoomTheme2, Directions, Email, EmailGrayIcon, Location, Lock, Phone, PhoneGrayIcon, RightCaret, Tik, User, WhatsappGrayIcon } from '@/modules/shared/components/ui/icons';
 
 import Skeleton from '@/modules/shared/components/ui/Skeleton';
 import Tag from '@/modules/shared/components/ui/Tag';
@@ -29,6 +29,8 @@ const DomesticHotelReserveDetail: NextPage = ({ portalData }: { portalData?: Web
     const { t: tPayment } = useTranslation('payment');
 
     const router = useRouter();
+
+    const theme2 = process.env.THEME === "THEME2";
 
     const userIsAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
 
@@ -223,7 +225,11 @@ const DomesticHotelReserveDetail: NextPage = ({ portalData }: { portalData?: Web
                                             <div
                                                 className="p-10 bg-neutral-100 flex items-center justify-center h-full max-lg:rounded-t-lg lg:rtl:rounded-r-lg lg:ltr:rounded-l-lg"
                                             >
-                                                <DefaultRoom className="fill-neutral-300 w-20 h-20" />
+                                                {theme2?(
+                                                    <DefaultRoomTheme2 className="fill-neutral-300 w-20 h-20" />
+                                                ):(
+                                                    <DefaultRoom className="fill-neutral-300 w-20 h-20" />
+                                                )}
                                             </div>
                                         )}
                                         <div

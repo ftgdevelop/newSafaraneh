@@ -30,6 +30,7 @@ import AccomodationPolicy from '@/modules/domesticHotel/components/hotelDetails/
 import dynamic from 'next/dynamic';
 import { useAppDispatch } from '@/modules/shared/hooks/use-store';
 import { emptyReduxSafarmarket, setReduxSafarmarketPixel } from '@/modules/shared/store/safarmarketSlice';
+import BreadCrumpt from '@/modules/shared/components/ui/BreadCrumpt';
 
 const SearchForm = dynamic(() => import('@/modules/domesticHotel/components/shared/SearchForm'), {
   ssr: false
@@ -330,6 +331,26 @@ useEffect(() => {
   }
 
 
+
+  let BreadCrumptListUrl;
+
+  if (i18n?.language === "fa" && process.env.LocaleInUrl !== "off") {
+      BreadCrumptListUrl = `/fa/hotels/هتل-های-${accommodationData.city?.name}`;
+  } else if (i18n?.language === "ar") {
+      BreadCrumptListUrl = `/hotels/فنادق-${accommodationData.city?.name}`;
+  } else {
+      BreadCrumptListUrl = `/hotels/هتل-های-${accommodationData.city?.name}`;
+  }
+  if (accommodationData.cityId){
+      BreadCrumptListUrl += `/location-${accommodationData.cityId}`
+  }
+
+  if (checkin && checkout) {
+      BreadCrumptListUrl += `/checkin-${checkin}/checkout-${checkout}`;
+  }
+
+
+
   return (
     <>
       <Head>
@@ -534,7 +555,27 @@ useEffect(() => {
             جهت رزرو با شماره <a dir="ltr" href={`tel:${tel?.replace("021", "+9821") || "+982126150051"}`} className='underline text-sm sm:text-base'> {tel || "02126150051"} </a> تماس بگیرید.
           </div>} */}
 
-          <BackToList checkin={checkin} checkout={checkout} cityId={accommodationData.cityId} cityName={accommodationData.city?.name || ""} />
+          {theme2 ? (
+            <BreadCrumpt
+              hideHome
+              items={[
+                {
+                  label:"رزرو هتل",
+                  link:"/"
+                },
+                {
+                  label:tHotel('seeHotelsIn', { city: accommodationData.city?.name || "" }),
+                  link:BreadCrumptListUrl
+                },
+                {
+                  label:accommodationData?.displayName || ""
+                }
+              ]}
+             />
+          ) : (
+            <BackToList url={BreadCrumptListUrl} cityName={accommodationData.city?.name || ""} />
+          )}
+
         </div>
 
         {!!hotelImages?.length && <Gallery images={hotelImages} hotelName={accommodationData.displayName} />}

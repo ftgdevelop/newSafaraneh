@@ -723,7 +723,7 @@ const HotelList: NextPage<Props> = props => {
               <button type='button' className='relative block w-full lg:mb-5' onClick={() => { setShowMap(true) }}>
                 {theme2 ? (
                   <div className='border border-neutral-300 rounded-xl overflow-hidden'>
-                    <Image src="/images/staticmap.png" alt="showMap" className='block w-full h-28 object-cover' width={354} height={100} />
+                    <Image src={theme2?"/images/staticmapTheme2.jpg":"/images/staticmap.png"} alt="showMap" className='block w-full h-28 object-cover' width={354} height={100} />
                     <div className='p-2 bg-white text-blue-600 text-sm'>
                       مشاهده روی نقشه
                     </div>

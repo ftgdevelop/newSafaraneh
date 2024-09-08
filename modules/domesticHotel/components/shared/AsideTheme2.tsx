@@ -1,7 +1,7 @@
 import Button from "@/modules/shared/components/ui/Button";
 import Rating from "@/modules/shared/components/ui/Rating";
 import Skeleton from "@/modules/shared/components/ui/Skeleton";
-import { Tik, User, DefaultRoom } from "@/modules/shared/components/ui/icons";
+import { Tik, User, DefaultRoomTheme2 } from "@/modules/shared/components/ui/icons";
 import { dateDiplayFormat, numberWithCommas } from "@/modules/shared/helpers";
 import { useTranslation } from "next-i18next";
 import Image from "next/image";
@@ -131,7 +131,7 @@ const AsideTheme2: React.FC<Props> = props => {
                     <div
                         className="bg-neutral-100 flex items-center justify-center h-full rounded-t-lg"
                     >
-                        <DefaultRoom className="fill-neutral-300 w-40 h-40 p-10" />
+                        <DefaultRoomTheme2 className="fill-neutral-300 w-40 h-40 p-10" />
                     </div>
                 )}
 
@@ -174,7 +174,7 @@ const AsideTheme2: React.FC<Props> = props => {
                             </label>
 
                             <div className="text-lg font-semibold mb-5">
-                                {dateDiplayFormat({ date: reserveInformation.checkin, format: "ddd dd mm", locale: "fa" })}
+                                {dateDiplayFormat({ date: reserveInformation.checkin, format: "ddd dd mm yyyy", locale: "fa" })}
                             </div>
 
                             <label className="block mb-2 font-semibold">
@@ -182,7 +182,7 @@ const AsideTheme2: React.FC<Props> = props => {
                             </label>
 
                             <div className="text-lg font-semibold mb-5">
-                                {dateDiplayFormat({ date: reserveInformation.checkout, format: "ddd dd mm", locale: "fa" })}
+                                {dateDiplayFormat({ date: reserveInformation.checkout, format: "ddd dd mm yyyy", locale: "fa" })}
                             </div>
 
                         </>
@@ -192,18 +192,18 @@ const AsideTheme2: React.FC<Props> = props => {
 
                         //TODO check cancelation
                         let cancellation = null;
-                        switch (roomItem.cancellationPolicyStatus) {
-                            case "NonRefundable":
-                                cancellation = <div className="margin-bottom-5 text-red">{t("non-refundable")}</div>;
+                        switch (roomItem.cancellationPolicyStatus.toLowerCase()) {
+                            case "nonrefundable":
+                                cancellation = <div className="margin-bottom-5 text-red">{tHotel("non-refundable")}</div>;
                                 break;
-                            case "Refundable":
+                            case "refundable":
                                 cancellation = <div className="text-green-600 margin-bottom-5">
                                     <Tik className="w-5 h-5 fill-green-600 inline-block rtl:ml-1 ltr:mr-1" />
-                                    {t("refundable")}
+                                    {tHotel("refundable")}
                                 </div>;
                                 break;
                             default:
-                                cancellation = <div className="margin-bottom-5">{roomItem.cancellationPolicyStatus}</div>;
+                                cancellation = <div className="margin-bottom-5">{roomItem.cancellationPolicyStatus} </div>;
                         }
 
                         let childPriceBlock = null;
@@ -244,7 +244,7 @@ const AsideTheme2: React.FC<Props> = props => {
 
                                     <div className="flex gap-2 items-center text-sm">
                                         <User className="w-4.5 h-4.5 fill-current" />
-                                        {roomItem.bed} {tHotel('guest')} {extraBedPriceBlock}
+                                        {roomItem.bed + roomItem.extraBed} {tHotel('guest')} {extraBedPriceBlock}
                                     </div>
 
                                     <div className="text-green-600 text-sm">{board(roomItem.board)}</div>

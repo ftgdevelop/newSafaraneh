@@ -26,6 +26,8 @@ const Gallery: React.FC<Props> = props => {
     const { t: tHotel } = useTranslation('hotel');
     const { images } = props;
 
+    const theme2 = process.env.THEME === "THEME2";
+
     const [open, setOpen] = useState(false);
     const [slideIndex, setSlideIndex] = useState(0);
 
@@ -48,7 +50,7 @@ const Gallery: React.FC<Props> = props => {
 
     return (
         <>
-            <div id="pictures_section" className='grid grid-cols-1 md:grid-cols-4 gap-1 bg-white relative'>
+            <div id="pictures_section" className={`grid grid-cols-1 md:grid-cols-4 bg-white relative ${theme2?"":"gap-1"}`}>
                 {images.slice(0, 5).map((slide, index) => (
                     <Image
                         key={slide.thumbnail}
@@ -60,7 +62,7 @@ const Gallery: React.FC<Props> = props => {
                         height={index ? 191 : 288}
                         sizes="(max-width: 767px) 100vw, 50vw"
                         onClick={() => { openLightBox(index); }}
-                        className={`cursor-pointer w-full h-full object-cover ${index ? "hidden md:block md:col-span-1 md:row-span-1" : "md:col-span-2 md:row-span-2"}`}
+                        className={`cursor-pointer w-full object-cover ${theme2?"p-px":""} ${theme2 ?index ? "h-40" :"h-80":"h-full"} ${index ? "hidden md:block md:col-span-1 md:row-span-1" : "md:col-span-2 md:row-span-2"}`}
                     />
                 ))}
 
@@ -76,7 +78,7 @@ const Gallery: React.FC<Props> = props => {
                 open={open}
                 close={() => setOpen(false)}
                 slides={images}
-                plugins={[Thumbnails, Captions]}
+                plugins={theme2 ? [Captions] : [Thumbnails, Captions]}
                 captions={{ descriptionTextAlign: 'center' }}
                 thumbnails={{ width: 80, height: 50 }}
             />

@@ -7,6 +7,7 @@ import { WebSiteDataType } from '@/modules/shared/types/common';
 import Head from 'next/head';
 import HomeTheme1 from '@/modules/home/components/theme1/HomeTheme1';
 import HomeTheme2 from '@/modules/home/components/theme2/HomeTheme2';
+import { getStrapiPages } from '@/modules/shared/actions/strapiActions';
 
 const FlightsHome: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], portalData?: WebSiteDataType }) => {
 
@@ -209,14 +210,37 @@ const FlightsHome: NextPage = ({ blogs, portalData }: { blogs?: BlogItemType[], 
 
 export const getStaticProps = async (context: any) => {
 
-  const recentBlogPost: any = process.env.PROJECT_MODULES?.includes("Blog") ? await getBlogs({ page: 1, per_page: 4 }) : null;
+  const theme2 = process.env.THEME === "THEME2";
+  const hasStrapi = process.env.PROJECT_SERVER_STRAPI;
+
+  const [recentBlogPost, strapiResponse, strapiResponse2] = await Promise.all<any>([
+    process.env.PROJECT_MODULES?.includes("Blog") ? await getBlogs({ page: 1, per_page: theme2 ? 5 : 4 }) : null,
+    (hasStrapi && theme2) ? await getStrapiPages('filters[Page][$eq]=home&populate[Sections][populate][Items][populate]=*') : undefined,
+    (hasStrapi && theme2) ? await getStrapiPages('filters[Page][$eq]=home&populate[Sections][populate]=*') : undefined
+  ]);
+
+  const link_banner_data = strapiResponse2?.data?.data[0]?.attributes?.Sections.find((section: any) => section.Keyword === "link_banner")?.Image;
+  const main_banner_data = strapiResponse2?.data?.data[0]?.attributes?.Sections.find((section: any) => section.Keyword === "main_banner")?.Image;
+  const strapi_generalData = strapiResponse?.data?.data[0]?.attributes?.Sections;
+  const strapi_generalData_link_banner_data = strapi_generalData?.find((section: any) => section.Keyword === "link_banner");
+  const strapi_generalData_main_banner_data = strapi_generalData?.find((section: any) => section.Keyword === "main_banner");
+
+  if (link_banner_data && strapi_generalData_link_banner_data) {
+    strapi_generalData_link_banner_data.Image = link_banner_data;
+  }
+  if (main_banner_data && strapi_generalData_main_banner_data) {
+    strapi_generalData_main_banner_data.Image = main_banner_data;
+  }
+
 
   return ({
     props: {
-      ...await serverSideTranslations(context.locale, ['common', 'home']),
+      ...await serverSideTranslations(context.locale, ['common', 'home', 'hotel']),
       context: context,
-      blogs: recentBlogPost?.data || null
-    }
+      blogs: recentBlogPost?.data || null,
+      homeSections: strapi_generalData || null
+    },
+    revalidate: 3600
   })
 };
 
