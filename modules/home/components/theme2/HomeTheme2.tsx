@@ -68,9 +68,10 @@ const HomeTheme2: React.FC<Props> = props => {
             {strapiMainBanner?.Image?.data?.attributes?.url ? <Image
                 src={strapiImagesMainUrl + strapiMainBanner.Image.data.attributes.url}
                 alt={strapiMainBanner?.ImageAlternative || "home banner"}
-                width={1500}
-                height={300}
-                className="w-full"
+                width={1080}
+                height={216}
+                className="w-full h-auto min-h-44 object-cover"
+                priority
             /> : null}
 
             <Banner
