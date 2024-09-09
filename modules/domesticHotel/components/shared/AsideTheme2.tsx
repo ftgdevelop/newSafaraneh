@@ -2,7 +2,7 @@ import Button from "@/modules/shared/components/ui/Button";
 import Rating from "@/modules/shared/components/ui/Rating";
 import Skeleton from "@/modules/shared/components/ui/Skeleton";
 import { Tik, User, DefaultRoomTheme2 } from "@/modules/shared/components/ui/icons";
-import { dateDiplayFormat, numberWithCommas } from "@/modules/shared/helpers";
+import { dateDiplayFormat, numberWithCommas, toPersianDigits } from "@/modules/shared/helpers";
 import { useTranslation } from "next-i18next";
 import Image from "next/image";
 import { AsideHotelInfoType, AsideReserveInfoType } from "../../types/hotel";
@@ -24,6 +24,8 @@ type Props = {
         isValid: true;
     };
     discountLoading?: boolean;
+    checkinTime?: string;
+    checkoutTime?: string;
 }
 const AsideTheme2: React.FC<Props> = props => {
 
@@ -174,7 +176,12 @@ const AsideTheme2: React.FC<Props> = props => {
                             </label>
 
                             <div className="text-lg font-semibold mb-5">
-                                {dateDiplayFormat({ date: reserveInformation.checkin, format: "ddd dd mm yyyy", locale: "fa" })}
+                                {dateDiplayFormat({ date: reserveInformation.checkin, format: "ddd dd mm yyyy", locale: "fa" })} 
+                                {props.checkinTime ? 
+                                    <span className="text-neutral-500 text-sm rtl:mr-4 ltr:ml-4">
+                                        از ساعت {toPersianDigits(props.checkinTime)}
+                                    </span>
+                                : null}
                             </div>
 
                             <label className="block mb-2 font-semibold">
@@ -182,7 +189,12 @@ const AsideTheme2: React.FC<Props> = props => {
                             </label>
 
                             <div className="text-lg font-semibold mb-5">
-                                {dateDiplayFormat({ date: reserveInformation.checkout, format: "ddd dd mm yyyy", locale: "fa" })}
+                                {dateDiplayFormat({ date: reserveInformation.checkout, format: "ddd dd mm yyyy", locale: "fa" })} 
+                                {props.checkoutTime ? 
+                                    <span className="text-neutral-500 text-sm rtl:mr-4 ltr:ml-4"> 
+                                        تا ساعت {toPersianDigits(props.checkoutTime)}
+                                    </span>
+                                : null}
                             </div>
 
                         </>
@@ -239,12 +251,12 @@ const AsideTheme2: React.FC<Props> = props => {
                                 <div>
 
                                     <div className="font-semibold text-base mb-2">
-                                        {roomItem.name}
+                                        {toPersianDigits(roomItem.name)}
                                     </div>
 
                                     <div className="flex gap-2 items-center text-sm">
                                         <User className="w-4.5 h-4.5 fill-current" />
-                                        {roomItem.bed + roomItem.extraBed} {tHotel('guest')} {extraBedPriceBlock}
+                                        {(roomItem.bed || 0) + (roomItem.extraBed || 0) } {tHotel('guest')} {extraBedPriceBlock}
                                     </div>
 
                                     <div className="text-green-600 text-sm">{board(roomItem.board)}</div>
