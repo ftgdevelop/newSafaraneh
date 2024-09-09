@@ -22,8 +22,8 @@ const LargeBanner : React.FC<Props> = props => {
                     src={props.imageUrl}
                     alt={props.imageAlt || ""}
                     title={props.imageTitle}
-                    width={1300}
-                    height={500}
+                    width={1000}
+                    height={400}
                     className="w-full min-h-72 object-cover rounded-2xl block"
                 />
 

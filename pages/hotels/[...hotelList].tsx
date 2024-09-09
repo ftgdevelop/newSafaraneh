@@ -5,7 +5,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { EntitySearchResultItemType, PricedHotelItem, SearchAccomodationItem, SortTypes } from '@/modules/domesticHotel/types/hotel';
 import SearchForm from '@/modules/domesticHotel/components/shared/SearchForm';
 import HotelsList from '@/modules/domesticHotel/components/hotelsList';
-import { addSomeDays, checkDateIsAfterDate, dateDiplayFormat, dateFormat } from '@/modules/shared/helpers';
+import { addSomeDays, checkDateIsAfterDate, dateDiplayFormat, dateFormat, toPersianDigits } from '@/modules/shared/helpers';
 import ProgressBarWithLabel from '@/modules/shared/components/ui/ProgressBarWithLabel';
 import { useTranslation } from 'next-i18next';
 import Select from '@/modules/shared/components/ui/Select';
@@ -756,7 +756,15 @@ const HotelList: NextPage<Props> = props => {
       
                     {hotels.length > 0 && pricesData && cityName ? (
                       <div className='text-sm max-sm:hidden'>
-                        <b> {hotels.length} </b> هتل در <b> {entity?.EntityName || cityName} </b> پیدا کردیم
+                        {theme2?(
+                          <>
+                          نتیجه جستجو در <b> {entity?.EntityName || cityName} </b>  : <b> {toPersianDigits(hotels.length.toString())} </b> هتل
+                          </>
+                        ):(
+                          <>
+                            <b> {hotels.length} </b> هتل در <b> {entity?.EntityName || cityName} </b> پیدا کردیم 
+                          </>
+                        )}
                       </div>
                     ) : (
                       <Skeleton className='w-52 max-sm:hidden' />
