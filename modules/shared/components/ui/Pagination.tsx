@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { LeftCaret } from "./icons";
 import { useTranslation } from "next-i18next";
+import { toPersianDigits } from "../../helpers";
 
 type Props = {
     totalItems: number;
@@ -87,7 +88,7 @@ const Pagination: React.FC<Props> = props => {
                         onClick={() => { setActivePage(index + 1) }}
                         className={`outline-none bg-white border rounded w-9 h-9 leading-4 text-center cursor-pointer select-none hover:text-blue-500 hover:border-blue-500 ${activePage === index + 1 ? "text-blue-500 border-blue-500" : "text-neutral-700 border-neutral-200"}`}
                     >
-                        {index + 1}
+                        {toPersianDigits((index + 1).toString())}
                     </button>
                 )
             })}

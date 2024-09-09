@@ -35,7 +35,7 @@ const AsideTheme2: React.FC<Props> = props => {
     const board = (code: string) => {
         switch (code) {
             case "BB":
-                return "به همراه صبحانه";
+                return "با صبحانه";
             case "HB":
                 return "صبحانه + ناهار یا شام";
             case "FB":

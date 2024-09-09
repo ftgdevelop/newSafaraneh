@@ -55,7 +55,7 @@ const RoomItemTheme2: React.FC<Props> = props => {
     const board = (code: string) => {
         switch (code) {
             case "BB":
-                return "به همراه صبحانه";
+                return "با صبحانه";
             case "HB":
                 return "صبحانه + ناهار یا شام";
             case "FB":
@@ -151,7 +151,7 @@ const RoomItemTheme2: React.FC<Props> = props => {
                                 {numberWithCommas(prices.boardPrice * count)} {t("rial")}
                             </div>
                         )}
-                        <div className='my-0.5 leading-5'>
+                        <div className='my-0.5 leading-5 text-base'>
                             {numberWithCommas(prices.roomPrice * count)} {t("rial")}
                             <InfoCircle className='fill-amber-500 w-5 h-5 inline-block rtl:mr-0.5 ltr:ml-0.5' />
                         </div>
@@ -163,7 +163,7 @@ const RoomItemTheme2: React.FC<Props> = props => {
                         className='text-xs text-blue-600 flex items-center gap-1 mb-2 cursor-pointer'
                     >
                         <Calendar className='w-4 h-4 fill-current' />
-                        نمایش جزییات 
+                        تقویم قیمت و ظرفیت
                     </button>}                    
                 </>
             )}
