@@ -33,10 +33,7 @@ type Props = {
   pageData:GetPageByUrlDataType;
   portalData: WebSiteDataType;
   accomodations?: SearchAccomodationItem[];
-<<<<<<< Updated upstream
-=======
   strapiData?: any;
->>>>>>> Stashed changes
 }
 
 const HotelList: NextPage<Props> = props => {
@@ -912,10 +909,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
       accomodations: searchAccomodationResponse?.data?.result || null,
       pageData: pageResponse?.data?.result || null,
-<<<<<<< Updated upstream
-=======
       strapiData: strapiResponse?.data?.data[0]?.attributes?.Sections || null
->>>>>>> Stashed changes
     },
   })
 }
