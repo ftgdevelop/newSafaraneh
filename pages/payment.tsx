@@ -283,11 +283,11 @@ const Payment: NextPage = () => {
         />
       ),
     },
-    {
-      key: '2',
-      label: ("کارت به کارت"),
-      children: (<CardToCard />),
-    },
+    // {
+    //   key: '2',
+    //   label: ("کارت به کارت"),
+    //   children: (<CardToCard />),
+    // },
     {
       key: '3',
       label: ("اعتباری"),
@@ -311,7 +311,9 @@ const Payment: NextPage = () => {
       rating: domesticHotelData.rating,
       address: domesticHotelData.address,
       Url: domesticHotelData.url,
-      CityId: domesticHotelData.cityId || domesticHotelData.city?.id
+      CityId: domesticHotelData.cityId || domesticHotelData.city?.id,
+      checkinTime: domesticHotelData.checkinTime,
+      checkoutTime: domesticHotelData.checkoutTime
     }
   }
   if (domesticHotelReserveData) {
@@ -461,7 +463,12 @@ const Payment: NextPage = () => {
 
             {type === 'HotelDomestic' ? (<>
               {theme2? (
-                <DomesticHotelAside2 hotelInformation={domesticHotelInformation} reserveInformation={domesticHotelReserveInformation} />
+                <DomesticHotelAside2 
+                  hotelInformation={domesticHotelInformation} 
+                  reserveInformation={domesticHotelReserveInformation} 
+                  checkinTime={domesticHotelData?.checkinTime}
+                  checkoutTime={domesticHotelData?.checkoutTime}
+                />
               ):(
                 <DomesticHotelAside hotelInformation={domesticHotelInformation} reserveInformation={domesticHotelReserveInformation} />
               )}

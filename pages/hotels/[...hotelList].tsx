@@ -25,14 +25,41 @@ import { GetPageByUrlDataType, WebSiteDataType } from '@/modules/shared/types/co
 import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
 import AvailabilityTimeout from '@/modules/shared/components/AvailabilityTimeout';
 import LoginLinkBanner from '@/modules/shared/components/theme2/LoginLinkBanner';
+import { getStrapiPages } from '@/modules/shared/actions/strapiActions';
+import Link from 'next/link';
+import { ServerAddress } from '@/enum/url';
 
 type Props = {
   pageData:GetPageByUrlDataType;
   portalData: WebSiteDataType;
   accomodations?: SearchAccomodationItem[];
+  strapiData?: any;
 }
 
 const HotelList: NextPage<Props> = props => {
+
+  let advBanner:{
+    imageUrl: string;
+    alt:string;
+    title:string;
+    url: string;
+  } | undefined = undefined;
+
+  if(props.strapiData){
+
+    const strapiImagesMainUrl = ServerAddress.Strapi ? ((ServerAddress.Type || "https://") + ServerAddress.Strapi) : "";
+
+    const banner = props.strapiData.find((item:any) => item.Keyword === "ads");
+    const bannerUrl = banner?.Image?.data?.attributes?.url;
+    if (bannerUrl){
+      advBanner = {
+        imageUrl: strapiImagesMainUrl + bannerUrl,
+        alt: banner.ImageAlternative || "",
+        title: banner.ImageTitle || "",
+        url: banner.Url || "#"
+      }
+    }
+  }
 
   const { pageData, portalData, accomodations } = props;
 
@@ -806,20 +833,17 @@ const HotelList: NextPage<Props> = props => {
         {!!theme2 && (
             <div className='hidden lg:block col-span-2'>
               <div className='sticky top-5'>
-                <Image
-                  src={"/images/del/adv.png"}
-                  alt='adv'
-                  width={100}
-                  height={1000}
-                  className='w-full mb-5'
-                />
-                <Image
-                  src={"/images/del/adv.png"}
-                  alt='adv'
-                  width={100}
-                  height={1000}
-                  className='w-full'
-                />
+                <Link 
+                  href={advBanner?.url || "#"}
+                >
+                  <Image
+                    src={advBanner?.imageUrl || "/images/del/adv.png"}
+                    alt={advBanner?.alt || 'adv'}
+                    width={171}
+                    height={1000}
+                    className='w-full mb-5'
+                  />
+                </Link>
               </div>
             </div>
           )}
@@ -858,6 +882,9 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const { locale, query } = context;
 
+  const hasStrapi = process.env.PROJECT_SERVER_STRAPI;
+  const theme2 = process.env.THEME === "THEME2";
+
   const url = `/${locale}/hotels/${query.hotelList![0]}`;
 
   const locationId =  query.hotelList.find((x:string) => x.includes("location-"))?.split("location-")[1];
@@ -871,16 +898,18 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     searchParameters.EntityId = locationId
   }
 
-  const searchAccomodationResponse: any = await SearchAccomodation(searchParameters, acceptLanguage);
-
-  const pageResponse: any = await getPageByUrl(url, acceptLanguage);
-
+  const [searchAccomodationResponse, pageResponse, strapiResponse] = await Promise.all<any>([
+    SearchAccomodation(searchParameters, acceptLanguage),
+    getPageByUrl(url, acceptLanguage),
+    (hasStrapi && theme2) ? await getStrapiPages('filters[Page][$eq]=hotel-list&populate[Sections][populate]=*') : undefined
+  ]);
 
   return ({
     props: {
       ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
       accomodations: searchAccomodationResponse?.data?.result || null,
       pageData: pageResponse?.data?.result || null,
+      strapiData: strapiResponse?.data?.data[0]?.attributes?.Sections || null
     },
   })
 }
