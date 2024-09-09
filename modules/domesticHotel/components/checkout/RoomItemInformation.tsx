@@ -4,7 +4,7 @@ import { useTranslation } from "next-i18next";
 import { Field, FormikErrors, FormikTouched } from "formik";
 import FormikField from "@/modules/shared/components/ui/FormikField";
 import { validateRequiedPersianAndEnglish } from "@/modules/shared/helpers/validation";
-import { numberWithCommas } from "@/modules/shared/helpers";
+import { numberWithCommas, toPersianDigits } from "@/modules/shared/helpers";
 import Quantity from "@/modules/shared/components/ui/Quantity";
 import { TravelerItem } from "@/modules/shared/types/common";
 import FormerTravelers from "@/modules/shared/components/FormerTravelers";
@@ -114,7 +114,7 @@ const RoomItemInformation: React.FC<Props> = props => {
 
       <div className={`flex justify-between text-sm items-start ${theme1?"md:col-span-3":""}`}>
         <h5 className='font-semibold text-xl mb-4'>
-          <Bed className='w-5 h-5 fill-current inline-block align-middle rtl:ml-2 ltr:mr-2' /> {tHotel('room')} {roomIndex + 1} - {roomItem.name}
+          <Bed className='w-5 h-5 fill-current inline-block align-middle rtl:ml-2 ltr:mr-2' /> {tHotel('room')} {toPersianDigits((roomIndex + 1).toString())} - {toPersianDigits(roomItem.name || "")}
         </h5>
 
         {(props.fetchTravelers && props.clearTravelers) && <FormerTravelers

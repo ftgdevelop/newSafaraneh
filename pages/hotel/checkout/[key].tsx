@@ -389,6 +389,8 @@ const Checkout: NextPage = () => {
                         roomExtraBed={roomsExtraBed}
                         discountLoading={discountLoading}
                         discountResponse={discountData?.isValid ? discountData : undefined}
+                        checkinTime={hotelInfo?.checkinTime}
+                        checkoutTime={hotelInfo?.checkoutTime}
                       />
                     )}
 
