@@ -45,13 +45,13 @@ const HotelName: React.FC<Props> = props => {
                 {!!(accomodationData.address) && (
                     <p className="text-neutral-500 text-sm mb-3 sm:mb-6"><Location className="w-4 h-4 fill-current inline-block align-middle" /> 
                         {accomodationData.address} 
-                        {!!theme2 && <Link
+                        {/* {!!theme2 && <Link
                             target='_blank'
                             className='mx-2'
                             href={`https://www.google.com/maps/dir/?api=1&travelmode=driving&dir_action=navigate&destination=${accomodationData.coordinates?.latitude},${accomodationData.coordinates?.longitude}`}
                         >
                             <Directions className='w-8 h-8 fill-blue-600 inline-block' />
-                        </Link>}
+                        </Link>} */}
                     </p>
                 )}
                 
