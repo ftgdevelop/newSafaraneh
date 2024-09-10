@@ -1,7 +1,7 @@
 import { Fragment, useState } from 'react';
 
 import { DomesticAccomodationType, DomesticHotelDetailType } from "@/modules/domesticHotel/types/hotel";
-import { Location } from "@/modules/shared/components/ui/icons";
+import { Directions, Location } from "@/modules/shared/components/ui/icons";
 import HotelScore from "../shared/HotelScore";
 import Rating from "@/modules/shared/components/ui/Rating";
 import Image from 'next/image';
@@ -10,6 +10,7 @@ import HotelMap from './HotelMap';
 import GuestRating from '@/modules/shared/components/ui/GuestRating';
 import HotelMapButton from './HotelMapButton';
 import AccommodationFacilityIcon from './AccommodationFacilityIcon';
+import Link from 'next/link';
 
 type Props = {
     accomodationData: DomesticAccomodationType;
@@ -41,7 +42,18 @@ const HotelName: React.FC<Props> = props => {
             <div className="lg:col-span-2 pt-3">
                 <h1 className="font-semibold text-2xl lg:text-4xl mb-3 sm:mb-4 lg:mb-5"> {accomodationData.displayName || accomodationData.name} </h1>
                 {!!(accomodationData.rating) && <Rating number={accomodationData.rating} className="mb-3" />}
-                {!!(accomodationData.address) && <p className="text-neutral-500 text-sm mb-3 sm:mb-6"><Location className="w-4 h-4 fill-current inline-block align-middle" /> {accomodationData.address}</p>}
+                {!!(accomodationData.address) && (
+                    <p className="text-neutral-500 text-sm mb-3 sm:mb-6"><Location className="w-4 h-4 fill-current inline-block align-middle" /> 
+                        {accomodationData.address} 
+                        {!!theme2 && <Link
+                            target='_blank'
+                            className='mx-2'
+                            href={`https://www.google.com/maps/dir/?api=1&travelmode=driving&dir_action=navigate&destination=${accomodationData.coordinates?.latitude},${accomodationData.coordinates?.longitude}`}
+                        >
+                            <Directions className='w-8 h-8 fill-blue-600 inline-block' />
+                        </Link>}
+                    </p>
+                )}
                 
                 {props.scoreData && theme1 ? (
                     <HotelScore
