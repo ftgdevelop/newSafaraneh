@@ -4,9 +4,11 @@ import HotelListItem from "./HotelListItem";
 import { useEffect, useState } from "react";
 import HotelListItemTheme2 from "./HotelListItemTheme2";
 import HotelListItemTheme3 from "./HotelListItemTheme3";
+import HotelListLazyLoad from "./HotelListLazyLoad";
 
 type Props = {
     hotels: PricedHotelItem[];
+    isFetching?: boolean;
 }
 
 const HotelsList: React.FC<Props> = props => {
@@ -39,6 +41,15 @@ const HotelsList: React.FC<Props> = props => {
 
     const theme2 = process.env.THEME === "THEME2";
     const theme3 = process.env.THEME === "THEME3";
+
+    if (process.env.HOTEL_LIST_LAZY_LOAD === "lazy"){
+        return(
+            <HotelListLazyLoad 
+                hotels={hotels}
+                isFetching={props.isFetching}
+            />
+        )
+    }
 
     return (
         <>
