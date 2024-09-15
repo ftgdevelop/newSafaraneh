@@ -5,9 +5,12 @@ import RecommendedHotels from "./RecommendedHotels";
 import LargeBanner from "./LargeBanner";
 import RecentBlogs from "./RecentBlogs";
 import { ServerAddress } from "@/enum/url";
+import LoginLinkBanner from "@/modules/shared/components/theme2/LoginLinkBanner";
+import parse from 'html-react-parser';
+import Image from "next/image";
 
 type SectionItem = {
-    Keyword: "login_banner" | "link_banner" | "last_seen_hotels" | "cities";
+    Keyword: "login_banner" | "link_banner" | "last_seen_hotels" | "cities" | "content" | "main_banner";
     Description?: string;
     Title?: string;
     LinkTitle?: string;
@@ -52,15 +55,29 @@ const HomeTheme2: React.FC<Props> = props => {
     const strapiCities = props.sections?.find(section => section.Keyword === "cities");
     const strapiLastSeenHotels = props.sections?.find(section => section.Keyword === "last_seen_hotels");
     const strapiLinkBanner = props.sections?.find(section => section.Keyword === "link_banner");
-    //const strapiLoginBanner = props.sections?.find(section => section.Keyword === "login_banner");
+    const strapiMainBanner = props.sections?.find(section => section.Keyword === "main_banner");
+    debugger;
+    const strapiLoginBanner = props.sections?.find(section => section.Keyword === "login_banner");
+    const strapiContent : any = props.sections?.find(section => section.Keyword === "content");
 
     const strapiImagesMainUrl = ServerAddress.Strapi ? ((ServerAddress.Type || "https://") + ServerAddress.Strapi) : "";
 
     return (
         <>
+
+            {strapiMainBanner?.Image?.data?.attributes?.url ? <Image
+                src={strapiImagesMainUrl + strapiMainBanner.Image.data.attributes.url}
+                alt={strapiMainBanner?.ImageAlternative || "home banner"}
+                width={1080}
+                height={216}
+                className="w-full h-auto min-h-44 object-cover"
+                priority
+            /> : null}
+
             <Banner
                 modules={props.modules}
-            //innerElement = {<LoginLinkBanner message={strapiLoginBanner?.Description || ""} btnText = {strapiLoginBanner?.LinkTitle || ""} />}
+                //bannerImage={strapiMainBanner?.Image?.data?.attributes?.url ? (strapiImagesMainUrl + strapiMainBanner.Image.data.attributes.url) : ""}
+                innerElement = {<LoginLinkBanner message={strapiLoginBanner?.Description || ""} btnText = {strapiLoginBanner?.LinkTitle || ""} />}
             />
 
             <BeyondTypicalStays
@@ -101,6 +118,14 @@ const HomeTheme2: React.FC<Props> = props => {
             <WeekendDeals /> */}
 
             <RecentBlogs blogs={props.blogs} />
+
+
+            {!!strapiContent?.Body && (
+                <section className="max-w-container m-auto px-3 max-xl:p-5 mb-5 sm:mb-12 my-8 text-justify inserted-content" >
+                    {!!strapiContent?.Title && (<h2 className='font-semibold text-md md:text-2xl mb-6'> {strapiContent.Title} </h2>) }
+                    {parse(strapiContent.Body)}
+                </section>
+            )}  
 
         </>
     )

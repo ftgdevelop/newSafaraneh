@@ -1,4 +1,5 @@
 import CheckboxGroup from "@/modules/shared/components/ui/CheckboxGroup";
+import { toPersianDigits } from "@/modules/shared/helpers";
 import { useAppSelector } from "@/modules/shared/hooks/use-store";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
@@ -23,7 +24,7 @@ const HotelFacilityFilter: React.FC = () => {
     const savedOptions = useAppSelector(state => state.domesticHotelFilter.filterOptions.facilityFilterOptions);
 
     const options: { value: string, label: React.ReactNode }[] = savedOptions.map(item => ({
-        label: (<div className="flex justify-between grow"> {item.label}  <span> ({item.count}) </span></div>),
+        label: (<div className="flex justify-between grow"> {item.label}  <span> ({toPersianDigits(item.count?.toString())}) </span></div>),
         value: item.keyword
     }))
 

@@ -228,11 +228,16 @@ export const getStaticProps = async (context: any) => {
   ]);
 
   const link_banner_data = strapiResponse2?.data?.data[0]?.attributes?.Sections.find((section: any) => section.Keyword === "link_banner")?.Image;
+  const main_banner_data = strapiResponse2?.data?.data[0]?.attributes?.Sections.find((section: any) => section.Keyword === "main_banner")?.Image;
   const strapi_generalData = strapiResponse?.data?.data[0]?.attributes?.Sections;
   const strapi_generalData_link_banner_data = strapi_generalData?.find((section: any) => section.Keyword === "link_banner");
+  const strapi_generalData_main_banner_data = strapi_generalData?.find((section: any) => section.Keyword === "main_banner");
 
   if (link_banner_data && strapi_generalData_link_banner_data) {
     strapi_generalData_link_banner_data.Image = link_banner_data;
+  }
+  if (main_banner_data && strapi_generalData_main_banner_data) {
+    strapi_generalData_main_banner_data.Image = main_banner_data;
   }
 
   return ({

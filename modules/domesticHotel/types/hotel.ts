@@ -508,7 +508,9 @@ export interface AsideHotelInfoType {
     address?: string;
     TopSelling?: number;
     Url?: string;
-    CityId?: number;
+    CityId?: number;  
+    checkinTime?: string;
+    checkoutTime?: string;
 
 }
 
@@ -666,11 +668,11 @@ export interface DomesticHotelSummaryDetail {
       rating?:number;
       address?: string;
       url?: string;
+      checkinTime?: string;
+      checkoutTime?: string;
       
     // "type": "Hotel",
     // "name": "string",
-    // "checkinTime": "string",
-    // "checkoutTime": "string",
     // "instruction": "string",
     // "briefDescription": "string",
     // "description": "string",

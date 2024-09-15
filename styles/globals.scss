@@ -333,3 +333,19 @@ footer img[src*=trustseal], footer img[src*='logo.samandehi'] {
   background-repeat: no-repeat;
   background-position: right;
 }
+
+.theme-2 {
+  .yarl__slide, .yarl__slide_captions_container, .yarl__carousel_with_slides {
+    background: #191e3b;
+  }
+  .yarl__navigation_next, .yarl__navigation_prev {
+    .yarl__icon {
+      background: #fff;
+      border-radius: 50%;
+      padding: 3px;
+      g{
+        fill: #1890ff;
+      }
+    }
+  }
+}

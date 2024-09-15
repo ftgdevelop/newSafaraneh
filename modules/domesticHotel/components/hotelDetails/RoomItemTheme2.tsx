@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 
 import { DomesticHotelRateItem, DomesticHotelRoomItem } from '@/modules/domesticHotel/types/hotel';
-import { Bed, Calendar, DefaultRoom, InfoCircle, Tik, User } from '@/modules/shared/components/ui/icons';
+import { Bed, Calendar, DefaultRoomTheme2, InfoCircle, Tik, User } from '@/modules/shared/components/ui/icons';
 import { numberWithCommas } from '@/modules/shared/helpers';
 import Tooltip from '@/modules/shared/components/ui/Tooltip';
 import Quantity from '@/modules/shared/components/ui/Quantity';
@@ -32,10 +32,12 @@ const RoomItemTheme2: React.FC<Props> = props => {
         return null;
     }
 
+    const isSafarLife = process.env.SITE_NAME === 'https://www.safarlife.com';
+
     let image: React.ReactNode = <div
-        className={`${props.roomsHasImage ? "" : "max-sm:hidden"} bg-travel-pattern flex items-center justify-center bg-neutral-100 p-5 rounded-t-xl`}
+        className={`${props.roomsHasImage ? "" : "max-sm:hidden"} rounded-t-2xl flex items-center justify-center bg-neutral-100 p-5`}
     >
-        <DefaultRoom className='fill-neutral-400 w-24 h-24' />
+        <DefaultRoomTheme2 className='fill-neutral-400 w-24 h-24' />
     </div>
 
     if (room.image) {
@@ -53,7 +55,7 @@ const RoomItemTheme2: React.FC<Props> = props => {
     const board = (code: string) => {
         switch (code) {
             case "BB":
-                return "به همراه صبحانه";
+                return "با صبحانه";
             case "HB":
                 return "صبحانه + ناهار یا شام";
             case "FB":
@@ -149,7 +151,7 @@ const RoomItemTheme2: React.FC<Props> = props => {
                                 {numberWithCommas(prices.boardPrice * count)} {t("rial")}
                             </div>
                         )}
-                        <div className='my-0.5 leading-5'>
+                        <div className='my-0.5 leading-5 text-base'>
                             {numberWithCommas(prices.roomPrice * count)} {t("rial")}
                             <InfoCircle className='fill-amber-500 w-5 h-5 inline-block rtl:mr-0.5 ltr:ml-0.5' />
                         </div>
@@ -161,7 +163,7 @@ const RoomItemTheme2: React.FC<Props> = props => {
                         className='text-xs text-blue-600 flex items-center gap-1 mb-2 cursor-pointer'
                     >
                         <Calendar className='w-4 h-4 fill-current' />
-                        نمایش جزییات 
+                        تقویم قیمت و ظرفیت
                     </button>}                    
                 </>
             )}
@@ -185,7 +187,7 @@ const RoomItemTheme2: React.FC<Props> = props => {
                 {prices?.roomPrice && prices.roomPrice < 1000 ?
                     "درخواست رزرو"
                     : rate.availablityType === "Online" ?
-                        tHotel("online-reserve")
+                    isSafarLife ? "رزرو آنی" : tHotel("online-reserve")
                         : tHotel("room-reserve")}
             </Button>
 

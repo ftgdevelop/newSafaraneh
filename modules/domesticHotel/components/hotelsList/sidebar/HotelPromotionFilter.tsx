@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 
 import CheckboxGroup from "@/modules/shared/components/ui/CheckboxGroup";
 import { useAppSelector } from "@/modules/shared/hooks/use-store";
+import { toPersianDigits } from "@/modules/shared/helpers";
 
 const HotelPromotionFilter: React.FC = () => {
 
@@ -13,7 +14,7 @@ const HotelPromotionFilter: React.FC = () => {
     const savedOptions = useAppSelector(state => state.domesticHotelFilter.filterOptions.promotionFilterOptions);
 
     const options: { value: string, label: React.ReactNode }[] = savedOptions.map(item => ({
-        label: (<div className="flex justify-between grow"> {item.label}  <span> ({item.count}) </span></div>),
+        label: (<div className="flex justify-between grow"> {item.label}  <span> ({toPersianDigits(item.count?.toString())}) </span></div>),
         value: item.keyword
     }));
 
