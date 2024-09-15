@@ -10,6 +10,7 @@ import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
 import Head from "next/head";
 import { WebSiteDataType } from "@/modules/shared/types/common";
 import NotFound from "@/modules/shared/components/ui/NotFound";
+import SearchTheme2 from "@/modules/blogs/components/shared/SearchTheme2";
 
 
 const Blog: NextPage<any> = ({ NewBlogs, Cities, Categories , Categories2 ,Categories3 , portalData, moduleDisabled}:
@@ -26,11 +27,16 @@ const Blog: NextPage<any> = ({ NewBlogs, Cities, Categories , Categories2 ,Categ
     
         const siteName = portalData?.billing.name || "";
         
+        const theme2 = process.env.THEME === "THEME2";
+
         return (
         <div className="bg-white">
             <Head>
                 <title>وبلاگ | حرفه ای ترین شبکه معرفی هتل های ایران | {siteName}</title>
             </Head>
+
+            {!!theme2 && <SearchTheme2 />}
+
             <div className="max-w-container m-auto pr-5 pl-5 max-sm:p-4">
                 <BreadCrumpt items={[{label : "بلاگ"}]} />
             </div>
@@ -38,7 +44,7 @@ const Blog: NextPage<any> = ({ NewBlogs, Cities, Categories , Categories2 ,Categ
             <div className="bg-slate-100 pt-14 pb-14">
             <CategoryBlog data={Categories} data2={Categories2} CategoriesData={Categories3} />
             </div>
-            <SearchBox />
+            {!theme2 && <SearchBox />}
             <NewBlog blogs={NewBlogs} />
         </div>
     )

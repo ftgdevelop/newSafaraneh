@@ -791,6 +791,7 @@ const HotelList: NextPage<Props> = props => {
       
                   {!!accomodations && <HotelsList
                     hotels={filteredHotels}
+                    isFetching={pricesLoading}
                   />}
                 </>
               ):(
@@ -906,7 +907,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   return ({
     props: {
-      ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
+      ...await (serverSideTranslations(context.locale, ['common', 'hotel', 'home'])),
       accomodations: searchAccomodationResponse?.data?.result || null,
       pageData: pageResponse?.data?.result || null,
       strapiData: strapiResponse?.data?.data[0]?.attributes?.Sections || null
