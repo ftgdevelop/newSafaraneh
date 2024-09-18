@@ -78,7 +78,7 @@ export const Flight = {
 
   export const Blog = {
     getPosts: "//wp-json/wp/v2/posts",
-    getCategories: '/wp-json/wp/v2/best_category?categories=',
+    getBestCategories: '/wp-json/wp/v2/best_category',
     getCategoeyName: '/wp-json/wp/v2/categories',
     getCities: "//wp-json/wp/v2/cities/",
     getTagName: '/wp-json/wp/v2/tags/',
