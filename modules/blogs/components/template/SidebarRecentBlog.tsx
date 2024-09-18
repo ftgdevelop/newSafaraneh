@@ -1,8 +1,14 @@
-import { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-const RecentBlogSidebar: NextPage<any> = ({data}) => {
+type Props = {
+    data: any;
+}
+
+const RecentBlogSidebar: React.FC<Props> = props => {
+    
+    const {data} = props;
+    
     return (
         <div className="mt-3 p-1">
             <Link href={`/blog/${data?.slug}`} className="flex justify-between">

@@ -1,17 +1,16 @@
 import { GetTagName , GetCategories , getBlogs} from "@/modules/blogs/actions";
-import Title from "@/modules/blogs/components/template/Title";
 import { NextPage } from "next";
-import Content from "@/modules/blogs/components/template/Content";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { BlogItemType, CategoriesNameType } from "@/modules/blogs/types/blog";
-import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
 import Head from "next/head";
 import { WebSiteDataType } from "@/modules/shared/types/common";
 import NotFound from "@/modules/shared/components/ui/NotFound";
+import ArchiveTheme2 from "@/modules/blogs/components/theme2/Archive";
+import Archive from "@/modules/blogs/components/shared/Archive";
 
 
-const Tag: NextPage<any> = ({ TagBlogs, TagName, categories_name, recentBlogs, pages, portalData, moduleDisabled } :
-    {TagBlogs : BlogItemType[] , TagName:any , categories_name:CategoriesNameType[], recentBlogs: BlogItemType[],pages:string , portalData: WebSiteDataType, moduleDisabled?: boolean;}) => {
+const Tag: NextPage<any> = ({ TagBlogs, TagName, allCategories, recentBlogs, pages, portalData, moduleDisabled } :
+    {TagBlogs : BlogItemType[] , TagName:any , allCategories:CategoriesNameType[], recentBlogs: BlogItemType[],pages:string , portalData: WebSiteDataType, moduleDisabled?: boolean;}) => {
     
         if (moduleDisabled) {
             return (
@@ -22,16 +21,59 @@ const Tag: NextPage<any> = ({ TagBlogs, TagName, categories_name, recentBlogs, p
     const tagname: string = TagName?.name || ''
     const siteName = portalData?.billing.name || "";
     
+
+    const theme2 = process.env.THEME === "THEME2";
+
+    const categories: undefined | {
+        label: string;
+        link: string;
+    }[] = allCategories?.map(item => ({
+        label: item.name,
+        link: `/blog/category/${item.id}`
+    }));
+
+    if (theme2) {
+
+        return (
+            <>
+                <Head>
+                    <title>وبلاگ | حرفه ای ترین شبکه معرفی هتل های ایران | {siteName}</title>
+                </Head>
+                <ArchiveTheme2
+                    categories={categories || []}
+                    posts={TagBlogs}
+                    recentPosts={recentBlogs?.map(item => ({
+                        link: `/blog/${item.slug}`,
+                        title: item.title.rendered
+                    }))}
+                    pages={pages}
+                    breadcrumptItems={[{ label: "بلاگ", link: "/blog" }, { label: tagname }]}
+                    pageTitle={TagName?.name}
+                />
+            </>
+        )
+    }
+
+
     return (
         <div className="bg-white">
             <Head>
             <title>وبلاگ | حرفه ای ترین شبکه معرفی هتل های ایران | {siteName}</title>
             </Head>
-            <div className="max-w-container m-auto pr-5 pl-5 max-sm:p-4">
-                <BreadCrumpt items={[{ label: "بلاگ", link: "/blog" }, { label: tagname }]} />
-            </div>
-                <Title data={TagName?.name} />
-                <Content Blogs={TagBlogs} blogPages={pages}  LastBlogs={recentBlogs?.slice(0,3)} CategoriesName={categories_name}  />
+
+            <Archive
+                categories={categories || []}
+                posts={TagBlogs}
+                recentPosts={recentBlogs?.map(item => ({
+                    link: `/blog/${item.slug}`,
+                    title: item.title?.rendered,
+                    imageUrl: item.images?.medium
+                }))}
+                pages={pages}
+                breadcrumptItems={[{ label: "بلاگ", link: "/blog" }, { label: tagname }]}
+                pageTitle={TagName?.name}
+                hideExcerpt
+            />
         </div>
     )
 }
@@ -56,7 +98,7 @@ export async function getServerSideProps(context: any) {
     let tag = context.query.tag;
     const pageQuery = context.query.page || 1
 
-    const [TagName, TagBlogs, categories_name, recentBlogs] = await Promise.all<any>([
+    const [TagName, TagBlogs, categories, recentBlogs] = await Promise.all<any>([
         GetTagName(+tag),
         getBlogs({page:pageQuery ,tags:tag}),
         GetCategories(),
@@ -70,7 +112,7 @@ export async function getServerSideProps(context: any) {
             TagBlogs: TagBlogs?.data || null,
             pages: TagBlogs?.headers?.['x-wp-totalpages'],
             recentBlogs: recentBlogs?.data || null,
-            categories_name: categories_name?.data || null
+            allCategories: categories?.data || null
         }
     })
 }

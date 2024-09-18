@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { BlogItemType } from '@/modules/blogs/types/blog';
+import { toPersianDigits } from '@/modules/shared/helpers';
 
 type Props = {
     blogs?: BlogItemType[];
@@ -30,9 +31,9 @@ const RecentBlogs: React.FC<Props> = props => {
                             title={blog.title.rendered}
                             width={index > 1 ? 387 : 590}
                             height={index > 1 ? 245 : 374}
-                            className='w-full rounded-2xl mb-2 block'
+                            className={`w-full rounded-2xl mb-2 block object-cover h-52 ${index > 1 ? "" : "lg:h-80"}`}
                         />
-                        <div className='text-sm'> {blog.date} </div>
+                        <div className='text-sm'> {toPersianDigits(blog.date)} </div>
                         <h2 className='font-semibold text-md mb-4'>{blog.title.rendered}</h2>
                     </Link>
                 ))}
