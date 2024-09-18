@@ -6,6 +6,7 @@ export interface EntitySearchResultItemType {
     language?: string;
     type: 'Province' | 'City' | 'Hotel';
     id?: number;
+    slug?: string;
 }
 
 export interface DomesticHotelFacilitieType {
