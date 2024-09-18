@@ -50,7 +50,6 @@ function MyApp({ Component, pageProps, portalData, pageData }: TProps) {
     const fetchh = async () => {
       const res = await  getPortal("fa-IR");
       if (res){
-        debugger;
       }
     }
     fetchh();

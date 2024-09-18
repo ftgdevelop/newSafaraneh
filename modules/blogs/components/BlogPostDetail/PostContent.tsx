@@ -1,14 +1,28 @@
-import { NextPage } from "next";
 import parse from 'html-react-parser';
 import Link from "next/link";
 import Sidebar from "../template/Sidebar";
 import styles from './Stylepostcontent.module.css';
 
-const ContentPost: NextPage<any> = ({ content, recentBlogs, CategoriesNames }) => {
+type Props = {
+    content:any;
+    recentBlogs: {
+        link: string;
+        title: string;
+        imageUrl?:string;
+    }[]; 
+    CategoriesNames: {
+        label: string;
+        link: string;
+    }[];
+}
+
+const ContentPost: React.FC<Props> = props => {
+
+    const {CategoriesNames, content, recentBlogs} = props;
     
     return (
         <div className="grid grid-cols-8 gap-8 mt-5 p-5 max-sm:p-3 max-lg:grid-cols-1">
-            <div className="text-sm leading-8 col-span-6">
+            <div className="text-sm leading-8 col-span-6 relative">
                 <div className={styles.content} onContextMenu={(e) => e.preventDefault()}>
                     {content && parse(content?.content.rendered)}
                 </div>
@@ -24,7 +38,7 @@ const ContentPost: NextPage<any> = ({ content, recentBlogs, CategoriesNames }) =
             </div>
             </div>
             <div className="col-span-2 max-lg:col-span-6 w-full mt-5 ">
-                <Sidebar recentBlogs={recentBlogs?.slice(0,3)} CategoriesNames={CategoriesNames} NotSticky={true} />
+                <Sidebar recentBlogs={recentBlogs?.slice(0,3)} categories={CategoriesNames} NotSticky={true} />
             </div>    
         </div>
     )

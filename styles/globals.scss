@@ -200,6 +200,7 @@
   --color-primary-900: theme('colors.blue.900');
 
   --container-max-width: 1200px;
+  --half-container-max-width: 600px;
 
   --body-background: #f0f3f5;
 }
@@ -218,6 +219,7 @@
   --color-primary-900: theme('colors.blue.900');
 
   --container-max-width: 1224px;
+  --half-container-max-width: 612px;
 
   --body-background: #fff;
 }
@@ -235,6 +237,7 @@
   --color-primary-900: #09112a;
 
   --container-max-width: 1200px;
+  --half-container-max-width: 600px;
 
   --body-background: #f8f8f8;
 }
@@ -280,6 +283,18 @@ body {
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 12px;
+  }
+  img {
+    .theme-2 & {
+      border-radius: 10px;
+      display: block;
+      margin: 20px 0;
+    }
+  }
+  hr{
+    .theme-2 & {
+      margin: 15px 0;
+    }
   }
 }
 

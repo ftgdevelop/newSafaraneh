@@ -1,17 +1,16 @@
 import {  GetCategories, getBlogs } from "@/modules/blogs/actions";
-import Title from "@/modules/blogs/components/template/Title";
-import Content from "@/modules/blogs/components/template/Content";
 import { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import { BlogItemType, CategoriesNameType } from "@/modules/blogs/types/blog";
-import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
 import Head from "next/head";
 import { WebSiteDataType } from "@/modules/shared/types/common";
 import NotFound from "@/modules/shared/components/ui/NotFound";
+import ArchiveTheme2 from "@/modules/blogs/components/theme2/Archive";
+import Archive from "@/modules/blogs/components/shared/Archive";
 
-const Search: NextPage<any> = ({ SearchBlog, LastBlogs, categories_name, pages, portalData, moduleDisabled }:
-    {SearchBlog: BlogItemType[], LastBlogs:BlogItemType[], categories_name:CategoriesNameType[],pages:string, portalData: WebSiteDataType , moduleDisabled?: boolean}) => {
+const Search: NextPage<any> = ({ SearchBlog, LastBlogs, allCategories, pages, portalData, moduleDisabled }:
+    {SearchBlog: BlogItemType[], LastBlogs:BlogItemType[], allCategories:CategoriesNameType[],pages:string, portalData: WebSiteDataType , moduleDisabled?: boolean}) => {
 
     const SearchValue = useRouter().query.search
     const siteName = portalData?.billing.name || "";
@@ -21,17 +20,63 @@ const Search: NextPage<any> = ({ SearchBlog, LastBlogs, categories_name, pages, 
             <NotFound />
         )
     }
+    
+    const theme2 = process.env.THEME === "THEME2";
+
+    const categories : undefined | {
+        label: string;
+        link: string;
+    }[] = allCategories?.map(item => ({
+        label: item.name,
+        link: `/blog/category/${item.id}`
+    }));
+
+    if (theme2){       
+
+        return (
+            <>
+                <Head>
+                    <title>وبلاگ | حرفه ای ترین شبکه معرفی هتل های ایران | {siteName}</title>
+                </Head>
+                <ArchiveTheme2
+                    categories={categories || []}
+                    posts={SearchBlog}
+                    recentPosts={LastBlogs?.map(item => ({
+                        link: `/blog/${item.slug}`,
+                        title: item.title.rendered
+                    }))}
+                    pages={pages}
+                    breadcrumptItems={[{ label: "بلاگ", link: "/blog" }, { label: `جستجوی"${SearchValue}"` }]}
+                    pageTitle="جستجوی"
+                    pageSubtitle={`"${SearchValue}"`}
+                />
+            </>
+        )
+    }
+
+
 
     return (
         <div className="bg-white">
             <Head>
-            <title>وبلاگ | حرفه ای ترین شبکه معرفی هتل های ایران | {siteName}</title>
+                <title>وبلاگ | حرفه ای ترین شبکه معرفی هتل های ایران | {siteName}</title>
             </Head>
-            <div className="max-w-container m-auto pr-5 pl-5 max-sm:p-4">
-                <BreadCrumpt items={[{ label: "بلاگ", link: "/blog" }, { label: `جستجوی"${SearchValue}"` }]} />
-            </div>
-                <Title data={'جستجوی'} searchValue={`"${SearchValue}"`} />
-                <Content Blogs={SearchBlog} LastBlogs={LastBlogs?.slice(0,3)} CategoriesName={categories_name} blogPages={pages}/>
+
+            <Archive
+                categories={categories || []}
+                posts={SearchBlog}
+                recentPosts={LastBlogs?.map(item => ({
+                    link: `/blog/${item.slug}`,
+                    title: item.title?.rendered,
+                    imageUrl: item.images?.medium
+                }))}
+                pages={pages}
+                breadcrumptItems={[{ label: "بلاگ", link: "/blog" }, { label: `جستجوی"${SearchValue}"` }]}
+                pageTitle="جستجوی"
+                pageSubtitle={`"${SearchValue}"`}
+                hideExcerpt
+            />
+
         </div>
     )
 }
@@ -55,7 +100,7 @@ export async function getServerSideProps(context: any) {
     const searchQuery = context.query.search;
     const pageQuery = context.query.page || 1
 
-    const [SearchBlog, categories_name, recentBlogs] = await Promise.all<any>([
+    const [SearchBlog, categories, recentBlogs] = await Promise.all<any>([
         getBlogs({page:pageQuery , search: searchQuery}),
         GetCategories(),
         getBlogs({page:1})
@@ -63,7 +108,7 @@ export async function getServerSideProps(context: any) {
     return ({
         props: {
             ...await serverSideTranslations(context.locale, ['common']),
-            categories_name: categories_name?.data || null,
+            allCategories: categories?.data || null,
             LastBlogs: recentBlogs?.data || null,
             pages: SearchBlog?.headers?.['x-wp-totalpages'],
             SearchBlog : SearchBlog?.data || null

@@ -83,10 +83,15 @@ const config: Config = {
         '400': '400px'
       },
       maxWidth: {
-        container: 'var(--container-max-width)'
+        container: 'var(--container-max-width)',
+        "half-container": 'var(--half-container-max-width)'
       },
       minHeight: {
-        'desktop-main' : 'calc(100vh - 450px)'
+        'desktop-main' : 'calc(100vh - 450px)',
+        '65vh': '65vh'
+      },
+      height: {
+        '500': '500px'
       },
       maxHeight: {
         'mobile-nav': 'calc(100vh - 90px)',
@@ -109,7 +114,8 @@ const config: Config = {
         '2xl': '22px',
         '3xl': '23px',
         '4xl': '28px',
-        '5xl': '34px'
+        '5xl': '34px',
+        '6xl': '41px'
       },
       gridTemplateColumns: {
         '13': 'repeat(13, minmax(0, 1fr))',
