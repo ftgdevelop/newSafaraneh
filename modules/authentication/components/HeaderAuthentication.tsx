@@ -84,7 +84,7 @@ const HeaderAuthentication: React.FC<Props> = props => {
     let buttonClassName = "h-12 text-sm text-blue-700 hover:text-blue-500 ltr:float-right rtl:float-left hidden md:block";
 
     if (theme2) {
-        buttonClassName = "whitespace-nowrap rounded-lg h-10 px-3 border border-stone-300 text-sm text-black hover:text-stone-800 ltr:float-right rtl:float-left font-semibold hidden md:flex items-center gap-3";
+        buttonClassName = "whitespace-nowrap rounded-lg max-md:ml-5 h-10 px-3 border border-stone-300 text-sm text-black hover:text-stone-800 ltr:float-right rtl:float-left font-semibold flex items-center gap-3";
     }
 
     return (
@@ -102,12 +102,14 @@ const HeaderAuthentication: React.FC<Props> = props => {
                                 onClick={() => { setStyle2AuthCtxOpen(true) }}
                             >
                                 <User className='w-6 h-6 fill-white bg-neutral-600 p-0.5 rounded-full' />
-
-                                {userData?.firstName && userData?.lastName ? (
-                                    `${userData?.firstName} ${userData?.lastName}`
-                                ) : (
-                                    "حساب کاربری"
-                                )}
+                                
+                                <span className='max-xs:hidden'>
+                                    {userData?.firstName && userData?.lastName ? (
+                                        `${userData?.firstName} ${userData?.lastName}`
+                                    ) : (
+                                        "حساب کاربری"
+                                    )}
+                                </span>
 
                                 <DownCaretThick className='w-3 h-3 fill-current' />
 
