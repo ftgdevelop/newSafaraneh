@@ -103,13 +103,13 @@ const HeaderAuthentication: React.FC<Props> = props => {
                             >
                                 <User className='w-6 h-6 fill-white bg-neutral-600 p-0.5 rounded-full' />
                                 
-                                <span className='max-xs:hidden'>
-                                    {userData?.firstName && userData?.lastName ? (
-                                        `${userData?.firstName} ${userData?.lastName}`
-                                    ) : (
-                                        "حساب کاربری"
-                                    )}
-                                </span>
+                                {userData?.firstName && userData?.lastName ? (
+                                    <>
+                                        {userData?.firstName} <span className='max-xs:hidden' > {userData?.lastName} </span>
+                                    </>
+                                ) : (
+                                    "حساب کاربری"
+                                )}
 
                                 <DownCaretThick className='w-3 h-3 fill-current' />
 
