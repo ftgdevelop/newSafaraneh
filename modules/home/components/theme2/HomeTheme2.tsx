@@ -56,7 +56,6 @@ const HomeTheme2: React.FC<Props> = props => {
     const strapiLastSeenHotels = props.sections?.find(section => section.Keyword === "last_seen_hotels");
     const strapiLinkBanner = props.sections?.find(section => section.Keyword === "link_banner");
     const strapiMainBanner = props.sections?.find(section => section.Keyword === "main_banner");
-    debugger;
     const strapiLoginBanner = props.sections?.find(section => section.Keyword === "login_banner");
     const strapiContent : any = props.sections?.find(section => section.Keyword === "content");
 
