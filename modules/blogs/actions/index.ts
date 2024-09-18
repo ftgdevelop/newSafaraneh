@@ -62,10 +62,10 @@ export const GetCities = async () => {
     }
 };
 
-export const GetBestCategory = async (id : number) => {
+export const GetBestCategoryById = async (id : number) => {
     try {
       const res = await axios.get(
-        `${ServerAddress.Type}${ServerAddress.Blog}${Blog.getCategories}${id}`,
+        `${ServerAddress.Type}${ServerAddress.Blog}${Blog.getBestCategories}?categories=${id}`,
         {
           headers: {
             // "Content-Type": "application/json",

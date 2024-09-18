@@ -1,37 +1,71 @@
-import { getBlogs , GetCategories, } from "@/modules/blogs/actions";
-import Title from "@/modules/blogs/components/template/Title";
+import { getBlogs, GetCategories, } from "@/modules/blogs/actions";
 import { BlogItemType, CategoriesNameType } from "@/modules/blogs/types/blog";
 import { NextPage } from "next";
-import Content from "@/modules/blogs/components/template/Content";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
 import NotFound from "@/modules/shared/components/ui/NotFound";
+import ArchiveTheme2 from "@/modules/blogs/components/theme2/Archive";
+import Archive from "@/modules/blogs/components/shared/Archive";
 
 
-const BlogList: NextPage<any> = ({ blogsPage, categories_name, pages,recentBlogs, moduleDisabled }:
-    { blogsPage?: BlogItemType[], categories_name?: CategoriesNameType[] , pages:number,recentBlogs:BlogItemType[] , moduleDisabled?:boolean}) => {
+const BlogList: NextPage<any> = ({ blogsPage, allCategories, pages, recentBlogs, moduleDisabled }:
+    { blogsPage?: BlogItemType[], allCategories?: CategoriesNameType[], pages: number, recentBlogs?: BlogItemType[], moduleDisabled?: boolean }) => {
 
-        if (moduleDisabled) {
-            return (
-                <NotFound />
-            )
-        }
+    const theme2 = process.env.THEME === "THEME2";
+
+    if (moduleDisabled) {
+        return (
+            <NotFound />
+        )
+    }
+
+    const categories: undefined | {
+        label: string;
+        link: string;
+    }[] = allCategories?.map(item => ({
+        label: item.name,
+        link: `/blog/category/${item.id}`
+    }));
+
+    if (theme2) {
 
         return (
-            <div className="bg-white">
-                <div className="max-w-container m-auto pr-5 pl-5 max-sm:p-4"> 
-                    <BreadCrumpt items={[{ label: "بلاگ", link: '/blog' }, { label: "جدیدترین مقالات" }]} />
-                </div>    
-                <Title data={'جدیدترین مطالب'} />
-                <Content Blogs={blogsPage} LastBlogs={recentBlogs?.slice(0, 3)} CategoriesName={categories_name} blogPages={pages} />
-            </div>
+            <ArchiveTheme2
+                categories={categories || []}
+                posts={blogsPage}
+                recentPosts={recentBlogs?.map(item => ({
+                    link: `/blog/${item.slug}`,
+                    title: item.title.rendered
+                }))}
+                pages={pages}
+                breadcrumptItems={[{ label: "بلاگ", link: '/blog' }, { label: "جدیدترین مقالات" }]}
+                pageTitle="جدیدترین مطالب "
+                pageSubtitle="حرفه ای ترین شبکه معرفی هتل های ایران"
+            />
+        )
+    }
+
+    return (
+        <Archive
+            categories={categories || []}
+            posts={blogsPage}
+            recentPosts={recentBlogs?.map(item => ({
+                link: `/blog/${item.slug}`,
+                title: item.title?.rendered,
+                imageUrl: item.images?.medium
+            }))}
+            pages={pages}
+            breadcrumptItems={[{ label: "بلاگ", link: '/blog' }, { label: "جدیدترین مقالات" }]}
+            pageTitle="جدیدترین مطالب "
+            pageSubtitle="حرفه ای ترین شبکه معرفی هتل های ایران"
+            hideExcerpt
+        />
     )
 }
 
 export default BlogList;
 
 
-export async function  getServerSideProps (context: any)  {
+export async function getServerSideProps(context: any) {
 
     if (!process.env.PROJECT_MODULES?.includes("Blog")) {
         return (
@@ -46,9 +80,9 @@ export async function  getServerSideProps (context: any)  {
 
 
     let pageQuery = context.query.page || 1
-    const [ LastBLogs, blogsPage, categories_name] = await Promise.all<any>([
-        getBlogs({page: 1}),
-        getBlogs({page:+pageQuery}),
+    const [LastBLogs, blogsPage, Categories] = await Promise.all<any>([
+        getBlogs({ page: 1 }),
+        getBlogs({ page: +pageQuery }),
         GetCategories()
     ])
 
@@ -57,9 +91,9 @@ export async function  getServerSideProps (context: any)  {
             props: {
                 ...await serverSideTranslations(context.locale, ['common']),
                 blogsPage: blogsPage?.data || null,
-                pages: LastBLogs?.headers?.['x-wp-totalpages'],
-                categories_name: categories_name?.data || null,
-                recentBlogs: LastBLogs.data || null
+                pages: LastBLogs?.headers?.['x-wp-totalpages'] || null,
+                allCategories: Categories?.data || null,
+                recentBlogs: LastBLogs?.data || null
             },
 
         }

@@ -22,6 +22,13 @@ export interface BlogItemType {
         large: string;
     };
 
+    tags?: number[];
+    tags_names?: string[];
+    content?:{
+        rendered?: string;
+    };
+    time_read?: string;
+
 }
 
 export interface CityItemType {
