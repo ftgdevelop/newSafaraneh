@@ -140,10 +140,13 @@ const SearchForm: React.FC<Props> = props => {
 
         let url: string = "";
 
+        const isSafarLife = process.env.SITE_NAME === 'https://www.safarlife.com';
+
         switch (selectedDestination.type) {
             case "City":
-
-                if (i18n && i18n.language === "fa") {
+                if (isSafarLife && selectedDestination.slug){
+                    url = selectedDestination.slug;
+                }else if (i18n && i18n.language === "fa") {
                     url = `/hotels/هتل-های-${selectedDestination.name!.replace(/ /g, "-")}`;
                 } else if (i18n && i18n.language === "ar") {
                     url = `/hotels/فنادق-${selectedDestination.name!.replace(/ /g, "-")}`;
