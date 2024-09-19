@@ -238,6 +238,7 @@ export interface DomesticAccomodationType {
         searchValue?: string;
         displayName?: string;
         id: number;
+        slug?: string;
     };
     coordinates: {
         latitude: number;

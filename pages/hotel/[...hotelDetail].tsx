@@ -60,6 +60,8 @@ const HotelDetail: NextPage<Props> = props => {
 
   const isSafaraneh = process.env.PROJECT === "SAFARANEH" || process.env.PROJECT === "IRANHOTEL";
 
+  const isSafarlife = process.env.PROJECT === "SAFARLIFE";
+
   const { portalData, allData } = props;
 
   const { t } = useTranslation('common');
@@ -229,15 +231,18 @@ useEffect(() => {
 
 
   let script_detail_2_Url;
-  if (accommodationData?.city?.name) {
+
+  if (isSafarlife && accommodationData?.city?.slug){
+    script_detail_2_Url = `${configWebsiteUrl}${accommodationData.city.slug}`;
+  }else if (accommodationData?.city?.name) {
     if (process.env.LocaleInUrl === "off") {
-      script_detail_2_Url = `${configWebsiteUrl}/hotels/${accommodationData?.city?.name.replace(/ /g, "-")}`;
+      script_detail_2_Url = `${configWebsiteUrl}/hotels/${accommodationData.city.name.replace(/ /g, "-")}`;
     } else if (i18n && i18n.language === "fa") {
-      script_detail_2_Url = `${configWebsiteUrl}/fa/hotels/هتل-های-${accommodationData?.city?.name.replace(/ /g, "-")}`;
+      script_detail_2_Url = `${configWebsiteUrl}/fa/hotels/هتل-های-${accommodationData.city.name.replace(/ /g, "-")}`;
     } else if (i18n && i18n.language === "ar") {
-      script_detail_2_Url = `${configWebsiteUrl}/ar/hotels/فنادق-${accommodationData?.city?.name.replace(/ /g, "-")}`;
+      script_detail_2_Url = `${configWebsiteUrl}/ar/hotels/فنادق-${accommodationData.city.name.replace(/ /g, "-")}`;
     } else {
-      script_detail_2_Url = `${configWebsiteUrl}/en/hotels/${accommodationData?.city?.name.replace(/ /g, "-")}`;
+      script_detail_2_Url = `${configWebsiteUrl}/en/hotels/${accommodationData.city.name.replace(/ /g, "-")}`;
     }
   }
 
@@ -334,15 +339,20 @@ useEffect(() => {
 
   let BreadCrumptListUrl;
 
-  if (i18n?.language === "fa" && process.env.LocaleInUrl !== "off") {
-      BreadCrumptListUrl = `/fa/hotels/هتل-های-${accommodationData.city?.name}`;
-  } else if (i18n?.language === "ar") {
-      BreadCrumptListUrl = `/hotels/فنادق-${accommodationData.city?.name}`;
+  if (isSafarlife && accommodationData?.city?.slug){
+    BreadCrumptListUrl = accommodationData.city.slug;
   } else {
-      BreadCrumptListUrl = `/hotels/هتل-های-${accommodationData.city?.name}`;
-  }
-  if (accommodationData.cityId){
-      BreadCrumptListUrl += `/location-${accommodationData.cityId}`
+
+      if (i18n?.language === "fa" && process.env.LocaleInUrl !== "off") {
+          BreadCrumptListUrl = `/fa/hotels/هتل-های-${accommodationData.city?.name}`;
+      } else if (i18n?.language === "ar") {
+          BreadCrumptListUrl = `/hotels/فنادق-${accommodationData.city?.name}`;
+      } else {
+          BreadCrumptListUrl = `/hotels/هتل-های-${accommodationData.city?.name}`;
+      }
+      if (accommodationData.cityId){
+          BreadCrumptListUrl += `/location-${accommodationData.cityId}`
+      }
   }
 
   if (checkin && checkout) {
