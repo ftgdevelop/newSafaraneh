@@ -127,14 +127,10 @@ const HotelList: NextPage<Props> = props => {
 
   const pathSegments = router.asPath?.split("/");
 
-  const locationSegment = pathSegments.find(item => item.includes("location"))?.split("?")[0]?.split("#")[0];
   const checkinSegment = pathSegments.find(item => item.includes("checkin"))?.split("?")[0]?.split("#")[0];
   const checkoutSegment = pathSegments.find(item => item.includes("checkout"))?.split("?")[0]?.split("#")[0];
 
-  let locationId: number;
-  if (locationSegment) {
-    locationId = +locationSegment.split("location-")[1];
-  }
+  const locationId = pageData?.entityId;
 
   let searchInfo = "";
   if (checkinSegment) {
@@ -887,21 +883,21 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const theme2 = process.env.THEME === "THEME2";
 
   const url = `/${locale}/hotels/${query.hotelList![0]}`;
-
-  const locationId =  query.hotelList.find((x:string) => x.includes("location-"))?.split("location-")[1];
   
   const searchParameters : { url: string; EntityId?:string;} = {
     url:url
   }
   
   const acceptLanguage = locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR";
-  if (locationId){
-    searchParameters.EntityId = locationId
+  
+  const pageResponse : any = await getPageByUrl(url, acceptLanguage);
+
+  if(pageResponse?.data?.result?.entityId){
+    searchParameters.EntityId = pageResponse.data.result.entityId;
   }
 
-  const [searchAccomodationResponse, pageResponse, strapiResponse] = await Promise.all<any>([
+  const [searchAccomodationResponse, strapiResponse] = await Promise.all<any>([
     SearchAccomodation(searchParameters, acceptLanguage),
-    getPageByUrl(url, acceptLanguage),
     (hasStrapi && theme2) ? await getStrapiPages('filters[Page][$eq]=hotel-list&populate[Sections][populate]=*') : undefined
   ]);
 
