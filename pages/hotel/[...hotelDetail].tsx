@@ -350,9 +350,6 @@ useEffect(() => {
       } else {
           BreadCrumptListUrl = `/hotels/هتل-های-${accommodationData.city?.name}`;
       }
-      if (accommodationData.cityId){
-          BreadCrumptListUrl += `/location-${accommodationData.cityId}`
-      }
   }
 
   if (checkin && checkout) {

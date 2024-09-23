@@ -70,7 +70,7 @@ const Checkout: NextPage = () => {
     const checkin = dateFormat(checkinDate);
     const checkout = dateFormat(checkoutDate);
 
-    backUrl = `${hotelInfo.url}/location-${hotelInfo.cityId || hotelInfo.city?.id}/checkin-${checkin}/checkout-${checkout}`;
+    backUrl = `${hotelInfo.url}/checkin-${checkin}/checkout-${checkout}`;
   }
 
   useEffect(() => {
