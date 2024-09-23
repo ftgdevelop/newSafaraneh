@@ -5,7 +5,7 @@ import DownloadPdfVoucher from "@/modules/cip/components/booking/DownloadPdfVouc
 import { CipGetReserveByIdResponse } from "@/modules/cip/types/cip"
 import Skeleton from "@/modules/shared/components/ui/Skeleton"
 import Tag from "@/modules/shared/components/ui/Tag"
-import { DefaultRoom, EmailGrayIcon, PhoneGrayIcon, RightCaret, Tik, Travel, WhatsappGrayIcon } from "@/modules/shared/components/ui/icons"
+import { DefaultRoom, DefaultRoomTheme2, EmailGrayIcon, PhoneGrayIcon, RightCaret, Tik, Travel, WhatsappGrayIcon } from "@/modules/shared/components/ui/icons"
 import { dateDiplayFormat } from "@/modules/shared/helpers"
 import { useAppDispatch, useAppSelector } from "@/modules/shared/hooks/use-store"
 import { WebSiteDataType } from "@/modules/shared/types/common"
@@ -37,6 +37,7 @@ const CipReserveDetail: NextPage = ({ portalData }: { portalData?: WebSiteDataTy
     const [cipReserveInfoLoading, setCipReserveInfoLoading] = useState<boolean>(true);
     const [reserveNotFound, setReserveNotFound] = useState<boolean>(false);
 
+    const theme2 = process.env.THEME === "THEME2";
 
     const [copied, setCopied] = useState<boolean>(false);
 
@@ -146,7 +147,11 @@ const CipReserveDetail: NextPage = ({ portalData }: { portalData?: WebSiteDataTy
                                         <div
                                             className="p-10 bg-neutral-100 flex items-center justify-center h-full max-lg:rounded-t-lg lg:rtl:rounded-r-lg lg:ltr:rounded-l-lg"
                                         >
-                                            <DefaultRoom className="fill-neutral-300 w-20 h-20" />
+                                            {theme2?(
+                                                <DefaultRoomTheme2 className="fill-neutral-300 w-20 h-20" />
+                                            ):(
+                                                <DefaultRoom className="fill-neutral-300 w-20 h-20" />
+                                            )}
                                         </div>
                                     )}
                                     <div
@@ -177,7 +182,7 @@ const CipReserveDetail: NextPage = ({ portalData }: { portalData?: WebSiteDataTy
                                         {dateDiplayFormat({ date: cipReserveInfo.flightTime, format: 'dd mm yyyy', locale: "fa" })}
                                     </div>
 
-                                    {(cipReserveInfo.status === 'Issued' && reserveId && username) ? (
+                                    {((cipReserveInfo.status === 'Issued' || cipReserveInfo.status === 'ContactProvider') && reserveId && username) ? (
                                         <DownloadPdfVoucher
                                             reserveId={reserveId}
                                             username={username}

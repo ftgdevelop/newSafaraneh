@@ -5,7 +5,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { EntitySearchResultItemType, PricedHotelItem, SearchAccomodationItem, SortTypes } from '@/modules/domesticHotel/types/hotel';
 import SearchForm from '@/modules/domesticHotel/components/shared/SearchForm';
 import HotelsList from '@/modules/domesticHotel/components/hotelsList';
-import { addSomeDays, checkDateIsAfterDate, dateDiplayFormat, dateFormat } from '@/modules/shared/helpers';
+import { addSomeDays, checkDateIsAfterDate, dateDiplayFormat, dateFormat, toPersianDigits } from '@/modules/shared/helpers';
 import ProgressBarWithLabel from '@/modules/shared/components/ui/ProgressBarWithLabel';
 import { useTranslation } from 'next-i18next';
 import Select from '@/modules/shared/components/ui/Select';
@@ -25,14 +25,41 @@ import { GetPageByUrlDataType, WebSiteDataType } from '@/modules/shared/types/co
 import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
 import AvailabilityTimeout from '@/modules/shared/components/AvailabilityTimeout';
 import LoginLinkBanner from '@/modules/shared/components/theme2/LoginLinkBanner';
+import { getStrapiPages } from '@/modules/shared/actions/strapiActions';
+import Link from 'next/link';
+import { ServerAddress } from '@/enum/url';
 
 type Props = {
   pageData:GetPageByUrlDataType;
   portalData: WebSiteDataType;
   accomodations?: SearchAccomodationItem[];
+  strapiData?: any;
 }
 
 const HotelList: NextPage<Props> = props => {
+
+  let advBanner:{
+    imageUrl: string;
+    alt:string;
+    title:string;
+    url: string;
+  } | undefined = undefined;
+
+  if(props.strapiData){
+
+    const strapiImagesMainUrl = ServerAddress.Strapi ? ((ServerAddress.Type || "https://") + ServerAddress.Strapi) : "";
+
+    const banner = props.strapiData.find((item:any) => item.Keyword === "ads");
+    const bannerUrl = banner?.Image?.data?.attributes?.url;
+    if (bannerUrl){
+      advBanner = {
+        imageUrl: strapiImagesMainUrl + bannerUrl,
+        alt: banner.ImageAlternative || "",
+        title: banner.ImageTitle || "",
+        url: banner.Url || "#"
+      }
+    }
+  }
 
   const { pageData, portalData, accomodations } = props;
 
@@ -100,14 +127,10 @@ const HotelList: NextPage<Props> = props => {
 
   const pathSegments = router.asPath?.split("/");
 
-  const locationSegment = pathSegments.find(item => item.includes("location"))?.split("?")[0]?.split("#")[0];
   const checkinSegment = pathSegments.find(item => item.includes("checkin"))?.split("?")[0]?.split("#")[0];
   const checkoutSegment = pathSegments.find(item => item.includes("checkout"))?.split("?")[0]?.split("#")[0];
 
-  let locationId: number;
-  if (locationSegment) {
-    locationId = +locationSegment.split("location-")[1];
-  }
+  const locationId = pageData?.entityId;
 
   let searchInfo = "";
   if (checkinSegment) {
@@ -555,7 +578,19 @@ const HotelList: NextPage<Props> = props => {
 
   let siteName = portalData?.billing.name || "";
 
-  const canonicalUrl = pageData?.url ? `${process.env.SITE_NAME}${pageData?.url}` : "";
+  let envSiteName = process.env.SITE_NAME;
+  
+  if (process.env.SITE_NAME?.includes("iranhotel")){
+    envSiteName = "https://www.iranhotel.app";
+  }
+
+  let pageUrl = pageData?.url;
+
+  if(pageUrl && process.env.LocaleInUrl === "off"){
+    pageUrl = pageUrl.replace("fa/","");    
+  }
+
+  const canonicalUrl = pageUrl ? `${envSiteName}${pageUrl}` : "";
 
   const theme1 = process.env.THEME === "THEME1";
   const theme2 = process.env.THEME === "THEME2";
@@ -605,7 +640,7 @@ const HotelList: NextPage<Props> = props => {
       </Head>
 
       {!!pricesData && <AvailabilityTimeout
-        minutes={10}
+        minutes={20}
         onRefresh={() => { window.location.reload() }}
         type='hotel'
         description={t("GetTheLatestPriceAndAvailabilityForYourSearchTo", { destination: cityName, dates: `${dateDiplayFormat({ date: checkin, locale: locale, format: "dd mm" })} - ${dateDiplayFormat({ date: checkout, locale: locale, format: "dd mm" })}` })}
@@ -685,7 +720,7 @@ const HotelList: NextPage<Props> = props => {
               <button type='button' className='relative block w-full lg:mb-5' onClick={() => { setShowMap(true) }}>
                 {theme2 ? (
                   <div className='border border-neutral-300 rounded-xl overflow-hidden'>
-                    <Image src="/images/staticmap.png" alt="showMap" className='block w-full h-28 object-cover' width={354} height={100} />
+                    <Image src={theme2?"/images/staticmapTheme2.jpg":"/images/staticmap.png"} alt="showMap" className='block w-full h-28 object-cover' width={354} height={100} />
                     <div className='p-2 bg-white text-blue-600 text-sm'>
                       مشاهده روی نقشه
                     </div>
@@ -718,7 +753,15 @@ const HotelList: NextPage<Props> = props => {
       
                     {hotels.length > 0 && pricesData && cityName ? (
                       <div className='text-sm max-sm:hidden'>
-                        <b> {hotels.length} </b> هتل در <b> {entity?.EntityName || cityName} </b> پیدا کردیم
+                        {theme2?(
+                          <>
+                          نتیجه جستجو در <b> {entity?.EntityName || cityName} </b>  : <b> {toPersianDigits(hotels.length.toString())} </b> هتل
+                          </>
+                        ):(
+                          <>
+                            <b> {hotels.length} </b> هتل در <b> {entity?.EntityName || cityName} </b> پیدا کردیم 
+                          </>
+                        )}
                       </div>
                     ) : (
                       <Skeleton className='w-52 max-sm:hidden' />
@@ -744,6 +787,7 @@ const HotelList: NextPage<Props> = props => {
       
                   {!!accomodations && <HotelsList
                     hotels={filteredHotels}
+                    isFetching={pricesLoading}
                   />}
                 </>
               ):(
@@ -786,20 +830,17 @@ const HotelList: NextPage<Props> = props => {
         {!!theme2 && (
             <div className='hidden lg:block col-span-2'>
               <div className='sticky top-5'>
-                <Image
-                  src={"/images/del/adv.png"}
-                  alt='adv'
-                  width={100}
-                  height={1000}
-                  className='w-full mb-5'
-                />
-                <Image
-                  src={"/images/del/adv.png"}
-                  alt='adv'
-                  width={100}
-                  height={1000}
-                  className='w-full'
-                />
+                <Link 
+                  href={advBanner?.url || "#"}
+                >
+                  <Image
+                    src={advBanner?.imageUrl || "/images/del/adv.png"}
+                    alt={advBanner?.alt || 'adv'}
+                    width={171}
+                    height={1000}
+                    className='w-full mb-5'
+                  />
+                </Link>
               </div>
             </div>
           )}
@@ -838,29 +879,34 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const { locale, query } = context;
 
-  const url = `/${locale}/hotels/${query.hotelList![0]}`;
+  const hasStrapi = process.env.PROJECT_SERVER_STRAPI;
+  const theme2 = process.env.THEME === "THEME2";
 
-  const locationId =  query.hotelList.find((x:string) => x.includes("location-"))?.split("location-")[1];
+  const url = `/${locale}/hotels/${query.hotelList![0]}`;
   
   const searchParameters : { url: string; EntityId?:string;} = {
     url:url
   }
   
   const acceptLanguage = locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR";
-  if (locationId){
-    searchParameters.EntityId = locationId
+  
+  const pageResponse : any = await getPageByUrl(url, acceptLanguage);
+
+  if(pageResponse?.data?.result?.entityId){
+    searchParameters.EntityId = pageResponse.data.result.entityId;
   }
 
-  const searchAccomodationResponse: any = await SearchAccomodation(searchParameters, acceptLanguage);
-
-  const pageResponse: any = await getPageByUrl(url, acceptLanguage);
-
+  const [searchAccomodationResponse, strapiResponse] = await Promise.all<any>([
+    SearchAccomodation(searchParameters, acceptLanguage),
+    (hasStrapi && theme2) ? await getStrapiPages('filters[Page][$eq]=hotel-list&populate[Sections][populate]=*') : undefined
+  ]);
 
   return ({
     props: {
-      ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
+      ...await (serverSideTranslations(context.locale, ['common', 'hotel', 'home'])),
       accomodations: searchAccomodationResponse?.data?.result || null,
       pageData: pageResponse?.data?.result || null,
+      strapiData: strapiResponse?.data?.data[0]?.attributes?.Sections || null
     },
   })
 }

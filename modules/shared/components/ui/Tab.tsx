@@ -10,9 +10,9 @@ type Props = {
     style?: "1" | "2" | "3" | "radioStyle" | "almosafer-home" | "expedia-home";
     radioStyle?: boolean;
     wrapperClassName?: string;
-    tabLinksCenter?: boolean;
     tabLinksBold?: boolean;
     innerElement?: React.ReactNode;
+    showTabsWhenThereIsOnlyOneItem?: boolean;
 }
 
 const Tab: React.FC<Props> = props => {
@@ -35,7 +35,7 @@ const Tab: React.FC<Props> = props => {
         }
     }
 
-    if (style === 'expedia-home' && items.length === 1){
+    if (style === 'expedia-home' && items.length === 1 && !props.showTabsWhenThereIsOnlyOneItem){
         return(
             <>
             <div className={props.wrapperClassName || ""}>
@@ -87,7 +87,7 @@ const Tab: React.FC<Props> = props => {
                             </label>))}
                     </>
                 ) : (
-                    <div className={`${style === '2' ? "flex gap-4" : style === '3' ? "flex border-b border-neutral-200" : "border-b border-neutral-200 sm:px-5"} ${props.tabLinksCenter ? "text-center" : ""} ${props.tabLinksBold ? "font-bold" : ""}`}>
+                    <div className={`${style === '2' ? "flex gap-4" : style === '3' ? "flex border-b border-neutral-200" : "border-b border-neutral-200 sm:px-5"} ${props.tabLinksBold ? "font-bold" : ""}`}>
                         {items.map(item => <button
                             type="button"
                             key={item.key}

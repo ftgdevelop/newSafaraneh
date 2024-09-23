@@ -10,7 +10,6 @@ import BackToList from '@/modules/domesticHotel/components/hotelDetails/BackToLi
 import { CalendarError } from '@/modules/shared/components/ui/icons';
 import Gallery from '@/modules/domesticHotel/components/hotelDetails/Gallery';
 import HotelName from '@/modules/domesticHotel/components/hotelDetails/HotelName';
-import SearchForm from '@/modules/domesticHotel/components/shared/SearchForm';
 import HotelFacilities from '@/modules/domesticHotel/components/hotelDetails/HotelFacilities';
 import HotelTerms from '@/modules/domesticHotel/components/hotelDetails/HotelTerms';
 import HotelAbout from '@/modules/domesticHotel/components/hotelDetails/HotelAbout';
@@ -28,6 +27,14 @@ import AvailabilityTimeout from '@/modules/shared/components/AvailabilityTimeout
 import LoginLinkBanner from '@/modules/shared/components/theme2/LoginLinkBanner';
 import AccommodationFacilities from '@/modules/domesticHotel/components/hotelDetails/AccommodationFacilities';
 import AccomodationPolicy from '@/modules/domesticHotel/components/hotelDetails/AccomodationPolicy';
+import dynamic from 'next/dynamic';
+import { useAppDispatch } from '@/modules/shared/hooks/use-store';
+import { emptyReduxSafarmarket, setReduxSafarmarketPixel } from '@/modules/shared/store/safarmarketSlice';
+import BreadCrumpt from '@/modules/shared/components/ui/BreadCrumpt';
+
+const SearchForm = dynamic(() => import('@/modules/domesticHotel/components/shared/SearchForm'), {
+  ssr: false
+});
 
 type Props = {
   allData: {
@@ -45,11 +52,15 @@ type Props = {
 
 const HotelDetail: NextPage<Props> = props => {
 
+  const dispatch = useAppDispatch();
+
   const theme2 = process.env.THEME === "THEME2";
 
   const theme1 = process.env.THEME === "THEME1";
 
   const isSafaraneh = process.env.PROJECT === "SAFARANEH" || process.env.PROJECT === "IRANHOTEL";
+
+  const isSafarlife = process.env.PROJECT === "SAFARLIFE";
 
   const { portalData, allData } = props;
 
@@ -84,6 +95,72 @@ const HotelDetail: NextPage<Props> = props => {
     defaultDates = [checkin, checkout];
   }
 
+  const [formIsInView,setFormIsInView] = useState<boolean>(false);
+  const checkFormIsInView = () => {
+    const targetTop = searchFormWrapperRef.current?.getBoundingClientRect().top;
+    const windowHeight = window.innerHeight || 0;
+
+    if (targetTop && targetTop < windowHeight) {
+        setFormIsInView(true);
+
+        document.removeEventListener('scroll', checkFormIsInView);
+        window.removeEventListener("resize", checkFormIsInView);
+
+    }
+}
+
+const querySafarmarketId = router.query?.safarmarketId; 
+// "sm-test001"
+const utm_medium = router.query?.utm_medium; 
+// "redirection"
+const utm_source = router.query?.utm_source; 
+// "safarmarket"
+const utm_term = router.query?.utm_term; 
+// "hotel"
+
+useEffect(()=>{
+
+  if (!process.env.SAFAR_MARKET_SITE_NAME){
+    return;
+  }
+
+  let cookieSafarmarketId;
+  let cookies = decodeURIComponent(document.cookie).split(';');
+  for (const item of cookies){
+    if (item.includes("safarMarketHotelSmId=")){
+      cookieSafarmarketId =item.split("=")[1];
+    }
+  }
+
+  if(querySafarmarketId && utm_source && utm_source === "safarmarket"){
+    const expDate = new Date();
+    expDate.setTime(expDate.getTime() + (7*24*60*60*1000));
+    if (document){
+      document.cookie = `safarMarketHotelSmId=${querySafarmarketId}; expires=${expDate.toUTCString()};path=/`;
+    }
+  }
+
+  const smId = querySafarmarketId || cookieSafarmarketId;
+
+  if(smId){
+    dispatch(setReduxSafarmarketPixel({
+      type: "hotel",
+      pixel : `https://safarmarket.com/api/hotel/v1/pixel/${process.env.SAFAR_MARKET_SITE_NAME}/2/0/?smId=${smId}`
+    }));
+  }
+},[querySafarmarketId,utm_source]);
+
+useEffect(() => {
+  document.addEventListener('scroll', checkFormIsInView);
+  window.addEventListener("resize", checkFormIsInView);
+
+  return (() => {
+    dispatch(emptyReduxSafarmarket());
+      document.removeEventListener('scroll', checkFormIsInView);
+      window.removeEventListener("resize", checkFormIsInView);
+  });
+}, []);
+
   useEffect(() => {
     setShowOnlyForm(false);
     const validDates = checkDateIsAfterDate(new Date(checkin), new Date(today)) && checkDateIsAfterDate(new Date(checkout), new Date(tomorrow));
@@ -92,6 +169,14 @@ const HotelDetail: NextPage<Props> = props => {
     }
   }, [checkin, checkout]);
 
+  // useEffect(()=>{
+  //   //delete this useEffect
+  //   const todoDelete = async () => {
+  //     const allData: any = await getDomesticHotelDetailsByUrl("/" + locale + props.todoDeleteUrl, locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR");
+  //   }
+
+  //   todoDelete();
+  // },[]);
 
   if (props.error410) {
     return (
@@ -103,8 +188,13 @@ const HotelDetail: NextPage<Props> = props => {
     return null;
   }
 
-  const { accommodation, hotel: hotelData, page: pageData, score: hotelScoreData, richSnippets, sheet } = allData;
-
+  const accommodation = allData?.accommodation;
+  const hotelData = allData?.hotel;
+  const pageData = allData?.page; 
+  const hotelScoreData = allData?.score; 
+  const richSnippets = allData?.richSnippets; 
+  const sheet = allData?.sheet; 
+ 
   const accommodationData = accommodation?.result;
 
   let defaultDestination: EntitySearchResultItemType | undefined = undefined;
@@ -141,15 +231,18 @@ const HotelDetail: NextPage<Props> = props => {
 
 
   let script_detail_2_Url;
-  if (accommodationData?.city?.name) {
+
+  if (isSafarlife && accommodationData?.city?.slug){
+    script_detail_2_Url = `${configWebsiteUrl}${accommodationData.city.slug}`;
+  }else if (accommodationData?.city?.name) {
     if (process.env.LocaleInUrl === "off") {
-      script_detail_2_Url = `${configWebsiteUrl}/hotels/${accommodationData?.city?.name.replace(/ /g, "-")}`;
+      script_detail_2_Url = `${configWebsiteUrl}/hotels/${accommodationData.city.name.replace(/ /g, "-")}`;
     } else if (i18n && i18n.language === "fa") {
-      script_detail_2_Url = `${configWebsiteUrl}/fa/hotels/هتل-های-${accommodationData?.city?.name.replace(/ /g, "-")}`;
+      script_detail_2_Url = `${configWebsiteUrl}/fa/hotels/هتل-های-${accommodationData.city.name.replace(/ /g, "-")}`;
     } else if (i18n && i18n.language === "ar") {
-      script_detail_2_Url = `${configWebsiteUrl}/ar/hotels/فنادق-${accommodationData?.city?.name.replace(/ /g, "-")}`;
+      script_detail_2_Url = `${configWebsiteUrl}/ar/hotels/فنادق-${accommodationData.city.name.replace(/ /g, "-")}`;
     } else {
-      script_detail_2_Url = `${configWebsiteUrl}/en/hotels/${accommodationData?.city?.name.replace(/ /g, "-")}`;
+      script_detail_2_Url = `${configWebsiteUrl}/en/hotels/${accommodationData.city.name.replace(/ /g, "-")}`;
     }
   }
 
@@ -159,17 +252,22 @@ const HotelDetail: NextPage<Props> = props => {
     width: number;
     height: number;
     description: string;
+    thumbnail: string;
   }[] = [];
 
   if ((process.env.PROJECT === "1STSAFAR" || accommodationData?.galleries?.length)) {
     if (accommodationData?.galleries?.length) {
-      hotelImages = accommodationData?.galleries?.map(item => ({
-        alt: item.fileAltAttribute || item.fileTitleAttribute || "",
-        description: item.fileTitleAttribute || item.fileAltAttribute || "",
-        src: item.filePath!,
-        width: 1000,
-        height: 700,
-      }))
+      hotelImages = accommodationData?.galleries?.map(item => {
+        const thumbnail = item.sizes?.find(p => p.displaySize === 'mobile')?.filePath || item.filePath!;
+        return ({
+          alt: item.fileAltAttribute || item.fileTitleAttribute || "",
+          description: item.fileTitleAttribute || item.fileAltAttribute || "",
+          src: item.filePath!,
+          width: 1000,
+          height: 700,
+          thumbnail: thumbnail
+        })
+      })
     }
   } else if (isSafaraneh && hotelData?.Gallery?.length) {
     hotelImages = hotelData.Gallery.filter(item => item.Image).map(item => ({
@@ -177,7 +275,8 @@ const HotelDetail: NextPage<Props> = props => {
       alt: item.Title || "",
       width: 1000,
       height: 700,
-      description: item.Alt || ""
+      description: item.Alt || "",
+      thumbnail: item.Image as string
     }))
   }
 
@@ -212,7 +311,7 @@ const HotelDetail: NextPage<Props> = props => {
     );
   }
 
-  if(siteName && accommodationData?.description){
+  if(accommodationData?.description){
     anchorTabsItems.push(
       { id: "about_section", title: tHotel('about-hotel') }
     );
@@ -235,6 +334,28 @@ const HotelDetail: NextPage<Props> = props => {
       { id: "similarhotels_section", title: tHotel('similar-hotels') }
     );
   }
+
+
+
+  let BreadCrumptListUrl;
+
+  if (isSafarlife && accommodationData?.city?.slug){
+    BreadCrumptListUrl = accommodationData.city.slug;
+  } else {
+
+      if (i18n?.language === "fa" && process.env.LocaleInUrl !== "off") {
+          BreadCrumptListUrl = `/fa/hotels/هتل-های-${accommodationData.city?.name}`;
+      } else if (i18n?.language === "ar") {
+          BreadCrumptListUrl = `/hotels/فنادق-${accommodationData.city?.name}`;
+      } else {
+          BreadCrumptListUrl = `/hotels/هتل-های-${accommodationData.city?.name}`;
+      }
+  }
+
+  if (checkin && checkout) {
+      BreadCrumptListUrl += `/checkin-${checkin}/checkout-${checkout}`;
+  }
+
 
 
   return (
@@ -441,7 +562,27 @@ const HotelDetail: NextPage<Props> = props => {
             جهت رزرو با شماره <a dir="ltr" href={`tel:${tel?.replace("021", "+9821") || "+982126150051"}`} className='underline text-sm sm:text-base'> {tel || "02126150051"} </a> تماس بگیرید.
           </div>} */}
 
-          <BackToList checkin={checkin} checkout={checkout} cityId={accommodationData.cityId} cityName={accommodationData.city?.name || ""} />
+          {theme2 ? (
+            <BreadCrumpt
+              hideHome
+              items={[
+                {
+                  label:"رزرو هتل",
+                  link:"/"
+                },
+                {
+                  label:tHotel('seeHotelsIn', { city: accommodationData.city?.name || "" }),
+                  link:BreadCrumptListUrl
+                },
+                {
+                  label:accommodationData?.displayName || ""
+                }
+              ]}
+             />
+          ) : (
+            <BackToList url={BreadCrumptListUrl} cityName={accommodationData.city?.name || ""} />
+          )}
+
         </div>
 
         {!!hotelImages?.length && <Gallery images={hotelImages} hotelName={accommodationData.displayName} />}
@@ -470,11 +611,11 @@ const HotelDetail: NextPage<Props> = props => {
           )}
           <h2 className='text-lg lg:text-3xl font-semibold mt-5 mb-3 md:mt-10 md:mb-7 relative z-[2]'>{t('change-search')}</h2>
 
-          <SearchForm
+          {!!formIsInView && <SearchForm
             defaultDestination={defaultDestination}
             defaultDates={defaultDates}
             wrapperClassName='relative z-[2]'
-          />
+          />}
         </div>
 
       </div>
@@ -498,10 +639,13 @@ const HotelDetail: NextPage<Props> = props => {
         />}
       </>
       ):(
-        <AccomodationPolicy policies={accommodationData?.policies} />
+        <AccomodationPolicy
+          policies={accommodationData?.policies} 
+          mendatoryFee={accommodationData?.mendatoryFee}
+        />
       )}
 
-      {!!siteName && <HotelAbout siteName={siteName} siteUrl={siteURL} description={accommodationData?.description} />}
+      <HotelAbout siteName={siteName || ""} siteUrl={siteURL} description={accommodationData?.description} />
 
       {!!(isSafaraneh && hotelData?.DistancePoints?.length) && (
         <div id="attractions_section" className="max-w-container mx-auto px-3 sm:px-5 pt-7 md:pt-10">
@@ -519,7 +663,7 @@ const HotelDetail: NextPage<Props> = props => {
       {!!(accommodationData?.faqs?.length) && <FAQ faqs={accommodationData.faqs} />}
 
       <AvailabilityTimeout
-        minutes={10}
+        minutes={20}
         onRefresh={() => {window.location.reload()}}
         type='hotel'
         description={t("GetTheLatestPriceAndAvailabilityForYourSearchTo", { destination: `${accommodationData.displayName}`, dates: `${dateDiplayFormat({ date: checkin || today, locale: locale, format: "dd mm" })} - ${dateDiplayFormat({ date: checkout || tomorrow, locale: locale, format: "dd mm" })}` })}
@@ -548,7 +692,12 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const url = encodeURI(`/hotel/${query.hotelDetail![0]}&checkin=${checkin}&checkout=${checkout}`);
 
-  const allData: any = await getDomesticHotelDetailsByUrl("/" + locale + url, locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR");
+  let localePart = "/" + locale;
+  if (process.env.LocaleInUrl === "off"){
+    localePart = "";
+  }
+
+  const allData: any = await getDomesticHotelDetailsByUrl( localePart + url, locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR");
 
   if (allData?.data && (!allData?.data?.result?.hotel && !allData?.data?.result?.accommodation) && process.env.LocaleInUrl !== "off") {
 

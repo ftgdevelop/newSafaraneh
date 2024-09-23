@@ -35,6 +35,7 @@ import FlightItemTheme2 from "@/modules/flights/components/flightList/FlightItem
 import FlightDetailsTheme2 from "@/modules/flights/components/flightList/FlightDetailsTheme2";
 import Button from "@/modules/shared/components/ui/Button";
 import { setReduxError } from "@/modules/shared/store/errorSlice";
+import BannerInSearchList from "@/modules/domesticHotel/components/shared/BannerInSearchList";
 
 
 type Airport = {
@@ -613,7 +614,7 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
                                 else {
                                     return a.capacity && a.adultPrice - b.adultPrice
                                 }
-                            }).slice(firstItemIndex, lastItem).map((flight: FlightItemType) =>
+                            }).slice(firstItemIndex, lastItem).map((flight: FlightItemType, index:number) =>
                                 <Fragment key={flight.flightKey} >
                                     {theme2 ? (
                                         <FlightItemTheme2
@@ -622,7 +623,15 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
                                             onSelectFlight={() => { setSelectedFlight(flight) }}
                                         />
                                     ) : (
-                                        <FlightItem passengers={passengers} flightData={flight} />
+                                        <>
+                                            <FlightItem passengers={passengers} flightData={flight} />
+                                            {/* {index=== 3 && (
+                                                <BannerInSearchList
+                                                    destinationCode= {departureList[0]?.arrivalAirport?.city?.code}
+                                                    itemType="list"
+                                                />
+                                            )} */}
+                                        </>
                                     )}
                                 </Fragment>
                             )
@@ -688,7 +697,7 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
 
             {!!key && (
                 <AvailabilityTimeout
-                    minutes={10}
+                    minutes={20}
                     onRefresh={() => { window.location.reload() }}
                     type='flight'
                     description={tFlight("flightTimeoutMessage")}

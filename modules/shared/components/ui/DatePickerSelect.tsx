@@ -185,7 +185,7 @@ const DatePickerSelect: React.FC<Props> = props => {
     }
 
     return (
-        <div className={`relative ${props.shamsi ? "font-samim" : "font-sans"}`}>
+        <div className={`relative ${!props.shamsi ? "font-sans" : theme2? "font-iranyekan" : "font-samim"}`}>
             {!!props.label && (
                 <label
                     className={`select-none pointer-events-none block leading-4 ${props.labelIsSimple ? "mb-3 text-base" : "top-0 text-xs z-10 text-sm absolute px-2 bg-white transition-all duration-300 -translate-y-1/2 rtl:right-1 ltr:left-1"}  `}

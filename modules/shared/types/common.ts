@@ -7,6 +7,7 @@ export type TabItem = {
 };
 
 export interface GetPageByUrlDataType {
+    entityId?: number;
     title?: string;
     pageTitle?: string;
     metaKeyword?: string;

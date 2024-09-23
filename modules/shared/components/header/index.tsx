@@ -53,7 +53,7 @@ const Header: React.FC<Props> = props => {
                 </a>
             </div>} */}
 
-            <div className={`max-w-container mx-auto relative ${theme2 ? "md:flex gap-2 justify-between items-center md:px-3" : theme1 ? "clearfix py-3 px-3 md:px-5" : ""}`}>
+            <div className={`max-w-container mx-auto relative ${theme2 ? "flex gap-2 justify-between items-center md:px-3" : theme1 ? "clearfix py-3 px-3 md:px-5" : ""}`}>
 
                 <Link href="/" className={`block ${theme1 ? "md:rtl:float-right md:ltr:float-left md:rtl:ml-5 md:ltr:mr-5" : theme2 ?"py-3":""}`}>
                     {logo ? (
@@ -64,7 +64,8 @@ const Header: React.FC<Props> = props => {
                 </Link>
 
                 {theme2 ? (
-                    <Navigation />
+                    null
+                    // <Navigation />
                 ) : (
                     <TravelServices logo={logo} siteName={siteName} className="rtl:float-right ltr:float-left" />
                 )}

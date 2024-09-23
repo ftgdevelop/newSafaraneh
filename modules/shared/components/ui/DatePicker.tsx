@@ -155,7 +155,7 @@ const DatePicker: React.FC<Props> = props => {
                     }}
                 >
 
-                    <footer className='direction-root font-samim mobi-date-picker-footer flex justify-center gap-5 md:justify-between items-center px-5 py-4 border-t border-neutral-300'>
+                    <footer className={`direction-root ${theme2?"font-iranyekan":"font-samim"} mobi-date-picker-footer flex justify-center gap-5 md:justify-between items-center px-5 py-4 border-t border-neutral-300`}>
                         <button type='button' onClick={goToday} className='text-primary-700 text-sm'>
                             {t('goToToday')}
                         </button>

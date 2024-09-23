@@ -171,6 +171,9 @@ label.mbsc-form-control-wrapper .mbsc-textfield {
 
 
 .mbsc-datepicker.price-calendar {
+  body &{
+    margin-top: 0;
+  }
   .mbsc-calendar-cell-inner{
     display: flex;
     flex-direction: column;
@@ -216,7 +219,10 @@ label.mbsc-form-control-wrapper .mbsc-textfield {
     }
     &.mbsc-range-day-end{
       border-left: 1px solid #007aff;
-      border-radius: 5px 0 0 5px;
+    }
+    &.mbsc-range-day-end.mbsc-range-day-start{
+      border: 1px solid #007aff;
+      border-radius: 5px;
     }
   }
   .mbsc-ios.mbsc-range-day:after{
@@ -263,4 +269,9 @@ label.mbsc-form-control-wrapper .mbsc-textfield {
   .mbsc-calendar-title-wrapper .mbsc-calendar-button {
     pointer-events: none;
   }
+}
+
+.theme-2 .mobiscroll-datepicker-wrapper.simple .mbsc-textfield {
+  height: 3.25rem;
+  border-color: #a3a3a3;
 }

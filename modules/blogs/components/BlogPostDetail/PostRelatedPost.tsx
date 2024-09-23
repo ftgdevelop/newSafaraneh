@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { BlogItemType } from "../../types/blog";
 
-const RelatedPost: NextPage<any> = ({Posts , Blog} : {Posts:BlogItemType[],Blog:BlogItemType[]}) => {
+const RelatedPost: NextPage<any> = ({Posts , Blog} : {Posts:BlogItemType[],Blog:BlogItemType}) => {
     
     return (
         <div>
@@ -13,7 +13,7 @@ const RelatedPost: NextPage<any> = ({Posts , Blog} : {Posts:BlogItemType[],Blog:
         <div className="w-full grid grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 justify-center gap-4">
                 {
                 Posts &&
-                Posts.filter((item : any) => item.id !== Blog?.[0]?.id).slice(0, 3).map((post : any , index : any) => 
+                Posts.filter((item : any) => item.id !== Blog?.id).slice(0, 3).map((post : any , index : any) => 
                     <Link href={`/blog/${post.slug}`} key={post.id} >
                         <Image src={post.images?.large} onContextMenu={(e) => e.preventDefault()}
                             width={300} height={160} alt="pic" className="rounded w-full" priority={!index} />

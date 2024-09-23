@@ -51,6 +51,15 @@ function MyApp({ Component, pageProps, portalData, pageData }: TProps) {
     }
   }, []);
 
+  useEffect(()=>{
+    const fetchh = async () => {
+      const res = await  getPortal("fa-IR");
+      if (res){
+      }
+    }
+    fetchh();
+
+  },[]);
 
   const tel = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
   const emergencyNumber = portalData?.billing.emergencyNumber || "";
@@ -84,20 +93,31 @@ function MyApp({ Component, pageProps, portalData, pageData }: TProps) {
   const scripts = portalData?.website?.scripts || "";
 
   let canonicalUrl = "";
+  let envSiteName = process.env.SITE_NAME;
+  let urlLocalePart = i18n?.language ? `/${i18n?.language}` : "";
+
+  if(process.env.LocaleInUrl === "off"){
+    urlLocalePart = "";
+  }
+
+  if (process.env.SITE_NAME?.includes("iranhotel")){
+    envSiteName = "https://www.iranhotel.app"
+  }
+
   if(typeof router !== 'undefined'){
     if (router.route === '/hotels/[...hotelList]'){
       canonicalUrl = "";
     }else if (router.route === '/hotel/[...hotelDetail]'){
-      canonicalUrl = process.env.SITE_NAME + (i18n?.language ? `/${i18n?.language}` : "") + (router.query.hotelDetail ? "/hotel/"+router.query.hotelDetail[0] : "");
+      canonicalUrl = envSiteName + urlLocalePart + (router.query.hotelDetail ? "/hotel/"+router.query.hotelDetail[0] : "");
     }else if (router.route === '/flights/[flights]'){
-      canonicalUrl = process.env.SITE_NAME + (i18n?.language ? `/${i18n?.language}` : "") + (router.query.flights ? "/flights/"+router.query.flights : "");
+      canonicalUrl = envSiteName + urlLocalePart + (router.query.flights ? "/flights/"+router.query.flights : "");
     }else{
 
       let path = router.asPath;
       if (path[path.length-1] === "/"){
         path = path.substring(0, path.length - 1);
       }
-      canonicalUrl = process.env.SITE_NAME + (i18n?.language ? `/${i18n?.language}` : "") + path
+      canonicalUrl = envSiteName + urlLocalePart + path
     }
   }
   return (
@@ -209,7 +229,7 @@ MyApp.getInitialProps = async (
   const acceptLanguage = locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR";
 
   const [portalData, pageResponse] = await Promise.all<any>([
-    await getPortal("fa-IR"),
+    getPortal("fa-IR"),
     getPageByUrl(url, acceptLanguage)
 ]) 
 

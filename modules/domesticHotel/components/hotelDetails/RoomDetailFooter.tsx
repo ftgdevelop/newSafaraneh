@@ -28,6 +28,8 @@ const RoomDetailFooter: React.FC<Props> = props => {
         return null;
     }
 
+    const isSafarLife = process.env.SITE_NAME === 'https://www.safarlife.com';
+
     const prices = {
         roomPrice: rate.pricing?.find(
             (item) => item.type === "Room" && item.ageCategoryType === "ADL"
@@ -109,12 +111,12 @@ const RoomDetailFooter: React.FC<Props> = props => {
                 }}
                 loading={!!selectedRoomToken && selectedRoomToken === rate.bookingToken}
                 disabled={!!selectedRoomToken && selectedRoomToken !== rate.bookingToken}
-                className='block w-full lg:w-44 h-8 px-5 rounded-md'
+                className='block w-full lg:w-44 h-8 px-5 rounded-md text-xs'
             >
                 {prices?.roomPrice && prices.roomPrice < 1000 ?
                     "درخواست رزرو"
                     : rate.availablityType === "Online" ?
-                        tHotel("online-reserve")
+                    isSafarLife ? "رزرو آنی" : tHotel("online-reserve")
                         : tHotel("room-reserve")}
             </Button>
 

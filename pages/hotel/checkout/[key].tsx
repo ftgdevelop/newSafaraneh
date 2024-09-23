@@ -70,7 +70,7 @@ const Checkout: NextPage = () => {
     const checkin = dateFormat(checkinDate);
     const checkout = dateFormat(checkoutDate);
 
-    backUrl = `${hotelInfo.url}/location-${hotelInfo.cityId || hotelInfo.city?.id}/checkin-${checkin}/checkout-${checkout}`;
+    backUrl = `${hotelInfo.url}/checkin-${checkin}/checkout-${checkout}`;
   }
 
   useEffect(() => {
@@ -167,6 +167,22 @@ const Checkout: NextPage = () => {
   }
 
   const submitHandler = async (params: any) => {
+
+    if(process.env.SAFAR_MARKET_SITE_NAME){
+      let cookieSafarmarketId;
+      let cookies = decodeURIComponent(document?.cookie).split(';');
+      for (const item of cookies){
+        if (item.includes("safarMarketHotelSmId=")){
+          cookieSafarmarketId =item.split("=")[1];
+        }
+      }
+
+      if(cookieSafarmarketId){
+        params.metaSearchName = 'safarmarket';
+        params.metaSearchKey = cookieSafarmarketId;
+      }
+
+    }
 
     setSubmitLoading(true);
 
@@ -373,6 +389,8 @@ const Checkout: NextPage = () => {
                         roomExtraBed={roomsExtraBed}
                         discountLoading={discountLoading}
                         discountResponse={discountData?.isValid ? discountData : undefined}
+                        checkinTime={hotelInfo?.checkinTime}
+                        checkoutTime={hotelInfo?.checkoutTime}
                       />
                     )}
 

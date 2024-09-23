@@ -16,7 +16,7 @@ type Props = {
     selectedRoomToken?: string;
     roomsHasImage?: boolean;
     nights?:number;
-    onShowPriceCalendar?: () => void;
+    onOpenRoom: () => void;
 }
 
 const RoomItem: React.FC<Props> = props => {
@@ -159,13 +159,13 @@ const RoomItem: React.FC<Props> = props => {
                         </div>
                     </Tooltip>
 
-                    {!!props.onShowPriceCalendar && !!rate.calendar && <button 
+                    {!!(rate.calendar || room.facilities?.length || room.promotions?.length) && <button 
                         type='button'
-                        onClick={props.onShowPriceCalendar}
+                        onClick={props.onOpenRoom}
                         className='text-xs text-blue-600 flex items-center gap-1 mb-2 cursor-pointer'
                     >
                         <Calendar className='w-4 h-4 fill-current' />
-                        نمایش تقویم قیمتی
+                        نمایش جزییات 
                     </button>}
                 </>
             )}
@@ -184,7 +184,7 @@ const RoomItem: React.FC<Props> = props => {
                 }}
                 loading={!!selectedRoomToken && selectedRoomToken === rate.bookingToken}
                 disabled={!!selectedRoomToken && selectedRoomToken !== rate.bookingToken}
-                className='block w-full lg:w-44 h-8 px-5 rounded-md'
+                className='text-sm block w-full lg:w-44 h-8 px-5 rounded-md'
             >
                 {prices?.roomPrice && prices.roomPrice < 1000 ?
                     "درخواست رزرو"
@@ -239,6 +239,18 @@ const RoomItem: React.FC<Props> = props => {
                         </div>
                     ) : (
                         <div className="line-through text-neutral-500"> {tHotel('extra-bed')} </div>
+                    )}
+                    {!!(room.promotions?.length) && (
+                        <div>
+                            {room.promotions.map(promotion => (
+                                <span
+                                    key={promotion.name}
+                                    className='bg-white border px-1 py-1 leading-5 rtl:ml-1 ltr:mr-1 mb-1 inline-block text-xs text-neutral-500 rounded'
+                                >
+                                    {promotion.name} 
+                                </span>
+                            ))}
+                        </div>
                     )}
 
                     {rate.description && <div className='text-amber-600 flex gap-2'>

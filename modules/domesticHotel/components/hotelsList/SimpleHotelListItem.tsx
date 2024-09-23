@@ -1,6 +1,6 @@
 import Rating from "@/modules/shared/components/ui/Rating";
 import Skeleton from "@/modules/shared/components/ui/Skeleton";
-import { DefaultRoom } from "@/modules/shared/components/ui/icons";
+import { DefaultRoom, DefaultRoomTheme2 } from "@/modules/shared/components/ui/icons";
 import Image from "next/image";
 import HotelScore from "../shared/HotelScore";
 import Link from "next/link";
@@ -51,6 +51,8 @@ const SimpleHotelListItem: React.FC<Props> = props => {
     } else {
         price = <div className="font-bold text-sm"> {numberWithCommas(priceInfo.salePrice)} {t('rial')}</div>;
     }
+    
+    const theme2 = process.env.THEME === "THEME2";
 
     return (
         <Link
@@ -71,7 +73,11 @@ const SimpleHotelListItem: React.FC<Props> = props => {
                 <div
                     className="bg-neutral-100 flex items-center justify-center h-full rtl:rounded-r-lg ltr:rounded-l-lg"
                 >
-                    <DefaultRoom className="fill-neutral-300 w-14 h-14" />
+                    {theme2?(
+                        <DefaultRoomTheme2 className="fill-neutral-300 w-14 h-14" />
+                    ):(
+                        <DefaultRoom className="fill-neutral-300 w-14 h-14" />
+                    )}
                 </div>
             )}
             <div className="col-span-4 p-2 flex flex-col justify-between">
