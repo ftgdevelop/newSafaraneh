@@ -198,10 +198,6 @@ const SearchForm: React.FC<Props> = props => {
                 url = "";
         }
 
-        let urlSegment = "";
-        if (selectedDestination.id && selectedDestination.type !== 'Hotel') {
-            urlSegment = `/location-${selectedDestination.id}`;
-        }
 
         if(!url){
             dispatch(setReduxError({
@@ -212,7 +208,7 @@ const SearchForm: React.FC<Props> = props => {
             return;
         }
 
-        url += `${urlSegment}/checkin-${dates[0]}/checkout-${dates[1]}`;
+        url += `/checkin-${dates[0]}/checkout-${dates[1]}`;
 
         const localStorageRecentSearches = localStorage?.getItem("hotelRecentSearches");
         const recentSearches: HotelRecentSearchItem[] = localStorageRecentSearches ? JSON.parse(localStorageRecentSearches) : [];

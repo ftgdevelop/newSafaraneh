@@ -337,21 +337,19 @@ useEffect(() => {
 
 
 
-  let BreadCrumptListUrl;
+  let BreadCrumptListUrl = "";
 
   if (isSafarlife && accommodationData?.city?.slug){
     BreadCrumptListUrl = accommodationData.city.slug;
-  } else {
+  } else if(accommodationData.city?.name){
+    const cityName = accommodationData.city.name.replaceAll(" ","-");
 
       if (i18n?.language === "fa" && process.env.LocaleInUrl !== "off") {
-          BreadCrumptListUrl = `/fa/hotels/هتل-های-${accommodationData.city?.name}`;
+          BreadCrumptListUrl = `/fa/hotels/هتل-های-${cityName}`;
       } else if (i18n?.language === "ar") {
-          BreadCrumptListUrl = `/hotels/فنادق-${accommodationData.city?.name}`;
+          BreadCrumptListUrl = `/hotels/فنادق-${cityName}`;
       } else {
-          BreadCrumptListUrl = `/hotels/هتل-های-${accommodationData.city?.name}`;
-      }
-      if (accommodationData.cityId){
-          BreadCrumptListUrl += `/location-${accommodationData.cityId}`
+          BreadCrumptListUrl = `/hotels/هتل-های-${cityName}`;
       }
   }
 
