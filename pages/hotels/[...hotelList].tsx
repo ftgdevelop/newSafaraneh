@@ -882,7 +882,11 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const hasStrapi = process.env.PROJECT_SERVER_STRAPI;
   const theme2 = process.env.THEME === "THEME2";
 
-  const url = `/${locale}/hotels/${query.hotelList![0]}`;
+  let url = `/${locale}/hotels/${query.hotelList![0]}`;
+
+  if (process.env.LocaleInUrl === "off"){
+    url = `/hotels/${query.hotelList![0]}`;
+  }
   
   const searchParameters : { url: string; EntityId?:string;} = {
     url:url
