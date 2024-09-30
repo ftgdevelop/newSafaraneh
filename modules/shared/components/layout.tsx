@@ -9,6 +9,7 @@ import { setReduxUser } from "@/modules/authentication/store/authenticationSlice
 import { getCurrentUserProfile } from "@/modules/authentication/actions";
 import Notification from "./Notification";
 import { setProgressLoading } from "../store/stylesSlice";
+import { FooterStrapi } from "../types/common";
 
 type Props = {
   logo: string;
@@ -24,6 +25,7 @@ type Props = {
   enamad?: any;
   samandehi?: string;
   scripts?: string;
+  footerStrapi?: FooterStrapi;
 }
 
 const Layout: React.FC<PropsWithChildren<Props>> = props => {
@@ -119,6 +121,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             contactInfo={props.contactInfo} 
             enamad={props.enamad || undefined} 
             samandehi={props.samandehi}
+            footerStrapi={props.footerStrapi}
           />
 
           {props.scripts ? <script
