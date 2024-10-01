@@ -8,6 +8,7 @@ import type { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 
@@ -15,6 +16,8 @@ const Capacity: NextPage = () => {
 
   const { t } = useTranslation('common');
   const { t: tHotel } = useTranslation('hotel');
+
+  const theme2 = process.env.THEME === "THEME2";
 
   const router = useRouter();
 
@@ -25,8 +28,8 @@ const Capacity: NextPage = () => {
 
     const pathArray = router.asPath.split("?")[1]?.split("#")[0].split("&");
 
-    const username = pathArray.find(item => item.includes("username="))?.split("username=")[1];
-    const reserveId = pathArray.find(item => item.includes("reserveId="))?.split("reserveId=")[1];
+    const username = pathArray?.find(item => item.includes("username="))?.split("username=")[1];
+    const reserveId = pathArray?.find(item => item.includes("reserveId="))?.split("reserveId=")[1];
 
     if (reserveId && username) {
       const response: any = await domesticHotelGetReserveById({ reserveId: reserveId, userName: username });
@@ -39,7 +42,7 @@ const Capacity: NextPage = () => {
             setReserveInfo(response.data.result);
           }
         }
-        if (response.data.result.status === 'Pending') {
+        if (response.data.result?.status === 'Pending') {
           router.push(`/payment?reserveId=${reserveId}&username=${username}`);
         }
       }
@@ -74,6 +77,36 @@ const Capacity: NextPage = () => {
   }, []);
 
   const theme1 = process.env.THEME === "THEME1";
+
+  if(theme2){
+    return(
+      <>
+      <Head>
+        <title>{tHotel("checking-capacity")}</title>
+      </Head>
+      <div className='max-w-container mx-auto px-5 py-10 md:py-32 text-center'>
+        <p className='text-lg mb-8'>
+           کارشناسان ما در حال بررسی درخواست شما هستند.
+          <br/>
+          لطفا منتظر بمانید.  
+        </p>
+
+        {!!reserveInfo?.id && <div className='mb-6 md:mb-10'>
+          کد پیگیری :
+          {reserveInfo.id}
+        </div>}
+        
+        <Image
+          src="/images/capacity-git.gif"
+          alt='check capacity'
+          width={288}
+          height={248}
+          className='w-72 mx-auto block'
+        />
+      </div>
+      </>
+    )
+  }
 
   return (
     <>
