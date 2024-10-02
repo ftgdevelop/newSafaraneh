@@ -1,104 +1,22 @@
 import { LeftCaret, RightCaret } from "@/modules/shared/components/ui/icons";
-import { useTranslation } from "next-i18next";
 import Image from "next/image";
+import Link from "next/link";
 import Slider from "react-slick";
 
-const RecommendedHotels: React.FC = () => {
+type Props = {
+    sectionTitle?: string;
+    sectionSubtitle?: string;
+    hotels?: {
+        url?: string;
+        name?: string;
+        imageUrl?: string;
+        alt?: string;
+        imageTitle?: string;
+        description?: string;
+    }[]
+}
 
-    const { t: tHome } = useTranslation('home');
-
-    const hotels: {
-        imageUrl: string;
-        name: string;
-        url: string;
-        rating: number;
-        alt: string;
-        reviewRating: number;
-        reviewCount: number;
-        city: string;
-    }[] = [
-            {
-                url: "hotel/هتل-پارسیان-آزادی-تهران",
-                imageUrl: "/images/home/theme2/hotels/parsian-azadi.jpeg",
-                name: tHome('azadi-hotel-name'),
-                rating: 5,
-                alt: "رزرو هتل آزادی تهران",
-                reviewCount: 160,
-                reviewRating: 80,
-                city: "تهران"
-            },
-            {
-                url: "hotel/هتل-پارس-شیراز",
-                imageUrl: "/images/home/theme2/hotels/pars-hotel-shiraz.jpeg",
-                name: tHome('pars-hotel-name'),
-                rating: 5,
-                alt: "رزرو هتل پارس شیراز",
-                reviewCount: 12,
-                reviewRating: 75,
-                city: "شیراز - فارس"
-            },
-            {
-                url: "hotel/هتل-مجلل-درویشی-مشهد",
-                imageUrl: "/images/home/theme2/hotels/darvishi-hotel-mashhad.jpg",
-                name: tHome('darvishi-hotel-name'),
-                rating: 5,
-                alt: "رزرو هتل مجلل درویشی مشهد",
-                reviewCount: 25,
-                reviewRating: 78,
-                city: "مشهد - خراسان"
-            },
-            {
-                url: "hotel/هتل-پارسیان-استقلال-تهران",
-                imageUrl: "/images/home/theme2/hotels/esteghlal-hotel-tehran.jpg",
-                name: tHome('esteghlal-hotel-name'),
-                rating: 5,
-                alt: "رزرو هتل استقلال تهران",
-                reviewCount: 160,
-                reviewRating: 77,
-                city: "تهران"
-            },
-            {
-                url: "hotel/هتل-اسپیناس-آستارا",
-                imageUrl: "/images/home/theme2/hotels/espinas-hotel-astara.jpg",
-                name: tHome('astara-hotel-name'),
-                rating: 4,
-                alt: "رزرو هتل اسپیناس آستارا",
-                reviewCount: 2,
-                reviewRating: 85,
-                city: "آستارا - گیلان"
-            },
-            {
-                url: "hotel/هتل-میراژ-کیش",
-                imageUrl: "/images/home/theme2/hotels/mirage-hotel-kish.jpg",
-                name: tHome('miraj-hotel-name'),
-                rating: 5,
-                alt: "رزرو هتل میراژ کیش",
-                reviewCount: 5,
-                reviewRating: 58,
-                city: "کیش - هرمزگان"
-            },
-            {
-                url: "hotel/هتل-داد-یزد",
-                imageUrl: "/images/home/theme2/hotels/daad-hotel-yazd.jpg",
-                name: tHome('dad-hotel-name'),
-                rating: 4,
-                alt: "رزرو هتل داد یزد",
-                reviewCount: 11,
-                reviewRating: 77,
-                city: "یزد"
-            },
-            {
-                url: "hotel/هتل-پارسیان-کوثر-اصفهان",
-                imageUrl: "/images/home/theme2/hotels/parsian-kowsar-hotel-isfahan.jpg",
-                name: tHome('kosar-hotel-name'),
-                rating: 5,
-                alt: "رزرو هتل کوثر اصفهان",
-                reviewCount: 3,
-                reviewRating: 40,
-                city: "اصفهان"
-            }
-
-        ]
+const RecommendedHotels: React.FC<Props> = props => {
 
     const settings = {
         speed: 500,
@@ -140,65 +58,91 @@ const RecommendedHotels: React.FC = () => {
         ]
     };
 
+    if(!props.hotels?.length){
+        return null;
+    }
+
+    if (props.hotels?.length < 3) {
+        return (
+            <section className="max-w-container m-auto px-3 max-xl:p-5 mb-5 sm:mb-10" >
+                <h2 className="font-semibold text-md md:text-2xl mb-5">
+                    {props.sectionTitle}
+                </h2>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {props.hotels?.map(hotel => {
+
+                        let url = hotel.url;
+
+                        if (process.env.LocaleInUrl === "off") {
+                            url = url?.replace("fa", "");
+                        }
+
+                        return (
+                            <Link
+                                href={hotel.url || ""}
+                                className='rounded-2xl border border-neutral-200 bg-white relative block overflow-hidden'
+                                target='_blank'
+                                title={hotel.name}
+                            >
+                                <Image
+                                    onContextMenu={e => { e.preventDefault() }}
+                                    src={hotel.imageUrl || ""}
+                                    alt={hotel.alt || ""}
+                                    title={hotel.imageTitle || ""}
+                                    width={299}
+                                    height={128}
+                                    className='col-span-5 object-cover h-32 w-full'
+                                />
+                                <div className="p-3 text-sm">
+                                    <b className='block font-semibold leading-5'> {hotel.name} </b>
+                                    <p className="mt-1 text-xs"> {hotel.description} </p>
+                                </div>
+                            </Link>
+                        )
+                    })}
+                </div>
+            </section>
+        )
+    }
+
     return (
         <section className="max-w-container m-auto px-3 max-xl:p-5 mb-5 sm:mb-12" >
             <h2 className="font-semibold text-md md:text-2xl mb-2">
-                هتل های پیشنهادی برای شما
+                {props.sectionTitle}
             </h2>
-            <p className="text-xs md:text-sm mb-3">
-                بر اساس مواردی که اخیرا دیده اید
-            </p>
+            {props.sectionSubtitle && <p className="text-xs md:text-sm mb-3">
+                {props.sectionSubtitle}
+            </p>}
 
             <div className="-mx-2">
                 <Slider
                     {...settings}
                 >
 
-                    {hotels.map(hotel => {
-
-                        let tag = "معمولی";
-
-                        if (hotel.reviewRating > 60) {
-                            tag = "خوب";
-                        }
-                        if (hotel.reviewRating > 80) {
-                            tag = "خیلی خوب";
-                        }
-                        if (hotel.reviewRating > 90) {
-                            tag = "عالی";
-                        }
-
-                        return (
-                            <div key={hotel.name} className='sm:px-2 rtl:rtl'>
-                                <a
-                                    href={hotel.url}
-                                    className='rounded-2xl border border-neutral-200 bg-white relative block overflow-hidden'
-                                    target='_blank'
-                                    title={hotel.name}
-                                >
-                                    <Image
-                                        onContextMenu={e => { e.preventDefault() }}
-                                        src={hotel.imageUrl}
-                                        alt={hotel.name}
-                                        width={299}
-                                        height={128}
-                                        className='col-span-5 object-cover h-32 w-full'
-                                    />
-                                    <div className="p-3 text-sm">
-                                        <b className='block font-semibold leading-5'> {hotel.name} </b>
-                                        <p className="mb-2 text-xs"> {hotel.city} </p>
-                                        <div className="flex">
-                                            <b className="font-bold"> {hotel.reviewRating} از 100  </b>
-                                            <span className="mx-2">
-                                                {tag}
-                                            </span>
-                                            ({hotel.reviewCount})
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        )
-                    })}
+                    {props.hotels?.map(hotel =>
+                        <div key={hotel.name} className='sm:px-2 rtl:rtl'>
+                            <Link
+                                href={hotel.url || ""}
+                                className='rounded-2xl border border-neutral-200 bg-white relative block overflow-hidden'
+                                target='_blank'
+                                title={hotel.name}
+                            >
+                                <Image
+                                    onContextMenu={e => { e.preventDefault() }}
+                                    src={hotel.imageUrl || ""}
+                                    alt={hotel.alt || ""}
+                                    title={hotel.imageTitle || ""}
+                                    width={299}
+                                    height={128}
+                                    className='col-span-5 object-cover h-32 w-full'
+                                />
+                                <div className="p-3 text-sm">
+                                    <b className='block font-semibold leading-5'> {hotel.name} </b>
+                                    <p className="mt-1 text-xs"> {hotel.description} </p>
+                                </div>
+                            </Link>
+                        </div>
+                    )}
 
                 </Slider>
             </div>

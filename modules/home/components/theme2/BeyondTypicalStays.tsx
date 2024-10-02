@@ -1,50 +1,71 @@
 import { LeftCaret, RightCaret } from "@/modules/shared/components/ui/icons";
-import { useTranslation } from "next-i18next";
 import Image from "next/image";
 import Link from "next/link";
 import Slider from "react-slick";
 
-const BeyondTypicalStays: React.FC = () => {
-
-    const { t: tHome } = useTranslation('home');
-
-    const cities: {
+type Props = {
+    sectionTitle?: string;
+    items?: {
         imageUrl: string;
+        imageAlt?: string;
+        imageTitle?: string;
         url: string;
         name: string;
-    }[] = [
-            {
-                imageUrl: "/images/home/theme2/isfahan.jpg",
-                url: tHome('esfahan-city-link'),
-                name: "اصفهان"
-            },
-            {
-                imageUrl: "/images/home/theme2/kish.jpg",
-                url: tHome('kish-city-link'),
-                name: "کیش"
-            },
-            {
-                imageUrl: "/images/home/theme2/shiraz.jpg",
-                url: tHome('shiraz-city-link'),
-                name: "شیراز"
-            },
-            {
-                imageUrl: "/images/home/theme2/mashad.jpg",
-                url: tHome('mashhad-city-link'),
-                name: "مشهد"
-            },
-            {
-                imageUrl: "/images/home/theme2/tehran.jpg",
-                url: tHome('tehran-city-link'),
-                name: "تهران"
-            }
+    }[]
+}
 
-        ];
+const BeyondTypicalStays: React.FC<Props> = props => {
+
+    const cities = props.items;
+
+    if (!cities?.length) {
+        return null;
+    }
+
+    if (cities.length < 3) {
+        return (
+            <section className="max-w-container m-auto px-3 max-xl:p-5 mb-5 sm:mb-10" >
+                <h2 className="font-semibold text-md md:text-2xl mb-5">
+                    {props.sectionTitle}
+                </h2>
+                <div className="grid sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                    {props.items?.map(city => {
+
+                        let url = city.url;
+
+                        if (process.env.LocaleInUrl === "off") {
+                            url = url.replace("fa", "");
+                        }
+
+                        return (
+                            <Link
+                                href={url}
+                                className='rounded-2xl relative block overflow-hidden before:absolute before:bg-gradient-to-t from-black/75 before:to-trabsparent before:h-24 before:left-0 before:right-0 before:bottom-0'
+                                target='_blank'
+                                title={city.name}
+                            >
+                                <Image
+                                    onContextMenu={e => { e.preventDefault() }}
+                                    src={city.imageUrl}
+                                    alt={city.imageAlt || city.name}
+                                    title={city.imageTitle || city.name}
+                                    width={232}
+                                    height={314}
+                                    className='col-span-5 h-80 w-full object-cover'
+                                />
+                                <b className='absolute bottom-0 font-bold text-white p-3 leading-5'> {city.name} </b>
+                            </Link>
+                        )
+                    })}
+                </div>
+            </section>
+        )
+    }
 
     const settings = {
         speed: 500,
-        slidesToShow: 5,
-        slidesToScroll: 5,
+        slidesToShow: cities.length > 5 ? 5 : cities.length,
+        slidesToScroll: cities.length > 5 ? 5 : 1,
         nextArrow: <RightCaret />,
         prevArrow: <LeftCaret />,
         customPaging: function () {
@@ -56,15 +77,15 @@ const BeyondTypicalStays: React.FC = () => {
             {
                 breakpoint: 1200,
                 settings: {
-                    slidesToShow: 4,
-                    slidesToScroll: 4,
+                    slidesToShow: cities.length > 4 ? 4 : cities.length,
+                    slidesToScroll: 1,
                 }
             },
             {
                 breakpoint: 992,
                 settings: {
-                    slidesToShow: 3,
-                    slidesToScroll: 3,
+                    slidesToShow: cities.length > 3 ? 3 : cities.length,
+                    slidesToScroll: cities.length > 3 ? 3 : 1,
                     dots: true,
                     arrows: false
                 }
@@ -84,7 +105,7 @@ const BeyondTypicalStays: React.FC = () => {
     return (
         <section className="max-w-container m-auto px-3 max-xl:p-5 mb-5 sm:mb-10" >
             <h2 className="font-semibold text-md md:text-2xl mb-5">
-                اقامت مورد علاقه جدید خود را انتخاب کنید
+                {props.sectionTitle}
             </h2>
 
             <div className="-mx-2">
@@ -92,7 +113,7 @@ const BeyondTypicalStays: React.FC = () => {
                     {...settings}
                 >
 
-                    {cities.map(city => {
+                    {props.items?.map(city => {
 
                         let url = city.url;
 
@@ -111,7 +132,8 @@ const BeyondTypicalStays: React.FC = () => {
                                     <Image
                                         onContextMenu={e => { e.preventDefault() }}
                                         src={city.imageUrl}
-                                        alt={city.name}
+                                        alt={city.imageAlt || city.name}
+                                        title={city.imageTitle || city.name}
                                         width={232}
                                         height={314}
                                         className='col-span-5 h-80 w-full object-cover'
@@ -125,8 +147,6 @@ const BeyondTypicalStays: React.FC = () => {
 
                 </Slider>
             </div>
-
-
 
         </section>
     )
