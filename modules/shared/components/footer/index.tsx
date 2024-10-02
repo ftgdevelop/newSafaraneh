@@ -4,6 +4,7 @@ import { useTranslation } from "next-i18next";
 
 import Image from "next/image";
 import dynamic from "next/dynamic";
+import { FooterStrapi } from "../../types/common";
 
 const GoToTop = dynamic(() => import('./GoToTop'), {
     ssr: false
@@ -15,7 +16,7 @@ type Props = {
     logo: string;
     siteName: string;
     contactInfo: {
-        emergencyNumber?:string;
+        emergencyNumber?: string;
         tel?: string;
         instagram?: string;
         linkedin?: string;
@@ -24,6 +25,7 @@ type Props = {
     }
     enamad?: any;
     samandehi?: string;
+    footerStrapi?: FooterStrapi;
 }
 
 const Footer: React.FC<Props> = props => {
@@ -37,11 +39,57 @@ const Footer: React.FC<Props> = props => {
     const theme2 = process.env.THEME === "THEME2";
 
     if (theme2) {
+        const blockTitleClassNames = "text-lg mb-3 font-bold block";
         return (
-            <footer className="border-t border-neutral-200" >
-                <div className="max-w-container mx-auto p-3 text-neutral-700 py-8 text-sm">
-                    کلیه حقوق این وبسایت محفوظ و متعلق به {siteName} است.
+            <footer className="border-t py-6 md:pt-8 border-neutral-200" >
+                <div className="max-w-container mx-auto p-3 text-neutral-700 py-3 text-sm">
+                    
+                    <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-9">
+                        <div className="sm:col-span-2 lg:col-span-5">
+                            <h4 className={blockTitleClassNames}> {props.footerStrapi?.title} </h4>
+                            <p className="lg:pl-28"> {props.footerStrapi?.description} </p>
+                        </div>
+
+                        {props.footerStrapi?.linkRows?.map(linkGroup=>(
+                            <div className="lg:col-span-2" key={linkGroup.id}>
+                                <h4 className={blockTitleClassNames}> {linkGroup.Title} </h4>
+                                {linkGroup.Links?.map(linkItem => (
+                                    <Link 
+                                        key={linkItem.Text} 
+                                        href={linkItem.Url || "#"} 
+                                        className="block text-sm"
+                                    >
+                                        {linkItem.Text}
+                                    </Link>
+                                ))} 
+                            </div>
+                        ))}
+
+                        {!!props.enamad && (
+                            <a className="footer-enamad" referrerPolicy="origin" target="_blank" href={props.enamad}>
+                                <Image
+                                    referrerPolicy="origin"
+                                    src={"/images/enamad.png"}
+                                    alt="enamad"
+                                    width={75}
+                                    height={75}
+                                    className="object-contain"
+                                />
+                            </a>
+                        )}
+
+                    </div>
+
+
+                    <hr className="my-6 border-neutral-300" />
+
+                    <p>
+                    کلیۀ حقوق این وبسایت محفوظ و متعلق به گروه لایف است.
+                    </p>
+
                 </div>
+
+
             </footer>
         )
     }
@@ -64,14 +112,14 @@ const Footer: React.FC<Props> = props => {
 
                         {!!props.enamad && (
                             <a className="footer-enamad" referrerPolicy="origin" target="_blank" href={props.enamad}>
-                                <Image 
-                                    referrerPolicy="origin" 
-                                    src={"/images/enamad.png"} 
+                                <Image
+                                    referrerPolicy="origin"
+                                    src={"/images/enamad.png"}
                                     alt="enamad"
                                     width={75}
                                     height={75}
                                     className="object-contain"
-                                 />
+                                />
                             </a>
                         )}
 

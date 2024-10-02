@@ -86,8 +86,8 @@
     .styled-scrollbar {
       &::-webkit-scrollbar {
         width: 7px;
+        height: 7px;
       }
-  
       &::-webkit-scrollbar-track {
         border-radius: 5px;
         background: #ddd;
@@ -120,6 +120,23 @@
     }
 
 }
+
+@font-face {
+  font-family: 'iranyekan';
+  src: url('/fonts/iranyekan/iranyekanregular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'iranyekan';
+  src: url('/fonts/iranyekan/iranyekanmedium.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
 
 @font-face {
   font-family: 'samim';
@@ -183,6 +200,7 @@
   --color-primary-900: theme('colors.blue.900');
 
   --container-max-width: 1200px;
+  --half-container-max-width: 600px;
 
   --body-background: #f0f3f5;
 }
@@ -201,6 +219,7 @@
   --color-primary-900: theme('colors.blue.900');
 
   --container-max-width: 1224px;
+  --half-container-max-width: 612px;
 
   --body-background: #fff;
 }
@@ -217,19 +236,8 @@
   --color-primary-800: #0d1a3f;
   --color-primary-900: #09112a;
 
-
-  --color-secondary-50: #fef4e6;
-  --color-secondary-100: #fde9ce;
-  --color-secondary-200: #fddfb5;
-  --color-secondary-300: #fcd49c;
-  --color-secondary-400: #fabe6b;
-  --color-secondary-500: #f9a939;
-  --color-secondary-600: #f89c1b;
-  --color-secondary-700: #df8507;
-  --color-secondary-800: #ad6705;
-  --color-secondary-900: #633b03;
-
   --container-max-width: 1200px;
+  --half-container-max-width: 600px;
 
   --body-background: #f8f8f8;
 }
@@ -265,6 +273,28 @@ body {
   }
   p{
     margin-bottom: 13px;
+  }
+  h3{
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 12px;
+  }
+  h4{
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 12px;
+  }
+  img {
+    .theme-2 & {
+      border-radius: 10px;
+      display: block;
+      margin: 20px 0;
+    }
+  }
+  hr{
+    .theme-2 & {
+      margin: 15px 0;
+    }
   }
 }
 
@@ -309,5 +339,28 @@ footer img[src*=trustseal], footer img[src*='logo.samandehi'] {
   @media screen and (min-width : 641px) {    
     padding-left: 7px;
     padding-right: 7px;
+  }
+}
+
+.bg-caret{
+  background-image: url('/images/down-carret.svg');
+  background-size: 25px;
+  background-repeat: no-repeat;
+  background-position: right;
+}
+
+.theme-2 {
+  .yarl__slide, .yarl__slide_captions_container, .yarl__carousel_with_slides {
+    background: #191e3b;
+  }
+  .yarl__navigation_next, .yarl__navigation_prev {
+    .yarl__icon {
+      background: #fff;
+      border-radius: 50%;
+      padding: 3px;
+      g{
+        fill: #1890ff;
+      }
+    }
   }
 }

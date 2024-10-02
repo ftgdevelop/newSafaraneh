@@ -1,5 +1,5 @@
 import Skeleton from "@/modules/shared/components/ui/Skeleton";
-import { DomesticHotelAvailability } from "../../types/hotel";
+import { DomesticHotelAvailability, DomesticHotelRateItem, DomesticHotelRoomItem } from "../../types/hotel";
 import RoomItemTheme2 from "./RoomItemTheme2";
 
 type Props = {
@@ -8,6 +8,10 @@ type Props = {
     selectedRoomToken?: string;
     roomsHasImage?: boolean;
     nights?: number;
+    onOpenRoom: (room : {
+        rate: DomesticHotelRateItem;
+        room?: DomesticHotelRoomItem;
+    }) => void;
 
 }
 
@@ -46,17 +50,23 @@ const RoomsListTheme2: React.FC<Props> = props => {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {props.availabilites.map(availability => {
-                return availability.rates?.map(rateItem => (
+                return (
                     <RoomItemTheme2
-                        key={rateItem.bookingToken}
-                        rate={rateItem}
+                        rates={availability.rates || []}
+                        key={availability.rooms?.[0]?.name}
                         room={availability.rooms![0]}
                         onSelectRoom={props.selectRoomHandle}
                         selectedRoomToken={props.selectedRoomToken}
                         roomsHasImage={props.roomsHasImage || false}
                         nights={props.nights}
+                        onOpenRoom={(rateItem:any) =>{
+                            props.onOpenRoom({
+                                rate: rateItem,
+                                room: availability.rooms?.[0]
+                            })
+                        }}
                     />
-                ))
+                )
             })}
         </div>
     )

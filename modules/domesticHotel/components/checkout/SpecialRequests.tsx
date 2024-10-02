@@ -26,7 +26,7 @@ const SpecialRequests:React.FC = () =>{
           className='text-blue-500 inline-flex gap-1 items-center text-sm font-semibold outline-none'
         >
           <DownCaret className={`w-5 h-5 fill-current transition-all ${open?"-rotate-180":""}`} />
-          {t('special-requests')}
+          {theme2?"ارائۀ توضیحات درخصوص رزرو": t('special-requests')}
         </button>
 
         {!!open && (

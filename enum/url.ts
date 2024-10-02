@@ -27,11 +27,17 @@ export const Header = {
     Flight: process.env.PROJECT_SERVER_FLIGHT,
     Crm:process.env.PROJECT_SERVER_CRM,
     Cip: process.env.PROJECT_SERVER_CIP,
-    Traveler : process.env.PROJECT_SERVER_TRAVELER
+    Traveler : process.env.PROJECT_SERVER_TRAVELER,
+    Strapi : process.env.PROJECT_SERVER_STRAPI
   };
 
   export const Cms = {
     GetByUrl: "/api/services/app/Page/GetByUrl",
+  }
+
+  export const Strapi = {
+    Pages:"/api/pages",
+    Footer:"/api/footers"
   }
 
   export const Identity = {
@@ -73,7 +79,7 @@ export const Flight = {
 
   export const Blog = {
     getPosts: "//wp-json/wp/v2/posts",
-    getCategories: '/wp-json/wp/v2/best_category?categories=',
+    getBestCategories: '/wp-json/wp/v2/best_category',
     getCategoeyName: '/wp-json/wp/v2/categories',
     getCities: "//wp-json/wp/v2/cities/",
     getTagName: '/wp-json/wp/v2/tags/',
@@ -92,7 +98,6 @@ export const Flight = {
     ValidateRoom:"/api/services/app/Booking/Validate",
     SearchHotels:"/v2/Hotel/SearchHotels",
     getRates:"/v2/Comment/Rates",
-    getCityFaqById:"/api/services/app/Faq/GetAll",
     GetEntityNameByLocation: "/api/services/app/Entity/Get",
     GetValidate:"/api/services/app/Booking/GetValidate",
     PreReserve: "/api/services/app/Booking/PreReserve",

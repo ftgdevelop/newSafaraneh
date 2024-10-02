@@ -14,16 +14,20 @@ import '../styles/leaflet.css';
 // import '../styles/modernDatePicker.scss';
 
 import { store } from '../modules/shared/store';
-import { WebSiteDataType } from '@/modules/shared/types/common';
+import { FooterStrapi, GetPageByUrlDataType, WebSiteDataType } from '@/modules/shared/types/common';
 import { getPortal } from '@/modules/shared/actions/portalActions';
 import Layout from '@/modules/shared/components/layout';
 import { GTM_ID } from '@/modules/shared/helpers';
+import { getPageByUrl } from '@/modules/shared/actions';
+import { getStrapiFooter } from '@/modules/shared/actions/strapiActions';
 
 type TProps = Pick<AppProps, "Component" | "pageProps"> & {
   portalData?: WebSiteDataType;
+  pageData?: GetPageByUrlDataType;
+  footerStrapiData?: FooterStrapi;
 };
 
-function MyApp({ Component, pageProps, portalData }: TProps) {
+function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }: TProps) {
   const router = useRouter();
 
   const { locale } = router;
@@ -44,6 +48,15 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
     }
   }, []);
 
+  useEffect(()=>{
+    const fetchh = async () => {
+      const res = await  getPortal("fa-IR");
+      if (res){
+      }
+    }
+    fetchh();
+
+  },[]);
 
   const tel = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
   const emergencyNumber = portalData?.billing.emergencyNumber || "";
@@ -59,30 +72,51 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
   const portalTitle = portalData?.website?.title || "";
   const portalKeywords = portalData?.metaTags?.keyword || "";
   const portalDescription = portalData?.metaTags?.description || "";
+
+  const portalAuthor = portalData?.metaTags.author || "";
+  const portalCreator = portalData?.metaTags.creator || "";
+
+  const pageTitle = pageData?.pageTitle?.replaceAll("{0}", siteName) || "";
+  const pageDescription = pageData?.metaDescription?.replaceAll("{0}", siteName) || "";
+  const pageKeywords = pageData?.metaKeyword?.replaceAll("{0}", siteName) || "";
+
+  const title = pageTitle || portalTitle;
+  const description = pageDescription || portalDescription;
+  const keywords = pageKeywords || portalKeywords; 
   
   const portalEnamadMetaTag = portalData?.metaTags?.enamad || "";
   const enamad = portalData?.website?.enamad || "";
-  const samandehi = portalData?.website.samandehi || "";
-  const scripts = portalData?.website.scripts || "";
+  const samandehi = portalData?.website?.samandehi || "";
+  const scripts = portalData?.website?.scripts || "";
 
   let canonicalUrl = "";
+  let envSiteName = process.env.SITE_NAME;
+  let urlLocalePart = i18n?.language ? `/${i18n?.language}` : "";
+
+  if(process.env.LocaleInUrl === "off"){
+    urlLocalePart = "";
+  }
+
+  if (process.env.SITE_NAME?.includes("iranhotel")){
+    envSiteName = "https://www.iranhotel.app"
+  }
+
   if(typeof router !== 'undefined'){
     if (router.route === '/hotels/[...hotelList]'){
       canonicalUrl = "";
     }else if (router.route === '/hotel/[...hotelDetail]'){
-      canonicalUrl = process.env.SITE_NAME + (i18n?.language ? `/${i18n?.language}` : "") + (router.query.hotelDetail ? "/hotel/"+router.query.hotelDetail[0] : "");
+      canonicalUrl = envSiteName + urlLocalePart + (router.query.hotelDetail ? "/hotel/"+router.query.hotelDetail[0] : "");
     }else if (router.route === '/flights/[flights]'){
-      canonicalUrl = process.env.SITE_NAME + (i18n?.language ? `/${i18n?.language}` : "") + (router.query.flights ? "/flights/"+router.query.flights : "");
+      canonicalUrl = envSiteName + urlLocalePart + (router.query.flights ? "/flights/"+router.query.flights : "");
     }else{
 
       let path = router.asPath;
       if (path[path.length-1] === "/"){
         path = path.substring(0, path.length - 1);
       }
-      canonicalUrl = process.env.SITE_NAME + (i18n?.language ? `/${i18n?.language}` : "") + path
+      canonicalUrl = envSiteName + urlLocalePart + path
     }
   }
-  
   return (
     <Provider store={store}>
       <Head>
@@ -99,12 +133,13 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
         <meta name="theme-color" content="#0a438b" />
         <meta charSet="utf-8" />
 
-        <meta name="author" content="safaraneh.com" />
+        {!!portalAuthor && <meta name="author" content={portalAuthor} />}
+        {!!portalCreator && <meta name="creator" content={portalCreator} />}
+
         <meta name="copyright" content="safaraneh.com" />
         <meta name="cache-control" content="cache" />
         <meta name="content-language" content="fa" />
         <meta name="content-type" content="text/html;UTF-8" />
-        <meta name="creator" content="safaraneh.com" />
         <meta name="DC.Language" content="fa" />
         <meta name="DC.Type" content="Text,Image" />
         <meta name="DC.Creator" content="safaraneh.com" />
@@ -130,9 +165,9 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
 
         <link rel="shortcut icon" href={favIconLink} />
 
-        {!!portalTitle && <title>{portalTitle}</title>}
-        {!!portalKeywords && <meta name="keywords" content={portalKeywords} />}
-        {!!portalDescription && <meta name="description" content={portalDescription} />}
+        {!!title && <title>{title}</title>}
+        {!!keywords && <meta name="keywords" content={keywords} />}
+        {!!description && <meta name="description" content={description} />}
 
         {!!portalEnamadMetaTag && <meta name='enamad' content={portalEnamadMetaTag} />}
 
@@ -163,6 +198,7 @@ function MyApp({ Component, pageProps, portalData }: TProps) {
         enamad={enamad}
         samandehi={samandehi}
         scripts={scripts}
+        footerStrapi={footerStrapiData}
       >
 
         <Component {...pageProps} portalData={portalData} />
@@ -178,10 +214,37 @@ MyApp.getInitialProps = async (
 ): Promise<any> => {
   const ctx = await App.getInitialProps(context);
 
-  //const portalData = await getPortal(context?.router?.locale === "ar" ? "ar-AE" : context?.router?.locale=== "en" ? "en-US" : "fa-IR");
-  const portalData = await getPortal("fa-IR");
+  let url = context.router?.asPath || "/";
+  
+  const locale = context.router?.locale || "";
+  
+  if(locale && process.env.LocaleInUrl !== "off"){
+    url = "/" + locale + url;
+  }
 
-  return { ...ctx, portalData: portalData?.data?.result || null };
+  const acceptLanguage = locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR";
+
+  const theme2 = process.env.THEME === "THEME2";
+  const hasStrapi = process.env.PROJECT_SERVER_STRAPI;
+
+  const [portalData, pageResponse,footerStrapi] = await Promise.all<any>([
+    getPortal("fa-IR"),
+    getPageByUrl(url, acceptLanguage),
+    (hasStrapi && theme2) ? await getStrapiFooter("populate[LinkRows][populate]=*") : undefined
+  ]);
+  
+  const footerStrapiData = hasStrapi && theme2 ? {
+    title: footerStrapi?.data?.data?.[0]?.attributes?.Title,
+    description: footerStrapi?.data?.data?.[0]?.attributes?.Description,
+    linkRows: footerStrapi?.data?.data?.[0]?.attributes?.LinkRows
+  } : null
+
+  return {
+    ...ctx,
+    portalData: portalData?.data?.result || null,
+    pageData: pageResponse?.data?.result || null,
+    footerStrapiData: footerStrapiData
+  };
 };
 
 export default appWithTranslation(MyApp);

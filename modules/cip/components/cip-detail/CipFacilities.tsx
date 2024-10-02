@@ -6,12 +6,14 @@ type Props = {
 
 const CipFacilities: React.FC<Props> = props => {
     const { facilities } = props;
+    
+    const theme2 = process.env.THEME === "THEME2";
 
     return (
         <div className='py-2 md:py-5'>
             <strong className="block font-semibold text-lg mb-5"> امکانات فرودگاه </strong>
 
-            <div className='bg-white inserted-content rounded-lg border border-neutral-300 p-5 md:p-8 text-base leading-8'>
+            <div className={`inserted-content text-base leading-8 ${theme2?"py-5":"bg-white rounded-lg border border-neutral-300 p-5 md:p-8"}`}>
                 {facilities?.map((item, index) => (
                     <div key={item.id} className={`grid grid-cols-1 sm:grid-cols-4 gap-5 ${index ? "mt-5 md:mt-8" : ""}`}>
 

@@ -174,7 +174,7 @@ const PhoneInput: React.FC<Props> = props => {
     }
 
 
-    const inputClassNames : string[] = [`border ${theme1?"h-10":theme2?"h-13":""} px-22 rounded-l-md col-span-2 px-2 outline-none`];
+    const inputClassNames : string[] = [`bg-caret border ${theme1?"h-10":theme2?"h-13":""} px-22 rounded-l-md ${theme2?"min-w-0 basis-40 grow-0":"col-span-4"} px-2 outline-none`];
 
     if(errorText && isTouched){
         inputClassNames.push(`border-red-500 ${theme2?"border-2":""}`);
@@ -182,7 +182,7 @@ const PhoneInput: React.FC<Props> = props => {
         inputClassNames.push(`${theme2?"border-neutral-400 focus:border-2":"border-neutral-300"} focus:border-blue-500`);
     }
 
-    const inputClassNames2 : string[] = [`border ${theme1?"h-10":theme2?"h-13":""} ${!props.labelIsSimple && theme2 ? "pt-4 leading-4" : ""} px-2 col-span-3 border-l-0 rounded-r-md outline-none`];
+    const inputClassNames2 : string[] = [`border ${theme1?"h-10":theme2?"h-13":""} ${!props.labelIsSimple && theme2 ? "pt-4 leading-4" : ""} px-2 ${theme2?"basis-60 w-full grow":"col-span-5"} border-l-0 rounded-r-md outline-none`];
 
     if(errorText && isTouched){
         inputClassNames2.push(`border-red-500 ${theme2?"border-2":""}`);
@@ -207,7 +207,7 @@ const PhoneInput: React.FC<Props> = props => {
                         </div>
                     )}
                 </div>
-                <div className='relative grid grid-cols-5 text-sm' dir='ltr' ref={codeRef}>
+                <div className={`relative text-sm ${theme2?"flex":"grid grid-cols-9"}`} dir='ltr' ref={codeRef}>
 
                     {!typedCode && <div className='absolute left-3 top-1/2 -translate-y-1/2 flex gap-2 items-center pointer-events-none'>
                         <Image
@@ -252,17 +252,17 @@ const PhoneInput: React.FC<Props> = props => {
                         name={props.name}
                     />
 
-                    {!!openCodes && <div className='absolute top-full left-0 min-w-full bg-white shadow z-10 max-h-44 overflow-auto'>
+                    {!!openCodes && <div className='absolute styled-scrollbar max-w-full top-full left-0 min-w-full bg-white shadow z-20 max-h-44 overflow-auto'>
                         {filterCodeItems.map(item => {
                             return (
                                 <div
-                                    className='flex gap-2 items-center text-sm select-none cursor-pointer hover:bg-neutral-800 border-neutral-800 hover:text-white px-2'
+                                    className='flex font-sans gap-2 items-center truncate max-w-full text-sm select-none cursor-pointer hover:bg-black transition-all border-neutral-800 hover:text-white h-10 px-3'
                                     dir='ltr'
                                     key={item[2].toString()}
                                     onClick={() => { selectCountry(item) }}
                                 >
                                     <Image src={`/images/flags/${item[2]}.svg`} alt={item[0]! as string} width={30} height={16} className='w-8 h-5 object-cover border' />
-                                    +{item[3]}
+                                    +{item[3]} <span className='text-xs'> {item[0]} </span>
                                 </div>
                             )
                         })}

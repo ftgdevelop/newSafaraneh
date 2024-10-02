@@ -46,6 +46,8 @@ function SetView({ coords, zoom }: { coords: [number, number], zoom: number }) {
 
 const LeafletMap: React.FC<Props> = props => {
 
+    const theme2 = process.env.THEME === "THEME2";
+    
     const { t } = useTranslation('common');
     const { t: tHotel } = useTranslation('hotel');
 
@@ -129,7 +131,7 @@ const LeafletMap: React.FC<Props> = props => {
         const iconHTML = ReactDOMServer.renderToString(<div>
 
             <div
-                className={`${colorClass} text-white px-2 py-0 rounded border-2 border-white shadow w-auto text-sm rtl:font-samim`}
+                className={`${colorClass} text-white px-2 py-0 rounded border-2 border-white shadow w-auto text-sm ${theme2?"rtl:font-iranyekan":"rtl:font-samim"}`}
             >
                 <div
                     className='font-semibold whitespace-nowrap'

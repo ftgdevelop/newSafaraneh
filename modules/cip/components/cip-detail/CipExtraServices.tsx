@@ -17,11 +17,13 @@ const CipExtraServices: React.FC<Props> = props => {
 
     const { t } = useTranslation('common');
 
+    const theme2 = process.env.THEME === "THEME2";
+
     const { selectedServicesArray, updateSelectedServices, activeServices, updateActiveService } = props;
 
     return (
         <div id="extra_services_section" className="py-2 sm:py-5">
-            <div className='bg-white rounded-lg border border-neutral-300 p-5'>
+            <div className={`${theme2?"py-5":"bg-white rounded-lg border border-neutral-300 p-5"}`}>
                 <strong className="font-semibold text-lg block "> انتخاب سرویس های مازاد </strong>
 
 

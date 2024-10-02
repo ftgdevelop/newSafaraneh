@@ -1,5 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 import Link from 'next/link';
+import { useAppDispatch } from '../../hooks/use-store';
+import { setProgressLoading } from '../../store/stylesSlice';
 
 type Props = {
     onClick?:()=>void;
@@ -9,13 +11,16 @@ type Props = {
     type?:"submit" | "button";
     href?:string;
     target?: "_blank";
-    color?:"red" | "blue" | 'green'|'gray' | "secondary" | "primary";
+    color?:"red" | "blue" | 'green'|'gray' | "primary";
     hasArrow?: boolean;
+    prefetch?: boolean;
 }
 
 
 const Button: React.FC<PropsWithChildren<Props>> = props => {
     
+    const dispatch = useAppDispatch();
+
     const {color} = props;
 
     const theme2 = process.env.THEME === "THEME2";
@@ -32,8 +37,6 @@ const Button: React.FC<PropsWithChildren<Props>> = props => {
         className += " text-white bg-green-800 hover:bg-green-700";
     }else if (color === 'gray'){
         className += " bg-neutral-100 hover:bg-neutral-200";
-    }else if (color === 'secondary'){
-        className += " text-white bg-secondary-600 hover:bg-secondary-700";
     }else{
         className += " text-white bg-red-600 hover:bg-red-700";
     }
@@ -45,7 +48,13 @@ const Button: React.FC<PropsWithChildren<Props>> = props => {
     ) : null;
 
     if (props.href){
-        return <Link href={props.href} target={props.target} className={className}>
+        return <Link 
+            href={props.href} 
+            target={props.target} 
+            className={className}
+            prefetch={props.prefetch || false}
+            onClick={() => {dispatch(setProgressLoading(true))}}
+        >
             {props.children}
             {arrow}
         </Link>

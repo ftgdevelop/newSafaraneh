@@ -8,7 +8,7 @@ import { Field, Form, Formik } from 'formik';
 import Button from '@/modules/shared/components/ui/Button';
 import Select from '@/modules/shared/components/ui/Select';
 import AutoComplete from '@/modules/shared/components/ui/AutoComplete';
-import { Calendar, Location, Minus, Swap, Travel } from '@/modules/shared/components/ui/icons';
+import { Calendar, CalendarFill, Location, Minus, Swap, Travel } from '@/modules/shared/components/ui/icons';
 import { Flight, ServerAddress } from '@/enum/url';
 import { validateRequied } from '@/modules/shared/helpers/validation';
 import { addSomeDays, dateFormat } from '@/modules/shared/helpers';
@@ -158,7 +158,7 @@ const SearchForm: React.FC<Props> = props => {
                                         <Select
                                             h10
                                             className='inline-block w-32 rounded-full'
-                                            buttonClassName='font-bold'
+                                            buttonClassName='border-neutral-400'
                                             items={[
                                                 { value: "OneWay", label: "یک طرفه" },
                                                 { value: "RoundTrip", label: "رفت و برگشت" }
@@ -201,7 +201,7 @@ const SearchForm: React.FC<Props> = props => {
                                         <Select
                                             h10
                                             className={`inline-block w-28 ${theme2 ? "rounded-full" : "rounded-lg"}`}
-                                            buttonClassName={theme2 ? "font-bold" : ""}
+                                            buttonClassName={theme2 ? "border-neutral-400" : ""}
                                             items={[
                                                 { value: "All", label: "همه" },
                                                 { value: "Economy", label: "اکونومی" },
@@ -217,7 +217,7 @@ const SearchForm: React.FC<Props> = props => {
 
                                 </div>
 
-                                <div className={`text-neutral-800 grid gap-3 gap-y-4 z-[2] relative ${theme1 ? "grid-cols-2 md:grid-cols-4 lg:grid-cols-6" : (theme2 || theme3) ? "grid-cols-1 sm:grid-cols-6 lg:grid-cols-5 xl:grid-cols-13" : ""}`}>
+                                <div className={`text-neutral-800 grid gap-3 gap-y-4 z-[2] relative ${theme1 ? "grid-cols-2 md:grid-cols-4 lg:grid-cols-6" : (theme2 || theme3) ? "grid-cols-1 sm:grid-cols-6 lg:grid-cols-5 xl:grid-cols-14" : ""}`}>
 
                                     <div className={`relative ${theme1 ? "col-span-2 sm:col-span-1 lg:col-span-2" : (theme2 || theme3) ? "sm:col-span-3 lg:col-span-1 xl:col-span-3" : ""}`}>
 
@@ -365,9 +365,9 @@ const SearchForm: React.FC<Props> = props => {
                                                     ])
                                                 });
                                             }}
-                                            className='rounded-full p-0.5 border border-neutral-500 bg-white absolute top-0 max-sm:rotate-90 -mt-5 sm:top-2.5 left-2 sm:left-auto sm:mt-0 sm:-right-5 cursor-pointer outline-none'
+                                            className={`rounded-full ${theme2?"p-1.5 top-0 sm:top-2 -mt-5":"-mt-5 p-0.5 top-0 sm:top-2.5"} border border-neutral-500 bg-white absolute max-sm:rotate-90 sm:mt-0 left-2 sm:left-auto sm:-right-5 cursor-pointer outline-none`}
                                         >
-                                            <Swap className='w-5 h-5 fill-current' />
+                                            <Swap className={`${theme2?"w-4 h-4 fill-blue-700":"w-5 h-5 fill-current"}`} />
                                         </button>
 
                                     </div>
@@ -416,7 +416,13 @@ const SearchForm: React.FC<Props> = props => {
                                                 onChangeLocale={setLocale}
                                                 value={values.departureDate}
                                             />
-                                            <Calendar className="w-5 h-5 fill-neutral-600 top-1/2 -translate-y-1/2 right-3 absolute select-none pointer-events-none" />
+                                        
+                                            {theme2 ?(
+                                                <CalendarFill className='w-5 h-5 fill-neutral-600 top-1/2 -translate-y-1/2 right-3 absolute select-none pointer-events-none' />
+                                            ):(
+                                                <Calendar className='w-5 h-5 fill-neutral-600 top-1/2 -translate-y-1/2 right-3 absolute select-none pointer-events-none' />
+                                            )}
+
                                             <label className={`absolute leading-5 rtl:right-10 select-none pointer-events-none transition-all ${values.departureDate ? "top-1.5 text-4xs " : "top-1/2 -translate-y-1/2 text-sm "}`}>
                                                 تاریخ رفت
                                             </label>
@@ -491,7 +497,13 @@ const SearchForm: React.FC<Props> = props => {
                                                     value={values.returnDate}
                                                     minDate={values.departureDate ? dateFormat(addSomeDays(new Date(values.departureDate))) : dateFormat(addSomeDays(new Date()))}
                                                 />
-                                                <Calendar className="w-5 h-5 fill-neutral-600 top-1/2 -translate-y-1/2 right-3 absolute select-none pointer-events-none" />
+
+                                                {theme2 ?(
+                                                    <CalendarFill className='w-5 h-5 fill-neutral-600 top-1/2 -translate-y-1/2 right-3 absolute select-none pointer-events-none' />
+                                                ):(
+                                                    <Calendar className='w-5 h-5 fill-neutral-600 top-1/2 -translate-y-1/2 right-3 absolute select-none pointer-events-none' />
+                                                )}
+
                                                 <label className={`absolute leading-5 rtl:right-10 select-none pointer-events-none transition-all ${values.returnDate ? "top-1.5 text-4xs " : "top-1/2 -translate-y-1/2 text-sm "}`}>
                                                     تاریخ برگشت
                                                 </label>
@@ -522,7 +534,12 @@ const SearchForm: React.FC<Props> = props => {
                                             className={`relative flex justify-center items-center border border-neutral-400 h-12 rounded-lg text-xs w-full cursor-pointer bg-white hover:bg-neutral-100 ${theme2 ? "sm:col-span-2 lg:col-span-1 xl:col-span-2" : ""}`}
                                             onClick={() => { setFieldValue("airTripType", 'RoundTrip', true); }}
                                         >
-                                            <Calendar className="w-7 h-7 fill-neutral-600 top-1/2 -mt-3.5 right-3 absolute select-none pointer-events-none" />
+                                            {theme2 ?(
+                                                <CalendarFill className='w-7 h-7 fill-neutral-600 top-1/2 -mt-3.5 right-3 absolute select-none pointer-events-none' />
+                                            ):(
+                                                <Calendar className='w-7 h-7 fill-neutral-600 top-1/2 -mt-3.5 right-3 absolute select-none pointer-events-none' />
+                                            )}
+
                                             تاریخ برگشت
                                         </div>
                                     )}
@@ -533,7 +550,7 @@ const SearchForm: React.FC<Props> = props => {
                                         wrapperClassNames='sm:col-span-2 lg:col-span-1 xl:col-span-2 shrink-0'
                                     />}
 
-                                    <div className={`relative ${theme1 ? "col-span-2 md:col-span-4 lg:col-span-6" : (theme2 || theme3) ? "sm:col-span-6 lg:col-span-5 xl:col-span-1" : ""}`} >
+                                    <div className={`relative ${theme1 ? "col-span-2 md:col-span-4 lg:col-span-6" : (theme2 || theme3) ? "sm:col-span-6 lg:col-span-5 xl:col-span-2" : ""}`} >
                                         <Button
                                             color='blue'
                                             type='submit'

@@ -1,5 +1,5 @@
 import Checkbox from "@/modules/shared/components/ui/Checkbox";
-import { FlightType } from "../../types/flights";
+import { FlightItemType } from "../../types/flights";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/modules/shared/store";
@@ -15,7 +15,7 @@ type uniqAirlinesType = {
     PictureAlt: string;
 }
 
-const Airlines: React.FC<any> = ({ FlightsData }: { FlightsData: FlightType[] }) => {
+const Airlines: React.FC<any> = ({ FlightsData }: { FlightsData: FlightItemType[] }) => {
     const airlinesFilter = useSelector((state: RootState) => state.flightFilters.filterOption.airlineOption)
     const dispatch = useDispatch()
 

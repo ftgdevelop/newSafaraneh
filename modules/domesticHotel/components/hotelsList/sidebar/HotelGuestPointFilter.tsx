@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 
 import { useAppSelector } from "@/modules/shared/hooks/use-store";
 import CheckboxGroup from "@/modules/shared/components/ui/CheckboxGroup";
+import { toPersianDigits } from "@/modules/shared/helpers";
 
 const HotelGuestPointFilter: React.FC = () => {
 
@@ -14,7 +15,7 @@ const HotelGuestPointFilter: React.FC = () => {
     const savedOptions = useAppSelector(state => state.domesticHotelFilter.filterOptions.guestPointFilterOptions);
 
     const options: { value: string, label: React.ReactNode }[] = savedOptions.filter(item => +item.value[0] >= 50).map(item => ({
-        label: (<div className="flex justify-between grow"> {item.label}  <span> ({item.count}) </span></div>),
+        label: (<div className="flex justify-between grow"> {item.label}  <span> ({toPersianDigits(item.count?.toString())}) </span></div>),
         value: item.value[0] + "-" + item.value[1]
     }))
 
@@ -52,6 +53,10 @@ const HotelGuestPointFilter: React.FC = () => {
     useEffect(()=>{
         setValues(initialValues);
     },[initialValues.length]);
+
+    if (!options.length){
+        return null;
+    }
 
     return (
         <div className="mb-2 mt-4 border-t border-neutral-300 pt-5">

@@ -1,8 +1,8 @@
 import Button from "@/modules/shared/components/ui/Button";
 import Rating from "@/modules/shared/components/ui/Rating";
 import Skeleton from "@/modules/shared/components/ui/Skeleton";
-import { Tik, User, DefaultRoom } from "@/modules/shared/components/ui/icons";
-import { dateDiplayFormat, numberWithCommas } from "@/modules/shared/helpers";
+import { Tik, User, DefaultRoomTheme2 } from "@/modules/shared/components/ui/icons";
+import { dateDiplayFormat, numberWithCommas, toPersianDigits } from "@/modules/shared/helpers";
 import { useTranslation } from "next-i18next";
 import Image from "next/image";
 import { AsideHotelInfoType, AsideReserveInfoType } from "../../types/hotel";
@@ -24,6 +24,8 @@ type Props = {
         isValid: true;
     };
     discountLoading?: boolean;
+    checkinTime?: string;
+    checkoutTime?: string;
 }
 const AsideTheme2: React.FC<Props> = props => {
 
@@ -35,7 +37,7 @@ const AsideTheme2: React.FC<Props> = props => {
     const board = (code: string) => {
         switch (code) {
             case "BB":
-                return "به همراه صبحانه";
+                return "با صبحانه";
             case "HB":
                 return "صبحانه + ناهار یا شام";
             case "FB":
@@ -78,31 +80,31 @@ const AsideTheme2: React.FC<Props> = props => {
     if (!reserveInformation) {
         return (
             <>
-            <div className='border border-neutral-300 bg-white rounded-xl mb-4'>
-                <Skeleton type='image' className="h-36 sm:h-60 rounded-t-xl" />
+                <div className='border border-neutral-300 bg-white rounded-xl mb-4'>
+                    <Skeleton type='image' className="h-36 sm:h-60 rounded-t-xl" />
 
-                <div className="p-5">
+                    <div className="p-5">
 
-                    <Skeleton className='mb-3 w-2/3' />
-                    <Skeleton className='mb-3 w-1/3 my-4' />
-                    <Skeleton className='w-full' />
+                        <Skeleton className='mb-3 w-2/3' />
+                        <Skeleton className='mb-3 w-1/3 my-4' />
+                        <Skeleton className='w-full' />
 
-                    <hr className="my-6"/>
+                        <hr className="my-6" />
 
-                    <Skeleton className='mb-3 w-1/3 my-4' />
-                    <Skeleton className='mb-3 w-2/3' />
-                    <Skeleton className='w-1/2' />
+                        <Skeleton className='mb-3 w-1/3 my-4' />
+                        <Skeleton className='mb-3 w-2/3' />
+                        <Skeleton className='w-1/2' />
 
-                    <hr className="my-6"/>
+                        <hr className="my-6" />
 
-                    <Skeleton className='mb-3 w-1/3 my-4' />
-                    <Skeleton className='mb-3 w-2/3' />
+                        <Skeleton className='mb-3 w-1/3 my-4' />
+                        <Skeleton className='mb-3 w-2/3' />
+
+                    </div>
 
                 </div>
 
-            </div>
-
-            <Skeleton className='mb-3 w-full mt-6 rounded-xl' type='button' />
+                <Skeleton className='mb-3 w-full mt-6 rounded-xl' type='button' />
 
             </>
         )
@@ -131,7 +133,7 @@ const AsideTheme2: React.FC<Props> = props => {
                     <div
                         className="bg-neutral-100 flex items-center justify-center h-full rounded-t-lg"
                     >
-                        <DefaultRoom className="fill-neutral-300 w-40 h-40 p-10" />
+                        <DefaultRoomTheme2 className="fill-neutral-300 w-40 h-40 p-10" />
                     </div>
                 )}
 
@@ -174,7 +176,12 @@ const AsideTheme2: React.FC<Props> = props => {
                             </label>
 
                             <div className="text-lg font-semibold mb-5">
-                                {dateDiplayFormat({ date: reserveInformation.checkin, format: "ddd dd mm", locale: "fa" })}
+                                {dateDiplayFormat({ date: reserveInformation.checkin, format: "ddd dd mm yyyy", locale: "fa" })} 
+                                {props.checkinTime ? 
+                                    <span className="text-neutral-500 text-sm rtl:mr-4 ltr:ml-4">
+                                        از ساعت {toPersianDigits(props.checkinTime)}
+                                    </span>
+                                : null}
                             </div>
 
                             <label className="block mb-2 font-semibold">
@@ -182,7 +189,12 @@ const AsideTheme2: React.FC<Props> = props => {
                             </label>
 
                             <div className="text-lg font-semibold mb-5">
-                                {dateDiplayFormat({ date: reserveInformation.checkout, format: "ddd dd mm", locale: "fa" })}
+                                {dateDiplayFormat({ date: reserveInformation.checkout, format: "ddd dd mm yyyy", locale: "fa" })} 
+                                {props.checkoutTime ? 
+                                    <span className="text-neutral-500 text-sm rtl:mr-4 ltr:ml-4"> 
+                                        تا ساعت {toPersianDigits(props.checkoutTime)}
+                                    </span>
+                                : null}
                             </div>
 
                         </>
@@ -192,18 +204,18 @@ const AsideTheme2: React.FC<Props> = props => {
 
                         //TODO check cancelation
                         let cancellation = null;
-                        switch (roomItem.cancellationPolicyStatus) {
-                            case "NonRefundable":
-                                cancellation = <div className="margin-bottom-5 text-red">{t("non-refundable")}</div>;
+                        switch (roomItem.cancellationPolicyStatus.toLowerCase()) {
+                            case "nonrefundable":
+                                cancellation = <div className="margin-bottom-5 text-red">{tHotel("non-refundable")}</div>;
                                 break;
-                            case "Refundable":
-                                cancellation = <div className="text-green margin-bottom-5">
-                                    <Tik className="w-3 h-4 fill-green-600" />
-                                    {t("refundable")}
+                            case "refundable":
+                                cancellation = <div className="text-green-600 margin-bottom-5">
+                                    <Tik className="w-5 h-5 fill-green-600 inline-block rtl:ml-1 ltr:mr-1" />
+                                    {tHotel("refundable")}
                                 </div>;
                                 break;
                             default:
-                                cancellation = <div className="margin-bottom-5">{roomItem.cancellationPolicyStatus}</div>;
+                                cancellation = <div className="margin-bottom-5">{roomItem.cancellationPolicyStatus} </div>;
                         }
 
                         let childPriceBlock = null;
@@ -239,12 +251,12 @@ const AsideTheme2: React.FC<Props> = props => {
                                 <div>
 
                                     <div className="font-semibold text-base mb-2">
-                                        {roomItem.name}
+                                        {toPersianDigits(roomItem.name)}
                                     </div>
 
                                     <div className="flex gap-2 items-center text-sm">
                                         <User className="w-4.5 h-4.5 fill-current" />
-                                        {roomItem.bed} {tHotel('guest')} {extraBedPriceBlock}
+                                        {(roomItem.bed || 0) + (roomItem.extraBed || 0) } {tHotel('guest')} {extraBedPriceBlock}
                                     </div>
 
                                     <div className="text-green-600 text-sm">{board(roomItem.board)}</div>
@@ -264,6 +276,48 @@ const AsideTheme2: React.FC<Props> = props => {
 
             <div className="bg-white p-5 rounded-xl border border-neutral-300 mb-4 text-sm">
                 <h5 className="font-semibold text-lg mb-3"> جزییات قیمت </h5>
+
+                {reserveInformation.rooms.map((room, roomIndex) => {
+
+                    if (room.nightly?.length && room.nightly.length > 1) {
+
+                        return (
+                            <div
+                                key={roomIndex}
+                                className="flex gap-3 mb-4 pb-3 overflow-x-auto styled-scrollbar select-none"
+                            >
+                                {room.nightly?.filter(n => (n.date && n.amount)).map(night => (
+                                    <div
+                                        key={roomIndex + (night.date || "")}
+                                        className="border rounded-lg text-xs bg-white whitespace-nowrap"
+                                    >
+                                        <header className="bg-neutral-200 p-2 leading-4 rounded-t-lg">
+                                            {dateDiplayFormat({
+                                                date: night.date!,
+                                                format: "ddd dd mm",
+                                                locale: "fa"
+                                            })}
+                                        </header>
+                                        <div className="p-2">
+                                            {!!night.board && <div className="text-neutral-400 text-xs line-through">
+                                                {numberWithCommas(night.board)} ریال
+                                            </div>}
+
+                                            {!!night.amount && <div className="font-semibold text-md">
+                                                {numberWithCommas(night.amount)} ریال
+                                            </div>}
+                                        </div>
+
+                                    </div>
+                                ))}
+                            </div>
+                        )
+                    } else {
+                        return null
+                    }
+
+                })}
+
                 {reserveInformation.salePrice && reserveInformation.salePrice > 500000 ? (
                     <>
                         {(hasDiscount || !!activeExtraBedPrice || !!reserveInformation.promoCodePrice || !!promoCodePrice) && (

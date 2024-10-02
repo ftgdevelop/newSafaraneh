@@ -10,7 +10,7 @@ import DomesticHotelAside from '@/modules/domesticHotel/components/shared/Aside'
 import DomesticHotelAside2 from '@/modules/domesticHotel/components/shared/AsideTheme2';
 import { domesticHotelGetReserveById, getDomesticHotelSummaryDetailById } from '@/modules/domesticHotel/actions';
 import { AsideHotelInfoType, AsideReserveInfoType, DomesticHotelGetReserveByIdData, DomesticHotelSummaryDetail } from '@/modules/domesticHotel/types/hotel';
-import { getDatesDiff } from '@/modules/shared/helpers';
+import { dateFormat, getDatesDiff } from '@/modules/shared/helpers';
 import { TabItem } from '@/modules/shared/types/common';
 import Tab from '@/modules/shared/components/ui/Tab';
 import OnlinePayment from '@/modules/payment/components/OnlinePayment';
@@ -26,6 +26,7 @@ import { flightGetReserveById } from '@/modules/flights/actions';
 import { DomesticFlightGetReserveByIdType } from '@/modules/flights/types/flights';
 import Aside from '@/modules/flights/components/shared/Aside';
 import { ServerAddress } from '@/enum/url';
+import { emptyReduxSafarmarket, setReduxSafarmarketPixel } from '@/modules/shared/store/safarmarketSlice';
 
 
 const Payment: NextPage = () => {
@@ -98,6 +99,54 @@ const Payment: NextPage = () => {
   }, [username, reserveId]);
 
 
+  const setHotelSafarmarketPixel = ({safarmarketSiteName, smId, reserveData, statusNumber}:{safarmarketSiteName: string , smId:string, reserveData: DomesticHotelGetReserveByIdData , statusNumber: 3|4|5}) => {
+
+    let beds = 0;
+    let extraBeds = 0;
+
+    let roomNames = [];
+    for(let i = 0; i < reserveData.rooms.length ; i++){
+      beds += reserveData.rooms[i].bed;
+      extraBeds += reserveData.rooms[i].extraBed;
+      roomNames.push(reserveData.rooms[i].name);
+    }
+
+    const pixel = {
+      rooms : reserveData.rooms?.length,
+      reserverName: reserveData?.reserver.firstName + " " + reserveData.reserver.lastName,
+      passengerPhone: reserveData.reserver.phoneNumber.replace("+98","0"),
+      passengerEmail: reserveData.reserver.email,
+      checkin:dateFormat(new Date(reserveData.checkin)),
+      checkout:dateFormat(new Date(reserveData.checkout)),
+      reserveId:reserveData.id,
+      countryId: "IR",
+      cityId: reserveData.accommodation?.city?.id,
+      rating:reserveData.accommodation?.rating,
+      price:reserveData.totalPrice,
+      roomType : roomNames,
+      hotelName:reserveData.accommodation?.name,
+      hotelEnglishName:reserveData.accommodation?.name, // نام انگلیسی هتل
+      cityName: reserveData.accommodation?.city?.name, //نام شهر به انگلیسی
+      guests : beds+ extraBeds, // تعداد مهمان
+      adults: beds, // تعداد بزرگسال
+      children: 0, // تعداد کودکان
+      ages:[], // سن کودکان
+      ref: status === "1" ? reserveData.id : 0  // شناسه یکتا برای مجزا کردن فروش که همان شماره ووچر می باشد. 
+    }
+
+    dispatch(setReduxSafarmarketPixel({
+      type: "hotel",
+      pixel : `https://safarmarket.com/api/hotel/v1/pixel/${safarmarketSiteName}/${statusNumber}/0/?smId=${smId}&DOM=1&PAX=${pixel.guests}&ROOM=${pixel.rooms}&ROOMTYPE=${pixel.roomType.join(",")}&ADL=${pixel.adults}&CHD=${pixel.children}&AGES=${pixel.ages.join(",")}&DSTID=${pixel.cityId}&CTY=${pixel.cityName}&CNTRYID=${pixel.countryId}&HNAME=${pixel.hotelName}&HEN=${pixel.hotelEnglishName}&STAR=${pixel.rating}&TOTPR=${pixel.price}&NAME=${pixel.reserverName}&PHON=${pixel.passengerPhone}&EMAIL=${pixel.passengerEmail}&CI=${pixel.checkin}&CO=${pixel.checkout}&OrderId=${pixel.reserveId}&REF=${pixel.ref}`
+    }));
+    
+  }
+
+  useEffect(()=>{
+    return (() => {
+      dispatch(emptyReduxSafarmarket());
+    });
+  },[]);
+
   useEffect(() => {
 
     const token = localStorage.getItem('Token') || "";
@@ -106,9 +155,37 @@ const Payment: NextPage = () => {
       const fetchDomesticHotelReserve = async () => {
         const response: any = await domesticHotelGetReserveById({ reserveId: reserveId, userName: username });
         if (response.data.result) {
-          setDomesticHotelReserveData(response.data.result)
-          setExpireDate(response.data.result.expirTime);
+          setDomesticHotelReserveData(response.data.result);
+          setExpireDate(response.data.result.expirTime);         
+          
+          if(process.env.SAFAR_MARKET_SITE_NAME){
+            
+            let pixelStatus : 3|4|5 = 3;
+            if (!status){
+              pixelStatus = 3;
+            } else if (status === "0"){
+              pixelStatus = 5;
+            } else if (status === "1"){
+              pixelStatus = 4;
+            }
 
+            let cookieSafarmarketId;
+            let cookies = decodeURIComponent(document?.cookie).split(';');
+            for (const item of cookies){
+              if (item.includes("safarMarketHotelSmId=")){
+                cookieSafarmarketId =item.split("=")[1];
+              }
+            }
+
+            if (cookieSafarmarketId){
+              setHotelSafarmarketPixel({
+                reserveData: response.data.result,
+                safarmarketSiteName: process.env.SAFAR_MARKET_SITE_NAME,
+                smId: cookieSafarmarketId,
+                statusNumber:pixelStatus
+              })
+            }
+          }
 
           const hotelDataResponse: { data?: { result?: DomesticHotelSummaryDetail } } = await getDomesticHotelSummaryDetailById(response.data.result.accommodationId || response.data.result.accommodation?.id);
           if (hotelDataResponse.data?.result) {
@@ -159,7 +236,6 @@ const Payment: NextPage = () => {
 
   }, [type, username, reserveId]);
 
-
   const goTobank = async (gatewayId: number) => {
 
     if (!reserveId) return;
@@ -207,11 +283,11 @@ const Payment: NextPage = () => {
         />
       ),
     },
-    {
-      key: '2',
-      label: ("کارت به کارت"),
-      children: (<CardToCard />),
-    },
+    // {
+    //   key: '2',
+    //   label: ("کارت به کارت"),
+    //   children: (<CardToCard />),
+    // },
     {
       key: '3',
       label: ("اعتباری"),
@@ -235,7 +311,9 @@ const Payment: NextPage = () => {
       rating: domesticHotelData.rating,
       address: domesticHotelData.address,
       Url: domesticHotelData.url,
-      CityId: domesticHotelData.cityId || domesticHotelData.city?.id
+      CityId: domesticHotelData.cityId || domesticHotelData.city?.id,
+      checkinTime: domesticHotelData.checkinTime,
+      checkoutTime: domesticHotelData.checkoutTime
     }
   }
   if (domesticHotelReserveData) {
@@ -255,7 +333,7 @@ const Payment: NextPage = () => {
         cancellationPolicyStatus: roomItem.cancellationPolicyStatus,
         bed: roomItem.bed,
         pricing: roomItem.pricing,
-
+        nightly: roomItem.nightly
       })),
       salePrice: domesticHotelReserveData.rooms.reduce((totalPrice: number, roomItem: any) => {
         const roomItemPrice = roomItem.pricing.find(
@@ -348,6 +426,7 @@ const Payment: NextPage = () => {
 
 
   }
+
   return (
     <>
 
@@ -384,7 +463,12 @@ const Payment: NextPage = () => {
 
             {type === 'HotelDomestic' ? (<>
               {theme2? (
-                <DomesticHotelAside2 hotelInformation={domesticHotelInformation} reserveInformation={domesticHotelReserveInformation} />
+                <DomesticHotelAside2 
+                  hotelInformation={domesticHotelInformation} 
+                  reserveInformation={domesticHotelReserveInformation} 
+                  checkinTime={domesticHotelData?.checkinTime}
+                  checkoutTime={domesticHotelData?.checkoutTime}
+                />
               ):(
                 <DomesticHotelAside hotelInformation={domesticHotelInformation} reserveInformation={domesticHotelReserveInformation} />
               )}

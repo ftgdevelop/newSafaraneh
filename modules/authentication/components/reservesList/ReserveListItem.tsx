@@ -184,7 +184,7 @@ const ReserveListItem: React.FC<Props> = props => {
     }
 
     let downloadTicket = null;
-    if (type === 'HotelDomestic' && status === 'Issued' && reserveDetail && username) {
+    if (type === 'HotelDomestic' && (status === 'Issued' || status === 'ContactProvider') && reserveDetail && username) {
         downloadTicket = <DownloadPdfVoucher
             simple
             reserveId={id.toString()}

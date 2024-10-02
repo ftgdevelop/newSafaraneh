@@ -233,6 +233,12 @@ const WeekendDeals: React.FC = () => {
         ]
     };
 
+    const items = pricedHotels.filter(hotel => hotel.salePrice || pricesLoading);
+
+    if (!items.length){
+        return null
+    }
+
     return (
         <section className="max-w-container m-auto px-3 max-xl:p-5 mb-5 sm:mb-12" >
             <h2 className="font-semibold text-md md:text-2xl mb-2">
@@ -247,7 +253,7 @@ const WeekendDeals: React.FC = () => {
                     {...settings}
                 >
 
-                    {pricedHotels.filter(hotel => hotel.salePrice || pricesLoading).map(hotel => (
+                    {items.map(hotel => (
                         <WeekendHotelItem
                             key={hotel.hotelId}
                             hotel={hotel}

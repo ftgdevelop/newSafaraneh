@@ -31,6 +31,8 @@ setOptions({
 
 const DatePicker: React.FC<Props> = props => {
 
+    const theme2 = process.env.THEME === "THEME2";
+
     const { t } = useTranslation('common');
 
     const [locale, setLocale] = useState<any>(localeFa);
@@ -83,6 +85,20 @@ const DatePicker: React.FC<Props> = props => {
         }
     },[value]);
 
+    const labelClassNames : string[] = ["z-10 select-none pointer-events-none block leading-4"];
+
+    if(props.labelIsSimple){
+        labelClassNames.push("mb-3 text-base");
+    }else{
+        labelClassNames.push("absolute px-2 bg-white transition-all duration-300 -translate-y-1/2 rtl:right-1 ltr:left-1");
+
+        if(value){
+            labelClassNames.push(`${theme2?"top-3.5 text-2xs":"top-0 text-xs"}`);
+        }else{
+            labelClassNames.push("top-1/2 text-sm");
+        }
+    }
+
     return (
         <div className={`${locale === localeFa ? 'persian-datepicker-wrapper' : ''} relative text-xs`} >
 
@@ -90,7 +106,7 @@ const DatePicker: React.FC<Props> = props => {
                 {!!props.label && (
                     <label
                         htmlFor={props.id}
-                        className={`z-10 select-none pointer-events-none block leading-4 ${props.labelIsSimple ? "mb-3" : "absolute px-2 bg-white transition-all duration-300 -translate-y-1/2 rtl:right-1 ltr:left-1"} ${props.labelIsSimple ? "text-base" : value ? "top-0 text-xs" : "top-1/2 text-sm"}`}
+                        className={labelClassNames.join(" ")}
                     >
                         {props.label}
                     </label>
@@ -101,7 +117,7 @@ const DatePicker: React.FC<Props> = props => {
                         name={props.name}
                         value={dateValue}
                         autoComplete="off"
-                        className={`${props.fieldClassName || ""} h-10 px-3 bg-white border ${props.errorText && props.isTouched ? "border-red-500" : "border-neutral-300 focus:border-blue-500"} outline-none rounded-md w-full`}
+                        className={`${props.fieldClassName || ""} ${theme2?"h-13 pt-4.5":"h-10"} px-3 bg-white border ${props.errorText && props.isTouched ? "border-red-500" : theme2? "border-neutral-400 focus:border-2 focus:border-blue-500": "border-neutral-300 focus:border-blue-500"} outline-none rounded-md w-full`}
                     />
             </div>
 
@@ -139,7 +155,7 @@ const DatePicker: React.FC<Props> = props => {
                     }}
                 >
 
-                    <footer className='direction-root font-samim mobi-date-picker-footer flex justify-center gap-5 md:justify-between items-center px-5 py-4 border-t border-neutral-300'>
+                    <footer className={`direction-root ${theme2?"font-iranyekan":"font-samim"} mobi-date-picker-footer flex justify-center gap-5 md:justify-between items-center px-5 py-4 border-t border-neutral-300`}>
                         <button type='button' onClick={goToday} className='text-primary-700 text-sm'>
                             {t('goToToday')}
                         </button>

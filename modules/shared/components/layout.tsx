@@ -9,6 +9,7 @@ import { setReduxUser } from "@/modules/authentication/store/authenticationSlice
 import { getCurrentUserProfile } from "@/modules/authentication/actions";
 import Notification from "./Notification";
 import { setProgressLoading } from "../store/stylesSlice";
+import { FooterStrapi } from "../types/common";
 
 type Props = {
   logo: string;
@@ -24,6 +25,7 @@ type Props = {
   enamad?: any;
   samandehi?: string;
   scripts?: string;
+  footerStrapi?: FooterStrapi;
 }
 
 const Layout: React.FC<PropsWithChildren<Props>> = props => {
@@ -43,6 +45,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
   }
   const removeLoading = () => { dispatch(setProgressLoading(false)) }
 
+  const safarmarketHotelPixel = useAppSelector(state => state.safarmarket.hotel);
 
   useEffect(() => {
 
@@ -99,6 +102,8 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
   return (
 
     <div className={`wrapper leading-7 ${process.env.THEME || ""} lang-${locale} ${locale !== "en" ? "rtl" : ""} ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`} >
+      
+      {!!safarmarketHotelPixel && <img src={safarmarketHotelPixel} className="h-px w-px opacity-0 absolute pointer-events-none" />}
 
       <PageLoadingBar active={loading} />
 
@@ -116,6 +121,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             contactInfo={props.contactInfo} 
             enamad={props.enamad || undefined} 
             samandehi={props.samandehi}
+            footerStrapi={props.footerStrapi}
           />
 
           {props.scripts ? <script

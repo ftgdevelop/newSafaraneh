@@ -31,6 +31,7 @@ const nextConfig = {
       'blog.iranhotel.ir',
       'trustseal.enamad.ir',
       'logo.samandehi.ir',
+      'strapi.safarlife.com',
       'www.facebook.com',
       'cdn.mehrbooking.net'
     ],
@@ -43,6 +44,8 @@ const nextConfig = {
     PROJECT: "SAFARANEH",
     SITE_NAME: 'https://www.safaraneh.com',
     THEME: "THEME1",
+    HOTEL_LIST_LAZY_LOAD: "lazy",
+    SAFAR_MARKET_SITE_NAME: "",
     PROJECT_SERVER_TYPE: "https://",
     PROJECT_SERVER_USER: "",
     
@@ -66,6 +69,7 @@ const nextConfig = {
     PROJECT_SERVER_CIP:"cip.safaraneh.com",
     PROJECT_SERVER_FLIGHT: "flightdomestic.safaraneh.com",
     PROJECT_SERVER_TENANTID: "1040",
+    PROJECT_SERVER_STRAPI:"",
     PROJECT_SERVER_NATIONALITY: "",
     PORT: '',
     //PROJECT_MODULES: "Flight Hotel CIP Blog ForeignFlight ForeignHotel",

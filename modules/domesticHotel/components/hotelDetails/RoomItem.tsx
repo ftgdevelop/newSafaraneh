@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 
 import { DomesticHotelRateItem, DomesticHotelRoomItem } from '@/modules/domesticHotel/types/hotel';
-import { Bed, DefaultRoom, InfoCircle, Restaurant, Tik, User } from '@/modules/shared/components/ui/icons';
+import { Bed, Calendar, DefaultRoom, InfoCircle, Tik, User } from '@/modules/shared/components/ui/icons';
 import { numberWithCommas } from '@/modules/shared/helpers';
 import Tooltip from '@/modules/shared/components/ui/Tooltip';
 import Quantity from '@/modules/shared/components/ui/Quantity';
@@ -16,6 +16,7 @@ type Props = {
     selectedRoomToken?: string;
     roomsHasImage?: boolean;
     nights?:number;
+    onOpenRoom: () => void;
 }
 
 const RoomItem: React.FC<Props> = props => {
@@ -32,10 +33,11 @@ const RoomItem: React.FC<Props> = props => {
         return null;
     }
 
-    let image: React.ReactNode = <div className={`${props.roomsHasImage?"":"max-sm:hidden"} bg-travel-pattern md:w-1/4 shrink-0 flex items-center justify-center bg-neutral-100 p-5 rtl:rounded-r-xl`}><DefaultRoom className='fill-neutral-400 w-24 h-24' /></div>
+    let image: React.ReactNode = props.roomsHasImage ? <div className="bg-travel-pattern md:w-1/4 shrink-0 flex items-center justify-center bg-neutral-100 p-5 rtl:rounded-r-xl"><DefaultRoom className='fill-neutral-400 w-24 h-24' /></div> : null;
 
     if (room.image) {
-        image = <div className={`${props.roomsHasImage?"":"max-sm:hidden"} bg-travel-pattern bg-neutral-300 w-full md:w-1/4 flex items-center justify-center max-md:rounded-t-xl md:rtl:rounded-r-xl md:ltr:rounded-l-xl`}>
+        image = props.roomsHasImage ? (
+        <div className="bg-travel-pattern bg-neutral-300 w-full md:w-1/4 flex items-center justify-center max-md:rounded-t-xl md:rtl:rounded-r-xl md:ltr:rounded-l-xl">
             <Image
                 onContextMenu={(e) => e.preventDefault()}
                 className='h-36 w-full object-cover object-center max-md:rounded-t-xl md:rtl:rounded-r-xl md:ltr:rounded-l-xl'
@@ -45,6 +47,7 @@ const RoomItem: React.FC<Props> = props => {
                 height="200"
             />
         </div>
+        ): null ;
     }
 
 
@@ -104,16 +107,6 @@ const RoomItem: React.FC<Props> = props => {
         )?.amount,
     };
 
-    const nightly = [];
-    if (rate.nightly.items) {
-        for (const [key, value] of Object.entries(rate.nightly.items)) {
-            nightly.push({
-                date: key,
-                amount: count * value.amount,
-                board: count * value.board,
-            });
-        }
-    }
 
     const calulateDiscount = (sale: number, board: number) => {
         let discountPercentage, fixedDiscountPercentage;
@@ -165,6 +158,15 @@ const RoomItem: React.FC<Props> = props => {
                             </div>
                         </div>
                     </Tooltip>
+
+                    {!!(rate.calendar || room.facilities?.length || room.promotions?.length) && <button 
+                        type='button'
+                        onClick={props.onOpenRoom}
+                        className='text-xs text-blue-600 flex items-center gap-1 mb-2 cursor-pointer'
+                    >
+                        <Calendar className='w-4 h-4 fill-current' />
+                        نمایش جزییات 
+                    </button>}
                 </>
             )}
         </>
@@ -182,7 +184,7 @@ const RoomItem: React.FC<Props> = props => {
                 }}
                 loading={!!selectedRoomToken && selectedRoomToken === rate.bookingToken}
                 disabled={!!selectedRoomToken && selectedRoomToken !== rate.bookingToken}
-                className='block w-full lg:w-44 h-8 px-5 rounded-md'
+                className='text-sm block w-full lg:w-44 h-8 px-5 rounded-md'
             >
                 {prices?.roomPrice && prices.roomPrice < 1000 ?
                     "درخواست رزرو"
@@ -223,7 +225,7 @@ const RoomItem: React.FC<Props> = props => {
                         </div>
                     )}
 
-                    {room.capacity.count && (
+                    {!!room.capacity.count && (
                         <div className="flex gap-2 items-center">
                             <User className='w-5 h-5 fill-neutral-400' />
                             {room.capacity.count} نفر
@@ -237,6 +239,18 @@ const RoomItem: React.FC<Props> = props => {
                         </div>
                     ) : (
                         <div className="line-through text-neutral-500"> {tHotel('extra-bed')} </div>
+                    )}
+                    {!!(room.promotions?.length) && (
+                        <div>
+                            {room.promotions.map(promotion => (
+                                <span
+                                    key={promotion.name}
+                                    className='bg-white border px-1 py-1 leading-5 rtl:ml-1 ltr:mr-1 mb-1 inline-block text-xs text-neutral-500 rounded'
+                                >
+                                    {promotion.name} 
+                                </span>
+                            ))}
+                        </div>
                     )}
 
                     {rate.description && <div className='text-amber-600 flex gap-2'>

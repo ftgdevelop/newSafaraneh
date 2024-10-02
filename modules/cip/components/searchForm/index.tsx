@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { Field, Form, Formik } from 'formik';
 import Button from '@/modules/shared/components/ui/Button';
 import AutoComplete from '@/modules/shared/components/ui/AutoComplete';
-import { Calendar, Location } from '@/modules/shared/components/ui/icons';
+import { Calendar, CalendarFill, Location } from '@/modules/shared/components/ui/icons';
 import { Cip, ServerAddress } from '@/enum/url';
 import { validateRequied } from '@/modules/shared/helpers/validation';
 import FormikField from '@/modules/shared/components/ui/FormikField';
@@ -255,7 +255,13 @@ const SearchForm: React.FC<Props> = props => {
                                             value={values.flightDate}
                                         />
 
-                                        <Calendar className="w-5 h-5 fill-neutral-600 top-1/2 -mt-2.5 right-3 absolute select-none pointer-events-none" />
+                                        {theme2 ?(
+                                            <CalendarFill className='w-5 h-5 fill-neutral-600 top-1/2 -mt-2.5 right-3 absolute select-none pointer-events-none' />
+                                        ):(
+                                            <Calendar className='w-5 h-5 fill-neutral-600 top-1/2 -mt-2.5 right-3 absolute select-none pointer-events-none' />
+                                        )}
+
+
                                         <label className={`absolute leading-5 rtl:right-10 select-none pointer-events-none transition-all ${values.flightDate ? "top-1.5 text-4xs " : "top-1/2 -translate-y-1/2 text-sm "}`}>
                                             تاریخ پرواز
                                         </label>

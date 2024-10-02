@@ -70,7 +70,8 @@ const DatePickerMobiscroll: React.FC<Props> = props => {
         instance?.navigate(new Date(2016, 1, 1));
     }
 
-
+    const theme2 = process.env.THEME === "THEME2";
+    
     return (
         <div className={`mobiscroll-datepicker-wrapper ${props.inputStyle} ${locale === localeFa ? 'persian-datepicker-wrapper' : ''}`} >
 
@@ -104,7 +105,7 @@ const DatePickerMobiscroll: React.FC<Props> = props => {
                 value = {value}
             >
 
-                <footer className='direction-root font-samim mobi-date-picker-footer flex justify-center gap-5 md:justify-between items-center px-5 py-4 border-t border-neutral-300'>
+                <footer className={`direction-root ${theme2?"font-iranyekan":"font-samim"} mobi-date-picker-footer flex justify-center gap-5 md:justify-between items-center px-5 py-4 border-t border-neutral-300`}>
                     <button type='button' onClick={goToday} className='text-primary-700 text-sm'>
                         {t('goToToday')}
                     </button>

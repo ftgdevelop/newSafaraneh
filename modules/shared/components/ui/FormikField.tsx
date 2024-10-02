@@ -19,6 +19,7 @@ type Props = {
     labelIsSimple?: boolean;
     labelIsSmall?:boolean;
     showRequiredStar?: boolean;
+    showRequiredStarEnd?: boolean;
     isPassword?: boolean;
     showNotConfirmedBadge?: boolean;
     disabled?:boolean;
@@ -88,9 +89,13 @@ const FormikField: React.FC<Props> = props => {
     if(props.heightClassName){
         inputClassNames.push(props.heightClassName);
     } else if(theme2){
-        inputClassNames.push(`h-13 pt-4 leading-4`);
+        inputClassNames.push(`h-13`);
     }else{
         inputClassNames.push("h-10");
+    }
+    
+    if(!props.labelIsSimple){
+        inputClassNames.push(`leading-4 ${theme2?"pt-4":"pt-0"}`);
     }
 
     if(props.errorText && props.isTouched){
@@ -118,8 +123,10 @@ const FormikField: React.FC<Props> = props => {
                             htmlFor={props.id}
                             className={labelClassNames.join(" ")}
                         >
-                            {!!(props.labelIsSimple && props.showRequiredStar) && <span className='text-red-600'>* </span>}
+                            {!!(props.labelIsSimple && props.showRequiredStar && !props.showRequiredStarEnd) && <span className='text-red-600'>* </span>}
                             {props.label}
+                            {!!(props.labelIsSimple && props.showRequiredStar && props.showRequiredStarEnd) && <span className='text-red-600'>* </span>}
+
                         </label>
                     )}
                     {props.showNotConfirmedBadge && (

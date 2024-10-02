@@ -1,6 +1,6 @@
-import { FlightType } from "../types/flights"
+import { FlightItemType } from "../types/flights"
 
-export const SidebarFilterChange = (FlightsData: FlightType[] , SidebarFilter: any , setFlightsInFilter: any) => {
+export const SidebarFilterChange = (FlightsData: FlightItemType[] , SidebarFilter: any , setFlightsInFilter: any) => {
     let list = FlightsData
     if (SidebarFilter.airlineOption.length) {
         list = list.filter((item: any) => SidebarFilter.airlineOption.includes(item.airline?.name))

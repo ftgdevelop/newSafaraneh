@@ -6,6 +6,7 @@ export interface EntitySearchResultItemType {
     language?: string;
     type: 'Province' | 'City' | 'Hotel';
     id?: number;
+    slug?: string;
 }
 
 export interface DomesticHotelFacilitieType {
@@ -189,6 +190,10 @@ export interface DomesticAccomodationGalleryType{
     filePath?: string;
     fileTitleAttribute?: string;
     fileAltAttribute?: string;
+    sizes?:{
+        displaySize:"mobile"|"desktop";
+        filePath?: string;
+    }[];
 }
 
 export interface DomesticAccomodationPolicyType{
@@ -233,6 +238,7 @@ export interface DomesticAccomodationType {
         searchValue?: string;
         displayName?: string;
         id: number;
+        slug?: string;
     };
     coordinates: {
         latitude: number;
@@ -289,6 +295,12 @@ export interface DomesticHotelRoomItem {
         extraBed: number;
     };
     id: number;
+    promotions?:{        
+        description?: string;
+        endDate?: string;
+        name?: string;
+        startDate?: string;
+    }[]
 }
 export interface DomesticHotelRateItem {
     pricing?: {
@@ -302,6 +314,13 @@ export interface DomesticHotelRateItem {
     supplierType: "Safaraneh" | "Snapp" | "ChannelLead" | "HotelYar" | "Eghamat24";
     available: number;
     description?: string;
+    calendar?: {
+        [date: string]: {
+            amount: number;
+            board: number;
+            type?: "Completion" | "Online" | "Offline" | "Request" | null;
+        };
+    };
     cancellationPolicy?: {
         status: "Refundable" | "NonRefundable" | "Unknown" | "CallSupport";
         fees: {
@@ -323,7 +342,13 @@ export interface DomesticHotelRateItem {
     nightly: {
         totalPrice: number;
         averagePrice: number;
-        items: unknown;
+        items: {
+            [date: string]: {
+                amount: number;
+                board: number;
+                type?: "Completion" | "Online" | "Offline" | "Request" | null;
+            }; 
+        }[];
     }
 }
 
@@ -420,6 +445,10 @@ export interface SearchAccomodationItem {
 export interface PricedHotelItem extends SearchAccomodationItem {
     ratesInfo?: "loading" | { Satisfaction: number; TotalRowCount: number; };
     priceInfo: "loading" | "notPriced" | "need-to-inquire" | { boardPrice: number; salePrice: number; };
+    promotions?:{
+        name?:string;
+        description?:string;
+    }[];
 }
 
 export type SortTypes = "priority" | "price" | "starRate" | "name" | "gueatRate";
@@ -450,8 +479,8 @@ export interface DomesticHotelGetValidateResponse {
         boardCode: "Undefined" | "BB" | "FB" | "HB" | "RO" | "Hour6" | "Hour10";
         boardExtra?: string;
         nightly: {
-            date: string;
-            amount: number;
+            date?: string;
+            amount?: number;
             board?: number;
         }[],
         pricing: {
@@ -481,7 +510,9 @@ export interface AsideHotelInfoType {
     address?: string;
     TopSelling?: number;
     Url?: string;
-    CityId?: number;
+    CityId?: number;  
+    checkinTime?: string;
+    checkoutTime?: string;
 
 }
 
@@ -502,6 +533,11 @@ export interface AsideReserveInfoType {
             ageCategoryType: "ADL" | "CHD" | "INF";
             type: "Room" | "RoomBoard" | "ExtraBed" | "HalfCharge" | "RoomNet" | "Markup" | "Commission" | "PromoCode";
         }[];
+        nightly?: {
+            date?: string;
+            amount?: number;
+            board?: number;
+        }[]
     }[]
     salePrice: number;
     boardPrice: number;
@@ -529,15 +565,26 @@ export interface DomesticHotelPrereserveParams {
     }[];
     specialRequest: string;
     preReserveKey: string;
+    metaSearchKey?: string;
+    metaSearchName?: "safarmarket"
 }
 
-export type DomesticHotelReserveStatus = "Undefined" | "Registered" | "Pending" | "Issued" | "Canceled" | "WebServiceCancel" | "PaymentSuccessful" | "WebServiceUnsuccessful" | "PriceChange" | "Unavailable" | "Refunded" | "Voided" | "InProgress" | "PaidBack" | "RefundInProgress" | "Changed" | "OnCredit";
+export type DomesticHotelReserveStatus = "Undefined" | "Registered" | "Pending" | "Issued" | "ContactProvider" | "Canceled" | "WebServiceCancel" | "PaymentSuccessful" | "WebServiceUnsuccessful" | "PriceChange" | "Unavailable" | "Refunded" | "Voided" | "InProgress" | "PaidBack" | "RefundInProgress" | "Changed" | "OnCredit";
 
 export interface DomesticHotelGetReserveByIdData {
     id: number;
     checkin: string;
     checkout: string;
     count: number;
+    accommodation?:{
+        name?: string;
+        displayName?: string;
+        rating?: number;
+        city?: {
+          name?: string;
+          id?: number
+        };
+    }
     accommodationId: number;
     totalPrice: number;
     totalBoardPrice: number;
@@ -567,6 +614,11 @@ export interface DomesticHotelGetReserveByIdData {
             ageCategoryType: "ADL" | "CHD" | "INF";
             type: "Room" | "RoomBoard" | "ExtraBed" | "HalfCharge" | "RoomNet" | "Markup" | "Commission" | "PromoCode";
         }[];
+        nightly?:{
+            date?: string;
+            mount?: number;
+            board?: number;
+        }[];
         extraBed: number;
         maxInfantAge: number;
         maxChildAge: number;
@@ -588,7 +640,7 @@ export interface DomesticHotelGetReserveByIdData {
 export interface DomesticHotelConfirmType {
     isCompleted: boolean;
     reserve: {
-        status: "Undefined" | "Registered" | "Pending" | "Issued" | "Canceled" | "WebServiceCancel" | "PaymentSuccessful" | "WebServiceUnsuccessful" | "PriceChange" | "Unavailable" | "Refunded" | "Voided" | "InProgress" | "PaidBack" | "RefundInProgress" | "Changed" | "OnCredit";
+        status: "Undefined" | "Registered" | "Pending" | "Issued" | "Canceled" | "ContactProvider" | "WebServiceCancel" | "PaymentSuccessful" | "WebServiceUnsuccessful" | "PriceChange" | "Unavailable" | "Refunded" | "Voided" | "InProgress" | "PaidBack" | "RefundInProgress" | "Changed" | "OnCredit";
     }
 }
 
@@ -618,11 +670,11 @@ export interface DomesticHotelSummaryDetail {
       rating?:number;
       address?: string;
       url?: string;
+      checkinTime?: string;
+      checkoutTime?: string;
       
     // "type": "Hotel",
     // "name": "string",
-    // "checkinTime": "string",
-    // "checkoutTime": "string",
     // "instruction": "string",
     // "briefDescription": "string",
     // "description": "string",

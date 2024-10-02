@@ -41,12 +41,34 @@ const settings = {
 };
 
 interface Props {
-    data? : CityItemType[]
+    cities? : CityItemType[]
 }
 
 
-const BlogCities: NextPage<Props> = ({data}) => {
+const BlogCities: NextPage<Props> = (props) => {
     
+    const {cities} = props;
+
+    const items = cities?.map((city ,index) => 
+        <Link 
+            key={city.title?.rendered}
+            href={city.excerpt?.rendered?.slice(3, city.excerpt.rendered.length - 5)}
+            target="_blank"
+            className="max-sm:relative max-sm:top-9 rtl:rtl" 
+        >
+            <div className="p-2">
+                <Image 
+                    src={city.images?.medium} 
+                    alt={city.title?.rendered} 
+                    width={397} 
+                    height={266}
+                    className="object-fit rounded-md w-full" 
+                    priority={!index} 
+                />
+                <p className="bg-white p-4 text-center rounded-lg relative bottom-18 ml-3 mr-3 m-auto text-xl">{city.title?.rendered}</p> 
+            </div>
+        </Link>
+    );
     
     return (
         <div className="text-black">
@@ -57,22 +79,9 @@ const BlogCities: NextPage<Props> = ({data}) => {
 
             <div className='max-xl:p-3 m-auto max-w-container'>
 
-            <Slider {...settings}>
-            {
-                data ?
-                data.map((city ,index) => 
-                    <Link href={city.excerpt.rendered.slice(3, city.excerpt.rendered.length - 5)}
-                    target="_blank" className="max-sm:relative max-sm:top-9 rtl:rtl" key={city.title.rendered}>
-                        <div className="p-2">
-                            <Image src={city.images.medium} alt={city.title.rendered} width={397} height={266}
-                                className="object-fit rounded-md w-full" priority={!index} />
-                            <p className="bg-white p-4 text-center rounded-lg relative bottom-18 ml-3 mr-3 m-auto text-xl">{city.title.rendered}</p> 
-                        </div>
-                    </Link>
-                ):<p></p>
-
-            }
-            </Slider>
+                {!!items?.length && <Slider {...settings}>
+                    {items}
+                </Slider>}
 
             </div>
         </div>

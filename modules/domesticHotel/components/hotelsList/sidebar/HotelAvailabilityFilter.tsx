@@ -11,6 +11,8 @@ const HotelAvailabilityFilter: React.FC = () => {
     const { t: tHotel } = useTranslation('hotel');
     const { t } = useTranslation('common');
 
+    const theme2 = process.env.THEME === "THEME2";
+
     const initialCkecked = router.asPath.includes('/available');
 
     const [checked, setchecked] = useState<boolean>(initialCkecked);
@@ -41,7 +43,7 @@ const HotelAvailabilityFilter: React.FC = () => {
         <>
             <div className="flex justify-between items-start mb-2 mt-4 border-t border-neutral-300 pt-5">
                 <label className="font-semibold text-sm">
-                    {tHotel('available-hotel')}
+                    {theme2 ? "هتل های قابل رزرو" : tHotel('available-hotel')}
                 </label>
                 {!!checked && <button
                     onClick={() => { setchecked(false) }}
@@ -54,7 +56,7 @@ const HotelAvailabilityFilter: React.FC = () => {
 
             <Checkbox
                 block
-                label={tHotel('just-available-hotel')}
+                label={theme2 ? "فقط هتل های قابل رزرو" : tHotel('just-available-hotel')}
                 onChange={c => { setchecked(c) }}
                 value=""
                 checked={checked}

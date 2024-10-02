@@ -162,7 +162,7 @@ const HotelListItemTheme3: React.FC<Props> = props => {
 
                 <div className="font-bold text-neutral-700 rtl:ml-2 ltr:mr-2 inline-block" > {hotel.displayName || hotel.name} </div>
 
-                {!!hotel.typeStr && <span className="bg-secondary-50 text-secondary-700 rounded-xl leading-6 text-2xs px-2 select-none">
+                {!!hotel.typeStr && <span className="bg-neutral-50 text-neutral-700 rounded-xl leading-6 text-2xs px-2 select-none">
                     {hotel.typeStr}
                 </span>}
 
@@ -176,7 +176,7 @@ const HotelListItemTheme3: React.FC<Props> = props => {
 
                 {!!hotel.address && <p className="text-xs leading-4 mb-2 text-neutral-500"> {hotel.address} </p>}
 
-                {hotel.facilities?.slice(0, 3).map(facility => (<span className="text-xs rtl:ml-2">
+                {hotel.facilities?.slice(0, 3).map(facility => (<span key={facility.id} className="text-xs rtl:ml-2">
                     {/* {facility.Image ? (
                         <Image
                             src={facility.Image}

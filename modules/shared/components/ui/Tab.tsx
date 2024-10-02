@@ -7,12 +7,12 @@ import RadioInputField from './RadioInputField';
 
 type Props = {
     items: TabItem[];
-    style?: "1" | "2" | "3" | "radioStyle" | "almosafer-home";
+    style?: "1" | "2" | "3" | "radioStyle" | "almosafer-home" | "expedia-home";
     radioStyle?: boolean;
     wrapperClassName?: string;
-    tabLinksCenter?: boolean;
     tabLinksBold?: boolean;
     innerElement?: React.ReactNode;
+    showTabsWhenThereIsOnlyOneItem?: boolean;
 }
 
 const Tab: React.FC<Props> = props => {
@@ -21,7 +21,7 @@ const Tab: React.FC<Props> = props => {
 
     const router = useRouter();
 
-    const [activetabKey, setActiveTabKey] = useState(items[0].key);
+    const [activetabKey, setActiveTabKey] = useState(items[0]?.key);
 
     let tabClassName = (active: boolean) => {
         if(style === 'almosafer-home'){
@@ -33,6 +33,20 @@ const Tab: React.FC<Props> = props => {
         } else {
             return `outline-none select-none text-2xs sm:text-sm px-2 sm:px-5 py-1 sm:py-2 border-b-2 transition-all ${active ? "text-primary-700 border-primary-700" : "border-transparent text-neutral-600"}`;
         }
+    }
+
+    if (style === 'expedia-home' && items.length === 1 && !props.showTabsWhenThereIsOnlyOneItem){
+        return(
+            <>
+            <div className={props.wrapperClassName || ""}>
+                {items[0].children}
+            </div>
+
+            {innerElement || null}
+
+            {items[0].children2 || null}
+        </>
+        )
     }
 
     return (
@@ -73,7 +87,7 @@ const Tab: React.FC<Props> = props => {
                             </label>))}
                     </>
                 ) : (
-                    <div className={`${style === '2' ? "flex gap-4" : style === '3' ? "flex border-b border-neutral-200" : "border-b border-neutral-200 sm:px-5"} ${props.tabLinksCenter ? "text-center" : ""} ${props.tabLinksBold ? "font-bold" : ""}`}>
+                    <div className={`${style === '2' ? "flex gap-4" : style === '3' ? "flex border-b border-neutral-200" : "border-b border-neutral-200 sm:px-5"} ${props.tabLinksBold ? "font-bold" : ""}`}>
                         {items.map(item => <button
                             type="button"
                             key={item.key}

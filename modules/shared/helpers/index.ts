@@ -1,18 +1,32 @@
+export const toPersianDigits = (x: string) => {
+    if (x) {                   
+        const persianNumbers = ["۰","۱","۲","۳","۴","۵","۶", "۷", "۸", "۹"];
+
+        for(var i=0; i<10; i++) {
+            x = x.replaceAll(i.toString(), persianNumbers[i]);
+        }
+    }
+
+  return x;
+};
+
 export const numberWithCommas = (x: number) => {
-    if (x) {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    if (x) {        
+        const y =  x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        return toPersianDigits(y);
     } else {
         return "0";
     }
 }
 
-export const dateDiplayFormat = ({ date, format, locale }: { date: string; format?: "m" | "d" | "HH:mm"| "dd mm"| "ddd dd mm" | "dd mm yyyy" | "yyyy/mm/dd" | "YYYY-MM-DD" | "yyyy/mm/dd h:m" , locale?: string }): string => {
+export const dateDiplayFormat = ({ date, format, locale }: { date: string; format?: "weekDayNumber" | "m" | "d" | "HH:mm"| "dd mm"| "ddd dd mm"| "ddd dd mm yyyy" | "dd mm yyyy" | "yyyy/mm/dd" | "YYYY-MM-DD" | "yyyy/mm/dd h:m" , locale?: string }): string => {
 
     if (!date) return "";
 
     const dateObject = new Date(date);
     const day = dateObject.toLocaleString(locale, { day: "numeric" });
     const weekDay = dateObject.toLocaleString(locale, { weekday: 'short' });
+    const weekDayNumber = dateObject.getDay();
     const month = dateObject.toLocaleString(locale, { month: "long" });
     const day2digit = dateObject.toLocaleString(locale, { day: "2-digit" })
     const month2digit = dateObject.toLocaleString(locale, { month: "2-digit" });
@@ -22,8 +36,8 @@ export const dateDiplayFormat = ({ date, format, locale }: { date: string; forma
     let m = dateObject.getMinutes().toString().padStart(2, '0');
 
     if (format === "HH:mm"){
-        const h = dateObject.toLocaleString(locale, { hour: "2-digit" });
-        const m = dateObject.toLocaleString(locale, { minute: "2-digit" });
+        const h = dateObject.toLocaleString(locale, { hour: "2-digit" }).padStart(2, '0');
+        const m = dateObject.toLocaleString(locale, { minute: "2-digit" }).padStart(2, '0');
         return(h+":"+m);
     }
 
@@ -50,10 +64,18 @@ export const dateDiplayFormat = ({ date, format, locale }: { date: string; forma
         return (`${day} ${month}`)
     }
     if (format === "d"){
-        return (day)
+        return (day2digit)
     }
     if (format === "m"){
         return (month)
+    }
+
+    if(format === "weekDayNumber"){
+        return weekDayNumber.toString()
+    }
+
+    if (format === "ddd dd mm yyyy"){
+        return (`${weekDay} ${day} ${month} ${year}`)
     }
 
     return date;

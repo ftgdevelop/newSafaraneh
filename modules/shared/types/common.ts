@@ -6,7 +6,26 @@ export type TabItem = {
     href?:string;
 };
 
-export interface PageDataType {
+export interface GetPageByUrlDataType {
+    entityId?: number;
+    title?: string;
+    pageTitle?: string;
+    metaKeyword?: string;
+    metaDescription?: string;
+    url?: string;
+    widget?:{
+      content?:{
+        description?: string;
+      };
+      faqs?:{
+        question?: string;
+        answer?: string;
+      }[]
+    }
+  };
+
+
+export interface HotelPageDataType {
     Id?: number;
     PageName?: string;
     Url?: string;
@@ -16,6 +35,7 @@ export interface PageDataType {
         Content: string
     }[];
 }
+
 export interface WebSiteDataType {
     billing: {
         name?: string;
@@ -150,3 +170,17 @@ export interface TravelerItem {
     phoneNumber?:string;
     id:number;
 }
+
+export interface FooterStrapi {
+    title?: string;
+    description?: string;
+    linkRows?: {
+      id: number;
+      Title?: string;
+      Links?:{
+        Text?: string;
+        Url?: string;
+        id: number;        
+      }[];
+    }[];
+  }
