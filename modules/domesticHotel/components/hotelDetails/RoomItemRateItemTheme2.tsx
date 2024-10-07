@@ -199,7 +199,7 @@ const RoomItemRateItemTheme2: React.FC<Props> = props => {
                 </div>}
 
                 <div className='flex gap-x-3 gap-y-1 items-center flex-wrap'>
-                    <span className='text-sm text-green-600'> {board(rate.board.code)} </span>
+                    <span className={`text-sm ${rate.board.code === 'RO' ? "text-neutral-400" : "text-green-600"}`}> {board(rate.board.code)} </span>
                     {cancellation}
                 </div>
 
