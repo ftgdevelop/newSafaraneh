@@ -50,7 +50,7 @@ const RoomItemTheme2: React.FC<Props> = props => {
                 <div className='p-3'>
 
                     <div className='flex gap-x-3 gap-y-1 items-center flex-wrap'>
-                        <h3 className='text-md md:text-lg font-semibold'> {room.name}</h3>
+                        <h3 className='text-17 md:text-lg font-semibold'> {room.name}</h3>
                     </div>
     
 
