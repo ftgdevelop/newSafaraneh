@@ -99,7 +99,7 @@ const HotelList: NextPage<Props> = props => {
 
   const [sortFactor, setSortFactor] = useState<SortTypes>("priority");
 
-  const [entity, setEntity] = useState<{ EntityName: string; EntityType: "City" | "Province" | "Hotel" }>();
+  const [entity, setEntity] = useState<{ EntityName: string; EntityType: "City" | "Province" | "Hotel"; slug?: string;  }>();
 
   const [showMap, setShowMap] = useState<boolean>(false);
 
@@ -342,7 +342,7 @@ const HotelList: NextPage<Props> = props => {
       const entityResponse: any = await getEntityNameByLocation(id, acceptLanguage);
 
       if (entityResponse?.data?.result) {
-        setEntity({ EntityName: entityResponse.data.result.name, EntityType: entityResponse.data.result.type });
+        setEntity({ EntityName: entityResponse.data.result.name, EntityType: entityResponse.data.result.type, slug: entityResponse.data.result.slug });
       }
     }
 
@@ -487,7 +487,8 @@ const HotelList: NextPage<Props> = props => {
   const defaultDestination: EntitySearchResultItemType = {
     name: entity?.EntityName,
     displayName: entity?.EntityName,
-    type: entity?.EntityType || 'City'
+    type: entity?.EntityType || 'City',
+    slug: entity?.slug || undefined
   }
 
   const urlSegments = router.asPath.split("/");
