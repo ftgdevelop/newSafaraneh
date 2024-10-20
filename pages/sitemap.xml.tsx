@@ -82,7 +82,7 @@ export const getServerSideProps = async ({ res }:{res:any}) => {
     })
     ,
     axios.get(
-      "https://cms2.safaraneh.com/api/services/app/Page/GetAll",
+      `${process.env.PROJECT_SERVER_TYPE}${process.env.PROJECT_SERVER_CMS}/api/services/app/Page/GetAll`,
       {
         headers: {
           'Content-Type': 'application/json',
