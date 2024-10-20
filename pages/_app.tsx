@@ -129,7 +129,6 @@ function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }:
         /> */}
         {/* _-_-_E_N_D_-_-_ delete when mobiscroll is activated */}
 
-        <meta name="robots" content="noindex" />
         <meta name="theme-color" content="#0a438b" />
         <meta charSet="utf-8" />
 
