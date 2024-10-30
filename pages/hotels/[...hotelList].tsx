@@ -34,6 +34,7 @@ type Props = {
   portalData: WebSiteDataType;
   accomodations?: SearchAccomodationItem[];
   strapiData?: any;
+  deleteParameters: any;
 }
 
 const HotelList: NextPage<Props> = props => {
@@ -83,6 +84,15 @@ const HotelList: NextPage<Props> = props => {
       description?:string;
     }[];
   }
+  
+
+  //TODO delete this useEffetc
+  useEffect(()=>{
+    const fetchHotels = async () => {
+      const response = await SearchAccomodation(props.deleteParameters, "fa-IR")
+    }
+    fetchHotels();
+  },[]);
 
   const dispatch = useAppDispatch();
 
@@ -911,7 +921,8 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       ...await (serverSideTranslations(context.locale, ['common', 'hotel', 'home'])),
       accomodations: searchAccomodationResponse?.data?.result || null,
       pageData: pageResponse?.data?.result || null,
-      strapiData: strapiResponse?.data?.data[0]?.attributes?.Sections || null
+      strapiData: strapiResponse?.data?.data[0]?.attributes?.Sections || null,
+      deleteParameters : searchParameters
     },
   })
 }
