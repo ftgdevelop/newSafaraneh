@@ -48,9 +48,19 @@ type Props = {
   };
   portalData: WebSiteDataType;
   error410?: "true";
+  deleteParameters:string;
 }
 
 const HotelDetail: NextPage<Props> = props => {
+
+
+  ////TODO: delete this useEffect
+  useEffect(()=>{
+    const fetchHotelAllData = async () => {
+      const allData: any = await getDomesticHotelDetailsByUrl( props.deleteParameters , "fa-IR");
+    }
+    fetchHotelAllData();
+  },[]);
 
   const dispatch = useAppDispatch();
 
@@ -858,7 +868,8 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return ({
     props: {
       ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
-      allData: allDataObject
+      allData: allDataObject,
+      deleteParameters: localePart + url 
     },
   })
 }
