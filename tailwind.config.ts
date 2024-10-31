@@ -111,6 +111,7 @@ const config: Config = {
         xs: '13px',
         sm: '14px',
         md: '15px',
+        17:'17px',
         '2xl': '22px',
         '3xl': '23px',
         '4xl': '28px',
