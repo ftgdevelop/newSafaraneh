@@ -165,7 +165,7 @@ const OnlinePayment: React.FC<Props> = props => {
                         {tPayment('please-choose-pay-panel')}
                     </h5>
 
-                    {bankGatewayList.map(item =>
+                    {bankGatewayList.filter(item => item.gateways?.length).map(item =>
                     (<div key={item.name}>
 
                         {item.category === "Group" ? (
