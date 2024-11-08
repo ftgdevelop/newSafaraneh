@@ -27,6 +27,7 @@ import { DomesticFlightGetReserveByIdType } from '@/modules/flights/types/flight
 import Aside from '@/modules/flights/components/shared/Aside';
 import { ServerAddress } from '@/enum/url';
 import { emptyReduxSafarmarket, setReduxSafarmarketPixel } from '@/modules/shared/store/safarmarketSlice';
+import { bankGatewayItem } from '@/modules/payment/types';
 
 
 const Payment: NextPage = () => {
@@ -49,7 +50,7 @@ const Payment: NextPage = () => {
   const [coordinatorPrice, setCoordinatorPrice] = useState<number>();
   const [domesticHotelReserveData, setDomesticHotelReserveData] = useState<DomesticHotelGetReserveByIdData>();
   const [domesticHotelData, setDomesticHotelData] = useState<DomesticHotelSummaryDetail>();
-  const [bankGatewayList, setBankGatewayList] = useState([]);
+  const [bankGatewayList, setBankGatewayList] = useState<bankGatewayItem[]>([]);
 
   const [cipReserveInfo, setCipReserveInfo] = useState<CipGetReserveByIdResponse>();
   const [cipReserveInfoLoading, setCipReserveInfoLoading] = useState<boolean>(true);
@@ -84,7 +85,7 @@ const Payment: NextPage = () => {
 
       const response: any = await getReserveBankGateway(reserveId);
       if (response?.status == 200 && response.data.result) {
-        setBankGatewayList(response.data?.result[0]);
+        setBankGatewayList(response.data?.result);
       } else {
         dispatch(setReduxError({
           title: t('error'),
