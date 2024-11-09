@@ -105,10 +105,10 @@ const Rooms: React.FC<Props> = props => {
         setSelectedRoomToken(token);
 
         let utm: undefined | { utmSource: string; utmKey: string };
-        if (router.query && router.query.utm_source && router.query.utm_key) {
+        if (router.query && router.query.utm_source && router.query.safarmarketId) {
             utm = {
                 utmSource: router.query.utm_source! as string,
-                utmKey: router.query.utm_key! as string
+                utmKey: router.query.safarmarketId! as string
             }
         }
 
