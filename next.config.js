@@ -45,7 +45,7 @@ const nextConfig = {
     SITE_NAME: 'https://www.safaraneh.com',
     THEME: "THEME1",
     HOTEL_LIST_LAZY_LOAD: "lazy",
-    SAFAR_MARKET_SITE_NAME: "",
+    SAFAR_MARKET_SITE_NAME: "safaraneh",
     PROJECT_SERVER_TYPE: "https://",
     PROJECT_SERVER_USER: "",
     
