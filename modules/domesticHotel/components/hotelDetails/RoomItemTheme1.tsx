@@ -2,7 +2,7 @@ import { useTranslation } from 'next-i18next';
 import Image from 'next/image';
 
 import { DomesticHotelRateItem, DomesticHotelRoomItem } from '@/modules/domesticHotel/types/hotel';
-import { Bed, DefaultRoomTheme2, User } from '@/modules/shared/components/ui/icons';
+import { Bed, User } from '@/modules/shared/components/ui/icons';
 import RoomItemRateItemTheme1 from './RoomItemRateItemTheme1';
 
 type Props = {
@@ -26,11 +26,7 @@ const RoomItemTheme1: React.FC<Props> = props => {
         return null;
     }
 
-    let image: React.ReactNode = <div
-        className={`${props.roomsHasImage ? "" : "max-md:hidden"} rounded-t-2xl md:rounded-2xl flex items-center justify-center bg-neutral-100 p-5`}
-    >
-        <DefaultRoomTheme2 className='fill-neutral-400 w-24 h-24' />
-    </div>
+    let image: React.ReactNode = null;
 
     if (room.image) {
         image = <Image
