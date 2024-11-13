@@ -308,7 +308,7 @@ export interface DomesticHotelRateItem {
         ageCategoryType: "ADL" | "CHD" | "INF";
         type: "Room" | "RoomBoard" | "ExtraBed" | "HalfCharge" | "RoomNet" | "Markup" | "Commission" | "PromoCode"
     }[];
-
+    isTheCheapest?: boolean;
     price: number;
     bookingToken?: string;
     supplierType: "Safaraneh" | "Snapp" | "ChannelLead" | "HotelYar" | "Eghamat24";
