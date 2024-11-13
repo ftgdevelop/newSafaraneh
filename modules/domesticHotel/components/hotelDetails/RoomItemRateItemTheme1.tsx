@@ -120,7 +120,6 @@ const RoomItemRateItemTheme1: React.FC<Props> = props => {
                     {(props.nights && props.nights > 1) ?(
                         <Tooltip
                             position='start'
-                            className='whitespace-nowrap'
                             title={rate.availablityType === 'Offline' ? (
                                 <div className='w-60'>
                                     قیمت نهایی پس از پردازش و تایید از طرف رزرواسیون مشخص می شود
