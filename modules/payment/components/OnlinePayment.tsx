@@ -37,11 +37,9 @@ const OnlinePayment: React.FC<Props> = props => {
     const [gatewayId, setGatewayId] = useState<number>();
     const [remaindSeconds, setRemaindSeconds] = useState<number>(100);
 
-    let firstBankId: number | undefined = undefined;
-    if (bankGatewayList[0]?.gateways?.length) {
-        firstBankId = bankGatewayList[0]?.gateways[0]?.id;
-    }
-
+    const banks = bankGatewayList.flatMap(item => [...item.gateways]);
+    const firstBankId = banks[0]?.id;
+    
     useEffect(() => {
         if (firstBankId) {
             setGatewayId(firstBankId);
