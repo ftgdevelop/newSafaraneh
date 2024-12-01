@@ -91,7 +91,8 @@ const config: Config = {
         '65vh': '65vh'
       },
       height: {
-        '500': '500px'
+        '500': '500px',
+        '550': '550px'
       },
       maxHeight: {
         'mobile-nav': 'calc(100vh - 90px)',
