@@ -9,13 +9,14 @@ import Head from "next/head";
 import { WebSiteDataType } from "@/modules/shared/types/common";
 import NotFound from "@/modules/shared/components/ui/NotFound";
 import SearchTheme2 from "@/modules/blogs/components/theme2/shared/SearchTheme2";
-import CategoriesTheme2 from "@/modules/blogs/components/theme2/blogHome/Categories";
 import Categories from "@/modules/blogs/components/BlogHome/Categories";
 import Intro from "@/modules/blogs/components/theme2/blogHome/Intro";
-import BlogListTheme2 from "@/modules/blogs/components/theme2/shared/BlogList";
-import Button from "@/modules/shared/components/ui/Button";
 import BlogList from "@/modules/blogs/components/shared/BlogList";
 import Link from "next/link";
+import { getStrapiMagazine } from "@/modules/shared/actions/strapiActions";
+import BlogCarousel from "@/modules/blogs/components/theme2/blogHome/BlogCarousel";
+import { LeftCaret } from "@/modules/shared/components/ui/icons";
+import BlogGrid from "@/modules/blogs/components/theme2/blogHome/BlogGrid";
 
 type Props = {
     recentPosts?: BlogItemType[];
@@ -25,6 +26,7 @@ type Props = {
     allCategories: CategoriesNameType[];
     portalData: WebSiteDataType;
     moduleDisabled?: boolean;
+    magzStrapiData?: BlogItemType[][];
 }
 
 const Blog: NextPage<Props> = (props) => {
@@ -49,19 +51,6 @@ const Blog: NextPage<Props> = (props) => {
         categoriesDetail.push(...category3);
     }
 
-    const categories: {
-        title: string;
-        imageUrl: string;
-        id: number
-    }[] = allCategories?.map(c => {
-        const categoryImage = categoriesDetail.find(item => item.title.rendered && item.title.rendered === c.name)?.images?.large;
-        return ({
-            id: c.id,
-            title: c.name,
-            imageUrl: categoryImage || ""
-        })
-    });
-
 
     if (theme2) {
         return (
@@ -72,26 +61,56 @@ const Blog: NextPage<Props> = (props) => {
 
                 <SearchTheme2 />
 
-                <Intro />
+                {props.magzStrapiData?.filter(item => item.length).map((item, index) => {
+                    const tags: {
+                        link: string;
+                        label: string;
+                    }[] = [];
 
-                <CategoriesTheme2 categories={categories} />
+                    const lastPost = item[0];
 
-                {!!recentPosts?.length &&
-                    <section className="max-w-container m-auto px-3 max-xl:p-5 mb-5 sm:mb-12">
-                        <BlogListTheme2 items={recentPosts} title="مطالب جدید" />
-                    </section>
+                    if (lastPost?.tags?.length && lastPost?.tags_names?.length) {
+                        for (let i = 0; i < lastPost.tags.length; i++) {
+                            tags.push({
+                                label: lastPost.tags_names[i],
+                                link: `/blog/tag/${lastPost.tags[i]}`
+                            });
+                        }
+                    }
+
+                    return (
+                        <div key={index}>
+                            <Intro
+                                tags={tags}
+                                description={lastPost?.excerpt?.rendered || ""}
+                                title={lastPost?.title?.rendered || ""}
+                                slug={lastPost?.slug || ""}
+                                imageAlt={lastPost?.title?.rendered || ""}
+                                imageUrl={lastPost?.images.large || ""}
+                                date={lastPost?.date}
+                            />
+
+                            <div className={`${index % 2 ? "md:px-10" : "max-w-container m-auto"} px-5 flex justify-between mb-6 lg:mb-10`} >
+                                <h2 className={`text-lg lg:text-4xl font-normal ${index % 2 ? "" : "lg:px-10"}`}> {lastPost?.categories_names?.[0]} </h2>
+                                <Link
+                                    href={`/blog/category/${lastPost?.categories[0]}`}
+                                    className="text-xs text-neutral-500 items-end"
+                                >
+                                    مشاهده همه مطالب دسته بندی {lastPost?.categories_names?.[0]}
+                                    <LeftCaret className="w-4 h-4 fill-current inline-block" />
+                                </Link>
+                            </div>
+
+                            {index % 2 ? (
+                                <BlogCarousel posts={item.slice(1)} />
+                            ) : (
+                                <BlogGrid posts={item.slice(1)} />
+                            )}
+
+                        </div>
+                    )
                 }
-
-                <div className="text-center my-14">
-                    <Button
-                        prefetch={false}
-                        href='/blog-list'
-                        className="w-60 h-10 mx-auto"
-                    >
-                        مشاهده مطالب بیشتر
-                    </Button>
-                </div>
-
+                )}
             </>
         )
     }
@@ -102,13 +121,13 @@ const Blog: NextPage<Props> = (props) => {
             <Head>
                 <title>وبلاگ | حرفه ای ترین شبکه معرفی هتل های ایران | {siteName} </title>
             </Head>
-            
+
             <div className="max-w-container m-auto pr-5 pl-5 max-sm:p-4">
                 <BreadCrumpt items={[{ label: "بلاگ" }]} />
             </div>
-            
+
             <BlogCities cities={cities} />
-        
+
             <Categories data3={category3} data2={category2} CategoriesData={allCategories} />
 
             <SearchBox />
@@ -118,7 +137,7 @@ const Blog: NextPage<Props> = (props) => {
                     <section className="max-w-container m-auto px-3 max-xl:p-5 mb-5 sm:mb-12">
                         <BlogList items={recentPosts} title="جدیدترین مطالب" />
                         <Link href='/blog-list'>
-                            <div  className="w-full rounded text-center mt-14 relative bottom-5 p-4 hover:bg-gray-100 duration-300 border-gray-200 border-2">
+                            <div className="w-full rounded text-center mt-14 relative bottom-5 p-4 hover:bg-gray-100 duration-300 border-gray-200 border-2">
                                 مشاهده مطالب بیشتر
                             </div>
                         </Link>
@@ -151,6 +170,21 @@ export const getStaticProps: GetStaticProps = async (context: any) => {
         GetCategories(),
     ])
 
+    const theme2 = process.env.THEME === "THEME2";
+    const hasStrapi = process.env.PROJECT_SERVER_STRAPI;
+
+    const strapiCategories = hasStrapi ? await getStrapiMagazine() : null;
+
+    const categoriyIds = theme2 && hasStrapi ? strapiCategories?.data?.data?.[0]?.attributes?.Items?.map((c: any) => +c.IdCategory) : null;
+
+    const theme2CategoriesPostRes = categoriyIds?.length ? await Promise.all<any>(categoriyIds?.map((x: any) => getBlogs({
+        category: x,
+        page: 1,
+        per_page: 4
+    }))) : null;
+
+    const theme2CategoriesPost = theme2CategoriesPostRes?.map(item => item.data);
+
     return ({
         props: {
             ...await serverSideTranslations(context.locale, ['common']),
@@ -158,7 +192,8 @@ export const getStaticProps: GetStaticProps = async (context: any) => {
             cities: cities?.data?.code ? [] : cities?.data || null,
             category3: category3?.data?.code ? [] : category3?.data || null,
             category2: category2?.data?.code ? [] : category2?.data || null,
-            allCategories: Categories?.data?.code ? [] : Categories?.data || null
+            allCategories: Categories?.data?.code ? [] : Categories?.data || null,
+            magzStrapiData: theme2CategoriesPost || null
         },
         revalidate: 12 * 60 * 60 //12 Hours
     })

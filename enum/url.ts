@@ -37,7 +37,8 @@ export const Header = {
 
   export const Strapi = {
     Pages:"/api/pages",
-    Footer:"/api/footers"
+    Footer:"/api/footers",
+    Magazine:"/api/magazines",
   }
 
   export const Identity = {
