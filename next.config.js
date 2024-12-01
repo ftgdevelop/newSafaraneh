@@ -62,7 +62,7 @@ const nextConfig = {
     PROJECT_SERVER_HOTEL_DATA: "hoteldomesticdata.safarlife.com",
     PROJECT_SERVER_HOTEL_AVAILABILITY: "hotelv4.safarlife.com",
     PROJECT_SERVER_COORDINATOR:"coordinator.safarlife.com",
-    //PROJECT_SERVER_BLOG :"panel.safarlife.com",
+    PROJECT_SERVER_BLOG :"panel.safarlife.com",
     PROJECT_SERVER_TRAVELER:"traveller.safarlife.com",
     PROJECT_SERVER_CRM:"crm.safarlife.com",
     PROJECT_SERVER_PAYMENT: "payline.safarlife.com",
@@ -74,7 +74,7 @@ const nextConfig = {
     PROJECT_SERVER_NATIONALITY: "",
     PORT: '',
     //PROJECT_MODULES: "DomesticHotel DomesticFlight CIP Blog ForeignFlight ForeignHotel",
-    PROJECT_MODULES: "DomesticHotel",
+    PROJECT_MODULES: "DomesticHotel Blog",
     // DEFAULT_lAN:"US",
     // LANGUAGES:["US","NO","FA"]
 
