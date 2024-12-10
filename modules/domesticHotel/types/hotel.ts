@@ -147,31 +147,6 @@ export interface DomesticHotelDetailType {
     NearBys?: DomesticHotelNearBy[]
 }
 
-export interface HotelScoreDataType {
-    Comments: {
-        CommentId?: number;
-        FullName?: string;
-        CityName?: string;
-        Comment?: string;
-        IsRecommended?: boolean;
-        Satisfaction?: number;
-        RoomService?: number;
-        ResturantQuality?: number;
-        DealWithPassanger?: number;
-        CreateDate?: string;
-        ModifyDate?: string;
-        PageUrl?: string;
-        AccommodationName?: string;
-        IsStay?: boolean;
-    }[];
-    TotalScore?: number;
-    Satisfaction?: number;
-    RoomService?: number;
-    ResturantQuality?: number;
-    DealWithPassanger?: number;
-    CommentCount?: number;
-}
-
 export interface DomesticAccomodationFacilityType{
     name?: string;
     description?: string;
@@ -712,4 +687,37 @@ export type HotelRecentSearchItem = {
     url: string;
     title: string;
     dates: string[];
+}
+
+export interface DomesticHotelReviewCommentItem {
+    id: number;
+    comment?: string;
+    overallRating: number;
+    userDisplayName: string;
+    recommendToOthers: boolean;
+    creationTime: string;
+    ratings: {
+        rating: number;
+        categoryId: number;
+        id: number;
+    }[];
+}
+
+export interface DomesticHotelReviewsType {
+    averageRating: number;
+    ratings: {
+        average: number;
+        category: {
+            keyword: "price_quality_satisfaction" | "staff_behavior" | "restaurant_cafe_quality" | "services" | "location" | "cleanliness",
+            name?: string;
+            tenantId: number;
+            isActive: boolean;
+            id: number;
+        },
+        //"id": 0
+    }[];
+    reviews: {
+        totalCount: number;
+        items: DomesticHotelReviewCommentItem[]
+    }
 }

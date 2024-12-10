@@ -1,13 +1,13 @@
 import { useTranslation } from 'next-i18next';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 
-import { HotelScoreDataType } from "@/modules/domesticHotel/types/hotel";
+import { DomesticHotelReviewsType } from "@/modules/domesticHotel/types/hotel";
 import HotelScore from '../../shared/HotelScore';
 import ProgressBar from '@/modules/shared/components/ui/ProgressBar';
 import CommentItem from './CommentItem';
 
 type Props = {
-    hotelScoreData: HotelScoreDataType;
+    hotelScoreData: DomesticHotelReviewsType;
 }
 
 const UsersComments: React.FC<Props> = props => {
@@ -32,34 +32,22 @@ const UsersComments: React.FC<Props> = props => {
 
             <div>
                 <h5 className='text-sm md:text-base font-semibold mb-5'>{tHotel("hotel-score")}</h5>
+
                 <HotelScore
-                    reviews={data.CommentCount}
-                    score={data.Satisfaction}
+                    reviews={data.reviews.totalCount}
+                    score={ Math.floor(data.averageRating)}
                     className="text-sm lg:text-md font-semibold"
                 />
 
-                <div className="mb-1 mt-5 text-sm">
-                    {tHotel('satisfaction-from-100', { satisfaction: data.Satisfaction })}
-                </div>
-                <ProgressBar percentage={data.Satisfaction || 0} />
+                {data.ratings.map(item => (
+                    <Fragment key={item.category.keyword}>
+                        <div className="mb-1 mt-5 text-sm">
+                            {item.category.name}
+                        </div>
+                        <ProgressBar percentage={item.average || 0} />
+                    </Fragment>
+                ))}
 
-
-                <div className="mb-1 mt-5 text-sm">
-                    {tHotel("room-status-from-10", { roomservice: data.RoomService })}
-                </div>
-                <ProgressBar percentage={(data.RoomService || 0) * 10} />
-
-
-                <div className="mb-1 mt-5 text-sm">
-                    {tHotel('restaurant-quality-from-10', { resturantquality: data.ResturantQuality })}
-                </div>
-                <ProgressBar percentage={(data.ResturantQuality || 0) * 10} />
-
-
-                <div className="mb-1 mt-5 text-sm">
-                    {tHotel("employees-treatment-from-10", { dealwithpassanger: data.DealWithPassanger })}
-                </div>
-                <ProgressBar percentage={(data.DealWithPassanger || 0) * 10} />
 
             </div>
 
@@ -67,8 +55,8 @@ const UsersComments: React.FC<Props> = props => {
 
                 <h5 className='text-sm md:text-base font-semibold mb-5'>{tHotel("user-suggestions")}</h5>
 
-                {data.Comments?.slice(0, 3).map((item, index) => <CommentItem key={index} comment={item} />)}
-                {showAll && data.Comments?.slice(3).map((item, index) => <CommentItem key={index} comment={item} />)}
+                {data?.reviews?.items?.slice(0, 3).map((item, index) => <CommentItem key={index} comment={item} />)}
+                {showAll && data?.reviews?.items?.slice(3).map((item, index) => <CommentItem key={index} comment={item} />)}
 
                 <button
                     type='button'
