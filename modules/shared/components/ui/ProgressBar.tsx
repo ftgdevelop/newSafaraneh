@@ -9,9 +9,8 @@ const ProgressBar: React.FC<Props> = props => {
         <div className={`h-2.5 rounded-lg bg bg-neutral-200 overflow-hidden ${props.className || ""}`} >
             <div
                 className='h-2.5 bg-primary-800'
-                style={{width: props.percentage + "%"}}
+                style={{width: props.percentage*10 + "%"}}
             />
-
         </div>
     );
 }
