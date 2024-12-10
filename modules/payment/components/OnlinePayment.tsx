@@ -211,11 +211,17 @@ const OnlinePayment: React.FC<Props> = props => {
                                             src={item.gateways[0]?.image?.path}
                                             alt={item.gateways[0]?.image?.altAttribute}
                                         />
-                                        <div className='text-right'>
-                                            <div className='font-semibold'>
-                                                {item.gateways[0]?.displayName || item.gateways[0]?.name}
-                                            </div>
-                                            {item.description}
+                                        <div className='text-right self-center'>
+                                            {(item.gateways[0]?.displayName && item.gateways[0]?.displayName === "سفرمارکت") ? (
+                                                <div className='font-semibold'> {item.gateways[0]?.displayName || item.gateways[0]?.name} </div>
+                                            ) : (
+                                                <>
+                                                    <div className='font-semibold'>
+                                                        {item.gateways[0]?.displayName || item.gateways[0]?.name}
+                                                    </div>
+                                                    {item.description}
+                                                </>
+                                            )}
                                         </div>
                                     </button>
 

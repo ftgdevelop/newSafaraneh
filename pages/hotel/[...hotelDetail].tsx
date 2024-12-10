@@ -131,7 +131,7 @@ useEffect(()=>{
     }
   }
 
-  if(querySafarmarketId && utm_source && utm_source === "safarmarket"){
+  if(querySafarmarketId){
     const expDate = new Date();
     expDate.setTime(expDate.getTime() + (7*24*60*60*1000));
     if (document){
@@ -365,7 +365,23 @@ useEffect(() => {
       BreadCrumptListUrl += `/checkin-${checkin}/checkout-${checkout}`;
   }
 
+  const searchFormSection = (
+    <div ref={searchFormWrapperRef} className='pt-5'>
+          {!!showOnlyForm && (
+            <div
+              className='fixed bg-black/75 backdrop-blur-sm top-0 bottom-0 right-0 left-0 z-[1]'
+              onClick={() => { setShowOnlyForm(false) }}
+            />
+          )}
+          <h2 className='text-lg lg:text-3xl font-semibold mt-5 mb-3 md:mt-10 md:mb-7 relative z-[2]'>{t('change-search')}</h2>
 
+          {!!formIsInView && <SearchForm
+            defaultDestination={defaultDestination}
+            defaultDates={defaultDates}
+            wrapperClassName='relative z-[2]'
+          />}
+        </div>
+  );
 
   return (
     <>
@@ -564,6 +580,13 @@ useEffect(() => {
       </ModalPortal>
 
       <div className="max-w-container mx-auto px-3 sm:px-5 pt-5">
+
+        {!!querySafarmarketId && (
+          <div className='bg-[#ed6527] text-white px-5 py-3 text-lg md:text-2xl lg:text-4xl xl:text-5xl mb-5 text-center font-semibold'>
+            شما از موتور جستجوی <span className='text-[#ed6527] inline-block mx-2 font-bold p-1 lg:p-3 bg-white rounded-xl'> سفرمارکت </span> به {portalData.billing?.name || " این سایت "} هدایت شده اید
+          </div>
+        )}
+
         <div className={theme1 ? "bg-white p-3" : "mb-4"}>
 
           {/* {!!hotelData.IsCovid && <div className='bg-emerald-700 leading-4 p-3 sm:p-4 text-white text-xs sm:text-sm rounded-md flex flex-wrap gap-2 items-center m-1 mb-3'>
@@ -614,22 +637,7 @@ useEffect(() => {
           message='با ورود به حساب کاربری از تخفیف رزرو این هتل استفاده کنید'
         />}
 
-
-        <div ref={searchFormWrapperRef} className='pt-5'>
-          {!!showOnlyForm && (
-            <div
-              className='fixed bg-black/75 backdrop-blur-sm top-0 bottom-0 right-0 left-0 z-[1]'
-              onClick={() => { setShowOnlyForm(false) }}
-            />
-          )}
-          <h2 className='text-lg lg:text-3xl font-semibold mt-5 mb-3 md:mt-10 md:mb-7 relative z-[2]'>{t('change-search')}</h2>
-
-          {!!formIsInView && <SearchForm
-            defaultDestination={defaultDestination}
-            defaultDates={defaultDates}
-            wrapperClassName='relative z-[2]'
-          />}
-        </div>
+        {searchFormSection}
 
       </div>
 
@@ -673,7 +681,7 @@ useEffect(() => {
 
       {!!(isSafaraneh && hotelData?.Similars) && <SimilarHotels similarHotels={hotelData.Similars} />}
 
-      {!!(accommodationData?.faqs?.length) && <FAQ faqs={accommodationData.faqs} />}
+      {!!(accommodationData?.faqs?.length && !querySafarmarketId) && <FAQ faqs={accommodationData.faqs} />}
 
       <AvailabilityTimeout
         minutes={20}
