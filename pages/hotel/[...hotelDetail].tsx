@@ -4,7 +4,7 @@ import { i18n, useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { HotelPageDataType, WebSiteDataType } from '@/modules/shared/types/common';
-import { DomesticAccomodationType, DomesticHotelDetailType, DomesticHotelRichSheet, DomesticHotelRichSnippets, EntitySearchResultItemType, HotelScoreDataType } from '@/modules/domesticHotel/types/hotel';
+import { DomesticAccomodationType, DomesticHotelDetailType, DomesticHotelReviewsType, DomesticHotelRichSheet, DomesticHotelRichSnippets, EntitySearchResultItemType } from '@/modules/domesticHotel/types/hotel';
 import { useRouter } from 'next/router';
 import BackToList from '@/modules/domesticHotel/components/hotelDetails/BackToList';
 import { CalendarError } from '@/modules/shared/components/ui/icons';
@@ -38,11 +38,10 @@ const SearchForm = dynamic(() => import('@/modules/domesticHotel/components/shar
 
 type Props = {
   allData: {
+    reviews?: DomesticHotelReviewsType;
     accommodation?: { result: DomesticAccomodationType };
     richSnippets?: DomesticHotelRichSnippets;
     sheet:DomesticHotelRichSheet;
-
-    score?: HotelScoreDataType;
     page?: HotelPageDataType;
     hotel?: DomesticHotelDetailType;
   };
@@ -201,9 +200,18 @@ useEffect(() => {
   const accommodation = allData?.accommodation;
   const hotelData = allData?.hotel;
   const pageData = allData?.page; 
-  const hotelScoreData = allData?.score; 
   const richSnippets = allData?.richSnippets; 
   const sheet = allData?.sheet; 
+
+  let reviewData = undefined;
+  if(allData?.reviews?.averageRating && allData.reviews.reviews?.totalCount){
+    reviewData = {
+      averageRating: Math.floor(allData.reviews.averageRating),
+      reviewCount: allData.reviews.reviews.totalCount
+    }
+  }
+
+  console.log(reviewData);
  
   const accommodationData = accommodation?.result;
 
@@ -333,7 +341,7 @@ useEffect(() => {
     );
   }
 
-  if (pageData?.Id && isSafaraneh) {
+  if (reviewData?.reviewCount) {
     anchorTabsItems.push(
       { id: "reviews_section", title: tHotel('suggestion') }
     );
@@ -606,7 +614,11 @@ useEffect(() => {
       <div className="max-w-container mx-auto px-3 sm:px-5" id="hotel_intro">
 
 
-        <HotelName hotelData={ isSafaraneh ? hotelData : undefined} scoreData={hotelScoreData} accomodationData={accommodationData} />
+        <HotelName 
+          hotelData={ isSafaraneh ? hotelData : undefined} 
+          reviewData={reviewData}
+          accomodationData={accommodationData} 
+        />
 
         {theme2 && <LoginLinkBanner
           message='با ورود به حساب کاربری از تخفیف رزرو این هتل استفاده کنید'
@@ -667,7 +679,7 @@ useEffect(() => {
         </div>
       )}
 
-      {!!(pageData?.Id && isSafaraneh) && <Comments hotelScoreData={hotelScoreData} pageId={pageData.Id} />}
+      {!!reviewData && <Comments hotelScoreData={allData.reviews} />}
 
       {!!(isSafaraneh && hotelData?.Similars) && <SimilarHotels similarHotels={hotelData.Similars} />}
 
