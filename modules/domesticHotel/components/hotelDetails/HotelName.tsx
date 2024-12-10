@@ -15,10 +15,10 @@ import Link from 'next/link';
 type Props = {
     accomodationData: DomesticAccomodationType;
     hotelData?: DomesticHotelDetailType;
-    scoreData?: {
-        CommentCount?: number;
-        Satisfaction?: number;
-    };
+    reviewData?: {
+        averageRating: number;
+        reviewCount: number;
+    }
 }
 
 const HotelName: React.FC<Props> = props => {
@@ -55,22 +55,21 @@ const HotelName: React.FC<Props> = props => {
 
                     </p>
                 )}
-                
-                {props.scoreData && theme1 ? (
-                    <HotelScore
-                        reviews={props.scoreData?.CommentCount}
-                        score={props.scoreData?.Satisfaction}
-                        className="text-md lg:text-lg font-semibold"
-                    />
-                ) : (theme2 && props.scoreData?.CommentCount && props.scoreData.Satisfaction) ? (
-                    <GuestRating
-                        rating={props.scoreData?.Satisfaction}
-                        reviewCount={props.scoreData?.CommentCount}
-                        large
-                    />
-                ) : (
+                {!props.reviewData ?
                     null
-                )}
+                    : theme2 ? (
+                        <GuestRating
+                            rating={props.reviewData.averageRating * 10}
+                            reviewCount={props.reviewData.reviewCount}
+                            large
+                        />
+                    ) : (
+                        <HotelScore
+                            reviews={props.reviewData.reviewCount}
+                            score={props.reviewData.averageRating}
+                            className="text-md lg:text-lg font-semibold"
+                        />
+                    )}
 
             </div>
 
