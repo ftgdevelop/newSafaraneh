@@ -6,7 +6,7 @@ import CommentForm from './CommentForm';
 
 type Props = {
     hotelScoreData?: DomesticHotelReviewsType;
-    //pageId: number;
+    pageId?: number;
 }
 
 const Comments: React.FC<Props> = props => {
@@ -19,7 +19,7 @@ const Comments: React.FC<Props> = props => {
 
             {!!props.hotelScoreData && <UsersComments hotelScoreData={props.hotelScoreData} />}
 
-            {/* <CommentForm pageId={props.pageId} /> */}
+            {/* {!!props.pageId && <CommentForm pageId={props.pageId} />} */}
 
         </div>
     )
