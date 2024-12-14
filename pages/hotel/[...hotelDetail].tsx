@@ -146,6 +146,9 @@ useEffect(()=>{
     expDate.setTime(expDate.getTime() + (7*24*60*60*1000));
     if (document){
       document.cookie = `safarMarketHotelSmId=${querySafarmarketId}; expires=${expDate.toUTCString()};path=/`;
+      if (utm_source){
+        document.cookie = `safarMarketHotelUtmSource=${utm_source}; expires=${expDate.toUTCString()};path=/`;        
+      }
     }
   }
 
@@ -687,7 +690,7 @@ useEffect(() => {
         </div>
       )}
 
-      {!!reviewData && <Comments hotelScoreData={allData.reviews} />}
+      {!!reviewData && <Comments hotelScoreData={allData.reviews} pageId={pageData?.Id} />}
 
       {!!(isSafaraneh && hotelData?.Similars) && <SimilarHotels similarHotels={hotelData.Similars} />}
 

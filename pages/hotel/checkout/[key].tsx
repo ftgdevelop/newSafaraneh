@@ -170,15 +170,19 @@ const Checkout: NextPage = () => {
 
     if(process.env.SAFAR_MARKET_SITE_NAME){
       let cookieSafarmarketId;
+      let cookieSafarmarketSource;
       let cookies = decodeURIComponent(document?.cookie).split(';');
       for (const item of cookies){
         if (item.includes("safarMarketHotelSmId=")){
           cookieSafarmarketId =item.split("=")[1];
         }
+        if (item.includes("safarMarketHotelUtmSource=")) {
+          cookieSafarmarketSource = item.split("=")[1];
+      }
       }
 
       if(cookieSafarmarketId){
-        params.metaSearchName = 'safarmarket';
+        params.metaSearchName = cookieSafarmarketSource || 'safarmarket';
         params.metaSearchKey = cookieSafarmarketId;
       }
 
