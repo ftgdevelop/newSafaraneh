@@ -6,7 +6,7 @@ import { validateRequied, validateEmail } from '@/modules/shared/helpers/validat
 import { insertComment } from '@/modules/domesticHotel/actions';
 
 type Props = {
-    pageId: number
+    pageId: number;
 }
 
 const CommentForm: React.FC<Props> = props => {
