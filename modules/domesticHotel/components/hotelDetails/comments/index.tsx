@@ -2,7 +2,6 @@ import { useTranslation } from 'next-i18next';
 
 import { DomesticHotelReviewsType } from "@/modules/domesticHotel/types/hotel";
 import UsersComments from './UsersComments';
-import CommentForm from './CommentForm';
 
 type Props = {
     hotelScoreData?: DomesticHotelReviewsType;
@@ -16,11 +15,7 @@ const Comments: React.FC<Props> = props => {
     return (
         <div id="reviews_section" className="max-w-container mx-auto px-3 sm:px-5 pt-7 md:pt-10">
             <h4 className='text-lg lg:text-3xl font-semibold mb-3 md:mb-7'> {tHotel("suggestion")} </h4>
-
-            {!!props.hotelScoreData && <UsersComments hotelScoreData={props.hotelScoreData} />}
-
-            {/* {!!props.pageId && <CommentForm pageId={props.pageId} />} */}
-
+            {!!props.hotelScoreData && <UsersComments hotelScoreData={props.hotelScoreData} pageId={props.pageId} />}
         </div>
     )
 }

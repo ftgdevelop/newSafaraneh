@@ -5,9 +5,11 @@ import { DomesticHotelReviewsType } from "@/modules/domesticHotel/types/hotel";
 import HotelScore from '../../shared/HotelScore';
 import ProgressBar from '@/modules/shared/components/ui/ProgressBar';
 import CommentItem from './CommentItem';
+import NewComment from './NewComment';
 
 type Props = {
     hotelScoreData: DomesticHotelReviewsType;
+    pageId?: number;
 }
 
 const UsersComments: React.FC<Props> = props => {
@@ -15,12 +17,15 @@ const UsersComments: React.FC<Props> = props => {
     const { hotelScoreData: data } = props;
 
     const { t } = useTranslation('common');
-    const { t : tHotel } = useTranslation('hotel');
+    const { t: tHotel } = useTranslation('hotel');
 
     const [showAll, setShowAll] = useState<boolean>(false);
 
     const toggleShowAll = () => {
         setShowAll(prevState => !prevState);
+    }
+    const refteshComments = () => {
+        debugger;
     }
 
     if (!data) {
@@ -35,7 +40,7 @@ const UsersComments: React.FC<Props> = props => {
 
                 <HotelScore
                     reviews={data.reviews.totalCount}
-                    score={ Math.floor(data.averageRating)}
+                    score={Math.floor(data.averageRating)}
                     className="text-sm lg:text-md font-semibold"
                 />
 
@@ -53,7 +58,13 @@ const UsersComments: React.FC<Props> = props => {
 
             <div className='md:col-span-2 text-justify leading-7 text-sm md:text-base md:leading-7'>
 
-                <h5 className='text-sm md:text-base font-semibold mb-5'>{tHotel("user-suggestions")}</h5>
+                <div className='flex justify-between'>
+                    <h5 className='text-sm md:text-base font-semibold mb-5'>{tHotel("user-suggestions")}</h5>
+                    {!!props.pageId && (
+                        <NewComment pageId={props.pageId} onRefreshComments={refteshComments} />
+                    )}
+                </div>
+
 
                 {data?.reviews?.items?.slice(0, 3).map((item, index) => <CommentItem key={index} comment={item} />)}
                 {showAll && data?.reviews?.items?.slice(3).map((item, index) => <CommentItem key={index} comment={item} />)}
