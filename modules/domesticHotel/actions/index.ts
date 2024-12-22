@@ -159,7 +159,7 @@ export const GetRooms = async (params:{id:number,checkin:string,checkout:string}
 }
 
 export const createComment = async (param: any, acceptLanguage: string = 'fa-IR') => {
-
+    
     try {
         let response = await axios.post(
             `${ServerAddress.Type}${ServerAddress.CMS}${Cms.CreateComment}`,

@@ -2,8 +2,8 @@ import { Formik, Form, Field } from 'formik';
 import { i18n, useTranslation } from 'next-i18next';
 
 import Button from '@/modules/shared/components/ui/Button';
-import { validateRequied, validateEmail } from '@/modules/shared/helpers/validation';
-import { createComment } from '@/modules/domesticHotel/actions';
+import { validateRequied } from '@/modules/shared/helpers/validation';
+import { createComment} from '@/modules/domesticHotel/actions';
 import RateInput from './RateInput';
 import RadioInputField from '@/modules/shared/components/ui/RadioInputField';
 import React, { useEffect, useState } from 'react';
@@ -11,17 +11,20 @@ import { useAppDispatch, useAppSelector } from '@/modules/shared/hooks/use-store
 import { openLoginForm } from '@/modules/authentication/store/authenticationSlice';
 import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
 import { Business, Couple, Family, Group3, Individual } from '@/modules/shared/components/ui/icons';
+import { setReduxNotification } from '@/modules/shared/store/notificationSlice';
+import { dateFormat } from '@/modules/shared/helpers';
 
 type Props = {
     pageId: number;
     closeHandle: () => void;
-    onRefreshComments: () => void;
 }
 
 const CommentForm: React.FC<Props> = props => {
 
     const { t } = useTranslation('common');
     const { t: tHotel } = useTranslation('hotel');
+
+    const [submitLoading, setSubmitLoading] = useState<boolean>(false);
 
     const userAuthentication = useAppSelector(state => state.authentication);
     const { user, isAuthenticated } = userAuthentication;
@@ -37,15 +40,15 @@ const CommentForm: React.FC<Props> = props => {
         }
     }, [isAuthenticated]);
 
-
     type FormValues = {
         travelType: "Individual" | "Family" | "Couple" | "Group" | "Business";
         comment: string;
-        recommendToOthers: boolean;
         positivePoints: string;
         negativePoints: string;
         userDisplayName: string;
         overallRating: number;
+        recommendToOthers: boolean;
+        isAnonymous: boolean;
     }
 
     let initialDisplayName = "";
@@ -60,39 +63,71 @@ const CommentForm: React.FC<Props> = props => {
     const initialValues: FormValues = {
         travelType: 'Individual',
         comment: '',
-        overallRating: 6,
+        overallRating: 9,
         recommendToOthers: false,
+        isAnonymous: false,
         positivePoints: '',
         negativePoints: '',
         userDisplayName: initialDisplayName
     };
 
-
     const submitHandle = async (values: FormValues, actions: any) => {
 
-        const params = {
-            PageId: props.pageId,
-            FullName: values.userDisplayName,
-            IsRecommended: values.recommendToOthers || false,
+        const params = {            
+            comment: values.comment,
+            overallRating: values.overallRating,
+            travelType: values.travelType,
+            isVerifiedReviewer: false,
+            userDisplayName: values.userDisplayName,
+            positivePoints: values.positivePoints,
+            negativePoints: values.negativePoints,
+            recommendToOthers: values.recommendToOthers,            
+            userId: user?.id,
+            language: "fa-IR",
+            pageId: props.pageId,
+            creationTime: dateFormat(new Date),
+            isActive: user?.isActive,
+            isAnonymous: values.isAnonymous,
+            tenantId: process.env.PROJECT_SERVER_TENANTID,
+            id: 0
         };
 
-        actions.resetForm();
+        setSubmitLoading(true);
+        setTimeout(()=>{
+            actions.resetForm();
 
-        console.log(values);
+            console.log(values);
+            console.log(params);
+    
+            setOpen(false);
+            props.closeHandle();
+            setSubmitLoading(false);
 
-        setOpen(false);
-        props.closeHandle();
-        props.onRefreshComments();
+            // dispatch(setReduxNotification({
+            //     status: 'success',
+            //     message:'دیدگاه شما با موفقیت ثبت شد و پس از تایید نمایش داده خواهد شد.' ,
+            //     isVisible: true
+            // }));
+            
+            dispatch(setReduxNotification({
+                status: 'error',
+                message:'متاسفانه ثبت دیدگاه شما با خطا روبرو شد. لطفا دوباره تلاش کنید.' ,
+                isVisible: true
+            }));
+            
+        },2000);
 
-        //const response: any = await createComment(params, i18n?.language === 'en' ? "en-US" : "fa-IR");
+        const response: any = await createComment(params);
 
-        // if (response?.data?.result) {
-        //     debugger;
-        //     //toDo
-        // }
-
+        if (response?.data?.result) {
+            console.log("response-data-result", response.data.result)
+            debugger;
+            //toDo
+        }else{
+            console.log("response-data", response.data);
+            debugger;
+        }
     }
-
 
     const travelTypeOptions: { value: string, label: string, icon: React.ReactNode }[] = [
         { label: "انفرادی", value: "Individual", icon: <Individual className='fill-current w-6 h-6' /> },
@@ -116,7 +151,7 @@ const CommentForm: React.FC<Props> = props => {
                     onClick={() => { props.closeHandle() }}
                 />
 
-                <div className={`bg-white max-h-screen overflow-auto sm:rounded-md relative w-full sm:w-520 p-4 md:p-6`}>
+                <div className={`bg-white max-h-screen md:modalMaxHeight overflow-auto sm:rounded-md relative w-full sm:w-570 p-4 md:p-6`}>
                     <div>
                         <h5 className='text-sm md:text-base font-semibold mb-4'>{tHotel("submit-suggestion")}</h5>
                     </div>
@@ -158,7 +193,7 @@ const CommentForm: React.FC<Props> = props => {
                                             {travelTypeOptions.map(option => (
                                                 <label
                                                     key={option.label}
-                                                    className='flex mb-2 md:inline-flex items-center gap-1 rtl:ml-3 ltr:mr-3 cursor-pointer'
+                                                    className='flex mb-2 md:inline-flex items-center gap-1 rtl:ml-4 ltr:mr-4 cursor-pointer'
                                                 >
                                                     <RadioInputField
                                                         onChange={(e: any) => {
@@ -240,6 +275,7 @@ const CommentForm: React.FC<Props> = props => {
 
                                         <Button
                                             type='submit'
+                                            loading={submitLoading}
                                             className='h-10 px-5 rounded-md max-w-full w-full sm:w-32'
                                         >
                                             {t('send')}

@@ -5,7 +5,6 @@ import CommentForm from "./CommentForm";
 
 type Props = {
     pageId: number;
-    onRefreshComments: () => void;
 }
 
 const NewComment: React.FC<Props> = props => {
@@ -27,7 +26,7 @@ const NewComment: React.FC<Props> = props => {
 
             </Button>
 
-            {open && <CommentForm pageId={props.pageId} onRefreshComments={props.onRefreshComments} closeHandle={() => { setOpen(false) }} />}
+            {open && <CommentForm pageId={props.pageId} closeHandle={() => { setOpen(false) }} />}
 
         </>
     )

@@ -24,9 +24,6 @@ const UsersComments: React.FC<Props> = props => {
     const toggleShowAll = () => {
         setShowAll(prevState => !prevState);
     }
-    const refteshComments = () => {
-        debugger;
-    }
 
     if (!data) {
         return null;
@@ -61,7 +58,7 @@ const UsersComments: React.FC<Props> = props => {
                 <div className='flex justify-between'>
                     <h5 className='text-sm md:text-base font-semibold mb-5'>{tHotel("user-suggestions")}</h5>
                     {!!props.pageId && (
-                        <NewComment pageId={props.pageId} onRefreshComments={refteshComments} />
+                        <NewComment pageId={props.pageId} />
                     )}
                 </div>
 

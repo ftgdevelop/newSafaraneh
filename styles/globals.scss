@@ -6,6 +6,9 @@
   .clearfix {
     @apply after:clear-both after:content-[''] after:table before:clear-both before:content-[''] before:table;
   }
+  .modalMaxHeight{
+    max-height: 90vh;
+  }
   .breakInsideAvoid{
     break-inside:avoid;
   }
