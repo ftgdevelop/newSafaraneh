@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { Header, ServerAddress, Hotel } from "../../../enum/url";
+import { Header, ServerAddress, Hotel, Cms } from "../../../enum/url";
 import { DomesticHotelPrereserveParams } from '../types/hotel';
 
 export const getDomesticHotelSummaryDetailById = async (id: number, acceptLanguage: string = 'fa-IR') => {
@@ -158,11 +158,11 @@ export const GetRooms = async (params:{id:number,checkin:string,checkout:string}
     }
 }
 
-export const insertComment = async (param: any, acceptLanguage: string = 'fa-IR') => {
-
+export const createComment = async (param: any, acceptLanguage: string = 'fa-IR') => {
+    
     try {
         let response = await axios.post(
-            `${ServerAddress.Type}api.safaraneh.com${Hotel.InsertComment}`,
+            `${ServerAddress.Type}${ServerAddress.CMS}${Cms.CreateComment}`,
             param,
             {
                 headers: {

@@ -285,7 +285,7 @@ const Checkout: NextPage = () => {
           className='py-3 mb-2'
           items={[
             { label: t('completing-information'), status: 'active' },
-            { label: tHotel('checking-capacity'), status: 'up-comming' },
+            //{ label: tHotel('checking-capacity'), status: 'up-comming' },
             { label: t('confirm-pay'), status: 'up-comming' },
             { label: t('complete-purchase'), status: 'up-comming' }
           ]}
