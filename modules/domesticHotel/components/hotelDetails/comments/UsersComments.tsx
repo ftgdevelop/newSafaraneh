@@ -57,9 +57,9 @@ const UsersComments: React.FC<Props> = props => {
 
                 <div className='flex justify-between'>
                     <h5 className='text-sm md:text-base font-semibold mb-5'>{tHotel("user-suggestions")}</h5>
-                    {!!props.pageId && (
+                    {/* {!!props.pageId && (
                         <NewComment pageId={props.pageId} />
-                    )}
+                    )} */}
                 </div>
 
 
