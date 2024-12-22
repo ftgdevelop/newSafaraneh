@@ -120,7 +120,7 @@ const Capacity: NextPage = () => {
           className='py-3 mb-2'
           items={[
             { label: t('completing-information'), status: 'done' },
-            { label: tHotel('checking-capacity'), status: 'active' },
+            //{ label: tHotel('checking-capacity'), status: 'active' },
             { label: t('confirm-pay'), status: 'up-comming' },
             { label: t('complete-purchase'), status: 'up-comming' }
           ]}
