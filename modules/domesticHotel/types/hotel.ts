@@ -696,6 +696,9 @@ export interface DomesticHotelReviewCommentItem {
     userDisplayName: string;
     recommendToOthers: boolean;
     creationTime: string;
+    positivePoints?: string;
+    negativePoints?: string;
+    travelType?: "Individual" | "Family" | "Couple" | "Group" | "Business";
     ratings: {
         rating: number;
         categoryId: number;

@@ -42,7 +42,6 @@ type Props = {
     accommodation?: { result: DomesticAccomodationType };
     richSnippets?: DomesticHotelRichSnippets;
     sheet:DomesticHotelRichSheet;
-    page?: HotelPageDataType;
     hotel?: DomesticHotelDetailType;
   };
   portalData: WebSiteDataType;
@@ -192,7 +191,6 @@ useEffect(() => {
 
   const accommodation = allData?.accommodation;
   const hotelData = allData?.hotel;
-  const pageData = allData?.page; 
   const richSnippets = allData?.richSnippets; 
   const sheet = allData?.sheet; 
 
@@ -680,7 +678,7 @@ useEffect(() => {
         </div>
       )}
 
-      {!!reviewData && <Comments hotelScoreData={allData.reviews} pageId={pageData?.Id} />}
+      {!!reviewData && <Comments hotelScoreData={allData.reviews} pageId={sheet.id} />}
 
       {!!(isSafaraneh && hotelData?.Similars) && <SimilarHotels similarHotels={hotelData.Similars} />}
 
