@@ -88,8 +88,7 @@ const CommentForm: React.FC<Props> = props => {
             creationTime: dateFormat(new Date),
             isActive: user?.isActive,
             isAnonymous: values.isAnonymous,
-            tenantId: process.env.PROJECT_SERVER_TENANTID,
-            id: 0
+            tenantId: +process.env.PROJECT_SERVER_TENANTID!
         };
 
         setSubmitLoading(true);
@@ -109,11 +108,11 @@ const CommentForm: React.FC<Props> = props => {
             //     isVisible: true
             // }));
             
-            dispatch(setReduxNotification({
-                status: 'error',
-                message:'متاسفانه ثبت دیدگاه شما با خطا روبرو شد. لطفا دوباره تلاش کنید.' ,
-                isVisible: true
-            }));
+            // dispatch(setReduxNotification({
+            //     status: 'error',
+            //     message:'متاسفانه ثبت دیدگاه شما با خطا روبرو شد. لطفا دوباره تلاش کنید.' ,
+            //     isVisible: true
+            // }));
             
         },2000);
 
