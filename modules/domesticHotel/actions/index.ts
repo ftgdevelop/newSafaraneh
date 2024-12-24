@@ -170,6 +170,7 @@ export const createComment = async (param: any, acceptLanguage: string = 'fa-IR'
                     "Accept-Language": acceptLanguage,
                     // apikey: "68703d73-c92c-4105-9f71-9f718aaad2cc"
                     apikey: process.env.PROJECT_SERVER_APIKEY,
+                    TenantId: process.env.PROJECT_SERVER_TENANTID
                 },
             },
         )
