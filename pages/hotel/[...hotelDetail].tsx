@@ -201,8 +201,6 @@ useEffect(() => {
       reviewCount: allData.reviews.reviews.totalCount
     }
   }
-
-  console.log(reviewData);
  
   const accommodationData = accommodation?.result;
 
@@ -573,7 +571,6 @@ useEffect(() => {
               {t("ContinueAnyway")}
             </button>
 
-
           </div>
 
         </div>
@@ -678,7 +675,7 @@ useEffect(() => {
         </div>
       )}
 
-      {!!reviewData && <Comments hotelScoreData={allData.reviews} pageId={sheet.id} />}
+      {!!reviewData && <Comments siteName={siteName} hotelScoreData={allData.reviews} pageId={sheet.id} />}
 
       {!!(isSafaraneh && hotelData?.Similars) && <SimilarHotels similarHotels={hotelData.Similars} />}
 

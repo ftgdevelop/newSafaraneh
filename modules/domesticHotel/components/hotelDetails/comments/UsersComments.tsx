@@ -10,6 +10,7 @@ import NewComment from './NewComment';
 type Props = {
     hotelScoreData: DomesticHotelReviewsType;
     pageId?: number;
+    siteName?: string;
 }
 
 const UsersComments: React.FC<Props> = props => {
@@ -63,8 +64,8 @@ const UsersComments: React.FC<Props> = props => {
                 </div>
 
 
-                {data?.reviews?.items?.slice(0, 3).map((item, index) => <CommentItem key={index} comment={item} />)}
-                {showAll && data?.reviews?.items?.slice(3).map((item, index) => <CommentItem key={index} comment={item} />)}
+                {data?.reviews?.items?.slice(0, 3).map((item, index) => <CommentItem key={index} comment={item} siteName={props.siteName} />)}
+                {showAll && data?.reviews?.items?.slice(3).map((item, index) => <CommentItem key={index} comment={item} siteName={props.siteName} />)}
 
                 <button
                     type='button'

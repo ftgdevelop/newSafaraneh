@@ -1,15 +1,40 @@
 import { DomesticHotelReviewCommentItem } from '@/modules/domesticHotel/types/hotel';
-import { Business, Couple, Group3, Individual, Sad, Smile, TikCircle } from '@/modules/shared/components/ui/icons';
+import { Business, Couple, DisLike, Group3, Individual, Like, Sad, Smile, TikCircle } from '@/modules/shared/components/ui/icons';
 import { dateDiplayFormat } from '@/modules/shared/helpers';
 import parse from 'html-react-parser';
 
 type Props = {
     comment: DomesticHotelReviewCommentItem;
+    siteName?: string;
 }
 
 const CommentItem: React.FC<Props> = props => {
 
     const { comment } = props;
+
+
+
+    const likeHandler = () => {
+
+        let cookieLikedComment: string[] = [];
+        const cookies = decodeURIComponent(document?.cookie).split(';');
+        for (const item of cookies) {
+            if (item.includes("likedComments=")) {
+                cookieLikedComment = item.split("=")[1]?.split("_");
+            }
+        }
+
+        if (cookieLikedComment.includes(comment.id.toString())) {
+            return;
+        }
+
+        //call request
+        const expDate = new Date();
+        expDate.setTime(expDate.getTime() + (400 * 24 * 60 * 60 * 1000));
+        const updatedLikedComments = [...cookieLikedComment, comment.id].join("_");
+        
+        document.cookie = `likedComments=${updatedLikedComments}; expires=${expDate.toUTCString()};path=/`;
+    }
 
     let travelTypeElement: React.ReactNode = null;
 
@@ -68,6 +93,37 @@ const CommentItem: React.FC<Props> = props => {
             )}
 
             {!!comment.comment && parse(comment.comment)}
+
+            {/* <div className='flex gap-10'>
+                آیا این نظر مفید بود؟
+                <div className='flex gap-3'>
+                    {comment.likeCount}
+                    <button
+                        type='button'
+                        onClick={likeHandler}
+                        className='border-none outline-none hover:text-green-700'
+                        aria-label='like'
+                    >
+                        <Like className='w-5 h-5 fill-current' />
+                    </button>
+                    {comment.dislikeCount}
+                    <button
+                        type='button'
+                        onClick={() => { }}
+                        className='border-none outline-none hover:text-green-700'
+                        aria-label='dislike'
+                    >
+                        <DisLike className='w-5 h-5 fill-current' />
+                    </button>
+                </div>
+            </div> */}
+
+            {comment.reply?.reply && (
+                <div className='border p-2 px-4 mt-3 rounded bg-slate-100'>
+                    <h5 className='font-semibold mb-2'> پاسخ کارشناس {props.siteName} </h5>
+                    {parse(comment.reply.reply)}
+                </div>
+            )}
 
         </div>
     )
