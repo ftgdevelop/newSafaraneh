@@ -704,6 +704,14 @@ export interface DomesticHotelReviewCommentItem {
         categoryId: number;
         id: number;
     }[];
+    reply?: {
+        dislikeCount: number;
+        id: number;
+        likeCount: number;
+        reply?: string;
+    };
+    likeCount: number;
+    dislikeCount: number;
 }
 
 export interface DomesticHotelReviewsType {
