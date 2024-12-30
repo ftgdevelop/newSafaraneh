@@ -170,15 +170,19 @@ const Checkout: NextPage = () => {
 
     if(process.env.SAFAR_MARKET_SITE_NAME){
       let cookieSafarmarketId;
+      let cookieSafarmarketSource;
       let cookies = decodeURIComponent(document?.cookie).split(';');
       for (const item of cookies){
         if (item.includes("safarMarketHotelSmId=")){
           cookieSafarmarketId =item.split("=")[1];
         }
+        if (item.includes("safarMarketHotelUtmSource=")) {
+          cookieSafarmarketSource = item.split("=")[1];
+      }
       }
 
       if(cookieSafarmarketId){
-        params.metaSearchName = 'safarmarket';
+        params.metaSearchName = cookieSafarmarketSource || 'safarmarket';
         params.metaSearchKey = cookieSafarmarketId;
       }
 
@@ -281,7 +285,7 @@ const Checkout: NextPage = () => {
           className='py-3 mb-2'
           items={[
             { label: t('completing-information'), status: 'active' },
-            { label: tHotel('checking-capacity'), status: 'up-comming' },
+            //{ label: tHotel('checking-capacity'), status: 'up-comming' },
             { label: t('confirm-pay'), status: 'up-comming' },
             { label: t('complete-purchase'), status: 'up-comming' }
           ]}
