@@ -1,7 +1,11 @@
+import { disLikeComment, likeComment } from '@/modules/domesticHotel/actions';
 import { DomesticHotelReviewCommentItem } from '@/modules/domesticHotel/types/hotel';
 import { Business, Couple, DisLike, Group3, Individual, Like, Sad, Smile, TikCircle } from '@/modules/shared/components/ui/icons';
 import { dateDiplayFormat } from '@/modules/shared/helpers';
+import { useAppDispatch, useAppSelector } from '@/modules/shared/hooks/use-store';
+import { setReduxNotification } from '@/modules/shared/store/notificationSlice';
 import parse from 'html-react-parser';
+import { useState } from 'react';
 
 type Props = {
     comment: DomesticHotelReviewCommentItem;
@@ -11,29 +15,71 @@ type Props = {
 const CommentItem: React.FC<Props> = props => {
 
     const { comment } = props;
+    const dispatch = useAppDispatch();
+    const userIsAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
 
+    const [liked, setLiked ] = useState<boolean>(false);
+    
+    const [disLiked, setDisLiked ] = useState<boolean>(false);
 
+    const likeHandler = async () => {
 
-    const likeHandler = () => {
-
-        let cookieLikedComment: string[] = [];
-        const cookies = decodeURIComponent(document?.cookie).split(';');
-        for (const item of cookies) {
-            if (item.includes("likedComments=")) {
-                cookieLikedComment = item.split("=")[1]?.split("_");
-            }
+        const localStorageToken = localStorage?.getItem('Token');
+        if (!localStorageToken){
+            dispatch(setReduxNotification({
+                status: 'error',
+                message: "برای پسندیدن نظرات باید وارد حساب کاربری شوید!",
+                isVisible: true
+            }));
+            return
         }
 
-        if (cookieLikedComment.includes(comment.id.toString())) {
+        if (comment.isWriter){
+            dispatch(setReduxNotification({
+                status: 'error',
+                message: "شما نمی توانید نظر خودتان را بپسندید!",
+                isVisible: true
+            }));
             return;
         }
-
-        //call request
-        const expDate = new Date();
-        expDate.setTime(expDate.getTime() + (400 * 24 * 60 * 60 * 1000));
-        const updatedLikedComments = [...cookieLikedComment, comment.id].join("_");
         
-        document.cookie = `likedComments=${updatedLikedComments}; expires=${expDate.toUTCString()};path=/`;
+        if (comment.isLiked || liked) return;
+
+        const like = await likeComment(comment.id, localStorageToken);
+        //TODO: check data saved successfully;
+        setLiked(true);
+        setDisLiked(false);
+
+    }
+
+    const disLikeHandler = async () => {
+
+        const localStorageToken = localStorage?.getItem('Token');
+        if (!localStorageToken){
+            dispatch(setReduxNotification({
+                status: 'error',
+                message: "برای نپسندیدن نظرات باید وارد حساب کاربری شوید!",
+                isVisible: true
+            }));
+            return
+        }
+
+        if (comment.isWriter){
+            dispatch(setReduxNotification({
+                status: 'error',
+                message: "شما نمی توانید نظر خودتان را نپسندید!",
+                isVisible: true
+            }));
+            return;
+        }
+        
+        if (comment.isLiked === false || disLiked) return;
+
+        const disLike = await disLikeComment(comment.id, localStorageToken);
+        //TODO: check data saved successfully;
+        setLiked(false);
+        setDisLiked(true);
+
     }
 
     let travelTypeElement: React.ReactNode = null;
@@ -94,29 +140,31 @@ const CommentItem: React.FC<Props> = props => {
 
             {!!comment.comment && parse(comment.comment)}
 
-            {/* <div className='flex gap-10'>
+            <div className='flex gap-10 mt-4'>
                 آیا این نظر مفید بود؟
                 <div className='flex gap-3'>
-                    {comment.likeCount}
+                    {liked? comment.likeCount + 1 : comment.likeCount}
                     <button
+                        disabled = {!userIsAuthenticated}
                         type='button'
                         onClick={likeHandler}
-                        className='border-none outline-none hover:text-green-700'
+                        className={`border-none outline-none ${(liked || (comment.isLiked && !disLiked))?"text-green-700":"hover:text-green-700" } disabled:text-neutral-400 disabled:cursor-no-drop`}
                         aria-label='like'
                     >
                         <Like className='w-5 h-5 fill-current' />
                     </button>
-                    {comment.dislikeCount}
+                    {disLiked ? comment.dislikeCount + 1 : comment.dislikeCount}
                     <button
+                        disabled = {!userIsAuthenticated}
                         type='button'
-                        onClick={() => { }}
-                        className='border-none outline-none hover:text-green-700'
+                        onClick={disLikeHandler}
+                        className={`border-none outline-none ${(disLiked || (comment.isLiked === false && !liked))?"text-red-700":"hover:text-red-700" } disabled:text-neutral-400 disabled:cursor-no-drop`}
                         aria-label='dislike'
                     >
                         <DisLike className='w-5 h-5 fill-current' />
                     </button>
                 </div>
-            </div> */}
+            </div>
 
             {comment.reply?.reply && (
                 <div className='border p-2 px-4 mt-3 rounded bg-slate-100'>

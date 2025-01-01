@@ -37,6 +37,72 @@ export const getDomesticHotelDetailsByUrl = async (url: string, acceptLanguage: 
     }
 }
 
+export const domesticHotelGetReviews = async (params : {pageId: number, token: string}, acceptLanguage: string = 'fa-IR') => {
+
+    try {
+        let response = await axios.get(
+            `${ServerAddress.Type}${ServerAddress.CMS}${Hotel.getReviewsByPageId}?PageId=${params.pageId}&MaxResultCount=100`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    apikey: process.env.PROJECT_SERVER_APIKEY,
+                    'Accept-Language': acceptLanguage,
+                    Authorization: `Bearer ${params.token}`,
+                    TenantId: process.env.PROJECT_SERVER_TENANTID
+                },
+            },
+        )
+        return response
+    } catch (error) {
+        return error
+    }
+}
+
+export const likeComment = async (commentId :number , token:string, acceptLanguage: string = 'fa-IR') => {
+
+    try {
+        let response = await axios.post(
+            `${ServerAddress.Type}${ServerAddress.CMS}${Hotel.likeCommentById}`,
+            {id:commentId},
+            {
+                headers: {
+                    Accept: 'application/json;charset=UTF-8',
+                    apikey: process.env.PROJECT_SERVER_APIKEY,
+                    "Accept-Language": acceptLanguage,
+                    Authorization: `Bearer ${token}`,
+                    Tenantid: process.env.PROJECT_SERVER_TENANTID
+                },
+            },
+        )
+        return response
+    } catch (error) {
+        return error
+    }
+}
+
+export const disLikeComment = async (commentId :number , token:string, acceptLanguage: string = 'fa-IR') => {
+
+    try {
+        let response = await axios.post(
+            `${ServerAddress.Type}${ServerAddress.CMS}${Hotel.dislikeCommentById}`,
+            {id:commentId},
+            {
+                headers: {
+                    Accept: 'application/json;charset=UTF-8',
+                    apikey: process.env.PROJECT_SERVER_APIKEY,
+                    "Accept-Language": acceptLanguage,
+                    Authorization: `Bearer ${token}`,
+                    Tenantid: process.env.PROJECT_SERVER_TENANTID
+                },
+            },
+        )
+        return response
+    } catch (error) {
+        return error
+    }
+}
+
+
 export const SearchAccomodation = async (parameters: {url: string; EntityId?: string}, acceptLanguage: string = 'fa-IR') => {
     try {
         
