@@ -1,11 +1,12 @@
+import { openLoginForm } from '@/modules/authentication/store/authenticationSlice';
 import { disLikeComment, likeComment } from '@/modules/domesticHotel/actions';
 import { DomesticHotelReviewCommentItem } from '@/modules/domesticHotel/types/hotel';
-import { Business, Couple, DisLike, Group3, Individual, Like, Sad, Smile, TikCircle } from '@/modules/shared/components/ui/icons';
+import { Business, Couple, DisLike, Group3, Individual, Like, Sad, Smile } from '@/modules/shared/components/ui/icons';
 import { dateDiplayFormat } from '@/modules/shared/helpers';
 import { useAppDispatch, useAppSelector } from '@/modules/shared/hooks/use-store';
 import { setReduxNotification } from '@/modules/shared/store/notificationSlice';
 import parse from 'html-react-parser';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type Props = {
     comment: DomesticHotelReviewCommentItem;
@@ -18,21 +19,35 @@ const CommentItem: React.FC<Props> = props => {
     const dispatch = useAppDispatch();
     const userIsAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
 
-    const [liked, setLiked ] = useState<boolean>(false);
-    
-    const [disLiked, setDisLiked ] = useState<boolean>(false);
+    const [likesCount, setLikesCount] = useState<number>(0);
+    const [dislikesCount, setDislikesCount] = useState<number>(0);
+
+    const [likeActive, setLikeActive] = useState<boolean>(false);
+    const [dislikeActive, setDislikeActive] = useState<boolean>(false);
+
+    useEffect(()=>{
+        if(userIsAuthenticated){
+            setLikesCount(comment.likeCount);
+            setDislikesCount(comment.dislikeCount);
+            setLikeActive(!!comment.isLiked);
+            setDislikeActive(comment.isLiked === false);
+        }
+    },[userIsAuthenticated, comment.isLiked]);
+
 
     const likeHandler = async () => {
 
-        const localStorageToken = localStorage?.getItem('Token');
-        if (!localStorageToken){
-            dispatch(setReduxNotification({
-                status: 'error',
-                message: "برای پسندیدن نظرات باید وارد حساب کاربری شوید!",
-                isVisible: true
-            }));
-            return
+        if (!userIsAuthenticated){
+             dispatch(openLoginForm());
+             dispatch(setReduxNotification({
+                 status: 'error',
+                 message: "برای پسندیدن نظرات باید وارد حساب کاربری شوید!",
+                 isVisible: true
+             }));
+            return;
         }
+
+        const localStorageToken = localStorage?.getItem('Token');
 
         if (comment.isWriter){
             dispatch(setReduxNotification({
@@ -43,26 +58,33 @@ const CommentItem: React.FC<Props> = props => {
             return;
         }
         
-        if (comment.isLiked || liked) return;
+        if (likeActive) return;
 
-        const like = await likeComment(comment.id, localStorageToken);
-        //TODO: check data saved successfully;
-        setLiked(true);
-        setDisLiked(false);
+        const likeRequest : any = await likeComment(comment.id, localStorageToken!);
+        if(likeRequest?.data?.success){
+            setLikesCount(prev => prev+1);
+            setLikeActive(true);
+            if(dislikeActive){
+                setDislikeActive(false);
+                setDislikesCount(prev => prev-1);
+            }
+        }
 
     }
 
     const disLikeHandler = async () => {
 
-        const localStorageToken = localStorage?.getItem('Token');
-        if (!localStorageToken){
+        if (!userIsAuthenticated){
+            dispatch(openLoginForm());
             dispatch(setReduxNotification({
                 status: 'error',
                 message: "برای نپسندیدن نظرات باید وارد حساب کاربری شوید!",
                 isVisible: true
             }));
-            return
-        }
+           return;
+       }
+
+        const localStorageToken = localStorage?.getItem('Token');
 
         if (comment.isWriter){
             dispatch(setReduxNotification({
@@ -73,13 +95,17 @@ const CommentItem: React.FC<Props> = props => {
             return;
         }
         
-        if (comment.isLiked === false || disLiked) return;
+        if (dislikeActive) return;
 
-        const disLike = await disLikeComment(comment.id, localStorageToken);
-        //TODO: check data saved successfully;
-        setLiked(false);
-        setDisLiked(true);
-
+        const disLikeRequest: any = await disLikeComment(comment.id, localStorageToken!);
+        if(disLikeRequest?.data?.success){
+            setDislikesCount(prev => prev+1);
+            setDislikeActive(true);
+            if(likeActive){
+                setLikeActive(false);
+                setLikesCount(prev => prev-1);
+            }
+        }
     }
 
     let travelTypeElement: React.ReactNode = null;
@@ -143,22 +169,20 @@ const CommentItem: React.FC<Props> = props => {
             <div className='flex gap-10 mt-4'>
                 آیا این نظر مفید بود؟
                 <div className='flex gap-3'>
-                    {liked? comment.likeCount + 1 : comment.likeCount}
+                    {likesCount}
                     <button
-                        disabled = {!userIsAuthenticated}
                         type='button'
                         onClick={likeHandler}
-                        className={`border-none outline-none ${(liked || (comment.isLiked && !disLiked))?"text-green-700":"hover:text-green-700" } disabled:text-neutral-400 disabled:cursor-no-drop`}
+                        className={`border-none outline-none ${likeActive?"text-green-700":"hover:text-green-700" }`}
                         aria-label='like'
                     >
                         <Like className='w-5 h-5 fill-current' />
                     </button>
-                    {disLiked ? comment.dislikeCount + 1 : comment.dislikeCount}
+                    {dislikesCount}
                     <button
-                        disabled = {!userIsAuthenticated}
                         type='button'
                         onClick={disLikeHandler}
-                        className={`border-none outline-none ${(disLiked || (comment.isLiked === false && !liked))?"text-red-700":"hover:text-red-700" } disabled:text-neutral-400 disabled:cursor-no-drop`}
+                        className={`border-none outline-none ${dislikeActive?"text-red-700":"hover:text-red-700" }`}
                         aria-label='dislike'
                     >
                         <DisLike className='w-5 h-5 fill-current' />
