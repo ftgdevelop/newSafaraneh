@@ -89,8 +89,8 @@ const UsersComments: React.FC<Props> = props => {
                 </div>
 
 
-                {data?.reviews?.items?.slice(0, 3).map((item, index) => <CommentItem key={index} comment={item} siteName={props.siteName} />)}
-                {showAll && data?.reviews?.items?.slice(3).map((item, index) => <CommentItem key={index} comment={item} siteName={props.siteName} />)}
+                {data?.reviews?.items?.slice(0, 3).map(item => <CommentItem key={item.id} comment={item} siteName={props.siteName} />)}
+                {showAll && data?.reviews?.items?.slice(3).map(item => <CommentItem key={item.id} comment={item} siteName={props.siteName} />)}
 
                 <button
                     type='button'
