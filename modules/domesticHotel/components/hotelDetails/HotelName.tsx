@@ -35,6 +35,8 @@ const HotelName: React.FC<Props> = props => {
     }
 
     const closeMapModal = () => { setShowMap(false) };
+    
+    const isSafarLife = process.env.SITE_NAME === 'https://www.safarlife.com';
 
     return (
 
@@ -80,9 +82,11 @@ const HotelName: React.FC<Props> = props => {
             />
 
             {
-                accomodationData.facilities?.length 
+                (accomodationData.facilities?.length 
                 || 
-                (process.env.PROJECT === "SAFARANEH" && props.hotelData?.Facilities?.length)
+                (process.env.PROJECT === "SAFARANEH" && props.hotelData?.Facilities?.length))
+                && 
+                !isSafarLife
             ? (
                 <div className='lg:col-span-2'>
                     
