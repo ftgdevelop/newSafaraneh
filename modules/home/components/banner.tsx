@@ -24,6 +24,8 @@ const Banner: React.FC<Props> = props => {
 
   const { t } = useTranslation('common');
   const { t: tHome } = useTranslation('home');
+  
+  const isSafarLife = process.env.SITE_NAME === 'https://www.safarlife.com';
 
   const today = dateFormat(new Date());
   const tomorrow = dateFormat(addSomeDays(new Date()));
@@ -46,7 +48,7 @@ const Banner: React.FC<Props> = props => {
           {!!theme1 && <RecentSearches />}
         </>
         ),
-        children2: theme2 && <div className='max-sm:px-5' ><RecentSearches /></div>
+        children2: theme2 && !isSafarLife ? <div className='max-sm:px-5' ><RecentSearches /></div> : null
       }
     )
   }
@@ -61,7 +63,7 @@ const Banner: React.FC<Props> = props => {
           {!!theme1 && <FlightRecentSearches />}
         </>
       ),
-      children2: theme2 && <div className='max-sm:px-5' ><FlightRecentSearches /></div>
+      children2: theme2 && !isSafarLife ? <div className='max-sm:px-5' ><FlightRecentSearches /></div> : null
     })
   }
 
@@ -75,7 +77,7 @@ const Banner: React.FC<Props> = props => {
           {!!theme1 && <CipRecentSearches />}
         </>
       ),
-      children2: theme2 && <div className='max-sm:px-5'><CipRecentSearches /></div>
+      children2: theme2 && !isSafarLife ? <div className='max-sm:px-5'><CipRecentSearches /></div> : null
     })
 
   }
