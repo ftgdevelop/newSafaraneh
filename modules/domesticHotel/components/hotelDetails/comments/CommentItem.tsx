@@ -1,7 +1,12 @@
+import { openLoginForm } from '@/modules/authentication/store/authenticationSlice';
+import { disLikeComment, likeComment } from '@/modules/domesticHotel/actions';
 import { DomesticHotelReviewCommentItem } from '@/modules/domesticHotel/types/hotel';
-import { Business, Couple, DisLike, Group3, Individual, Like, Sad, Smile, TikCircle } from '@/modules/shared/components/ui/icons';
+import { Business, Couple, DisLike, Group3, Individual, Like, Sad, Smile } from '@/modules/shared/components/ui/icons';
 import { dateDiplayFormat } from '@/modules/shared/helpers';
+import { useAppDispatch, useAppSelector } from '@/modules/shared/hooks/use-store';
+import { setReduxNotification } from '@/modules/shared/store/notificationSlice';
 import parse from 'html-react-parser';
+import { useEffect, useState } from 'react';
 
 type Props = {
     comment: DomesticHotelReviewCommentItem;
@@ -11,29 +16,96 @@ type Props = {
 const CommentItem: React.FC<Props> = props => {
 
     const { comment } = props;
+    const dispatch = useAppDispatch();
+    const userIsAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
 
+    const [likesCount, setLikesCount] = useState<number>(0);
+    const [dislikesCount, setDislikesCount] = useState<number>(0);
 
+    const [likeActive, setLikeActive] = useState<boolean>(false);
+    const [dislikeActive, setDislikeActive] = useState<boolean>(false);
 
-    const likeHandler = () => {
-
-        let cookieLikedComment: string[] = [];
-        const cookies = decodeURIComponent(document?.cookie).split(';');
-        for (const item of cookies) {
-            if (item.includes("likedComments=")) {
-                cookieLikedComment = item.split("=")[1]?.split("_");
-            }
+    useEffect(()=>{
+        if(userIsAuthenticated){
+            setLikesCount(comment.likeCount);
+            setDislikesCount(comment.dislikeCount);
+            setLikeActive(!!comment.isLiked);
+            setDislikeActive(comment.isLiked === false);
         }
+    },[userIsAuthenticated, comment.isLiked]);
 
-        if (cookieLikedComment.includes(comment.id.toString())) {
+
+    const likeHandler = async () => {
+
+        if (!userIsAuthenticated){
+             dispatch(openLoginForm());
+             dispatch(setReduxNotification({
+                 status: 'error',
+                 message: "برای پسندیدن نظرات باید وارد حساب کاربری شوید!",
+                 isVisible: true
+             }));
             return;
         }
 
-        //call request
-        const expDate = new Date();
-        expDate.setTime(expDate.getTime() + (400 * 24 * 60 * 60 * 1000));
-        const updatedLikedComments = [...cookieLikedComment, comment.id].join("_");
+        const localStorageToken = localStorage?.getItem('Token');
+
+        if (comment.isWriter){
+            dispatch(setReduxNotification({
+                status: 'error',
+                message: "شما نمی توانید نظر خودتان را بپسندید!",
+                isVisible: true
+            }));
+            return;
+        }
         
-        document.cookie = `likedComments=${updatedLikedComments}; expires=${expDate.toUTCString()};path=/`;
+        if (likeActive) return;
+
+        const likeRequest : any = await likeComment(comment.id, localStorageToken!);
+        if(likeRequest?.data?.success){
+            setLikesCount(prev => prev+1);
+            setLikeActive(true);
+            if(dislikeActive){
+                setDislikeActive(false);
+                setDislikesCount(prev => prev-1);
+            }
+        }
+
+    }
+
+    const disLikeHandler = async () => {
+
+        if (!userIsAuthenticated){
+            dispatch(openLoginForm());
+            dispatch(setReduxNotification({
+                status: 'error',
+                message: "برای نپسندیدن نظرات باید وارد حساب کاربری شوید!",
+                isVisible: true
+            }));
+           return;
+       }
+
+        const localStorageToken = localStorage?.getItem('Token');
+
+        if (comment.isWriter){
+            dispatch(setReduxNotification({
+                status: 'error',
+                message: "شما نمی توانید نظر خودتان را نپسندید!",
+                isVisible: true
+            }));
+            return;
+        }
+        
+        if (dislikeActive) return;
+
+        const disLikeRequest: any = await disLikeComment(comment.id, localStorageToken!);
+        if(disLikeRequest?.data?.success){
+            setDislikesCount(prev => prev+1);
+            setDislikeActive(true);
+            if(likeActive){
+                setLikeActive(false);
+                setLikesCount(prev => prev-1);
+            }
+        }
     }
 
     let travelTypeElement: React.ReactNode = null;
@@ -94,29 +166,29 @@ const CommentItem: React.FC<Props> = props => {
 
             {!!comment.comment && parse(comment.comment)}
 
-            {/* <div className='flex gap-10'>
+            <div className='flex gap-10 mt-4'>
                 آیا این نظر مفید بود؟
                 <div className='flex gap-3'>
-                    {comment.likeCount}
+                    {likesCount}
                     <button
                         type='button'
                         onClick={likeHandler}
-                        className='border-none outline-none hover:text-green-700'
+                        className={`border-none outline-none ${likeActive?"text-green-700":"hover:text-green-700" }`}
                         aria-label='like'
                     >
                         <Like className='w-5 h-5 fill-current' />
                     </button>
-                    {comment.dislikeCount}
+                    {dislikesCount}
                     <button
                         type='button'
-                        onClick={() => { }}
-                        className='border-none outline-none hover:text-green-700'
+                        onClick={disLikeHandler}
+                        className={`border-none outline-none ${dislikeActive?"text-red-700":"hover:text-red-700" }`}
                         aria-label='dislike'
                     >
                         <DisLike className='w-5 h-5 fill-current' />
                     </button>
                 </div>
-            </div> */}
+            </div>
 
             {comment.reply?.reply && (
                 <div className='border p-2 px-4 mt-3 rounded bg-slate-100'>

@@ -1,11 +1,13 @@
 import { useTranslation } from 'next-i18next';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 
 import { DomesticHotelReviewsType } from "@/modules/domesticHotel/types/hotel";
 import HotelScore from '../../shared/HotelScore';
 import ProgressBar from '@/modules/shared/components/ui/ProgressBar';
 import CommentItem from './CommentItem';
 import NewComment from './NewComment';
+import { domesticHotelGetReviews } from '@/modules/domesticHotel/actions';
+import { useAppSelector } from '@/modules/shared/hooks/use-store';
 
 type Props = {
     hotelScoreData: DomesticHotelReviewsType;
@@ -15,12 +17,35 @@ type Props = {
 
 const UsersComments: React.FC<Props> = props => {
 
-    const { hotelScoreData: data } = props;
-
     const { t } = useTranslation('common');
     const { t: tHotel } = useTranslation('hotel');
 
     const [showAll, setShowAll] = useState<boolean>(false);
+
+    const [userComments, setUserComments] = useState<DomesticHotelReviewsType | undefined>(); 
+    
+    const data: DomesticHotelReviewsType = userComments || props.hotelScoreData;
+
+    const userIsAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
+
+    useEffect(()=>{                
+        if (!userIsAuthenticated || !props.pageId) return;
+        
+        const localStorageToken = localStorage?.getItem('Token');
+
+        if(!localStorageToken) return;
+
+        const updateComments = async (token: string, pageId:number) => {
+            const reviewsData : any = await domesticHotelGetReviews({
+                pageId: pageId,
+                token: token
+            });
+            if (reviewsData?.data?.result){
+                setUserComments(reviewsData.data.result)
+            }
+        }
+        updateComments(localStorageToken, props.pageId);
+    },[userIsAuthenticated, props.pageId]);
 
     const toggleShowAll = () => {
         setShowAll(prevState => !prevState);
@@ -64,8 +89,8 @@ const UsersComments: React.FC<Props> = props => {
                 </div>
 
 
-                {data?.reviews?.items?.slice(0, 3).map((item, index) => <CommentItem key={index} comment={item} siteName={props.siteName} />)}
-                {showAll && data?.reviews?.items?.slice(3).map((item, index) => <CommentItem key={index} comment={item} siteName={props.siteName} />)}
+                {data?.reviews?.items?.slice(0, 3).map(item => <CommentItem key={item.id} comment={item} siteName={props.siteName} />)}
+                {showAll && data?.reviews?.items?.slice(3).map(item => <CommentItem key={item.id} comment={item} siteName={props.siteName} />)}
 
                 <button
                     type='button'

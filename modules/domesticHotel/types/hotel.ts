@@ -245,8 +245,10 @@ export interface DomesticAccomodationType {
     id: number;
     facilities?: DomesticAccomodationFacilityType[];
     galleries?: DomesticAccomodationGalleryType[];
-    policies?: DomesticAccomodationPolicyType[]
-      
+    policies?: DomesticAccomodationPolicyType[];
+    similars?:{
+        id: number;
+    }[]
 }
 
 export interface AvailabilityByIdItem {
@@ -712,6 +714,8 @@ export interface DomesticHotelReviewCommentItem {
     };
     likeCount: number;
     dislikeCount: number;
+    isWriter: boolean;
+    isLiked?: null | boolean;
 }
 
 export interface DomesticHotelReviewsType {
