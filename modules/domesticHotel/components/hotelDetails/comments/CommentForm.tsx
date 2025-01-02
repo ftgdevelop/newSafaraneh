@@ -123,8 +123,6 @@ const CommentForm: React.FC<Props> = props => {
         { label: "کاری", value: "Business", icon: <Business className='fill-current w-5 h-5' /> }
     ];
 
-    if (!isAuthenticated) return "null";
-
     return (
         <ModalPortal
             show={open}

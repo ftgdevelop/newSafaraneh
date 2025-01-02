@@ -1,6 +1,6 @@
 import Button from "@/modules/shared/components/ui/Button";
 import { useAppSelector } from "@/modules/shared/hooks/use-store";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CommentForm from "./CommentForm";
 
 type Props = {
@@ -11,6 +11,14 @@ const NewComment: React.FC<Props> = props => {
 
     const userAuthentication = useAppSelector(state => state.authentication);
     const isAuthenticated = userAuthentication?.isAuthenticated;
+
+    const loginFormIsOpen = useAppSelector(state => state.authentication.loginFormIsOpen);
+
+    useEffect(()=>{
+        if(!loginFormIsOpen && !isAuthenticated){
+            setOpen(false);
+        }
+    },[loginFormIsOpen]);
 
     const [open, setOpen] = useState<boolean>(false);
 
@@ -26,7 +34,7 @@ const NewComment: React.FC<Props> = props => {
 
             </Button>
 
-            {open && <CommentForm pageId={props.pageId} closeHandle={() => { setOpen(false) }} />}
+            {!!open && <CommentForm pageId={props.pageId} closeHandle={() => { setOpen(false) }} />}
 
         </>
     )

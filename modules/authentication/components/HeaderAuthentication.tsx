@@ -43,9 +43,9 @@ const HeaderAuthentication: React.FC<Props> = props => {
     useEffect(() => {
         if (open) {
             setTimeout(() => { setDelayedOpen(true) }, 100);
-            dispatch(setBodyScrollable(false));
+            //dispatch(setBodyScrollable(false));
         } else {
-            dispatch(setBodyScrollable(true));
+            //dispatch(setBodyScrollable(true));
         }
     }, [open]);
 
