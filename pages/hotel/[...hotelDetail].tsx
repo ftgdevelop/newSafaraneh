@@ -174,12 +174,14 @@ useEffect(() => {
 
   useEffect(()=>{
     //delete this useEffect
-    const todoDelete = async () => {
-      const allData: any = await getDomesticHotelDetailsByUrl("/" + locale + props.todoDeleteUrl, locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR");
+    const todoDelete = async (u:string) => {
+      const allData: any = await getDomesticHotelDetailsByUrl(u,"fa-IR");
     }
-
-    todoDelete();
-  },[]);
+    
+    if(props.todoDeleteUrl){
+      todoDelete(props.todoDeleteUrl);
+    }
+  },[props.todoDeleteUrl]);
 
   if (props.error410) {
     return (
