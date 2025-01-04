@@ -47,6 +47,7 @@ type Props = {
   };
   portalData: WebSiteDataType;
   error410?: "true";
+  todoDeleteUrl?: string;
 }
 
 const HotelDetail: NextPage<Props> = props => {
@@ -171,14 +172,14 @@ useEffect(() => {
     }
   }, [checkin, checkout]);
 
-  // useEffect(()=>{
-  //   //delete this useEffect
-  //   const todoDelete = async () => {
-  //     const allData: any = await getDomesticHotelDetailsByUrl("/" + locale + props.todoDeleteUrl, locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR");
-  //   }
+  useEffect(()=>{
+    //delete this useEffect
+    const todoDelete = async () => {
+      const allData: any = await getDomesticHotelDetailsByUrl("/" + locale + props.todoDeleteUrl, locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR");
+    }
 
-  //   todoDelete();
-  // },[]);
+    todoDelete();
+  },[]);
 
   if (props.error410) {
     return (
@@ -878,7 +879,8 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return ({
     props: {
       ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
-      allData: allDataObject
+      allData: allDataObject,
+      todoDeleteUrl: url
     },
   })
 }
