@@ -3,7 +3,7 @@ import type { GetServerSideProps, NextPage } from 'next';
 import { i18n, useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
-import { HotelPageDataType, WebSiteDataType } from '@/modules/shared/types/common';
+import { WebSiteDataType } from '@/modules/shared/types/common';
 import { DomesticAccomodationType, DomesticHotelDetailType, DomesticHotelReviewsType, DomesticHotelRichSheet, DomesticHotelRichSnippets, EntitySearchResultItemType } from '@/modules/domesticHotel/types/hotel';
 import { useRouter } from 'next/router';
 import BackToList from '@/modules/domesticHotel/components/hotelDetails/BackToList';
@@ -31,6 +31,7 @@ import dynamic from 'next/dynamic';
 import { useAppDispatch } from '@/modules/shared/hooks/use-store';
 import { emptyReduxSafarmarket, setReduxSafarmarketPixel } from '@/modules/shared/store/safarmarketSlice';
 import BreadCrumpt from '@/modules/shared/components/ui/BreadCrumpt';
+import SimilarHotelsNew from '@/modules/domesticHotel/components/hotelDetails/SimilarHotelsNew';
 
 const SearchForm = dynamic(() => import('@/modules/domesticHotel/components/shared/SearchForm'), {
   ssr: false
@@ -336,7 +337,7 @@ useEffect(() => {
     );
   }
   
-  if(isSafaraneh && hotelData?.Similars){
+  if((isSafaraneh && hotelData?.Similars) || (accommodationData?.similars?.length) ){
     anchorTabsItems.push(
       { id: "similarhotels_section", title: tHotel('similar-hotels') }
     );
@@ -677,6 +678,7 @@ useEffect(() => {
 
       {!!reviewData && <Comments siteName={siteName} hotelScoreData={allData.reviews} pageId={sheet.id} />}
 
+      {!!(isSafarlife && accommodationData?.similars?.length) && <SimilarHotelsNew similarHotels={accommodationData.similars} />}
       {!!(isSafaraneh && hotelData?.Similars) && <SimilarHotels similarHotels={hotelData.Similars} />}
 
       {!!(accommodationData?.faqs?.length && !querySafarmarketId) && <FAQ faqs={accommodationData.faqs} />}
