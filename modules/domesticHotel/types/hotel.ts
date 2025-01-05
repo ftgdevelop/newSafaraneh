@@ -191,6 +191,28 @@ export interface DomesticAccomodationPolicyType{
       }[];
   }
 
+export interface DomesticHotelSimilarHotel {
+    id: number;
+    type: "Hotel",
+    typeStr?: string;
+    rating: number;
+    displayOrder?: string;
+    name?: string;
+    displayName?: string;
+    address?: string;
+    isPromotion: boolean;
+    url: string;
+    picture?:{
+        path?: string;
+        titleAttribute?: string;
+        altAttribute?: string;
+    }
+}
+export interface ExtendedDomesticHotelSimilarHotel extends DomesticHotelSimilarHotel {
+    ratesInfo?: "loading" | { Satisfaction: number; TotalRowCount: number; };
+    priceInfo: "loading" | "notPriced" | "need-to-inquire" | { boardPrice: number; salePrice: number; };
+}
+
 export interface DomesticAccomodationType {
     type: "Hotel" | "Apartments" | "Guesthouse" | "Motel" | "TraditionalHouse" | "Ecolodge" | "TourismComplex" | "BoutiqueHotel" | "Pansion";
     rating?: number;
@@ -246,9 +268,7 @@ export interface DomesticAccomodationType {
     facilities?: DomesticAccomodationFacilityType[];
     galleries?: DomesticAccomodationGalleryType[];
     policies?: DomesticAccomodationPolicyType[];
-    similars?:{
-        id: number;
-    }[]
+    similars?:DomesticHotelSimilarHotel[]
 }
 
 export interface AvailabilityByIdItem {
