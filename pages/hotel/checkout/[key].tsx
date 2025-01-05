@@ -232,7 +232,7 @@ const Checkout: NextPage = () => {
       email: user?.emailAddress || "",
       nationalId: user?.nationalId || "",
       phoneNumber: user?.phoneNumber || "",
-      passport: ""
+      passportNumber: ""
     },
     passengers: reserveInfo?.rooms.map((_, index) => ({
       gender: true,
