@@ -17,7 +17,7 @@ type Props = {
             email: string;
             nationalId: string;
             phoneNumber: string;
-            passport: string;
+            passportNumber: string;
         };
     }>;
     touched: FormikTouched<{
@@ -28,7 +28,7 @@ type Props = {
             email: string;
             nationalId: string;
             phoneNumber: string;
-            passport: string;
+            passportNumber: string;
         };
     }>;
     setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => Promise<void | FormikErrors<{
@@ -39,7 +39,7 @@ type Props = {
             email: string;
             nationalId: string;
             phoneNumber: string;
-            passport: string;
+            passportNumber: string;
             extraBed: number;
         };
     }>>;
@@ -51,7 +51,7 @@ type Props = {
             email: string;
             nationalId: string;
             phoneNumber: string;
-            passport: string;
+            passportNumber: string;
         };
         passengers: {
             gender: boolean;
@@ -204,13 +204,13 @@ const ReserverInformation: React.FC<Props> = props => {
                 ):(
                     <FormikField
                         setFieldValue={setFieldValue}
-                        errorText={errors.reserver?.passport as string}
-                        id='reserver_passport'
-                        name='reserver.passport'
-                        isTouched={touched.reserver?.passport}
+                        errorText={errors.reserver?.passportNumber as string}
+                        id='reserver_passportNumber'
+                        name='reserver.passportNumber'
+                        isTouched={touched.reserver?.passportNumber}
                         label="شماره پاسپورت"
                         validateFunction={(value: string) => validateRequied(value, t('please-enter-national-code'))}
-                        value={values.reserver.passport}
+                        value={values.reserver.passportNumber}
                     />
                 )}
 
