@@ -207,6 +207,18 @@ export interface DomesticHotelSimilarHotel {
         titleAttribute?: string;
         altAttribute?: string;
     }
+    facilities:{
+        keyword?: string;
+        name?: string;
+        items?: {
+            name?: string;
+            keyword?: string;
+            isImportant?: boolean;
+            isAdditionalCharge?: boolean;
+            isFree?: boolean;
+            description?: string;
+        }[]
+    }[]
 }
 export interface ExtendedDomesticHotelSimilarHotel extends DomesticHotelSimilarHotel {
     ratesInfo?: "loading" | { Satisfaction: number; TotalRowCount: number; };
