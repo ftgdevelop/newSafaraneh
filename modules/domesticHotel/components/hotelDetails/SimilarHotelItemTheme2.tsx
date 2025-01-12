@@ -26,6 +26,9 @@ const SimilarHotelItemTheme2: React.FC<Props> = props => {
         return null;
     }
 
+    const importantFacilities = hotel.facilities?.flatMap(facility => facility.items)?.filter(facility => facility?.isImportant);
+    
+
     let rate: React.ReactNode = null;
     if (!hotel.ratesInfo) {
         rate = <div />;
@@ -63,21 +66,8 @@ const SimilarHotelItemTheme2: React.FC<Props> = props => {
 
         const { boardPrice, salePrice } = hotel.priceInfo;
 
-        let discount: number = 0;
-
-        const discountPercentage = ((boardPrice - salePrice) * 100 / boardPrice);
-
-        if (discountPercentage > 0 && discountPercentage < 1) {
-            discount = 1;
-        } else {
-            discount = +discountPercentage.toFixed(0);
-        }
-
         priceBlock = (
             <>
-
-                {!!discount && <div><span className="bg-green-700 text-white rounded-xl leading-7 text-2xs px-2 select-none"> {toPersianDigits(discount.toString())}% {t('discount')} </span></div>}
-
                 {(boardPrice > salePrice) && <span className="text-xs inline-block text-neutral-500 line-through whitespace-nowrap">
                     {numberWithCommas(boardPrice)} {t('rial')}
                 </span>}
@@ -120,10 +110,10 @@ const SimilarHotelItemTheme2: React.FC<Props> = props => {
                     alt={hotel.displayName || hotel.name || ""}
                     width={310}
                     height={130}
-                    className='w-full h-48 rounded-t-xl object-cover'
+                    className='w-full h-40 rounded-t-xl object-cover'
                 />
             ) : (
-                <div className='w-full h-48 flex justify-center items-center rounded-t-xl bg-neutral-100'>
+                <div className='w-full h-40 flex justify-center items-center rounded-t-xl bg-neutral-100'>
                     <DefaultRoomTheme2 className="fill-neutral-300 w-28 h-28" />
                 </div>
             )}
@@ -136,7 +126,7 @@ const SimilarHotelItemTheme2: React.FC<Props> = props => {
                         {hotel.typeStr}
                     </span>}
 
-                    {hotel.address && <p className='text-xs text-neutral-400 mb-3 leading-5 mt-2'>{hotel.address}</p>}
+                    {importantFacilities?.map(x => <div key={x?.name}>{x?.name}</div>)}
 
                     {rate}
                 </div>
