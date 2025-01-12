@@ -126,7 +126,7 @@ const SimilarHotelItemTheme2: React.FC<Props> = props => {
                         {hotel.typeStr}
                     </span>}
 
-                    {importantFacilities?.map(x => <div key={x?.name}>{x?.name}</div>)}
+                    {importantFacilities?.map(x => <div className='text-2xs' key={x?.name}>{x?.name}</div>)}
 
                     {rate}
                 </div>
