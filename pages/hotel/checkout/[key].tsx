@@ -231,7 +231,8 @@ const Checkout: NextPage = () => {
       lastName: user?.lastName || "",
       email: user?.emailAddress || "",
       nationalId: user?.nationalId || "",
-      phoneNumber: user?.phoneNumber || ""
+      phoneNumber: user?.phoneNumber || "",
+      passportNumber: ""
     },
     passengers: reserveInfo?.rooms.map((_, index) => ({
       gender: true,
