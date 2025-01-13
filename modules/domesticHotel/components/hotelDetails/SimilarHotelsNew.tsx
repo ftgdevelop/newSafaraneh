@@ -57,6 +57,7 @@ const SimilarHotelsNew: React.FC<Props> = props => {
     const nights = getDatesDiff(new Date(checkin), new Date(checkout));
 
     const isSafaraneh = process.env.PROJECT === "SAFARANEH";
+    const isSafarlife = process.env.PROJECT === "SAFARLIFE";
 
     const [ratesData, setRatesData] = useState<RatesResponseItem[] | undefined>();
     const [ratesLoading, setRatesLoading] = useState<boolean>(false);
@@ -204,8 +205,9 @@ const SimilarHotelsNew: React.FC<Props> = props => {
 
         <div id='similarhotels_section' className="max-w-container mx-auto px-3 sm:px-5 py-7 md:py-10" ref={wrapperRef}>
 
-            <h2 className='text-center text-lg lg:text-3xl font-semibold mb-3' > {tHotel('similar-hotels')} </h2>
-            <p className='text-center text-neutral-700 mb-3 md:mb-7' > {tHotel('you-might-be-interested-this-hotels')} </p>
+            {!isSafarlife && <h2 className='text-center text-lg lg:text-3xl font-semibold mb-3' > {tHotel('similar-hotels')} </h2>}
+            
+            <p className={`mb-3 md:mb-7 ${isSafarlife?"font-semibold":"text-center text-neutral-700"}`} > {tHotel('you-might-be-interested-this-hotels')} </p>
 
             {(hotels?.length) ? (
                 <div className='-mx-2'>
