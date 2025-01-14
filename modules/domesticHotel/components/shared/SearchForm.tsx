@@ -140,10 +140,13 @@ const SearchForm: React.FC<Props> = props => {
 
         let url: string = "";
 
+        const isSafarLife = process.env.SITE_NAME === 'https://www.safarlife.com';
+
         switch (selectedDestination.type) {
             case "City":
-
-                if (i18n && i18n.language === "fa") {
+                if (isSafarLife && selectedDestination.slug){
+                    url = selectedDestination.slug;
+                }else if (i18n && i18n.language === "fa") {
                     url = `/hotels/هتل-های-${selectedDestination.name!.replace(/ /g, "-")}`;
                 } else if (i18n && i18n.language === "ar") {
                     url = `/hotels/فنادق-${selectedDestination.name!.replace(/ /g, "-")}`;
@@ -195,10 +198,6 @@ const SearchForm: React.FC<Props> = props => {
                 url = "";
         }
 
-        let urlSegment = "";
-        if (selectedDestination.id && selectedDestination.type !== 'Hotel') {
-            urlSegment = `/location-${selectedDestination.id}`;
-        }
 
         if(!url){
             dispatch(setReduxError({
@@ -209,7 +208,7 @@ const SearchForm: React.FC<Props> = props => {
             return;
         }
 
-        url += `${urlSegment}/checkin-${dates[0]}/checkout-${dates[1]}`;
+        url += `/checkin-${dates[0]}/checkout-${dates[1]}`;
 
         const localStorageRecentSearches = localStorage?.getItem("hotelRecentSearches");
         const recentSearches: HotelRecentSearchItem[] = localStorageRecentSearches ? JSON.parse(localStorageRecentSearches) : [];
@@ -272,7 +271,7 @@ const SearchForm: React.FC<Props> = props => {
                 <div className="relative z-20 col-span-1 md:col-span-3">
                 <AutoCompleteZoom
                     defaultListLabel="محبوب ترین ها"
-                    label="نام شهر، هتل یا منطقه"
+                    label={theme2 ? t('search-hotel-or-city') : "نام شهر، هتل یا منطقه"}
                     type="hotel"
                     defaultList={defaultDestinations}
                     inputId="destination"
@@ -282,7 +281,7 @@ const SearchForm: React.FC<Props> = props => {
                     acceptLanguage="fa-IR"
                     renderOption={renderOption}
                     icon="location"
-                    inputClassName={`w-full bg-white leading-4 border rounded-lg border-neutral-400 py-0.5 text-md h-12 flex flex-col justify-center`}
+                    inputClassName="w-full bg-white leading-5 border rounded-lg border-neutral-400 py-0.5 text-md h-12 flex flex-col justify-center"
                     placeholder={t('search-hotel-or-city')}
                     min={2}
                     value={selectedDestination}

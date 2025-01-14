@@ -1,4 +1,5 @@
 import { Star } from "@/modules/shared/components/ui/icons";
+import { toPersianDigits } from "@/modules/shared/helpers";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from 'react';
@@ -107,7 +108,7 @@ const HotelRatingFilter: React.FC = () => {
                         onClick={() => { toggleItem(item) }}
                         className={`border ${item ? "text-xs" : "text-3xs"} ${values.includes(item) ? "bg-blue-600 text-white" : "bg-white text-neutral-500"} border-neutral-300 rounded px-1 whitespace-nowrap flex gap-0.5 leading-4 items-center h-8`}
                     >
-                        {item ? <>{item} <Star className={`w-3.5 h-3.5 ${values.includes(item) ? "fill-current" :theme2? "fill-neutral-700" : "fill-amber-500"}`} /> </> : tHotel('unrated')}
+                        {item ? <>{toPersianDigits(item.toString())} <Star className={`w-3.5 h-3.5 ${values.includes(item) ? "fill-current" :theme2? "fill-neutral-700" : "fill-amber-500"}`} /> </> : tHotel('unrated')}
                     </button>
                 ))}
 

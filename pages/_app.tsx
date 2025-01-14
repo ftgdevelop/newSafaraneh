@@ -14,18 +14,20 @@ import '../styles/leaflet.css';
 // import '../styles/modernDatePicker.scss';
 
 import { store } from '../modules/shared/store';
-import { GetPageByUrlDataType, WebSiteDataType } from '@/modules/shared/types/common';
+import { FooterStrapi, GetPageByUrlDataType, WebSiteDataType } from '@/modules/shared/types/common';
 import { getPortal } from '@/modules/shared/actions/portalActions';
 import Layout from '@/modules/shared/components/layout';
 import { GTM_ID } from '@/modules/shared/helpers';
 import { getPageByUrl } from '@/modules/shared/actions';
+import { getStrapiFooter } from '@/modules/shared/actions/strapiActions';
 
 type TProps = Pick<AppProps, "Component" | "pageProps"> & {
   portalData?: WebSiteDataType;
-  pageData?: GetPageByUrlDataType
+  pageData?: GetPageByUrlDataType;
+  footerStrapiData?: FooterStrapi;
 };
 
-function MyApp({ Component, pageProps, portalData, pageData }: TProps) {
+function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }: TProps) {
   const router = useRouter();
 
   const { locale } = router;
@@ -45,6 +47,16 @@ function MyApp({ Component, pageProps, portalData, pageData }: TProps) {
       router.push(router.asPath, router.asPath, { locale: locale });
     }
   }, []);
+
+  useEffect(()=>{
+    const fetchh = async () => {
+      const res = await  getPortal("fa-IR");
+      if (res){
+      }
+    }
+    fetchh();
+
+  },[]);
 
   const tel = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
   const emergencyNumber = portalData?.billing.emergencyNumber || "";
@@ -186,6 +198,7 @@ function MyApp({ Component, pageProps, portalData, pageData }: TProps) {
         enamad={enamad}
         samandehi={samandehi}
         scripts={scripts}
+        footerStrapi={footerStrapiData}
       >
 
         <Component {...pageProps} portalData={portalData} />
@@ -211,15 +224,26 @@ MyApp.getInitialProps = async (
 
   const acceptLanguage = locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR";
 
-  const [portalData, pageResponse] = await Promise.all<any>([
+  const theme2 = process.env.THEME === "THEME2";
+  const hasStrapi = process.env.PROJECT_SERVER_STRAPI;
+
+  const [portalData, pageResponse,footerStrapi] = await Promise.all<any>([
     getPortal("fa-IR"),
-    getPageByUrl(url, acceptLanguage)
-]) 
+    getPageByUrl(url, acceptLanguage),
+    (hasStrapi && theme2) ? await getStrapiFooter("populate[LinkRows][populate]=*") : undefined
+  ]);
+  
+  const footerStrapiData = hasStrapi && theme2 ? {
+    title: footerStrapi?.data?.data?.[0]?.attributes?.Title,
+    description: footerStrapi?.data?.data?.[0]?.attributes?.Description,
+    linkRows: footerStrapi?.data?.data?.[0]?.attributes?.LinkRows
+  } : null
 
   return {
     ...ctx,
     portalData: portalData?.data?.result || null,
-    pageData: pageResponse?.data?.result || null
+    pageData: pageResponse?.data?.result || null,
+    footerStrapiData: footerStrapiData
   };
 };
 

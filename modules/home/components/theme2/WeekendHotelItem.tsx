@@ -105,7 +105,7 @@ const WeekendHotelItem: React.FC<Props> = props => {
     return (
         <div className='sm:px-2 rtl:rtl'>
             <a
-                href={`${hotel.url}/location-${hotel.hotelId}/checkin-${props.checkin}/checkout-${props.checkout}`}
+                href={`${hotel.url}/checkin-${props.checkin}/checkout-${props.checkout}`}
                 className='block outline-none'
                 target='_blank'
                 title={hotel.name}

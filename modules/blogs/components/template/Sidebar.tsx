@@ -1,11 +1,24 @@
-import { NextPage } from "next";
-import Image from "next/image";
-import RecentBlogSidebar from "./SidebarRecentBlog";
 import SidebarSearchBlog from "./SidebarSearchBlog";
 import Link from "next/link";
 import BestHotels from "./SidebarBestHotels";
+import Image from "next/image";
 
-const Sidebar: NextPage<any> = ({ recentBlogs, CategoriesNames, SearchItem, NotSticky }) => {
+type Props = {
+    recentBlogs:{
+        link: string;
+        title: string;
+        imageUrl?:string;
+    }[]
+    categories: {
+        label: string;
+    link: string;
+    }[];
+    showSearch?: boolean;
+    NotSticky?: boolean
+}
+const Sidebar: React.FC<Props> = props => {
+
+    const {categories, recentBlogs, NotSticky, showSearch} = props;
     
     return (
         <div className={`${!NotSticky && 'sticky top-5 bottom-5'} w-full max-lg:mt-10`}>
@@ -14,15 +27,14 @@ const Sidebar: NextPage<any> = ({ recentBlogs, CategoriesNames, SearchItem, NotS
             </div>
                 <ul className="divide-y p-1">
                     {
-                        CategoriesNames && 
-                        CategoriesNames.map((item : any) => 
-                            <li key={item.name} className="p-2 text-sm hover:text-blue-800"><Link href={`/blog/category/${item.id}`}>{item.name}</Link></li>
+                        categories?.map(item => 
+                            <li key={item.label} className="p-2 text-sm hover:text-blue-800"><Link href={item.link}>{item.label}</Link></li>
                         )
                     }
                 </ul>
    
             {
-                SearchItem && <SidebarSearchBlog />
+                !!showSearch && <SidebarSearchBlog />
             }
 
             <div className="mt-5">
@@ -31,8 +43,15 @@ const Sidebar: NextPage<any> = ({ recentBlogs, CategoriesNames, SearchItem, NotS
                 </div>
             <div className="divide-y">
                     {
-                        recentBlogs &&
-                        recentBlogs.map((blog : any) => <RecentBlogSidebar key={blog.id} data={blog} /> )
+                        recentBlogs?.slice(0,3)?.map(blog  => (
+                            <div className="mt-3 p-1" key={blog.title}>
+                            <Link href={blog.link} className="flex justify-between">
+                                <p className="text-xs ml-2 hover:text-blue-800">{blog.title}</p>
+                                <Image src={blog.imageUrl || ""} onContextMenu={e => e.preventDefault()}
+                                width={120} height={70} alt='pic' className="rounded-md object-cover w-20 h-20"/>
+                            </Link>
+                        </div>
+                        ) )
                     }
             </div>
             </div>

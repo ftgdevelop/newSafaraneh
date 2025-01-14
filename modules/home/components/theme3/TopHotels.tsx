@@ -126,7 +126,7 @@ const TopHotels: React.FC = () => {
                         let url = hotel.url;
 
                         if (process.env.LocaleInUrl === "off") {
-                            url = url.replace("fa", "");
+                            url = url.replace("fa/", "");
                         }
 
                         return (

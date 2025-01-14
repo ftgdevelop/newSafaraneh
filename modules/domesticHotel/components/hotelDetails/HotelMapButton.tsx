@@ -26,7 +26,7 @@ const HotelMapButton: React.FC<Props> = props => {
                 <p className="text-md sm:text-lg mb-1 font-semibold"> موقعیت را بررسی کنید </p>
 
                 <button type='button' className='w-full relative rounded-2xl border border-neutral-300 overflow-hidden select-none text-sm' onClick={props.onClick}>
-                    <Image src="/images/staticmap.png" alt="showMap" className='block w-full h-full object-cover' width={354} height={173} />
+                    <Image src={theme2?"/images/staticmapTheme2.jpg":"/images/staticmap.png"} alt="showMap" className='block w-full h-full object-cover' width={354} height={173} />
 
                     <div className="absolute bottom-0 left-0 right-0 p-3 bg-white">
                         {tHotel('viewOnMap')}

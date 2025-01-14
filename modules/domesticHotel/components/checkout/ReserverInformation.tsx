@@ -2,11 +2,11 @@ import { UserInformation } from "@/modules/authentication/types/authentication";
 import FormikField from "@/modules/shared/components/ui/FormikField";
 import PhoneInput from "@/modules/shared/components/ui/PhoneInput";
 import RadioInputField from "@/modules/shared/components/ui/RadioInputField";
-import { validateEmail, validateNationalId, validateRequiedPersianAndEnglish } from "@/modules/shared/helpers/validation";
+import { validateEmail, validateNationalId, validateRequied, validateRequiedPersianAndEnglish } from "@/modules/shared/helpers/validation";
 import { useAppSelector } from "@/modules/shared/hooks/use-store";
 import { Field, FormikErrors, FormikTouched } from "formik";
 import { useTranslation } from "next-i18next";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
     errors: FormikErrors<{
@@ -17,6 +17,7 @@ type Props = {
             email: string;
             nationalId: string;
             phoneNumber: string;
+            passportNumber: string;
         };
     }>;
     touched: FormikTouched<{
@@ -27,6 +28,7 @@ type Props = {
             email: string;
             nationalId: string;
             phoneNumber: string;
+            passportNumber: string;
         };
     }>;
     setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => Promise<void | FormikErrors<{
@@ -37,6 +39,7 @@ type Props = {
             email: string;
             nationalId: string;
             phoneNumber: string;
+            passportNumber: string;
             extraBed: number;
         };
     }>>;
@@ -48,6 +51,7 @@ type Props = {
             email: string;
             nationalId: string;
             phoneNumber: string;
+            passportNumber: string;
         };
         passengers: {
             gender: boolean;
@@ -66,7 +70,11 @@ const ReserverInformation: React.FC<Props> = props => {
 
     const { t } = useTranslation('common');
 
+    const isSafaraneh = process.env.PROJECT === "SAFARANEH";
+
     const { errors, touched, setFieldValue, values } = props;
+
+    const [iraniReserver, setIraniReserver] = useState(true);
 
     const user: UserInformation | undefined = useAppSelector(state => state.authentication.isAuthenticated ? state.authentication.user : undefined);
 
@@ -163,6 +171,49 @@ const ReserverInformation: React.FC<Props> = props => {
                     value={values.reserver.lastName}
                 />
 
+                {!!isSafaraneh && <div role="group" className={`leading-4 ${theme1?"md:col-span-2 lg:col-span-1":""}`} >
+                    <label className='block text-xs mb-2' > ملیت </label>
+                    <label className='inline-flex items-center gap-1 rtl:ml-4 ltr:mr-4 cursor-pointer'>
+                        <RadioInputField
+                            onChange={(e: any) => {setIraniReserver(e.target.checked)}}
+                            checked={iraniReserver}
+                        />
+                        ایرانی
+                    </label>
+                    <label className='inline-flex items-center gap-1 cursor-pointer'>
+                        <RadioInputField
+                            onChange={(e: any) => {setIraniReserver(!e.target.checked)}}
+                            checked={!iraniReserver}
+                        />
+                        غیر ایرانی
+                    </label>
+                </div>}
+
+                {iraniReserver ? (
+                    <FormikField
+                        setFieldValue={setFieldValue}
+                        errorText={errors.reserver?.nationalId as string}
+                        id='nationalId'
+                        name='reserver.nationalId'
+                        isTouched={touched.reserver?.nationalId}
+                        label={t('national-code')}
+                        maxLength={10}
+                        validateFunction={(value: string) => validateNationalId({ value: value, invalidMessage: t('invalid-national-code'), reqiredMessage: t('please-enter-national-code') })}
+                        value={values.reserver.nationalId}
+                    />
+                ):(
+                    <FormikField
+                        setFieldValue={setFieldValue}
+                        errorText={errors.reserver?.passportNumber as string}
+                        id='reserver_passportNumber'
+                        name='reserver.passportNumber'
+                        isTouched={touched.reserver?.passportNumber}
+                        label="شماره پاسپورت"
+                        validateFunction={(value: string) => validateRequied(value, t('please-enter-national-code'))}
+                        value={values.reserver.passportNumber}
+                    />
+                )}
+
 
                 <PhoneInput
                     defaultCountry={
@@ -180,18 +231,6 @@ const ReserverInformation: React.FC<Props> = props => {
                     label={t("phone-number") + " (بدون صفر)"}
                     errorText={errors.reserver?.phoneNumber}
                     initialValue={values.reserver.phoneNumber || ""}
-                />
-
-                <FormikField
-                    setFieldValue={setFieldValue}
-                    errorText={errors.reserver?.nationalId as string}
-                    id='nationalId'
-                    name='reserver.nationalId'
-                    isTouched={touched.reserver?.nationalId}
-                    label={t('national-code')}
-                    maxLength={10}
-                    validateFunction={(value: string) => validateNationalId({ value: value, invalidMessage: t('invalid-national-code'), reqiredMessage: t('please-enter-national-code') })}
-                    value={values.reserver.nationalId}
                 />
 
                 <FormikField

@@ -1,7 +1,7 @@
 import { Fragment, useState } from 'react';
 
 import { DomesticAccomodationType, DomesticHotelDetailType } from "@/modules/domesticHotel/types/hotel";
-import { Location } from "@/modules/shared/components/ui/icons";
+import { Directions, Location } from "@/modules/shared/components/ui/icons";
 import HotelScore from "../shared/HotelScore";
 import Rating from "@/modules/shared/components/ui/Rating";
 import Image from 'next/image';
@@ -10,14 +10,15 @@ import HotelMap from './HotelMap';
 import GuestRating from '@/modules/shared/components/ui/GuestRating';
 import HotelMapButton from './HotelMapButton';
 import AccommodationFacilityIcon from './AccommodationFacilityIcon';
+import Link from 'next/link';
 
 type Props = {
     accomodationData: DomesticAccomodationType;
     hotelData?: DomesticHotelDetailType;
-    scoreData?: {
-        CommentCount?: number;
-        Satisfaction?: number;
-    };
+    reviewData?: {
+        averageRating: number;
+        reviewCount: number;
+    }
 }
 
 const HotelName: React.FC<Props> = props => {
@@ -34,30 +35,42 @@ const HotelName: React.FC<Props> = props => {
     }
 
     const closeMapModal = () => { setShowMap(false) };
+    
+    const isSafarLife = process.env.SITE_NAME === 'https://www.safarlife.com';
 
     return (
 
-        <div className={`grid grid-cols-1 lg:grid-cols-3 gap-5 bg-white rounded-b-xl ${theme1?" p-3 -mt-6 pt-12 sm:p-5 xl:p-7 xl:pt-16":"pt-14 pb-5"}`}>
+        <div className={`grid grid-cols-1 lg:grid-cols-3 gap-5 bg-white rounded-b-xl ${theme1?" p-3 -mt-6 pt-12 sm:p-5 xl:p-7 xl:pt-16":"pt-3 pb-5"}`}>
             <div className="lg:col-span-2 pt-3">
                 <h1 className="font-semibold text-2xl lg:text-4xl mb-3 sm:mb-4 lg:mb-5"> {accomodationData.displayName || accomodationData.name} </h1>
                 {!!(accomodationData.rating) && <Rating number={accomodationData.rating} className="mb-3" />}
-                {!!(accomodationData.address) && <p className="text-neutral-500 text-sm mb-3 sm:mb-6"><Location className="w-4 h-4 fill-current inline-block align-middle" /> {accomodationData.address}</p>}
-                
-                {props.scoreData && theme1 ? (
-                    <HotelScore
-                        reviews={props.scoreData?.CommentCount}
-                        score={props.scoreData?.Satisfaction}
-                        className="text-md lg:text-lg font-semibold"
-                    />
-                ) : (theme2 && props.scoreData?.CommentCount && props.scoreData.Satisfaction) ? (
-                    <GuestRating
-                        rating={props.scoreData?.Satisfaction}
-                        reviewCount={props.scoreData?.CommentCount}
-                        large
-                    />
-                ) : (
-                    null
+                {!!(accomodationData.address) && (
+                    <p className="text-neutral-500 text-sm mb-3 sm:mb-6"><Location className="w-4 h-4 fill-current inline-block align-middle" /> 
+                        {accomodationData.address} 
+                        {!!theme2 && <Link
+                            target='_blank'
+                            className='mx-2'
+                            href={`https://www.google.com/maps/dir/?api=1&travelmode=driving&dir_action=navigate&destination=${accomodationData.coordinates?.latitude},${accomodationData.coordinates?.longitude}`}
+                        >
+                            <Directions className='w-8 h-8 fill-blue-600 inline-block' />
+                        </Link>}
+                    </p>
                 )}
+                {!props.reviewData ?
+                    null
+                    : theme2 ? (
+                        <GuestRating
+                            rating={props.reviewData.averageRating * 10}
+                            reviewCount={props.reviewData.reviewCount}
+                            large
+                        />
+                    ) : (
+                        <HotelScore
+                            reviews={props.reviewData.reviewCount}
+                            score={props.reviewData.averageRating}
+                            className="text-md lg:text-lg font-semibold"
+                        />
+                    )}
 
             </div>
 
@@ -68,9 +81,11 @@ const HotelName: React.FC<Props> = props => {
             />
 
             {
-                accomodationData.facilities?.length 
+                (accomodationData.facilities?.length 
                 || 
-                (process.env.PROJECT === "SAFARANEH" && props.hotelData?.Facilities?.length)
+                (process.env.PROJECT === "SAFARANEH" && props.hotelData?.Facilities?.length))
+                && 
+                !isSafarLife
             ? (
                 <div className='lg:col-span-2'>
                     

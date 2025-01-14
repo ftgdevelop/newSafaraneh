@@ -7,6 +7,7 @@ export type TabItem = {
 };
 
 export interface GetPageByUrlDataType {
+    entityId?: number;
     title?: string;
     pageTitle?: string;
     metaKeyword?: string;
@@ -169,3 +170,17 @@ export interface TravelerItem {
     phoneNumber?:string;
     id:number;
 }
+
+export interface FooterStrapi {
+    title?: string;
+    description?: string;
+    linkRows?: {
+      id: number;
+      Title?: string;
+      Links?:{
+        Text?: string;
+        Url?: string;
+        id: number;        
+      }[];
+    }[];
+  }

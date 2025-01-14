@@ -46,6 +46,7 @@ const nextConfig = {
     SITE_NAME: 'https://www.samita.com',
     THEME: "THEME1",
     SAFAR_MARKET_SITE_NAME: "samita",
+    HOTEL_LIST_LAZY_LOAD: "lazy",
     PROJECT_SERVER_TYPE: "https://",
     PROJECT_SERVER_USER: "",
 

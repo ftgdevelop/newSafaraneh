@@ -43,9 +43,9 @@ const HeaderAuthentication: React.FC<Props> = props => {
     useEffect(() => {
         if (open) {
             setTimeout(() => { setDelayedOpen(true) }, 100);
-            dispatch(setBodyScrollable(false));
+            //dispatch(setBodyScrollable(false));
         } else {
-            dispatch(setBodyScrollable(true));
+            //dispatch(setBodyScrollable(true));
         }
     }, [open]);
 
@@ -84,7 +84,7 @@ const HeaderAuthentication: React.FC<Props> = props => {
     let buttonClassName = "h-12 text-sm text-blue-700 hover:text-blue-500 ltr:float-right rtl:float-left hidden md:block";
 
     if (theme2) {
-        buttonClassName = "whitespace-nowrap rounded-lg h-10 px-3 border border-stone-300 text-sm text-black hover:text-stone-800 ltr:float-right rtl:float-left font-semibold hidden md:flex items-center gap-3";
+        buttonClassName = "whitespace-nowrap rounded-lg max-md:ml-5 h-10 px-3 border border-stone-300 text-sm text-black hover:text-stone-800 ltr:float-right rtl:float-left font-semibold flex items-center gap-3";
     }
 
     return (
@@ -102,9 +102,11 @@ const HeaderAuthentication: React.FC<Props> = props => {
                                 onClick={() => { setStyle2AuthCtxOpen(true) }}
                             >
                                 <User className='w-6 h-6 fill-white bg-neutral-600 p-0.5 rounded-full' />
-
+                                
                                 {userData?.firstName && userData?.lastName ? (
-                                    `${userData?.firstName} ${userData?.lastName}`
+                                    <>
+                                        {userData?.firstName} <span className='max-xs:hidden' > {userData?.lastName} </span>
+                                    </>
                                 ) : (
                                     "حساب کاربری"
                                 )}
@@ -130,7 +132,7 @@ const HeaderAuthentication: React.FC<Props> = props => {
                                 </Link>
 
                                 <Logout
-                                    className='block w-full rtl:text-right ltr:text-left py-1.5 hover:bg-neutral-100 px-3'
+                                    className='block w-full rtl:text-right ltr:text-left py-1.5 hover:bg-neutral-100 px-3 text-red-600 text-xs'
                                     closeModal={()=>{setStyle2AuthCtxOpen(false);}}
                                 />
 

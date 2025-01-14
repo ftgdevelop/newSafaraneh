@@ -165,6 +165,8 @@ const PhoneActivationForm: React.FC<Props> = props => {
 
     const showVerificationFormDelayed = true;
 
+    const theme1 = process.env.THEME === "THEME1";
+
     return (
 
         <>
@@ -186,7 +188,7 @@ const PhoneActivationForm: React.FC<Props> = props => {
                     return (
                         <Form autoComplete='off' >
 
-                            <div className="grid sm:grid-cols-4 gap-3 mb-2 lg:w-1/2 mb-5">
+                            <div className={`grid sm:grid-cols-4 gap-3 mb-2 ${theme1?"lg:w-1/2":""} mb-5`}>
                                 <PhoneInput
                                     disabled={!!user?.isPhoneNumberConfirmed}
                                     className="sm:col-span-3"

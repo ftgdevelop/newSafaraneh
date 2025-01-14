@@ -12,6 +12,7 @@ type Props = {
     wrapperClassName?: string;
     tabLinksBold?: boolean;
     innerElement?: React.ReactNode;
+    showTabsWhenThereIsOnlyOneItem?: boolean;
 }
 
 const Tab: React.FC<Props> = props => {
@@ -34,7 +35,7 @@ const Tab: React.FC<Props> = props => {
         }
     }
 
-    if (style === 'expedia-home' && items.length === 1){
+    if (style === 'expedia-home' && items.length === 1 && !props.showTabsWhenThereIsOnlyOneItem){
         return(
             <>
             <div className={props.wrapperClassName || ""}>

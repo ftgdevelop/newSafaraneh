@@ -2,11 +2,21 @@ import { Formik, Form, Field } from 'formik';
 import { i18n, useTranslation } from 'next-i18next';
 
 import Button from '@/modules/shared/components/ui/Button';
-import { validateRequied, validateEmail } from '@/modules/shared/helpers/validation';
-import { insertComment } from '@/modules/domesticHotel/actions';
+import { validateRequied } from '@/modules/shared/helpers/validation';
+import { createComment} from '@/modules/domesticHotel/actions';
+import RateInput from './RateInput';
+import RadioInputField from '@/modules/shared/components/ui/RadioInputField';
+import React, { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '@/modules/shared/hooks/use-store';
+import { openLoginForm } from '@/modules/authentication/store/authenticationSlice';
+import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
+import { Business, Couple, Family, Group3, Individual } from '@/modules/shared/components/ui/icons';
+import { setReduxNotification } from '@/modules/shared/store/notificationSlice';
+import { dateFormat } from '@/modules/shared/helpers';
 
 type Props = {
-    pageId: number
+    pageId: number;
+    closeHandle: () => void;
 }
 
 const CommentForm: React.FC<Props> = props => {
@@ -14,200 +24,257 @@ const CommentForm: React.FC<Props> = props => {
     const { t } = useTranslation('common');
     const { t: tHotel } = useTranslation('hotel');
 
-    type FormValues = {
-        FullName: string;
-        CityName: string;
-        Email: string;
-        Comment: string;
-        Satisfaction: string;
-        RoomService: string;
-        ResturantQuality: string;
-        DealWithPassanger: string;
-        IsRecommended: boolean;
-    }
-    const initialValues: FormValues = {
-        FullName: '',
-        CityName: '',
-        Email: '',
-        Comment: '',
-        Satisfaction: '',
-        RoomService: '',
-        ResturantQuality: '',
-        DealWithPassanger: '',
-        IsRecommended: false
-    };
+    const [submitLoading, setSubmitLoading] = useState<boolean>(false);
 
-    const numbersArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const userAuthentication = useAppSelector(state => state.authentication);
+    const { user, isAuthenticated } = userAuthentication;
+    const dispatch = useAppDispatch();
+
+    const [open, setOpen] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            setOpen(true);
+        } else {
+            dispatch(openLoginForm());
+        }
+    }, [isAuthenticated]);
+
+    type FormValues = {
+        travelType: "Individual" | "Family" | "Couple" | "Group" | "Business";
+        comment: string;
+        positivePoints: string;
+        negativePoints: string;
+        userDisplayName: string;
+        overallRating: number;
+        recommendToOthers: boolean;
+        isAnonymous: boolean;
+    }
+
+    let initialDisplayName = "";
+    if (user?.firstName) {
+        initialDisplayName = user.firstName;
+    }
+    if (user?.lastName) {
+        if (initialDisplayName) initialDisplayName += " ";
+        initialDisplayName += user.lastName;
+    }
+
+    const initialValues: FormValues = {
+        travelType: 'Individual',
+        comment: '',
+        overallRating: 9,
+        recommendToOthers: false,
+        isAnonymous: false,
+        positivePoints: '',
+        negativePoints: '',
+        userDisplayName: initialDisplayName
+    };
 
     const submitHandle = async (values: FormValues, actions: any) => {
 
         const params = {
-            PageId: props.pageId,
-            FullName: values.FullName,
-            CityName: values.CityName,
-            Email: values.Email,
-            Comment: values.Comment,
-            IsRecommended: values.IsRecommended || false,
-            Satisfaction: +values.Satisfaction,
-            RoomService: +values.RoomService,
-            ResturantQuality: +values.ResturantQuality,
-            DealWithPassanger: +values.DealWithPassanger
+            comment: values.comment,
+            overallRating: values.overallRating,
+            travelType: values.travelType,
+            isVerifiedReviewer: false,
+            userDisplayName: values.userDisplayName,
+            positivePoints: values.positivePoints,
+            negativePoints: values.negativePoints,
+            recommendToOthers: values.recommendToOthers,
+            userId: user?.id,
+            language: "fa-IR",
+            pageId: props.pageId,
+            creationTime: dateFormat(new Date),
+            isActive: user?.isActive,
+            isAnonymous: values.isAnonymous,
+            tenantId: +process.env.PROJECT_SERVER_TENANTID!
         };
 
-        actions.resetForm();
+        setSubmitLoading(true);
 
-        const response : any = await insertComment(params, i18n?.language === 'en'?"en-US":"fa-IR");
+        const response: any = await createComment(params);
+
+        actions.resetForm();
+        setOpen(false);
+        props.closeHandle();
+        setSubmitLoading(false);
 
         if (response?.data?.result) {
-            debugger;
-            //toDo
+            dispatch(setReduxNotification({
+                status: 'success',
+                message: 'دیدگاه شما با موفقیت ثبت شد و پس از تایید نمایش داده خواهد شد.',
+                isVisible: true
+            }));
+        } else {
+            dispatch(setReduxNotification({
+                status: 'error',
+                message: 'متاسفانه ثبت دیدگاه شما با خطا روبرو شد. لطفا دوباره تلاش کنید.',
+                isVisible: true
+            }));
         }
-
     }
 
+    const travelTypeOptions: { value: string, label: string, icon: React.ReactNode }[] = [
+        { label: "انفرادی", value: "Individual", icon: <Individual className='fill-current w-6 h-6' /> },
+        { label: "خانواده", value: "Family", icon: <Family className='fill-current w-6 h-6' /> },
+        { label: "زوج", value: "Couple", icon: <Couple className='fill-current w-6 h-6' /> },
+        { label: "گروهی", value: "Group", icon: <Group3 className='fill-current w-6 h-6' /> },
+        { label: "کاری", value: "Business", icon: <Business className='fill-current w-5 h-5' /> }
+    ];
+
     return (
-        <div className='p-3 sm:p-5 lg:p-7 bg-white rounded-xl grid grid-cols-1 md:grid-cols-3 md:gap-6'>
-            <div>
-                <h5 className='text-sm md:text-base font-semibold mb-5'>{tHotel("submit-suggestion")}</h5>
-            </div>
+        <ModalPortal
+            show={open}
+            selector='modal_portal_2'
+        >
+            <div className="fixed w-screen h-screen ovelflow-auto bg-black/75 backdrop-blur top-0 left-0 flex items-center justify-center">
 
-            <div className='md:col-span-2'>
-                <Formik
-                     validate={() => { return {} }}
-                    initialValues={initialValues}
-                    onSubmit={submitHandle}
-                >
-                    {({ errors, touched, isValid, isSubmitting }) => {
-                        if (isSubmitting && !isValid) {
+                <div
+                    className="absolute left-0 right-0 bottom-0 top-0"
+                    onClick={() => { props.closeHandle() }}
+                />
 
-                            setTimeout(() => {
-                                const formFirstError = document.querySelector(".has-validation-error");
-                                if (formFirstError) {
-                                    formFirstError.scrollIntoView({ behavior: "smooth" });
+                <div className={`bg-white max-h-screen md:modalMaxHeight overflow-auto sm:rounded-md relative w-full sm:w-570 p-4 md:p-6`}>
+                    <div>
+                        <h5 className='text-sm md:text-base font-semibold mb-4'>{tHotel("submit-suggestion")}</h5>
+                    </div>
+
+                    <div className='md:col-span-2'>
+                        <Formik
+                            validate={() => { return {} }}
+                            initialValues={initialValues}
+                            onSubmit={submitHandle}
+                        >
+                            {({ errors, touched, isValid, isSubmitting, values, setFieldValue }) => {
+                                if (isSubmitting && !isValid) {
+
+                                    setTimeout(() => {
+                                        const formFirstError = document.querySelector(".has-validation-error");
+                                        if (formFirstError) {
+                                            formFirstError.scrollIntoView({ behavior: "smooth" });
+                                        }
+                                    }, 100)
+
                                 }
-                            }, 100)
+                                return (
+                                    <Form className='leading-6 text-xs sm:text-sm'>
+                                        <p className='mb-3'>
+                                            با انتخاب يکی از گزینه‌های امتياز خود را به اين اقامتگاه ثبت کنید
+                                            <br />
+                                            ( 1 کمترین امتیاز و 10 بیشترین امتیاز)
+                                        </p>
 
-                        }
-                        return (
-                            <Form className='leading-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 md:gap-4 text-xs sm:text-sm'>
+                                        <RateInput
+                                            onChanage={r => { setFieldValue('overallRating', r) }}
+                                            wrapperClassName='mb-5'
+                                            defaultValue={initialValues.overallRating}
+                                        />
 
-                                <div className={`sm:col-span-2 lg:col-span-4 ${errors.FullName ? "has-validation-error" : ""}`}>
-                                    <label htmlFor="FullName" className='block mb-1' > <span className='text-red-500'>*</span> {t('full-name')}</label>
-                                    <Field
-                                        validate={(value: string) => validateRequied(value, t('please-enter-name'))}
-                                        id="FullName"
-                                        name="FullName"
-                                        className={`h-10 px-5 border ${errors.FullName && touched.FullName ? "border-red-500" : "border-neutral-300"} outline-none rounded-md w-full`}
-                                    />
-                                    {errors.FullName && touched.FullName && <div className='text-red-500 text-xs'>{errors.FullName as string}</div>}
+                                        <div className="mb-3">
+                                            <label htmlFor="FullName" className='block mb-1' > نوع سفر </label>
 
-                                </div>
+                                            {travelTypeOptions.map(option => (
+                                                <label
+                                                    key={option.label}
+                                                    className='flex mb-2 md:inline-flex items-center gap-1 rtl:ml-4 ltr:mr-4 cursor-pointer'
+                                                >
+                                                    <RadioInputField
+                                                        onChange={(e: any) => {
+                                                            const val = e.target.checked;
+                                                            if (val) {
+                                                                setFieldValue('travelType', option.value);
+                                                            }
+                                                        }}
+                                                        checked={values.travelType === option.value}
+                                                    />
+                                                    {option.icon}{option.label}
+                                                </label>
+                                            ))}
 
-                                <div className='lg:col-span-4'>
-                                    <label htmlFor="CityName" className='block mb-1' > {tHotel('from-city')} </label>
-                                    <Field
-                                        id="CityName"
-                                        name="CityName"
-                                        className="h-10 px-5 border border-neutral-300 outline-none rounded-md w-full"
-                                    />
-                                </div>
+                                        </div>
 
-                                <div className={`lg:col-span-4 ${errors.Email ? "has-validation-error" : ""}`}>
-                                    <label htmlFor="Email" className='block mb-1' > <span className='text-red-500'>*</span> {t('email')} </label>
-                                    <Field
-                                        validate={(value: string) => validateEmail({value:value,reqiredMessage: t('enter-email-address'),invalidMessage: t('invalid-email')})}
-                                        id="Email"
-                                        name="Email"
-                                        className={`h-10 px-5 border ${errors.Email && touched.Email ? "border-red-500" : "border-neutral-300"} outline-none rounded-md w-full`}
-                                    />
-                                    {errors.Email && touched.Email && <div className='text-red-500 text-xs'>{errors.Email as string}</div>}
-                                </div>
 
-                                <div className='sm:col-span-2 lg:col-span-12'>
+                                        <div>
+                                            <label htmlFor="positivePoints" className='block mb-1' > نکات مثبت </label>
+                                            <Field
+                                                id="positivePoints"
+                                                name="positivePoints"
+                                                className="h-10 px-5 border border-neutral-300 outline-none rounded-md w-full mb-4"
+                                            />
 
-                                    <label htmlFor="Comment" className='block mb-1' > {tHotel('suggestion-text')} </label>
-                                    <Field
-                                        as="textarea"
-                                        id="Comment"
-                                        name="Comment"
-                                        className="h-20 px-5 border border-neutral-300 outline-none rounded-md w-full"
-                                    />
+                                        </div>
 
-                                </div>
+                                        <div>
 
-                                <div className='lg:col-span-3'>
-                                    <label htmlFor="Satisfaction" className='md:text-xs block mb-1' > {tHotel('satisfaction-percentage')} </label>
-                                    <Field
-                                        as="select"
-                                        id="Satisfaction"
-                                        name="Satisfaction"
-                                        className="h-10 px-5 border border-neutral-300 outline-none rounded-md w-full"
-                                    >
-                                        {numbersArray.map(item => <option key={item} value={item * 10}>{item * 10}</option>)}
-                                    </Field>
-                                </div>
+                                            <label htmlFor="negativePoints" className='block mb-1' > نکات منفی </label>
+                                            <Field
+                                                id="negativePoints"
+                                                name="negativePoints"
+                                                className="h-10 px-5 border border-neutral-300 outline-none rounded-md w-full mb-4"
+                                            />
 
-                                <div className='lg:col-span-3'>
-                                    <label htmlFor="RoomService" className='md:text-xs block mb-1' > {tHotel('room-status')} </label>
-                                    <Field
-                                        as="select"
-                                        id="RoomService"
-                                        name="RoomService"
-                                        className="h-10 px-5 border border-neutral-300 outline-none rounded-md w-full"
-                                    >
-                                        {numbersArray.map(item => <option key={item} value={item}>{item}</option>)}
-                                    </Field>
-                                </div>
+                                        </div>
 
-                                <div className='lg:col-span-3'>
-                                    <label htmlFor="ResturantQuality" className='md:text-xs block mb-1' > {tHotel('restaurant-quality')} </label>
-                                    <Field
-                                        as="select"
-                                        id="ResturantQuality"
-                                        name="ResturantQuality"
-                                        className="h-10 px-5 border border-neutral-300 outline-none rounded-md w-full"
-                                    >
-                                        {numbersArray.map(item => <option key={item} value={item}>{item}</option>)}
-                                    </Field>
-                                </div>
+                                        <div className='relative'>
 
-                                <div className='lg:col-span-3'>
-                                    <label htmlFor="DealWithPassanger" className='md:text-xs block mb-1' > {tHotel('employees-treatment')} </label>
-                                    <Field
-                                        as="select"
-                                        id="DealWithPassanger"
-                                        name="DealWithPassanger"
-                                        className="h-10 px-5 border border-neutral-300 outline-none rounded-md w-full"
-                                    >
-                                        {numbersArray.map(item => <option key={item} value={item}>{item}</option>)}
-                                    </Field>
-                                </div>
+                                            <label htmlFor="comment" className='block mb-1' > <span className='text-red-500'>*</span> {tHotel('suggestion-text')} </label>
 
-                                <div className='sm:col-span-2 lg:col-span-12'>
-                                    <label>
-                                        <Field type="checkbox" name="IsRecommended" className="inline-block align-middle" /> {tHotel('suggest-to-other')}
-                                    </label>
+                                            <Field
+                                                validate={(value: string) => validateRequied(value, "لطفا دیدگاه خود را وارد کنید!")}
+                                                as="textarea"
+                                                id="comment"
+                                                value={values.comment.substring(0, 400)}
+                                                name="comment"
+                                                className={`h-24 px-5 py-2 border ${errors.comment && touched.comment ? "border-red-500" : "border-neutral-300"} outline-none rounded-md w-full`}
+                                            />
+                                            <div className='flex justify-between mb-1'>
+                                                {errors.comment && touched.comment ? <div className='text-red-500 text-xs'>{errors.comment as string}</div> : <span />}
+                                                <span className='block'>
+                                                    {(400 - values.comment.length) > 0 ? (400 - values.comment.length) : 0} کاراکتر
+                                                </span>
+                                            </div>
 
-                                </div>
+                                        </div>
 
-                                <div className='sm:col-span-2 lg:col-span-12'>
-                                    <Button
-                                        type='submit'
-                                        className='h-10 px-5 rounded-md max-w-full sm:w-32'
-                                    >
-                                        {t('send')}
-                                    </Button>
-                                </div>
+                                        <label className='mb-4 block'>
+                                            <Field type="checkbox" name="recommendToOthers" className="inline-block align-middle" /> {tHotel('suggest-to-other')}
+                                        </label>
 
-                            </Form>
-                        )
-                    }}
-                </Formik>
+                                        <div className={`mb-1 ${errors.userDisplayName ? "has-validation-error" : ""}`}>
+                                            <label htmlFor="userDisplayName" className='block mb-1' > <span className='text-red-500'>*</span> {t('full-name')}</label>
+                                            <Field
+                                                validate={(value: string) => validateRequied(value, t('please-enter-name'))}
+                                                id="userDisplayName"
+                                                name="userDisplayName"
+                                                className={`h-10 px-5 border ${errors.userDisplayName && touched.userDisplayName ? "border-red-500" : "border-neutral-300"} outline-none rounded-md w-full`}
+                                            />
+                                            {errors.userDisplayName && touched.userDisplayName && <div className='text-red-500 text-xs'>{errors.userDisplayName as string}</div>}
 
+                                        </div>
+
+                                        <label className='mb-5 block'>
+                                            <Field type="checkbox" name="isAnonymous" className="inline-block align-middle" /> نظر شما به صورت ناشناس ثبت شود
+                                        </label>
+
+                                        <Button
+                                            type='submit'
+                                            loading={submitLoading}
+                                            className='h-10 px-5 rounded-md max-w-full w-full sm:w-32'
+                                        >
+                                            {t('send')}
+                                        </Button>
+
+                                    </Form>
+                                )
+                            }}
+                        </Formik>
+
+                    </div>
+
+                </div>
             </div>
-
-
-        </div>
+        </ModalPortal>
     )
 }
 
