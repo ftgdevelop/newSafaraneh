@@ -16,6 +16,7 @@ import CipRecentSearches from '@/modules/cip/components/home/CipRecentSearches';
 type Props = {
   modules: ("domesticHotel" | "domesticFlight" | "cip")[];
   innerElement?: React.ReactNode;
+  bannerImage?: string;
 }
 
 const Banner: React.FC<Props> = props => {
@@ -23,6 +24,8 @@ const Banner: React.FC<Props> = props => {
 
   const { t } = useTranslation('common');
   const { t: tHome } = useTranslation('home');
+  
+  const isSafarLife = process.env.SITE_NAME === 'https://www.safarlife.com';
 
   const today = dateFormat(new Date());
   const tomorrow = dateFormat(addSomeDays(new Date()));
@@ -45,7 +48,7 @@ const Banner: React.FC<Props> = props => {
           {!!theme1 && <RecentSearches />}
         </>
         ),
-        children2: theme2 && <div className='max-sm:px-5' ><RecentSearches /></div>
+        children2: theme2 && !isSafarLife ? <div className='max-sm:px-5' ><RecentSearches /></div> : null
       }
     )
   }
@@ -60,7 +63,7 @@ const Banner: React.FC<Props> = props => {
           {!!theme1 && <FlightRecentSearches />}
         </>
       ),
-      children2: theme2 && <div className='max-sm:px-5' ><FlightRecentSearches /></div>
+      children2: theme2 && !isSafarLife ? <div className='max-sm:px-5' ><FlightRecentSearches /></div> : null
     })
   }
 
@@ -74,7 +77,7 @@ const Banner: React.FC<Props> = props => {
           {!!theme1 && <CipRecentSearches />}
         </>
       ),
-      children2: theme2 && <div className='max-sm:px-5'><CipRecentSearches /></div>
+      children2: theme2 && !isSafarLife ? <div className='max-sm:px-5'><CipRecentSearches /></div> : null
     })
 
   }
@@ -85,12 +88,13 @@ const Banner: React.FC<Props> = props => {
     wrapperClassName={`${theme3 ? "" :theme2 ? "mb-6 sm:rounded-2xl sm:border sm:border-neutral-300" : "sm:rounded-lg px-5 pt-3 sm:p-5 bg-white"}`}
     tabLinksBold={theme2}
     innerElement={props.innerElement}
+    showTabsWhenThereIsOnlyOneItem={theme2}
   />;
 
   return (
     <div className={`relative ${theme1 ? "bg-cyan-800/50" : theme3 ? "md:bg-theme3-banner md:bg-cover md:bg-center" : ""}`}>
-      {!!theme1 && <Image
-        src='/images/home/banner.jpg'
+      {!!theme1 || props.bannerImage && <Image
+        src={props.bannerImage || '/images/home/banner.jpg'}
         alt="blue sky"
         width={1350}
         height={433}

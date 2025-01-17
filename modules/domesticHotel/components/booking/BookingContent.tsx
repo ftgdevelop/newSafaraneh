@@ -26,10 +26,12 @@ const BookingContent: React.FC<Props> = props => {
 
     const { reserveInfo, username, reserveId, confirmStatus, confirmLoading } = props;
 
+    const theme2 = process.env.THEME === "THEME2";
+
     const createBoardText = (code: DomesticHotelGetReserveByIdData['rooms'][0]['boardCode']) => {
         switch (code) {
             case "BB":
-                return "به همراه صبحانه";
+                return theme2 ? "با صبحانه":"به همراه صبحانه";
             case "HB":
                 return "صبحانه + ناهار یا شام";
             case "FB":

@@ -34,7 +34,7 @@ const BeyondTypicalStays: React.FC<Props> = props => {
                         let url = city.url;
 
                         if (process.env.LocaleInUrl === "off") {
-                            url = url.replace("fa", "");
+                            url = url.replace("fa/", "");
                         }
 
                         return (
@@ -118,7 +118,7 @@ const BeyondTypicalStays: React.FC<Props> = props => {
                         let url = city.url;
 
                         if (process.env.LocaleInUrl === "off") {
-                            url = url.replace("fa", "");
+                            url = url.replace("fa/", "");
                         }
 
                         return (

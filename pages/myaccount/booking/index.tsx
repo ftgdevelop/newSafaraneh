@@ -7,7 +7,7 @@ import Skeleton from '@/modules/shared/components/ui/Skeleton';
 import { CalendarBeautiful, ErrorCircle } from '@/modules/shared/components/ui/icons';
 import { useAppDispatch } from '@/modules/shared/hooks/use-store';
 import { setReduxError } from '@/modules/shared/store/errorSlice';
-import { ReserveType, UserReserveListItem } from '@/modules/shared/types/common';
+import { ReserveType, UserReserveListItem, WebSiteDataType } from '@/modules/shared/types/common';
 import type { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -15,11 +15,13 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-const Profile: NextPage = () => {
+const Profile: NextPage = ({ portalData }: { portalData?: WebSiteDataType }) => {
 
     const { t } = useTranslation('common');
     const router = useRouter();
     const dispatch = useAppDispatch();
+
+    const theme1 = process.env.THEME === "THEME1";
 
     const [reserveList, setReserveList] = useState<UserReserveListItem[]>([]);
     const [total, setTotal] = useState<number>();
@@ -138,15 +140,15 @@ const Profile: NextPage = () => {
             </Head>
             <div className='max-w-container mx-auto p-3 sm:px-5 sm:py-4'>
 
-                <div className='grid gap-4 lg:grid-cols-3'>
+                <div className={`grid ${theme1?"gap-4 md:grid-cols-3":"py-3 gap-6 md:grid-cols-4"}`}>
                     <div className='max-lg:hidden'>
-                        <AccountSidebar />
+                        <AccountSidebar logoUrl={portalData?.billing?.logo?.value} />
                     </div>
-                    <div className='lg:col-span-2'>
+                    <div className={theme1?"md:col-span-2":"md:col-span-3"}>
                         <div className='border border-neutral-300 bg-white rounded-md mb-4'>
 
                             <div className='flex items-center gap-3 sm:gap-5 whitespace-nowrap p-3 sm:p-5 border-b border-neutral-300'>
-                                <CalendarBeautiful className='w-12 h-12' />
+                                {!!theme1 && <CalendarBeautiful className='w-12 h-12' />}
                                 <div className='text-lg'>
                                     رزروهای من
                                     <p className='text-xs mt-1'>

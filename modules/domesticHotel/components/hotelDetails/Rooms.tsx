@@ -18,7 +18,7 @@ import dynamic from 'next/dynamic';
 
 const PriceCalendar = dynamic(() => import('./PriceCalendar'), {
     ssr: false
-  });
+});
 
 type Props = {
     hotelId: number;
@@ -104,11 +104,29 @@ const Rooms: React.FC<Props> = props => {
     const selectRoomHandle = async (token: string, count: number) => {
         setSelectedRoomToken(token);
 
+        let cookieSafarmarketId;
+        let cookieSafarmarketSource;
+        let cookies = decodeURIComponent(document?.cookie).split(';');
+        for (const item of cookies) {
+            if (item.includes("safarMarketHotelSmId=")) {
+                cookieSafarmarketId = item.split("=")[1];
+            }
+            if (item.includes("safarMarketHotelUtmSource=")) {
+                cookieSafarmarketSource = item.split("=")[1];
+            }
+
+        }
+
         let utm: undefined | { utmSource: string; utmKey: string };
-        if (router.query && router.query.utm_source && router.query.utm_key) {
+        if (router.query && router.query.utm_source && router.query.safarmarketId) {
             utm = {
                 utmSource: router.query.utm_source! as string,
-                utmKey: router.query.utm_key! as string
+                utmKey: router.query.safarmarketId! as string
+            }
+        } else if (cookieSafarmarketId) {
+            utm = {
+                utmSource: cookieSafarmarketSource || "safarmarket",
+                utmKey: cookieSafarmarketId
             }
         }
 
@@ -170,7 +188,7 @@ const Rooms: React.FC<Props> = props => {
         })
     }
 
-    if(openedRoom?.room?.promotions?.length){
+    if (openedRoom?.room?.promotions?.length) {
         selectedRoomDetailTabItems.push({
             key: "promotions",
             label: "هدایای رزرو",
@@ -235,7 +253,7 @@ const Rooms: React.FC<Props> = props => {
                         </div>
                     </div>
                 ) : (
-                    <>                    
+                    <>
                         <h2 className="text-lg lg:text-3xl font-semibold mb-3 md:mb-7"> {tHotel('choose-room')}  </h2>
 
                         {!!theme1 && <RoomsListTheme1

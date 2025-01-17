@@ -111,6 +111,7 @@ const EmailActivationForm = () => {
         }
     }
 
+    const theme1 = process.env.THEME === "THEME1";
 
     return (
 
@@ -134,7 +135,7 @@ const EmailActivationForm = () => {
                         <Form autoComplete='off' className=" mb-5">
 
 
-                            <div className="grid sm:grid-cols-4 gap-3 mb-2 lg:w-1/2">
+                            <div className={`grid sm:grid-cols-4 gap-3 mb-2 ${theme1?"lg:w-1/2":""}`}>
                                 <FormikField
                                     disabled={!!user?.isEmailConfirmed}
                                     labelIsSimple

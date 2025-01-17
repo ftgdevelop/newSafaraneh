@@ -50,23 +50,23 @@ const RoomsListTheme2: React.FC<Props> = props => {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {props.availabilites.map(availability => {
-                return availability.rates?.map(rateItem => (
+                return (
                     <RoomItemTheme2
-                        key={rateItem.bookingToken}
-                        rate={rateItem}
+                        rates={availability.rates || []}
+                        key={availability.rooms?.[0]?.name}
                         room={availability.rooms![0]}
                         onSelectRoom={props.selectRoomHandle}
                         selectedRoomToken={props.selectedRoomToken}
                         roomsHasImage={props.roomsHasImage || false}
                         nights={props.nights}
-                        onOpenRoom={() =>{
+                        onOpenRoom={(rateItem:any) =>{
                             props.onOpenRoom({
                                 rate: rateItem,
                                 room: availability.rooms?.[0]
                             })
                         }}
                     />
-                ))
+                )
             })}
         </div>
     )

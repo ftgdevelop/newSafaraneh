@@ -74,7 +74,7 @@ const RecommendedHotels: React.FC<Props> = props => {
                         let url = hotel.url;
 
                         if (process.env.LocaleInUrl === "off") {
-                            url = url?.replace("fa", "");
+                            url = url?.replace("fa/", "");
                         }
 
                         return (

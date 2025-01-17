@@ -6,6 +6,7 @@ export interface EntitySearchResultItemType {
     language?: string;
     type: 'Province' | 'City' | 'Hotel';
     id?: number;
+    slug?: string;
 }
 
 export interface DomesticHotelFacilitieType {
@@ -146,31 +147,6 @@ export interface DomesticHotelDetailType {
     NearBys?: DomesticHotelNearBy[]
 }
 
-export interface HotelScoreDataType {
-    Comments: {
-        CommentId?: number;
-        FullName?: string;
-        CityName?: string;
-        Comment?: string;
-        IsRecommended?: boolean;
-        Satisfaction?: number;
-        RoomService?: number;
-        ResturantQuality?: number;
-        DealWithPassanger?: number;
-        CreateDate?: string;
-        ModifyDate?: string;
-        PageUrl?: string;
-        AccommodationName?: string;
-        IsStay?: boolean;
-    }[];
-    TotalScore?: number;
-    Satisfaction?: number;
-    RoomService?: number;
-    ResturantQuality?: number;
-    DealWithPassanger?: number;
-    CommentCount?: number;
-}
-
 export interface DomesticAccomodationFacilityType{
     name?: string;
     description?: string;
@@ -215,6 +191,40 @@ export interface DomesticAccomodationPolicyType{
       }[];
   }
 
+export interface DomesticHotelSimilarHotel {
+    id: number;
+    type: "Hotel",
+    typeStr?: string;
+    rating: number;
+    displayOrder?: string;
+    name?: string;
+    displayName?: string;
+    address?: string;
+    isPromotion: boolean;
+    url: string;
+    picture?:{
+        path?: string;
+        titleAttribute?: string;
+        altAttribute?: string;
+    }
+    facilities:{
+        keyword?: string;
+        name?: string;
+        items?: {
+            name?: string;
+            keyword?: string;
+            isImportant?: boolean;
+            isAdditionalCharge?: boolean;
+            isFree?: boolean;
+            description?: string;
+        }[]
+    }[]
+}
+export interface ExtendedDomesticHotelSimilarHotel extends DomesticHotelSimilarHotel {
+    ratesInfo?: "loading" | { Satisfaction: number; TotalRowCount: number; };
+    priceInfo: "loading" | "notPriced" | "need-to-inquire" | { boardPrice: number; salePrice: number; };
+}
+
 export interface DomesticAccomodationType {
     type: "Hotel" | "Apartments" | "Guesthouse" | "Motel" | "TraditionalHouse" | "Ecolodge" | "TourismComplex" | "BoutiqueHotel" | "Pansion";
     rating?: number;
@@ -237,6 +247,7 @@ export interface DomesticAccomodationType {
         searchValue?: string;
         displayName?: string;
         id: number;
+        slug?: string;
     };
     coordinates: {
         latitude: number;
@@ -268,8 +279,8 @@ export interface DomesticAccomodationType {
     id: number;
     facilities?: DomesticAccomodationFacilityType[];
     galleries?: DomesticAccomodationGalleryType[];
-    policies?: DomesticAccomodationPolicyType[]
-      
+    policies?: DomesticAccomodationPolicyType[];
+    similars?:DomesticHotelSimilarHotel[]
 }
 
 export interface AvailabilityByIdItem {
@@ -306,7 +317,7 @@ export interface DomesticHotelRateItem {
         ageCategoryType: "ADL" | "CHD" | "INF";
         type: "Room" | "RoomBoard" | "ExtraBed" | "HalfCharge" | "RoomNet" | "Markup" | "Commission" | "PromoCode"
     }[];
-
+    isTheCheapest?: boolean;
     price: number;
     bookingToken?: string;
     supplierType: "Safaraneh" | "Snapp" | "ChannelLead" | "HotelYar" | "Eghamat24";
@@ -508,7 +519,9 @@ export interface AsideHotelInfoType {
     address?: string;
     TopSelling?: number;
     Url?: string;
-    CityId?: number;
+    CityId?: number;  
+    checkinTime?: string;
+    checkoutTime?: string;
 
 }
 
@@ -565,7 +578,7 @@ export interface DomesticHotelPrereserveParams {
     metaSearchName?: "safarmarket"
 }
 
-export type DomesticHotelReserveStatus = "Undefined" | "Registered" | "Pending" | "Issued" | "ContactProvider" | "Canceled" | "WebServiceCancel" | "PaymentSuccessful" | "WebServiceUnsuccessful" | "PriceChange" | "Unavailable" | "Refunded" | "Voided" | "InProgress" | "PaidBack" | "RefundInProgress" | "Changed" | "OnCredit";
+export type DomesticHotelReserveStatus = "Undefined" | "UnConfirmed" | "Registered" | "Pending" | "Issued" | "ContactProvider" | "Canceled" | "WebServiceCancel" | "PaymentSuccessful" | "WebServiceUnsuccessful" | "PriceChange" | "Unavailable" | "Refunded" | "Voided" | "InProgress" | "PaidBack" | "RefundInProgress" | "Changed" | "OnCredit";
 
 export interface DomesticHotelGetReserveByIdData {
     id: number;
@@ -666,11 +679,11 @@ export interface DomesticHotelSummaryDetail {
       rating?:number;
       address?: string;
       url?: string;
+      checkinTime?: string;
+      checkoutTime?: string;
       
     // "type": "Hotel",
     // "name": "string",
-    // "checkinTime": "string",
-    // "checkoutTime": "string",
     // "instruction": "string",
     // "briefDescription": "string",
     // "description": "string",
@@ -708,4 +721,50 @@ export type HotelRecentSearchItem = {
     url: string;
     title: string;
     dates: string[];
+}
+
+export interface DomesticHotelReviewCommentItem {
+    id: number;
+    comment?: string;
+    overallRating: number;
+    userDisplayName: string;
+    recommendToOthers: boolean;
+    creationTime: string;
+    positivePoints?: string;
+    negativePoints?: string;
+    travelType?: "Individual" | "Family" | "Couple" | "Group" | "Business";
+    ratings: {
+        rating: number;
+        categoryId: number;
+        id: number;
+    }[];
+    reply?: {
+        dislikeCount: number;
+        id: number;
+        likeCount: number;
+        reply?: string;
+    };
+    likeCount: number;
+    dislikeCount: number;
+    isWriter: boolean;
+    isLiked?: null | boolean;
+}
+
+export interface DomesticHotelReviewsType {
+    averageRating: number;
+    ratings: {
+        average: number;
+        category: {
+            keyword: "price_quality_satisfaction" | "staff_behavior" | "restaurant_cafe_quality" | "services" | "location" | "cleanliness",
+            name?: string;
+            tenantId: number;
+            isActive: boolean;
+            id: number;
+        },
+        //"id": 0
+    }[];
+    reviews: {
+        totalCount: number;
+        items: DomesticHotelReviewCommentItem[]
+    }
 }

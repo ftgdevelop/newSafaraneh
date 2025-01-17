@@ -1,6 +1,11 @@
-import { NextPage } from "next";
+type Props = {
+    data: string;
+    searchValue?: string;
+}
+const Title: React.FC<Props> = props => {
+    
+    const {data, searchValue} = props;
 
-const Title: NextPage<any> = ({data , searchValue}) => {
     return (
         <div>
         <div className="text-center p-16 max-sm:pb-1">

@@ -27,6 +27,7 @@ import { DomesticFlightGetReserveByIdType } from '@/modules/flights/types/flight
 import Aside from '@/modules/flights/components/shared/Aside';
 import { ServerAddress } from '@/enum/url';
 import { emptyReduxSafarmarket, setReduxSafarmarketPixel } from '@/modules/shared/store/safarmarketSlice';
+import { bankGatewayItem } from '@/modules/payment/types';
 
 
 const Payment: NextPage = () => {
@@ -49,7 +50,7 @@ const Payment: NextPage = () => {
   const [coordinatorPrice, setCoordinatorPrice] = useState<number>();
   const [domesticHotelReserveData, setDomesticHotelReserveData] = useState<DomesticHotelGetReserveByIdData>();
   const [domesticHotelData, setDomesticHotelData] = useState<DomesticHotelSummaryDetail>();
-  const [bankGatewayList, setBankGatewayList] = useState([]);
+  const [bankGatewayList, setBankGatewayList] = useState<bankGatewayItem[]>([]);
 
   const [cipReserveInfo, setCipReserveInfo] = useState<CipGetReserveByIdResponse>();
   const [cipReserveInfoLoading, setCipReserveInfoLoading] = useState<boolean>(true);
@@ -84,7 +85,7 @@ const Payment: NextPage = () => {
 
       const response: any = await getReserveBankGateway(reserveId);
       if (response?.status == 200 && response.data.result) {
-        setBankGatewayList(response.data?.result[0]);
+        setBankGatewayList(response.data?.result);
       } else {
         dispatch(setReduxError({
           title: t('error'),
@@ -283,11 +284,11 @@ const Payment: NextPage = () => {
         />
       ),
     },
-    {
-      key: '2',
-      label: ("کارت به کارت"),
-      children: (<CardToCard />),
-    },
+    // {
+    //   key: '2',
+    //   label: ("کارت به کارت"),
+    //   children: (<CardToCard />),
+    // },
     {
       key: '3',
       label: ("اعتباری"),
@@ -311,7 +312,9 @@ const Payment: NextPage = () => {
       rating: domesticHotelData.rating,
       address: domesticHotelData.address,
       Url: domesticHotelData.url,
-      CityId: domesticHotelData.cityId || domesticHotelData.city?.id
+      CityId: domesticHotelData.cityId || domesticHotelData.city?.id,
+      checkinTime: domesticHotelData.checkinTime,
+      checkoutTime: domesticHotelData.checkoutTime
     }
   }
   if (domesticHotelReserveData) {
@@ -461,7 +464,12 @@ const Payment: NextPage = () => {
 
             {type === 'HotelDomestic' ? (<>
               {theme2? (
-                <DomesticHotelAside2 hotelInformation={domesticHotelInformation} reserveInformation={domesticHotelReserveInformation} />
+                <DomesticHotelAside2 
+                  hotelInformation={domesticHotelInformation} 
+                  reserveInformation={domesticHotelReserveInformation} 
+                  checkinTime={domesticHotelData?.checkinTime}
+                  checkoutTime={domesticHotelData?.checkoutTime}
+                />
               ):(
                 <DomesticHotelAside hotelInformation={domesticHotelInformation} reserveInformation={domesticHotelReserveInformation} />
               )}

@@ -13,6 +13,7 @@ type Props = {
     target?: "_blank";
     color?:"red" | "blue" | 'green'|'gray' | "primary";
     hasArrow?: boolean;
+    prefetch?: boolean;
 }
 
 
@@ -51,6 +52,7 @@ const Button: React.FC<PropsWithChildren<Props>> = props => {
             href={props.href} 
             target={props.target} 
             className={className}
+            prefetch={props.prefetch || false}
             onClick={() => {dispatch(setProgressLoading(true))}}
         >
             {props.children}

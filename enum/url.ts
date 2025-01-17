@@ -33,10 +33,13 @@ export const Header = {
 
   export const Cms = {
     GetByUrl: "/api/services/app/Page/GetByUrl",
+    CreateComment : '/api/services/app/Review/Create'
   }
 
   export const Strapi = {
-    Pages:"/api/pages"
+    Pages:"/api/pages",
+    Footer:"/api/footers",
+    Magazine:"/api/magazines",
   }
 
   export const Identity = {
@@ -78,7 +81,7 @@ export const Flight = {
 
   export const Blog = {
     getPosts: "//wp-json/wp/v2/posts",
-    getCategories: '/wp-json/wp/v2/best_category?categories=',
+    getBestCategories: '/wp-json/wp/v2/best_category',
     getCategoeyName: '/wp-json/wp/v2/categories',
     getCities: "//wp-json/wp/v2/cities/",
     getTagName: '/wp-json/wp/v2/tags/',
@@ -91,12 +94,14 @@ export const Flight = {
     GetHotelSummaryDetailById: "/api/services/app/Accommodation/Get",
     GetDomesticHotelDetails:"/api/services/app/Accommodation/Get",
     GetScore: "/v2/Comment/GetScore",
-    InsertComment : '/v2/Comment/InsertComment',
     AvailabilityByHotelId:"/api/services/app/Booking/AvailabilityByHotelId",
     GetRooms:"/api/services/app/Booking/GetRoom",
     ValidateRoom:"/api/services/app/Booking/Validate",
     SearchHotels:"/v2/Hotel/SearchHotels",
     getRates:"/v2/Comment/Rates",
+    getReviewsByPageId:"/api/services/app/Review/GetByPageId",
+    likeCommentById : "/api/services/app/Review/Like",
+    dislikeCommentById : "/api/services/app/Review/Dislike",
     GetEntityNameByLocation: "/api/services/app/Entity/Get",
     GetValidate:"/api/services/app/Booking/GetValidate",
     PreReserve: "/api/services/app/Booking/PreReserve",
