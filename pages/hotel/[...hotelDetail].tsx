@@ -57,7 +57,7 @@ const HotelDetail: NextPage<Props> = props => {
 
   const theme1 = process.env.THEME === "THEME1";
 
-  const isSafaraneh = process.env.PROJECT === "SAFARANEH" || process.env.PROJECT === "IRANHOTEL";
+  const isSafaraneh = process.env.PROJECT === "SAFARANEH" || process.env.PROJECT === "IRANHOTEL" || process.env.PROJECT === "HOTELBAN";
 
   const isSafarlife = process.env.PROJECT === "SAFARLIFE";
 
@@ -698,7 +698,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const { locale, query } = context;
 
-  const isSafaraneh = process.env.PROJECT === "SAFARANEH" || process.env.PROJECT === "IRANHOTEL";
+  const isSafaraneh = process.env.PROJECT === "SAFARANEH" || process.env.PROJECT === "IRANHOTEL" || process.env.PROJECT === "HOTELBAN";
 
   let checkin = dateFormat(new Date());
   let checkout = dateFormat(addSomeDays(new Date()));
