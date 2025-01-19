@@ -172,6 +172,9 @@ function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }:
 
         {!!portalEnamadMetaTag && <meta name='enamad' content={portalEnamadMetaTag} />}
 
+        {/* toDO: use samandehi from portalData meta tags */}
+        <meta name="samandehi" content="743180156"/>
+
       </Head>
 
       <noscript>
