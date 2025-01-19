@@ -166,8 +166,7 @@ function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }:
 
         <link rel="shortcut icon" href={favIconLink} />
 
-        <title> CWE0516 </title>
-        {/* {!!title && <title>{title}</title>} */}
+        {!!title && <title>{title}</title>}
         {!!keywords && <meta name="keywords" content={keywords} />}
         {!!description && <meta name="description" content={description} />}
 
