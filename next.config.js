@@ -69,7 +69,11 @@ const nextConfig = {
     PROJECT_SERVER_CIP:"cip.safaraneh.com",
     PROJECT_SERVER_FLIGHT: "flightdomestic.safaraneh.com",
     PROJECT_SERVER_TENANTID: "1040",
+    
     PROJECT_SERVER_STRAPI:"",
+    PROJECT_SERVER_STRAPI_TOKEN:"",
+    PROJECT_SERVER_STRAPI_TENANT:"",
+
     PROJECT_SERVER_NATIONALITY: "",
     PORT: '',
     //PROJECT_MODULES: "Flight Hotel CIP Blog ForeignFlight ForeignHotel",
