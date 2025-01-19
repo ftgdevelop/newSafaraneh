@@ -37,6 +37,7 @@ const Footer: React.FC<Props> = props => {
     const linkClassNames = "block hover:text-blue-600 hover:underline";
 
     const theme2 = process.env.THEME === "THEME2";
+    const isHotelBan =process.env.PROJECT === "HOTELBAN";
 
     if (theme2) {
         const blockTitleClassNames = "text-lg mb-3 font-bold block";
@@ -103,11 +104,13 @@ const Footer: React.FC<Props> = props => {
                 <div className="max-w-container mx-auto p-3 text-neutral-700 pt-8 pb-14">
 
                     <div className="flex justify-center gap-1 sm:gap-4 mb-10" onContextMenu={e => { e.preventDefault() }}>
-                        <Image src='/images/footer/tandis-01.png' className="h-11 sm:h-18 object-contain" alt='' width={62} height={72} />
-                        <Image src='/images/footer/tandis-02.png' className="h-11 sm:h-18 object-contain" alt='' width={62} height={72} />
-                        <Image src='/images/footer/tandis-03.png' className="h-11 sm:h-18 object-contain" alt='' width={62} height={72} />
-                        <Image src='/images/footer/tandis-04.png' className="h-11 sm:h-18 object-contain" alt='' width={62} height={72} />
-                        <Image src='/images/footer/tandis-05.png' className="h-11 sm:h-18 object-contain" alt='' width={62} height={72} />
+                        {!isHotelBan && (<>
+                            <Image src='/images/footer/tandis-01.png' className="h-11 sm:h-18 object-contain" alt='' width={62} height={72} />
+                            <Image src='/images/footer/tandis-02.png' className="h-11 sm:h-18 object-contain" alt='' width={62} height={72} />
+                            <Image src='/images/footer/tandis-03.png' className="h-11 sm:h-18 object-contain" alt='' width={62} height={72} />
+                            <Image src='/images/footer/tandis-04.png' className="h-11 sm:h-18 object-contain" alt='' width={62} height={72} />
+                            <Image src='/images/footer/tandis-05.png' className="h-11 sm:h-18 object-contain" alt='' width={62} height={72} />
+                        </>)}
 
 
                         {!!props.enamad && (
