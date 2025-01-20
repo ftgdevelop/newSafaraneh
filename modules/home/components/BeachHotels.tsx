@@ -5,8 +5,29 @@ import Slider from "react-slick";
 
 import Rating from '../../shared/components/ui/Rating';
 import { LeftCircle, RightCircle } from '@/modules/shared/components/ui/icons';
+import { ServerAddress } from '@/enum/url';
 
-const BeachHotels: React.FC = () => {
+type Props = {
+    strapiData?: {
+        Title?: string;
+        Items?: {
+            Description?: string;
+            Title?: string;
+            Url: string;
+            ImageAlternative?: string;
+            ImageTitle?: string;
+            Image?: {
+                data?: {
+                    attributes?: {
+                        url?: string;
+                    }
+                }
+            }
+        }[]
+    }
+}
+
+const BeachHotels: React.FC<Props> = props => {
 
     const { t: tHome } = useTranslation('home');
 
@@ -15,46 +36,53 @@ const BeachHotels: React.FC = () => {
         name: string;
         url: string;
         rating: number;
-    }[] = [
-            {
-                url: tHome("noor-hotel-beach-link"),
-                imageUrl: "https://cdn2.safaraneh.com/images/home/hotel-beach-noor-thumb.jpg",
-                name: tHome('noor-hotel-beach-name'),
-                rating: 4
-            },
-            {
-                url: tHome("toranj-hotel-beach-link"),
-                imageUrl: "https://cdn2.safaraneh.com/images/home/hotel-beach-toranj-thumb.jpg",
-                name: tHome('toranj-hotel-beach-name'),
-                rating: 5
-            },
-            {
-                url: tHome("parsian-chalos-hotel-beach-link"),
-                imageUrl: "https://cdn2.safaraneh.com/images/home/hotel-beach-azadi-khazar-thumb.jpg",
-                name: tHome('parsian-chalos-hotel-beach-name'),
-                rating: 5
-            },
-            {
-                url: tHome("homa-hotel-beach-link"),
-                imageUrl: "https://cdn2.safaraneh.com/images/home/hotel-beach-homa-bandarabbas-thumb.jpg",
-                name: tHome('homa-hotel-beach-name'),
-                rating: 5
-            },
-            {
-                url: tHome("lipar-hotel-beach-link"),
-                imageUrl: "https://cdn2.safaraneh.com/images/home/hotel-beach-lipar-thumb.jpg",
-                name: tHome('lipar-hotel-beach-name'),
-                rating: 5
-            },
-            {
-                url: tHome("marina-hotel-beach-link"),
-                imageUrl: "https://cdn2.safaraneh.com/images/home/hotel-beach-marina-thumb.jpg",
-                name: tHome('marina-hotel-beach-name'),
-                rating: 5
-            }
+    }[] = props.strapiData?.Items?.length ?
+            props.strapiData?.Items.map(item => ({
+                name: item.Title || "",
+                url: item.Url || "",
+                rating: +(item.Description || 0),
+                imageUrl: item.Image?.data?.attributes?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}${item.Image.data.attributes.url}` : ""
+            }))
+            : [
+                {
+                    url: tHome("noor-hotel-beach-link"),
+                    imageUrl: "https://cdn2.safaraneh.com/images/home/hotel-beach-noor-thumb.jpg",
+                    name: tHome('noor-hotel-beach-name'),
+                    rating: 4
+                },
+                {
+                    url: tHome("toranj-hotel-beach-link"),
+                    imageUrl: "https://cdn2.safaraneh.com/images/home/hotel-beach-toranj-thumb.jpg",
+                    name: tHome('toranj-hotel-beach-name'),
+                    rating: 5
+                },
+                {
+                    url: tHome("parsian-chalos-hotel-beach-link"),
+                    imageUrl: "https://cdn2.safaraneh.com/images/home/hotel-beach-azadi-khazar-thumb.jpg",
+                    name: tHome('parsian-chalos-hotel-beach-name'),
+                    rating: 5
+                },
+                {
+                    url: tHome("homa-hotel-beach-link"),
+                    imageUrl: "https://cdn2.safaraneh.com/images/home/hotel-beach-homa-bandarabbas-thumb.jpg",
+                    name: tHome('homa-hotel-beach-name'),
+                    rating: 5
+                },
+                {
+                    url: tHome("lipar-hotel-beach-link"),
+                    imageUrl: "https://cdn2.safaraneh.com/images/home/hotel-beach-lipar-thumb.jpg",
+                    name: tHome('lipar-hotel-beach-name'),
+                    rating: 5
+                },
+                {
+                    url: tHome("marina-hotel-beach-link"),
+                    imageUrl: "https://cdn2.safaraneh.com/images/home/hotel-beach-marina-thumb.jpg",
+                    name: tHome('marina-hotel-beach-name'),
+                    rating: 5
+                }
 
 
-        ];
+            ];
 
     const settings = {
         speed: 500,
@@ -104,28 +132,28 @@ const BeachHotels: React.FC = () => {
             </h2>
 
 
-                <Slider {...settings} className='gap-slider'>
+            <Slider {...settings} className='gap-slider'>
 
-                    {hotels.map(hotel => (
-                        <a key={hotel.name} href={hotel.url} className='rtl:rtl outline-none block bg-white rounded-lg overflow-hidden' target='_blank' title={hotel.name}>
-                            <Image
-                                onContextMenu={e => { e.preventDefault() }}
-                                src={hotel.imageUrl}
-                                alt={`رزرو ${hotel.name}`}
-                                width={376}
-                                height={183}
-                                className='w-full h-auto'
-                            />
-                            <div className='p-3'>
-                                <h2 className='mb-1 text-sm font-semibold'>
-                                    {hotel.name}
-                                </h2>
-                                {!!hotel.rating && <Rating number={hotel.rating} minimal />}
-                            </div>
+                {hotels.map(hotel => (
+                    <a key={hotel.name} href={hotel.url} className='rtl:rtl outline-none block bg-white rounded-lg overflow-hidden' target='_blank' title={hotel.name}>
+                        <Image
+                            onContextMenu={e => { e.preventDefault() }}
+                            src={hotel.imageUrl}
+                            alt={`رزرو ${hotel.name}`}
+                            width={376}
+                            height={183}
+                            className='w-full h-auto'
+                        />
+                        <div className='p-3'>
+                            <h2 className='mb-1 text-sm font-semibold'>
+                                {hotel.name}
+                            </h2>
+                            {!!hotel.rating && <Rating number={hotel.rating} minimal />}
+                        </div>
 
-                        </a>
-                    ))}
-                </Slider>
+                    </a>
+                ))}
+            </Slider>
 
 
         </Fragment>

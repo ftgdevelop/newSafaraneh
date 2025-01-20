@@ -34,11 +34,11 @@ const nextConfig = {
       {protocol: 'https', hostname: 'trustseal.enamad.ir', pathname: '**'},
       {protocol: 'https', hostname: 'logo.samandehi.ir', pathname: '**'},
       {protocol: 'https', hostname: 'strapi.safarlife.com', pathname: '**'},
+      {protocol: 'https', hostname: 'strapi.safaraneh.com', pathname: '**'},      
       {protocol: 'https', hostname: 'www.facebook.com', pathname: '**'},
       {protocol: 'https', hostname: 'cdn.mehrbooking.net', pathname: '**'},
       {protocol: 'https', hostname: 'iranhotel.app', pathname: '**'},
       {protocol: 'https', hostname: 'blogonline.ir', pathname: '**'}
-
     ],
     formats: ['image/avif', 'image/webp'],
   },
