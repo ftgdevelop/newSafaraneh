@@ -16,6 +16,7 @@ type Props = {
     logo: string;
     blogs?: BlogItemType[];
     modules: ("domesticHotel" | "domesticFlight" | "cip")[];
+    sections?:any;
 }
 
 const HomeTheme1: React.FC<Props> = props => {
@@ -29,21 +30,47 @@ const HomeTheme1: React.FC<Props> = props => {
             />
 
             <div className='max-w-container mx-auto px-5'>
-                <ModulesBanner />
-                <SuggestedHotels />
-                <PopularCities />
-                <BeachHotels />
-                <Unknowns />
+                
+                <ModulesBanner
+                    strapiData={props.sections?.find((item:any) => item.Keyword === "top-banners")}
+                />
+
+                <SuggestedHotels
+                    strapiData={props.sections?.find((item:any) => item.Keyword === "suggested-hotels")}
+                />
+
+                <PopularCities 
+                    strapiData={props.sections?.find((item:any) => item.Keyword === "popular-cities")}
+                />
+
+                <BeachHotels 
+                    strapiData={props.sections?.find((item:any) => item.Keyword === "beach-hotels")}
+                />
+                
+                <Unknowns 
+                    strapiData={props.sections?.find((item:any) => item.Keyword === "unknowns")}
+                />
             </div>
 
             <div className='max-w-container mx-auto px-5'>
+                
                 {blogs ? <RecentBlogs blogs={blogs} /> : <br />}
-                <Services siteName={siteName} />
+
+                <Services 
+                    siteName={siteName} 
+                    strapiData={props.sections?.find((item:any) => item.Keyword === "services")}
+                />
+                
                 <AboutSummary
                     logo={logo}
                     siteName={siteName}
+                    strapiContent={props.sections?.find((item:any) => item.Keyword === "about-section")?.Body}
                 />
-                <HomeFAQ />
+
+                <HomeFAQ 
+                    items={props.sections?.find((item:any) => item.Keyword === "faq-section")?.Items}
+                />
+                
                 <Newsletter />
             </div>
         </>
