@@ -4,8 +4,30 @@ import { Fragment } from 'react';
 import Image from 'next/image';
 import Slider from "react-slick";
 import { LeftCircle, RightCircle } from '@/modules/shared/components/ui/icons';
+import { ServerAddress } from '@/enum/url';
 
-const Unknowns: React.FC = () => {
+type Props = {
+    strapiData?: {
+        Title?: string;
+        Items?: {
+            Description?: string;
+            Title?: string;
+            Url: string;
+            ImageAlternative?: string;
+            ImageTitle?: string;
+            Image?: {
+                data?: {
+                    attributes?: {
+                        url?: string;
+                    }
+                }
+            }
+        }[]
+    }
+}
+
+const Unknowns: React.FC<Props> = props => {
+
     const { t } = useTranslation('common');
     const { t: tHome } = useTranslation('home');
 
@@ -14,45 +36,53 @@ const Unknowns: React.FC = () => {
         title: string;
         location: string;
         url: string;
-    }[] = [
-            {
-                url: "https://www.instagram.com/p/CHVMUhqAFbV/",
-                imageUrl: "https://cdn2.safaraneh.com/images/home/unknown-busher-thumb.jpg",
-                title: tHome('offer3-desc'),
-                location: tHome('offer3')
-            },
-            {
-                url: "https://www.instagram.com/p/CJdreyCASlk/",
-                imageUrl: "https://cdn2.safaraneh.com/images/home/unknown-hormoz-thumb.jpg",
-                title: tHome('offer5-desc'),
-                location: tHome('offer5')
-            },
-            {
-                url: "https://www.instagram.com/p/CH2sdAqgK8i/",
-                imageUrl: "https://cdn2.safaraneh.com/images/home/unknown-lahijan-thumb.jpg",
-                title: tHome('offer1-desc'),
-                location: tHome('offer1')
-            },
-            {
-                url: "https://www.instagram.com/p/CHksBtmgZbl/",
-                imageUrl: "https://cdn2.safaraneh.com/images/home/unknown-matinabad-thumb.jpg",
-                title: tHome('offer2-desc'),
-                location: tHome('offer2')
-            },
-            {
-                url: "https://www.instagram.com/p/CHK5VE2gatE/",
-                imageUrl: "https://cdn2.safaraneh.com/images/home/unknown-esfahan-thumb.jpg",
-                title: tHome('offer4-desc'),
-                location: tHome('offer4')
-            },
-            {
-                url: "https://www.instagram.com/p/CKT3qG_gGTF/",
-                imageUrl: "https://cdn2.safaraneh.com/images/home/unknown-yazd-thumb.jpg",
-                title: tHome('offer6-desc'),
-                location: tHome('offer6')
-            }
+    }[] = props.strapiData?.Items?.length ?
+            props.strapiData?.Items.map(item => ({
+                title: item.Title || "",
+                url: item.Url || "",
+                location: item.Description || "",
+                imageUrl: item.Image?.data?.attributes?.url ? `${ServerAddress.Type}${ServerAddress.Strapi}${item.Image.data.attributes.url}` : ""
+            }))
+            :
+            [
+                {
+                    url: "https://www.instagram.com/p/CHVMUhqAFbV/",
+                    imageUrl: "https://cdn2.safaraneh.com/images/home/unknown-busher-thumb.jpg",
+                    title: tHome('offer3-desc'),
+                    location: tHome('offer3')
+                },
+                {
+                    url: "https://www.instagram.com/p/CJdreyCASlk/",
+                    imageUrl: "https://cdn2.safaraneh.com/images/home/unknown-hormoz-thumb.jpg",
+                    title: tHome('offer5-desc'),
+                    location: tHome('offer5')
+                },
+                {
+                    url: "https://www.instagram.com/p/CH2sdAqgK8i/",
+                    imageUrl: "https://cdn2.safaraneh.com/images/home/unknown-lahijan-thumb.jpg",
+                    title: tHome('offer1-desc'),
+                    location: tHome('offer1')
+                },
+                {
+                    url: "https://www.instagram.com/p/CHksBtmgZbl/",
+                    imageUrl: "https://cdn2.safaraneh.com/images/home/unknown-matinabad-thumb.jpg",
+                    title: tHome('offer2-desc'),
+                    location: tHome('offer2')
+                },
+                {
+                    url: "https://www.instagram.com/p/CHK5VE2gatE/",
+                    imageUrl: "https://cdn2.safaraneh.com/images/home/unknown-esfahan-thumb.jpg",
+                    title: tHome('offer4-desc'),
+                    location: tHome('offer4')
+                },
+                {
+                    url: "https://www.instagram.com/p/CKT3qG_gGTF/",
+                    imageUrl: "https://cdn2.safaraneh.com/images/home/unknown-yazd-thumb.jpg",
+                    title: tHome('offer6-desc'),
+                    location: tHome('offer6')
+                }
 
-        ];
+            ];
 
 
     const settings = {
@@ -103,34 +133,34 @@ const Unknowns: React.FC = () => {
                 ناشناخته ها
             </h2>
 
-                <Slider {...settings} className='gap-slider'>
+            <Slider {...settings} className='gap-slider'>
 
-                    {items.map(item => (
-                        <a key={item.title} href={item.url} className='rtl:rtl block bg-white rounded-lg overflow-hidden' target='_blank' title={item.title}>
-                            <div className='relative'>
-                                <Image
-                                    onContextMenu={e => { e.preventDefault() }}
-                                    src={item.imageUrl}
-                                    alt={`رزرو ${item.title}`}
-                                    width={272}
-                                    height={142}
-                                    className='w-full h-auto'
-                                />
-                                <div className='absolute bottom-3 px-5'>
-                                    <span className='bg-primary-800 text-white px-5 pt-2 pb-3 inline-block leading-4 text-sm rounded-lg'> {item.location} </span>
-                                </div>
+                {items.map(item => (
+                    <a key={item.title} href={item.url} className='rtl:rtl block bg-white rounded-lg overflow-hidden' target='_blank' title={item.title}>
+                        <div className='relative'>
+                            <Image
+                                onContextMenu={e => { e.preventDefault() }}
+                                src={item.imageUrl}
+                                alt={`رزرو ${item.title}`}
+                                width={272}
+                                height={142}
+                                className='w-full h-auto'
+                            />
+                            <div className='absolute bottom-3 px-5'>
+                                <span className='bg-primary-800 text-white px-5 pt-2 pb-3 inline-block leading-4 text-sm rounded-lg'> {item.location} </span>
                             </div>
-                            <div className='p-3'>
-                                <h2 className='mb-1 text-sm font-semibold'>
-                                    {item.title}
-                                </h2>
-                                <div className="text-sm text-blue-700 rtl:text-left ltr:text-right">{t('more-details')}</div>
-                            </div>
+                        </div>
+                        <div className='p-3'>
+                            <h2 className='mb-1 text-sm font-semibold'>
+                                {item.title}
+                            </h2>
+                            <div className="text-sm text-blue-700 rtl:text-left ltr:text-right">{t('more-details')}</div>
+                        </div>
 
-                        </a>
-                    ))}
+                    </a>
+                ))}
 
-                </Slider>
+            </Slider>
 
         </Fragment>
 
