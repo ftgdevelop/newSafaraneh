@@ -39,8 +39,6 @@ const Footer: React.FC<Props> = props => {
     const theme2 = process.env.THEME === "THEME2";
     const isHotelBan =process.env.PROJECT === "HOTELBAN";
 
-    const isHotelBan = process.env.PROJECT === "HOTELBAN";
-
     if (theme2) {
         const blockTitleClassNames = "text-lg mb-3 font-bold block";
         return (
