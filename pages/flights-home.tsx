@@ -228,8 +228,8 @@ export const getStaticProps = async (context: any) => {
       StrapiQueri2 = 'filters[Page][$eq]=home&populate[Sections][populate]=*';
     }
     if(isHotelban){
-      StrapiQueri1 = `filters[Slug][$eq]=home&filters[tenant][$eq]=${strapiTenant}&populate[Sections][populate][Items][populate]=*`;
-      StrapiQueri2 = `filters[Slug][$eq]=home&filters[tenant][$eq]=${strapiTenant}&populate[Sections][populate][Item][populate]=*`;
+      StrapiQueri1 = `filters[Slug][$eq]=home&filters[Tenant][$eq]=${strapiTenant}&populate[Sections][populate][Items][populate]=*`;
+      StrapiQueri2 = `filters[Slug][$eq]=home&filters[Tenant][$eq]=${strapiTenant}&populate[Sections][populate][Item][populate]=*`;
     }
   }
 

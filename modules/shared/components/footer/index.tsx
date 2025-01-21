@@ -38,30 +38,32 @@ const Footer: React.FC<Props> = props => {
 
     const theme2 = process.env.THEME === "THEME2";
 
+    const isHotelBan = process.env.PROJECT === "HOTELBAN";
+
     if (theme2) {
         const blockTitleClassNames = "text-lg mb-3 font-bold block";
         return (
             <footer className="border-t py-6 md:pt-8 border-neutral-200" >
                 <div className="max-w-container mx-auto p-3 text-neutral-700 py-3 text-sm">
-                    
+
                     <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-9">
                         <div className="sm:col-span-2 lg:col-span-5">
                             <h4 className={blockTitleClassNames}> {props.footerStrapi?.title} </h4>
                             <p className="lg:pl-28"> {props.footerStrapi?.description} </p>
                         </div>
 
-                        {props.footerStrapi?.linkRows?.map(linkGroup=>(
+                        {props.footerStrapi?.linkRows?.map(linkGroup => (
                             <div className="lg:col-span-2" key={linkGroup.id}>
                                 <h4 className={blockTitleClassNames}> {linkGroup.Title} </h4>
                                 {linkGroup.Links?.map(linkItem => (
-                                    <Link 
-                                        key={linkItem.Text} 
-                                        href={linkItem.Url || "#"} 
+                                    <Link
+                                        key={linkItem.Text}
+                                        href={linkItem.Url || "#"}
                                         className="block text-sm"
                                     >
                                         {linkItem.Text}
                                     </Link>
-                                ))} 
+                                ))}
                             </div>
                         ))}
 
@@ -84,7 +86,7 @@ const Footer: React.FC<Props> = props => {
                     <hr className="my-6 border-neutral-300" />
 
                     <p>
-                    کلیۀ حقوق این وبسایت محفوظ و متعلق به گروه لایف است.
+                        کلیۀ حقوق این وبسایت محفوظ و متعلق به گروه لایف است.
                     </p>
 
                 </div>
@@ -95,6 +97,8 @@ const Footer: React.FC<Props> = props => {
     }
 
     const phoneNumber = props.contactInfo.emergencyNumber;
+
+    const footerLinks = props.footerStrapi?.linkRows?.[0]?.Links;
 
     return (
         <>
@@ -150,24 +154,34 @@ const Footer: React.FC<Props> = props => {
                     </div>
 
                     <nav className="hidden sm:flex justify-center gap-6 text-xs mb-6">
-                        <Link title={t('contact-us')} href="/contact" className={linkClassNames} >
-                            {t('contact-us')}
-                        </Link>
-                        <Link title={t('faq')} href="/faq" className={linkClassNames} >
-                            {t('faq')}
-                        </Link>
-                        <Link title={t('terms')} href="/terms" className={linkClassNames} >
-                            {t('terms')}
-                        </Link>
-                        <Link title={t('privacy')} href="/privacy" className={linkClassNames} >
-                            {t('privacy')}
-                        </Link>
-                        <Link title={t("about-us")} href="/about" className={linkClassNames} >
-                            {t("about-us")}
-                        </Link>
-                        <Link title={t('organizational-reservation')} href="/organizational-reservation" className={linkClassNames} >
-                            {t('organizational-reservation')}
-                        </Link>
+
+                        {footerLinks ? footerLinks.map(link => (
+                            <Link key={link.id} title={link.Text} href={link.Url || ""} className={linkClassNames} >
+                                {link.Text}
+                            </Link>
+                        ))
+                            : (
+                                <>
+                                    <Link title={t('contact-us')} href="/contact" className={linkClassNames} >
+                                        {t('contact-us')}
+                                    </Link>
+                                    <Link title={t('faq')} href="/faq" className={linkClassNames} >
+                                        {t('faq')}
+                                    </Link>
+                                    <Link title={t('terms')} href="/terms" className={linkClassNames} >
+                                        {t('terms')}
+                                    </Link>
+                                    <Link title={t('privacy')} href="/privacy" className={linkClassNames} >
+                                        {t('privacy')}
+                                    </Link>
+                                    <Link title={t("about-us")} href="/about" className={linkClassNames} >
+                                        {t("about-us")}
+                                    </Link>
+                                    <Link title={t('organizational-reservation')} href="/organizational-reservation" className={linkClassNames} >
+                                        {t('organizational-reservation')}
+                                    </Link>
+                                </>
+                            )}
                     </nav>
 
                     <Link href="/">
