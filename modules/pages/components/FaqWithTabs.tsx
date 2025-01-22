@@ -38,7 +38,7 @@ const FaqWithTabs: React.FC<Props> = props => {
                                 <Accordion
                                     key={item.id}
                                     WrapperClassName="mb-4"
-                                    content={item.Answer ? <Markdown children={item.Answer} /> : null}
+                                    content={<Markdown>{item.Answer}</Markdown>}
                                     title={(
                                         <>
                                             <QuestionCircle className='w-5 h-5 mt-.5 rtl:ml-2 ltr:mr-2 fill-current inline-block' />

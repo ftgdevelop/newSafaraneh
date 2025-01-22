@@ -201,9 +201,7 @@ const HomeFAQ: React.FC<Props> = props => {
 
                 content={(
                     <div className='leading-7 text-sm'>
-                        <Markdown>
-                            {faq.content as string}
-                        </Markdown>
+                        <Markdown>{faq.content as string}</Markdown>
                     </div>
                 )}
 

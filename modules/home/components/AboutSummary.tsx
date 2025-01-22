@@ -25,9 +25,7 @@ const AboutSummary: React.FC<Props> = props => {
 
             {props.strapiContent ? (
                 <div className='inserted-content text-justify mb-4'>
-                    <Markdown>
-                        {props.strapiContent}
-                    </Markdown>
+                    <Markdown>{props.strapiContent}</Markdown>
                 </div>
             ) : (
                 <>
