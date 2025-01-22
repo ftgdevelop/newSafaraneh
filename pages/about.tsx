@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import parse from 'html-react-parser';
+import Markdown from 'react-markdown';
 import Image from "next/image";
 import mojavez from '../public/images/about/mojavez .jpg';
 import honor1 from '../public/images/about/download.png';
@@ -67,8 +67,8 @@ const About: NextPage<Props> = props => {
                 <h2 className="text-3xl font-bold mt-10"> {title} </h2>
 
                 {strapiContent ? (
-                    <div className='inserted-content text-justify bg-white rounded-md border-2 border-gray mt-10 p-7 max-md:p-3 pt-10 pb-10 space-y-7' >
-                        {parse(strapiContent)}
+                    <div className='inserted-content text-justify bg-white rounded-md border-2 border-gray mt-10 p-7 max-md:p-3 pt-10 pb-10 space-y-7' >                        
+                        <Markdown children={strapiContent} />
                     </div>
                 ) : (
                     <div className="bg-white rounded-md border-2 border-gray mt-10 p-7 max-md:p-3 pt-10 pb-10 space-y-7">

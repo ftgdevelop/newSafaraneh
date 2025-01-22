@@ -1,6 +1,6 @@
 import { getStrapiPages } from "@/modules/shared/actions/strapiActions";
 import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
-import parse from 'html-react-parser';
+import Markdown from 'react-markdown';
 import { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
@@ -29,7 +29,7 @@ const privacy: NextPage<Props> = props => {
 
             {strapiContent ? (
                 <div className='inserted-content text-justify bg-white rounded-md border-2 border-gray mt-10 p-7 max-md:p-3 pt-10 pb-10 space-y-7' >
-                    {parse(strapiContent)}
+                    <Markdown children={strapiContent} />
                 </div>
             ) : (
                 <div className="bg-white border-2 border-gray space-y-6 p-5 max-md:p-3 max-md:pt-7 rounded-md">

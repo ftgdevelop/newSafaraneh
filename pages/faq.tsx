@@ -1,10 +1,31 @@
+import FaqWithTabs from "@/modules/pages/components/FaqWithTabs";
+import { getStrapiPages } from "@/modules/shared/actions/strapiActions";
 import Accordion from "@/modules/shared/components/ui/Accordion";
 import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
 import { QuestionCircle } from "@/modules/shared/components/ui/icons";
 import { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-const faq: NextPage = () => {
+type Props = {
+    strapiData?: {
+        attributes?: {
+            Sections?: {
+                Title?: string;
+                Keyword?: string;
+                Type?: string;
+                id: number;
+                Items?: {
+                    Answer?: string;
+                    Question?: string;
+                    id: number;
+                }[];
+            }[];
+        }
+
+    }[];
+}
+
+const faq: NextPage<Props> = props => {
 
     const faqs = [
         {
@@ -161,6 +182,16 @@ const faq: NextPage = () => {
         }
     ]
 
+    const isHotelban = process.env.PROJECT === "HOTELBAN";
+    if (isHotelban){
+        return(
+            <FaqWithTabs 
+                tabItems={props.strapiData?.[0]?.attributes?.Sections}
+            />
+        )
+    }
+
+
     return (
 
         <div className="max-w-container m-auto p-5 max-sm:p-3">
@@ -190,10 +221,21 @@ export default faq;
 
 
 export async function getStaticProps(context: any) {
+    const hasStrapi = process.env.PROJECT_SERVER_STRAPI;
+    const strapiTenant = process.env.PROJECT_SERVER_STRAPI_TENANTID;
+
+    let strapiData: any;
+
+    if (hasStrapi) {
+        strapiData = await getStrapiPages(`filters[Slug][$eq]=faq&filters[Tenant][$eq]=${strapiTenant}&populate[Sections][populate]=*`)
+    }
+
+
     return (
         {
             props: {
                 ...await serverSideTranslations(context.locale, ['common']),
+                strapiData: strapiData?.data?.data || null
             },
 
         }

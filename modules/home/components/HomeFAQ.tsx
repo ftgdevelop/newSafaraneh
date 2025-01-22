@@ -1,5 +1,6 @@
 import Accordion from '../../shared/components/ui/Accordion';
 import { QuestionCircle } from '../../shared/components/ui/icons';
+import Markdown from 'react-markdown';
 
 type Props = {
     items?: {
@@ -12,12 +13,14 @@ type Props = {
 const HomeFAQ: React.FC<Props> = props => {
 
     const faqs: {
-        title: string,
-        content: React.ReactNode
+        title: string;
+        content: React.ReactNode;
+        id?: number;
     }[] = props.items?.length ?
             props.items.map(item => ({
                 content: item.Answer || "",
-                title: item.Question || ""
+                title: item.Question || "",
+                id: item.id
             }))
             : [
                 {
@@ -189,7 +192,7 @@ const HomeFAQ: React.FC<Props> = props => {
         <div className="bg-white p-5 lg:p-7 rounded-lg leading-10 text-justify mb-10">
             {faqs.map((faq, index) => <Accordion
 
-                key={faq.title}
+                key={faq.id || faq.title}
 
                 title={(<>
                     <QuestionCircle className='w-5 h-5 mt-.5 rtl:ml-2 ltr:mr-2 fill-current inline-block' />
@@ -198,7 +201,9 @@ const HomeFAQ: React.FC<Props> = props => {
 
                 content={(
                     <div className='leading-7 text-sm'>
-                        {faq.content}
+                        <Markdown>
+                            {faq.content as string}
+                        </Markdown>
                     </div>
                 )}
 

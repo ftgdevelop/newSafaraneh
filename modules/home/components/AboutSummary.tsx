@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import parse from 'html-react-parser';
+import Markdown from 'react-markdown';
 
 type Props = {
     logo: string;
@@ -25,7 +25,9 @@ const AboutSummary: React.FC<Props> = props => {
 
             {props.strapiContent ? (
                 <div className='inserted-content text-justify mb-4'>
-                    {parse(props.strapiContent)}
+                    <Markdown>
+                        {props.strapiContent}
+                    </Markdown>
                 </div>
             ) : (
                 <>
