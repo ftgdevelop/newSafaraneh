@@ -32,7 +32,7 @@ const BlogGrid: React.FC<Props> = props => {
                             >
                                 <Image
                                     onContextMenu={e => { e.preventDefault() }}
-                                    src={post.images.medium}
+                                    src={post.images?.medium || "/images/no-image.jpg"}
                                     alt={post.title?.rendered || ""}
                                     title={post.title?.rendered || ""}
                                     width={500}

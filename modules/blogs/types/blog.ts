@@ -17,9 +17,9 @@ export interface BlogItemType {
     title: {
         rendered: string;
     };
-    images: {
-        medium: string;
-        large: string;
+    images?: {
+        medium?: string;
+        large?: string;
     };
 
     tags?: number[];
