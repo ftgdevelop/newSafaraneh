@@ -11,8 +11,8 @@ type Props = {
 const AboutSummary: React.FC<Props> = props => {
 
     return (
-        <div className="bg-white p-5 lg:p-7 rounded-lg text-sm text-justify mb-10">
-            {!!props.logo && <Link href={"/"}>
+        <div className="bg-white p-5 lg:p-7 rounded-lg text-sm text-center mb-10">
+            {!!props.logo && <Link href={"/"} className='inline-block'>
                 <Image
                     onContextMenu={e => { e.preventDefault() }}
                     src={props.logo}
@@ -24,7 +24,7 @@ const AboutSummary: React.FC<Props> = props => {
             </Link>}
 
             {props.strapiContent ? (
-                <div className='inserted-content text-justify mb-4'>
+                <div className='inserted-content text-center mb-4'>
                     <Markdown>{props.strapiContent}</Markdown>
                 </div>
             ) : (

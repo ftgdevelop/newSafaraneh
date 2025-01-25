@@ -56,7 +56,7 @@ const Sidebar: React.FC<Props> = props => {
             </div>
             </div>
             
-
+{/* 
             <div className="p-1 mt-4 ">
                 <div className="border-b-4 border-blue-800">
                     <h2 className="text-xs bg-blue-800 rounded-md inline text-white p-2">پرطرفدارترین هتل های ایران</h2>
@@ -64,7 +64,7 @@ const Sidebar: React.FC<Props> = props => {
                 <div className="w-full mt-7">
                 <BestHotels />
                 </div>    
-            </div>
+            </div> */}
         </div>
     )
 }

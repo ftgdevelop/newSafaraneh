@@ -52,7 +52,7 @@ const Categories: React.FC<Props> = props => {
             <div className="max-w-container m-auto max-xl:p-5" >
                 <p className="text-3xl mb-10">دسته بندی های محبوب</p>
 
-                <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
+                <div className="grid gap-1 sm:grid-cols-2 md:grid-cols-4">
 
                     { content }
 

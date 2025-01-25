@@ -72,11 +72,6 @@ const BlogCities: NextPage<Props> = (props) => {
     
     return (
         <div className="text-black">
-            <div className="text-center pt-14 p-5 max-md:pt-10">
-                <h1 className="font-bold text-4xl p-5">وبلاگ</h1>
-                <p className="max-sm:text-sm max-sm:text-gray-600">حرفه ای ترین شبکه معرفی هتل های ایران</p>
-            </div>
-
             <div className='max-xl:p-3 m-auto max-w-container'>
 
                 {!!items?.length && <Slider {...settings}>

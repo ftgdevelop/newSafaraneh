@@ -16,4 +16,3 @@ Disallow: /hotel/reserveroom/*
 Disallow: /hotels/view/*/favicon.ico$
 Disallow: /city/tag/*/favicon.ico$
 Disallow: /hotels/group/*/favicon.ico$
-Sitemap:  https://www.iranhotel.ir/sitemap.xml

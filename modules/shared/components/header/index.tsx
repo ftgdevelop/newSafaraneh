@@ -63,19 +63,15 @@ const Header: React.FC<Props> = props => {
                     )}
                 </Link>
 
-                {theme2 ? (
-                    null
-                    // <Navigation />
-                ) : (
-                    <TravelServices logo={logo} siteName={siteName} className="rtl:float-right ltr:float-left" />
-                )}
 
+                <Navigation />
+{/* 
                 <HeaderAuthentication
                     logo={logo}
                     siteName={siteName}
-                />
+                /> */}
 
-                {!userIsAuthenticated && !theme2 && <TrackOrder />}
+                {/* {!userIsAuthenticated && !theme2 && <TrackOrder />} */}
 
                 {/* <Language className="ltr:float-right rtl:float-left rtl:ml-5 ltr:mr-5 hidden md:block" buttonClassName="h-12" /> */}
             </div>
