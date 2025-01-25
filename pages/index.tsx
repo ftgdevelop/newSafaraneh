@@ -81,10 +81,6 @@ const Home: NextPage<Props> = props => {
             strapiContent={props.homeSections?.find((item: any) => item.Keyword === "about-section")?.Body}
           />
 
-          <HomeFAQ
-            items={props.homeSections?.find((item: any) => item.Keyword === "faq-section")?.Items}
-          />
-
         </div>
       </div>
     </>
