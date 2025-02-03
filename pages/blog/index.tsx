@@ -86,7 +86,7 @@ const Blog: NextPage<Props> = (props) => {
                                 title={lastPost?.title?.rendered || ""}
                                 slug={lastPost?.slug || ""}
                                 imageAlt={lastPost?.title?.rendered || ""}
-                                imageUrl={lastPost?.images.large || ""}
+                                imageUrl={lastPost?.images?.large || ""}
                                 date={lastPost?.date}
                             />
 
