@@ -250,7 +250,29 @@ const Checkout: NextPage = () => {
     setDiscountLoading(true);
     setDiscountData(undefined);
 
-    const response = await validateDiscountCode({ prereserveKey: key!, type: 'HotelDomestic', discountPromoCode: value });
+    let cookieSafarmarketId = "";
+    let cookieSafarmarketSource = "";
+    
+    if(process.env.SAFAR_MARKET_SITE_NAME){
+      let cookies = decodeURIComponent(document?.cookie).split(';');
+      for (const item of cookies){
+        if (item.includes("safarMarketHotelSmId=")){
+          cookieSafarmarketId =item.split("=")[1];
+          cookieSafarmarketSource='safarmarket';
+        }
+        if (item.includes("safarMarketHotelUtmSource=")) {
+          cookieSafarmarketSource = item.split("=")[1];
+        }
+      }
+    }
+
+    const response = await validateDiscountCode({ 
+      prereserveKey: key!,
+      type: 'HotelDomestic',
+      discountPromoCode: value,
+      MetaSearchKey:cookieSafarmarketId,
+      MetaSearchName: cookieSafarmarketSource
+    });
 
     setDiscountLoading(false);
 
