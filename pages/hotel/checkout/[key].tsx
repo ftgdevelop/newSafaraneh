@@ -61,6 +61,25 @@ const Checkout: NextPage = () => {
 
   const [submitLoading, setSubmitLoading] = useState<boolean>(false);
 
+  let metaSearchName = "";
+  let metaSearchKey = "";
+
+  if(process.env.SAFAR_MARKET_SITE_NAME){
+    
+    debugger;
+
+    let cookies = decodeURIComponent(document?.cookie).split(';');
+    for (const item of cookies){
+      if (item.includes("safarMarketHotelSmId=")){
+        metaSearchKey =item.split("=")[1];
+        metaSearchName = 'safarmarket';
+      }
+      if (item.includes("safarMarketHotelUtmSource=")) {
+        metaSearchName = item.split("=")[1];
+      }
+    }
+  }
+
   let backUrl: string = "";
   const checkinDate = reserveInfo?.checkin && new Date(reserveInfo.checkin);
   const checkoutDate = reserveInfo?.checkout && new Date(reserveInfo.checkout);
@@ -168,24 +187,9 @@ const Checkout: NextPage = () => {
 
   const submitHandler = async (params: any) => {
 
-    if(process.env.SAFAR_MARKET_SITE_NAME){
-      let cookieSafarmarketId;
-      let cookieSafarmarketSource;
-      let cookies = decodeURIComponent(document?.cookie).split(';');
-      for (const item of cookies){
-        if (item.includes("safarMarketHotelSmId=")){
-          cookieSafarmarketId =item.split("=")[1];
-        }
-        if (item.includes("safarMarketHotelUtmSource=")) {
-          cookieSafarmarketSource = item.split("=")[1];
-      }
-      }
-
-      if(cookieSafarmarketId){
-        params.metaSearchName = cookieSafarmarketSource || 'safarmarket';
-        params.metaSearchKey = cookieSafarmarketId;
-      }
-
+    if(metaSearchKey){
+      params.metaSearchName = metaSearchName;
+      params.metaSearchKey = metaSearchKey;
     }
 
     setSubmitLoading(true);
@@ -198,7 +202,14 @@ const Checkout: NextPage = () => {
       const username = reserveResponse.data.result.username;
 
       if (discountData?.isValid && promoCode) {
-        await registerDiscountCode({ discountPromoCode: promoCode, reserveId: id.toString(), username: username });
+        await registerDiscountCode({
+          discountPromoCode: promoCode,
+          reserveId: id.toString(),
+          username: username ,
+          MetaSearchKey : metaSearchKey,
+          MetaSearchName : metaSearchName
+        });
+      
       }
 
       if (reserveResponse.data.result.status === "Pending") {
@@ -250,28 +261,12 @@ const Checkout: NextPage = () => {
     setDiscountLoading(true);
     setDiscountData(undefined);
 
-    let cookieSafarmarketId = "";
-    let cookieSafarmarketSource = "";
-    
-    if(process.env.SAFAR_MARKET_SITE_NAME){
-      let cookies = decodeURIComponent(document?.cookie).split(';');
-      for (const item of cookies){
-        if (item.includes("safarMarketHotelSmId=")){
-          cookieSafarmarketId =item.split("=")[1];
-          cookieSafarmarketSource='safarmarket';
-        }
-        if (item.includes("safarMarketHotelUtmSource=")) {
-          cookieSafarmarketSource = item.split("=")[1];
-        }
-      }
-    }
-
     const response = await validateDiscountCode({ 
       prereserveKey: key!,
       type: 'HotelDomestic',
       discountPromoCode: value,
-      MetaSearchKey:cookieSafarmarketId,
-      MetaSearchName: cookieSafarmarketSource
+      MetaSearchKey:metaSearchKey,
+      MetaSearchName: metaSearchName
     });
 
     setDiscountLoading(false);
