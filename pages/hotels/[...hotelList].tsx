@@ -34,9 +34,19 @@ type Props = {
   portalData: WebSiteDataType;
   accomodations?: SearchAccomodationItem[];
   strapiData?: any;
+  url?: string;
 }
 
 const HotelList: NextPage<Props> = props => {
+
+  useEffect(()=>{
+    const fetchPageData = async (url:string) => {
+      const pageResponse : any = await getPageByUrl(url, acceptLanguage);
+    }
+    if(props.url){
+      fetchPageData(props.url);
+    }
+  },[props.url]);
 
   let advBanner:{
     imageUrl: string;
@@ -900,6 +910,10 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   if(pageResponse?.data?.result?.entityId){
     searchParameters.EntityId = pageResponse.data.result.entityId;
   }
+  const locationId = query.hotelList!.find((item:string) => item.includes('locationId-'));
+  if (locationId){
+    searchParameters.EntityId = locationId.split("locationId-")[1];
+  }
 
   const [searchAccomodationResponse, strapiResponse] = await Promise.all<any>([
     SearchAccomodation(searchParameters, acceptLanguage),
@@ -911,7 +925,8 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       ...await (serverSideTranslations(context.locale, ['common', 'hotel', 'home'])),
       accomodations: searchAccomodationResponse?.data?.result || null,
       pageData: pageResponse?.data?.result || null,
-      strapiData: strapiResponse?.data?.data[0]?.attributes?.Sections || null
+      strapiData: strapiResponse?.data?.data[0]?.attributes?.Sections || null,
+      url: url || null
     },
   })
 }

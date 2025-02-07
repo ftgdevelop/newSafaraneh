@@ -153,7 +153,10 @@ const SearchForm: React.FC<Props> = props => {
                 } else {
                     url = `/hotels/${selectedDestination.name!.replace(/ /g, "-")}`;
                 }
-
+                
+                if(selectedDestination.id){
+                    url += `/locationId-${selectedDestination.id}`;
+                }
                 break;
 
             case "Province":
@@ -164,6 +167,10 @@ const SearchForm: React.FC<Props> = props => {
                     url = `/hotels/فنادق-محافظة-${selectedDestination.name!.replace(/ /g, "-")}`;
                 } else {
                     url = `/hotels/${selectedDestination.name!.replace(/ /g, "-")}`;
+                }
+
+                if(selectedDestination.id){
+                    url += `/locationId-${selectedDestination.id}`;
                 }
 
                 break;
