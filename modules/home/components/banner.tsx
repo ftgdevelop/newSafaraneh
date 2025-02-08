@@ -11,12 +11,15 @@ import CipSearchForm from '@/modules/cip/components/searchForm';
 import RecentSearches from '@/modules/domesticHotel/components/home/HotelRecentSearches';
 import FlightRecentSearches from '@/modules/flights/components/home/FlightRecentSearches';
 import CipRecentSearches from '@/modules/cip/components/home/CipRecentSearches';
+import Header from '@/modules/shared/components/header';
 
 
 type Props = {
   modules: ("domesticHotel" | "domesticFlight" | "cip")[];
   innerElement?: React.ReactNode;
   bannerImage?: string;
+  logo?: string;
+  siteName?: string;
 }
 
 const Banner: React.FC<Props> = props => {
@@ -92,34 +95,26 @@ const Banner: React.FC<Props> = props => {
   />;
 
   return (
-    <div className={`relative ${theme1 ? "bg-cyan-800/50" : theme3 ? "md:bg-theme3-banner md:bg-cover md:bg-center" : ""}`}>
+    <div className={`relative ${theme1 ? "bg-cyan-800/50" :theme3 ? "h-screen": ""}`}>
+      
       {!!theme1 || props.bannerImage && <Image
         src={props.bannerImage || '/images/home/banner.jpg'}
-        alt="blue sky"
+        alt="hero image"
         width={1350}
         height={433}
         onContextMenu={(e) => e.preventDefault()}
         className='absolute top-0 left-0 w-full h-full object-cover object-center z-10 max-sm:hidden'
       />}
 
-      {!!theme3 && (
-        <div className='max-md:hidden max-w-container mx-auto px-3 md:px-5 py-6 md:pt-24 md:pb-10  text-white'>
-          <h2 className='text-xl lg:text-5xl font-bold mb-4'> سفر بعدی خود را رزرو کنید! </h2>
-          <p className='text-base'>  از بین بیش از 1.5 میلیون هتل و بیش از 450  ایرلاین انتخاب کنید </p>
-        </div>
-      )}
+      <div className={`max-w-container mx-auto sm:px-3 relative z-20 ${theme1 ? "sm:py-10 sm:pb-28 pt-5" : theme2 ? "pb-5 sm:pb-8 pt-5" : "sm:pt-5 md:pt-8"}`}>
 
-      {theme3?(
-        tabs
-      ):(
-        <div className={`pt-5 max-w-container mx-auto sm:px-3 relative z-20 ${theme1 ? "sm:py-10 sm:pb-28" : theme2 ? "pb-5 sm:pb-8" : ""}`}>
+        {!!theme1 && <h1 className="text-white drop-shadow-lg text-center font-bold text-xl sm:text-4xl mb-6 sm:mb-10" > {tHome("Plan-your-trip")} </h1>}
 
-          {!!theme1 && <h1 className="text-white drop-shadow-lg text-center font-bold text-xl sm:text-4xl mb-6 sm:mb-10" > {tHome("Plan-your-trip")} </h1>}
+        {!!(theme3 && props.siteName && props.logo) && <Header logo={props.logo} siteName={props.siteName} withoutContainer />}
 
-          {tabs}
+        {tabs}
 
-        </div>
-      )}
+      </div>
 
     </div>
   )
