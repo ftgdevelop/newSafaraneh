@@ -15,6 +15,9 @@ const HomeTheme3: React.FC<Props> = props => {
         <>
             <Banner
                 modules={props.modules}
+                bannerImage="/images/hotelban/hero.jpg"
+                siteName={props.siteName}
+                logo={props.logo}
             />
             
             <TopHotels />
