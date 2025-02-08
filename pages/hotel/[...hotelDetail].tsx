@@ -137,7 +137,11 @@ useEffect(()=>{
     if (document){
       document.cookie = `safarMarketHotelSmId=${querySafarmarketId}; expires=${expDate.toUTCString()};path=/`;
       if (utm_source){
-        document.cookie = `safarMarketHotelUtmSource=${utm_source}; expires=${expDate.toUTCString()};path=/`;        
+        if (typeof utm_source === 'object'){
+          document.cookie = `safarMarketHotelUtmSource=${utm_source[0]}; expires=${expDate.toUTCString()};path=/`;
+        }else{
+          document.cookie = `safarMarketHotelUtmSource=${utm_source}; expires=${expDate.toUTCString()};path=/`;
+        }
       }
     }
   }
