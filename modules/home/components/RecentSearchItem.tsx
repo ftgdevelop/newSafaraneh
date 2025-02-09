@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Apartment, Suitcase, Travel } from "../../shared/components/ui/icons";
+import { Apartment, Bed4, Suitcase, Suitcase2, Travel, Travel2 } from "../../shared/components/ui/icons";
 import { useTranslation } from "next-i18next";
 import { useState } from "react";
 import { useAppDispatch } from "@/modules/shared/hooks/use-store";
@@ -23,22 +23,23 @@ const RecentSearchItem: React.FC<Props> = props => {
 
     const theme1 = process.env.THEME === "THEME1";
     const theme2 = process.env.THEME === "THEME2";
+    const theme3 = process.env.THEME === "THEME3";
 
     const [clicked, setClicked] = useState<boolean>(false);
 
     let icon = null;
 
-    const iconClassName = "w-6 h-6 fill-current";
+    const iconClassName = theme3 ? "w-6 h-6 fill-neutral-400" : "w-6 h-6 fill-current";
 
     switch (props.type) {
         case "cip":
-            icon = <Suitcase className={iconClassName} />;
+            icon = theme3 ? <Suitcase2 className={iconClassName} /> : <Suitcase className={iconClassName} />;
             break;
         case "flight":
-            icon = <Travel className={iconClassName} />;
+            icon = theme3 ? <Travel2 className={iconClassName} /> : <Travel className={iconClassName} />;
             break;
         case "hotel":
-            icon = <Apartment className={iconClassName} />;
+            icon = theme3 ? <Bed4 className={iconClassName} /> : <Apartment className={iconClassName} />;
             break;
         default:
             icon = null;
@@ -59,6 +60,13 @@ const RecentSearchItem: React.FC<Props> = props => {
     const removeLoading = () => { dispatch(setProgressLoading(false)) };
 
     let linkClassName = "";
+
+    
+    if (theme3) {
+        linkClassName = `cursor-pointer flex items-center gap-3 leading-4 p-2 text-2xs border-2 border-white rounded-xl bg-white group transition-all 
+        relative text-neutral-800 hover:border-[#fdab05]
+        ${props.className || ""}`
+    }
 
     if (theme1) {
         linkClassName = `cursor-pointer flex items-center gap-3 leading-4 p-3 text-2xs rounded-lg border border-neutral-300 group transition-all 
@@ -88,11 +96,13 @@ const RecentSearchItem: React.FC<Props> = props => {
             {icon}
 
             <div className="flex flex-col gap-2">
-                <div className={`font-bold ${theme2?"text-sm":"text-xs"}`}>
+                <div className={`${theme3?"":"font-bold"} ${theme2?"text-sm":"text-xs"}`}>
                     {props.model.title}
                 </div>
 
-                {props.model.subtitle || ""}
+                {!!props.model.subtitle && <div className={theme3?"text-neutral-400":""}>
+                    {props.model.subtitle}
+                </div>}
 
                 {details}
             </div>
