@@ -1,7 +1,7 @@
 import { useTranslation } from 'next-i18next';
 
 import SearchForm from '../../domesticHotel/components/shared/SearchForm';
-import { Apartment, Suitcase, Travel } from '../../shared/components/ui/icons';
+import { Apartment, Bed4, Suitcase, Suitcase2, Travel, Travel2 } from '../../shared/components/ui/icons';
 import Tab from '../../shared/components/ui/Tab';
 import { TabItem } from '@/modules/shared/types/common';
 import Image from 'next/image';
@@ -12,6 +12,7 @@ import RecentSearches from '@/modules/domesticHotel/components/home/HotelRecentS
 import FlightRecentSearches from '@/modules/flights/components/home/FlightRecentSearches';
 import CipRecentSearches from '@/modules/cip/components/home/CipRecentSearches';
 import Header from '@/modules/shared/components/header';
+import { ReactNode } from 'react';
 
 
 type Props = {
@@ -42,53 +43,96 @@ const Banner: React.FC<Props> = props => {
   const theme3 = process.env.THEME === "THEME3";
 
   if (props.modules.includes('domesticHotel') && process.env.PROJECT_MODULES?.includes("DomesticHotel")) {
+    
+    let icon: ReactNode = null;
+    let children2 : ReactNode = null;
+    if(theme1){
+      icon = <Apartment className='w-6 h-6 fill-current block mx-auto mb-1' />;
+    }
+    if (theme2 && !isSafarLife){
+      children2 = <div className='max-sm:px-5' ><RecentSearches /></div>;
+    }
+    if (theme3){
+      icon = <Bed4 className='w-6 h-6 fill-current inline-block rtl:ml-1' />;
+      children2 = <div className='max-sm:px-5' ><RecentSearches /></div>;
+    }
+
     items.push(
       {
         key: '1',
-        label: (<div className='text-center'> {!!theme1 && <Apartment className='w-6 h-6 fill-current block mx-auto mb-1' />} {t('domestic-hotel')} </div>),
+        label: (<div className='text-center'> {icon} {t('domestic-hotel')} </div>),
         children: (<>
-          <SearchForm wrapperClassName={`${theme3 ? "py-3 sm:py-14" :theme2 ? "p-5" : "py-5"}`} defaultDates={domesticHotelDefaultDates} />
+          <SearchForm wrapperClassName={`${theme3 ? "py-3 sm:py-8" :theme2 ? "p-5" : "py-5"}`} defaultDates={domesticHotelDefaultDates} />
           {!!theme1 && <RecentSearches />}
         </>
         ),
-        children2: theme2 && !isSafarLife ? <div className='max-sm:px-5' ><RecentSearches /></div> : null
+        children2: children2
       }
     )
   }
 
   if (props.modules.includes('domesticFlight') && process.env.PROJECT_MODULES?.includes("DomesticFlight")) {
+
+    let icon: ReactNode = null;
+    let children2 : ReactNode = null;
+    if(theme1){
+      icon = <Travel className='w-6 h-6 fill-current block mx-auto mb-1' />;
+    }
+    if(theme2 && !isSafarLife){
+      children2 = <div className='max-sm:px-5' ><FlightRecentSearches /></div>;
+    }
+    if (theme3){
+      icon = <Travel2 className='w-6 h-6 fill-current inline-block rtl:ml-1' />;
+      children2 = <div className='max-sm:px-5' ><FlightRecentSearches /></div>;
+    }
+
     items.push({
       key: '2',
-      label: (<div className='text-center'> {!!theme1 && <Travel className='w-6 h-6 fill-current block mx-auto mb-1' />} {t('domestic-flight')} </div>),
+      label: (<div className='text-center'> {icon} {t('domestic-flight')} </div>),
       children: (
         <>
           <FlightSearch wrapperClassName={theme2 ? "p-5" : "py-5"} />
           {!!theme1 && <FlightRecentSearches />}
         </>
       ),
-      children2: theme2 && !isSafarLife ? <div className='max-sm:px-5' ><FlightRecentSearches /></div> : null
+      children2: children2
     })
   }
 
   if (props.modules.includes("cip") && process.env.PROJECT_MODULES?.includes("CIP")) {
+
+    let icon: ReactNode = null;
+    let children2 : ReactNode = null;
+
+    if(theme1){
+      icon = <Suitcase className='w-6 h-6 fill-current block mx-auto mb-1' />;
+    }
+    if( theme2 && !isSafarLife){
+      children2 = <div className='max-sm:px-5'><CipRecentSearches /></div>;
+    }
+    if (theme3){
+      icon = <Suitcase2 className='w-6 h-6 fill-current inline-block rtl:ml-1' />;
+      children2 = <div className='max-sm:px-5'><CipRecentSearches /></div>;
+    }
+
     items.push({
       key: '3',
-      label: (<div className='text-center'> {!!theme1 && <Suitcase className='w-6 h-6 fill-current block mx-auto mb-1' />} {t('cip')} </div>),
+      label: (<div className='text-center'> {icon} {t('cip')} </div>),
       children: (
         <>
           <CipSearchForm wrapperClassName={theme2 ? "p-5" : "py-5"} />
           {!!theme1 && <CipRecentSearches />}
         </>
       ),
-      children2: theme2 && !isSafarLife ? <div className='max-sm:px-5'><CipRecentSearches /></div> : null
+      children2: children2
     })
 
   }
 
   const tabs = <Tab
-    style={theme2 ? "expedia-home" : theme3 ? "almosafer-home" : "1"}
+    style={theme2 ? "expedia-home" : theme3 ? "theme3" : "1"}
     items={items}
-    wrapperClassName={`${theme3 ? "" :theme2 ? "mb-6 sm:rounded-2xl sm:border sm:border-neutral-300" : "sm:rounded-lg px-5 pt-3 sm:p-5 bg-white"}`}
+    wrapperClassName={`${theme3 ? "bg-white sm:rounded-2xl p-4 sm:mt-6 md:mt-20" :theme2 ? "mb-6 sm:rounded-2xl sm:border sm:border-neutral-300" : "sm:rounded-lg px-5 pt-3 sm:p-5 bg-white"}`}
     tabLinksBold={theme2}
     innerElement={props.innerElement}
     showTabsWhenThereIsOnlyOneItem={theme2}

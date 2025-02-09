@@ -21,6 +21,7 @@ const CipRecentSearches: React.FC = () => {
     }
     const theme1 = process.env.THEME === "THEME1";
     const theme2 = process.env.THEME === "THEME2";
+    const theme3 = process.env.THEME === "THEME3";
 
     const slicedItems: {
         title: string;
@@ -30,7 +31,7 @@ const CipRecentSearches: React.FC = () => {
 
         return ({
             title: item.airportName,
-            subtitle: theme1 ? dateDiplayFormat({ date: item.flightDate, format: "dd mm", locale: i18n?.language }) : theme2 ?  dateDiplayFormat({ date: item.flightDate, format: "ddd dd mm", locale: i18n?.language }) : "",
+            subtitle: theme1 ? dateDiplayFormat({ date: item.flightDate, format: "dd mm", locale: i18n?.language }) : (theme2 || theme3) ?  dateDiplayFormat({ date: item.flightDate, format: "ddd dd mm", locale: i18n?.language }) : "",
             url: item.url
         })
     })
