@@ -19,12 +19,13 @@ const RecentSearches : React.FC<Props>= props => {
     }
 
     const theme2 = process.env.THEME === "THEME2";
+    const theme3 = process.env.THEME === "THEME3";
     
     const slicedItems = theme2 ? items.slice(0, 4) : items.slice(0, 5);
 
     return (
         <>
-            <div className="flex gap-2 mb-4 my-3">
+           {!theme3 && <div className="flex gap-2 mb-4 my-3">
 
                 <strong 
                     className={`font-semibold text-md ${theme2 ? "md:text-2xl" : ""}`}
@@ -38,9 +39,9 @@ const RecentSearches : React.FC<Props>= props => {
                 >
                     حذف
                 </button>
-            </div>
+            </div>}
 
-            <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pb-3 ${theme2?"":"lg:grid-cols-5"}`}>
+            <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pb-3 ${theme2?"":"lg:grid-cols-5"} ${theme3?"mt-8":""}`}>
                 {slicedItems.map((item, index) => <RecentSearchItem
                     key={index}
                     model={{

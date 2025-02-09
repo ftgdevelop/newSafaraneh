@@ -91,12 +91,25 @@ const RangePicker: React.FC<Props> = props => {
     }
 
     return (
-        <div className={`mobiscroll-datepicker-wrapper ${locale === localeFa ? 'persian-datepicker-wrapper' : ''} relative text-xs`} >
+        <div className={`mobiscroll-datepicker-wrapper ${theme3?"w-full":""} ${locale === localeFa ? 'persian-datepicker-wrapper' : ''} relative text-xs`} >
 
-            <div className='grid grid-cols-2'>
+            <div className={`grid grid-cols-2 ${theme3?"gap-x-1":""}`}>
+
+                {theme3 && (
+                    <>
+                    <label htmlFor='checkin_date' className="text-sm">
+                        {t('checkin-date')}
+                    </label>
+
+                    <label htmlFor='checkout_date' className="text-sm">
+                        {t('checkout-date')}
+                    </label>
+
+                    </>
+                )}
 
                 <div className='relative'>
-                    {!theme3 && <label htmlFor='checkin_date' className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5 pointer-events-none">
+                    {theme3 || <label htmlFor='checkin_date' className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5 pointer-events-none">
                         {t('checkin-date')}
                     </label>}
                     
@@ -108,13 +121,14 @@ const RangePicker: React.FC<Props> = props => {
                     
                     <input 
                         id="checkin_date" 
-                        className={`border w-full h-12 border-neutral-400 rtl:rounded-r-lg ltr:rounded-l-lg rtl:pr-10 ltr:pl-10 ${theme3?"":"pt-5 leading-4"} rtl:border-l-0 ltr:border-r-0 ${locale === localeEn ? "font-sans" : ""}`} 
+                        className={`w-full h-12 rtl:rounded-r-lg ltr:rounded-l-lg rtl:pr-10 ltr:pl-10 ${theme3?"bg-neutral-200":"border border-neutral-400 pt-5 leading-4"} rtl:border-l-0 ltr:border-r-0 ${locale === localeEn ? "font-sans" : ""}`} 
                         value={start} 
                         readOnly 
                     />
                 </div>
+
                 <div className='relative'>
-                    {!theme3 &&<label htmlFor='checkout_date' className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5 pointer-events-none">
+                    {theme3 || <label htmlFor='checkout_date' className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5 pointer-events-none">
                         {t('checkout-date')}
                     </label>}
                     
@@ -124,11 +138,11 @@ const RangePicker: React.FC<Props> = props => {
                         <Calendar className='w-5 h-5 fill-current absolute rtl:right-2 ltr:left-2 top-1/2 -mt-2.5 z-10 pointer-events-none' />
                     )}
 
-                    <input id="checkout_date" className={`border w-full h-12 border-neutral-400 rtl:rounded-l-lg ltr:rounded-r-lg rtl:pr-10 ltr:pl-10 ${theme3?"":"pt-5 leading-4"}`} value={end} readOnly />
+                    <input id="checkout_date" className={`w-full h-12 rtl:rounded-l-lg ltr:rounded-r-lg rtl:pr-10 ltr:pl-10 ${theme3?"bg-neutral-200":"border border-neutral-400 pt-5 leading-4"}`} value={end} readOnly />
                 </div>
 
             </div>
-            <div className='absolute top-0 left-0 right-0 h-full opacity-0'>
+            <div className={`absolute ${theme3?"top-7":"top-0"} left-0 right-0 h-full opacity-0`}>
                 <MobiscrollDatepicker
                     ref={datePickerRef}
                     onInit={(_, inst) => { setInstance(inst) }}
