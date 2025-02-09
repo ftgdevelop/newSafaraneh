@@ -24,6 +24,7 @@ const HotelRecentSearches: React.FC = () => {
 
     const theme1 = process.env.THEME === "THEME1";
     const theme2 = process.env.THEME === "THEME2";
+    const theme3 = process.env.THEME === "THEME3";
 
     const transformedItems: {
         title: string;
@@ -33,7 +34,7 @@ const HotelRecentSearches: React.FC = () => {
         
         let subtitle = "";
 
-        if(theme1){
+        if(theme1 || theme3){
             const checkinDay = dateDiplayFormat({ date: item.dates[0], format: "d", locale: i18n?.language });
             const checkoutMonth = dateDiplayFormat({ date: item.dates[1], format: "m", locale: i18n?.language });
             const checkoutDay = dateDiplayFormat({ date: item.dates[1], format: "d", locale: i18n?.language });

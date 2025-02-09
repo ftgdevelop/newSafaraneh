@@ -22,7 +22,7 @@ const HeaderStyle3: React.FC<Props> = props => {
 
     if (props.withoutContainer) {
         return (
-            <header className="flex justify-between gap-3 sm:gap-5 mb-5 bg-white sm:rounded-2xl p-3 sm:p-4">
+            <header className="flex justify-between gap-3 sm:gap-5 border-b sm:border-0 bg-white sm:rounded-2xl p-3 sm:p-4">
 
                 <Link href="/" className="block self-center">
                     {logo ? (

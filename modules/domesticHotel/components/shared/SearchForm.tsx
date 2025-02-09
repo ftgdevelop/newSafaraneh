@@ -1,12 +1,12 @@
 import { useTranslation, i18n } from "next-i18next";
-import { useCallback, useEffect, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from "next/router";
 
 import { getDomesticHotelSummaryDetailById } from "@/modules/domesticHotel/actions";
 import { Header, ServerAddress, Hotel } from "../../../../enum/url";
 import AutoComplete from "../../../shared/components/ui/AutoComplete";
-import { ApartmentOutline, Calendar, Home2, Location } from "../../../shared/components/ui/icons";
+import { ApartmentOutline, Calendar, Home2, Loading, Location, Search, SearchTheme3 } from "../../../shared/components/ui/icons";
 import { EntitySearchResultItemType, HotelRecentSearchItem } from "@/modules/domesticHotel/types/hotel";
 import { useAppDispatch } from "@/modules/shared/hooks/use-store";
 import { setReduxError } from "@/modules/shared/store/errorSlice";
@@ -270,38 +270,22 @@ const SearchForm: React.FC<Props> = props => {
 
     const theme2 = process.env.THEME === "THEME2";
 
+    let buttonInnerHtml : ReactNode = t('search');
+    if(theme3){
+        if(submitLoading){
+            buttonInnerHtml = <Loading className="w-7 h-7 fill-white animate-spin" />;
+        }else{
+            buttonInnerHtml = <SearchTheme3 className="w-6 h-6 fill-white" />;
+        }
+    }
     return (
-        <div className={`domestic-hotel-search-form grid grid-cols-1 ${theme3 ? "md:grid-cols-8" : "md:grid-cols-7"} gap-2 ${props.wrapperClassName || ""}`}>
-
-
-            {theme2 ? (
-                <div className="relative z-20 col-span-1 md:col-span-3">
-                <AutoCompleteZoom
-                    defaultListLabel="محبوب ترین ها"
-                    label={theme2 ? t('search-hotel-or-city') : "نام شهر، هتل یا منطقه"}
-                    type="hotel"
-                    defaultList={defaultDestinations}
-                    inputId="destination"
-                    //checkTypingLanguage
-                    noResultMessage={t('NoResultsFound')}
-                    createTextFromOptionsObject={(item: EntitySearchResultItemType) => item.displayName || item.name || ""}
-                    acceptLanguage="fa-IR"
-                    renderOption={renderOption}
-                    icon="location"
-                    inputClassName="w-full bg-white leading-5 border rounded-lg border-neutral-400 py-0.5 text-md h-12 flex flex-col justify-center"
-                    placeholder={t('search-hotel-or-city')}
-                    min={2}
-                    value={selectedDestination}
-                    onChangeHandle={setSelectedDestination}
-                    url={autoCompleteUrl}
-                />
-                </div>
-            ) : (
-                <div className="relative z-20 col-span-1 md:col-span-3">
-                    {!theme3 && <label htmlFor="destination" className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5">
-                        {t('searchHotelDestination')}
-                    </label>}
-                    <AutoComplete
+        <div className={`domestic-hotel-search-form ${theme3?"flex flex-col sm:flex-row":"grid grid-cols-1 md:grid-cols-7"} gap-2 ${props.wrapperClassName || ""}`}>
+            
+            <div className={`relative z-20 ${theme3?"sm:grow xl:basis-7/12":"col-span-1 md:col-span-3"}`}>
+                {theme2 ? (
+                    <AutoCompleteZoom
+                        defaultListLabel="محبوب ترین ها"
+                        label={theme2 ? t('search-hotel-or-city') : "نام شهر، هتل یا منطقه"}
                         type="hotel"
                         defaultList={defaultDestinations}
                         inputId="destination"
@@ -311,57 +295,40 @@ const SearchForm: React.FC<Props> = props => {
                         acceptLanguage="fa-IR"
                         renderOption={renderOption}
                         icon="location"
-                        inputClassName={`w-full outline-none border rounded-lg border-neutral-400 ${theme3?"":"pt-4"} h-12 text-sm text-neutral-500 placeholder:text-neutral-500 focus:border-neutral-900`}
+                        inputClassName="w-full bg-white leading-5 border rounded-lg border-neutral-400 py-0.5 text-md h-12 flex flex-col justify-center"
                         placeholder={t('search-hotel-or-city')}
                         min={2}
                         value={selectedDestination}
                         onChangeHandle={setSelectedDestination}
                         url={autoCompleteUrl}
                     />
-                </div>
-            )}
-
-
-            <div className={`col-span-1 md:col-span-3 relative z-10`}>
-
-                {/* TODO: delete when mobiscroll is activated */}
-                {/* <div className="modernCalendar-dates-wrapper grid grid-cols-2 gap-2">
-                    <div className="relative modernDatePicker-checkin">
-                        <DatePickerModern
-                            wrapperClassName="block"
-                            minimumDate={dateDiplayFormat({ date: new Date().toISOString(), locale: 'en', format: "YYYY-MM-DD" })}
-                            inputPlaceholder="ورود"
-                            inputClassName="border border-neutral-400 h-12 rounded-lg focus:border-neutral-900 outline-none pt-7 text-xs w-full pr-10"
-                            inputName="checkin"
-                            toggleLocale={() => { setLocale(prevState => prevState === 'fa' ? "en" : "fa") }}
-                            locale={locale}
-                            onChange={(v: string) => { onChangeCheckin(v) }}
-                            value={dates ? dates[0] : undefined}
-                        />
-                        <Calendar className="w-5 h-5 fill-neutral-600 top-1/2 -mt-2.5 right-3 absolute z-[100] select-none pointer-events-none" />
-                        <label className="absolute top-1.5 leading-5 rtl:right-10 text-4xs z-[100] select-none pointer-events-none">
-                            تاریخ ورود
+                ) : (
+                    <>
+                        <label htmlFor="destination" className={theme3?"text-sm":"absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5"}>
+                            {t('searchHotelDestination')}
                         </label>
-                    </div>
-                    <div className="relative modernDatePicker-checkout">
-                        <DatePickerModern
-                            wrapperClassName="block"
-                            minimumDate={dateDiplayFormat({ date: dates ? dateFormat(addSomeDays(new Date(dates[0]))) : dateFormat(addSomeDays(new Date())), locale: 'en', format: "YYYY-MM-DD" })}
-                            inputPlaceholder="ورود"
-                            inputClassName="border border-neutral-400 h-12 rounded-lg focus:border-neutral-900 outline-none pt-7 text-xs w-full pr-10"
-                            inputName="checkin"
-                            toggleLocale={() => { setLocale(prevState => prevState === 'fa' ? "en" : "fa") }}
-                            locale={locale}
-                            onChange={(v: string) => { onChangeCheckout(v) }}
-                            value={dates ? dates[1] : undefined}
+                        <AutoComplete
+                            type="hotel"
+                            defaultList={defaultDestinations}
+                            inputId="destination"
+                            //checkTypingLanguage
+                            noResultMessage={t('NoResultsFound')}
+                            createTextFromOptionsObject={(item: EntitySearchResultItemType) => item.displayName || item.name || ""}
+                            acceptLanguage="fa-IR"
+                            renderOption={renderOption}
+                            icon="location"
+                            inputClassName={`w-full outline-none rounded-lg ${theme3?"bg-neutral-200":"border border-neutral-400 pt-4"} h-12 text-sm text-neutral-500 placeholder:text-neutral-500 focus:border-neutral-900`}
+                            placeholder={t('search-hotel-or-city')}
+                            min={2}
+                            value={selectedDestination}
+                            onChangeHandle={setSelectedDestination}
+                            url={autoCompleteUrl}
                         />
-                        <Calendar className="w-5 h-5 fill-neutral-600 top-1/2 -mt-2.5 right-3 absolute z-[100] select-none pointer-events-none" />
-                        <label className="absolute top-1.5 leading-5 rtl:right-10 text-4xs z-[100] select-none pointer-events-none">
-                            تاریخ خروج
-                        </label>
-                    </div>
-                </div> */}
+                    </>
+                )}
+            </div>
 
+            <div className={`relative z-10 ${theme3?"flex sm:grow":"col-span-1 md:col-span-3"}`}>
                 <RangePicker
                     value={dates}
                     onChange={dateChangeHandle}
@@ -369,16 +336,16 @@ const SearchForm: React.FC<Props> = props => {
                     locale={localeFa}
                 />
 
-
             </div>
 
-            <div className={`col-span-1 pt-5 md:pt-0 ${theme3?"md:col-span-2":"md:col-span-1"}`}>
+            <div className={`${theme3?"pt-4 sm:pt-7":"pt-5 md:pt-0"}`}>
                 <Button
-                    loading={submitLoading}
+                    loading={theme3 ? false : submitLoading}
                     onClick={submitHandler}
-                    className={`h-12 block w-full mx-auto ${theme3?"font-semibold":"sm:max-w-64"}`}
+                    color={theme3 ? "yellow" : undefined}
+                    className={`h-12 block mx-auto ${theme3?"font-semibold w-full sm:w-12 flex items-center justify-center":"w-full sm:max-w-64"}`}
                 >
-                    {t('search')}
+                    {buttonInnerHtml}
                 </Button>
             </div>
         </div>
