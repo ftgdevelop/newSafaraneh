@@ -39,14 +39,9 @@ const Footer: React.FC<Props> = props => {
     const linkClassNames = "block hover:text-blue-600 hover:underline";
 
     const theme2 = process.env.THEME === "THEME2";
-<<<<<<< Updated upstream
 
-    const isHotelBan = process.env.PROJECT === "HOTELBAN";
-=======
     const theme3 = process.env.THEME === "THEME3";
-    const isHotelBan =process.env.PROJECT === "HOTELBAN";
->>>>>>> Stashed changes
-
+    
     if (theme2) {
         const blockTitleClassNames = "text-lg mb-3 font-bold block";
         return (
