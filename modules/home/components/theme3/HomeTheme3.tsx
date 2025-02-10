@@ -1,6 +1,11 @@
 import { BlogItemType } from "@/modules/blogs/types/blog";
 import Banner from "../banner";
-import TopHotels from "./TopHotels";
+import TopCities from "./TopCities";
+import Services from "./Services";
+import Promotions from "./Promotions";
+import Cip from "./Cip";
+import About from "./About";
+import Faq from "./Faq";
 
 type Props = {
     siteName: string;
@@ -19,8 +24,18 @@ const HomeTheme3: React.FC<Props> = props => {
                 siteName={props.siteName}
                 logo={props.logo}
             />
-            
-            <TopHotels />
+
+            <TopCities />
+
+            <Services />
+
+            <Promotions />
+
+            <Cip />
+
+            <About logo={props.logo} />
+
+            <Faq />
 
         </>
     )
