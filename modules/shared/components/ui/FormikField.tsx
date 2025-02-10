@@ -30,6 +30,7 @@ const FormikField: React.FC<Props> = props => {
 
     const theme1 = process.env.THEME === "THEME1";
     const theme2 = process.env.THEME === "THEME2";
+    const theme3 = process.env.THEME === "THEME3";
 
     const [labelUp, setLabelUp] = useState<boolean>(false);
     const [isPassword, setIsPassword] = useState<boolean>(props.isPassword || false);
@@ -90,6 +91,8 @@ const FormikField: React.FC<Props> = props => {
         inputClassNames.push(props.heightClassName);
     } else if(theme2){
         inputClassNames.push(`h-13`);
+    }else if (theme3){
+        inputClassNames.push(`h-12`);
     }else{
         inputClassNames.push("h-10");
     }

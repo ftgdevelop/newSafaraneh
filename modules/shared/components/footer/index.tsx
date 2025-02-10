@@ -5,6 +5,7 @@ import { useTranslation } from "next-i18next";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { FooterStrapi } from "../../types/common";
+import FooterStyle3 from "./FooterStyle3";
 
 const GoToTop = dynamic(() => import('./GoToTop'), {
     ssr: false
@@ -22,6 +23,7 @@ type Props = {
         linkedin?: string;
         twitter?: string;
         facebook?: string;
+        emailAddress?: string;
     }
     enamad?: any;
     samandehi?: string;
@@ -37,8 +39,11 @@ const Footer: React.FC<Props> = props => {
     const linkClassNames = "block hover:text-blue-600 hover:underline";
 
     const theme2 = process.env.THEME === "THEME2";
+
     const isHotelBan =process.env.PROJECT === "HOTELBAN";
 
+    const theme3 = process.env.THEME === "THEME3";
+    
     if (theme2) {
         const blockTitleClassNames = "text-lg mb-3 font-bold block";
         return (
@@ -98,6 +103,18 @@ const Footer: React.FC<Props> = props => {
     const phoneNumber = props.contactInfo.emergencyNumber;
 
     const footerLinks = props.footerStrapi?.linkRows?.[0]?.Links;
+
+    if (theme3){
+        return (
+           <FooterStyle3 
+                logo={logo}
+                siteName={siteName}
+                email={props.contactInfo.emailAddress}
+                supportNumber={props.contactInfo.emergencyNumber}
+                enamad={props.enamad}
+           />
+        )
+    }
 
     return (
         <>

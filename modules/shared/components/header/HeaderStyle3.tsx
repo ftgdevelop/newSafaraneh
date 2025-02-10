@@ -50,7 +50,7 @@ const HeaderStyle3: React.FC<Props> = props => {
     }
 
     return (
-        <header className="bg-white">
+        <header className="bg-white border-b">
             <div className="max-w-container mx-auto">
                 <div className="flex justify-between gap-3 sm:gap-5 p-3 sm:p-5">
                     <Link href="/" className="block self-center">
