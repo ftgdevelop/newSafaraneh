@@ -49,7 +49,7 @@ const nextConfig = {
     PROJECT: "HOTELBAN",
     SITE_NAME: 'https://www.hotelban.com',
     THEME: "THEME3",
-    HOTEL_LIST_LAZY_LOAD: "lazy",
+    HOTEL_LIST_LAZY_LOAD: "",
     SAFAR_MARKET_SITE_NAME: "",
     PROJECT_SERVER_TYPE: "https://",
     PROJECT_SERVER_USER: "",
