@@ -1017,3 +1017,19 @@ export const DisLike: React.FC<Props> = props => {
         <svg className={props.className || ""} viewBox="0 -960 960 960" ><path d="M240-840h440v520L400-40l-50-50q-7-7-11.5-19t-4.5-23v-14l44-174H120q-32 0-56-24t-24-56v-80q0-7 2-15t4-15l120-282q9-20 30-34t44-14Zm360 80H240L120-480v80h360l-54 220 174-174v-406Zm0 406v-406 406Zm80 34v-80h120v-360H680v-80h200v520H680Z"/></svg>
     )
 }
+
+export const Phone2: React.FC<Props> = props => {
+    return (
+        <svg className={props.className || ""} viewBox="0 0 24 24" >
+            <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
+        </svg>
+    )
+}
+
+export const Email2: React.FC<Props> = props => {
+    return (
+        <svg className={props.className || ""} viewBox="0 0 24 24" >
+            <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M16 12v1.5a2.5 2.5 0 0 0 5 0v-1.5a9 9 0 1 0 -5.5 8.28" />
+        </svg>
+    )
+}
