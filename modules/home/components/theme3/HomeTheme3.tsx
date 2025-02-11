@@ -31,7 +31,7 @@ const HomeTheme3: React.FC<Props> = props => {
 
             <Promotions />
 
-            <Cip />
+            {props.modules.includes("cip") && <Cip />}
 
             <About logo={props.logo} />
 
