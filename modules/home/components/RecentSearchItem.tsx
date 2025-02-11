@@ -63,8 +63,8 @@ const RecentSearchItem: React.FC<Props> = props => {
 
     
     if (theme3) {
-        linkClassName = `cursor-pointer flex items-center gap-3 leading-4 p-2 text-2xs border-2 border-white rounded-xl bg-white group transition-all 
-        relative text-neutral-800 hover:border-[#fdab05]
+        linkClassName = `cursor-pointer flex items-center gap-2 sm:gap-3 leading-4 p-2 text-2xs border md:border-2 md:border-white rounded-xl bg-white group transition-all 
+        relative text-neutral-800 md:hover:border-[#fdab05]
         ${props.className || ""}`
     }
 

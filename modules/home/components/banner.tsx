@@ -54,7 +54,7 @@ const Banner: React.FC<Props> = props => {
     }
     if (theme3){
       icon = <Bed4 className='w-6 h-6 fill-current inline-block rtl:ml-1' />;
-      children2 = <div className='max-sm:px-5' ><RecentSearches /></div>;
+      children2 = <div className='max-sm:px-3' ><RecentSearches /></div>;
     }
 
     items.push(
@@ -132,14 +132,14 @@ const Banner: React.FC<Props> = props => {
   const tabs = <Tab
     style={theme2 ? "expedia-home" : theme3 ? "theme3" : "1"}
     items={items}
-    wrapperClassName={`${theme3 ? "bg-white sm:rounded-2xl p-4 sm:mt-6 md:mt-20" :theme2 ? "mb-6 sm:rounded-2xl sm:border sm:border-neutral-300" : "sm:rounded-lg px-5 pt-3 sm:p-5 bg-white"}`}
+    wrapperClassName={`${theme3 ? "sm:bg-white sm:rounded-2xl p-3 sm:p-4 sm:mt-6 md:mt-20" :theme2 ? "mb-6 sm:rounded-2xl sm:border sm:border-neutral-300" : "sm:rounded-lg px-5 pt-3 sm:p-5 bg-white"}`}
     tabLinksBold={theme2}
     innerElement={props.innerElement}
     showTabsWhenThereIsOnlyOneItem={theme2}
   />;
 
   return (
-    <div className={`relative ${theme1 ? "bg-cyan-800/50" :theme3 ? "h-screen": ""}`}>
+    <div className={`relative ${theme1 ? "bg-cyan-800/50" :theme3 ? "bg-stone-50 lg:min-h-screen pb-4": ""}`}>
       
       {!!theme1 || props.bannerImage && <Image
         src={props.bannerImage || '/images/home/banner.jpg'}

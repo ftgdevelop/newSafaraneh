@@ -25,7 +25,7 @@ const RecentSearches : React.FC<Props>= props => {
 
     return (
         <>
-           {!theme3 && <div className="flex gap-2 mb-4 my-3">
+           {!theme3 && <div className="flex gap-2 mb-4 md:mt-3">
 
                 <strong 
                     className={`font-semibold text-md ${theme2 ? "md:text-2xl" : ""}`}
@@ -41,7 +41,7 @@ const RecentSearches : React.FC<Props>= props => {
                 </button>
             </div>}
 
-            <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pb-3 ${theme2?"":"lg:grid-cols-5"} ${theme3?"mt-8":""}`}>
+            <div className={`grid sm:grid-cols-2 lg:grid-cols-4 pb-3 ${theme2?"":"lg:grid-cols-5"} ${theme3?"mt-2 sm:mt-8 grid-cols-2 gap-2 sm:gap-3":" gap-3 grid-cols-1"}`}>
                 {slicedItems.map((item, index) => <RecentSearchItem
                     key={index}
                     model={{
