@@ -92,6 +92,7 @@ type Props = {
 const RoomItemInformation: React.FC<Props> = props => {
 
   const theme1 = process.env.THEME === "THEME1";
+  const theme3 = process.env.THEME === "THEME3";
 
   const { roomIndex, roomItem, errors, setFieldValue, touched, values } = props;
 
@@ -164,6 +165,7 @@ const RoomItemInformation: React.FC<Props> = props => {
       </div>
 
       <FormikField
+        labelIsSimple={theme3}
         setFieldValue={setFieldValue}
         id={`passengers_${roomIndex}_firstName`}
         errorText={errors.passengers ? (errors.passengers[roomIndex] as FormikErrors<{
@@ -181,6 +183,7 @@ const RoomItemInformation: React.FC<Props> = props => {
       />
 
       <FormikField
+        labelIsSimple={theme3}
         setFieldValue={setFieldValue}
         id={`passengers_${roomIndex}_lastName`}
         errorText={errors.passengers ? (errors.passengers[roomIndex] as FormikErrors<{

@@ -67,6 +67,7 @@ type Props = {
 const ReserverInformation: React.FC<Props> = props => {
 
     const theme1 = process.env.THEME === "THEME1";
+    const theme3 = process.env.THEME === "THEME3";
 
     const { t } = useTranslation('common');
 
@@ -140,6 +141,7 @@ const ReserverInformation: React.FC<Props> = props => {
                 </div>
 
                 <FormikField
+                    labelIsSimple={theme3}
                     setFieldValue={setFieldValue}
                     errorText={errors.reserver?.firstName as string}
                     id='firstName'
@@ -156,6 +158,7 @@ const ReserverInformation: React.FC<Props> = props => {
                 />
 
                 <FormikField
+                    labelIsSimple={theme3}
                     setFieldValue={setFieldValue}
                     errorText={errors.reserver?.lastName as string}
                     id='lastName'
@@ -191,6 +194,7 @@ const ReserverInformation: React.FC<Props> = props => {
 
                 {iraniReserver ? (
                     <FormikField
+                        labelIsSimple={theme3}
                         setFieldValue={setFieldValue}
                         errorText={errors.reserver?.nationalId as string}
                         id='nationalId'
@@ -203,6 +207,7 @@ const ReserverInformation: React.FC<Props> = props => {
                     />
                 ):(
                     <FormikField
+                        labelIsSimple={theme3}
                         setFieldValue={setFieldValue}
                         errorText={errors.reserver?.passportNumber as string}
                         id='reserver_passportNumber'
@@ -231,9 +236,11 @@ const ReserverInformation: React.FC<Props> = props => {
                     label={t("phone-number") + " (بدون صفر)"}
                     errorText={errors.reserver?.phoneNumber}
                     initialValue={values.reserver.phoneNumber || ""}
+                    labelIsSimple={theme3}
                 />
 
                 <FormikField
+                    labelIsSimple={theme3}
                     setFieldValue={setFieldValue}
                     errorText={errors.reserver?.email as string}
                     id='email'

@@ -144,7 +144,19 @@ const HeaderAuthentication: React.FC<Props> = props => {
 
                         </div>
 
-                    ) : (
+                    ) :theme3?(
+                        <>
+                            <Link
+                                href="/myaccount/profile"
+                                className={buttonClassName}
+                            >
+                                <Image src="/images/hotelban/user.svg" alt={t('retrieve-my-booking')} width={24} height={24} className="w-6 h-6 hidden sm:block" />
+                                حساب کاربری
+                            </Link>
+                            
+                            <UserWallet />
+                        </>
+                    ): (
                         <>
 
                             <button

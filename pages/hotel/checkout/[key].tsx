@@ -32,6 +32,7 @@ const Checkout: NextPage = () => {
   const { t } = useTranslation('common');
   const { t: tHotel } = useTranslation('hotel');
 
+  const theme3 = process.env.THEME === "THEME3";
   const theme2 = process.env.THEME === "THEME2";
 
   const theme1 = process.env.THEME === "THEME1";
@@ -65,8 +66,6 @@ const Checkout: NextPage = () => {
   let metaSearchKey = "";
 
   if(process.env.SAFAR_MARKET_SITE_NAME){
-    
-    debugger;
 
     let cookies = decodeURIComponent(document?.cookie).split(';');
     for (const item of cookies){
@@ -311,7 +310,7 @@ const Checkout: NextPage = () => {
 
         {backUrl ? (
           <Link href={backUrl} className={`text-sm text-blue-500 mb-4 inline-block  ${theme2 ? "mt-1 shadow-normal rounded-full hover:bg-blue-100 w-8 h-8 flex items-center justify-center" : ""}`}>
-            <ArrowRight className='inline-block align-middle w-5 h-5 fill-current ltr:rotate-180' /> {!!theme1 && "برگشت به انتخاب اتاق"}
+            <ArrowRight className='inline-block align-middle w-5 h-5 fill-current ltr:rotate-180' /> {!!(theme1 || theme3) && "برگشت به انتخاب اتاق"}
           </Link>
         ) : (
           <Skeleton className='mt-2 mb-3 w-60' />
@@ -334,11 +333,11 @@ const Checkout: NextPage = () => {
               }
               return (
 
-                <Form className={`md:grid ${theme1 ? "md:grid-cols-12 lg:grid-cols-3 gap-4" : "md:grid-cols-12 md:gap-5 lg:gap-20"}`} autoComplete='off' >
+                <Form className={`md:grid ${(theme1 || theme3) ? "md:grid-cols-12 lg:grid-cols-3 gap-4" : "md:grid-cols-12 md:gap-5 lg:gap-20"}`} autoComplete='off' >
 
-                  <div className={`${theme1 ? "md:col-span-7 lg:col-span-2" : "md:col-span-7"}`}>
+                  <div className={`${(theme1 || theme3) ? "md:col-span-7 lg:col-span-2" : "md:col-span-7"}`}>
 
-                    <div className={`${theme1 ? "bg-white border border-neutral-300 p-5 rounded-lg" : ""}`}>
+                    <div className={`${(theme1 || theme3) ? "bg-white border border-neutral-300 p-5 rounded-lg" : ""}`}>
 
                       <ReserverInformation
                         errors={errors}
@@ -390,9 +389,9 @@ const Checkout: NextPage = () => {
 
                   </div>
 
-                  <div className={`${theme1 ? "md:col-span-5 lg:col-span-1" : "md:col-span-5"}`}>
+                  <div className={`${(theme1 || theme3) ? "md:col-span-5 lg:col-span-1" : "md:col-span-5"}`}>
 
-                    {theme1 ? (
+                    {(theme1 || theme3) ? (
                       <Aside
                         hotelInformation={hotelInformation}
                         reserveInformation={reserveInformation}

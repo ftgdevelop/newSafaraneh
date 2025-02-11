@@ -158,6 +158,7 @@ const Rooms: React.FC<Props> = props => {
 
     const theme1 = process.env.THEME === "THEME1";
     const theme2 = process.env.THEME === "THEME2";
+    const theme3 = process.env.THEME === "THEME3";
 
     let selectedNights: string[] = [];
     if (openedRoom?.rate?.nightly?.items) {
@@ -256,7 +257,7 @@ const Rooms: React.FC<Props> = props => {
                     <>
                         <h2 className="text-lg lg:text-3xl font-semibold mb-3 md:mb-7"> {tHotel('choose-room')}  </h2>
 
-                        {!!theme1 && <RoomsListTheme1
+                        {!!(theme1 || theme3) && <RoomsListTheme1
                             availabilites={availabilites}
                             selectRoomHandle={selectRoomHandle}
                             selectedRoomToken={selectedRoomToken}
