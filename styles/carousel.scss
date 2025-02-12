@@ -99,4 +99,27 @@
         border: 2px solid #fff;
         width: 40px;
     }
-}
+
+
+        .slick-slider.promotion-carousel {
+            .slick-arrow {
+                bottom: 10px;
+                top: auto;
+    
+                &.slick-prev {
+                    left: 10px;
+                }
+    
+                &.slick-next {
+                    right: auto;
+                    left: 45px;
+                }
+    
+                border: 0 none;
+                background-color: #fff;
+                fill: #402594;
+                width: 30px;
+                height: 30px;
+            }
+        }
+        }

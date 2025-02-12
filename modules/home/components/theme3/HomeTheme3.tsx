@@ -7,14 +7,30 @@ import Cip from "./Cip";
 import About from "./About";
 import Faq from "./Faq";
 
+type SectionItem = {
+    Keyword: "about-section" | "faq-section";
+    Body?: string;
+    Title?: string;
+    Items?: {
+        Answer?: string;
+        Question?: string;
+        id: number;
+    }[]
+}
+
 type Props = {
     siteName: string;
     logo: string;
     blogs?: BlogItemType[];
     modules: ("domesticHotel" | "domesticFlight" | "cip")[];
+    sections?: SectionItem[];
 }
 
 const HomeTheme3: React.FC<Props> = props => {
+
+    const strapiAboutContent = props.sections?.find(item => item.Keyword === "about-section")?.Body;
+    const strapiFAQ = props.sections?.find(item => item.Keyword === "faq-section")?.Items;
+
 
     return (
         <>
@@ -33,9 +49,13 @@ const HomeTheme3: React.FC<Props> = props => {
 
             {props.modules.includes("cip") && <Cip />}
 
-            <About logo={props.logo} />
+            <About logo={props.logo} strapiContent={strapiAboutContent} />
 
-            <Faq />
+            {strapiFAQ && <Faq items={strapiFAQ.map(item => ({
+                key: item.id,
+                content: item.Answer,
+                title: item.Question
+            }))} />}
 
         </>
     )

@@ -2,40 +2,82 @@ import Rating from "@/modules/shared/components/ui/Rating";
 import Image from "next/image";
 import Link from "next/link";
 import { ReactNode } from "react";
+import PromotionCarousel from "./PromotionCarousel";
 
 const Promotions: React.FC = () => {
-
-    const largeItems: {
+    type Carousel1Items = {
         imageUrl: string;
         title: string;
         subtitle: ReactNode;
-        icon: string;
+        icon?: string;
         url: string;
-        overlayColor?: "blue" | "violet";
-    }[] = [
-            {
-                url: "/hotel/هتل-اسپیناس-پالاس-تهران",
-                imageUrl: "/images/home/theme3/promotions/espinas.jpg",
-                icon: "/images/home/theme3/promotions/espinas-logo.png",
-                title: " هتل اسپیناس پالاس تهران ",
-                subtitle: <div className="flex gap-2 text-xs lg:text-sm items-center">
-                    <Image src="/images/hotelban/off.svg" alt="offer" width={32} height={32} className="w-6 h-6 lg:w-8 lg:h-8" />
-                    تخفیف ویژه
-                </div>,
-                overlayColor: "blue"
-            },
-            {
-                url: "/hotel/هتل-اطلس-مشهد",
-                imageUrl: "/images/home/theme3/promotions/atlas.png",
-                icon: "/images/home/theme3/promotions/atlas-logo.png",
-                title: "هتل اطلس مشهد",
-                subtitle: <div className="flex gap-2 text-xs lg:text-sm items-center">
-                    <Rating number={3} />
-                    ۳ ستاره
-                </div>,
-                overlayColor: "violet"
-            },
-        ];
+    }[];
+
+    const carousel1Items: Carousel1Items = [
+        {
+            url: "/hotel/هتل-اسپیناس-بلوار-تهران",
+            imageUrl: "/images/home/theme3/promotions/espinas-bolvar-tehran.jpg",
+            // icon: "/images/home/theme3/promotions/atlas-logo.png",
+            title: "هتل اسپیناس بلوار تهران",
+            subtitle: <div className="flex gap-2 text-xs lg:text-sm items-center">
+                <Rating number={5} />
+                ۵ ستاره
+            </div>
+        },
+        {
+            url: "/hotel/هتل-اسپیناس-پالاس-تهران",
+            imageUrl: "/images/home/theme3/promotions/espinas.jpg",
+            icon: "/images/home/theme3/promotions/espinas-logo.png",
+            title: " هتل اسپیناس پالاس تهران ",
+            subtitle: <div className="flex gap-2 text-xs lg:text-sm items-center">
+                <Image src="/images/hotelban/off.svg" alt="offer" width={32} height={32} className="w-6 h-6 lg:w-8 lg:h-8" />
+                تخفیف ویژه
+            </div>
+        },
+        {
+            url: "/hotel/هتل-پرشین-پلازا-تهران",
+            imageUrl: "/images/home/theme3/promotions/persian-plaza-tehran.jpg",
+            //icon: "/images/home/theme3/promotions/atlas-logo.png",
+            title: "هتل پرشین پلازا تهران",
+            subtitle: <div className="flex gap-2 text-xs lg:text-sm items-center">
+                <Rating number={5} />
+                ۵ ستاره
+            </div>
+        }
+    ];
+
+    const carousel2Items: Carousel1Items = [
+        {
+            url: "/hotel/هتل-جواد-مشهد",
+            imageUrl: "/images/home/theme3/promotions/javad-mashad.jpg",
+            //icon: "/images/home/theme3/promotions/atlas-logo.png",
+            title: "هتل جواد مشهد",
+            subtitle: <div className="flex gap-2 text-xs lg:text-sm items-center">
+                <Rating number={4} />
+                ۴ ستاره
+            </div>
+        },
+        {
+            url: "/hotel/هتل-اطلس-مشهد",
+            imageUrl: "/images/home/theme3/promotions/atlas.jpg",
+            icon: "/images/home/theme3/promotions/atlas-logo.png",
+            title: "هتل اطلس مشهد",
+            subtitle: <div className="flex gap-2 text-xs lg:text-sm items-center">
+                <Rating number={3} />
+                ۳ ستاره
+            </div>
+        },
+        {
+            url: "/hotel/هتل-تارا-مشهد",
+            imageUrl: "/images/home/theme3/promotions/tara-mashad.jpg",
+            //icon: "/images/home/theme3/promotions/atlas-logo.png",
+            title: "هتل تارا مشهد",
+            subtitle: <div className="flex gap-2 text-xs lg:text-sm items-center">
+                <Rating number={4} />
+                ۴ ستاره
+            </div>
+        }
+    ];
 
     const smallItems: {
         imageUrl: string;
@@ -88,48 +130,9 @@ const Promotions: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-6 gap-4">
 
-                {largeItems.map(item => {
+                <PromotionCarousel items={carousel1Items} wrapperClassName="sm:col-span-3 -mb-2.5" />
 
-                    let overlayColorClass = "";
-                    if (item.overlayColor) {
-                        if (item.overlayColor === "blue") {
-                            overlayColorClass = "from-[#002e69] bg-gradient-to-l to-transparent";
-                        }
-                        if (item.overlayColor === "violet") {
-                            overlayColorClass = "from-[#625783] bg-gradient-to-l to-transparent";
-                        }
-                    }
-                    return (
-                        <Link
-                            key={item.title}
-                            href={item.url}
-                            target="_blank"
-                            className="block sm:col-span-3 relative rounded-2xl overflow-hidden"
-                        >
-                            <Image
-                                src={item.imageUrl}
-                                alt={item.title}
-                                width={580}
-                                height={300}
-                                className="w-full h-48 lg:h-72 object-cover"
-                            />
-                            <div className={`absolute top-0 right-0 bottom-0 w-2/3 flex flex-col justify-between text-white p-3 lg:p-5 lg:pt-10 ${overlayColorClass}`} >
-                                <div>
-                                    <h2 className="lg:text-lg mb-2"> {item.title} </h2>
-                                    {item.subtitle}
-                                </div>
-
-                                <Image
-                                    src={item.icon}
-                                    alt={item.title}
-                                    width={100}
-                                    height={64}
-                                    className="bg-white rounded-lg w-16 h-auto"
-                                />
-                            </div>
-                        </Link>
-                    )
-                })}
+                <PromotionCarousel items={carousel2Items} wrapperClassName="sm:col-span-3 -mb-2.5" />
 
                 {smallItems.map(item => (
                     <Link
