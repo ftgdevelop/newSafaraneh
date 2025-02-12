@@ -24,6 +24,20 @@ const Home: NextPage<{ blogs?: BlogItemType[], portalData?: WebSiteDataType, hom
   const theme2 = process.env.THEME === "THEME2";
   const theme3 = process.env.THEME === "THEME3";
 
+  type ModuleItem = "domesticHotel"| "domesticFlight"| "cip";
+  const modules :  ModuleItem[] = [];
+
+  if (process.env.PROJECT_MODULES?.includes("DomesticHotel")){
+    modules.push("domesticHotel");
+  }
+  if (process.env.PROJECT_MODULES?.includes("DomesticFlight")){
+    modules.push("domesticFlight");
+  }
+  if (process.env.PROJECT_MODULES?.includes("CIP")){
+    modules.push("cip");
+  }
+
+
   return (
     <>
       <Head>
@@ -191,7 +205,7 @@ const Home: NextPage<{ blogs?: BlogItemType[], portalData?: WebSiteDataType, hom
       </Head>
 
       {!!theme1 && <HomeTheme1
-        modules={["domesticHotel", "domesticFlight", "cip"]}
+        modules={modules}
         logo={logo}
         siteName={siteName}
         blogs={blogs}
@@ -200,14 +214,15 @@ const Home: NextPage<{ blogs?: BlogItemType[], portalData?: WebSiteDataType, hom
 
       {!!theme2 && <HomeTheme2
         sections={homeSections}
-        modules={["domesticHotel", "domesticFlight", "cip"]}
+        modules={modules}
         logo={logo}
         siteName={siteName}
         blogs={blogs}
       />}
 
       {!!theme3 && <HomeTheme3
-        modules={["domesticHotel", "domesticFlight", "cip"]}
+        sections={homeSections}
+        modules={modules}
         logo={logo}
         siteName={siteName}
         blogs={blogs}

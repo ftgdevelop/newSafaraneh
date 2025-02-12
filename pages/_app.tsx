@@ -65,6 +65,7 @@ function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }:
 
   const tel = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
   const emergencyNumber = portalData?.billing.emergencyNumber || "";
+  const email = portalData?.billing?.email;
   const instagram = portalData?.social?.instagram || "";
   const facebook = portalData?.social?.facebook || "";
   const linkedin = portalData?.social?.linkedin || "";
@@ -195,7 +196,8 @@ function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }:
             instagram: instagram,
             linkedin: linkedin,
             twitter: twitter,
-            facebook: facebook
+            facebook: facebook,
+            emailAddress: email
           }
         }
         logo={logo}

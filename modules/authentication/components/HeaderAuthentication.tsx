@@ -144,7 +144,19 @@ const HeaderAuthentication: React.FC<Props> = props => {
 
                         </div>
 
-                    ) : (
+                    ) :theme3?(
+                        <>
+                            <Link
+                                href="/myaccount/profile"
+                                className={buttonClassName}
+                            >
+                                <Image src="/images/hotelban/user.svg" alt={t('retrieve-my-booking')} width={24} height={24} className="w-6 h-6 hidden sm:block" />
+                                حساب کاربری
+                            </Link>
+                            
+                            <UserWallet />
+                        </>
+                    ): (
                         <>
 
                             <button
@@ -186,7 +198,7 @@ const HeaderAuthentication: React.FC<Props> = props => {
                     onClick={() => { setDelayedOpen(false) }}
                 />
 
-                <div className={`fixed h-screen top-0 w-screen pb-5 ${theme1?"sm:w-520" : theme2 ? "sm:w-400 sm:pb-20" :""}  bg-white duration-200 transition-all ${theme1 ? "overflow-auto rtl:left-0 ltr:right-0" : "sm:h-auto sm:rounded-xl sm:top-1/2 sm:left-1/2 sm:-translate-y-1/2 sm:-translate-x-1/2" } ${delayedOpen ? "scale-100 opacity-100" : "scale-90 opacity-0"}`}>
+                <div className={`fixed h-screen top-0 w-screen pb-5 ${theme1?"sm:w-520" : theme2 ? "sm:w-400 sm:pb-20": theme3? "sm:w-480" :""}  bg-white duration-200 transition-all ${theme1 ? "overflow-auto rtl:left-0 ltr:right-0" : "sm:h-auto sm:rounded-xl sm:top-1/2 sm:left-1/2 sm:-translate-y-1/2 sm:-translate-x-1/2" } ${delayedOpen ? "scale-100 opacity-100" : "scale-90 opacity-0"}`}>
 
                     {userIsAuthenticated ? (
                         <AccountSidebar
