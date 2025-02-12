@@ -207,6 +207,7 @@ const Home: NextPage<{ blogs?: BlogItemType[], portalData?: WebSiteDataType, hom
       />}
 
       {!!theme3 && <HomeTheme3
+        sections={homeSections}
         modules={["domesticHotel"]}
         logo={logo}
         siteName={siteName}

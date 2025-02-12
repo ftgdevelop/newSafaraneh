@@ -1,6 +1,8 @@
 import Image from "next/image";
+import Markdown from "react-markdown";
 type Props = {
     logo?: string;
+    strapiContent?: string;
 }
 const About: React.FC<Props> = props => {
 
@@ -14,10 +16,9 @@ const About: React.FC<Props> = props => {
                 className="w-auto h-12 mb-3 lg:mb-6"
             />}
 
-            <p>
-                سایت هتل‌بان با هدف آشنایی بیشتر کاربران با دنیای شگفت‌انگیز گردشگری و سفر ایجاد شده است. این سایت بستری است برای علاقه‌مندان به کشف اطلاعات مفید، خواندن مطالب جذاب، و به‌روزترین اخبار در زمینه گردشگری، فرهنگ، و مقاصد دیدنی. ما در هتل‌بان تلاش می‌کنیم تا با ارائه مقالات متنوع و الهام‌بخش، شما را در مسیر برنامه‌ریزی سفرهای آینده‌تان یاری کنیم. از داستان‌های جذاب درباره شهرها و کشورهای مختلف گرفته تا نکات کاربردی برای سفر، همه و همه در یک مکان جمع‌آوری شده‌اند تا تجربه‌ای متفاوت از گردشگری دیجیتال را به شما ارائه دهیم.
-                با هتل‌بان، مقصد بعدی شما فقط یک قدم نزدیک‌تر است!
-            </p>
+            {props.strapiContent && <div className="inserted-content hotelban-strapi-about">
+                <Markdown>{props.strapiContent}</Markdown>
+            </div>}
         </section>
     )
 }
