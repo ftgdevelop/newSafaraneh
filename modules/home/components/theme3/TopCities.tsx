@@ -40,13 +40,25 @@ const TopCities: React.FC = () => {
                 url: "/hotels/هتل-های-جزیره-کیش",
                 imageUrl: "/images/home/theme3/cities/kish.jpg",
                 subtitle: "80 هتل"
+            },
+            {
+                title: "هتل های تبریز",
+                url: "/hotels/هتل-های-تبریز",
+                imageUrl: "/images/home/theme3/cities/tabriz.jpg",
+                subtitle: "72 هتل"
+            },
+            {
+                title: "هتل های قشم",
+                url: "/hotels/هتل-های-جزیره-قشم",
+                imageUrl: "/images/home/theme3/cities/qeshm.jpg",
+                subtitle: "75 هتل"
             }
         ]
 
     const settings = {
         speed: 500,
         slidesToShow: 5,
-        infinite: false,
+        infinite: true,
         slidesToScroll: 1,
         nextArrow: <RightCaret />,
         prevArrow: <LeftCaret />,
@@ -97,7 +109,7 @@ const TopCities: React.FC = () => {
             </h2>
             <p className="mb-8 pr-6"> شهرهای محبوب، جایی که تاریخ، فرهنگ و زندگی در هم می‌آمیزند </p>
 
-            <div className="-mx-2">
+            <div className="-mx-2" dir="ltr">
                 <Slider
                     {...settings}
                 >

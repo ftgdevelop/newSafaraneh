@@ -221,6 +221,7 @@ const Home: NextPage<{ blogs?: BlogItemType[], portalData?: WebSiteDataType, hom
       />}
 
       {!!theme3 && <HomeTheme3
+        sections={homeSections}
         modules={modules}
         logo={logo}
         siteName={siteName}
