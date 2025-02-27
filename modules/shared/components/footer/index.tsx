@@ -171,12 +171,13 @@ const Footer: React.FC<Props> = props => {
 
                         <img 
                             referrerPolicy='origin' 
-                            id = 'rgvjjzpefukzapfuesgtsizp' 
+                            id = 'rgvjjzpejzpeoeukrgvjwlao' 
+                            style ={{cursor: "pointer"}}
                             onClick = {() => {
-                                window.open("https://logo.samandehi.ir/Verify.aspx?id=376509&p=xlaojyoegvkadshwobpdpfvl", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")
+                                window.open("https://logo.samandehi.ir/Verify.aspx?id=377834&p=xlaojyoejyoemcsixlaoaods", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")
                             }} 
                             alt = 'logo-samandehi' 
-                            src = 'https://logo.samandehi.ir/logo.aspx?id=376509&p=qftiyndtwlbqujynlymabsiy' 
+                            src = 'https://logo.samandehi.ir/logo.aspx?id=377834&p=qftiyndtyndtaqgwqftishwl' 
                         />
 
                     </div>
