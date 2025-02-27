@@ -34,6 +34,8 @@ function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }:
   const { locale } = router;
   const dir = locale === 'en' ? 'ltr' : 'rtl';
 
+  const isHotelban = process.env.PROJECT === "HOTELBAN";
+
   useEffect(() => {
     i18n?.changeLanguage(locale);
   }, [locale]);
@@ -82,7 +84,7 @@ function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }:
   const pageDescription = pageData?.metaDescription?.replaceAll("{0}", siteName) || "";
   const pageKeywords = pageData?.metaKeyword?.replaceAll("{0}", siteName) || "";
 
-  const title = pageTitle || portalTitle;
+  const title = isHotelban ? "71416543" : pageTitle || portalTitle;
   const description = pageDescription || portalDescription;
   const keywords = pageKeywords || portalKeywords; 
   
