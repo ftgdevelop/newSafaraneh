@@ -84,7 +84,7 @@ function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }:
   const pageDescription = pageData?.metaDescription?.replaceAll("{0}", siteName) || "";
   const pageKeywords = pageData?.metaKeyword?.replaceAll("{0}", siteName) || "";
 
-  const title = isHotelban ? "71416543" : pageTitle || portalTitle;
+  const title = isHotelban ? "NQLPOVN" : pageTitle || portalTitle;
   const description = pageDescription || portalDescription;
   const keywords = pageKeywords || portalKeywords; 
   
@@ -136,6 +136,8 @@ function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }:
         <meta name="robots" content="index, follow" />
         <meta name="theme-color" content="#0a438b" />
         <meta charSet="utf-8" />
+        
+        <meta name="samandehi" content="124933150"/>
 
         {!!portalAuthor && <meta name="author" content={portalAuthor} />}
         {!!portalCreator && <meta name="creator" content={portalCreator} />}
