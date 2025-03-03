@@ -69,6 +69,7 @@ const HotelName: React.FC<Props> = props => {
                             reviews={props.reviewData.reviewCount}
                             score={props.reviewData.averageRating}
                             className="text-md lg:text-lg font-semibold"
+                            max={10}
                         />
                     )}
 

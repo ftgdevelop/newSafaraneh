@@ -60,6 +60,7 @@ const HotelListItem: React.FC<Props> = props => {
             score={hotel.ratesInfo.Satisfaction}
             small
             className="text-md"
+            max={100}
         />
     }
 
