@@ -154,6 +154,10 @@ const SearchForm: React.FC<Props> = props => {
                     url = `/hotels/${selectedDestination.name!.replace(/ /g, "-")}`;
                 }
                 
+                if(selectedDestination.id){
+                    url += `/locationId-${selectedDestination.id}`;
+                }
+                
                 break;
 
             case "Province":

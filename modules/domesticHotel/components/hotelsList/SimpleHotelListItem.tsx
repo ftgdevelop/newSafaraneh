@@ -37,6 +37,7 @@ const SimpleHotelListItem: React.FC<Props> = props => {
             reviews={ratesInfo.TotalRowCount}
             score={ratesInfo.Satisfaction}
             small
+            max={100}
         />
     }
 
