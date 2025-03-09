@@ -65,6 +65,7 @@ const UsersComments: React.FC<Props> = props => {
                     reviews={data.reviews.totalCount}
                     score={Math.floor(data.averageRating)}
                     className="text-sm lg:text-md font-semibold"
+                    max={10}
                 />
 
                 {data.ratings.map(item => (
