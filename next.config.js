@@ -50,7 +50,7 @@ const nextConfig = {
     SITE_NAME: 'https://www.hotelban.com',
     THEME: "THEME3",
     HOTEL_LIST_LAZY_LOAD: "",
-    SAFAR_MARKET_SITE_NAME: "",
+    SAFAR_MARKET_SITE_NAME: "hotelban",
     PROJECT_SERVER_TYPE: "https://",
     PROJECT_SERVER_USER: "",
     
@@ -68,7 +68,7 @@ const nextConfig = {
     PROJECT_SERVER_COORDINATOR:"coordinator.safaraneh.com",
     //PROJECT_SERVER_BLOG :"blogonline.ir/iranhotel",
     PROJECT_SERVER_CRM:"crm.safaraneh.com",
-    PROJECT_SERVER_PAYMENT: "payline.samita.com",
+    PROJECT_SERVER_PAYMENT: "payline.hotelban.com",
     PROJECT_SERVER_IDENTITY:"identity.safaraneh.com",
     PROJECT_SERVER_TRAVELER:"traveller.safaraneh.com",
     PROJECT_SERVER_CIP:"cip.safaraneh.com",
