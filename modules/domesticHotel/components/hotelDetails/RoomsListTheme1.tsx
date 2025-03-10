@@ -10,12 +10,12 @@ type Props = {
     selectRoomHandle: (key: string, count: number) => void;
     selectedRoomToken?: string;
     roomsHasImage?: boolean;
-    nights?: number;
+    nights: number;
     onOpenRoom: (room: {
         rate: DomesticHotelRateItem;
         room?: DomesticHotelRoomItem;
     }) => void;
-
+    goToSearchForm : () => void;
 }
 
 type Keyword = "breakfast" | "extraBed";
@@ -167,6 +167,7 @@ const RoomsListTheme1: React.FC<Props> = props => {
             {filteredAvailability.map(availability => {
                 return (
                     <RoomItemTheme1
+                        goToSearchForm={props.goToSearchForm}
                         priceType={priceType}
                         rates={availability.rates || []}
                         key={availability.rooms?.[0]?.name}
