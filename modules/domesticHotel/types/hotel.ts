@@ -358,7 +358,9 @@ export interface DomesticHotelRateItem {
                 type?: "Completion" | "Online" | "Offline" | "Request" | null;
             }; 
         }[];
-    }
+    },
+    maxStay?: number;
+    minStay?: number;
 }
 
 export interface DomesticHotelAvailability {

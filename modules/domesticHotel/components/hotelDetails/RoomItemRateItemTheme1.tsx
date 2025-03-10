@@ -13,10 +13,11 @@ type Props = {
     onSelectRoom: (bookingToken: string, count: number) => void;
     selectedRoomToken?: string;
     roomsHasImage?: boolean;
-    nights?: number;
+    nights: number;
     onOpenRoom: () => void;
     rate: DomesticHotelRateItem;
     priceType: "total" | "average";
+    goToSearchForm : () => void;
 }
 
 const RoomItemRateItemTheme1: React.FC<Props> = props => {
@@ -176,7 +177,20 @@ const RoomItemRateItemTheme1: React.FC<Props> = props => {
         price = <div className="text-red-500 rtl:text-left ltr:text-right">قیمت نیازمند استعلام است</div>;
     }
 
-    if (rate.availablityType === "Completion") {
+    const minStayFailed = rate.minStay && rate.minStay > props.nights; 
+    const maxStayFailed = rate.maxStay && rate.maxStay < props.nights; 
+
+    if (minStayFailed || maxStayFailed){
+        bookBtn= (
+            <Button
+                type='button'
+                className='block whitespace-nowrap h-10 w-full px-8'
+                onClick={props.goToSearchForm}
+            >
+                تغییر مدت اقامت
+            </Button>
+        )
+    }else if (rate.availablityType === "Completion") {
         bookBtn = <div className="text-red-500"> ظرفیت تکمیل است  </div>;
     } else {
         bookBtn = (
@@ -245,7 +259,18 @@ const RoomItemRateItemTheme1: React.FC<Props> = props => {
                     {bookBtn}
                 </div>
 
+                {minStayFailed && (
+                    <div className='md:col-span-5 p-3 border-t text-red-600'>
+                        <InfoCircle className='inline-block fill-current w-5 h-5 ml-2' />
+                        این اتاق برای رزرو های بیشتر از {rate.minStay} روز در دسترس است
+                    </div>
+                )}
 
+                {maxStayFailed && (
+                    <div className='md:col-span-5 p-3 border-t text-red-600'>
+                        این اتاق برای رزرو های کمتر از {rate.maxStay} روز در دسترس است
+                    </div>
+                )}
             </div>
         </>
     )
