@@ -22,6 +22,7 @@ const PriceCalendar = dynamic(() => import('./PriceCalendar'), {
 
 type Props = {
     hotelId: number;
+    goToSearchForm : () => void;
 }
 
 const Rooms: React.FC<Props> = props => {
@@ -258,6 +259,7 @@ const Rooms: React.FC<Props> = props => {
                         <h2 className="text-lg lg:text-3xl font-semibold mb-3 md:mb-7"> {tHotel('choose-room')}  </h2>
 
                         {!!(theme1 || theme3) && <RoomsListTheme1
+                            goToSearchForm={props.goToSearchForm}
                             availabilites={availabilites}
                             selectRoomHandle={selectRoomHandle}
                             selectedRoomToken={selectedRoomToken}
