@@ -179,6 +179,7 @@ const RoomItemRateItemTheme1: React.FC<Props> = props => {
 
     const minStayFailed = rate.minStay && rate.minStay > props.nights; 
     const maxStayFailed = rate.maxStay && rate.maxStay < props.nights; 
+    const { closeToArrival, closeToDeparture } = rate;
 
     if (minStayFailed || maxStayFailed){
         bookBtn= (
@@ -190,7 +191,18 @@ const RoomItemRateItemTheme1: React.FC<Props> = props => {
                 تغییر مدت اقامت
             </Button>
         )
-    }else if (rate.availablityType === "Completion") {
+    } else if (closeToArrival || closeToDeparture) {
+        bookBtn = (
+            <Button
+                type='button'
+                className='block whitespace-nowrap h-10 w-full px-8'
+                onClick={props.goToSearchForm}
+            >
+                تغییر تاریخ اقامت
+            </Button>
+        )
+    }
+    else if (rate.availablityType === "Completion") {
         bookBtn = <div className="text-red-500"> ظرفیت تکمیل است  </div>;
     } else {
         bookBtn = (
@@ -271,6 +283,17 @@ const RoomItemRateItemTheme1: React.FC<Props> = props => {
                         این اتاق برای رزرو های کمتر از {rate.maxStay} روز در دسترس است
                     </div>
                 )}
+
+                {closeToArrival ? (
+                    <div className='md:col-span-5 p-3 border-t text-red-600'>
+                        این اتاق در تاریخ ورود شما پذیرش ورودی ندارد، برای رزرو این اتاق تاریخ ورود خود را تغییر دهید
+                    </div>
+                ) : closeToDeparture ? (
+                    <div className='md:col-span-5 p-3 border-t text-red-600'>
+                        این اتاق در تاریخ خروج شما پذیرش خروجی ندارد، برای رزرو این اتاق تاریخ خروج خود را تغییر دهید
+                    </div>
+                ) : null}
+
             </div>
         </>
     )
