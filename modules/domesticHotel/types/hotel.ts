@@ -361,6 +361,8 @@ export interface DomesticHotelRateItem {
     },
     maxStay?: number;
     minStay?: number;
+    closeToArrival?: boolean;
+    closeToDeparture?: boolean;
 }
 
 export interface DomesticHotelAvailability {
