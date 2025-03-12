@@ -509,6 +509,11 @@ export interface DomesticHotelGetValidateResponse {
             amount: number;
             fromDate?: string;
         }[]
+    }[];
+    rules?:{
+        name?: string;
+        description?: string;
+        keyword: "reception" | "children" | "cancellation";
     }[]
 }
 
@@ -646,6 +651,11 @@ export interface DomesticHotelGetReserveByIdData {
             // "childrenAge": [],
             // "nationality": 0
           }[];
+    }[];
+    rules?:{
+        name?: string;
+        description?: string;
+        keyword: "reception" | "children" | "cancellation";
     }[]
 
 }

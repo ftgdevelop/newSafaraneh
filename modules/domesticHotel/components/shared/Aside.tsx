@@ -5,7 +5,7 @@ import { ArrowLeft, Tik, Bed, User, Calendar, DefaultRoom } from "@/modules/shar
 import { dateDiplayFormat, getDatesDiff, numberWithCommas } from "@/modules/shared/helpers";
 import { useTranslation } from "next-i18next";
 import Image from "next/image";
-import { AsideHotelInfoType, AsideReserveInfoType } from "../../types/hotel";
+import { AsideHotelInfoType, AsideReserveInfoType, DomesticHotelGetValidateResponse } from "../../types/hotel";
 
 type Props = {
     reserveInformation?: AsideReserveInfoType;
@@ -23,6 +23,7 @@ type Props = {
         isValid: true;
     };
     discountLoading?: boolean;
+    rules?: DomesticHotelGetValidateResponse['rules'];
 }
 const Aside: React.FC<Props> = props => {
 
@@ -111,6 +112,35 @@ const Aside: React.FC<Props> = props => {
     let promoCodePrice: number = reserveInformation.promoCodePrice || 0;
     if (discountResponse) {
         promoCodePrice = discountResponse.discountPrice;
+    }
+
+    let cancelationElement = null;
+    const cancelationData = props.rules?.find(rule => rule.keyword === "cancellation");
+    if (cancelationData){
+
+        cancelationElement = (
+            <div className="bg-neutral-100 p-3 mb-4 rounded-lg">
+                <h5 className="font-semibold text-sm mb-1"> {cancelationData.name} </h5>
+                <div className="text-xs leading-6">
+                    {cancelationData.description}
+                </div>
+            </div>
+        )
+    }
+
+
+    let childrenElement = null;
+    const childrenData = props.rules?.find(rule => rule.keyword === "children");
+    if (childrenData){
+
+        childrenElement = (
+            <div className="bg-neutral-100 p-3 mb-4 rounded-lg">
+                <h5 className="font-semibold text-sm mb-1"> {childrenData.name} </h5>
+                <div className="text-xs leading-6">
+                    {childrenData.description}
+                </div>
+            </div>
+        )
     }
 
     return (
@@ -298,6 +328,10 @@ const Aside: React.FC<Props> = props => {
                             }
 
                         })}
+
+                        {cancelationElement}
+
+                        {childrenElement}
 
                         {reserveInformation.salePrice && reserveInformation.salePrice > 500000 ? (
                             <>
