@@ -62,22 +62,27 @@ const Checkout: NextPage = () => {
 
   const [submitLoading, setSubmitLoading] = useState<boolean>(false);
 
-  let metaSearchName = "";
-  let metaSearchKey = "";
+  const [metaSearchName, setMetaSearchName] = useState<string>("");
+  const [metaSearchKey, setMetaSearchKey] = useState<string>("");
 
-  if(process.env.SAFAR_MARKET_SITE_NAME){
+  useEffect(()=>{
+    if(process.env.SAFAR_MARKET_SITE_NAME){  
+      let cookies = decodeURIComponent(document?.cookie).split(';');
+      for (const item of cookies){
+        if (item.includes("safarMarketHotelSmId=")){
 
-    let cookies = decodeURIComponent(document?.cookie).split(';');
-    for (const item of cookies){
-      if (item.includes("safarMarketHotelSmId=")){
-        metaSearchKey =item.split("=")[1];
-        metaSearchName = 'safarmarket';
-      }
-      if (item.includes("safarMarketHotelUtmSource=")) {
-        metaSearchName = item.split("=")[1];
+          setMetaSearchKey(item.split("=")[1]);
+
+          let sourceName = 'safarmarket';
+          if (item.includes("safarMarketHotelUtmSource=")) {
+            sourceName = item.split("=")[1];
+          }
+          setMetaSearchName(sourceName);
+        }
       }
     }
-  }
+  },[]);
+  
 
   let backUrl: string = "";
   const checkinDate = reserveInfo?.checkin && new Date(reserveInfo.checkin);
@@ -400,6 +405,7 @@ const Checkout: NextPage = () => {
                         roomExtraBed={roomsExtraBed}
                         discountLoading={discountLoading}
                         discountResponse={discountData?.isValid ? discountData : undefined}
+                        rules={reserveInfo?.rules || undefined}
                       />
                     ) : (
                       <AsideTheme2
