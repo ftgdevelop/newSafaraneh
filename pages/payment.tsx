@@ -471,7 +471,7 @@ const Payment: NextPage = () => {
                   checkoutTime={domesticHotelData?.checkoutTime}
                 />
               ):(
-                <DomesticHotelAside hotelInformation={domesticHotelInformation} reserveInformation={domesticHotelReserveInformation} />
+                <DomesticHotelAside rules={domesticHotelReserveData?.rules || undefined} hotelInformation={domesticHotelInformation} reserveInformation={domesticHotelReserveInformation} />
               )}
 
             </>) : type === 'Cip' ? (
