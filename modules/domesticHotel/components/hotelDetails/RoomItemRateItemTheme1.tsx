@@ -102,12 +102,22 @@ const RoomItemRateItemTheme1: React.FC<Props> = props => {
 
     let price: React.ReactNode;
     let bookBtn: React.ReactNode;
-    let calendar: React.ReactNode;
+    let calendar: React.ReactNode = null;
     let discountBadge: React.ReactNode;
 
+    if (rate.calendar || room.facilities?.length || room.promotions?.length) {
+        calendar = <button
+            type='button'
+            onClick={props.onOpenRoom}
+            className='text-xs text-blue-600 flex items-center gap-1 mb-2 cursor-pointer'
+        >
+            <Calendar className='w-4 h-4 fill-current' />
+            تقویم قیمت و ظرفیت
+        </button>
+    }
+    
     if (rate.availablityType === "Completion") {
         price = "";
-        calendar = null;
     } else if (prices?.roomPrice && prices.roomPrice > 1000) {
 
         if (prices.boardPrice && (prices.boardPrice !== prices.roomPrice)) {
@@ -161,17 +171,6 @@ const RoomItemRateItemTheme1: React.FC<Props> = props => {
                 </>
             )}
         </>
-
-        if (rate.calendar || room.facilities?.length || room.promotions?.length) {
-            calendar = <button
-                type='button'
-                onClick={props.onOpenRoom}
-                className='text-xs text-blue-600 flex items-center gap-1 mb-2 cursor-pointer'
-            >
-                <Calendar className='w-4 h-4 fill-current' />
-                تقویم قیمت و ظرفیت
-            </button>
-        }
 
     } else {
         price = <div className="text-red-500 rtl:text-left ltr:text-right">قیمت نیازمند استعلام است</div>;
