@@ -654,7 +654,12 @@ useEffect(() => {
 
       </div>
 
-      {!!accommodationData.id && <Rooms hotelId={accommodationData.id} />}
+      {!!accommodationData.id && (
+        <Rooms 
+          hotelId={accommodationData.id} 
+          goToSearchForm={() =>{ searchFormWrapperRef.current?.scrollIntoView({ behavior: 'smooth' });}}
+        />
+        )}
 
       {(!isSafaraneh || accommodationData?.facilities?.length) ? (
         <AccommodationFacilities facilities={accommodationData?.facilities} />
