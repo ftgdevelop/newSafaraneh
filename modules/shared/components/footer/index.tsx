@@ -112,6 +112,7 @@ const Footer: React.FC<Props> = props => {
                 email={props.contactInfo.emailAddress}
                 supportNumber={props.contactInfo.emergencyNumber}
                 enamad={props.enamad}
+                samandehi={props.samandehi}
            />
         )
     }
