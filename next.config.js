@@ -30,7 +30,6 @@ const nextConfig = {
       {protocol: 'https', hostname: 'panel.safaraneh.com', pathname: '**'},
       {protocol: 'https', hostname: 'blog.iranhotel.ir', pathname: '**'},
       {protocol: 'https', hostname: 'blogonline.ir', pathname: '**'},
-      {protocol: 'https', hostname: 'hotelban.com', pathname: '**'},
       {protocol: 'https', hostname: 'trustseal.enamad.ir', pathname: '**'},
       {protocol: 'https', hostname: 'logo.samandehi.ir', pathname: '**'},
       {protocol: 'https', hostname: 'strapi.safarlife.com', pathname: '**'},
