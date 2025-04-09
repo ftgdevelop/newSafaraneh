@@ -49,14 +49,14 @@ const Contact: NextPage = ({ portalData }: { portalData?: WebSiteDataType }) => 
 
                     {!!tel && <div className="flex gap-1">
                         <b>تلفن</b>:
-                        <Link href={`tel:${tel}`} className="font-semibold text-lg">
+                        <span className="font-semibold text-lg">
                             {tel}
-                        </Link>
+                        </span>
                     </div>}
 
                     <div className="flex gap-1">
                         <b>فکس</b>:
-                        <Link href={`tel:+982126150054`} className="font-semibold text-lg">2126150054 98+</Link>
+                        <span className="font-semibold text-lg">2126150054 98+</span>
                     </div>
 
                     {!!email && <div className="flex gap-1">
