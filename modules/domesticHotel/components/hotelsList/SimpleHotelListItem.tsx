@@ -17,6 +17,7 @@ type Props = {
     imageUrl?: string;
     ratesInfo?: "loading" | { Satisfaction: number; TotalRowCount: number; };
     priceInfo: "loading" | "notPriced" | "need-to-inquire" | { boardPrice: number; salePrice: number; };
+    availablityType?: "Online"| "Offline"| "Request"| "Completion";
 }
 
 const SimpleHotelListItem: React.FC<Props> = props => {
@@ -88,7 +89,10 @@ const SimpleHotelListItem: React.FC<Props> = props => {
                 {guestRate}
 
                 <div className="flex gap-2 justify-between items-center">
-                    {price}
+                    <div>
+                        {!!(props.availablityType === "Completion") && (<div className="text-sm text-red-500 font-semibold">  تکمیل ظرفیت </div>)}
+                        {price}
+                    </div>
 
                     <Button type="button" className="text-xs px-2 h-8">
                         {tHotel('see-rooms')}
