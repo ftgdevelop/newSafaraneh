@@ -462,6 +462,7 @@ export interface PricedHotelItem extends SearchAccomodationItem {
         name?:string;
         description?:string;
     }[];
+    availablityType?: "Online"| "Offline"| "Request"| "Completion";
 }
 
 export type SortTypes = "priority" | "price" | "starRate" | "name" | "gueatRate";

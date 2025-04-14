@@ -88,6 +88,7 @@ const HotelListItemTheme3: React.FC<Props> = props => {
 
         priceBlock = (
             <>
+                {!!(hotel.availablityType === "Completion") && (<div className="text-sm text-red-500 font-semibold">  تکمیل ظرفیت </div>)}
 
                 {!!discount && <div><span className="bg-green-700 text-white rounded-xl leading-7 text-2xs px-2 select-none"> {discount}% {t('discount')} </span></div>}
 
