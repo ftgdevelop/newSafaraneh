@@ -162,7 +162,8 @@ const FooterStyle3: React.FC<Props> = props => {
                                         window.open("https://logo.samandehi.ir/Verify.aspx?id=376509&p=xlaojyoegvkadshwobpdpfvl", "Popup", "toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")
                                     }}
                                     alt='logo-samandehi'
-                                    src='https://logo.samandehi.ir/logo.aspx?id=376509&p=qftiyndtwlbqujynlymabsiy'
+                                    //src='https://logo.samandehi.ir/logo.aspx?id=376509&p=qftiyndtwlbqujynlymabsiy'
+                                    src="/images/footer/resaneh.png"
                                 />
 
                             </div>
