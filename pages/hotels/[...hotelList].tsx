@@ -92,6 +92,7 @@ const HotelList: NextPage<Props> = props => {
       name?:string;
       description?:string;
     }[];
+    availablityType?: "Online"| "Offline"| "Request"| "Completion";
   }
 
   const dispatch = useAppDispatch();
@@ -378,6 +379,9 @@ const HotelList: NextPage<Props> = props => {
     const hotelPriceData = pricesData?.find(item => item.id === hotel.id);
 
     let priceInfo: "loading" | "notPriced" | "need-to-inquire" | { boardPrice: number, salePrice: number };
+    
+    const avalibilityType : PricesResponseItem["availablityType"] = hotelPriceData?.availablityType;
+
 
     if (!pricesData || pricesLoading) {
       priceInfo = "loading";
@@ -393,7 +397,8 @@ const HotelList: NextPage<Props> = props => {
       ...hotel,
       ratesInfo: ratesInfo,
       priceInfo: priceInfo,
-      promotions: hotelPriceData?.promotions
+      promotions: hotelPriceData?.promotions,
+      availablityType: avalibilityType
     })
   }) || [];
 
@@ -876,7 +881,8 @@ const HotelList: NextPage<Props> = props => {
           url: hotel.url + searchInfo,
           price: hotel.priceInfo,
           guestRate: hotel.ratesInfo,
-          imageUrl: hotel.picture?.path
+          imageUrl: hotel.picture?.path,
+          availablityType: hotel.availablityType
         }))}
       />}
 
