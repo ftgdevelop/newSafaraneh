@@ -88,7 +88,8 @@ const HotelListItemTheme2: React.FC<Props> = props => {
 
         priceBlock = (
             <>
-
+                {!!(hotel.availablityType === "Completion") && (<div className="text-sm text-red-500 font-semibold">  تکمیل ظرفیت </div>)}
+                
                 {!!discount && <div><span className="bg-green-700 text-white rounded-xl leading-7 text-2xs px-2 select-none"> {toPersianDigits(discount.toString())}% {t('discount')} </span></div>}
 
                 {(boardPrice > salePrice) && <span className="text-xs inline-block text-neutral-500 line-through whitespace-nowrap">
