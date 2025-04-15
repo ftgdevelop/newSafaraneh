@@ -378,27 +378,25 @@ const HotelList: NextPage<Props> = props => {
 
     const hotelPriceData = pricesData?.find(item => item.id === hotel.id);
 
-    let priceInfo: "loading" | "notPriced" | "need-to-inquire" | { boardPrice: number, salePrice: number };
-    
-    const avalibilityType : PricesResponseItem["availablityType"] = hotelPriceData?.availablityType;
-
+    let priceInfo: "loading" | "notPriced" | { boardPrice: number, salePrice: number , availablityType?: "Online"| "Offline"| "Request"| "Completion"  };
 
     if (!pricesData || pricesLoading) {
       priceInfo = "loading";
     } else if (!hotelPriceData) {
       priceInfo = "notPriced";
-    } else if (hotelPriceData.salePrice < 10000) {
-      priceInfo = "need-to-inquire";
     } else {
-      priceInfo = { boardPrice: hotelPriceData.boardPrice, salePrice: hotelPriceData.salePrice }
+      priceInfo = { 
+        boardPrice: hotelPriceData.boardPrice,
+        salePrice: hotelPriceData.salePrice,
+        availablityType: hotelPriceData.availablityType
+       }
     }
 
     return ({
       ...hotel,
       ratesInfo: ratesInfo,
       priceInfo: priceInfo,
-      promotions: hotelPriceData?.promotions,
-      availablityType: avalibilityType
+      promotions: hotelPriceData?.promotions
     })
   }) || [];
 
@@ -471,10 +469,9 @@ const HotelList: NextPage<Props> = props => {
           return (a.rating - b.rating);
 
         case "price":
-
-          if (b.priceInfo !== 'loading' && b.priceInfo !== 'need-to-inquire' && b.priceInfo !== 'notPriced' && a.priceInfo !== 'loading' && a.priceInfo !== 'need-to-inquire' && a.priceInfo !== 'notPriced') {
+          if (b.priceInfo !== 'loading' && b.priceInfo !== 'notPriced' && a.priceInfo !== 'loading' && a.priceInfo !== 'notPriced') {
             return b.priceInfo.salePrice - a.priceInfo.salePrice
-          } else if (b.priceInfo !== 'loading' && b.priceInfo !== 'need-to-inquire' && b.priceInfo !== 'notPriced') {
+          } else if (b.priceInfo !== 'loading' && b.priceInfo !== 'notPriced') {
             return -1
           }
           return 1
@@ -571,8 +568,6 @@ const HotelList: NextPage<Props> = props => {
       hotelItem.priceInfo !== 'loading' &&
       (
         hotelItem.priceInfo === 'notPriced'
-        ||
-        hotelItem.priceInfo === 'need-to-inquire'
         ||
         hotelItem.priceInfo.salePrice < +filteredPrice[0]
         ||
@@ -881,8 +876,7 @@ const HotelList: NextPage<Props> = props => {
           url: hotel.url + searchInfo,
           price: hotel.priceInfo,
           guestRate: hotel.ratesInfo,
-          imageUrl: hotel.picture?.path,
-          availablityType: hotel.availablityType
+          imageUrl: hotel.picture?.path
         }))}
       />}
 
