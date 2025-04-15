@@ -222,7 +222,7 @@ export interface DomesticHotelSimilarHotel {
 }
 export interface ExtendedDomesticHotelSimilarHotel extends DomesticHotelSimilarHotel {
     ratesInfo?: "loading" | { Satisfaction: number; TotalRowCount: number; };
-    priceInfo: "loading" | "notPriced" | "need-to-inquire" | { boardPrice: number; salePrice: number; };
+    priceInfo: "loading" | "notPriced" | { boardPrice: number; salePrice: number; availablityType?: "Online"| "Offline"| "Request"| "Completion"; };
 }
 
 export interface DomesticAccomodationType {
@@ -457,12 +457,11 @@ export interface SearchAccomodationItem {
 
 export interface PricedHotelItem extends SearchAccomodationItem {
     ratesInfo?: "loading" | { Satisfaction: number; TotalRowCount: number; };
-    priceInfo: "loading" | "notPriced" | "need-to-inquire" | { boardPrice: number; salePrice: number; };
+    priceInfo: "loading" | "notPriced" | { boardPrice: number; salePrice: number; availablityType?: "Online"| "Offline"| "Request"| "Completion";};
     promotions?:{
         name?:string;
         description?:string;
-    }[];
-    availablityType?: "Online"| "Offline"| "Request"| "Completion";
+    }[];   
 }
 
 export type SortTypes = "priority" | "price" | "starRate" | "name" | "gueatRate";

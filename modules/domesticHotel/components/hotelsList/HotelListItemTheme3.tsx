@@ -67,18 +67,14 @@ const HotelListItemTheme3: React.FC<Props> = props => {
             <Skeleton className="w-28 my-2" />
             <Skeleton className="w-20" />
         </div>
-
-    } else if (hotel.priceInfo === "need-to-inquire") {
-
-        priceBlock = <div className="whitespace-nowrap text-red-500 text-xs"> قیمت نیازمند استعلام است </div>
-
+        
     } else {
 
         const { boardPrice, salePrice } = hotel.priceInfo;
 
         let discount: number = 0;
 
-        const discountPercentage = ((boardPrice - salePrice) * 100 / boardPrice);
+        const discountPercentage = boardPrice && salePrice ? ((boardPrice - salePrice) * 100 / boardPrice) : 0;
 
         if (discountPercentage > 0 && discountPercentage < 1) {
             discount = 1;
@@ -88,39 +84,46 @@ const HotelListItemTheme3: React.FC<Props> = props => {
 
         priceBlock = (
             <>
-                {!!(hotel.availablityType === "Completion") && (<div className="text-sm text-red-500 font-semibold">  تکمیل ظرفیت </div>)}
+                {!!(hotel.priceInfo.availablityType === "Completion") && (<div className="text-sm text-red-500 font-semibold">  تکمیل ظرفیت </div>)}
+                
+                {!!(hotel.priceInfo.availablityType === "Request") && (<div className="whitespace-nowrap text-red-500 text-xs"> قیمت نیازمند استعلام است </div>)}
 
                 {!!discount && <div><span className="bg-green-700 text-white rounded-xl leading-7 text-2xs px-2 select-none"> {discount}% {t('discount')} </span></div>}
 
-                {(boardPrice > salePrice) && <span className="text-xs inline-block text-neutral-500 line-through whitespace-nowrap">
+                {(boardPrice > 10000 && salePrice > 10000 && boardPrice > salePrice) && <span className="text-xs inline-block text-neutral-500 line-through whitespace-nowrap">
                     {numberWithCommas(boardPrice)} {t('rial')}
                 </span>}
 
-                <Tooltip
-                    className="inline-block text-sm rtl:mr-2 ltr:ml-2"
-                    position="end"
-                    title={
-                        <div className="whitespace-nowrap">
+                {salePrice > 10000 && (
+                    <>
+                        <Tooltip
+                            className="inline-block text-sm rtl:mr-2 ltr:ml-2"
+                            position="end"
+                            title={
+                                <div className="whitespace-nowrap">
 
-                            {numberWithCommas(+(salePrice / nights).toFixed(0))} {t('rial')}
+                                    {numberWithCommas(+(salePrice / nights).toFixed(0))} {t('rial')}
 
-                            <br />
+                                    <br />
 
-                            <small> {tHotel("Avg-per-night")} </small>
+                                    <small> {tHotel("Avg-per-night")} </small>
 
+                                </div>
+                            }
+                        >
+
+                            <div className="font-semibold whitespace-nowrap">
+                                {numberWithCommas(salePrice)} {t('rial')}
+                            </div>
+
+                        </Tooltip>
+
+                        <div className="text-xs text-neutral-500 leading-4">
+                            {tHotel("price-for-nights", { nights: nights })}
                         </div>
-                    }
-                >
+                    </>
+                )}
 
-                    <div className="font-semibold whitespace-nowrap">
-                        {numberWithCommas(salePrice)} {t('rial')}
-                    </div>
-
-                </Tooltip>
-
-                <div className="text-xs text-neutral-500 leading-4">
-                    {tHotel("price-for-nights", { nights: nights })}
-                </div>
             </>
         )
     }

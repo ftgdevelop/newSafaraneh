@@ -16,8 +16,7 @@ type Props = {
     url: string;
     imageUrl?: string;
     ratesInfo?: "loading" | { Satisfaction: number; TotalRowCount: number; };
-    priceInfo: "loading" | "notPriced" | "need-to-inquire" | { boardPrice: number; salePrice: number; };
-    availablityType?: "Online"| "Offline"| "Request"| "Completion";
+    priceInfo: "loading" | "notPriced" | { boardPrice: number; salePrice: number; availablityType?: "Online"| "Offline"| "Request"| "Completion"; };   
 }
 
 const SimpleHotelListItem: React.FC<Props> = props => {
@@ -46,11 +45,15 @@ const SimpleHotelListItem: React.FC<Props> = props => {
 
     if (priceInfo === "loading") {
         price = <Skeleton />
-    } else if (priceInfo === "need-to-inquire") {
-        price = <div className="text-red-500 text-xs"> قیمت نیازمند استعلام است </div>;
+    // } else if (priceInfo === "need-to-inquire") {
+    //     price = <div className="text-red-500 text-xs"> قیمت نیازمند استعلام است </div>;
     } else if (priceInfo === "notPriced") {
         price = <div className="text-red-500 text-xs"> قیمت وجود ندارد </div>;
-    } else {
+    } else if (priceInfo.availablityType === "Completion"){
+        price = <div className="text-red-500 text-xs"> تکمیل ظرفیت </div>;
+    } else if (priceInfo.availablityType === "Request"){
+        price = <div className="text-red-500 text-xs"> قیمت نیازمند استعلام است </div>;
+    } else if (priceInfo.salePrice > 10000) {
         price = <div className="font-bold text-sm"> {numberWithCommas(priceInfo.salePrice)} {t('rial')}</div>;
     }
     
@@ -90,7 +93,6 @@ const SimpleHotelListItem: React.FC<Props> = props => {
 
                 <div className="flex gap-2 justify-between items-center">
                     <div>
-                        {!!(props.availablityType === "Completion") && (<div className="text-sm text-red-500 font-semibold">  تکمیل ظرفیت </div>)}
                         {price}
                     </div>
 
