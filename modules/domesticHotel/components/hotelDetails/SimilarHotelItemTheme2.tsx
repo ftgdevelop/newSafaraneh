@@ -58,9 +58,6 @@ const SimilarHotelItemTheme2: React.FC<Props> = props => {
             <Skeleton className="w-20" />
         </div>
 
-    } else if (hotel.priceInfo === "need-to-inquire") {
-
-        priceBlock = <div className="whitespace-nowrap text-red-500 text-xs leading-4"> قیمت نیازمند استعلام است </div>
 
     } else {
 
@@ -68,17 +65,27 @@ const SimilarHotelItemTheme2: React.FC<Props> = props => {
 
         priceBlock = (
             <>
-                {(boardPrice > salePrice) && <span className="text-xs inline-block text-neutral-500 line-through whitespace-nowrap">
+            
+                {!!(hotel.priceInfo.availablityType === "Completion") && (<div className="text-sm text-red-500 font-semibold leading-4">  تکمیل ظرفیت </div>)}
+                
+                {!!(hotel.priceInfo.availablityType === "Request") && (<div className="whitespace-nowrap text-red-500 text-xs leading-4"> قیمت نیازمند استعلام است </div>)}
+              
+
+                {(boardPrice > 10000 && salePrice > 10000 && boardPrice > salePrice) && <span className="text-xs inline-block text-neutral-500 line-through whitespace-nowrap">
                     {numberWithCommas(boardPrice)} {t('rial')}
                 </span>}
 
-                <div className="font-semibold whitespace-nowrap">
-                    {numberWithCommas(salePrice)} {t('rial')}
-                </div>
+                {salePrice > 10000 && (
+                    <>
+                        <div className="font-semibold whitespace-nowrap">
+                            {numberWithCommas(salePrice)} {t('rial')}
+                        </div>
 
-                <div className="text-xs text-neutral-500 leading-4">
-                    {tHotel("price-for-nights", { nights: toPersianDigits(nights.toString()) })}
-                </div>
+                        <div className="text-xs text-neutral-500 leading-4">
+                            {tHotel("price-for-nights", { nights: toPersianDigits(nights.toString()) })}
+                        </div>
+                    </>
+                )}
             </>
         )
     }
@@ -90,6 +97,8 @@ const SimilarHotelItemTheme2: React.FC<Props> = props => {
         button = null;
     } else if (hotel.priceInfo === 'loading') {
         button = null;
+    } else if (hotel.priceInfo.availablityType === 'Completion'){
+        button = null;
     } else {
         button = (
             <Button
@@ -97,7 +106,7 @@ const SimilarHotelItemTheme2: React.FC<Props> = props => {
                 target="_blank"
                 className="rounded-full h-10 px-5 text-sm w-full mt-2"
             >
-                {hotel.priceInfo === "need-to-inquire" ? "درخواست رزرو" : "مشاهده و رزرو"}
+                {hotel.priceInfo.availablityType === "Request" ? "درخواست رزرو" : "مشاهده و رزرو"}
             </Button>
         )
     }
