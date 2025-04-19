@@ -47,7 +47,6 @@ type Props = {
   };
   portalData: WebSiteDataType;
   error410?: "true";
-  url: string;
 }
 
 const HotelDetail: NextPage<Props> = props => {
@@ -118,16 +117,6 @@ const utm_source = router.query?.utm_source;
 const utm_term = router.query?.utm_term; 
 // "hotel"
 
-
-useEffect(()=>{
-  const fetchData = async (url:string) => {
-    const allData: any = await getDomesticHotelDetailsByUrl( url, "fa-IR");
-  }
-  if(props.url){
-    fetchData(`/fa${props.url}`)
-  }
-
-},[props.url]);
 
 useEffect(()=>{
 
@@ -899,8 +888,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return ({
     props: {
       ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
-      allData: allDataObject,
-      url: url
+      allData: allDataObject
     },
   })
 }
