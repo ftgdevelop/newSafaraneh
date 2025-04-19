@@ -26,6 +26,7 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {protocol: 'https', hostname: 'cdn.safaraneh.com', pathname: '**'},
+      {protocol: 'https', hostname: 'cdn.hotelban.com', pathname: '**'},
       {protocol: 'https', hostname: 'cdn2.safaraneh.com', pathname: '**'},
       {protocol: 'https', hostname: 'panel.safaraneh.com', pathname: '**'},
       {protocol: 'https', hostname: 'blog.iranhotel.ir', pathname: '**'},
