@@ -34,6 +34,7 @@ const Payment: NextPage = () => {
 
   const theme2 = process.env.THEME === "THEME2";
   const theme1 = process.env.THEME === "THEME1";
+  const isHotelban = process.env.PROJECT=== "HOTELBAN";
 
   const { t } = useTranslation('common');
 
@@ -289,12 +290,16 @@ const Payment: NextPage = () => {
     //   label: ("کارت به کارت"),
     //   children: (<CardToCard />),
     // },
-    {
+
+  ];
+
+  if (!isHotelban) {
+    tabItems.push({
       key: '3',
       label: ("اعتباری"),
       children: (<CreditPayment price={coordinatorPrice} />),
-    }
-  ];
+    })
+  }
 
 
 
@@ -450,12 +455,28 @@ const Payment: NextPage = () => {
 
           <div className={`${theme2?"md:col-span-7":"md:col-span-2"}`}>
             <div className={`mb-4 ${theme1 ? "bg-white rounded-lg border border-neutral-300 p-4" : ""}`}>
-              <h2 className='text-2xl mt-4 mb-8'> چگونه می خواهید پرداخت کنید؟ </h2>
 
-              <Tab
-                style = {theme1?'2':'radioStyle'}
-                items={tabItems}
-              />
+              {isHotelban ? (
+                <OnlinePayment
+                  coordinatorPrice={coordinatorPrice}
+                  onSubmit={(bankId) => { goTobank(bankId) }}
+                  bankGatewayList={bankGatewayList}
+                  expireDate={expireDate}
+                  status={status}
+                  goToBankLoading={goToBankLoading}
+                  type={type}
+                />
+              ) : (
+                <>
+                  <h2 className='text-2xl mt-4 mb-8'> چگونه می خواهید پرداخت کنید؟ </h2>
+                  <Tab
+                    style={theme1 ? '2' : 'radioStyle'}
+                    items={tabItems}
+                  />
+
+                </>
+              )}              
+
             </div>
 
           </div>
