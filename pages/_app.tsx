@@ -17,7 +17,6 @@ import { store } from '../modules/shared/store';
 import { FooterStrapi, GetPageByUrlDataType, WebSiteDataType } from '@/modules/shared/types/common';
 import { getPortal } from '@/modules/shared/actions/portalActions';
 import Layout from '@/modules/shared/components/layout';
-import { GTM_ID } from '@/modules/shared/helpers';
 import { getPageByUrl } from '@/modules/shared/actions';
 import { getStrapiFooter } from '@/modules/shared/actions/strapiActions';
 
@@ -131,7 +130,7 @@ function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }:
         /> */}
         {/* _-_-_E_N_D_-_-_ delete when mobiscroll is activated */}
 
-        <meta name="robots" content="index, follow" />
+        <meta name="robots" content="noindex, nofollow, max-image-preview:large" />
         <meta name="theme-color" content="#0a438b" />
         <meta charSet="utf-8" />
         
@@ -180,14 +179,6 @@ function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }:
 
       </Head>
 
-      <noscript>
-        <iframe
-          src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
-          height="0"
-          width="0"
-          style={{ display: 'none', visibility: 'hidden' }}
-        />
-      </noscript>
 
       <Layout
         contactInfo={
