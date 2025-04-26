@@ -338,7 +338,7 @@ const Aside: React.FC<Props> = props => {
                                 {(hasDiscount || !!activeExtraBedPrice || !!reserveInformation.promoCodePrice || !!promoCodePrice) && (
                                     <div className="flex items-center justify-between">
                                         {t("sum")}
-                                        <span>{numberWithCommas(reserveInformation.boardPrice)} {t('rial')} </span>
+                                        <span>{numberWithCommas(reserveInformation.boardPrice || reserveInformation.salePrice)} {t('rial')} </span>
                                     </div>
                                 )}
 
