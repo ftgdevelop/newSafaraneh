@@ -204,10 +204,17 @@ export const getEntityNameByLocation = async (cityId: number, acceptLanguage: st
 
 }
 
-export const GetRooms = async (params:{id:number,checkin:string,checkout:string} , acceptLanguage: string = 'fa-IR') => {
+export const GetRooms = async (params:{id:number,checkin:string,checkout:string, MetaSearchKey?: string; MetaSearchName?: string} , acceptLanguage: string = 'fa-IR') => {
+
+    let fetchUrl = `${ServerAddress.Type}${ServerAddress.Hotel_Availability}${Hotel.GetRooms}?Id=${params.id}&CheckIn=${params.checkin}&CheckOut=${params.checkout}`;
+
+    if(params.MetaSearchKey && params.MetaSearchName){
+        fetchUrl += `&MetaSearchKey=${params.MetaSearchKey}&MetaSearchName=${params.MetaSearchName}`
+    }
+
     try {
         let response = await axios.get(
-            `${ServerAddress.Type}${ServerAddress.Hotel_Availability}${Hotel.GetRooms}?Id=${params.id}&CheckIn=${params.checkin}&CheckOut=${params.checkout}`,
+            fetchUrl,
             {
                 headers: {
                     'Content-Type': 'application/json',
