@@ -165,9 +165,10 @@ const Payment: NextPage = () => {
             let pixelStatus: 4|5| undefined = undefined;
              if (status && status === "0"){
               pixelStatus = 5;
-            } else if (status && status === "1"){
-              pixelStatus = 4;
-            }
+            } 
+            // else if (status && status === "1"){
+            //   pixelStatus = 4;
+            // }
 
             let cookieSafarmarketId;
             let cookies = decodeURIComponent(document?.cookie).split(';');
