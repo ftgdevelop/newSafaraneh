@@ -491,6 +491,7 @@ export interface DomesticHotelGetValidateResponse {
         availablityType: "Online" | "Offline" | "Request" | "Completion";
         boardCode: "Undefined" | "BB" | "FB" | "HB" | "RO" | "Hour6" | "Hour10";
         boardExtra?: string;
+        boardName?: string;
         nightly: {
             date?: string;
             amount?: number;
@@ -533,30 +534,32 @@ export interface AsideHotelInfoType {
     checkoutTime?: string;
 
 }
-
+export interface AsideReserveInfoRoomItemType {
+    name: string | undefined;
+    boardExtra?: string;
+    boardName?: string;
+    cancellationPolicyStatus?: "Refundable" | "NonRefundable" | "Unknown" | "CallSupport";
+    bed: number;
+    extraBed: number;
+    pricing: {
+        amount: number;
+        isSelected: boolean;
+        isShow: boolean;
+        ageCategoryType: "ADL" | "CHD" | "INF";
+        type: "Room" | "RoomBoard" | "ExtraBed" | "HalfCharge" | "RoomNet" | "Markup" | "Commission" | "PromoCode";
+    }[];
+    nightly?: {
+        date?: string;
+        amount?: number;
+        board?: number;
+    }[]
+}
 export interface AsideReserveInfoType {
     reserveId?: number;
     checkin: string;
     checkout: string;
     duration: number;
-    rooms: {
-        name: string | undefined;
-        board: "Undefined" | "BB" | "FB" | "HB" | "RO" | "Hour6" | "Hour10";
-        cancellationPolicyStatus?: "Refundable" | "NonRefundable" | "Unknown" | "CallSupport";
-        bed: number;
-        pricing: {
-            amount: number;
-            isSelected: boolean;
-            isShow: boolean;
-            ageCategoryType: "ADL" | "CHD" | "INF";
-            type: "Room" | "RoomBoard" | "ExtraBed" | "HalfCharge" | "RoomNet" | "Markup" | "Commission" | "PromoCode";
-        }[];
-        nightly?: {
-            date?: string;
-            amount?: number;
-            board?: number;
-        }[]
-    }[]
+    rooms: AsideReserveInfoRoomItemType[]
     salePrice: number;
     boardPrice: number;
 
@@ -622,7 +625,8 @@ export interface DomesticHotelGetReserveByIdData {
     supplierType: "Safaraneh" | "Snapp" | "ChannelLead" | "HotelYar" | "Eghamat24";
     rooms: {
         name?: string;
-        boardCode: "Undefined" | "BB" | "FB" | "HB" | "RO" | "Hour6" | "Hour10";
+        boardName?: string;
+        boardExtra?: string;
         cancellationPolicyStatus?: "Refundable" | "NonRefundable" | "Unknown" | "CallSupport";
         bed: number;
         pricing: {
