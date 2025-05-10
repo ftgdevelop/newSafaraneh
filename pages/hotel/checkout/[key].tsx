@@ -155,7 +155,8 @@ const Checkout: NextPage = () => {
 
       rooms: reserveInfo.rooms.map((roomItem: DomesticHotelGetValidateResponse['rooms'][0]) => ({
         name: roomItem.name,
-        board: roomItem.boardCode,
+        boardName:roomItem.boardName,
+        boardExtra: roomItem.boardExtra,
         cancellationPolicyStatus: roomItem.cancellationPolicyStatus,
         bed: roomItem.bed,
         extraBed: roomItem.extraBed,

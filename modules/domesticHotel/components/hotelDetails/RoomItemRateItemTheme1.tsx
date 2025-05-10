@@ -33,26 +33,6 @@ const RoomItemRateItemTheme1: React.FC<Props> = props => {
         return null;
     }
 
-    const board = (code: string) => {
-        switch (code) {
-            case "BB":
-                return "با صبحانه";
-            case "HB":
-                return "صبحانه + ناهار یا شام";
-            case "FB":
-                return "تمام وعده های غذایی شامل می شود";
-            case "RO":
-                return "بدون صبحانه";
-            case "Hour6":
-                return "اقامت به مدت ۶ ساعت";
-            case "Hour10":
-                return "اقامت به مدت ۱۰ ساعت";
-
-            default:
-                return code;
-        }
-    }
-
     let cancellation = null;
     if (rate.cancellationPolicy?.status) {
         switch (rate.cancellationPolicy.status) {
@@ -239,7 +219,7 @@ const RoomItemRateItemTheme1: React.FC<Props> = props => {
                     </div>}
 
                     <div className='flex gap-x-3 gap-y-1 items-center flex-wrap'>
-                        <span className={`text-sm ${rate.board.code === 'RO' ? "text-neutral-400" : "text-green-600"}`}> {board(rate.board.code)} </span>
+                        {!!rate.board?.name && <span className="text-sm text-green-600"> {rate.board.name} </span>}
                         {cancellation}
                     </div>
 

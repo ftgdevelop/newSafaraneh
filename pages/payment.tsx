@@ -353,11 +353,13 @@ const Payment: NextPage = () => {
       duration: getDatesDiff(new Date(domesticHotelReserveData.checkout), new Date(domesticHotelReserveData.checkin)),
       rooms: domesticHotelReserveData.rooms.map(roomItem => ({
         name: roomItem.name,
-        board: roomItem.boardCode,
+        boardName: roomItem.boardName,
+        boardExtra: roomItem.boardExtra,
         cancellationPolicyStatus: roomItem.cancellationPolicyStatus,
         bed: roomItem.bed,
         pricing: roomItem.pricing,
-        nightly: roomItem.nightly
+        nightly: roomItem.nightly,
+        extraBed: roomItem.extraBed
       })),
       salePrice: domesticHotelReserveData.rooms.reduce((totalPrice: number, roomItem: any) => {
         const roomItemPrice = roomItem.pricing.find(

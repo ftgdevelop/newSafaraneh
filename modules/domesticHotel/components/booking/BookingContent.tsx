@@ -26,28 +26,6 @@ const BookingContent: React.FC<Props> = props => {
 
     const { reserveInfo, username, reserveId, confirmStatus, confirmLoading } = props;
 
-    const theme2 = process.env.THEME === "THEME2";
-
-    const createBoardText = (code: DomesticHotelGetReserveByIdData['rooms'][0]['boardCode']) => {
-        switch (code) {
-            case "BB":
-                return theme2 ? "با صبحانه":"به همراه صبحانه";
-            case "HB":
-                return "صبحانه + ناهار یا شام";
-            case "FB":
-                return "تمام وعده های غذایی شامل می شود";
-            case "RO":
-                return "بدون صبحانه";
-            case "Hour6":
-                return "اقامت به مدت ۶ ساعت";
-            case "Hour10":
-                return "اقامت به مدت ۱۰ ساعت";
-
-            default:
-                return code;
-        }
-    }
-
     const [progress, setProgress] = useState<number>(0);
 
     let timer: any;
@@ -221,7 +199,8 @@ const BookingContent: React.FC<Props> = props => {
                                             </div>
                                         )}
                                         <p>
-                                            {!!item.boardCode && createBoardText(item.boardCode)}
+                                            {item.boardName}
+                                            <div>{item.boardExtra}</div>
                                             {cancellation}
                                         </p>
                                     </div>
