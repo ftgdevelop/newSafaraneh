@@ -10,6 +10,7 @@ import { getCurrentUserProfile } from "@/modules/authentication/actions";
 import Notification from "./Notification";
 import { setProgressLoading } from "../store/stylesSlice";
 import { FooterStrapi } from "../types/common";
+import Script from "next/script";
 
 type Props = {
   logo: string;
@@ -136,12 +137,9 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         footerStrapi={props.footerStrapi}
       />}
 
-      {props.scripts ? <script
-          id="script_footer_api_scripts"
-          dangerouslySetInnerHTML={{
-              __html: `${props.scripts}`,
-          }}
-      /> : null}
+      {props.scripts && <Script id="footer_api_scripts" strategy="afterInteractive">
+        {props.scripts}
+      </Script>}
 
     </div>
 
