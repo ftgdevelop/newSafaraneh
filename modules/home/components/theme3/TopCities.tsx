@@ -138,7 +138,7 @@ const TopCities: React.FC = () => {
                                         height={384}
                                         className='col-span-5 h-80 w-full object-cover group-hover:scale-105 transition-all duration-300'
                                     />
-                                    <div className="absolute  bottom-0 left-0 right-0 text-white p-3 text-center leading-5 bg-gradient-to-t from-black/90 before:to-trabsparent">
+                                    <div className="absolute  bottom-0 left-0 right-0 text-white p-3 text-center leading-5 bg-gradient-to-t from-black/90 to-trabsparent">
                                         <b className='font-semibold mb-1 block text-lg'> {city.title} </b>
                                         <p className="text-sm pb-2"> {city.subtitle} </p>
                                     </div>
