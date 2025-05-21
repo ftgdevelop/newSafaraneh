@@ -139,7 +139,8 @@ const Banner: React.FC<Props> = props => {
   />;
 
   return (
-    <div className={`relative ${theme1 ? "bg-cyan-800/50" :theme3 ? "bg-stone-50 lg:min-h-screen pb-4": ""}`}>
+    <div className={`relative ${theme1 ? "bg-cyan-800/50" :theme3 ? "bg-stone-50 pb-4 lg:pb-12": ""}`}>
+      {!!theme3 && <div className='max-sm:hidden absolute bottom-0 left-0 right-0 h-1/2 z-[11] bg-gradient-to-t from-black/50 to-trabsparent' />}
       
       {!!theme1 || props.bannerImage && <Image
         src={props.bannerImage || '/images/home/banner.jpg'}
