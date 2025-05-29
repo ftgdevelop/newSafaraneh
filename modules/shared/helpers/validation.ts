@@ -1,6 +1,6 @@
 export const validateRequied = (value: string, message: string) => {
     let error;
-    if (!value) {
+    if (!value || value.trim().length === 0) {
         error = message;
     }
     return error;

@@ -5,7 +5,7 @@ import { Tik, User, DefaultRoomTheme2 } from "@/modules/shared/components/ui/ico
 import { dateDiplayFormat, numberWithCommas, toPersianDigits } from "@/modules/shared/helpers";
 import { useTranslation } from "next-i18next";
 import Image from "next/image";
-import { AsideHotelInfoType, AsideReserveInfoType } from "../../types/hotel";
+import { AsideHotelInfoType, AsideReserveInfoRoomItemType, AsideReserveInfoType } from "../../types/hotel";
 import { Fragment } from "react";
 
 type Props = {
@@ -33,26 +33,6 @@ const AsideTheme2: React.FC<Props> = props => {
     const { t: tHotel } = useTranslation('hotel');
 
     const { hotelInformation, reserveInformation, roomExtraBed, discountResponse, discountLoading } = props;
-
-    const board = (code: string) => {
-        switch (code) {
-            case "BB":
-                return "با صبحانه";
-            case "HB":
-                return "صبحانه + ناهار یا شام";
-            case "FB":
-                return "تمام وعده های غذایی شامل می شود";
-            case "RO":
-                return "بدون صبحانه";
-            case "Hour6":
-                return "اقامت به مدت ۶ ساعت";
-            case "Hour10":
-                return "اقامت به مدت ۱۰ ساعت";
-
-            default:
-                return code;
-        }
-    }
 
     const hasDiscount = reserveInformation?.salePrice && reserveInformation.boardPrice && reserveInformation.boardPrice > reserveInformation.salePrice;
 
@@ -200,11 +180,11 @@ const AsideTheme2: React.FC<Props> = props => {
                         </>
                     )}
 
-                    {reserveInformation.rooms.map((roomItem: any, roomIndex: number) => {
+                    {reserveInformation.rooms.map((roomItem: AsideReserveInfoRoomItemType, roomIndex: number) => {
 
                         //TODO check cancelation
                         let cancellation = null;
-                        switch (roomItem.cancellationPolicyStatus.toLowerCase()) {
+                        switch (roomItem.cancellationPolicyStatus?.toLowerCase()) {
                             case "nonrefundable":
                                 cancellation = <div className="margin-bottom-5 text-red">{tHotel("non-refundable")}</div>;
                                 break;
@@ -251,7 +231,7 @@ const AsideTheme2: React.FC<Props> = props => {
                                 <div>
 
                                     <div className="font-semibold text-base mb-2">
-                                        {toPersianDigits(roomItem.name)}
+                                        {toPersianDigits(roomItem.name || "")}
                                     </div>
 
                                     <div className="flex gap-2 items-center text-sm">
@@ -259,7 +239,8 @@ const AsideTheme2: React.FC<Props> = props => {
                                         {(roomItem.bed || 0) + (roomItem.extraBed || 0) } {tHotel('guest')} {extraBedPriceBlock}
                                     </div>
 
-                                    <div className="text-green-600 text-sm">{board(roomItem.board)}</div>
+                                    <div className="text-green-600 text-sm">{roomItem.boardName}</div>
+                                    <div className="text-green-600 text-sm">{roomItem.boardExtra}</div>
 
                                     {cancellation}
 

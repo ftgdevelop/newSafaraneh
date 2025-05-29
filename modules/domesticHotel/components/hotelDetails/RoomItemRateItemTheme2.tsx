@@ -112,7 +112,7 @@ const RoomItemRateItemTheme2: React.FC<Props> = props => {
     } else if (prices?.roomPrice && prices.roomPrice > 1000) {
 
         if(prices.boardPrice && (prices.boardPrice !== prices.roomPrice)){
-            discountBadge = <span className="bg-green-700 text-white px-2 py-1 leading-4 rounded-xl text-xs inline-block">
+            discountBadge = <span className="text-2xs whitespace-nowrap bg-green-700 self-center text-white px-2 py-0.5 leading-4 rounded-xl lg:text-xs inline-block">
             {calulateDiscount(prices.roomPrice, prices.boardPrice)}% {tHotel('discount')}
         </span>
         }
@@ -135,11 +135,11 @@ const RoomItemRateItemTheme2: React.FC<Props> = props => {
                     >
 
                         {prices.boardPrice && (prices.roomPrice < prices.boardPrice) && (
-                            <span className="leading-5 my-0.5 ml-3 line-through font-semibold text-2xs text-neutral-500">
+                            <span className="whitespace-nowrap leading-5 my-0.5 ml-3 line-through font-semibold text-2xs text-neutral-500">
                                 {numberWithCommas(prices.boardPrice * count)} {t("rial")}
                             </span>
                         )}
-                        <span className='my-0.5 leading-5 text-xs'>
+                        <span className='my-0.5 leading-5 text-md whitespace-nowrap'>
                             {numberWithCommas(prices.roomPrice * count)} {t("rial")}
                             <InfoCircle className='fill-amber-500 w-5 h-5 inline-block rtl:mr-0.5 ltr:ml-0.5' />
                         </span>
@@ -176,7 +176,7 @@ const RoomItemRateItemTheme2: React.FC<Props> = props => {
                 }}
                 loading={!!selectedRoomToken && selectedRoomToken === rate.bookingToken}
                 disabled={!!selectedRoomToken && selectedRoomToken !== rate.bookingToken}
-                className='block whitespace-nowrap h-10 sm:w-40 px-2.5 sm:px-5'
+                className='block whitespace-nowrap h-10 sm:w-40 px-8'
             >
                 {prices?.roomPrice && prices.roomPrice < 1000 ?
                     "درخواست رزرو"
@@ -199,7 +199,7 @@ const RoomItemRateItemTheme2: React.FC<Props> = props => {
                 </div>}
 
                 <div className='flex gap-x-3 gap-y-1 items-center flex-wrap'>
-                    <span className='text-sm text-green-600'> {board(rate.board.code)} </span>
+                    <span className={`text-sm ${rate.board.code === 'RO' ? "text-neutral-400" : "text-green-600"}`}> {board(rate.board.code)} </span>
                     {cancellation}
                 </div>
 
@@ -218,7 +218,7 @@ const RoomItemRateItemTheme2: React.FC<Props> = props => {
 
                 {calendar ? (
                     <>
-                    <div className='flex justify-between gap-3 mb-2'>
+                    <div className='flex justify-between flex-wrap gap-3 mb-2'>
                         {price} {discountBadge}
                     </div>
                     <div className='flex justify-between items-end gap-2'>

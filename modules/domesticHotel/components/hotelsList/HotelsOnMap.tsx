@@ -26,7 +26,7 @@ type Props = {
         url: string;
         imageUrl?: string;
         guestRate?: "loading" | { Satisfaction: number; TotalRowCount: number; };
-        price: "loading" | "notPriced" | "need-to-inquire" | { boardPrice: number; salePrice: number; };
+        price: "loading" | "notPriced" | { boardPrice: number; salePrice: number;availablityType?: "Online"| "Offline"| "Request"| "Completion";};        
     }[];
     closeMapModal: () => void;
     allHotelsLength: number;

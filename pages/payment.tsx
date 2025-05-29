@@ -27,12 +27,14 @@ import { DomesticFlightGetReserveByIdType } from '@/modules/flights/types/flight
 import Aside from '@/modules/flights/components/shared/Aside';
 import { ServerAddress } from '@/enum/url';
 import { emptyReduxSafarmarket, setReduxSafarmarketPixel } from '@/modules/shared/store/safarmarketSlice';
+import { bankGatewayItem } from '@/modules/payment/types';
 
 
 const Payment: NextPage = () => {
 
   const theme2 = process.env.THEME === "THEME2";
   const theme1 = process.env.THEME === "THEME1";
+  const isHotelban = process.env.PROJECT=== "HOTELBAN";
 
   const { t } = useTranslation('common');
 
@@ -49,7 +51,7 @@ const Payment: NextPage = () => {
   const [coordinatorPrice, setCoordinatorPrice] = useState<number>();
   const [domesticHotelReserveData, setDomesticHotelReserveData] = useState<DomesticHotelGetReserveByIdData>();
   const [domesticHotelData, setDomesticHotelData] = useState<DomesticHotelSummaryDetail>();
-  const [bankGatewayList, setBankGatewayList] = useState([]);
+  const [bankGatewayList, setBankGatewayList] = useState<bankGatewayItem[]>([]);
 
   const [cipReserveInfo, setCipReserveInfo] = useState<CipGetReserveByIdResponse>();
   const [cipReserveInfoLoading, setCipReserveInfoLoading] = useState<boolean>(true);
@@ -84,7 +86,7 @@ const Payment: NextPage = () => {
 
       const response: any = await getReserveBankGateway(reserveId);
       if (response?.status == 200 && response.data.result) {
-        setBankGatewayList(response.data?.result[0]);
+        setBankGatewayList(response.data?.result);
       } else {
         dispatch(setReduxError({
           title: t('error'),
@@ -160,12 +162,10 @@ const Payment: NextPage = () => {
           
           if(process.env.SAFAR_MARKET_SITE_NAME){
             
-            let pixelStatus : 3|4|5 = 3;
-            if (!status){
-              pixelStatus = 3;
-            } else if (status === "0"){
+            let pixelStatus: 4|5| undefined = undefined;
+             if (status && status === "0"){
               pixelStatus = 5;
-            } else if (status === "1"){
+            } else if (status && status === "1"){
               pixelStatus = 4;
             }
 
@@ -177,7 +177,7 @@ const Payment: NextPage = () => {
               }
             }
 
-            if (cookieSafarmarketId){
+            if (cookieSafarmarketId && pixelStatus){
               setHotelSafarmarketPixel({
                 reserveData: response.data.result,
                 safarmarketSiteName: process.env.SAFAR_MARKET_SITE_NAME,
@@ -274,7 +274,27 @@ const Payment: NextPage = () => {
       children: (
         <OnlinePayment
           coordinatorPrice={coordinatorPrice}
-          onSubmit={(bankId) => { goTobank(bankId) }}
+          onSubmit={(bankId) => { 
+            
+            let cookieSafarmarketId;
+            let cookies = decodeURIComponent(document?.cookie).split(';');
+            for (const item of cookies){
+              if (item.includes("safarMarketHotelSmId=")){
+                cookieSafarmarketId =item.split("=")[1];
+              }
+            }
+
+            if(domesticHotelReserveData && process.env.SAFAR_MARKET_SITE_NAME && cookieSafarmarketId){              
+              setHotelSafarmarketPixel({
+                reserveData: domesticHotelReserveData,
+                safarmarketSiteName: process.env.SAFAR_MARKET_SITE_NAME,
+                smId: cookieSafarmarketId,
+                statusNumber:3
+              });
+            }
+
+            goTobank(bankId);
+          }}
           bankGatewayList={bankGatewayList}
           expireDate={expireDate}
           status={status}
@@ -288,12 +308,16 @@ const Payment: NextPage = () => {
     //   label: ("کارت به کارت"),
     //   children: (<CardToCard />),
     // },
-    {
+
+  ];
+
+  if (!isHotelban) {
+    tabItems.push({
       key: '3',
       label: ("اعتباری"),
       children: (<CreditPayment price={coordinatorPrice} />),
-    }
-  ];
+    })
+  }
 
 
 
@@ -329,11 +353,13 @@ const Payment: NextPage = () => {
       duration: getDatesDiff(new Date(domesticHotelReserveData.checkout), new Date(domesticHotelReserveData.checkin)),
       rooms: domesticHotelReserveData.rooms.map(roomItem => ({
         name: roomItem.name,
-        board: roomItem.boardCode,
+        boardName: roomItem.boardName,
+        boardExtra: roomItem.boardExtra,
         cancellationPolicyStatus: roomItem.cancellationPolicyStatus,
         bed: roomItem.bed,
         pricing: roomItem.pricing,
-        nightly: roomItem.nightly
+        nightly: roomItem.nightly,
+        extraBed: roomItem.extraBed
       })),
       salePrice: domesticHotelReserveData.rooms.reduce((totalPrice: number, roomItem: any) => {
         const roomItemPrice = roomItem.pricing.find(
@@ -449,12 +475,28 @@ const Payment: NextPage = () => {
 
           <div className={`${theme2?"md:col-span-7":"md:col-span-2"}`}>
             <div className={`mb-4 ${theme1 ? "bg-white rounded-lg border border-neutral-300 p-4" : ""}`}>
-              <h2 className='text-2xl mt-4 mb-8'> چگونه می خواهید پرداخت کنید؟ </h2>
 
-              <Tab
-                style = {theme1?'2':'radioStyle'}
-                items={tabItems}
-              />
+              {isHotelban ? (
+                <OnlinePayment
+                  coordinatorPrice={coordinatorPrice}
+                  onSubmit={(bankId) => { goTobank(bankId) }}
+                  bankGatewayList={bankGatewayList}
+                  expireDate={expireDate}
+                  status={status}
+                  goToBankLoading={goToBankLoading}
+                  type={type}
+                />
+              ) : (
+                <>
+                  <h2 className='text-2xl mt-4 mb-8'> چگونه می خواهید پرداخت کنید؟ </h2>
+                  <Tab
+                    style={theme1 ? '2' : 'radioStyle'}
+                    items={tabItems}
+                  />
+
+                </>
+              )}              
+
             </div>
 
           </div>
@@ -470,7 +512,7 @@ const Payment: NextPage = () => {
                   checkoutTime={domesticHotelData?.checkoutTime}
                 />
               ):(
-                <DomesticHotelAside hotelInformation={domesticHotelInformation} reserveInformation={domesticHotelReserveInformation} />
+                <DomesticHotelAside rules={domesticHotelReserveData?.rules || undefined} hotelInformation={domesticHotelInformation} reserveInformation={domesticHotelReserveInformation} />
               )}
 
             </>) : type === 'Cip' ? (

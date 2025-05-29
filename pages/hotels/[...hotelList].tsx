@@ -34,9 +34,19 @@ type Props = {
   portalData: WebSiteDataType;
   accomodations?: SearchAccomodationItem[];
   strapiData?: any;
+  url?: string;
 }
 
 const HotelList: NextPage<Props> = props => {
+
+  useEffect(()=>{
+    const fetchPageData = async (url:string) => {
+      const pageResponse : any = await getPageByUrl(url, acceptLanguage);
+    }
+    if(props.url){
+      fetchPageData(props.url);
+    }
+  },[props.url]);
 
   let advBanner:{
     imageUrl: string;
@@ -82,6 +92,7 @@ const HotelList: NextPage<Props> = props => {
       name?:string;
       description?:string;
     }[];
+    availablityType?: "Online"| "Offline"| "Request"| "Completion";
   }
 
   const dispatch = useAppDispatch();
@@ -99,7 +110,7 @@ const HotelList: NextPage<Props> = props => {
 
   const [sortFactor, setSortFactor] = useState<SortTypes>("priority");
 
-  const [entity, setEntity] = useState<{ EntityName: string; EntityType: "City" | "Province" | "Hotel" }>();
+  const [entity, setEntity] = useState<{ EntityName: string; EntityType: "City" | "Province" | "Hotel"; slug?: string;  }>();
 
   const [showMap, setShowMap] = useState<boolean>(false);
 
@@ -342,7 +353,7 @@ const HotelList: NextPage<Props> = props => {
       const entityResponse: any = await getEntityNameByLocation(id, acceptLanguage);
 
       if (entityResponse?.data?.result) {
-        setEntity({ EntityName: entityResponse.data.result.name, EntityType: entityResponse.data.result.type });
+        setEntity({ EntityName: entityResponse.data.result.name, EntityType: entityResponse.data.result.type, slug: entityResponse.data.result.slug });
       }
     }
 
@@ -367,16 +378,18 @@ const HotelList: NextPage<Props> = props => {
 
     const hotelPriceData = pricesData?.find(item => item.id === hotel.id);
 
-    let priceInfo: "loading" | "notPriced" | "need-to-inquire" | { boardPrice: number, salePrice: number };
+    let priceInfo: "loading" | "notPriced" | { boardPrice: number, salePrice: number , availablityType?: "Online"| "Offline"| "Request"| "Completion"  };
 
     if (!pricesData || pricesLoading) {
       priceInfo = "loading";
     } else if (!hotelPriceData) {
       priceInfo = "notPriced";
-    } else if (hotelPriceData.salePrice < 10000) {
-      priceInfo = "need-to-inquire";
     } else {
-      priceInfo = { boardPrice: hotelPriceData.boardPrice, salePrice: hotelPriceData.salePrice }
+      priceInfo = { 
+        boardPrice: hotelPriceData.boardPrice,
+        salePrice: hotelPriceData.salePrice,
+        availablityType: hotelPriceData.availablityType
+       }
     }
 
     return ({
@@ -456,10 +469,9 @@ const HotelList: NextPage<Props> = props => {
           return (a.rating - b.rating);
 
         case "price":
-
-          if (b.priceInfo !== 'loading' && b.priceInfo !== 'need-to-inquire' && b.priceInfo !== 'notPriced' && a.priceInfo !== 'loading' && a.priceInfo !== 'need-to-inquire' && a.priceInfo !== 'notPriced') {
+          if (b.priceInfo !== 'loading' && b.priceInfo !== 'notPriced' && a.priceInfo !== 'loading' && a.priceInfo !== 'notPriced') {
             return b.priceInfo.salePrice - a.priceInfo.salePrice
-          } else if (b.priceInfo !== 'loading' && b.priceInfo !== 'need-to-inquire' && b.priceInfo !== 'notPriced') {
+          } else if (b.priceInfo !== 'loading' && b.priceInfo !== 'notPriced') {
             return -1
           }
           return 1
@@ -487,7 +499,8 @@ const HotelList: NextPage<Props> = props => {
   const defaultDestination: EntitySearchResultItemType = {
     name: entity?.EntityName,
     displayName: entity?.EntityName,
-    type: entity?.EntityType || 'City'
+    type: entity?.EntityType || 'City',
+    slug: entity?.slug || undefined
   }
 
   const urlSegments = router.asPath.split("/");
@@ -555,8 +568,6 @@ const HotelList: NextPage<Props> = props => {
       hotelItem.priceInfo !== 'loading' &&
       (
         hotelItem.priceInfo === 'notPriced'
-        ||
-        hotelItem.priceInfo === 'need-to-inquire'
         ||
         hotelItem.priceInfo.salePrice < +filteredPrice[0]
         ||
@@ -899,6 +910,10 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   if(pageResponse?.data?.result?.entityId){
     searchParameters.EntityId = pageResponse.data.result.entityId;
   }
+  const locationId = query.hotelList!.find((item:string) => item.includes('locationId-'));
+  if (locationId){
+    searchParameters.EntityId = locationId.split("locationId-")[1];
+  }
 
   const [searchAccomodationResponse, strapiResponse] = await Promise.all<any>([
     SearchAccomodation(searchParameters, acceptLanguage),
@@ -910,7 +925,8 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       ...await (serverSideTranslations(context.locale, ['common', 'hotel', 'home'])),
       accomodations: searchAccomodationResponse?.data?.result || null,
       pageData: pageResponse?.data?.result || null,
-      strapiData: strapiResponse?.data?.data[0]?.attributes?.Sections || null
+      strapiData: strapiResponse?.data?.data[0]?.attributes?.Sections || null,
+      url: url || null
     },
   })
 }

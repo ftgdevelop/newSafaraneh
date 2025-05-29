@@ -2,17 +2,16 @@ import Link from "next/link";
 import { useTranslation } from "next-i18next";
 
 import TravelServices from "./travelServices";
-import Language from "./Language";
 import Image from "next/image";
 import TrackOrder from "./TrackOrder";
 import HeaderAuthentication from "@/modules/authentication/components/HeaderAuthentication";
 import { useAppSelector } from "../../hooks/use-store";
-import Navigation from "./Navigation";
 import HeaderStyle3 from "./HeaderStyle3";
 
 type Props = {
     logo: string;
     siteName: string;
+    withoutContainer?: boolean;
 }
 
 const Header: React.FC<Props> = props => {
@@ -30,7 +29,7 @@ const Header: React.FC<Props> = props => {
     const theme3 = process.env.THEME === "THEME3";
 
     if (theme3){
-        return <HeaderStyle3 logo={logo} siteName={siteName} />
+        return <HeaderStyle3 logo={logo} siteName={siteName} withoutContainer={props.withoutContainer} />
     }
     
     return (

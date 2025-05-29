@@ -23,7 +23,7 @@ const BlogListItem: React.FC<Props> = props => {
             <div className="grid grid-cols-3 gap-5 mt-6 max-sm:grid-cols-1">
 
                 <Link href={`blog/${blog.slug}`}>
-                    <Image src={blog.images?.large} onContextMenu={(e) => e.preventDefault()}
+                    <Image src={blog.images?.large || "/images/no-image.jpg"} onContextMenu={(e) => e.preventDefault()}
                         alt={blog.title?.rendered} height={100} width={300} className="rounded-md max-sm:mr-2 w-full" />
                 </Link>
 

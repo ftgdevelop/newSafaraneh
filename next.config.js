@@ -24,16 +24,21 @@ const nextConfig = {
     ]
   },
   images: {
-    domains: [
-      'cdn.safaraneh.com',
-      'cdn2.safaraneh.com',
-      'panel.safaraneh.com',
-      'blog.iranhotel.ir',
-      'trustseal.enamad.ir',
-      'logo.samandehi.ir',
-      'strapi.safarlife.com',
-      'www.facebook.com',
-      'cdn.mehrbooking.net'
+    remotePatterns: [
+      {protocol: 'https', hostname: 'cdn.safaraneh.com', pathname: '**'},
+      {protocol: 'https', hostname: 'cdn2.safaraneh.com', pathname: '**'},
+      {protocol: 'https', hostname: 'panel.safaraneh.com', pathname: '**'},
+      {protocol: 'https', hostname: 'blog.iranhotel.ir', pathname: '**'},
+      {protocol: 'https', hostname: 'blogonline.ir', pathname: '**'},
+      {protocol: 'https', hostname: 'hotelban.com', pathname: '**'},
+      {protocol: 'https', hostname: 'trustseal.enamad.ir', pathname: '**'},
+      {protocol: 'https', hostname: 'logo.samandehi.ir', pathname: '**'},
+      {protocol: 'https', hostname: 'strapi.safarlife.com', pathname: '**'},
+      {protocol: 'https', hostname: 'strapi.safaraneh.com', pathname: '**'},      
+      {protocol: 'https', hostname: 'www.facebook.com', pathname: '**'},
+      {protocol: 'https', hostname: 'cdn.mehrbooking.net', pathname: '**'},
+      {protocol: 'https', hostname: 'iranhotel.app', pathname: '**'},
+      {protocol: 'https', hostname: 'blogonline.ir', pathname: '**'}
     ],
     formats: ['image/avif', 'image/webp'],
   },
@@ -69,7 +74,11 @@ const nextConfig = {
     PROJECT_SERVER_CIP:"cip.safaraneh.com",
     PROJECT_SERVER_FLIGHT: "flightdomestic.safaraneh.com",
     PROJECT_SERVER_TENANTID: "1040",
+    
     PROJECT_SERVER_STRAPI:"",
+    PROJECT_SERVER_STRAPI_TOKEN:"",
+    PROJECT_SERVER_STRAPI_TENANT:"",
+
     PROJECT_SERVER_NATIONALITY: "",
     PORT: '',
     //PROJECT_MODULES: "Flight Hotel CIP Blog ForeignFlight ForeignHotel",

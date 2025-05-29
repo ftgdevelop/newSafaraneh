@@ -6,6 +6,9 @@
   .clearfix {
     @apply after:clear-both after:content-[''] after:table before:clear-both before:content-[''] before:table;
   }
+  .modalMaxHeight{
+    max-height: 90vh;
+  }
   .breakInsideAvoid{
     break-inside:avoid;
   }
@@ -49,13 +52,6 @@
   }
   .bg-travel-pattern {
     background-image: url("/images/pattern.png");
-  }
-  
-  .bg-theme3-banner {
-    background-image: url("/images/home/theme3/hero.jpg");
-  }
-  .theme3-transparent-bg {
-    background-color: #112359ed;
   }
 
   input.noStyleInputNumber::-webkit-outer-spin-button,
@@ -118,7 +114,9 @@
     .min-w-400{
       min-width: 400px;
     }
-
+    .text-shadow{
+      text-shadow: 0 0 3px #000000bd;
+    }
 }
 
 @font-face {
@@ -225,18 +223,18 @@
 }
 
 .theme-3 {
-  --color-primary-50: #eaeefb;
-  --color-primary-100: #d5ddf6;
-  --color-primary-200: #aabbee;
-  --color-primary-300: #8099e5;
-  --color-primary-400: #4166d8;
-  --color-primary-500: #274dbe;
-  --color-primary-600: #1d388c;
-  --color-primary-700: #162b6a;
-  --color-primary-800: #0d1a3f;
-  --color-primary-900: #09112a;
+  --color-primary-50: #fff8e1;
+  --color-primary-100: #ffefcc;
+  --color-primary-200: #ffde9b;
+  --color-primary-300: #fecb66;
+  --color-primary-400: #fdbc39;
+  --color-primary-500: #fdb21d;
+  --color-primary-600: #fdad0b;
+  --color-primary-700: #e19700;
+  --color-primary-800: #c98600;
+  --color-primary-900: #ae7300;
 
-  --container-max-width: 1200px;
+  --container-max-width: 1300px;
   --half-container-max-width: 600px;
 
   --body-background: #f8f8f8;
@@ -270,6 +268,37 @@ body {
     list-style-position: inside;
     list-style-type: disc;
     margin-bottom: 1rem;
+  }
+  &.hotelban-strapi-about {
+    h1{
+      font-size: 27px;
+      font-weight: 600;
+      margin-bottom: .75em;
+    } 
+    h2{
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: .75em;
+    } 
+    h3{
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: .75em;
+    } 
+    h4{
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: .75em;
+    } 
+    h5{
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: .75em;
+    }
+    
+    li{
+      margin-bottom: 5px;
+    }
   }
   p{
     margin-bottom: 13px;

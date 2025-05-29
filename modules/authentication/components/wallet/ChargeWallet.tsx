@@ -90,6 +90,7 @@ const ChargeWallet: React.FC = () => {
     }
     
     const theme2 = process.env.THEME === "THEME2";
+    const theme3 = process.env.THEME === "THEME3";
 
     return (
 
@@ -121,7 +122,7 @@ const ChargeWallet: React.FC = () => {
                                     validateFunction={(value: string) => validateRequied(value, "لطفا مبلغ را وارد کنید")}
                                     value={values.amount}
                                 />
-                                <select className={`border rtl:rounded-l-md ltr:rounded-r-md border-neutral-300 w-1/4 outline-none ${theme2?"px-3 h-13 border-neutral-400 focus:border-2 focus:border-blue-500":"h-10"}`}>
+                                <select className={`border rtl:rounded-l-md ltr:rounded-r-md border-neutral-300 w-1/4 outline-none ${theme2?"px-3 h-13 border-neutral-400 focus:border-2 focus:border-blue-500":theme3?"h-12":"h-10"}`}>
                                     <option value={"IRR"}>
                                         ریال
                                     </option>

@@ -7,7 +7,7 @@ import RadioInputField from './RadioInputField';
 
 type Props = {
     items: TabItem[];
-    style?: "1" | "2" | "3" | "radioStyle" | "almosafer-home" | "expedia-home";
+    style?: "1" | "2" | "3" | "radioStyle" | "theme3" | "expedia-home";
     radioStyle?: boolean;
     wrapperClassName?: string;
     tabLinksBold?: boolean;
@@ -24,8 +24,8 @@ const Tab: React.FC<Props> = props => {
     const [activetabKey, setActiveTabKey] = useState(items[0]?.key);
 
     let tabClassName = (active: boolean) => {
-        if(style === 'almosafer-home'){
-            return `outline-none select-none basis-20 rounded-t py-2 px-4 rtl:ml-1 ltr:mr-1 text-sm font-semibold transition-all text-neutral-800 ${active ? "theme3-transparent-bg text-white b-g-white/90" : "bg-white/50"}`
+        if(style === 'theme3'){
+            return `whitespace-nowrap outline-none select-none basis-20 rounded-full py-0 sm:py-2 px-2 sm:px-4 rtl:ml-1 ltr:mr-1 text-xs sm:text-sm font-semibold transition-all text-neutral-800 ${active ? "bg-[#1d274b] text-white" : "text-neutral-600"}`
         }else if (style === '2') {
             return `shadow-normal outline-none select-none basis-20 relative grow text-blue-700 border border-2 rounded py-3 transition-all ${active ? "bg-blue-50 font-semibold text-primary-700 border-primary-700" : "border-transparent text-neutral-600"}`
         } else if (style === '3') {
@@ -52,8 +52,8 @@ const Tab: React.FC<Props> = props => {
     return (
         <>
             <div className={props.wrapperClassName || ""}>
-                {style === 'almosafer-home' ? (
-                    <div className='max-w-container mx-auto px-3 sm:px-5'>
+                {style === 'theme3' ? (
+                    <div className='flex border-b pb-4'>
                         {items.map(item => <button
                             type="button"
                             key={item.key}
@@ -66,9 +66,7 @@ const Tab: React.FC<Props> = props => {
                             }}
                             className={tabClassName(activetabKey === item.key)}
                         >
-
                             {item.label}
-
                         </button>)}
                     </div>
                 ) : style === 'radioStyle' ? (
@@ -110,20 +108,15 @@ const Tab: React.FC<Props> = props => {
                     </div>
                 )}
 
-                {style === 'almosafer-home' ? (
-                    <div className='theme3-transparent-bg b-g-white/90'>
-                        <div className='max-w-container mx-auto px-3 sm:px-5'>
-                            {items.map(item => <Fragment key={item.key}>
-                                {activetabKey === item.key ? item.children : null}
-                            </Fragment>)}
-                        </div>
-                    </div>
+                {style === 'theme3' ? (
+                    items.map(item => <Fragment key={item.key}>
+                        {activetabKey === item.key ? item.children : null}
+                    </Fragment>)
                 ) : (
                     items.map(item => <Fragment key={item.key}>
                         {activetabKey === item.key ? item.children : null}
                     </Fragment>)
                 )}
-
 
             </div>
 

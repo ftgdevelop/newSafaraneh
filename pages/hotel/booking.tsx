@@ -115,7 +115,9 @@ const Booking: NextPage = ({ portalData }: { portalData?: WebSiteDataType }) => 
             duration: getDatesDiff(new Date(domesticHotelReserveData.checkout), new Date(domesticHotelReserveData.checkin)),
             rooms: domesticHotelReserveData.rooms.map(roomItem => ({
                 name: roomItem.name,
-                board: roomItem.boardCode,
+                extraBed: roomItem.extraBed,
+                boardExtra: roomItem.boardExtra,
+                boardName: roomItem.boardName,
                 cancellationPolicyStatus: roomItem.cancellationPolicyStatus,
                 bed: roomItem.bed,
                 pricing: roomItem.pricing,
@@ -184,7 +186,7 @@ const Booking: NextPage = ({ portalData }: { portalData?: WebSiteDataType }) => 
                     className='py-3 mb-2 max-md:hidden'
                     items={[
                         { label: t('completing-information'), status: 'done' },
-                        { label: tHotel('checking-capacity'), status: 'done' },
+                        //{ label: tHotel('checking-capacity'), status: 'done' },
                         { label: t('confirm-pay'), status: 'done' },
                         { label: t('complete-purchase'), status: 'done' }
                     ]}

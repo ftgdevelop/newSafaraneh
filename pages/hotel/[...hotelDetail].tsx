@@ -3,8 +3,8 @@ import type { GetServerSideProps, NextPage } from 'next';
 import { i18n, useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
-import { HotelPageDataType, WebSiteDataType } from '@/modules/shared/types/common';
-import { DomesticAccomodationType, DomesticHotelDetailType, DomesticHotelRichSheet, DomesticHotelRichSnippets, EntitySearchResultItemType, HotelScoreDataType } from '@/modules/domesticHotel/types/hotel';
+import { WebSiteDataType } from '@/modules/shared/types/common';
+import { DomesticAccomodationType, DomesticHotelDetailType, DomesticHotelReviewsType, DomesticHotelRichSheet, DomesticHotelRichSnippets, EntitySearchResultItemType } from '@/modules/domesticHotel/types/hotel';
 import { useRouter } from 'next/router';
 import BackToList from '@/modules/domesticHotel/components/hotelDetails/BackToList';
 import { CalendarError } from '@/modules/shared/components/ui/icons';
@@ -32,6 +32,7 @@ import { useAppDispatch } from '@/modules/shared/hooks/use-store';
 import { emptyReduxSafarmarket, setReduxSafarmarketPixel } from '@/modules/shared/store/safarmarketSlice';
 import BreadCrumpt from '@/modules/shared/components/ui/BreadCrumpt';
 import GalleryLevel1 from '@/modules/domesticHotel/components/hotelDetails/GalleryLevel1';
+import SimilarHotelsNew from '@/modules/domesticHotel/components/hotelDetails/SimilarHotelsNew';
 
 const SearchForm = dynamic(() => import('@/modules/domesticHotel/components/shared/SearchForm'), {
   ssr: false
@@ -39,12 +40,10 @@ const SearchForm = dynamic(() => import('@/modules/domesticHotel/components/shar
 
 type Props = {
   allData: {
+    reviews?: DomesticHotelReviewsType;
     accommodation?: { result: DomesticAccomodationType };
     richSnippets?: DomesticHotelRichSnippets;
     sheet:DomesticHotelRichSheet;
-
-    score?: HotelScoreDataType;
-    page?: HotelPageDataType;
     hotel?: DomesticHotelDetailType;
   };
   portalData: WebSiteDataType;
@@ -135,11 +134,18 @@ useEffect(()=>{
     }
   }
 
-  if(querySafarmarketId && utm_source && utm_source === "safarmarket"){
+  if(querySafarmarketId){
     const expDate = new Date();
     expDate.setTime(expDate.getTime() + (7*24*60*60*1000));
     if (document){
       document.cookie = `safarMarketHotelSmId=${querySafarmarketId}; expires=${expDate.toUTCString()};path=/`;
+      if (utm_source){
+        if (typeof utm_source === 'object'){
+          document.cookie = `safarMarketHotelUtmSource=${utm_source[0]}; expires=${expDate.toUTCString()};path=/`;
+        }else{
+          document.cookie = `safarMarketHotelUtmSource=${utm_source}; expires=${expDate.toUTCString()};path=/`;
+        }
+      }
     }
   }
 
@@ -193,10 +199,16 @@ useEffect(() => {
 
   const accommodation = allData?.accommodation;
   const hotelData = allData?.hotel;
-  const pageData = allData?.page; 
-  const hotelScoreData = allData?.score; 
   const richSnippets = allData?.richSnippets; 
   const sheet = allData?.sheet; 
+
+  let reviewData = undefined;
+  if(allData?.reviews?.averageRating && allData.reviews.reviews?.totalCount){
+    reviewData = {
+      averageRating: Math.floor(allData.reviews.averageRating),
+      reviewCount: allData.reviews.reviews.totalCount
+    }
+  }
  
   const accommodationData = accommodation?.result;
 
@@ -326,13 +338,13 @@ useEffect(() => {
     );
   }
 
-  if (pageData?.Id && isSafaraneh) {
+  if (reviewData?.reviewCount) {
     anchorTabsItems.push(
       { id: "reviews_section", title: tHotel('suggestion') }
     );
   }
   
-  if(isSafaraneh && hotelData?.Similars){
+  if((isSafaraneh && hotelData?.Similars) || (accommodationData?.similars?.length) ){
     anchorTabsItems.push(
       { id: "similarhotels_section", title: tHotel('similar-hotels') }
     );
@@ -360,7 +372,23 @@ useEffect(() => {
       BreadCrumptListUrl += `/checkin-${checkin}/checkout-${checkout}`;
   }
 
+  const searchFormSection = (
+    <div ref={searchFormWrapperRef} className='pt-5'>
+          {!!showOnlyForm && (
+            <div
+              className='fixed bg-black/75 backdrop-blur-sm top-0 bottom-0 right-0 left-0 z-[1]'
+              onClick={() => { setShowOnlyForm(false) }}
+            />
+          )}
+          <h2 className='text-lg lg:text-3xl font-semibold mt-5 mb-3 md:mt-10 md:mb-7 relative z-[2]'>{t('change-search')}</h2>
 
+          {!!formIsInView && <SearchForm
+            defaultDestination={defaultDestination}
+            defaultDates={defaultDates}
+            wrapperClassName='relative z-[2]'
+          />}
+        </div>
+  );
 
   return (
     <>
@@ -551,7 +579,6 @@ useEffect(() => {
               {t("ContinueAnyway")}
             </button>
 
-
           </div>
 
         </div>
@@ -559,6 +586,13 @@ useEffect(() => {
       </ModalPortal>
 
       <div className="max-w-container mx-auto px-3 sm:px-5 pt-5">
+
+        {!!querySafarmarketId && (
+          <div className='bg-[#ed6527] text-white px-5 py-3 text-lg md:text-2xl lg:text-4xl xl:text-5xl mb-5 text-center font-semibold'>
+            شما از موتور جستجوی <span className='text-[#ed6527] inline-block mx-2 font-bold p-1 lg:p-3 bg-white rounded-xl'> سفرمارکت </span> به {portalData.billing?.name || " این سایت "} هدایت شده اید
+          </div>
+        )}
+
         <div className={theme1 ? "bg-white p-3" : "mb-4"}>
 
           {/* {!!hotelData.IsCovid && <div className='bg-emerald-700 leading-4 p-3 sm:p-4 text-white text-xs sm:text-sm rounded-md flex flex-wrap gap-2 items-center m-1 mb-3'>
@@ -604,32 +638,26 @@ useEffect(() => {
       <div className="max-w-container mx-auto px-3 sm:px-5" id="hotel_intro">
 
 
-        <HotelName hotelData={ isSafaraneh ? hotelData : undefined} scoreData={hotelScoreData} accomodationData={accommodationData} />
+        <HotelName 
+          hotelData={ isSafaraneh ? hotelData : undefined} 
+          reviewData={reviewData}
+          accomodationData={accommodationData} 
+        />
 
         {theme2 && <LoginLinkBanner
           message='با ورود به حساب کاربری از تخفیف رزرو این هتل استفاده کنید'
         />}
 
-
-        <div ref={searchFormWrapperRef} className='pt-5'>
-          {!!showOnlyForm && (
-            <div
-              className='fixed bg-black/75 backdrop-blur-sm top-0 bottom-0 right-0 left-0 z-[1]'
-              onClick={() => { setShowOnlyForm(false) }}
-            />
-          )}
-          <h2 className='text-lg lg:text-3xl font-semibold mt-5 mb-3 md:mt-10 md:mb-7 relative z-[2]'>{t('change-search')}</h2>
-
-          {!!formIsInView && <SearchForm
-            defaultDestination={defaultDestination}
-            defaultDates={defaultDates}
-            wrapperClassName='relative z-[2]'
-          />}
-        </div>
+        {searchFormSection}
 
       </div>
 
-      {!!accommodationData.id && <Rooms hotelId={accommodationData.id} />}
+      {!!accommodationData.id && (
+        <Rooms 
+          hotelId={accommodationData.id} 
+          goToSearchForm={() =>{ searchFormWrapperRef.current?.scrollIntoView({ behavior: 'smooth' });}}
+        />
+        )}
 
       {(!isSafaraneh || accommodationData?.facilities?.length) ? (
         <AccommodationFacilities facilities={accommodationData?.facilities} />
@@ -665,11 +693,12 @@ useEffect(() => {
         </div>
       )}
 
-      {!!(pageData?.Id && isSafaraneh) && <Comments hotelScoreData={hotelScoreData} pageId={pageData.Id} />}
+      {!!reviewData && <Comments siteName={siteName} hotelScoreData={allData.reviews} pageId={sheet.id} />}
 
+      {!!(isSafarlife && accommodationData?.similars?.length) && <SimilarHotelsNew similarHotels={accommodationData.similars} />}
       {!!(isSafaraneh && hotelData?.Similars) && <SimilarHotels similarHotels={hotelData.Similars} />}
 
-      {!!(accommodationData?.faqs?.length) && <FAQ faqs={accommodationData.faqs} />}
+      {!!(accommodationData?.faqs?.length && !querySafarmarketId) && <FAQ faqs={accommodationData.faqs} />}
 
       <AvailabilityTimeout
         minutes={20}

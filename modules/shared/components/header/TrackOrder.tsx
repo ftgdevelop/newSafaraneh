@@ -12,6 +12,7 @@ import { validateEmail, validateRequied } from "../../helpers/validation";
 import Button from "../ui/Button";
 import { useRouter } from "next/router";
 import { getReserveFromCoordinator } from "../../actions";
+import Image from "next/image";
 
 type Props ={
     isInMobileMenu?: boolean;
@@ -22,6 +23,8 @@ type Props ={
 const TrackOrder: React.FC<Props> = props => {
 
     const { t } = useTranslation('common');
+    
+    const theme3 = process.env.THEME === "THEME3";
 
     const dispatch = useAppDispatch();
 
@@ -99,15 +102,22 @@ const TrackOrder: React.FC<Props> = props => {
         }
     }
 
+    let buttonIcon = null;
+    if(props.isInMobileMenu && !!props.iconClassName){
+        buttonIcon = <Ticket className={props.iconClassName} />;
+    }
+    if(theme3){
+        buttonIcon = <Image src="/images/hotelban/ticket.svg" alt={t('retrieve-my-booking')} width={24} height={24} className="hidden sm:block w-6 h-6" />
+    }
     return (
         <>
             <button
                 onClick={() => { setOpen(true) }}
                 type="button"
                 aria-label={t('retrieve-my-booking')}
-                className={`${props.isInMobileMenu?"px-5 py-1 block my-2 transition-all duration-200 hover:text-blue-700 flex items-center gap-3 md:hidden":"h-12 text-sm text-blue-700 hover:text-blue-500 ltr:float-right rtl:float-left rtl:ml-5 ltr:mr-5 hidden md:block"}`}
+                className={`${theme3 ? "flex gap-2 items-center text-sm bg-gray-400 px-2 sm:px-4 py-1 sm:py-2 rounded-full text-white self-center" : props.isInMobileMenu?"px-5 py-1 block my-2 transition-all duration-200 hover:text-blue-700 flex items-center gap-3 md:hidden":"h-12 text-sm text-blue-700 hover:text-blue-500 ltr:float-right rtl:float-left rtl:ml-5 ltr:mr-5 hidden md:block"}`}
             >
-                {!!props.isInMobileMenu && !!props.iconClassName && <Ticket className={props.iconClassName} />}
+                {buttonIcon}
                 {t('retrieve-my-booking')}
             </button>
 
