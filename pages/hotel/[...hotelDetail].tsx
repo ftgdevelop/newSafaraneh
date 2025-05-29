@@ -31,6 +31,7 @@ import dynamic from 'next/dynamic';
 import { useAppDispatch } from '@/modules/shared/hooks/use-store';
 import { emptyReduxSafarmarket, setReduxSafarmarketPixel } from '@/modules/shared/store/safarmarketSlice';
 import BreadCrumpt from '@/modules/shared/components/ui/BreadCrumpt';
+import GalleryLevel1 from '@/modules/domesticHotel/components/hotelDetails/GalleryLevel1';
 import SimilarHotelsNew from '@/modules/domesticHotel/components/hotelDetails/SimilarHotelsNew';
 
 const SearchForm = dynamic(() => import('@/modules/domesticHotel/components/shared/SearchForm'), {
@@ -71,6 +72,8 @@ const HotelDetail: NextPage<Props> = props => {
   const isSafaraneh = process.env.PROJECT === "SAFARANEH" || process.env.PROJECT === "IRANHOTEL" || process.env.PROJECT === "HOTELBAN";
 
   const isSafarlife = process.env.PROJECT === "SAFARLIFE";
+
+  const isHotelban = process.env.PROJECT === "HOTELBAN";
 
   const { portalData, allData } = props;
 
@@ -632,7 +635,12 @@ useEffect(() => {
 
         </div>
 
-        {!!hotelImages?.length && <Gallery images={hotelImages} hotelName={accommodationData.displayName} />}
+        {isHotelban ? (
+          <GalleryLevel1 images={hotelImages} hotelName={accommodationData.displayName} />
+        ) :(
+          <Gallery images={hotelImages} hotelName={accommodationData.displayName} />
+        )}
+
       </div>
 
       <AnchorTabs

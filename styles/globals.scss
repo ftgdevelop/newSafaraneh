@@ -397,3 +397,8 @@ footer img[src*=trustseal], footer img[src*='logo.samandehi'] {
 .hotelban-home-cip-bg {
   background-image: url("/images/home/theme3/bg-cip.png");
 }
+
+.h-calc-gallery2 {
+    height: calc(100vh - 75px);
+    overflow: auto;
+}
