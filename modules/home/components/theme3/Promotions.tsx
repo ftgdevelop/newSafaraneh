@@ -115,7 +115,7 @@ const Promotions: React.FC = () => {
         ]
 
     return (
-        <section className="max-w-container m-auto px-3 max-xl:p-5 mb-5 sm:mb-16" >
+        <section className="max-w-container m-auto px-5 max-xl:p-5 mb-5 sm:mb-16" >
 
             <h2 className="flex gap-2 font-semibold text-md md:text-2xl mb-2 h-10">
                 <span
