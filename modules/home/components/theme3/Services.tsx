@@ -31,7 +31,7 @@ const Services: React.FC = () => {
         ]
 
     return (
-        <section className="max-w-container m-auto px-3 max-xl:p-5 mb-5 sm:mb-10" >
+        <section className="max-w-container m-auto px-5 max-xl:p-5 mb-5 sm:mb-10" >
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {items.map(item => (

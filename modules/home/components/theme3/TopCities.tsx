@@ -97,7 +97,7 @@ const TopCities: React.FC = () => {
     };
 
     return (
-        <section className="max-w-container m-auto px-3 lg:pt-14 max-xl:p-5 mb-5 sm:mb-10" >
+        <section className="max-w-container m-auto px-5 lg:pt-14 max-xl:p-5 mb-5 sm:mb-10" >
 
             <h2 className="flex gap-2 font-semibold text-md md:text-2xl mb-2 h-10">
                 <span
