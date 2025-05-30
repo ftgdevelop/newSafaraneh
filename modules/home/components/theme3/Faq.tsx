@@ -10,7 +10,7 @@ type Props = {
 }
 const Faq: React.FC<Props> = props => {
     return (
-        <section className="max-w-container m-auto px-3 max-xl:p-5 mb-5 sm:mb-14" >
+        <section className="max-w-container m-auto px-5 max-xl:p-5 mb-5 sm:mb-14" >
             {props.items?.map((item, index) => (
                 <Accordion
                     key={item.key}
