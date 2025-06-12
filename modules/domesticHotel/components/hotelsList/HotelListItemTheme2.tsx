@@ -90,7 +90,7 @@ const HotelListItemTheme2: React.FC<Props> = props => {
                 {!!(hotel.priceInfo.availablityType === "Request") && (<div className="whitespace-nowrap text-red-500 text-xs leading-4"> قیمت نیازمند استعلام است </div>)}
                 
                 
-                {!!discount && <div><span className="bg-green-700 text-white rounded-xl leading-7 text-2xs px-2 select-none"> {toPersianDigits(discount.toString())}% {t('discount')} </span></div>}
+                {!!(discount>0) && <div><span className="bg-green-700 text-white rounded-xl leading-7 text-2xs px-2 select-none"> {toPersianDigits(discount.toString())}% {t('discount')} </span></div>}
 
                 {(boardPrice > 10000 && salePrice > 10000 && boardPrice  > salePrice) && <span className="text-xs inline-block text-neutral-500 line-through whitespace-nowrap">
                     {numberWithCommas(boardPrice)} {t('rial')}
