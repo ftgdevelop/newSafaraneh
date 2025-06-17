@@ -13,10 +13,11 @@ type Props = {
     onSelectRoom: (bookingToken: string, count: number) => void;
     selectedRoomToken?: string;
     roomsHasImage?: boolean;
-    nights?: number;
+    nights: number;
     onOpenRoom: () => void;
     rate: DomesticHotelRateItem;
     priceType: "total" | "average";
+    goToSearchForm : () => void;
 }
 
 const RoomItemRateItemTheme1: React.FC<Props> = props => {
@@ -30,26 +31,6 @@ const RoomItemRateItemTheme1: React.FC<Props> = props => {
 
     if (!rate || !room) {
         return null;
-    }
-
-    const board = (code: string) => {
-        switch (code) {
-            case "BB":
-                return "با صبحانه";
-            case "HB":
-                return "صبحانه + ناهار یا شام";
-            case "FB":
-                return "تمام وعده های غذایی شامل می شود";
-            case "RO":
-                return "بدون صبحانه";
-            case "Hour6":
-                return "اقامت به مدت ۶ ساعت";
-            case "Hour10":
-                return "اقامت به مدت ۱۰ ساعت";
-
-            default:
-                return code;
-        }
     }
 
     let cancellation = null;
@@ -101,15 +82,25 @@ const RoomItemRateItemTheme1: React.FC<Props> = props => {
 
     let price: React.ReactNode;
     let bookBtn: React.ReactNode;
-    let calendar: React.ReactNode;
+    let calendar: React.ReactNode = null;
     let discountBadge: React.ReactNode;
 
+    if (rate.calendar || room.facilities?.length || room.promotions?.length) {
+        calendar = <button
+            type='button'
+            onClick={props.onOpenRoom}
+            className='text-xs text-blue-600 flex items-center gap-1 mb-2 cursor-pointer'
+        >
+            <Calendar className='w-4 h-4 fill-current' />
+            تقویم قیمت و ظرفیت
+        </button>
+    }
+    
     if (rate.availablityType === "Completion") {
         price = "";
-        calendar = null;
     } else if (prices?.roomPrice && prices.roomPrice > 1000) {
 
-        if (prices.boardPrice && (prices.boardPrice !== prices.roomPrice)) {
+        if (prices.boardPrice && (prices.boardPrice > prices.roomPrice)) {
             discountBadge = <span className="text-2xs whitespace-nowrap bg-green-700 self-center text-white px-2 py-0.5 leading-4 rounded-xl lg:text-xs inline-block">
                 {calulateDiscount(prices.roomPrice, prices.boardPrice)}% {tHotel('discount')}
             </span>
@@ -161,22 +152,36 @@ const RoomItemRateItemTheme1: React.FC<Props> = props => {
             )}
         </>
 
-        if (rate.calendar || room.facilities?.length || room.promotions?.length) {
-            calendar = <button
-                type='button'
-                onClick={props.onOpenRoom}
-                className='text-xs text-blue-600 flex items-center gap-1 mb-2 cursor-pointer'
-            >
-                <Calendar className='w-4 h-4 fill-current' />
-                تقویم قیمت و ظرفیت
-            </button>
-        }
-
     } else {
         price = <div className="text-red-500 rtl:text-left ltr:text-right">قیمت نیازمند استعلام است</div>;
     }
 
-    if (rate.availablityType === "Completion") {
+    const minStayFailed = rate.minStay && rate.minStay > props.nights; 
+    const maxStayFailed = rate.maxStay && rate.maxStay < props.nights; 
+    const { closeToArrival, closeToDeparture } = rate;
+
+    if (minStayFailed || maxStayFailed){
+        bookBtn= (
+            <Button
+                type='button'
+                className='block whitespace-nowrap h-10 w-full px-8'
+                onClick={props.goToSearchForm}
+            >
+                تغییر مدت اقامت
+            </Button>
+        )
+    } else if (closeToArrival || closeToDeparture) {
+        bookBtn = (
+            <Button
+                type='button'
+                className='block whitespace-nowrap h-10 w-full px-8'
+                onClick={props.goToSearchForm}
+            >
+                تغییر تاریخ اقامت
+            </Button>
+        )
+    }
+    else if (rate.availablityType === "Completion") {
         bookBtn = <div className="text-red-500"> ظرفیت تکمیل است  </div>;
     } else {
         bookBtn = (
@@ -214,7 +219,7 @@ const RoomItemRateItemTheme1: React.FC<Props> = props => {
                     </div>}
 
                     <div className='flex gap-x-3 gap-y-1 items-center flex-wrap'>
-                        <span className={`text-sm ${rate.board.code === 'RO' ? "text-neutral-400" : "text-green-600"}`}> {board(rate.board.code)} </span>
+                        {!!rate.board?.name && <span className="text-sm text-green-600"> {rate.board.name} </span>}
                         {cancellation}
                     </div>
 
@@ -245,6 +250,28 @@ const RoomItemRateItemTheme1: React.FC<Props> = props => {
                     {bookBtn}
                 </div>
 
+                {minStayFailed && (
+                    <div className='md:col-span-5 p-3 border-t text-red-600'>
+                        <InfoCircle className='inline-block fill-current w-5 h-5 ml-2' />
+                        این اتاق برای رزرو های بیشتر از {rate.minStay} روز در دسترس است
+                    </div>
+                )}
+
+                {maxStayFailed && (
+                    <div className='md:col-span-5 p-3 border-t text-red-600'>
+                        این اتاق برای رزرو های کمتر از {rate.maxStay} روز در دسترس است
+                    </div>
+                )}
+
+                {closeToArrival ? (
+                    <div className='md:col-span-5 p-3 border-t text-red-600'>
+                        این اتاق در تاریخ ورود شما پذیرش ورودی ندارد، برای رزرو این اتاق تاریخ ورود خود را تغییر دهید
+                    </div>
+                ) : closeToDeparture ? (
+                    <div className='md:col-span-5 p-3 border-t text-red-600'>
+                        این اتاق در تاریخ خروج شما پذیرش خروجی ندارد، برای رزرو این اتاق تاریخ خروج خود را تغییر دهید
+                    </div>
+                ) : null}
 
             </div>
         </>

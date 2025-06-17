@@ -16,7 +16,7 @@ type Props = {
     url: string;
     imageUrl?: string;
     ratesInfo?: "loading" | { Satisfaction: number; TotalRowCount: number; };
-    priceInfo: "loading" | "notPriced" | "need-to-inquire" | { boardPrice: number; salePrice: number; };
+    priceInfo: "loading" | "notPriced" | { boardPrice: number; salePrice: number; availablityType?: "Online"| "Offline"| "Request"| "Completion"; };   
 }
 
 const SimpleHotelListItem: React.FC<Props> = props => {
@@ -37,6 +37,7 @@ const SimpleHotelListItem: React.FC<Props> = props => {
             reviews={ratesInfo.TotalRowCount}
             score={ratesInfo.Satisfaction}
             small
+            max={100}
         />
     }
 
@@ -44,11 +45,15 @@ const SimpleHotelListItem: React.FC<Props> = props => {
 
     if (priceInfo === "loading") {
         price = <Skeleton />
-    } else if (priceInfo === "need-to-inquire") {
-        price = <div className="text-red-500 text-xs"> قیمت نیازمند استعلام است </div>;
+    // } else if (priceInfo === "need-to-inquire") {
+    //     price = <div className="text-red-500 text-xs"> قیمت نیازمند استعلام است </div>;
     } else if (priceInfo === "notPriced") {
         price = <div className="text-red-500 text-xs"> قیمت وجود ندارد </div>;
-    } else {
+    } else if (priceInfo.availablityType === "Completion"){
+        price = <div className="text-red-500 text-xs"> تکمیل ظرفیت </div>;
+    } else if (priceInfo.availablityType === "Request"){
+        price = <div className="text-red-500 text-xs"> قیمت نیازمند استعلام است </div>;
+    } else if (priceInfo.salePrice > 10000) {
         price = <div className="font-bold text-sm"> {numberWithCommas(priceInfo.salePrice)} {t('rial')}</div>;
     }
     
@@ -87,7 +92,9 @@ const SimpleHotelListItem: React.FC<Props> = props => {
                 {guestRate}
 
                 <div className="flex gap-2 justify-between items-center">
-                    {price}
+                    <div>
+                        {price}
+                    </div>
 
                     <Button type="button" className="text-xs px-2 h-8">
                         {tHotel('see-rooms')}

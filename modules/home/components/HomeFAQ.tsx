@@ -18,7 +18,7 @@ const HomeFAQ: React.FC<Props> = props => {
         id?: number;
     }[] = props.items?.length ?
             props.items.map(item => ({
-                content: item.Answer || "",
+                content: <Markdown>{ item.Answer || ""}</Markdown>,
                 title: item.Question || "",
                 id: item.id
             }))
@@ -201,7 +201,7 @@ const HomeFAQ: React.FC<Props> = props => {
 
                 content={(
                     <div className='leading-7 text-sm'>
-                        <Markdown>{faq.content as string}</Markdown>
+                        {faq.content}
                     </div>
                 )}
 

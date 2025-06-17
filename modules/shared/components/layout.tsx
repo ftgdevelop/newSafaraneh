@@ -10,6 +10,8 @@ import { getCurrentUserProfile } from "@/modules/authentication/actions";
 import Notification from "./Notification";
 import { setProgressLoading } from "../store/stylesSlice";
 import { FooterStrapi } from "../types/common";
+import Script from "next/script";
+import { GTM_ID } from "../helpers";
 
 type Props = {
   logo: string;
@@ -21,6 +23,7 @@ type Props = {
     linkedin?: string;
     twitter?: string;
     facebook?: string;
+    emailAddress?: string;
   }
   enamad?: any;
   samandehi?: string;
@@ -46,6 +49,8 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
   const removeLoading = () => { dispatch(setProgressLoading(false)) }
 
   const safarmarketHotelPixel = useAppSelector(state => state.safarmarket.hotel);
+
+  const isHotelban = process.env.PROJECT === "HOTELBAN";
 
   useEffect(() => {
 
@@ -94,14 +99,24 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     }
   }, []);
 
-  let showHeaderAndFooter = true;
+
+
+  let showHeader = true;
+  let showFooter = true;
+  
   if (router.pathname === "/404") {
-    showHeaderAndFooter = false;
+    showFooter = false;
+    showHeader = false;
+  }
+  const theme3 = process.env.THEME === "THEME3";
+
+  if(  theme3 && (router.pathname === "/" || router.pathname === "/hotels-home" || router.pathname === "/flights-home")){
+    showHeader = false;
   }
 
   return (
 
-    <div className={`wrapper leading-7 ${process.env.THEME || ""} lang-${locale} ${locale !== "en" ? "rtl" : ""} ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`} >
+    <div className={`${theme3?"bg-white":""} wrapper leading-7 ${process.env.THEME || ""} lang-${locale} ${locale !== "en" ? "rtl" : ""} ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`} >
       
       {!!safarmarketHotelPixel && <img src={safarmarketHotelPixel} className="h-px w-px opacity-0 absolute pointer-events-none" />}
 
@@ -109,34 +124,36 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
 
       <Error />
       <Notification />
-      {showHeaderAndFooter ? (
-        <>
-          <Header logo={props.logo} siteName={props.siteName} />
-          <main id="main" className={`min-h-desktop-main relative ${isHeaderUnderMain ? "z-50" : "z-10"}`}>
-            {props.children}
-          </main>
-          <Footer 
-            logo={props.logo} 
-            siteName={props.siteName} 
-            contactInfo={props.contactInfo} 
-            enamad={props.enamad || undefined} 
-            samandehi={props.samandehi}
-            footerStrapi={props.footerStrapi}
-          />
+          
+      {showHeader && <Header logo={props.logo} siteName={props.siteName} />}
 
-          {props.scripts ? <script
-              id="script_footer_api_scripts"
-              dangerouslySetInnerHTML={{
-                  __html: `${props.scripts}`,
-              }}
-          /> : null}
+      <main id="main" className={`${showHeader && showFooter ? "min-h-desktop-main" : ""} relative ${isHeaderUnderMain ? "z-50" : "z-10"}`}>
+        {props.children}
+      </main>
 
-        </>
-      ) : (
-        <main id="main" >
-          {props.children}
-        </main>
-      )}
+      {showFooter && <Footer 
+        logo={props.logo} 
+        siteName={props.siteName} 
+        contactInfo={props.contactInfo} 
+        enamad={props.enamad || undefined} 
+        samandehi={props.samandehi}
+        footerStrapi={props.footerStrapi}
+      />}
+
+      {props.scripts && <Script id="footer_api_scripts" strategy="afterInteractive">
+        {props.scripts}
+      </Script>}
+
+      {isHotelban && GTM_ID ? <script
+          id="google_tag_manager_2"
+          dangerouslySetInnerHTML={{
+              __html:`window.dataLayer = window.dataLayer || [];
+                      function gtag(){dataLayer.push(arguments);}
+                      gtag('js', new Date());
+                      gtag('config', ${GTM_ID});`
+          }}
+      /> : null}
+
 
     </div>
 

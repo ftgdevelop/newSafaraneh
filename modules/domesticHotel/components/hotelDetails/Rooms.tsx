@@ -22,6 +22,7 @@ const PriceCalendar = dynamic(() => import('./PriceCalendar'), {
 
 type Props = {
     hotelId: number;
+    goToSearchForm : () => void;
 }
 
 const Rooms: React.FC<Props> = props => {
@@ -85,7 +86,32 @@ const Rooms: React.FC<Props> = props => {
                 setAvailabilities(undefined);
                 setAvailabilitiesLoading(true);
 
-                const response: any = await GetRooms({ id: hotelId, checkin: checkin, checkout: checkout }, i18n?.language === "en" ? "en-US" : i18n?.language === "ar" ? "ar-AE" : "fa-IR");
+                let cookieSafarmarketId;
+                let cookieSafarmarketSource;
+                let cookies = decodeURIComponent(document?.cookie).split(';');
+                for (const item of cookies) {
+                    if (item.includes("safarMarketHotelSmId=")) {
+                        cookieSafarmarketId = item.split("=")[1];
+                    }
+                    if (item.includes("safarMarketHotelUtmSource=")) {
+                        cookieSafarmarketSource = item.split("=")[1];
+                    }
+                }
+
+                let utm: undefined | { utmSource: string; utmKey: string };
+                if (router.query && router.query.utm_source && router.query.safarmarketId) {
+                    utm = {
+                        utmSource: router.query.utm_source! as string,
+                        utmKey: router.query.safarmarketId! as string
+                    }
+                } else if (cookieSafarmarketId) {
+                    utm = {
+                        utmSource: cookieSafarmarketSource || "safarmarket",
+                        utmKey: cookieSafarmarketId
+                    }
+                }
+
+                const response: any = await GetRooms({ id: hotelId, checkin: checkin, checkout: checkout, MetaSearchKey: utm?.utmKey, MetaSearchName: utm?.utmSource }, i18n?.language === "en" ? "en-US" : i18n?.language === "ar" ? "ar-AE" : "fa-IR");
 
                 setAvailabilitiesLoading(false);
 
@@ -158,6 +184,7 @@ const Rooms: React.FC<Props> = props => {
 
     const theme1 = process.env.THEME === "THEME1";
     const theme2 = process.env.THEME === "THEME2";
+    const theme3 = process.env.THEME === "THEME3";
 
     let selectedNights: string[] = [];
     if (openedRoom?.rate?.nightly?.items) {
@@ -256,7 +283,8 @@ const Rooms: React.FC<Props> = props => {
                     <>
                         <h2 className="text-lg lg:text-3xl font-semibold mb-3 md:mb-7"> {tHotel('choose-room')}  </h2>
 
-                        {!!theme1 && <RoomsListTheme1
+                        {!!(theme1 || theme3) && <RoomsListTheme1
+                            goToSearchForm={props.goToSearchForm}
                             availabilites={availabilites}
                             selectRoomHandle={selectRoomHandle}
                             selectedRoomToken={selectedRoomToken}

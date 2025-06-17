@@ -5,7 +5,7 @@ import { ArrowLeft, Tik, Bed, User, Calendar, DefaultRoom } from "@/modules/shar
 import { dateDiplayFormat, getDatesDiff, numberWithCommas } from "@/modules/shared/helpers";
 import { useTranslation } from "next-i18next";
 import Image from "next/image";
-import { AsideHotelInfoType, AsideReserveInfoType } from "../../types/hotel";
+import { AsideHotelInfoType, AsideReserveInfoRoomItemType, AsideReserveInfoType, DomesticHotelGetValidateResponse } from "../../types/hotel";
 
 type Props = {
     reserveInformation?: AsideReserveInfoType;
@@ -23,6 +23,7 @@ type Props = {
         isValid: true;
     };
     discountLoading?: boolean;
+    rules?: DomesticHotelGetValidateResponse['rules'];
 }
 const Aside: React.FC<Props> = props => {
 
@@ -30,26 +31,6 @@ const Aside: React.FC<Props> = props => {
     const { t: tHotel } = useTranslation('hotel');
 
     const { hotelInformation, reserveInformation, roomExtraBed, discountResponse, discountLoading } = props;
-
-    const board = (code: string) => {
-        switch (code) {
-            case "BB":
-                return "به همراه صبحانه";
-            case "HB":
-                return "صبحانه + ناهار یا شام";
-            case "FB":
-                return "تمام وعده های غذایی شامل می شود";
-            case "RO":
-                return "بدون صبحانه";
-            case "Hour6":
-                return "اقامت به مدت ۶ ساعت";
-            case "Hour10":
-                return "اقامت به مدت ۱۰ ساعت";
-
-            default:
-                return code;
-        }
-    }
 
     const hasDiscount = reserveInformation?.salePrice && reserveInformation.boardPrice && reserveInformation.boardPrice > reserveInformation.salePrice;
 
@@ -111,6 +92,35 @@ const Aside: React.FC<Props> = props => {
     let promoCodePrice: number = reserveInformation.promoCodePrice || 0;
     if (discountResponse) {
         promoCodePrice = discountResponse.discountPrice;
+    }
+
+    let cancelationElement = null;
+    const cancelationData = props.rules?.find(rule => rule.keyword === "cancellation");
+    if (cancelationData){
+
+        cancelationElement = (
+            <div className="bg-neutral-100 p-3 mb-4 rounded-lg">
+                <h5 className="font-semibold text-sm mb-1"> {cancelationData.name} </h5>
+                <div className="text-xs leading-6">
+                    {cancelationData.description}
+                </div>
+            </div>
+        )
+    }
+
+
+    let childrenElement = null;
+    const childrenData = props.rules?.find(rule => rule.keyword === "children");
+    if (childrenData){
+
+        childrenElement = (
+            <div className="bg-neutral-100 p-3 mb-4 rounded-lg">
+                <h5 className="font-semibold text-sm mb-1"> {childrenData.name} </h5>
+                <div className="text-xs leading-6">
+                    {childrenData.description}
+                </div>
+            </div>
+        )
     }
 
     return (
@@ -187,7 +197,7 @@ const Aside: React.FC<Props> = props => {
                         </div>
                     )}
 
-                    {reserveInformation.rooms.map((roomItem: any, roomIndex: number) => {
+                    {reserveInformation.rooms.map((roomItem: AsideReserveInfoRoomItemType, roomIndex: number) => {
 
                         //TODO check cancelation
                         let cancellation = null;
@@ -247,8 +257,9 @@ const Aside: React.FC<Props> = props => {
                                     <User className="w-4.5 h-4.5 fill-current" />
                                     {roomItem.bed} {tHotel('guest')} {extraBedPriceBlock}
                                 </div>
-
-                                <div className="text-green-600 text-sm">{board(roomItem.board)}</div>
+                               
+                                {roomItem.boardName && <div className="text-green-600 text-sm">{roomItem.boardName}</div> }
+                                {roomItem.boardExtra && <div className="text-green-600 text-sm">{roomItem.boardExtra}</div> }
 
                                 {cancellation}
 
@@ -280,9 +291,9 @@ const Aside: React.FC<Props> = props => {
                                                     })}
                                                 </header>
                                                 <div className="p-2">
-                                                    {!!night.board && <div className="text-neutral-400 text-xs line-through">
+                                                    {night.board && night.amount && (night.board > night.amount) ? <div className="text-neutral-400 text-xs line-through">
                                                         {numberWithCommas(night.board)} ریال
-                                                    </div>}
+                                                    </div>:null}
 
                                                     {!!night.amount && <div className="font-semibold text-md">
                                                         {numberWithCommas(night.amount)} ریال
@@ -299,12 +310,16 @@ const Aside: React.FC<Props> = props => {
 
                         })}
 
+                        {cancelationElement}
+
+                        {childrenElement}
+
                         {reserveInformation.salePrice && reserveInformation.salePrice > 500000 ? (
                             <>
                                 {(hasDiscount || !!activeExtraBedPrice || !!reserveInformation.promoCodePrice || !!promoCodePrice) && (
                                     <div className="flex items-center justify-between">
                                         {t("sum")}
-                                        <span>{numberWithCommas(reserveInformation.boardPrice)} {t('rial')} </span>
+                                        <span>{numberWithCommas(reserveInformation.boardPrice || reserveInformation.salePrice)} {t('rial')} </span>
                                     </div>
                                 )}
 

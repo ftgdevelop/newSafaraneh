@@ -4,15 +4,37 @@ import { GetTransactionParams } from '../types';
 
 type DiscountType = "Undefined"| "HotelDomestic"| "FlightDomestic"| "Bus"| "Package"| "Flight"| "Hotel"| "PnrOutside"| "Cip"| "Activity";
 
-export const validateDiscountCode = async (params:{prereserveKey:string, type:DiscountType, discountPromoCode:string}, acceptLanguage: string = 'fa-IR') => {
+type ValidateDiscountCodeType = {
+  prereserveKey:string;
+  type:DiscountType;
+  discountPromoCode:string;
+  MetaSearchName?: string;
+  MetaSearchKey?: string;
+}
+
+export const validateDiscountCode = async (params:ValidateDiscountCodeType, acceptLanguage: string = 'fa-IR') => {
     try {
+        const data:{
+          preReserve: string;
+          type:DiscountType;
+          promoCode: string;
+          MetaSearchKey?: string;
+          MetaSearchName?: string;
+        } = {
+          preReserve: params.prereserveKey,
+          type: params.type,
+          promoCode: params.discountPromoCode,
+        }
+        if(params.MetaSearchKey){
+          data.MetaSearchKey = params.MetaSearchKey;
+        }
+        if(params.MetaSearchName){
+          data.MetaSearchName = params.MetaSearchName;
+        }
+
         const response = await axios({
             method: "post",
-            data: {
-                preReserve: params.prereserveKey,
-                type: params.type,
-                promoCode: params.discountPromoCode,
-            },
+            data,
             url: `${ServerAddress.Type}${ServerAddress.Crm}${Payment.ValidateDiscountCode}`,
             headers: {
                 ...Header,
@@ -27,15 +49,36 @@ export const validateDiscountCode = async (params:{prereserveKey:string, type:Di
     }
 }
 
-export const registerDiscountCode = async (params:{reserveId:string, username:unknown, discountPromoCode:string}, acceptLanguage: string = 'fa-IR') => {
+type RegisterDiscountCodeType = {
+  reserveId:string;
+  username:string;
+  discountPromoCode:string;
+  MetaSearchName?: string;
+  MetaSearchKey?: string;
+}
+export const registerDiscountCode = async (params:RegisterDiscountCodeType, acceptLanguage: string = 'fa-IR') => {
     try {
+      const data:{
+        reserveId: string;
+        username: string;
+        promoCode: string;
+        MetaSearchKey?: string;
+        MetaSearchName?: string;
+      } = {
+        reserveId: params.reserveId,
+        username: params.username,
+        promoCode: params.discountPromoCode,
+      }
+      if(params.MetaSearchKey){
+        data.MetaSearchKey = params.MetaSearchKey;
+      }
+      if(params.MetaSearchName){
+        data.MetaSearchName = params.MetaSearchName;
+      }
+
         const response = await axios({
             method: "post",
-            data: {
-           reserveId: params.reserveId,
-           username: params.username,
-           promoCode: params.discountPromoCode,
-            },
+            data,
             url: `${ServerAddress.Type}${ServerAddress.Crm}${Payment.RegisterDiscountCode}`,
             headers: {
                 ...Header,

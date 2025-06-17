@@ -1,8 +1,39 @@
+import TermsWithTabs from "@/modules/pages/components/TermsWithTabs";
+import { getStrapiPages } from "@/modules/shared/actions/strapiActions";
 import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
 import { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-const Terms: NextPage = () => {
+type Props = {
+    strapiData?: {
+        attributes?: {
+            Sections?: {
+                Title?: string;
+                Keyword?: string;
+                Type?: string;
+                id: number;
+                Items?: {
+                    Answer?: string;
+                    Question?: string;
+                    id: number;
+                }[];
+            }[];
+        }
+
+    }[];
+}
+
+const Terms: NextPage<Props> = props => {
+    
+    const isHotelban = process.env.PROJECT === "HOTELBAN";
+    if (isHotelban){
+        return(
+            <TermsWithTabs 
+                tabItems={props.strapiData?.[0]?.attributes?.Sections}
+            />
+        )
+    }
+
     return (
 
         <div className="max-w-container m-auto p-5 max-sm:p-3">
@@ -133,11 +164,24 @@ const Terms: NextPage = () => {
 
 export default Terms;
 
+
 export async function getStaticProps(context: any) {
+
+        const hasStrapi = process.env.PROJECT_SERVER_STRAPI;
+        const strapiTenant = process.env.PROJECT_SERVER_STRAPI_TENANTID;
+    
+        let strapiData: any;
+    
+        if (hasStrapi) {
+            strapiData = await getStrapiPages(`filters[Slug][$eq]=terms&filters[Tenant][$eq]=${strapiTenant}&populate[Sections][populate]=*`)
+        }
+    
+
     return (
         {
             props: {
                 ...await serverSideTranslations(context.locale, ['common']),
+                strapiData: strapiData?.data?.data || null
             },
 
         }

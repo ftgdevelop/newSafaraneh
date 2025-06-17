@@ -92,7 +92,7 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, recentBlogs, moduleDis
             link: `/blog/${r.slug}`,
             title: r.title.rendered,
             date: r.date,
-            imageUrl: r.images.medium || "",
+            imageUrl: r.images?.medium || "",
             tags:[]
         }));
 

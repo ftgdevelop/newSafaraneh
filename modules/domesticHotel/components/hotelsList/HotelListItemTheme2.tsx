@@ -68,17 +68,13 @@ const HotelListItemTheme2: React.FC<Props> = props => {
             <Skeleton className="w-20" />
         </div>
 
-    } else if (hotel.priceInfo === "need-to-inquire") {
-
-        priceBlock = <div className="whitespace-nowrap text-red-500 text-xs leading-4"> قیمت نیازمند استعلام است </div>
-
     } else {
 
         const { boardPrice, salePrice } = hotel.priceInfo;
 
         let discount: number = 0;
 
-        const discountPercentage = ((boardPrice - salePrice) * 100 / boardPrice);
+        const discountPercentage = boardPrice && salePrice ? ((boardPrice - salePrice) * 100 / boardPrice) : 0;
 
         if (discountPercentage > 0 && discountPercentage < 1) {
             discount = 1;
@@ -89,37 +85,46 @@ const HotelListItemTheme2: React.FC<Props> = props => {
         priceBlock = (
             <>
 
-                {!!discount && <div><span className="bg-green-700 text-white rounded-xl leading-7 text-2xs px-2 select-none"> {toPersianDigits(discount.toString())}% {t('discount')} </span></div>}
+                {!!(hotel.priceInfo.availablityType === "Completion") && (<div className="text-sm text-red-500 font-semibold leading-4">  تکمیل ظرفیت </div>)}
+                
+                {!!(hotel.priceInfo.availablityType === "Request") && (<div className="whitespace-nowrap text-red-500 text-xs leading-4"> قیمت نیازمند استعلام است </div>)}
+                
+                
+                {!!(discount>0) && <div><span className="bg-green-700 text-white rounded-xl leading-7 text-2xs px-2 select-none"> {toPersianDigits(discount.toString())}% {t('discount')} </span></div>}
 
-                {(boardPrice > salePrice) && <span className="text-xs inline-block text-neutral-500 line-through whitespace-nowrap">
+                {(boardPrice > 10000 && salePrice > 10000 && boardPrice  > salePrice) && <span className="text-xs inline-block text-neutral-500 line-through whitespace-nowrap">
                     {numberWithCommas(boardPrice)} {t('rial')}
                 </span>}
 
-                <Tooltip
-                    className="inline-block text-sm rtl:mr-2 ltr:ml-2"
-                    position="end"
-                    title={
-                        <div className="whitespace-nowrap">
+                {salePrice > 10000 && (
+                    <>
+                        <Tooltip
+                            className="inline-block text-sm rtl:mr-2 ltr:ml-2"
+                            position="end"
+                            title={
+                                <div className="whitespace-nowrap">
 
-                            {numberWithCommas(+(salePrice / nights).toFixed(0))} {t('rial')}
+                                    {numberWithCommas(+(salePrice / nights).toFixed(0))} {t('rial')}
 
-                            <br />
+                                    <br />
 
-                            <small> {tHotel("Avg-per-night")} </small>
+                                    <small> {tHotel("Avg-per-night")} </small>
 
+                                </div>
+                            }
+                        >
+
+                            <div className="font-semibold whitespace-nowrap">
+                                {numberWithCommas(salePrice)} {t('rial')}
+                            </div>
+
+                        </Tooltip>
+
+                        <div className="text-xs text-neutral-500 leading-4">
+                            {tHotel("price-for-nights", { nights: toPersianDigits(nights.toString()) })}
                         </div>
-                    }
-                >
-
-                    <div className="font-semibold whitespace-nowrap">
-                        {numberWithCommas(salePrice)} {t('rial')}
-                    </div>
-
-                </Tooltip>
-
-                <div className="text-xs text-neutral-500 leading-4">
-                    {tHotel("price-for-nights", { nights: toPersianDigits(nights.toString()) })}
-                </div>
+                    </>
+                )}
             </>
         )
     }
@@ -143,7 +148,7 @@ const HotelListItemTheme2: React.FC<Props> = props => {
                 target="_blank"
                 className="rounded-full h-10 px-5 text-sm w-full md:w-48 max-w-full mt-2"
             >
-                {hotel.priceInfo === "need-to-inquire" ? "درخواست رزرو" :"مشاهده و رزرو"}
+                {/* {hotel.priceInfo === "need-to-inquire" ? "درخواست رزرو" :"مشاهده و رزرو"} */}
             </Button>
         )
     }
