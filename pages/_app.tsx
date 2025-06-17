@@ -1,3 +1,4 @@
+import { GoogleTagManager } from '@next/third-parties/google'
 import { i18n } from 'next-i18next';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -134,6 +135,8 @@ function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }:
         <meta name="robots" content="index, follow" />
         <meta name="theme-color" content="#0a438b" />
         <meta charSet="utf-8" />
+        
+        <meta name="samandehi" content="124933150"/>
 
         {!!portalAuthor && <meta name="author" content={portalAuthor} />}
         {!!portalCreator && <meta name="creator" content={portalCreator} />}
@@ -178,14 +181,7 @@ function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }:
 
       </Head>
 
-      <noscript>
-        <iframe
-          src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
-          height="0"
-          width="0"
-          style={{ display: 'none', visibility: 'hidden' }}
-        />
-      </noscript>
+       {!!GTM_ID && <GoogleTagManager gtmId={GTM_ID} />}
 
       <Layout
         contactInfo={

@@ -48,9 +48,20 @@ type Props = {
   };
   portalData: WebSiteDataType;
   error410?: "true";
+  url: string;
 }
 
 const HotelDetail: NextPage<Props> = props => {
+
+  useEffect(()=>{
+    const fetchData = async (u:string) => {
+      const allData: any = await getDomesticHotelDetailsByUrl( u, "fa-IR");
+    }
+
+    if(props.url){
+      fetchData( "/fa"+ props.url);
+    }
+  },[props.url]);
 
   const dispatch = useAppDispatch();
 
@@ -119,6 +130,7 @@ const utm_source = router.query?.utm_source;
 // "safarmarket"
 const utm_term = router.query?.utm_term; 
 // "hotel"
+
 
 useEffect(()=>{
 
@@ -895,7 +907,8 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return ({
     props: {
       ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
-      allData: allDataObject
+      allData: allDataObject,
+      url: url
     },
   })
 }
