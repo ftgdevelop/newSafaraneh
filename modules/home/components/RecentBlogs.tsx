@@ -21,7 +21,7 @@ const RecentBlogs: React.FC<Props> = props => {
                     <Link key={blog.id} href={`/blog/${blog.slug}`} title={blog.title?.rendered}>
                         <Image
                             onContextMenu={e => {e.preventDefault()}}
-                            src={blog.images?.medium}
+                            src={blog.images?.medium || "/images/no-image.jpg"}
                             alt={blog.title?.rendered}
                             title={blog.title?.rendered}
                             width={278}

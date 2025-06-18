@@ -40,6 +40,7 @@ const PhoneInput: React.FC<Props> = props => {
 
     const theme1 = process.env.THEME === "THEME1";
     const theme2 = process.env.THEME === "THEME2";
+    const theme3 = process.env.THEME === "THEME3";
 
     const codeRef = useRef<HTMLDivElement>(null);
 
@@ -174,7 +175,7 @@ const PhoneInput: React.FC<Props> = props => {
     }
 
 
-    const inputClassNames : string[] = [`bg-caret border ${theme1?"h-10":theme2?"h-13":""} px-22 rounded-l-md ${theme2?"min-w-0 basis-40 grow-0":"col-span-4"} px-2 outline-none`];
+    const inputClassNames : string[] = [`bg-caret border ${theme1?"h-10":theme2?"h-13":theme3?"h-12":""} px-22 rounded-l-md ${(theme2 || theme3)?"min-w-0 basis-40 grow-0":"col-span-4"} px-2 outline-none`];
 
     if(errorText && isTouched){
         inputClassNames.push(`border-red-500 ${theme2?"border-2":""}`);
@@ -182,7 +183,7 @@ const PhoneInput: React.FC<Props> = props => {
         inputClassNames.push(`${theme2?"border-neutral-400 focus:border-2":"border-neutral-300"} focus:border-blue-500`);
     }
 
-    const inputClassNames2 : string[] = [`border ${theme1?"h-10":theme2?"h-13":""} ${!props.labelIsSimple && theme2 ? "pt-4 leading-4" : ""} px-2 ${theme2?"basis-60 w-full grow":"col-span-5"} border-l-0 rounded-r-md outline-none`];
+    const inputClassNames2 : string[] = [`border ${theme1?"h-10":theme2?"h-13":theme3?"h-12":""} ${!props.labelIsSimple && theme2 ? "pt-4 leading-4" : ""} px-2 ${(theme2 || theme3)?"basis-60 w-full grow":"col-span-5"} border-l-0 rounded-r-md outline-none`];
 
     if(errorText && isTouched){
         inputClassNames2.push(`border-red-500 ${theme2?"border-2":""}`);
@@ -207,7 +208,7 @@ const PhoneInput: React.FC<Props> = props => {
                         </div>
                     )}
                 </div>
-                <div className={`relative text-sm ${theme2?"flex":"grid grid-cols-9"}`} dir='ltr' ref={codeRef}>
+                <div className={`relative text-sm ${(theme2 || theme3) ?"flex":"grid grid-cols-9"}`} dir='ltr' ref={codeRef}>
 
                     {!typedCode && <div className='absolute left-3 top-1/2 -translate-y-1/2 flex gap-2 items-center pointer-events-none'>
                         <Image

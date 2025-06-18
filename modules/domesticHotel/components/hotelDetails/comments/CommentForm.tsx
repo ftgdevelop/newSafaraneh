@@ -73,7 +73,7 @@ const CommentForm: React.FC<Props> = props => {
 
     const submitHandle = async (values: FormValues, actions: any) => {
 
-        const params = {            
+        const params = {
             comment: values.comment,
             overallRating: values.overallRating,
             travelType: values.travelType,
@@ -81,51 +81,37 @@ const CommentForm: React.FC<Props> = props => {
             userDisplayName: values.userDisplayName,
             positivePoints: values.positivePoints,
             negativePoints: values.negativePoints,
-            recommendToOthers: values.recommendToOthers,            
+            recommendToOthers: values.recommendToOthers,
             userId: user?.id,
             language: "fa-IR",
             pageId: props.pageId,
             creationTime: dateFormat(new Date),
             isActive: user?.isActive,
             isAnonymous: values.isAnonymous,
-            tenantId: process.env.PROJECT_SERVER_TENANTID,
-            id: 0
+            tenantId: +process.env.PROJECT_SERVER_TENANTID!
         };
 
         setSubmitLoading(true);
-        setTimeout(()=>{
-            actions.resetForm();
-
-            console.log(values);
-            console.log(params);
-    
-            setOpen(false);
-            props.closeHandle();
-            setSubmitLoading(false);
-
-            // dispatch(setReduxNotification({
-            //     status: 'success',
-            //     message:'دیدگاه شما با موفقیت ثبت شد و پس از تایید نمایش داده خواهد شد.' ,
-            //     isVisible: true
-            // }));
-            
-            dispatch(setReduxNotification({
-                status: 'error',
-                message:'متاسفانه ثبت دیدگاه شما با خطا روبرو شد. لطفا دوباره تلاش کنید.' ,
-                isVisible: true
-            }));
-            
-        },2000);
 
         const response: any = await createComment(params);
 
+        actions.resetForm();
+        setOpen(false);
+        props.closeHandle();
+        setSubmitLoading(false);
+
         if (response?.data?.result) {
-            console.log("response-data-result", response.data.result)
-            debugger;
-            //toDo
-        }else{
-            console.log("response-data", response.data);
-            debugger;
+            dispatch(setReduxNotification({
+                status: 'success',
+                message: 'دیدگاه شما با موفقیت ثبت شد و پس از تایید نمایش داده خواهد شد.',
+                isVisible: true
+            }));
+        } else {
+            dispatch(setReduxNotification({
+                status: 'error',
+                message: 'متاسفانه ثبت دیدگاه شما با خطا روبرو شد. لطفا دوباره تلاش کنید.',
+                isVisible: true
+            }));
         }
     }
 
@@ -136,8 +122,6 @@ const CommentForm: React.FC<Props> = props => {
         { label: "گروهی", value: "Group", icon: <Group3 className='fill-current w-6 h-6' /> },
         { label: "کاری", value: "Business", icon: <Business className='fill-current w-5 h-5' /> }
     ];
-
-    if (!isAuthenticated) return "null";
 
     return (
         <ModalPortal

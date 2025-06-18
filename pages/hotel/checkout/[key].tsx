@@ -32,6 +32,7 @@ const Checkout: NextPage = () => {
   const { t } = useTranslation('common');
   const { t: tHotel } = useTranslation('hotel');
 
+  const theme3 = process.env.THEME === "THEME3";
   const theme2 = process.env.THEME === "THEME2";
 
   const theme1 = process.env.THEME === "THEME1";
@@ -60,6 +61,28 @@ const Checkout: NextPage = () => {
   const [fetchingTravelersLoading, setFetchingTravelersLoading] = useState<boolean>(false);
 
   const [submitLoading, setSubmitLoading] = useState<boolean>(false);
+
+  const [metaSearchName, setMetaSearchName] = useState<string>("");
+  const [metaSearchKey, setMetaSearchKey] = useState<string>("");
+
+  useEffect(()=>{
+    if(process.env.SAFAR_MARKET_SITE_NAME){  
+      let cookies = decodeURIComponent(document?.cookie).split(';');
+      for (const item of cookies){
+        if (item.includes("safarMarketHotelSmId=")){
+
+          setMetaSearchKey(item.split("=")[1]);
+
+          let sourceName = 'safarmarket';
+          if (item.includes("safarMarketHotelUtmSource=")) {
+            sourceName = item.split("=")[1];
+          }
+          setMetaSearchName(sourceName);
+        }
+      }
+    }
+  },[]);
+  
 
   let backUrl: string = "";
   const checkinDate = reserveInfo?.checkin && new Date(reserveInfo.checkin);
@@ -132,7 +155,8 @@ const Checkout: NextPage = () => {
 
       rooms: reserveInfo.rooms.map((roomItem: DomesticHotelGetValidateResponse['rooms'][0]) => ({
         name: roomItem.name,
-        board: roomItem.boardCode,
+        boardName:roomItem.boardName,
+        boardExtra: roomItem.boardExtra,
         cancellationPolicyStatus: roomItem.cancellationPolicyStatus,
         bed: roomItem.bed,
         extraBed: roomItem.extraBed,
@@ -168,24 +192,9 @@ const Checkout: NextPage = () => {
 
   const submitHandler = async (params: any) => {
 
-    if(process.env.SAFAR_MARKET_SITE_NAME){
-      let cookieSafarmarketId;
-      let cookieSafarmarketSource;
-      let cookies = decodeURIComponent(document?.cookie).split(';');
-      for (const item of cookies){
-        if (item.includes("safarMarketHotelSmId=")){
-          cookieSafarmarketId =item.split("=")[1];
-        }
-        if (item.includes("safarMarketHotelUtmSource=")) {
-          cookieSafarmarketSource = item.split("=")[1];
-      }
-      }
-
-      if(cookieSafarmarketId){
-        params.metaSearchName = cookieSafarmarketSource || 'safarmarket';
-        params.metaSearchKey = cookieSafarmarketId;
-      }
-
+    if(metaSearchKey){
+      params.metaSearchName = metaSearchName;
+      params.metaSearchKey = metaSearchKey;
     }
 
     setSubmitLoading(true);
@@ -198,7 +207,14 @@ const Checkout: NextPage = () => {
       const username = reserveResponse.data.result.username;
 
       if (discountData?.isValid && promoCode) {
-        await registerDiscountCode({ discountPromoCode: promoCode, reserveId: id.toString(), username: username });
+        await registerDiscountCode({
+          discountPromoCode: promoCode,
+          reserveId: id.toString(),
+          username: username ,
+          MetaSearchKey : metaSearchKey,
+          MetaSearchName : metaSearchName
+        });
+      
       }
 
       if (reserveResponse.data.result.status === "Pending") {
@@ -231,7 +247,8 @@ const Checkout: NextPage = () => {
       lastName: user?.lastName || "",
       email: user?.emailAddress || "",
       nationalId: user?.nationalId || "",
-      phoneNumber: user?.phoneNumber || ""
+      phoneNumber: user?.phoneNumber || "",
+      passportNumber: ""
     },
     passengers: reserveInfo?.rooms.map((_, index) => ({
       gender: true,
@@ -249,7 +266,13 @@ const Checkout: NextPage = () => {
     setDiscountLoading(true);
     setDiscountData(undefined);
 
-    const response = await validateDiscountCode({ prereserveKey: key!, type: 'HotelDomestic', discountPromoCode: value });
+    const response = await validateDiscountCode({ 
+      prereserveKey: key!,
+      type: 'HotelDomestic',
+      discountPromoCode: value,
+      MetaSearchKey:metaSearchKey,
+      MetaSearchName: metaSearchName
+    });
 
     setDiscountLoading(false);
 
@@ -285,7 +308,7 @@ const Checkout: NextPage = () => {
           className='py-3 mb-2'
           items={[
             { label: t('completing-information'), status: 'active' },
-            { label: tHotel('checking-capacity'), status: 'up-comming' },
+            //{ label: tHotel('checking-capacity'), status: 'up-comming' },
             { label: t('confirm-pay'), status: 'up-comming' },
             { label: t('complete-purchase'), status: 'up-comming' }
           ]}
@@ -293,7 +316,7 @@ const Checkout: NextPage = () => {
 
         {backUrl ? (
           <Link href={backUrl} className={`text-sm text-blue-500 mb-4 inline-block  ${theme2 ? "mt-1 shadow-normal rounded-full hover:bg-blue-100 w-8 h-8 flex items-center justify-center" : ""}`}>
-            <ArrowRight className='inline-block align-middle w-5 h-5 fill-current ltr:rotate-180' /> {!!theme1 && "برگشت به انتخاب اتاق"}
+            <ArrowRight className='inline-block align-middle w-5 h-5 fill-current ltr:rotate-180' /> {!!(theme1 || theme3) && "برگشت به انتخاب اتاق"}
           </Link>
         ) : (
           <Skeleton className='mt-2 mb-3 w-60' />
@@ -316,11 +339,11 @@ const Checkout: NextPage = () => {
               }
               return (
 
-                <Form className={`md:grid ${theme1 ? "md:grid-cols-12 lg:grid-cols-3 gap-4" : "md:grid-cols-12 md:gap-5 lg:gap-20"}`} autoComplete='off' >
+                <Form className={`md:grid ${(theme1 || theme3) ? "md:grid-cols-12 lg:grid-cols-3 gap-4" : "md:grid-cols-12 md:gap-5 lg:gap-20"}`} autoComplete='off' >
 
-                  <div className={`${theme1 ? "md:col-span-7 lg:col-span-2" : "md:col-span-7"}`}>
+                  <div className={`${(theme1 || theme3) ? "md:col-span-7 lg:col-span-2" : "md:col-span-7"}`}>
 
-                    <div className={`${theme1 ? "bg-white border border-neutral-300 p-5 rounded-lg" : ""}`}>
+                    <div className={`${(theme1 || theme3) ? "bg-white border border-neutral-300 p-5 rounded-lg" : ""}`}>
 
                       <ReserverInformation
                         errors={errors}
@@ -372,9 +395,9 @@ const Checkout: NextPage = () => {
 
                   </div>
 
-                  <div className={`${theme1 ? "md:col-span-5 lg:col-span-1" : "md:col-span-5"}`}>
+                  <div className={`${(theme1 || theme3) ? "md:col-span-5 lg:col-span-1" : "md:col-span-5"}`}>
 
-                    {theme1 ? (
+                    {(theme1 || theme3) ? (
                       <Aside
                         hotelInformation={hotelInformation}
                         reserveInformation={reserveInformation}
@@ -383,6 +406,7 @@ const Checkout: NextPage = () => {
                         roomExtraBed={roomsExtraBed}
                         discountLoading={discountLoading}
                         discountResponse={discountData?.isValid ? discountData : undefined}
+                        rules={reserveInfo?.rules || undefined}
                       />
                     ) : (
                       <AsideTheme2

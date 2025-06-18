@@ -10,10 +10,11 @@ type Props = {
     onSelectRoom: (bookingToken: string, count: number) => void;
     selectedRoomToken?: string;
     roomsHasImage?: boolean;
-    nights?: number;
+    nights: number;
     onOpenRoom: (rateItem: DomesticHotelRateItem) => void;
     rates:DomesticHotelRateItem[];
     priceType: "total" | "average";
+    goToSearchForm : () => void;
 }
 
 const RoomItemTheme1: React.FC<Props> = props => {
@@ -98,6 +99,7 @@ const RoomItemTheme1: React.FC<Props> = props => {
                 </div>
                 {rates?.map(rate=> (
                     <RoomItemRateItemTheme1
+                        goToSearchForm={props.goToSearchForm}
                         priceType={props.priceType}
                         onOpenRoom={()=>{props.onOpenRoom(rate)}}
                         onSelectRoom={props.onSelectRoom}

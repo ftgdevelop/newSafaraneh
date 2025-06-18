@@ -3,7 +3,7 @@ import type { GetServerSideProps, NextPage } from 'next';
 import { i18n, useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
-import { HotelPageDataType, WebSiteDataType } from '@/modules/shared/types/common';
+import { WebSiteDataType } from '@/modules/shared/types/common';
 import { DomesticAccomodationType, DomesticHotelDetailType, DomesticHotelReviewsType, DomesticHotelRichSheet, DomesticHotelRichSnippets, EntitySearchResultItemType } from '@/modules/domesticHotel/types/hotel';
 import { useRouter } from 'next/router';
 import BackToList from '@/modules/domesticHotel/components/hotelDetails/BackToList';
@@ -31,6 +31,8 @@ import dynamic from 'next/dynamic';
 import { useAppDispatch } from '@/modules/shared/hooks/use-store';
 import { emptyReduxSafarmarket, setReduxSafarmarketPixel } from '@/modules/shared/store/safarmarketSlice';
 import BreadCrumpt from '@/modules/shared/components/ui/BreadCrumpt';
+import GalleryLevel1 from '@/modules/domesticHotel/components/hotelDetails/GalleryLevel1';
+import SimilarHotelsNew from '@/modules/domesticHotel/components/hotelDetails/SimilarHotelsNew';
 
 const SearchForm = dynamic(() => import('@/modules/domesticHotel/components/shared/SearchForm'), {
   ssr: false
@@ -42,7 +44,6 @@ type Props = {
     accommodation?: { result: DomesticAccomodationType };
     richSnippets?: DomesticHotelRichSnippets;
     sheet:DomesticHotelRichSheet;
-    page?: HotelPageDataType;
     hotel?: DomesticHotelDetailType;
   };
   portalData: WebSiteDataType;
@@ -60,6 +61,8 @@ const HotelDetail: NextPage<Props> = props => {
   const isSafaraneh = process.env.PROJECT === "SAFARANEH" || process.env.PROJECT === "IRANHOTEL";
 
   const isSafarlife = process.env.PROJECT === "SAFARLIFE";
+
+  const isHotelban = process.env.PROJECT === "HOTELBAN";
 
   const { portalData, allData } = props;
 
@@ -137,7 +140,11 @@ useEffect(()=>{
     if (document){
       document.cookie = `safarMarketHotelSmId=${querySafarmarketId}; expires=${expDate.toUTCString()};path=/`;
       if (utm_source){
-        document.cookie = `safarMarketHotelUtmSource=${utm_source}; expires=${expDate.toUTCString()};path=/`;        
+        if (typeof utm_source === 'object'){
+          document.cookie = `safarMarketHotelUtmSource=${utm_source[0]}; expires=${expDate.toUTCString()};path=/`;
+        }else{
+          document.cookie = `safarMarketHotelUtmSource=${utm_source}; expires=${expDate.toUTCString()};path=/`;
+        }
       }
     }
   }
@@ -192,7 +199,6 @@ useEffect(() => {
 
   const accommodation = allData?.accommodation;
   const hotelData = allData?.hotel;
-  const pageData = allData?.page; 
   const richSnippets = allData?.richSnippets; 
   const sheet = allData?.sheet; 
 
@@ -203,8 +209,6 @@ useEffect(() => {
       reviewCount: allData.reviews.reviews.totalCount
     }
   }
-
-  console.log(reviewData);
  
   const accommodationData = accommodation?.result;
 
@@ -340,7 +344,7 @@ useEffect(() => {
     );
   }
   
-  if(isSafaraneh && hotelData?.Similars){
+  if((isSafaraneh && hotelData?.Similars) || (accommodationData?.similars?.length) ){
     anchorTabsItems.push(
       { id: "similarhotels_section", title: tHotel('similar-hotels') }
     );
@@ -575,7 +579,6 @@ useEffect(() => {
               {t("ContinueAnyway")}
             </button>
 
-
           </div>
 
         </div>
@@ -620,7 +623,12 @@ useEffect(() => {
 
         </div>
 
-        {!!hotelImages?.length && <Gallery images={hotelImages} hotelName={accommodationData.displayName} />}
+        {isHotelban ? (
+          <GalleryLevel1 images={hotelImages} hotelName={accommodationData.displayName} />
+        ) :(
+          <Gallery images={hotelImages} hotelName={accommodationData.displayName} />
+        )}
+
       </div>
 
       <AnchorTabs
@@ -644,7 +652,12 @@ useEffect(() => {
 
       </div>
 
-      {!!accommodationData.id && <Rooms hotelId={accommodationData.id} />}
+      {!!accommodationData.id && (
+        <Rooms 
+          hotelId={accommodationData.id} 
+          goToSearchForm={() =>{ searchFormWrapperRef.current?.scrollIntoView({ behavior: 'smooth' });}}
+        />
+        )}
 
       {(!isSafaraneh || accommodationData?.facilities?.length) ? (
         <AccommodationFacilities facilities={accommodationData?.facilities} />
@@ -680,8 +693,9 @@ useEffect(() => {
         </div>
       )}
 
-      {!!reviewData && <Comments hotelScoreData={allData.reviews} pageId={pageData?.Id} />}
+      {!!reviewData && <Comments siteName={siteName} hotelScoreData={allData.reviews} pageId={sheet.id} />}
 
+      {!!(isSafarlife && accommodationData?.similars?.length) && <SimilarHotelsNew similarHotels={accommodationData.similars} />}
       {!!(isSafaraneh && hotelData?.Similars) && <SimilarHotels similarHotels={hotelData.Similars} />}
 
       {!!(accommodationData?.faqs?.length && !querySafarmarketId) && <FAQ faqs={accommodationData.faqs} />}

@@ -27,7 +27,7 @@ const RoomItemTheme2: React.FC<Props> = props => {
     }
 
     let image: React.ReactNode = <div
-        className={`${props.roomsHasImage ? "" : "max-sm:hidden"} rounded-t-2xl flex items-center justify-center bg-neutral-100 p-5`}
+        className={`${props.roomsHasImage ? "" : "hidden"} rounded-t-2xl flex items-center justify-center bg-neutral-100 p-5`}
     >
         <DefaultRoomTheme2 className='fill-neutral-400 w-24 h-24' />
     </div>

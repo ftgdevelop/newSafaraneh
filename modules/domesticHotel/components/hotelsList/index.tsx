@@ -28,12 +28,30 @@ const HotelsList: React.FC<Props> = props => {
 
         if (a.priceInfo === "loading" || b.priceInfo === 'loading') {
             return 1;  // or -1?
-        } else if (a.priceInfo === "notPriced" && b.priceInfo !== "notPriced") {
-            return -1;
-        } else if (a.priceInfo !== "notPriced" && b.priceInfo === "notPriced") {
+        } else if(a.priceInfo === "notPriced"){
+            if(b.priceInfo === "notPriced"){
+                return 1;
+            }else{
+                return -1;
+            }
+        } else if (b.priceInfo === "notPriced"){
             return 1;
-        } else if (a.priceInfo === "need-to-inquire") {
-            return -1;
+        } else if (a.priceInfo.availablityType === "Completion"){
+            if(b.priceInfo.availablityType === "Completion"){
+                return 1
+            }else{
+                return -1
+            }
+        } else if (b.priceInfo.availablityType === "Completion"){
+            return 1
+        } else if (a.priceInfo.availablityType === "Request"){
+            if (b.priceInfo.availablityType === "Request"){
+                return 1
+            }else{
+                return -1
+            }
+        } else if (b.priceInfo.availablityType === "Request"){
+            return 1
         } else {
             return 1
         }

@@ -18,6 +18,8 @@ type CalendarArrayItemType = {
     amount?: number;
     board?: number;
     type?: "Completion" | "Online" | "Offline" | "Request" | null;
+    closeToArrival?: boolean;
+    closeToDeparture?: boolean;
 };
 
 const PriceCalendar: React.FC<Props> = props => {
@@ -55,6 +57,16 @@ const PriceCalendar: React.FC<Props> = props => {
             if(item.type === "Completion"){
                 title = "ظرفیت تکمیل";
                 textColor = "red";
+            }
+
+            if(item.closeToDeparture){
+                title = "محدودیت خروج";
+                textColor = "orange";
+            }
+            
+            if(item.closeToArrival){
+                title = "محدودیت ورود";
+                textColor = "orange";
             }
 
             return ({

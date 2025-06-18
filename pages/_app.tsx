@@ -60,6 +60,7 @@ function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }:
 
   const tel = portalData?.billing.telNumber || portalData?.billing.phoneNumber || "";
   const emergencyNumber = portalData?.billing.emergencyNumber || "";
+  const email = portalData?.billing?.email;
   const instagram = portalData?.social?.instagram || "";
   const facebook = portalData?.social?.facebook || "";
   const linkedin = portalData?.social?.linkedin || "";
@@ -190,7 +191,8 @@ function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }:
             instagram: instagram,
             linkedin: linkedin,
             twitter: twitter,
-            facebook: facebook
+            facebook: facebook,
+            emailAddress: email
           }
         }
         logo={logo}
@@ -224,16 +226,29 @@ MyApp.getInitialProps = async (
 
   const acceptLanguage = locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR";
 
-  const theme2 = process.env.THEME === "THEME2";
   const hasStrapi = process.env.PROJECT_SERVER_STRAPI;
+  const strapiTenant = process.env.PROJECT_SERVER_STRAPI_TENANTID;
+  
+  const isSafarlife = process.env.PROJECT === "SAFARLIFE";
+  const isHotelban = process.env.PROJECT === "HOTELBAN";
+
+  let footerStrapiQueri ="";
+  if(hasStrapi){
+    if(isSafarlife){
+      footerStrapiQueri = "populate[LinkRows][populate]=*";
+    }
+    if(isHotelban){
+      footerStrapiQueri = `filters[Tenant][$eq]=${strapiTenant}&populate[LinkRows][populate]=*`;
+    }
+  }
 
   const [portalData, pageResponse,footerStrapi] = await Promise.all<any>([
     getPortal("fa-IR"),
     getPageByUrl(url, acceptLanguage),
-    (hasStrapi && theme2) ? await getStrapiFooter("populate[LinkRows][populate]=*") : undefined
+    footerStrapiQueri ? await getStrapiFooter(footerStrapiQueri) : undefined
   ]);
   
-  const footerStrapiData = hasStrapi && theme2 ? {
+  const footerStrapiData = hasStrapi ? {
     title: footerStrapi?.data?.data?.[0]?.attributes?.Title,
     description: footerStrapi?.data?.data?.[0]?.attributes?.Description,
     linkRows: footerStrapi?.data?.data?.[0]?.attributes?.LinkRows

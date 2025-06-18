@@ -43,7 +43,7 @@ export const getServerSideProps = async ({ res }:{res:any}) => {
   const [postsResponse, pagesResponse, flightResponse] = await Promise.all([
     
     axios.get(`${process.env.PROJECT_SERVER_TYPE}${process.env.PROJECT_SERVER_BLOG}//wp-json/wp/v2/posts?per_page=100`).catch(function (error) {
-      console.log(error.toJSON());
+      console.log("error");
     })
     ,
     axios.get(
@@ -55,11 +55,11 @@ export const getServerSideProps = async ({ res }:{res:any}) => {
           apikey: process.env.PROJECT_PORTAL_APIKEY,
         },
       }).catch(function (error) {
-        console.log(error.toJSON());
+        console.log("error");
       })    
     ,
     axios.get(`${process.env.PROJECT_SERVER_BLOG}wp-json/wp/v2/flightdomestic`).catch(function (error) {
-      console.log(error.toJSON());
+      console.log("error");
     })
   ]);
 

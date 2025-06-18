@@ -191,6 +191,7 @@ const Home: NextPage<{ blogs?: BlogItemType[], portalData?: WebSiteDataType, hom
       </Head>
 
       {!!theme1 && <HomeTheme1
+        sections={homeSections}
         modules={["domesticHotel"]}
         logo={logo}
         siteName={siteName}
@@ -206,6 +207,7 @@ const Home: NextPage<{ blogs?: BlogItemType[], portalData?: WebSiteDataType, hom
       />}
 
       {!!theme3 && <HomeTheme3
+        sections={homeSections}
         modules={["domesticHotel"]}
         logo={logo}
         siteName={siteName}
@@ -219,34 +221,66 @@ const Home: NextPage<{ blogs?: BlogItemType[], portalData?: WebSiteDataType, hom
 export const getStaticProps = async (context: any) => {
 
   const theme2 = process.env.THEME === "THEME2";
+  
   const hasStrapi = process.env.PROJECT_SERVER_STRAPI;
+  const strapiTenant = process.env.PROJECT_SERVER_STRAPI_TENANTID;
+
+  const isSafarlife = process.env.PROJECT === "SAFARLIFE";
+  const isHotelban = process.env.PROJECT === "HOTELBAN";
+
+  let StrapiQueri1: string = "";
+  let StrapiQueri2: string = "";
+
+  if(hasStrapi){
+    if(isSafarlife){
+      StrapiQueri1 = 'filters[Page][$eq]=home&populate[Sections][populate][Items][populate]=*';
+      StrapiQueri2 = 'filters[Page][$eq]=home&populate[Sections][populate]=*';
+    }
+    if(isHotelban){
+      StrapiQueri1 = `filters[Slug][$eq]=home&filters[Tenant][$eq]=${strapiTenant}&populate[Sections][populate][Items][populate]=*`;
+      StrapiQueri2 = `filters[Slug][$eq]=home&filters[Tenant][$eq]=${strapiTenant}&populate[Sections][populate][Item][populate]=*`;
+    }
+  }
 
   const [recentBlogPost, strapiResponse, strapiResponse2] = await Promise.all<any>([
     process.env.PROJECT_MODULES?.includes("Blog") ? await getBlogs({ page: 1, per_page: theme2 ? 5 : 4 }) : null,
-    (hasStrapi && theme2) ? await getStrapiPages('filters[Page][$eq]=home&populate[Sections][populate][Items][populate]=*') : undefined,
-    (hasStrapi && theme2) ? await getStrapiPages('filters[Page][$eq]=home&populate[Sections][populate]=*') : undefined
+    StrapiQueri1 ? await getStrapiPages(StrapiQueri1) : undefined,
+    StrapiQueri2 ? await getStrapiPages(StrapiQueri2) : undefined
   ]);
 
-  const link_banner_data = strapiResponse2?.data?.data[0]?.attributes?.Sections.find((section: any) => section.Keyword === "link_banner")?.Image;
-  const main_banner_data = strapiResponse2?.data?.data[0]?.attributes?.Sections.find((section: any) => section.Keyword === "main_banner")?.Image;
-  const strapi_generalData = strapiResponse?.data?.data[0]?.attributes?.Sections;
-  const strapi_generalData_link_banner_data = strapi_generalData?.find((section: any) => section.Keyword === "link_banner");
-  const strapi_generalData_main_banner_data = strapi_generalData?.find((section: any) => section.Keyword === "main_banner");
+  let homeSections : any;
 
-  if (link_banner_data && strapi_generalData_link_banner_data) {
-    strapi_generalData_link_banner_data.Image = link_banner_data;
-  }
-  if (main_banner_data && strapi_generalData_main_banner_data) {
-    strapi_generalData_main_banner_data.Image = main_banner_data;
+  if(hasStrapi && isSafarlife){
+    const link_banner_data = strapiResponse2?.data?.data[0]?.attributes?.Sections.find((section: any) => section.Keyword === "link_banner")?.Image;
+    const main_banner_data = strapiResponse2?.data?.data[0]?.attributes?.Sections.find((section: any) => section.Keyword === "main_banner")?.Image;
+    homeSections = strapiResponse?.data?.data[0]?.attributes?.Sections;
+    const strapi_generalData_link_banner_data = homeSections?.find((section: any) => section.Keyword === "link_banner");
+    const strapi_generalData_main_banner_data = homeSections?.find((section: any) => section.Keyword === "main_banner");
+  
+    if (link_banner_data && strapi_generalData_link_banner_data) {
+      strapi_generalData_link_banner_data.Image = link_banner_data;
+    }
+    if (main_banner_data && strapi_generalData_main_banner_data) {
+      strapi_generalData_main_banner_data.Image = main_banner_data;
+    }
   }
 
+  if(hasStrapi && isHotelban){
+    
+    homeSections = strapiResponse?.data?.data[0]?.attributes?.Sections?.filter((section:any) => section.Keyword !== "top-banners");
+    const topBannerSection = strapiResponse2?.data?.data[0]?.attributes?.Sections?.find((section:any) => section.Keyword === "top-banners");
+    if(topBannerSection){
+      homeSections.push(topBannerSection);
+    }
+
+  }
 
   return ({
     props: {
       ...await serverSideTranslations(context.locale, ['common', 'home', 'hotel']),
       context: context,
       blogs: recentBlogPost?.data || null,
-      homeSections: strapi_generalData || null
+      homeSections: homeSections || null
     },
     revalidate: 3600
   })

@@ -191,6 +191,40 @@ export interface DomesticAccomodationPolicyType{
       }[];
   }
 
+export interface DomesticHotelSimilarHotel {
+    id: number;
+    type: "Hotel",
+    typeStr?: string;
+    rating: number;
+    displayOrder?: string;
+    name?: string;
+    displayName?: string;
+    address?: string;
+    isPromotion: boolean;
+    url: string;
+    picture?:{
+        path?: string;
+        titleAttribute?: string;
+        altAttribute?: string;
+    }
+    facilities:{
+        keyword?: string;
+        name?: string;
+        items?: {
+            name?: string;
+            keyword?: string;
+            isImportant?: boolean;
+            isAdditionalCharge?: boolean;
+            isFree?: boolean;
+            description?: string;
+        }[]
+    }[]
+}
+export interface ExtendedDomesticHotelSimilarHotel extends DomesticHotelSimilarHotel {
+    ratesInfo?: "loading" | { Satisfaction: number; TotalRowCount: number; };
+    priceInfo: "loading" | "notPriced" | { boardPrice: number; salePrice: number; availablityType?: "Online"| "Offline"| "Request"| "Completion"; };
+}
+
 export interface DomesticAccomodationType {
     type: "Hotel" | "Apartments" | "Guesthouse" | "Motel" | "TraditionalHouse" | "Ecolodge" | "TourismComplex" | "BoutiqueHotel" | "Pansion";
     rating?: number;
@@ -245,8 +279,8 @@ export interface DomesticAccomodationType {
     id: number;
     facilities?: DomesticAccomodationFacilityType[];
     galleries?: DomesticAccomodationGalleryType[];
-    policies?: DomesticAccomodationPolicyType[]
-      
+    policies?: DomesticAccomodationPolicyType[];
+    similars?:DomesticHotelSimilarHotel[]
 }
 
 export interface AvailabilityByIdItem {
@@ -324,7 +358,11 @@ export interface DomesticHotelRateItem {
                 type?: "Completion" | "Online" | "Offline" | "Request" | null;
             }; 
         }[];
-    }
+    },
+    maxStay?: number;
+    minStay?: number;
+    closeToArrival?: boolean;
+    closeToDeparture?: boolean;
 }
 
 export interface DomesticHotelAvailability {
@@ -419,11 +457,11 @@ export interface SearchAccomodationItem {
 
 export interface PricedHotelItem extends SearchAccomodationItem {
     ratesInfo?: "loading" | { Satisfaction: number; TotalRowCount: number; };
-    priceInfo: "loading" | "notPriced" | "need-to-inquire" | { boardPrice: number; salePrice: number; };
+    priceInfo: "loading" | "notPriced" | { boardPrice: number; salePrice: number; availablityType?: "Online"| "Offline"| "Request"| "Completion";};
     promotions?:{
         name?:string;
         description?:string;
-    }[];
+    }[];   
 }
 
 export type SortTypes = "priority" | "price" | "starRate" | "name" | "gueatRate";
@@ -453,6 +491,7 @@ export interface DomesticHotelGetValidateResponse {
         availablityType: "Online" | "Offline" | "Request" | "Completion";
         boardCode: "Undefined" | "BB" | "FB" | "HB" | "RO" | "Hour6" | "Hour10";
         boardExtra?: string;
+        boardName?: string;
         nightly: {
             date?: string;
             amount?: number;
@@ -471,6 +510,11 @@ export interface DomesticHotelGetValidateResponse {
             amount: number;
             fromDate?: string;
         }[]
+    }[];
+    rules?:{
+        name?: string;
+        description?: string;
+        keyword: "reception" | "children" | "cancellation";
     }[]
 }
 
@@ -490,30 +534,32 @@ export interface AsideHotelInfoType {
     checkoutTime?: string;
 
 }
-
+export interface AsideReserveInfoRoomItemType {
+    name: string | undefined;
+    boardExtra?: string;
+    boardName?: string;
+    cancellationPolicyStatus?: "Refundable" | "NonRefundable" | "Unknown" | "CallSupport";
+    bed: number;
+    extraBed: number;
+    pricing: {
+        amount: number;
+        isSelected: boolean;
+        isShow: boolean;
+        ageCategoryType: "ADL" | "CHD" | "INF";
+        type: "Room" | "RoomBoard" | "ExtraBed" | "HalfCharge" | "RoomNet" | "Markup" | "Commission" | "PromoCode";
+    }[];
+    nightly?: {
+        date?: string;
+        amount?: number;
+        board?: number;
+    }[]
+}
 export interface AsideReserveInfoType {
     reserveId?: number;
     checkin: string;
     checkout: string;
     duration: number;
-    rooms: {
-        name: string | undefined;
-        board: "Undefined" | "BB" | "FB" | "HB" | "RO" | "Hour6" | "Hour10";
-        cancellationPolicyStatus?: "Refundable" | "NonRefundable" | "Unknown" | "CallSupport";
-        bed: number;
-        pricing: {
-            amount: number;
-            isSelected: boolean;
-            isShow: boolean;
-            ageCategoryType: "ADL" | "CHD" | "INF";
-            type: "Room" | "RoomBoard" | "ExtraBed" | "HalfCharge" | "RoomNet" | "Markup" | "Commission" | "PromoCode";
-        }[];
-        nightly?: {
-            date?: string;
-            amount?: number;
-            board?: number;
-        }[]
-    }[]
+    rooms: AsideReserveInfoRoomItemType[]
     salePrice: number;
     boardPrice: number;
 
@@ -544,7 +590,7 @@ export interface DomesticHotelPrereserveParams {
     metaSearchName?: "safarmarket"
 }
 
-export type DomesticHotelReserveStatus = "Undefined" | "Registered" | "Pending" | "Issued" | "ContactProvider" | "Canceled" | "WebServiceCancel" | "PaymentSuccessful" | "WebServiceUnsuccessful" | "PriceChange" | "Unavailable" | "Refunded" | "Voided" | "InProgress" | "PaidBack" | "RefundInProgress" | "Changed" | "OnCredit";
+export type DomesticHotelReserveStatus = "Undefined" | "UnConfirmed" | "Registered" | "Pending" | "Issued" | "ContactProvider" | "Canceled" | "WebServiceCancel" | "PaymentSuccessful" | "WebServiceUnsuccessful" | "PriceChange" | "Unavailable" | "Refunded" | "Voided" | "InProgress" | "PaidBack" | "RefundInProgress" | "Changed" | "OnCredit";
 
 export interface DomesticHotelGetReserveByIdData {
     id: number;
@@ -579,7 +625,8 @@ export interface DomesticHotelGetReserveByIdData {
     supplierType: "Safaraneh" | "Snapp" | "ChannelLead" | "HotelYar" | "Eghamat24";
     rooms: {
         name?: string;
-        boardCode: "Undefined" | "BB" | "FB" | "HB" | "RO" | "Hour6" | "Hour10";
+        boardName?: string;
+        boardExtra?: string;
         cancellationPolicyStatus?: "Refundable" | "NonRefundable" | "Unknown" | "CallSupport";
         bed: number;
         pricing: {
@@ -608,6 +655,11 @@ export interface DomesticHotelGetReserveByIdData {
             // "childrenAge": [],
             // "nationality": 0
           }[];
+    }[];
+    rules?:{
+        name?: string;
+        description?: string;
+        keyword: "reception" | "children" | "cancellation";
     }[]
 
 }
@@ -696,11 +748,24 @@ export interface DomesticHotelReviewCommentItem {
     userDisplayName: string;
     recommendToOthers: boolean;
     creationTime: string;
+    positivePoints?: string;
+    negativePoints?: string;
+    travelType?: "Individual" | "Family" | "Couple" | "Group" | "Business";
     ratings: {
         rating: number;
         categoryId: number;
         id: number;
     }[];
+    reply?: {
+        dislikeCount: number;
+        id: number;
+        likeCount: number;
+        reply?: string;
+    };
+    likeCount: number;
+    dislikeCount: number;
+    isWriter: boolean;
+    isLiked?: null | boolean;
 }
 
 export interface DomesticHotelReviewsType {
