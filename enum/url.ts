@@ -33,7 +33,8 @@ export const Header = {
 
   export const Cms = {
     GetByUrl: "/api/services/app/Page/GetByUrl",
-    CreateComment : '/api/services/app/Review/Create'
+    CreateComment : '/api/services/app/Review/Create',
+    GetAllPages:"/api/services/app/Page/GetAll"
   }
 
   export const Strapi = {
@@ -104,7 +105,8 @@ export const Flight = {
     PreReserve: "/api/services/app/Booking/PreReserve",
     GetReserveById: "/api/services/app/Reserve/Get",
     Confirm:"/api/services/app/Booking/Confirm",
-    SearchAccomodations:"/api/services/app/Accommodation/GetAll"
+    SearchAccomodations:"/api/services/app/Accommodation/GetAll",
+    GetAllForSiteMapImages:"/api/services/app/Accommodation/GetAllForSiteMap"
   };
 
   export const Reserve = {
