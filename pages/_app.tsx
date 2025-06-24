@@ -18,7 +18,7 @@ import { store } from '../modules/shared/store';
 import { FooterStrapi, GetPageByUrlDataType, WebSiteDataType } from '@/modules/shared/types/common';
 import { getPortal } from '@/modules/shared/actions/portalActions';
 import Layout from '@/modules/shared/components/layout';
-import { GTM_ID } from '@/modules/shared/helpers';
+//import { GTM_ID } from '@/modules/shared/helpers';
 import { getPageByUrl } from '@/modules/shared/actions';
 import { getStrapiFooter } from '@/modules/shared/actions/strapiActions';
 
@@ -181,7 +181,7 @@ function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }:
 
       </Head>
 
-       {!!GTM_ID && <GoogleTagManager gtmId={GTM_ID} />}
+       {/* {!!GTM_ID && <GoogleTagManager gtmId={GTM_ID} />} */}
 
       <Layout
         contactInfo={
