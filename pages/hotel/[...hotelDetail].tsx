@@ -33,19 +33,22 @@ import { emptyReduxSafarmarket, setReduxSafarmarketPixel } from '@/modules/share
 import BreadCrumpt from '@/modules/shared/components/ui/BreadCrumpt';
 import GalleryLevel1 from '@/modules/domesticHotel/components/hotelDetails/GalleryLevel1';
 import SimilarHotelsNew from '@/modules/domesticHotel/components/hotelDetails/SimilarHotelsNew';
+import Loading from '@/modules/shared/components/ui/Loading';
 
 const SearchForm = dynamic(() => import('@/modules/domesticHotel/components/shared/SearchForm'), {
   ssr: false
 });
 
-type Props = {
-  allData: {
+type HotelAllData = {
     reviews?: DomesticHotelReviewsType;
     accommodation?: { result: DomesticAccomodationType };
     richSnippets?: DomesticHotelRichSnippets;
     sheet:DomesticHotelRichSheet;
     hotel?: DomesticHotelDetailType;
-  };
+}
+
+type Props = {
+  allData2: HotelAllData;
   portalData: WebSiteDataType;
   error410?: "true";
   url: string;
@@ -53,12 +56,20 @@ type Props = {
 
 const HotelDetail: NextPage<Props> = props => {
 
+  const [allData, setAllData] = useState< HotelAllData| undefined>( props.allData2);
+  const [loading, setLoading ] = useState<boolean>(false);
+
   useEffect(()=>{
     const fetchData = async (u:string) => {
-      const allData: any = await getDomesticHotelDetailsByUrl( u, "fa-IR");
+      setLoading(true);
+      const response: any = await getDomesticHotelDetailsByUrl( u, "fa-IR");
+      if(response?.data?.result){
+        setAllData(response.data.result)
+      }
+      setLoading(false);
     }
 
-    if(props.url){
+    if(props.url && !props.allData2){
       fetchData( "/fa"+ props.url);
     }
   },[props.url]);
@@ -75,7 +86,7 @@ const HotelDetail: NextPage<Props> = props => {
 
   const isHotelban = process.env.PROJECT === "HOTELBAN";
 
-  const { portalData, allData } = props;
+  const { portalData } = props;
 
   const { t } = useTranslation('common');
   const { t: tHotel } = useTranslation('hotel');
@@ -202,6 +213,14 @@ useEffect(() => {
   if (props.error410) {
     return (
       <NotFound code={410} />
+    )
+  }
+
+  if(loading) {
+    return (
+      <div className='text-center py-24'>
+        <Loading size='large' />
+      </div>
     )
   }
 
@@ -471,7 +490,7 @@ useEffect(() => {
                 "@type": "ListItem",
                 "position": 3,
                 "item": {
-                  "@id": "${configWebsiteUrl}${sheet.url}",
+                  "@id": "${configWebsiteUrl}${sheet?.url}",
                   "name": "${accommodationData.displayName}"
                 }
               }
@@ -521,7 +540,7 @@ useEffect(() => {
             "priceRange": "${richSnippets?.priceRange || "قیمت موجود نیست"}",
             "telephone":"${accommodationData.telNumber || "تلفن ثبت نشده است."}",
             "image": "${accommodationData.galleries && accommodationData.galleries[0]?.filePath || accommodationData.picture?.path || ""}",
-            "url": "${configWebsiteUrl}${sheet.url}",
+            "url": "${configWebsiteUrl}${sheet?.url}",
             "name": "${accommodationData.displayName || accommodationData.name}",
             "description": "${sheet?.pageTitle?.replaceAll("{0}", siteName)}",
             "address": {
@@ -705,7 +724,7 @@ useEffect(() => {
         </div>
       )}
 
-      {!!reviewData && <Comments siteName={siteName} hotelScoreData={allData.reviews} pageId={sheet.id} />}
+      {!!reviewData && <Comments siteName={siteName} hotelScoreData={allData?.reviews} pageId={sheet?.id} />}
 
       {!!(isSafarlife && accommodationData?.similars?.length) && <SimilarHotelsNew similarHotels={accommodationData.similars} />}
       {!!(isSafaraneh && hotelData?.Similars) && <SimilarHotels similarHotels={hotelData.Similars} />}
@@ -907,7 +926,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return ({
     props: {
       ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
-      allData: allDataObject,
+      allData2: allDataObject,
       url: url
     },
   })
