@@ -908,7 +908,8 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     props: {
       ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
       allData: allDataObject,
-      url: url
+      url: url,
+      tttttttttttttt: allData?.data || null
     },
   })
 }
