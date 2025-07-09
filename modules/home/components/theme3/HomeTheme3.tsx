@@ -6,6 +6,7 @@ import Promotions from "./Promotions";
 import Cip from "./Cip";
 import About from "./About";
 import Faq from "./Faq";
+import RecentPostsTheme3 from "./RecentPostsTheme3";
 
 type SectionItem = {
     Keyword: "about-section" | "faq-section";
@@ -50,6 +51,8 @@ const HomeTheme3: React.FC<Props> = props => {
             {props.modules.includes("cip") && <Cip />}
 
             <About logo={props.logo} strapiContent={strapiAboutContent} />
+
+            {props.blogs ? <RecentPostsTheme3 blogs={props.blogs} /> : <br />}
 
             {strapiFAQ && <Faq items={strapiFAQ.map(item => ({
                 key: item.id,

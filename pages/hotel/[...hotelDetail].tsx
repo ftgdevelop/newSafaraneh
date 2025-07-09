@@ -262,7 +262,7 @@ useEffect(() => {
 
   if (portalData) {
 
-    tel = portalData.billing?.telNumber || portalData?.billing?.phoneNumber || "";
+    tel = portalData.billing?.telNumber || portalData.billing?.phoneNumber || "";
     twitter = portalData.social?.x || "";
     siteLogo = portalData.billing?.logo?.value || "";
     siteName = portalData.billing?.name || "";
@@ -620,7 +620,7 @@ useEffect(() => {
 
         {!!querySafarmarketId && (
           <div className='bg-[#ed6527] text-white px-5 py-3 text-lg md:text-2xl lg:text-4xl xl:text-5xl mb-5 text-center font-semibold'>
-            شما از موتور جستجوی <span className='text-[#ed6527] inline-block mx-2 font-bold p-1 lg:p-3 bg-white rounded-xl'> سفرمارکت </span> به {portalData.billing?.name || " این سایت "} هدایت شده اید
+            شما از موتور جستجوی <span className='text-[#ed6527] inline-block mx-2 font-bold p-1 lg:p-3 bg-white rounded-xl'> سفرمارکت </span> به {portalData?.billing?.name || " این سایت "} هدایت شده اید
           </div>
         )}
 
