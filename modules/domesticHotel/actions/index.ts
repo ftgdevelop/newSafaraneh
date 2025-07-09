@@ -21,7 +21,7 @@ export const getDomesticHotelSummaryDetailById = async (id: number, acceptLangua
 
 export const getDomesticHotelDetailsByUrl = async (url: string, acceptLanguage: string = 'fa-IR') => {
     try {
-        let response = await axios.get(
+        const response = await axios.get(
             `${ServerAddress.Type}${ServerAddress.Hotel_WP}${Hotel.GetDomesticHotelDetails}?url=${url}`,
             {
                 headers: {
@@ -31,8 +31,10 @@ export const getDomesticHotelDetailsByUrl = async (url: string, acceptLanguage: 
                 },
             },
         )
+        console.log('LOG 1 - API Response:', response.data)
         return response
-    } catch (error) {
+    } catch (error:any) {
+        console.error('LOG 2 - Error fetching data:', error.message)
         return error
     }
 }
