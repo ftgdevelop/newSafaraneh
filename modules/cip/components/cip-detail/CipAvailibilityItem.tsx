@@ -166,7 +166,7 @@ const CipAvailibilityItem : React.FC<Props> = props => {
                         <TikCircle className="w-11 h-11 fill-green-500" /> 
                     ):(
                         <>
-                            {item.boardPrice && item.salePrice && item.boardPrice > item.salePrice && <span className='rtl:ml-2 ltr:mr-2 text-neutral-400 text-sm line-through'>{numberWithCommas(item.boardPrice)} ریال</span>}
+                            {item.boardPrice && item.salePrice && item.boardPrice > item.salePrice ? <span className='rtl:ml-2 ltr:mr-2 text-neutral-400 text-sm line-through'>{numberWithCommas(item.boardPrice)} ریال</span>:null}
                             <b className='rtl:ml-2 ltr:mr-2 text-sm'>{numberWithCommas(item.salePrice)} ریال</b>
                             <Button 
                                 type="button"

@@ -291,9 +291,9 @@ const Aside: React.FC<Props> = props => {
                                                     })}
                                                 </header>
                                                 <div className="p-2">
-                                                    {!!night.board && <div className="text-neutral-400 text-xs line-through">
+                                                    {night.board && night.amount && (night.board > night.amount) ? <div className="text-neutral-400 text-xs line-through">
                                                         {numberWithCommas(night.board)} ریال
-                                                    </div>}
+                                                    </div>:null}
 
                                                     {!!night.amount && <div className="font-semibold text-md">
                                                         {numberWithCommas(night.amount)} ریال

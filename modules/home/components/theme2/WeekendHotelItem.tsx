@@ -88,7 +88,7 @@ const WeekendHotelItem: React.FC<Props> = props => {
                     </div>
                 </div>
 
-                {!!discount && <span className="bg-green-700 text-white rounded leading-7 inline-block mt-4 text-2xs px-2 select-none"> {discount}% {t('discount')} </span>}
+                {!!(discount>0) && <span className="bg-green-700 text-white rounded leading-7 inline-block mt-4 text-2xs px-2 select-none"> {discount}% {t('discount')} </span>}
 
             </>
         )

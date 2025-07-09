@@ -11,6 +11,7 @@ import Notification from "./Notification";
 import { setProgressLoading } from "../store/stylesSlice";
 import { FooterStrapi } from "../types/common";
 import Script from "next/script";
+import { GTM_ID } from "../helpers";
 
 type Props = {
   logo: string;
@@ -48,6 +49,8 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
   const removeLoading = () => { dispatch(setProgressLoading(false)) }
 
   const safarmarketHotelPixel = useAppSelector(state => state.safarmarket.hotel);
+
+  const isHotelban = process.env.PROJECT === "HOTELBAN";
 
   useEffect(() => {
 
@@ -140,6 +143,17 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
       {props.scripts && <Script id="footer_api_scripts" strategy="afterInteractive">
         {props.scripts}
       </Script>}
+
+      {isHotelban && GTM_ID ? <script
+          id="google_tag_manager_2"
+          dangerouslySetInnerHTML={{
+              __html:`window.dataLayer = window.dataLayer || [];
+                      function gtag(){dataLayer.push(arguments);}
+                      gtag('js', new Date());
+                      gtag('config', ${GTM_ID});`
+          }}
+      /> : null}
+
 
     </div>
 

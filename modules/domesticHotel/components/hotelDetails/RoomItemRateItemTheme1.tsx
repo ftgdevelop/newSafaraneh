@@ -100,7 +100,7 @@ const RoomItemRateItemTheme1: React.FC<Props> = props => {
         price = "";
     } else if (prices?.roomPrice && prices.roomPrice > 1000) {
 
-        if (prices.boardPrice && (prices.boardPrice !== prices.roomPrice)) {
+        if (prices.boardPrice && (prices.boardPrice > prices.roomPrice)) {
             discountBadge = <span className="text-2xs whitespace-nowrap bg-green-700 self-center text-white px-2 py-0.5 leading-4 rounded-xl lg:text-xs inline-block">
                 {calulateDiscount(prices.roomPrice, prices.boardPrice)}% {tHotel('discount')}
             </span>
