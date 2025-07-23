@@ -13,43 +13,43 @@ const TopCities: React.FC = () => {
     }[] = [
             {
                 title: "هتل های تهران",
-                url: "/hotels/هتل-های-تهران",
+                url: "/hotels/هتل-های-تهران/locationId-164",
                 imageUrl: "/images/home/theme3/cities/tehran.jpg",
                 subtitle: "122 هتل"
             },
             {
                 title: "هتل های اصفهان",
-                url: "/hotels/هتل-های-اصفهان",
+                url: "/hotels/هتل-های-اصفهان/locationId-166",
                 imageUrl: "/images/home/theme3/cities/isfahan.jpg",
                 subtitle: "89 هتل"
             },
             {
                 title: "هتل های مشهد",
-                url: "/hotels/هتل-های-مشهد",
+                url: "/hotels/هتل-های-مشهد/locationId-168",
                 imageUrl: "/images/home/theme3/cities/mashad.jpg",
                 subtitle: "190 هتل"
             },
             {
                 title: "هتل های شیراز",
-                url: "/hotels/هتل-های-شیراز",
+                url: "/hotels/هتل-های-شیراز/locationId-215",
                 imageUrl: "/images/home/theme3/cities/shiraz.jpg",
                 subtitle: "102 هتل"
             },
             {
                 title: "هتل های کیش",
-                url: "/hotels/هتل-های-جزیره-کیش",
+                url: "/hotels/هتل-های-جزیره-کیش/locationId-187",
                 imageUrl: "/images/home/theme3/cities/kish.jpg",
                 subtitle: "80 هتل"
             },
             {
                 title: "هتل های تبریز",
-                url: "/hotels/هتل-های-تبریز",
+                url: "/hotels/هتل-های-تبریز/locationId-112",
                 imageUrl: "/images/home/theme3/cities/tabriz.jpg",
                 subtitle: "72 هتل"
             },
             {
                 title: "هتل های قشم",
-                url: "/hotels/هتل-های-جزیره-قشم",
+                url: "/hotels/هتل-های-جزیره-قشم/locationId-137",
                 imageUrl: "/images/home/theme3/cities/qeshm.jpg",
                 subtitle: "75 هتل"
             }
@@ -97,7 +97,7 @@ const TopCities: React.FC = () => {
     };
 
     return (
-        <section className="max-w-container m-auto px-3 lg:pt-14 max-xl:p-5 mb-5 sm:mb-10" >
+        <section className="max-w-container m-auto px-5 lg:pt-14 max-xl:p-5 mb-5 sm:mb-10" >
 
             <h2 className="flex gap-2 font-semibold text-md md:text-2xl mb-2 h-10">
                 <span
@@ -138,7 +138,7 @@ const TopCities: React.FC = () => {
                                         height={384}
                                         className='col-span-5 h-80 w-full object-cover group-hover:scale-105 transition-all duration-300'
                                     />
-                                    <div className="absolute  bottom-0 left-0 right-0 text-white p-3 text-center leading-5 bg-gradient-to-t from-black/90 before:to-trabsparent">
+                                    <div className="absolute  bottom-0 left-0 right-0 text-white p-3 text-center leading-5 bg-gradient-to-t from-black/90 to-trabsparent">
                                         <b className='font-semibold mb-1 block text-lg'> {city.title} </b>
                                         <p className="text-sm pb-2"> {city.subtitle} </p>
                                     </div>

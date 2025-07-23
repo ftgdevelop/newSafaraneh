@@ -162,14 +162,13 @@ const Payment: NextPage = () => {
           
           if(process.env.SAFAR_MARKET_SITE_NAME){
             
-            let pixelStatus : 3|4|5 = 3;
-            if (!status){
-              pixelStatus = 3;
-            } else if (status === "0"){
+            let pixelStatus: 4|5| undefined = undefined;
+             if (status && status === "0"){
               pixelStatus = 5;
-            } else if (status === "1"){
-              pixelStatus = 4;
-            }
+            } 
+            // else if (status && status === "1"){
+            //   pixelStatus = 4;
+            // }
 
             let cookieSafarmarketId;
             let cookies = decodeURIComponent(document?.cookie).split(';');
@@ -179,7 +178,7 @@ const Payment: NextPage = () => {
               }
             }
 
-            if (cookieSafarmarketId){
+            if (cookieSafarmarketId && pixelStatus){
               setHotelSafarmarketPixel({
                 reserveData: response.data.result,
                 safarmarketSiteName: process.env.SAFAR_MARKET_SITE_NAME,
@@ -276,7 +275,27 @@ const Payment: NextPage = () => {
       children: (
         <OnlinePayment
           coordinatorPrice={coordinatorPrice}
-          onSubmit={(bankId) => { goTobank(bankId) }}
+          onSubmit={(bankId) => { 
+            
+            let cookieSafarmarketId;
+            let cookies = decodeURIComponent(document?.cookie).split(';');
+            for (const item of cookies){
+              if (item.includes("safarMarketHotelSmId=")){
+                cookieSafarmarketId =item.split("=")[1];
+              }
+            }
+
+            if(domesticHotelReserveData && process.env.SAFAR_MARKET_SITE_NAME && cookieSafarmarketId){              
+              setHotelSafarmarketPixel({
+                reserveData: domesticHotelReserveData,
+                safarmarketSiteName: process.env.SAFAR_MARKET_SITE_NAME,
+                smId: cookieSafarmarketId,
+                statusNumber:3
+              });
+            }
+
+            goTobank(bankId);
+          }}
           bankGatewayList={bankGatewayList}
           expireDate={expireDate}
           status={status}
@@ -335,11 +354,13 @@ const Payment: NextPage = () => {
       duration: getDatesDiff(new Date(domesticHotelReserveData.checkout), new Date(domesticHotelReserveData.checkin)),
       rooms: domesticHotelReserveData.rooms.map(roomItem => ({
         name: roomItem.name,
-        board: roomItem.boardCode,
+        boardName: roomItem.boardName,
+        boardExtra: roomItem.boardExtra,
         cancellationPolicyStatus: roomItem.cancellationPolicyStatus,
         bed: roomItem.bed,
         pricing: roomItem.pricing,
-        nightly: roomItem.nightly
+        nightly: roomItem.nightly,
+        extraBed: roomItem.extraBed
       })),
       salePrice: domesticHotelReserveData.rooms.reduce((totalPrice: number, roomItem: any) => {
         const roomItemPrice = roomItem.pricing.find(

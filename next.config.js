@@ -55,7 +55,7 @@ const nextConfig = {
     PROJECT_SERVER_USER: "",
     
     GOOGLE_ANALYTIC_ID: 'G-L9XG7Q3D68',
-    GOOGLE_TAG_MANAGER_ID: 'GTM-MJQWGBV',
+    GOOGLE_TAG_MANAGER_ID: 'G-1EXTLDBKNV',
 
     PROJECT_SERVER_APIKEY: '602d3109-6e40-4653-42a4-08dbc10a4f4a',
     PROJECT_PORTAL_APIKEY: '92ba7928-ab01-4011-be49-5bed7556ae2a',
@@ -66,8 +66,8 @@ const nextConfig = {
     PROJECT_SERVER_HOTEL_DATA: "hoteldomesticdata.hotelban.com",
     PROJECT_SERVER_HOTEL_AVAILABILITY: "hotelv6.safaraneh.com",
     PROJECT_SERVER_COORDINATOR:"coordinator.safaraneh.com",
-    //PROJECT_SERVER_BLOG :"blogonline.ir/iranhotel",
-    PROJECT_SERVER_CRM:"crm.safaraneh.com",
+    PROJECT_SERVER_BLOG :"blogonline.ir",
+    PROJECT_SERVER_CRM:"crm.hotelban.com",
     PROJECT_SERVER_PAYMENT: "payline.hotelban.com",
     PROJECT_SERVER_IDENTITY:"identity.safaraneh.com",
     PROJECT_SERVER_TRAVELER:"traveller.safaraneh.com",
@@ -83,7 +83,7 @@ const nextConfig = {
     PROJECT_SERVER_NATIONALITY: "",
     PORT: '',
     //PROJECT_MODULES: "Flight Hotel CIP Blog ForeignFlight ForeignHotel",
-    PROJECT_MODULES: "DomesticHotel",
+    PROJECT_MODULES: "DomesticHotel Blog",
     // DEFAULT_lAN:"US",
     // LANGUAGES:["US","NO","FA"]
 

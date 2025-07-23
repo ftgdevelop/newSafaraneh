@@ -21,7 +21,7 @@ export const getDomesticHotelSummaryDetailById = async (id: number, acceptLangua
 
 export const getDomesticHotelDetailsByUrl = async (url: string, acceptLanguage: string = 'fa-IR') => {
     try {
-        let response = await axios.get(
+        const response = await axios.get(
             `${ServerAddress.Type}${ServerAddress.Hotel_WP}${Hotel.GetDomesticHotelDetails}?url=${url}`,
             {
                 headers: {
@@ -31,8 +31,10 @@ export const getDomesticHotelDetailsByUrl = async (url: string, acceptLanguage: 
                 },
             },
         )
+        console.log('LOG 1 - API Response:', response.data)
         return response
-    } catch (error) {
+    } catch (error:any) {
+        console.error('LOG 2 - Error fetching data:', error.message)
         return error
     }
 }
@@ -204,10 +206,17 @@ export const getEntityNameByLocation = async (cityId: number, acceptLanguage: st
 
 }
 
-export const GetRooms = async (params:{id:number,checkin:string,checkout:string} , acceptLanguage: string = 'fa-IR') => {
+export const GetRooms = async (params:{id:number,checkin:string,checkout:string, MetaSearchKey?: string; MetaSearchName?: string} , acceptLanguage: string = 'fa-IR') => {
+
+    let fetchUrl = `${ServerAddress.Type}${ServerAddress.Hotel_Availability}${Hotel.GetRooms}?Id=${params.id}&CheckIn=${params.checkin}&CheckOut=${params.checkout}`;
+
+    if(params.MetaSearchKey && params.MetaSearchName){
+        fetchUrl += `&MetaSearchKey=${params.MetaSearchKey}&MetaSearchName=${params.MetaSearchName}`
+    }
+
     try {
         let response = await axios.get(
-            `${ServerAddress.Type}${ServerAddress.Hotel_Availability}${Hotel.GetRooms}?Id=${params.id}&CheckIn=${params.checkin}&CheckOut=${params.checkout}`,
+            fetchUrl,
             {
                 headers: {
                     'Content-Type': 'application/json',

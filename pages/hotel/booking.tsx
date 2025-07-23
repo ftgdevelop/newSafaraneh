@@ -115,7 +115,9 @@ const Booking: NextPage = ({ portalData }: { portalData?: WebSiteDataType }) => 
             duration: getDatesDiff(new Date(domesticHotelReserveData.checkout), new Date(domesticHotelReserveData.checkin)),
             rooms: domesticHotelReserveData.rooms.map(roomItem => ({
                 name: roomItem.name,
-                board: roomItem.boardCode,
+                extraBed: roomItem.extraBed,
+                boardExtra: roomItem.boardExtra,
+                boardName: roomItem.boardName,
                 cancellationPolicyStatus: roomItem.cancellationPolicyStatus,
                 bed: roomItem.bed,
                 pricing: roomItem.pricing,

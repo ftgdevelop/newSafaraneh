@@ -17,6 +17,7 @@ import { store } from '../modules/shared/store';
 import { FooterStrapi, GetPageByUrlDataType, WebSiteDataType } from '@/modules/shared/types/common';
 import { getPortal } from '@/modules/shared/actions/portalActions';
 import Layout from '@/modules/shared/components/layout';
+
 import { getPageByUrl } from '@/modules/shared/actions';
 import { getStrapiFooter } from '@/modules/shared/actions/strapiActions';
 
@@ -178,7 +179,6 @@ function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }:
         <meta name="samandehi" content="743180156"/>
 
       </Head>
-
 
       <Layout
         contactInfo={

@@ -7,7 +7,7 @@ type Props = {
 const About: React.FC<Props> = props => {
 
     return (
-        <section className="max-w-container m-auto px-3 max-xl:p-5 mb-5 sm:mb-10" >
+        <section className="max-w-container m-auto px-5 max-xl:p-5 mb-5 sm:mb-10" >
             {props.logo && <Image
                 src={props.logo}
                 alt="هتل بان"

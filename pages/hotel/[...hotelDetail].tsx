@@ -31,20 +31,24 @@ import dynamic from 'next/dynamic';
 import { useAppDispatch } from '@/modules/shared/hooks/use-store';
 import { emptyReduxSafarmarket, setReduxSafarmarketPixel } from '@/modules/shared/store/safarmarketSlice';
 import BreadCrumpt from '@/modules/shared/components/ui/BreadCrumpt';
+import GalleryLevel1 from '@/modules/domesticHotel/components/hotelDetails/GalleryLevel1';
 import SimilarHotelsNew from '@/modules/domesticHotel/components/hotelDetails/SimilarHotelsNew';
+import Loading from '@/modules/shared/components/ui/Loading';
 
 const SearchForm = dynamic(() => import('@/modules/domesticHotel/components/shared/SearchForm'), {
   ssr: false
 });
 
-type Props = {
-  allData: {
+type HotelAllData = {
     reviews?: DomesticHotelReviewsType;
     accommodation?: { result: DomesticAccomodationType };
     richSnippets?: DomesticHotelRichSnippets;
     sheet:DomesticHotelRichSheet;
     hotel?: DomesticHotelDetailType;
-  };
+}
+
+type Props = {
+  allData2: HotelAllData;
   portalData: WebSiteDataType;
   error410?: "true";
   url: string;
@@ -52,12 +56,20 @@ type Props = {
 
 const HotelDetail: NextPage<Props> = props => {
 
+  const [allData, setAllData] = useState< HotelAllData| undefined>( props.allData2);
+  const [loading, setLoading ] = useState<boolean>(false);
+
   useEffect(()=>{
     const fetchData = async (u:string) => {
-      const allData: any = await getDomesticHotelDetailsByUrl( u, "fa-IR");
+      setLoading(true);
+      const response: any = await getDomesticHotelDetailsByUrl( u, "fa-IR");
+      if(response?.data?.result){
+        setAllData(response.data.result)
+      }
+      setLoading(false);
     }
 
-    if(props.url){
+    if(props.url && !props.allData2){
       fetchData( "/fa"+ props.url);
     }
   },[props.url]);
@@ -72,7 +84,9 @@ const HotelDetail: NextPage<Props> = props => {
 
   const isSafarlife = process.env.PROJECT === "SAFARLIFE";
 
-  const { portalData, allData } = props;
+  const isHotelban = process.env.PROJECT === "HOTELBAN";
+
+  const { portalData } = props;
 
   const { t } = useTranslation('common');
   const { t: tHotel } = useTranslation('hotel');
@@ -202,6 +216,14 @@ useEffect(() => {
     )
   }
 
+  if(loading) {
+    return (
+      <div className='text-center py-24'>
+        <Loading size='large' />
+      </div>
+    )
+  }
+
   if (!allData && isSafaraneh) {
     return null;
   }
@@ -240,7 +262,7 @@ useEffect(() => {
 
   if (portalData) {
 
-    tel = portalData.billing?.telNumber || portalData?.billing?.phoneNumber || "";
+    tel = portalData.billing?.telNumber || portalData.billing?.phoneNumber || "";
     twitter = portalData.social?.x || "";
     siteLogo = portalData.billing?.logo?.value || "";
     siteName = portalData.billing?.name || "";
@@ -468,7 +490,7 @@ useEffect(() => {
                 "@type": "ListItem",
                 "position": 3,
                 "item": {
-                  "@id": "${configWebsiteUrl}${sheet.url}",
+                  "@id": "${configWebsiteUrl}${sheet?.url}",
                   "name": "${accommodationData.displayName}"
                 }
               }
@@ -518,7 +540,7 @@ useEffect(() => {
             "priceRange": "${richSnippets?.priceRange || "قیمت موجود نیست"}",
             "telephone":"${accommodationData.telNumber || "تلفن ثبت نشده است."}",
             "image": "${accommodationData.galleries && accommodationData.galleries[0]?.filePath || accommodationData.picture?.path || ""}",
-            "url": "${configWebsiteUrl}${sheet.url}",
+            "url": "${configWebsiteUrl}${sheet?.url}",
             "name": "${accommodationData.displayName || accommodationData.name}",
             "description": "${sheet?.pageTitle?.replaceAll("{0}", siteName)}",
             "address": {
@@ -598,7 +620,7 @@ useEffect(() => {
 
         {!!querySafarmarketId && (
           <div className='bg-[#ed6527] text-white px-5 py-3 text-lg md:text-2xl lg:text-4xl xl:text-5xl mb-5 text-center font-semibold'>
-            شما از موتور جستجوی <span className='text-[#ed6527] inline-block mx-2 font-bold p-1 lg:p-3 bg-white rounded-xl'> سفرمارکت </span> به {portalData.billing?.name || " این سایت "} هدایت شده اید
+            شما از موتور جستجوی <span className='text-[#ed6527] inline-block mx-2 font-bold p-1 lg:p-3 bg-white rounded-xl'> سفرمارکت </span> به {portalData?.billing?.name || " این سایت "} هدایت شده اید
           </div>
         )}
 
@@ -632,7 +654,12 @@ useEffect(() => {
 
         </div>
 
-        {!!hotelImages?.length && <Gallery images={hotelImages} hotelName={accommodationData.displayName} />}
+        {isHotelban ? (
+          <GalleryLevel1 images={hotelImages} hotelName={accommodationData.displayName} />
+        ) :(
+          <Gallery images={hotelImages} hotelName={accommodationData.displayName} />
+        )}
+
       </div>
 
       <AnchorTabs
@@ -697,7 +724,7 @@ useEffect(() => {
         </div>
       )}
 
-      {!!reviewData && <Comments siteName={siteName} hotelScoreData={allData.reviews} pageId={sheet.id} />}
+      {!!reviewData && <Comments siteName={siteName} hotelScoreData={allData?.reviews} pageId={sheet?.id} />}
 
       {!!(isSafarlife && accommodationData?.similars?.length) && <SimilarHotelsNew similarHotels={accommodationData.similars} />}
       {!!(isSafaraneh && hotelData?.Similars) && <SimilarHotels similarHotels={hotelData.Similars} />}
@@ -899,7 +926,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return ({
     props: {
       ...await (serverSideTranslations(context.locale, ['common', 'hotel'])),
-      allData: allDataObject,
+      allData2: allDataObject,
       url: url
     },
   })
