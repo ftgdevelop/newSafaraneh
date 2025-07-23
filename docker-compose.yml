@@ -1,0 +1,9 @@
+version: '3'
+services:
+  testapi_hotelban_service:
+    image: testapi_hotelban_image
+    restart: always
+    build: ./
+    command: 'yarn start -p 2091'
+    ports:
+      - '2091:2091'
