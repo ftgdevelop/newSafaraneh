@@ -115,6 +115,8 @@ const Blog: NextPage<Props> = (props) => {
         )
     }
 
+    const isHotelban = process.env.PROJECT === "HOTELBAN";
+
     return (
         <div className="bg-white">
 
@@ -126,9 +128,9 @@ const Blog: NextPage<Props> = (props) => {
                 <BreadCrumpt items={[{ label: "بلاگ" }]} />
             </div>
 
-            <BlogCities cities={cities} />
+            {!isHotelban && <BlogCities cities={cities} />}
 
-            <Categories data3={category3} data2={category2} CategoriesData={allCategories} />
+            {!isHotelban && <Categories data3={category3} data2={category2} CategoriesData={allCategories} />}
 
             <SearchBox />
 
