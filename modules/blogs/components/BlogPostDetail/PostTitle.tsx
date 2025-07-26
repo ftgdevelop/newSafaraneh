@@ -1,25 +1,35 @@
 import { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { BlogItemType } from "../../types/blog";
 
-const TitlePost: NextPage<any> = ({ BlogPost }) => {
+type Props = {
+    BlogPost:BlogItemType;
+    categoryName?: string;
+    categoryId?: number;
+}
+const TitlePost: NextPage<Props> = props => {
+
+    const {BlogPost} = props;
     
+    const imageUrl = BlogPost?.acf?.image_url_bp || BlogPost?.images?.large;
+
     return (
         <div className="pl-5 pr-5 max-sm:p-3">
         <div className="overflow-hidden rounded-md flex items-center relative h-550 max-lg:h-full max-lg:mt-5 shadow-xl max-sm:shadow-none">
                 <div className="text-center absolute z-20 w-full p-4">
-                    <Link href={`/blog/category/${BlogPost?.categories[0]}`}
+                    <Link href={`/blog/category/${props.categoryId || BlogPost?.categories[0]}`}
                         className="bg-white text-sm text-red-600 p-3 rounded-2xl hover:text-white hover:bg-red-600 duration-300">
-                    {BlogPost?.categories_names?.[0]}</Link>
+                    {props.categoryName || BlogPost?.categories_names?.[0]}</Link>
                     <p
                         className="font-bold text-4xl max-sm:text-xl text-white mt-8 leading-10 text-center">
                         {BlogPost?.title.rendered}
                     </p>
                 </div>
                 <div className="w-full h-full absolute z-10 bg-black/40 bottom-0"></div>
-                <Image
-                    src={BlogPost?.images?.large} alt={BlogPost?.title?.rendered} onContextMenu={(e) => e.preventDefault()}
-                    width={400} height={250} className="w-full" priority={true} />
+                {!!imageUrl && <Image
+                    src={imageUrl} alt={BlogPost?.title?.rendered} onContextMenu={(e) => e.preventDefault()}
+                    width={400} height={250} className="w-full" priority={true} />}
         </div>
             <div className="w-full flex justify-center max-sm:w-fit text-center"> 
                 <div
