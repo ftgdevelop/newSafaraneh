@@ -22,24 +22,28 @@ const RecentPostsTheme3: React.FC<Props> = props => {
 
             <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pb-10'>
 
-                {props.blogs?.slice(0,4)?.map(blog => (
+                {props.blogs?.slice(0,4)?.map(blog => {
+                    
+                    const imageUrl = blog.acf.image_url_bp || blog.images?.medium || "/images/no-image.jpg";
 
+                    return (
                     <Link key={blog.id} href={`/blog/${blog.slug}`} title={blog.title?.rendered}>
                         <Image
                             onContextMenu={e => {e.preventDefault()}}
-                            src={blog.images?.medium || "/images/no-image.jpg"}
+                            src={imageUrl}
                             alt={blog.title?.rendered}
                             title={blog.title?.rendered}
                             width={278}
                             height={176}
-                            className='w-full'
+                            className='w-full h-52 object-contain'
                         />
                         <div className="bg-white relative rounded-lg p-4 pb-2 mx-3 -mt-8 text-sm text-neutral-600">
                             <h2 className='font-semibold mb-3 leading-6'>{blog.title.rendered}</h2>
                             <small className='text-xs'>{blog.date}</small>
                         </div>
                     </Link>
-                ))}
+                )
+                })}
 
             </div>
 
