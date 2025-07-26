@@ -51,7 +51,7 @@ const BlogList: NextPage<any> = ({ blogsPage, allCategories, pages, recentBlogs,
             recentPosts={recentBlogs?.map(item => ({
                 link: `/blog/${item.slug}`,
                 title: item.title?.rendered,
-                imageUrl: item.images?.medium
+                imageUrl: item.acf?.image_url_bp || item.images?.medium
             }))}
             pages={pages}
             breadcrumptItems={[{ label: "بلاگ", link: '/blog' }, { label: "جدیدترین مقالات" }]}

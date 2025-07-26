@@ -14,6 +14,7 @@ type Props = {
         label: string;
         link: string;
     }[];
+    tags?:{label:string, id:number, slug: string}[];
 }
 
 const ContentPost: React.FC<Props> = props => {
@@ -28,13 +29,15 @@ const ContentPost: React.FC<Props> = props => {
                 </div>
             <div className="flex flex-wrap mt-10 gap-3">
                 <p>تگ ها:</p>
-                {
-                    content &&
-                    content.tags_names?.map((tag: any, index: any) =>
-                        <Link href={`/blog/tag/${content.tags[index]}`}
-                            className="hover:text-blue-500 duration-200" key={tag}> #{tag}
-                        </Link>)
-                }
+                {props.tags?.map(tag => (
+                    <Link 
+                        href={`/blog/tag/${tag.id}`}
+                        className="hover:text-blue-500 duration-200" 
+                        key={tag.id}
+                    >
+                        #{tag.label}
+                    </Link>
+                ))}
             </div>
             </div>
             <div className="col-span-2 max-lg:col-span-6 w-full mt-5 ">
