@@ -3,7 +3,10 @@ export interface BlogItemType {
     date: string;
     slug: string;
     acf: {
-        time_read: string
+        time_read: string;        
+        image_alt_bp?:string;
+        image_title_bp?:string;
+        image_url_bp?:string;
     };
     categories: [
       number  

@@ -67,7 +67,7 @@ const Tag: NextPage<any> = ({ TagBlogs, TagName, allCategories, recentBlogs, pag
                 recentPosts={recentBlogs?.map(item => ({
                     link: `/blog/${item.slug}`,
                     title: item.title?.rendered,
-                    imageUrl: item.images?.medium
+                    imageUrl: item.acf?.image_url_bp || item.images?.medium
                 }))}
                 pages={pages}
                 breadcrumptItems={[{ label: "بلاگ", link: "/blog" }, { label: tagname }]}
