@@ -23,6 +23,8 @@ const RoomItem: React.FC<Props> = props => {
 
     const { rate, room, selectedRoomToken } = props;
 
+    const isHotelban = process.env.PROJECT === "HOTELBAN";
+
     const { t } = useTranslation('common');
     const { t: tHotel } = useTranslation('hotel');
 
@@ -91,6 +93,7 @@ const RoomItem: React.FC<Props> = props => {
                 <div className='text-xs'>{rate.cancellationPolicy.status}</div>;
         }
     }
+    if (isHotelban) cancellation = null;
 
     const prices = {
         roomPrice: rate.pricing?.find(
