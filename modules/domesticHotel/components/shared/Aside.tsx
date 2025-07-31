@@ -30,6 +30,8 @@ const Aside: React.FC<Props> = props => {
     const { t } = useTranslation('common');
     const { t: tHotel } = useTranslation('hotel');
 
+    const isHotelban = process.env.PROJECT === "HOTELBAN";
+
     const { hotelInformation, reserveInformation, roomExtraBed, discountResponse, discountLoading } = props;
 
     const hasDiscount = reserveInformation?.salePrice && reserveInformation.boardPrice && reserveInformation.boardPrice > reserveInformation.salePrice;
@@ -214,6 +216,8 @@ const Aside: React.FC<Props> = props => {
                             default:
                                 cancellation = <div className="margin-bottom-5">{roomItem.cancellationPolicyStatus}</div>;
                         }
+                        
+                        if (isHotelban) cancellation = null;
 
                         let childPriceBlock = null;
                         let extraBedPriceBlock = null;
