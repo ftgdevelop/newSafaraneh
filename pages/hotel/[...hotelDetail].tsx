@@ -696,7 +696,7 @@ useEffect(() => {
       {!!reviewData && <Comments siteName={siteName} hotelScoreData={allData.reviews} pageId={sheet.id} />}
 
       {!!(isSafarlife && accommodationData?.similars?.length) && <SimilarHotelsNew similarHotels={accommodationData.similars} />}
-      {!!(isSafaraneh && hotelData?.Similars) && <SimilarHotels similarHotels={hotelData.Similars} />}
+      {!!(isSafaraneh && hotelData?.Similars) && <SimilarHotels similarHotels={hotelData.Similars} checkin={checkin} checkout={checkout} />}
 
       {!!(accommodationData?.faqs?.length && !querySafarmarketId) && <FAQ faqs={accommodationData.faqs} />}
 
