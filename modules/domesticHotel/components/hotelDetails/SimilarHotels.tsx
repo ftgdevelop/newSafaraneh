@@ -5,16 +5,18 @@ import { AvailabilityByIdItem, DomesticHotelMainType } from '@/modules/domesticH
 import SimilarHotelItem from './SimilarHotelItem';
 import { useRouter } from 'next/router';
 import { InfoCircle } from '@/modules/shared/components/ui/icons';
-import { addSomeDays, dateFormat, getDatesDiff } from '@/modules/shared/helpers';
+import { getDatesDiff } from '@/modules/shared/helpers';
 import { AvailabilityByHotelId } from '../../actions';
 
 type Props = {
     similarHotels?: DomesticHotelMainType[];
+    checkin: string;
+    checkout: string;
 }
 
 const SimilarHotels: React.FC<Props> = props => {
 
-    const { similarHotels } = props;
+    const { similarHotels, checkin, checkout} = props;
 
     const router = useRouter();
     const { asPath } = router;
@@ -27,16 +29,10 @@ const SimilarHotels: React.FC<Props> = props => {
     const [showAll, setShowAll] = useState<boolean>(false);
 
     const [isInView,setIsInView] = useState<boolean>(false);
-
-    const today = dateFormat(new Date());
-    const tomorrow = dateFormat(addSomeDays(new Date()));
-    let checkin = today;
-    let checkout = tomorrow;
+    
     let searchInfo = '';
 
     if (asPath.includes("checkin") && asPath.includes("checkout")) {
-        checkin = asPath.split('checkin-')[1].split("/")[0];
-        checkout = asPath.split('checkout-')[1].split("/")[0];
         searchInfo = `/checkin-${checkin}/checkout-${checkout}`;
     }
 
