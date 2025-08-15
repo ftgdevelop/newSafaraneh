@@ -50,8 +50,6 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
 
   const safarmarketHotelPixel = useAppSelector(state => state.safarmarket.hotel);
 
-  const isHotelban = process.env.PROJECT === "HOTELBAN";
-
   useEffect(() => {
 
     removeLoading();
@@ -91,6 +89,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             user: {},
             getUserLoading: false
           }));
+          localStorage.removeItem('Token');
         }
 
       }

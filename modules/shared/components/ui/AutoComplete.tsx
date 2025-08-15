@@ -75,7 +75,7 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
         try {
 
             let axiosParams;
-            if (props.type === 'flight') {
+            if (props?.type === 'flight') {
                 axiosParams = {
                     method: "post",
                     url: url,
@@ -89,7 +89,7 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
                         "Accept-Language": acceptLanguage || "fa-IR",
                     }
                 }
-            } else if (props.type === 'hotel') {
+            } else if (props?.type === 'hotel') {
                 axiosParams = {
                     method: "post",
                     url: `${url}?input=${val}`,
@@ -100,7 +100,7 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
                         "Accept-Language": acceptLanguage || "fa-IR",
                     }
                 }
-            } else if (props.type === 'cip') {
+            } else if (props?.type === 'cip') {
                 axiosParams = {
                     method: "post",
                     url: `${url}?input=${val}`,

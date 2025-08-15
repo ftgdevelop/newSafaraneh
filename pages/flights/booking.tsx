@@ -66,7 +66,7 @@ const Booking: NextPage = ({ portalData }: { portalData?: WebSiteDataType }) => 
                 setConfirmLoading(true);
 
                 const response: any = await confirmFlight({ reserveId: reserveId, userName: username, token: token }, 'fa-IR');
-                if (response.status === 200) {
+                if (response?.status === 200) {
                     if (response.data?.result?.isCompleted) {
                         setConfirmStatus(response.data?.result?.reserve?.status);
 
