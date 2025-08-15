@@ -21,7 +21,7 @@ const Callback: NextPage = () => {
 
       if (username && reserveId) {
         const response: any = await getReserveFromCoordinator({ reserveId: reserveId, username: username });
-        if (response.status == 200) {
+        if (response?.status == 200) {
           if (!status || status === "0" || status === "false") {
             router.push(`/payment?username=${username}&reserveId=${reserveId}&status=0`);
           } else if (status && status === "1" || status === "true") {

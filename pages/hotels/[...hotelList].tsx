@@ -237,7 +237,7 @@ const HotelList: NextPage<Props> = props => {
 
       const hotelItem = hotelItems[i];
 
-      if (!hotelItem.type) {
+      if (!hotelItem?.type) {
         continue;
       }
 
@@ -246,7 +246,7 @@ const HotelList: NextPage<Props> = props => {
       if (updatingOptionItem) {
         updatingOptionItem.count = updatingOptionItem.count + 1
       } else {
-        options.push({ id: hotelItem.type, label: hotelItem.typeStr || "", count: 1 })
+        options.push({ id: hotelItem?.type, label: hotelItem.typeStr || "", count: 1 })
       }
     }
 
@@ -533,7 +533,7 @@ const HotelList: NextPage<Props> = props => {
       return false;
     }
 
-    if (filteredHotelType.length && !filteredHotelType.some(item => item === hotelItem.type)) {
+    if (filteredHotelType.length && !filteredHotelType.some(item => item === hotelItem?.type)) {
       return false;
     }
 

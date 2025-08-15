@@ -64,7 +64,7 @@ const Booking: NextPage = ({ portalData }: { portalData?: WebSiteDataType }) => 
                 setConfirmLoading(true);
 
                 const response: any = await DomesticHotelConfirm({ reserveId: reserveId, username: username }, 'fa-IR');
-                if (response.status === 200) {
+                if (response?.status === 200) {
                     if (response.data.result.isCompleted) {
                         setConfirmData(response.data.result);
 

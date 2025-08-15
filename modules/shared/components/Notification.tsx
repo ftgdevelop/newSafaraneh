@@ -15,9 +15,9 @@ const Notification: React.FC = () => {
 
     let icon: React.ReactNode = "";
 
-    if (storedNotification.status === "error") {
+    if (storedNotification?.status === "error") {
         icon = <ErrorCircle className="fill-red-500 w-7 h-7" />;
-    } else if (storedNotification.status === "success") {
+    } else if (storedNotification?.status === "success") {
         icon = <TikCircle className="fill-green-500 w-7 h-7" />;
     }
 
