@@ -20,12 +20,17 @@ import Layout from '@/modules/shared/components/layout';
 
 import { getPageByUrl } from '@/modules/shared/actions';
 import { getStrapiFooter } from '@/modules/shared/actions/strapiActions';
+import dynamic from 'next/dynamic';
 
 type TProps = Pick<AppProps, "Component" | "pageProps"> & {
   portalData?: WebSiteDataType;
   pageData?: GetPageByUrlDataType;
   footerStrapiData?: FooterStrapi;
 };
+
+const ElmahLogError = dynamic(() => import('../modules/shared/components/ElmahLogError'), {
+  ssr: false
+});
 
 function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }: TProps) {
 
@@ -203,6 +208,8 @@ function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }:
         <Component {...pageProps} portalData={portalData} />
 
       </Layout>
+
+      <ElmahLogError />
 
     </Provider>
   )

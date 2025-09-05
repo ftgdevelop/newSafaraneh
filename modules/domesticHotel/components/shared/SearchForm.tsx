@@ -116,7 +116,7 @@ const SearchForm: React.FC<Props> = props => {
 
     const renderOption = useCallback((option: EntitySearchResultItemType, direction: "ltr" | "rtl" | undefined) => (
         <div className={`px-3 py-2 flex gap-3 hover:bg-blue-50 items-center ${!direction ? "" : direction === 'rtl' ? "rtl" : "ltr"}`}>
-            {option.type === "Hotel" ? <ApartmentOutline className="w-5 h-5 fill-current" /> : option.type === "Province" ? <Home2 className="w-5 h-5 fill-current" /> : <Location className="w-5 h-5 fill-current" />}
+            {option?.type === "Hotel" ? <ApartmentOutline className="w-5 h-5 fill-current" /> : option?.type === "Province" ? <Home2 className="w-5 h-5 fill-current" /> : <Location className="w-5 h-5 fill-current" />}
             <div className="leading-5 text-neutral-600">
                 <div className='text-xs font-bold'>{option.name}</div>
                 <div className='text-3xs'>{option.displayName}</div>
@@ -142,7 +142,7 @@ const SearchForm: React.FC<Props> = props => {
 
         const isSafarLife = process.env.SITE_NAME === 'https://www.safarlife.com';
 
-        switch (selectedDestination.type) {
+        switch (selectedDestination?.type) {
             case "City":
                 if (isSafarLife && selectedDestination.slug){
                     url = selectedDestination.slug;
@@ -309,6 +309,7 @@ const SearchForm: React.FC<Props> = props => {
                             {t('searchHotelDestination')}
                         </label>
                         <AutoComplete
+                            grayBg={theme3}
                             type="hotel"
                             defaultList={defaultDestinations}
                             inputId="destination"

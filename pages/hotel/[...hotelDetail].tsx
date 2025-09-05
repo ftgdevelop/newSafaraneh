@@ -145,41 +145,41 @@ const utm_term = router.query?.utm_term;
 
 useEffect(()=>{
 
-  if (!process.env.SAFAR_MARKET_SITE_NAME){
-    return;
-  }
-
-  let cookieSafarmarketId;
-  let cookies = decodeURIComponent(document.cookie).split(';');
-  for (const item of cookies){
-    if (item.includes("safarMarketHotelSmId=")){
-      cookieSafarmarketId =item.split("=")[1];
+  if (process.env.SAFAR_MARKET_SITE_NAME){
+    
+    let cookieSafarmarketId;
+    let cookies = decodeURIComponent(document.cookie).split(';');
+    for (const item of cookies){
+      if (item.includes("safarMarketHotelSmId=")){
+        cookieSafarmarketId =item.split("=")[1];
+      }
     }
-  }
-
-  if(querySafarmarketId){
-    const expDate = new Date();
-    expDate.setTime(expDate.getTime() + (7*24*60*60*1000));
-    if (document){
-      document.cookie = `safarMarketHotelSmId=${querySafarmarketId}; expires=${expDate.toUTCString()};path=/`;
-      if (utm_source){
-        if (typeof utm_source === 'object'){
-          document.cookie = `safarMarketHotelUtmSource=${utm_source[0]}; expires=${expDate.toUTCString()};path=/`;
-        }else{
-          document.cookie = `safarMarketHotelUtmSource=${utm_source}; expires=${expDate.toUTCString()};path=/`;
+  
+    if(querySafarmarketId){
+      const expDate = new Date();
+      expDate.setTime(expDate.getTime() + (7*24*60*60*1000));
+      if (document){
+        document.cookie = `safarMarketHotelSmId=${querySafarmarketId}; expires=${expDate.toUTCString()};path=/`;
+        if (utm_source){
+          if (typeof utm_source === 'object'){
+            document.cookie = `safarMarketHotelUtmSource=${utm_source[0]}; expires=${expDate.toUTCString()};path=/`;
+          }else{
+            document.cookie = `safarMarketHotelUtmSource=${utm_source}; expires=${expDate.toUTCString()};path=/`;
+          }
         }
       }
     }
+  
+    const smId = querySafarmarketId || cookieSafarmarketId;
+  
+    if(smId){
+      dispatch(setReduxSafarmarketPixel({
+        type: "hotel",
+        pixel : `https://safarmarket.com/api/hotel/v1/pixel/${process.env.SAFAR_MARKET_SITE_NAME}/2/0/?smId=${smId}`
+      }));
+    }
   }
 
-  const smId = querySafarmarketId || cookieSafarmarketId;
-
-  if(smId){
-    dispatch(setReduxSafarmarketPixel({
-      type: "hotel",
-      pixel : `https://safarmarket.com/api/hotel/v1/pixel/${process.env.SAFAR_MARKET_SITE_NAME}/2/0/?smId=${smId}`
-    }));
-  }
 },[querySafarmarketId,utm_source]);
 
 useEffect(() => {
@@ -727,7 +727,7 @@ useEffect(() => {
       {!!reviewData && <Comments siteName={siteName} hotelScoreData={allData?.reviews} pageId={sheet?.id} />}
 
       {!!(isSafarlife && accommodationData?.similars?.length) && <SimilarHotelsNew similarHotels={accommodationData.similars} />}
-      {!!(isSafaraneh && hotelData?.Similars) && <SimilarHotels similarHotels={hotelData.Similars} />}
+      {!!(isSafaraneh && hotelData?.Similars) && <SimilarHotels similarHotels={hotelData.Similars} checkin={checkin} checkout={checkout} />}
 
       {!!(accommodationData?.faqs?.length && !querySafarmarketId) && <FAQ faqs={accommodationData.faqs} />}
 

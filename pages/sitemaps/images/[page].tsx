@@ -13,9 +13,6 @@ function creareSiteMap(items:{
 
   let contents = "";
 
-  console.log(items?.[0]);
-
-
   if(items.length){
     for(let i = 0 ; i < items.length ; i++ ){
 

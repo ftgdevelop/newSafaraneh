@@ -15,10 +15,10 @@ export const safarmarketSlice = createSlice({
     initialState,
     reducers:{
         setReduxSafarmarketPixel:(state, action) =>{
-            if(action.payload.type === "hotel"){            
+            if(action.payload?.type === "hotel"){            
                 state.hotel = action.payload.pixel || undefined;
             }
-            if(action.payload.type === "flight"){            
+            if(action.payload?.type === "flight"){            
                 state.flight = action.payload.pixel || undefined;
             }
         },

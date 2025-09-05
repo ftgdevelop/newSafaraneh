@@ -31,7 +31,7 @@ const RoomsListTheme1: React.FC<Props> = props => {
     }[] = [];
 
     if (props.availabilites?.length) {
-        let refundable = false;
+
         let breakfast = false;
         let extraBed = false;
 
@@ -44,9 +44,6 @@ const RoomsListTheme1: React.FC<Props> = props => {
                 breakfast = true;
             }
 
-            if (availibility.rates?.find(rate => rate.cancellationPolicy?.status === "Refundable")) {
-                refundable = true;
-            }
         }
 
         if (extraBed) availableFilters.push({

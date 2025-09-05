@@ -24,6 +24,8 @@ const BookingContent: React.FC<Props> = props => {
     const { t: tPayment } = useTranslation('payment');
     const { t: tHotel } = useTranslation('hotel');
 
+    const isHotelban = process.env.PROJECT === "HOTELBAN";
+
     const { reserveInfo, username, reserveId, confirmStatus, confirmLoading } = props;
 
     const [progress, setProgress] = useState<number>(0);
@@ -179,6 +181,9 @@ const BookingContent: React.FC<Props> = props => {
                             default:
                                 cancellation = <div className="margin-bottom-5">{item.cancellationPolicyStatus}</div>;
                         }
+                        
+                        if(isHotelban) cancellation = null;
+
                         return (
                             <div key={index} className="border border-neutral-300 rounded-sm">
 

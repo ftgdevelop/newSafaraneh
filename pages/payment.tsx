@@ -252,14 +252,14 @@ const Payment: NextPage = () => {
     };
 
     const response = await makeToken(params);
-    if (response.status == 200) {
+    if (response?.status == 200) {
       window.location.replace(
         `https://${ServerAddress.Payment}/fa/Reserves/Payment/PaymentRequest?tokenId=${response.data.result.tokenId}`
       );
     } else {
       dispatch(setReduxError({
         title: t('error'),
-        message: response.data.error.message,
+        message: response?.data?.error?.message,
         isVisible: true
       }));
 
@@ -343,7 +343,7 @@ const Payment: NextPage = () => {
   }
   if (domesticHotelReserveData) {
 
-    if(domesticHotelReserveData.status !== "Pending"){
+    if(domesticHotelReserveData?.status !== "Pending"){
       router.push(`/hotel/capacity?reserveId=${domesticHotelReserveData.id}&username=${domesticHotelReserveData.username}`);
     }
 

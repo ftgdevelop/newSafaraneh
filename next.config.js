@@ -72,7 +72,7 @@ const nextConfig = {
     PROJECT_SERVER_IDENTITY:"identity.safaraneh.com",
     PROJECT_SERVER_TRAVELER:"traveller.safaraneh.com",
     PROJECT_SERVER_CIP:"cip.safaraneh.com",
-    PROJECT_SERVER_FLIGHT: "flightdomestic.safaraneh.com",
+    PROJECT_SERVER_FLIGHT: "flightdomestic.hotelban.com",
 
     PROJECT_SERVER_TENANTID: "1047",
 
@@ -83,7 +83,7 @@ const nextConfig = {
     PROJECT_SERVER_NATIONALITY: "",
     PORT: '',
     //PROJECT_MODULES: "Flight Hotel CIP Blog ForeignFlight ForeignHotel",
-    PROJECT_MODULES: "DomesticHotel Blog",
+    PROJECT_MODULES: "DomesticHotel DomesticFlight",
     // DEFAULT_lAN:"US",
     // LANGUAGES:["US","NO","FA"]
 
