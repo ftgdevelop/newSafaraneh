@@ -269,6 +269,7 @@ const SearchForm: React.FC<Props> = props => {
                                                     </label>
                                                 )}
                                                 <AutoComplete
+                                                    grayBg={theme3}
                                                     icon={theme3 ? "location" : undefined}
                                                     sortListFunction={(b, a) => { return b.airportType === 'City' ? -1 : 1 }}
                                                     defaultList={defaultAirportOptions}
@@ -343,6 +344,7 @@ const SearchForm: React.FC<Props> = props => {
                                                     </label>
                                                 )}
                                                 <AutoComplete
+                                                    grayBg={theme3}
                                                     icon={theme3 ? "location" : undefined}
                                                     sortListFunction={(b, a) => { return b.airportType === 'City' ? -1 : 1 }}
                                                     defaultList={defaultAirportOptions}
@@ -494,7 +496,7 @@ const SearchForm: React.FC<Props> = props => {
                                         </div>
                                     ) : (
                                         <div
-                                            className={`relative flex justify-center items-center border border-neutral-400 h-12 rounded-lg text-xs w-full cursor-pointer ${theme3 ? "max-sm:hidden md:col-span-3 xl:w-1/6" : theme2 ? "sm:col-span-2 lg:col-span-1 xl:col-span-2" : ""} bg-white ${theme3 ? "mt-7 border-2 text-[#fdaf16] border-[#fdaf16]" : " hover:bg-neutral-100"}`}
+                                            className={`relative flex justify-center items-center h-12 rounded-lg text-xs w-full cursor-pointer ${theme3 ? "max-sm:hidden md:col-span-3 xl:w-1/6" : theme2 ? "sm:col-span-2 lg:col-span-1 xl:col-span-2" : ""} bg-white ${theme3 ? "mt-7 border-2 text-[#fdaf16] border-[#fdaf16]" : "border border-neutral-400 hover:bg-neutral-100"}`}
                                             onClick={() => { setFieldValue("airTripType", 'RoundTrip', true); }}
                                         >
                                             {theme2 ? (
@@ -530,7 +532,7 @@ const SearchForm: React.FC<Props> = props => {
                                             <Select
                                                 h10={!theme3}
                                                 className={`${theme3 ? "w-full" : "inline-block w-28"} ${theme2 ? "rounded-full" : "rounded-lg"}`}
-                                                buttonClassName={theme2 ? "border-neutral-400" : ""}
+                                                buttonClassName={theme3?"bg-natural-200": theme2 ? "border-neutral-400" : ""}
                                                 items={[
                                                     { value: "All", label: "همه" },
                                                     { value: "Economy", label: "اکونومی" },

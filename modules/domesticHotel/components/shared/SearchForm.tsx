@@ -309,6 +309,7 @@ const SearchForm: React.FC<Props> = props => {
                             {t('searchHotelDestination')}
                         </label>
                         <AutoComplete
+                            grayBg={theme3}
                             type="hotel"
                             defaultList={defaultDestinations}
                             inputId="destination"
