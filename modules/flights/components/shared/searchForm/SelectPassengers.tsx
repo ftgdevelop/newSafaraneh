@@ -46,8 +46,9 @@ const SelectPassengers: React.FC<Props> = props => {
     const text = values.adult + values.child + values.infant + " مسافر"
 
     const theme2 = process.env.THEME === "THEME2";
+    const theme3 = process.env.THEME === "THEME3";
 
-    const buttonClassNames: string[] = ['flex rounded items-center', 'rounded-md', 'border', 'bg-white', 'px-3', `${theme2 ? "gap-1.5 w-full h-12 border-neutral-400" : "justify-between h-10 w-28"}`, 'ltr:text-left', 'rtl:text-right'];
+    const buttonClassNames: string[] = ['flex rounded items-center', 'rounded-md', 'border', 'bg-white', 'px-3', `${theme3?"justify-between h-12 w-full":theme2 ? "gap-1.5 w-full h-12 border-neutral-400" : "justify-between h-10 w-28"}`, 'ltr:text-left', 'rtl:text-right'];
 
     const boxClassNames = `bg-white absolute w-60 z-[1] top-full left-0 right-0 shadow border mt-1 rounded ${theme2 ? "p-2 scale-20" : ""} invisible opacity-0`
     const openBoxClassNames = `bg-white absolute w-60 z-[1] top-full left-0 right-0 shadow border mt-1 rounded transition-all visible opacity-100 ${theme2 ? "p-2 rtl:origin-top-right ltr:origin-top-left scale-100" : " "}`

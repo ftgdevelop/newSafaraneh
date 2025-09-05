@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { ReactNode, useCallback, useState } from 'react';
 import { i18n, useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 
@@ -8,7 +8,7 @@ import { Field, Form, Formik } from 'formik';
 import Button from '@/modules/shared/components/ui/Button';
 import Select from '@/modules/shared/components/ui/Select';
 import AutoComplete from '@/modules/shared/components/ui/AutoComplete';
-import { Calendar, CalendarFill, Location, Minus, Swap, Travel } from '@/modules/shared/components/ui/icons';
+import { Calendar, CalendarFill, Loading, Location, Minus, SearchTheme3, Swap, Travel } from '@/modules/shared/components/ui/icons';
 import { Flight, ServerAddress } from '@/enum/url';
 import { validateRequied } from '@/modules/shared/helpers/validation';
 import { addSomeDays, dateFormat } from '@/modules/shared/helpers';
@@ -21,6 +21,7 @@ type Props = {
     defaultValues?: FlightSearchDefaultValues;
     research?: () => void;
     wrapperClassName?: string;
+    lebelsWhite?: boolean;
 }
 
 const SearchForm: React.FC<Props> = props => {
@@ -129,6 +130,16 @@ const SearchForm: React.FC<Props> = props => {
     const theme2 = process.env.THEME === "THEME2";
     const theme3 = process.env.THEME === "THEME3";
 
+    let buttonInnerHtml: ReactNode = t('search');
+    if (theme3) {
+        if (submitPending) {
+            buttonInnerHtml = <Loading className="w-7 h-7 fill-white animate-spin" />;
+        } else {
+            buttonInnerHtml = <SearchTheme3 className="w-6 h-6 fill-white" />;
+        }
+    }
+
+
     return (
         <div className={`text-sm ${props.wrapperClassName || ""}`}>
 
@@ -152,7 +163,7 @@ const SearchForm: React.FC<Props> = props => {
 
                         <Form autoComplete='off' >
                             <div className=''>
-                                <div className={`flex gap-3 ${(theme2 || theme3) ? "flex-row" : "flex-col md:flex-row md:justify-between"} mb-4 z-[3] relative`}>
+                                <div className={`flex gap-3 ${theme3 ? "flex-col sm:flex-row" : theme2 ? "flex-row" : "flex-col md:flex-row md:justify-between"} mb-4 z-[3] relative`}>
 
                                     {theme2 ? (
                                         <Select
@@ -190,7 +201,7 @@ const SearchForm: React.FC<Props> = props => {
                                         </div>
                                     )}
 
-                                    <div className='flex gap-3 text-neutral-800'>
+                                    {theme3 || <div className='flex gap-3 text-neutral-800'>
 
                                         {!theme2 && <SelectPassengers
                                             values={values}
@@ -213,13 +224,13 @@ const SearchForm: React.FC<Props> = props => {
                                             value={values.cabinClassCode}
                                         />
 
-                                    </div>
+                                    </div>}
 
                                 </div>
 
-                                <div className={`text-neutral-800 grid gap-3 gap-y-4 z-[2] relative ${theme1 ? "grid-cols-2 md:grid-cols-4 lg:grid-cols-6" : (theme2 || theme3) ? "grid-cols-1 sm:grid-cols-6 lg:grid-cols-5 xl:grid-cols-14" : ""}`}>
+                                <div className={`text-neutral-800 gap-3 gap-y-4 z-[2] relative grid ${theme3 ? "md:leading-7 grid-cols-1 sm:grid-cols-2 md:grid-cols-12 xl:flex" : ""} ${theme1 ? "grid-cols-2 md:grid-cols-4 lg:grid-cols-6" : theme2 ? "grid-cols-1 sm:grid-cols-6 lg:grid-cols-5 xl:grid-cols-14" : ""}`}>
 
-                                    <div className={`relative ${theme1 ? "col-span-2 sm:col-span-1 lg:col-span-2" : (theme2 || theme3) ? "sm:col-span-3 lg:col-span-1 xl:col-span-3" : ""}`}>
+                                    <div className={`relative ${theme3 ? "md:col-span-3" : theme1 ? "col-span-2 sm:col-span-1 lg:col-span-2" : theme2 ? "sm:col-span-3 lg:col-span-1 xl:col-span-3" : ""}`}>
 
                                         {theme2 ? (
                                             <AutoCompleteZoom
@@ -251,30 +262,38 @@ const SearchForm: React.FC<Props> = props => {
                                                 value={locations[0]}
                                             />
                                         ) : (
-                                            <AutoComplete
-                                                sortListFunction={(b, a) => { return b.airportType === 'City' ? -1 : 1 }}
-                                                defaultList={defaultAirportOptions}
-                                                noResultMessage={t('NoResultsFound')}
-                                                placeholder='مبدا'
-                                                acceptLanguage={i18n?.language === "ar" ? "ar-AE" : i18n?.language === "en" ? "en-US" : "fa-IR"}
-                                                inputClassName='w-full text-left border border-neutral-400 h-12 rounded-lg focus:border-neutral-900 outline-none'
-                                                type="flight"
-                                                createTextFromOptionsObject={(item: AirportAutoCompleteType) => item.airportType === 'City' ? item.city.name || item.name : item.city.name + " - " + item.name}
-                                                renderOption={renderOption}
-                                                min={3}
-                                                url={`${ServerAddress.Type}${ServerAddress.Flight}${Flight.AirportSearch}`}
-                                                onChangeHandle={
-                                                    (v: AirportAutoCompleteType | undefined) => {
-                                                        setLocations(prevState => ([
-                                                            v,
-                                                            prevState[1]
-                                                        ]))
-                                                        setFieldValue("originCode", v?.code || "", true);
+                                            <>
+                                                {theme3 && (
+                                                    <label htmlFor="destination" className={`text-sm ${props.lebelsWhite ? "text-white" : ""}`}>
+                                                        مبدا
+                                                    </label>
+                                                )}
+                                                <AutoComplete
+                                                    icon={theme3 ? "location" : undefined}
+                                                    sortListFunction={(b, a) => { return b.airportType === 'City' ? -1 : 1 }}
+                                                    defaultList={defaultAirportOptions}
+                                                    noResultMessage={t('NoResultsFound')}
+                                                    placeholder={theme3 ? 'جستجوی مبدا' : 'مبدا'}
+                                                    acceptLanguage={i18n?.language === "ar" ? "ar-AE" : i18n?.language === "en" ? "en-US" : "fa-IR"}
+                                                    inputClassName={`w-full text-left h-12 rounded-lg focus:border-neutral-900 outline-none ${theme3 ? "bg-neutral-200" : "border border-neutral-400"}`}
+                                                    type="flight"
+                                                    createTextFromOptionsObject={(item: AirportAutoCompleteType) => item.airportType === 'City' ? item.city.name || item.name : item.city.name + " - " + item.name}
+                                                    renderOption={renderOption}
+                                                    min={3}
+                                                    url={`${ServerAddress.Type}${ServerAddress.Flight}${Flight.AirportSearch}`}
+                                                    onChangeHandle={
+                                                        (v: AirportAutoCompleteType | undefined) => {
+                                                            setLocations(prevState => ([
+                                                                v,
+                                                                prevState[1]
+                                                            ]))
+                                                            setFieldValue("originCode", v?.code || "", true);
+                                                        }
                                                     }
-                                                }
 
-                                                value={locations[0]}
-                                            />
+                                                    value={locations[0]}
+                                                />
+                                            </>
                                         )}
                                         <Field
                                             validate={(value: string) => validateRequied(value, "مبدا را انتخاب کنید.")}
@@ -286,7 +305,7 @@ const SearchForm: React.FC<Props> = props => {
 
                                     </div>
 
-                                    <div className={`relative ${theme1 ? "col-span-2 sm:col-span-1 lg:col-span-2" : (theme2 || theme3) ? "sm:col-span-3 lg:col-span-1 xl:col-span-3" : ""}`}>
+                                    <div className={`relative ${theme3 ? "md:col-span-3" : theme1 ? "col-span-2 sm:col-span-1 lg:col-span-2" : theme2 ? "sm:col-span-3 lg:col-span-1 xl:col-span-3" : ""}`}>
                                         {theme2 ? (
                                             <AutoCompleteZoom
                                                 defaultListLabel="محبوب ترین ها"
@@ -317,32 +336,40 @@ const SearchForm: React.FC<Props> = props => {
                                                 value={locations[1]}
                                             />
                                         ) : (
-                                            <AutoComplete
-                                                sortListFunction={(b, a) => { return b.airportType === 'City' ? -1 : 1 }}
-                                                defaultList={defaultAirportOptions}
-                                                noResultMessage={t('NoResultsFound')}
-                                                placeholder='مقصد'
-                                                acceptLanguage={i18n?.language === "ar" ? "ar-AE" : i18n?.language === "en" ? "en-US" : "fa-IR"}
-                                                inputClassName='w-full text-left border border-neutral-400 h-12 rounded-lg focus:border-neutral-900 outline-none'
-                                                type="flight"
-                                                createTextFromOptionsObject={(item: AirportAutoCompleteType) => item.airportType === 'City' ? item.city.name || item.name : item.city.name + " - " + item.name}
-                                                renderOption={renderOption}
-                                                min={3}
-                                                url={`${ServerAddress.Type}${ServerAddress.Flight}${Flight.AirportSearch}`}
-                                                onChangeHandle={
+                                            <>
+                                                {theme3 && (
+                                                    <label htmlFor="destination" className={`text-sm ${props.lebelsWhite ? "text-white" : ""}`}>
+                                                        مقصد
+                                                    </label>
+                                                )}
+                                                <AutoComplete
+                                                    icon={theme3 ? "location" : undefined}
+                                                    sortListFunction={(b, a) => { return b.airportType === 'City' ? -1 : 1 }}
+                                                    defaultList={defaultAirportOptions}
+                                                    noResultMessage={t('NoResultsFound')}
+                                                    placeholder={theme3 ? 'جستجوی مقصد' : 'مقصد'}
+                                                    acceptLanguage={i18n?.language === "ar" ? "ar-AE" : i18n?.language === "en" ? "en-US" : "fa-IR"}
+                                                    inputClassName={`w-full text-left h-12 rounded-lg outline-none ${theme3 ? "bg-neutral-200" : "border border-neutral-400"}`}
+                                                    type="flight"
+                                                    createTextFromOptionsObject={(item: AirportAutoCompleteType) => item.airportType === 'City' ? item.city.name || item.name : item.city.name + " - " + item.name}
+                                                    renderOption={renderOption}
+                                                    min={3}
+                                                    url={`${ServerAddress.Type}${ServerAddress.Flight}${Flight.AirportSearch}`}
+                                                    onChangeHandle={
 
-                                                    (v: AirportAutoCompleteType | undefined) => {
-                                                        setLocations(prevState => ([
-                                                            prevState[0],
-                                                            v
-                                                        ]))
-                                                        setFieldValue("destinationCode", v?.code || "", true);
+                                                        (v: AirportAutoCompleteType | undefined) => {
+                                                            setLocations(prevState => ([
+                                                                prevState[0],
+                                                                v
+                                                            ]))
+                                                            setFieldValue("destinationCode", v?.code || "", true);
+                                                        }
                                                     }
-                                                }
 
-                                                value={locations[1]}
+                                                    value={locations[1]}
 
-                                            />
+                                                />
+                                            </>
                                         )}
 
                                         <Field
@@ -365,49 +392,25 @@ const SearchForm: React.FC<Props> = props => {
                                                     ])
                                                 });
                                             }}
-                                            className={`rounded-full ${theme2?"p-1.5 top-0 sm:top-2 -mt-5":"-mt-5 p-0.5 top-0 sm:top-2.5"} border border-neutral-500 bg-white absolute max-sm:rotate-90 sm:mt-0 left-2 sm:left-auto sm:-right-5 cursor-pointer outline-none`}
+                                            className={`rounded-full ${theme3 ? "hidden sm:block sm:top-10" : theme2 ? "p-1.5 top-0 sm:top-2 -mt-5" : "-mt-5 p-0.5 top-0 sm:top-2.5"} border border-neutral-500 bg-white absolute max-sm:rotate-90 sm:mt-0 left-2 sm:left-auto sm:-right-5 cursor-pointer outline-none`}
                                         >
-                                            <Swap className={`${theme2?"w-4 h-4 fill-blue-700":"w-5 h-5 fill-current"}`} />
+                                            <Swap className={`${theme2 ? "w-4 h-4 fill-blue-700" : "w-5 h-5 fill-current"}`} />
                                         </button>
 
                                     </div>
 
-                                    {/* TODO: delete when mobiscroll is activated */}
-                                    {/* <div className={`modernCalendar-dates-wrapper ${theme2?"sm:col-span-2 lg:col-span-1 xl:col-span-2":""}`}>
-                                        <div className="relative modernDatePicker-checkin">
-                                            <DatePickerModern
-                                                wrapperClassName="block"
-                                                minimumDate={dateDiplayFormat({ date: new Date().toISOString(), locale: 'en', format: "YYYY-MM-DD" })}
-                                                inputPlaceholder="تاریخ رفت"
-                                                inputClassName="border border-neutral-400 h-12 rounded-lg focus:border-neutral-900 outline-none pt-7 text-xs w-full pr-10"
-                                                toggleLocale={() => { setLocale(prevState => prevState === 'fa' ? "en" : "fa") }}
-                                                locale={locale}
-                                                onChange={(v: string) => {
-                                                    if (v) {
-                                                        setFieldValue("departureDate", v, true);
-                                                    }
-                                                }}
-                                                value={values.departureDate}
-                                            />
-                                            <Calendar className="w-5 h-5 fill-neutral-600 top-1/2 -mt-2.5 right-3 absolute select-none pointer-events-none" />
-                                            <label className="absolute top-1.5 leading-5 rtl:right-10 text-4xs select-none pointer-events-none">
+                                    <div className={`${theme3 ? "md:col-span-3" : theme2 ? "sm:col-span-2 lg:col-span-1 xl:col-span-2" : ""}`} >
+
+                                        {theme3 && (
+                                            <label className={`leading-5 select-none pointer-events-none ${props.lebelsWhite ? "text-white" : ""}`}>
                                                 تاریخ رفت
                                             </label>
-                                        </div>
-                                        <Field
-                                            validate={(value: string) => validateRequied(value, values.airTripType === 'RoundTrip' ? "تاریخ رفت را انتخاب کنید." : "تاریخ پرواز را انتخاب کنید.")}
-                                            type='hidden'
-                                            name="departureDate"
-                                            value={values.departureDate}
-                                        />
-                                        {touched.departureDate && errors.departureDate && <div className='text-xs text-red-500'> {errors.departureDate as string}</div>}
-                                    </div> */}
+                                        )}
 
-                                    <div className={`${(theme2 || theme3) ? "sm:col-span-2 lg:col-span-1 xl:col-span-2" : ""}`} >
                                         <div className='relative'>
                                             <DatePickerMobiscroll
-                                                minDate={ dateFormat(new Date()) }
-                                                inputStyle='theme1'
+                                                minDate={dateFormat(new Date())}
+                                                inputStyle={theme3 ? "theme3" : 'theme1'}
                                                 onChange={a => {
                                                     setFieldValue("departureDate", a.value, true)
                                                 }}
@@ -416,16 +419,16 @@ const SearchForm: React.FC<Props> = props => {
                                                 onChangeLocale={setLocale}
                                                 value={values.departureDate}
                                             />
-                                        
-                                            {theme2 ?(
+
+                                            {theme2 ? (
                                                 <CalendarFill className='w-5 h-5 fill-neutral-600 top-1/2 -translate-y-1/2 right-3 absolute select-none pointer-events-none' />
-                                            ):(
+                                            ) : (
                                                 <Calendar className='w-5 h-5 fill-neutral-600 top-1/2 -translate-y-1/2 right-3 absolute select-none pointer-events-none' />
                                             )}
 
-                                            <label className={`absolute leading-5 rtl:right-10 select-none pointer-events-none transition-all ${values.departureDate ? "top-1.5 text-4xs " : "top-1/2 -translate-y-1/2 text-sm "}`}>
+                                            {theme3 || <label className={`absolute leading-5 rtl:right-10 select-none pointer-events-none transition-all ${values.departureDate ? "top-1.5 text-4xs " : "top-1/2 -translate-y-1/2 text-sm "}`}>
                                                 تاریخ رفت
-                                            </label>
+                                            </label>}
                                         </div>
 
                                         <Field
@@ -438,56 +441,17 @@ const SearchForm: React.FC<Props> = props => {
                                     </div>
 
                                     {values.airTripType === 'RoundTrip' ? (
-                                        // <div className={`modernCalendar-dates-wrapper ${theme2 ? "sm:col-span-2 lg:col-span-1 xl:col-span-2" : ""}`}>
+                                        <div className={`${theme3 ? "md:col-span-3" : theme2 ? "sm:col-span-2 lg:col-span-1 xl:col-span-2" : ""}`} >
 
-                                        //     <div className="relative modernDatePicker-checkout">
-                                        //         <DatePickerModern
-                                        //             wrapperClassName="block"
-                                        //             minimumDate={dateDiplayFormat({ date: values.departureDate ? dateFormat(addSomeDays(new Date(values.departureDate))) : dateFormat(addSomeDays(new Date())), locale: 'en', format: "YYYY-MM-DD" })}
-                                        //             inputPlaceholder="تاریخ برگشت"
-                                        //             inputClassName="border border-neutral-400 h-12 rounded-lg focus:border-neutral-900 outline-none pt-7 text-xs w-full pr-10"
-                                        //             toggleLocale={() => { setLocale(prevState => prevState === 'fa' ? "en" : "fa") }}
-                                        //             locale={locale}
-                                        //             onChange={(v: string) => {
-                                        //                 if (v) {
-                                        //                     setFieldValue("returnDate", v, true);
-                                        //                 }
-                                        //             }}
-                                        //             value={values.returnDate}
-                                        //         />
-                                        //         <Calendar className="w-5 h-5 fill-neutral-600 top-1/2 -mt-2.5 right-3 absolute select-none pointer-events-none" />
-                                        //         <label className="absolute top-1.5 leading-5 rtl:right-10 text-4xs select-none pointer-events-none">
-                                        //             تاریخ برگشت
-                                        //         </label>
+                                            {theme3 && (
+                                                <label className={`leading-5 select-none pointer-events-none ${props.lebelsWhite ? "text-white" : ""}`}>
+                                                    تاریخ برگشت
+                                                </label>
+                                            )}
 
-                                        //         <button
-                                        //             type='button'
-                                        //             className='p-1 border border-neutral-300 rounded bg-neutral-600 absolute top-1/2 -mt-3 left-3'
-                                        //             onClick={() => {
-                                        //                 setFieldValue("returnDate", undefined, true);
-                                        //                 setFieldValue("airTripType", 'OneWay', true);
-                                        //             }
-                                        //             }
-                                        //         >
-                                        //             <Minus className='w-4 h-4 fill-white' />
-                                        //         </button>
-
-                                        //     </div>
-                                        //     <Field
-                                        //         validate={(value: string) => validateRequied(value, "تاریخ برگشت را انتخاب کنید.")}
-                                        //         type='hidden'
-                                        //         name="returnDate"
-                                        //         value={values.returnDate}
-                                        //     />
-
-                                        //     {touched.returnDate && errors.returnDate && <div className='text-xs text-red-500'> {errors.returnDate as string}</div>}
-                                        // </div>
-
-
-                                        <div className={`${(theme2 || theme3) ? "sm:col-span-2 lg:col-span-1 xl:col-span-2" : ""}`} >
                                             <div className='relative'>
                                                 <DatePickerMobiscroll
-                                                    inputStyle='theme1'
+                                                    inputStyle={theme3 ? "theme3" : 'theme1'}
                                                     onChange={a => {
                                                         setFieldValue("returnDate", a.value, true)
                                                     }}
@@ -498,9 +462,9 @@ const SearchForm: React.FC<Props> = props => {
                                                     minDate={values.departureDate ? dateFormat(addSomeDays(new Date(values.departureDate))) : dateFormat(addSomeDays(new Date()))}
                                                 />
 
-                                                {theme2 ?(
+                                                {theme2 ? (
                                                     <CalendarFill className='w-5 h-5 fill-neutral-600 top-1/2 -translate-y-1/2 right-3 absolute select-none pointer-events-none' />
-                                                ):(
+                                                ) : (
                                                     <Calendar className='w-5 h-5 fill-neutral-600 top-1/2 -translate-y-1/2 right-3 absolute select-none pointer-events-none' />
                                                 )}
 
@@ -528,36 +492,66 @@ const SearchForm: React.FC<Props> = props => {
                                             />
                                             {touched.returnDate && errors.returnDate && <div className='text-xs text-red-500'> {errors.returnDate as string}</div>}
                                         </div>
-
                                     ) : (
                                         <div
-                                            className={`relative flex justify-center items-center border border-neutral-400 h-12 rounded-lg text-xs w-full cursor-pointer bg-white hover:bg-neutral-100 ${theme2 ? "sm:col-span-2 lg:col-span-1 xl:col-span-2" : ""}`}
+                                            className={`relative flex justify-center items-center border border-neutral-400 h-12 rounded-lg text-xs w-full cursor-pointer ${theme3 ? "max-sm:hidden md:col-span-3 xl:w-1/6" : theme2 ? "sm:col-span-2 lg:col-span-1 xl:col-span-2" : ""} bg-white ${theme3 ? "mt-7 border-2 text-[#fdaf16] border-[#fdaf16]" : " hover:bg-neutral-100"}`}
                                             onClick={() => { setFieldValue("airTripType", 'RoundTrip', true); }}
                                         >
-                                            {theme2 ?(
+                                            {theme2 ? (
                                                 <CalendarFill className='w-7 h-7 fill-neutral-600 top-1/2 -mt-3.5 right-3 absolute select-none pointer-events-none' />
-                                            ):(
-                                                <Calendar className='w-7 h-7 fill-neutral-600 top-1/2 -mt-3.5 right-3 absolute select-none pointer-events-none' />
+                                            ) : (
+                                                <Calendar className={`w-7 h-7 top-1/2 -mt-3.5 right-3 absolute select-none pointer-events-none ${theme3 ? "fill-[#fdaf16]" : "fill-neutral-600"}`} />
                                             )}
 
                                             تاریخ برگشت
                                         </div>
                                     )}
 
-                                    {!!(theme2 || theme3) && <SelectPassengers
-                                        values={values}
-                                        setFieldValue={setFieldValue}
-                                        wrapperClassNames='sm:col-span-2 lg:col-span-1 xl:col-span-2 shrink-0'
-                                    />}
+                                    {!theme1 && <div className={theme3?"md:col-span-3 xl:w-1/6":""}>
+                                        {theme3 && (
+                                            <label className={`leading-5 select-none pointer-events-none ${props.lebelsWhite ? "text-white" : ""}`}>
+                                                انتخاب مسافران
+                                            </label>
+                                        )}
+                                        <SelectPassengers
+                                            values={values}
+                                            setFieldValue={setFieldValue}
+                                            wrapperClassNames={`shrink-0 ${theme3 ? "" : "sm:col-span-2 lg:col-span-1 xl:col-span-2"}`}
+                                        />
+                                    </div>}
 
-                                    <div className={`relative ${theme1 ? "col-span-2 md:col-span-4 lg:col-span-6" : (theme2 || theme3) ? "sm:col-span-6 lg:col-span-5 xl:col-span-2" : ""}`} >
+                                    {theme3 && (
+                                        <div className="md:col-span-3 xl:w-1/6">
+                                            {theme3 && (
+                                                <label className={`leading-5 select-none pointer-events-none ${props.lebelsWhite ? "text-white" : ""}`}>
+                                                    کلاس پرواز
+                                                </label>
+                                            )}
+                                            <Select
+                                                h10={!theme3}
+                                                className={`${theme3 ? "w-full" : "inline-block w-28"} ${theme2 ? "rounded-full" : "rounded-lg"}`}
+                                                buttonClassName={theme2 ? "border-neutral-400" : ""}
+                                                items={[
+                                                    { value: "All", label: "همه" },
+                                                    { value: "Economy", label: "اکونومی" },
+                                                    { value: "Business", label: "بیزینس" }
+                                                ]}
+                                                onChange={(value) => {
+                                                    setFieldValue("cabinClassCode", value)
+                                                }}
+                                                value={values.cabinClassCode}
+                                            />
+                                        </div>
+                                    )}
+
+                                    <div className={`relative ${theme3 ? "sm:col-span-2 md:col-span-6 shrink-0 lg:w-12 sm:text-end" : theme1 ? "col-span-2 md:col-span-4 lg:col-span-6" : theme2 ? "sm:col-span-6 lg:col-span-5 xl:col-span-2" : ""}`} >
                                         <Button
-                                            color='blue'
+                                            loading={theme3 ? false : submitPending}
+                                            color={theme3 ? "yellow" : 'blue'}
                                             type='submit'
-                                            className={`h-12 w-full mx-auto ${theme1 ? "sm:w-40" : "sm:w-40 max-w-full font-semibold"}`}
-                                            loading={submitPending}
+                                            className={`h-12 w-full mx-auto ${theme3 ? "md:mt-7 sm:inline-flex sm:w-12 font-semibold" : theme1 ? "sm:w-40" : "sm:w-40 max-w-full font-semibold"}`}
                                         >
-                                            {t('search')}
+                                            {buttonInnerHtml}
                                         </Button>
                                     </div>
                                 </div>
