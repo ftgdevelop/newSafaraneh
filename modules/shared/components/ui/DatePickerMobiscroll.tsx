@@ -14,7 +14,7 @@ type Props = {
     value?: string;
     placeholder?:string;
     minDate?: string;
-    inputStyle:"simple" | "theme1" | "theme2"
+    inputStyle:"simple" | "theme1" | "theme2" | "theme3";
 }
 
 type DatePickerValue = {
