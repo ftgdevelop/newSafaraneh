@@ -352,6 +352,7 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
     }
 
     const theme2 = process.env.THEME === "THEME2";
+    const theme3 = process.env.THEME === "THEME3";
 
     let selectedFlightTotalPrice = 0;
     if (selectedFlight) {
@@ -685,6 +686,7 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
                                     <SearchForm
                                         defaultValues={defaultValues}
                                         research={research}
+                                        lebelsWhite={theme3}
                                     />
 
                                 </div>
