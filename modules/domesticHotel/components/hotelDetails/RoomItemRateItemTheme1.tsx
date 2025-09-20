@@ -253,14 +253,14 @@ const RoomItemRateItemTheme1: React.FC<Props> = props => {
                     {bookBtn}
                 </div>
 
-                {minStayFailed && (
+                {!!minStayFailed && (
                     <div className='md:col-span-5 p-3 border-t text-red-600'>
                         <InfoCircle className='inline-block fill-current w-5 h-5 ml-2' />
                         این اتاق برای رزرو های بیشتر از {rate.minStay} روز در دسترس است
                     </div>
                 )}
 
-                {maxStayFailed && (
+                {!!maxStayFailed && (
                     <div className='md:col-span-5 p-3 border-t text-red-600'>
                         این اتاق برای رزرو های کمتر از {rate.maxStay} روز در دسترس است
                     </div>
