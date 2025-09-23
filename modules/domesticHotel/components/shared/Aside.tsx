@@ -125,6 +125,16 @@ const Aside: React.FC<Props> = props => {
         )
     }
 
+    const roomsTax = reserveInformation?.rooms?.reduce((total: number, item: AsideReserveInfoRoomItemType) => {
+        const taxPrice = item.pricing.find(i => i.type === "Tax")?.amount
+        return total + (taxPrice || 0)
+    }, 0);
+
+    const roomsBase = reserveInformation?.rooms?.reduce((total: number, item: AsideReserveInfoRoomItemType) => {
+        const basePrice = item.pricing.find(i => i.type === "Base")?.amount
+        return total + (basePrice || 0)
+    }, 0);
+
     return (
         <div className={`bg-white rounded-lg border border-neutral-300 mb-4 ${props.className}`} >
 
@@ -320,10 +330,17 @@ const Aside: React.FC<Props> = props => {
 
                         {reserveInformation.salePrice && reserveInformation.salePrice > 500000 ? (
                             <>
-                                {(hasDiscount || !!activeExtraBedPrice || !!reserveInformation.promoCodePrice || !!promoCodePrice) && (
+                                {(hasDiscount || !!activeExtraBedPrice || !!reserveInformation.promoCodePrice || !!promoCodePrice || !!roomsTax) && (
                                     <div className="flex items-center justify-between">
-                                        {t("sum")}
-                                        <span>{numberWithCommas(reserveInformation.boardPrice || reserveInformation.salePrice)} {t('rial')} </span>
+                                        قیمت پایه
+                                        <span>{numberWithCommas(roomsTax ? roomsBase : (reserveInformation.boardPrice || reserveInformation.salePrice))} {t('rial')} </span>
+                                    </div>
+                                )}
+
+                                {!!roomsTax && (
+                                    <div className="flex items-center justify-between">
+                                        مالیات
+                                        <span>{numberWithCommas(roomsTax)} {t('rial')} </span>
                                     </div>
                                 )}
 

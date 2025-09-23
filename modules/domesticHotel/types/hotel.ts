@@ -546,7 +546,7 @@ export interface AsideReserveInfoRoomItemType {
         isSelected: boolean;
         isShow: boolean;
         ageCategoryType: "ADL" | "CHD" | "INF";
-        type: "Room" | "RoomBoard" | "ExtraBed" | "HalfCharge" | "RoomNet" | "Markup" | "Commission" | "PromoCode";
+        type: "Room" | "RoomBoard" | "ExtraBed" | "HalfCharge" | "RoomNet" | "Markup" | "Commission" | "PromoCode" | "Base" | "Tax";
     }[];
     nightly?: {
         date?: string;
