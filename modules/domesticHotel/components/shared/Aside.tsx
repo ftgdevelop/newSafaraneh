@@ -333,14 +333,7 @@ const Aside: React.FC<Props> = props => {
                                 {(hasDiscount || !!activeExtraBedPrice || !!reserveInformation.promoCodePrice || !!promoCodePrice || !!roomsTax) && (
                                     <div className="flex items-center justify-between">
                                         قیمت پایه
-                                        <span>{numberWithCommas(roomsTax ? roomsBase : (reserveInformation.boardPrice || reserveInformation.salePrice))} {t('rial')} </span>
-                                    </div>
-                                )}
-
-                                {!!roomsTax && (
-                                    <div className="flex items-center justify-between">
-                                        مالیات
-                                        <span>{numberWithCommas(roomsTax)} {t('rial')} </span>
+                                        <span>{numberWithCommas( reserveInformation.boardPrice || reserveInformation.salePrice)} {t('rial')} </span>
                                     </div>
                                 )}
 
@@ -367,6 +360,20 @@ const Aside: React.FC<Props> = props => {
                                         <span>{numberWithCommas(promoCodePrice)} {t('rial')}</span>
                                     </div>
                                 )}
+                                
+                                {!!roomsTax && (
+                                    <>
+                                        <div className="flex items-center justify-between">
+                                            قیمت بدون مالیات
+                                            <span>{numberWithCommas(roomsBase)} {t('rial')} </span>
+                                        </div>
+                                        <div className="flex items-center justify-between">
+                                            مالیات
+                                            <span>{numberWithCommas(roomsTax)} {t('rial')} </span>
+                                        </div>
+                                    </>
+                                )}
+
                                 {!!reserveInformation.salePrice && (
                                     <div className="flex items-center justify-between">
                                         {t("price-paid")}
