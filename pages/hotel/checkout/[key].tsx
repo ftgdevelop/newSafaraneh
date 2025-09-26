@@ -242,9 +242,7 @@ const Checkout: NextPage = () => {
     setReserverIsPassenger(false);
   }
 
-  const isHotelban = process.env.PROJECT === "HOTELBAN";
-
-  const getAllPassengers = !!metaSearchKey && isHotelban;
+  const getAllPassengers = (process.env.GET_ALL_PASSENFERS_DATA_IN_SAFAR_MARKET === "true") && metaSearchKey;
 
   let initialPassengers: {
     gender: true,
