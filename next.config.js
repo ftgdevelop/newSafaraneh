@@ -51,6 +51,7 @@ const nextConfig = {
     THEME: "THEME3",
     HOTEL_LIST_LAZY_LOAD: "",
     SAFAR_MARKET_SITE_NAME: "hotelban",
+    GET_ALL_PASSENFERS_DATA_IN_SAFAR_MARKET: "false",
     PROJECT_SERVER_TYPE: "https://",
     PROJECT_SERVER_USER: "",
     
