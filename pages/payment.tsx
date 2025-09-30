@@ -163,7 +163,7 @@ const Payment: NextPage = () => {
 
     if (username && reserveId && type === 'HotelDomestic') {
       const fetchDomesticHotelReserve = async () => {
-        const response: any = await domesticHotelGetReserveById({ reserveId: reserveId, userName: username });
+        const response: any = await domesticHotelGetReserveById({ reserveId: reserveId, userName: username, token: token });
         if (response.data.result) {
           setDomesticHotelReserveData(response.data.result);
           setExpireDate(response.data.result.expirTime);         

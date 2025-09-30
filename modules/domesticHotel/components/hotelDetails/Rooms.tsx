@@ -111,7 +111,9 @@ const Rooms: React.FC<Props> = props => {
                     }
                 }
 
-                const response: any = await GetRooms({ id: hotelId, checkin: checkin, checkout: checkout, MetaSearchKey: utm?.utmKey, MetaSearchName: utm?.utmSource }, i18n?.language === "en" ? "en-US" : i18n?.language === "ar" ? "ar-AE" : "fa-IR");
+                const token = localStorage.getItem('Token');
+
+                const response: any = await GetRooms({userToken: token || "", id: hotelId, checkin: checkin, checkout: checkout, MetaSearchKey: utm?.utmKey, MetaSearchName: utm?.utmSource }, i18n?.language === "en" ? "en-US" : i18n?.language === "ar" ? "ar-AE" : "fa-IR");
 
                 setAvailabilitiesLoading(false);
 
@@ -156,13 +158,16 @@ const Rooms: React.FC<Props> = props => {
             }
         }
 
+        const userToken = localStorage.getItem('Token') || "";
+
         const preReserveResponse: any = await domesticHotelValidateRoom({
             bookingToken: token,
             checkin: checkin,
             checkout: checkout,
             count: count,
             MetaSearchName: utm?.utmSource || null,
-            MetaSearchKey: utm?.utmKey || null
+            MetaSearchKey: utm?.utmKey || null,
+            userToken: userToken
         });
 
         if (preReserveResponse.data?.result?.preReserveKey) {
