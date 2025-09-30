@@ -19,17 +19,26 @@ const DownloadPdfVoucher: React.FC<Props> = props => {
 
     const handleClick = async () => {
 
+        
         setLoading(true);
-
+        
         try {
+
+            const token = localStorage.getItem('Token');
+
+            const Header : any = {
+                'Content-Type': 'application/json',
+                apikey: process.env.PROJECT_SERVER_APIKEY,
+                'Accept-Language': i18n?.language === "en" ? "en-US" :i18n?.language === "ar" ? "ar-AE" : "fa-IR"
+            };
+            if(token){
+                Header.Authorization = `Bearer ${token}`;
+            }
+
             const response = await axios.get(
                 `https://${ServerAddress.Hotel_Availability}/api/services/app/Reserve/GetVoucherPdf?ReserveId=${props.reserveId}&Username=${props.username}`,
                 {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        apikey: process.env.PROJECT_SERVER_APIKEY,
-                        'Accept-Language': i18n?.language === "en" ? "en-US" :i18n?.language === "ar" ? "ar-AE" : "fa-IR"
-                    },
+                    headers: Header,
                 },
             )
             

@@ -167,7 +167,10 @@ const WeekendDeals: React.FC = () => {
         const fetchPrices = async () => {
             setPricesLoading(true);
             setPricesData(undefined);
-            const pricesResponse = await AvailabilityByHotelId({ checkin: checkin, checkout: checkout, ids: ids as number[] }, "fa-IR");
+            
+            const token = localStorage.getItem('Token') || "";
+
+            const pricesResponse = await AvailabilityByHotelId({ checkin: checkin, checkout: checkout, ids: ids as number[], userToken: token }, "fa-IR");
 
             if (pricesResponse.data?.result?.hotels) {
 
