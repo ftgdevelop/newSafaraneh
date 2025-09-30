@@ -587,7 +587,8 @@ export interface DomesticHotelPrereserveParams {
     specialRequest: string;
     preReserveKey: string;
     metaSearchKey?: string;
-    metaSearchName?: "safarmarket"
+    metaSearchName?: string | "safarmarket";
+    userToken?: string;
 }
 
 export type DomesticHotelReserveStatus = "Undefined" | "UnConfirmed" | "Registered" | "Pending" | "Issued" | "ContactProvider" | "Canceled" | "WebServiceCancel" | "PaymentSuccessful" | "WebServiceUnsuccessful" | "PriceChange" | "Unavailable" | "Refunded" | "Voided" | "InProgress" | "PaidBack" | "RefundInProgress" | "Changed" | "OnCredit";

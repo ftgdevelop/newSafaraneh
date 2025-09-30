@@ -340,7 +340,9 @@ const HotelList: NextPage<Props> = props => {
       
       if (!hotelIds?.length) return;
 
-      const pricesResponse = await AvailabilityByHotelId({ checkin: checkin, checkout: checkout, ids: hotelIds as number[] }, acceptLanguage);
+      const token = localStorage.getItem('Token') || "";
+      
+      const pricesResponse = await AvailabilityByHotelId({ checkin: checkin, checkout: checkout, ids: hotelIds as number[], userToken: token }, acceptLanguage);
 
       if (pricesResponse.data?.result?.hotels) {
 

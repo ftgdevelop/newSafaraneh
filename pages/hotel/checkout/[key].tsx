@@ -44,7 +44,7 @@ const Checkout: NextPage = () => {
   const router = useRouter();
   const pathSegments = router.asPath.split("?")[0].split("#")[0].split("/");
   const keySegment = pathSegments.find(item => item.includes('key='));
-  const key = keySegment?.split("key=")[1];
+  const urlKey = keySegment?.split("key=")[1];
 
   const user: UserInformation | undefined = useAppSelector(state => state.authentication.isAuthenticated ? state.authentication.user : undefined);
 
@@ -102,7 +102,9 @@ const Checkout: NextPage = () => {
 
     const fetchData = async (key: string) => {
 
-      const response: any = await domesticHotelGetValidate(key);
+      const token = localStorage.getItem('Token') || "";
+
+      const response: any = await domesticHotelGetValidate({key:key, acceptLanguage:'fa-IR', userToken :token});
 
       if (response?.data?.result) {
         setReserveInfo(response.data.result);
@@ -122,11 +124,11 @@ const Checkout: NextPage = () => {
 
     }
 
-    if (key) {
-      fetchData(key);
+    if (urlKey) {
+      fetchData(urlKey);
     }
 
-  }, [key]);
+  }, [urlKey]);
 
   let hotelInformation: AsideHotelInfoType;
   let reserveInformation: AsideReserveInfoType;
@@ -202,7 +204,10 @@ const Checkout: NextPage = () => {
     setSubmitLoading(true);
 
     const token = localStorage.getItem('Token');
-    const reserveResponse: any = await domesticHotelPreReserve(params, token);
+    if (token){
+     params.userToken = token;
+    }
+    const reserveResponse: any = await domesticHotelPreReserve(params);
 
     if (reserveResponse.data && reserveResponse.data.result) {
       const id = reserveResponse.data.result.id;
@@ -287,7 +292,7 @@ const Checkout: NextPage = () => {
     },
     passengers: initialPassengers,
     specialRequest: "",
-    preReserveKey: key
+    preReserveKey: urlKey || ""
   }
 
   const discountSubmitHandler = async (value: string) => {
@@ -296,7 +301,7 @@ const Checkout: NextPage = () => {
     setDiscountData(undefined);
 
     const response = await validateDiscountCode({ 
-      prereserveKey: key!,
+      prereserveKey: urlKey!,
       type: 'HotelDomestic',
       discountPromoCode: value,
       MetaSearchKey:metaSearchKey,

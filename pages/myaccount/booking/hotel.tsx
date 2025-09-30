@@ -55,7 +55,10 @@ const DomesticHotelReserveDetail: NextPage = ({ portalData }: { portalData?: Web
 
         if (username && reserveId) {
             const fetchDomesticHotelReserve = async () => {
-                const response: any = await domesticHotelGetReserveById({ reserveId: reserveId, userName: username });
+                
+                const token = localStorage.getItem('Token') || "";
+
+                const response: any = await domesticHotelGetReserveById({ reserveId: reserveId, userName: username, token:token });
                 if (response.data.result) {
                     setReserveData(response.data.result)
 

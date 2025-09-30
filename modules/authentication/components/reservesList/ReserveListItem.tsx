@@ -37,7 +37,7 @@ const ReserveListItem: React.FC<Props> = props => {
         if (type === 'HotelDomestic') {
             setReserveDetail(undefined);
             setDetailLoading(true);
-            const response: any = await domesticHotelGetReserveById({ reserveId: id.toString(), userName: username });
+            const response: any = await domesticHotelGetReserveById({ reserveId: id.toString(), userName: username, token: token });
             setDetailLoading(false);
             if (response?.data?.result) {
                 setReserveDetail(response.data.result);
