@@ -59,7 +59,7 @@ const Payment: NextPage = () => {
   const [domesticFlightReserveInfo, setDomesticFlightReserveInfo] = useState<DomesticFlightGetReserveByIdType>();
   const [domesticFlightReserveInfoLoading, setDomesticFlightReserveInfoLoading] = useState<boolean>(true);
 
-
+  const [cookieSafarmarketId, setCookieSafarmarketId] = useState<string>("");
 
   const [goToBankLoading, setGoToBankLoading] = useState<boolean>(false);
 
@@ -144,6 +144,14 @@ const Payment: NextPage = () => {
   }
 
   useEffect(()=>{
+      
+    let cookies = decodeURIComponent(document?.cookie).split(';');
+      for (const item of cookies){
+        if (item.includes("safarMarketHotelSmId=")){
+          setCookieSafarmarketId(item.split("=")[1]);
+        }
+      }
+
     return (() => {
       dispatch(emptyReduxSafarmarket());
     });
@@ -169,14 +177,6 @@ const Payment: NextPage = () => {
             // else if (status && status === "1"){
             //   pixelStatus = 4;
             // }
-
-            let cookieSafarmarketId;
-            let cookies = decodeURIComponent(document?.cookie).split(';');
-            for (const item of cookies){
-              if (item.includes("safarMarketHotelSmId=")){
-                cookieSafarmarketId =item.split("=")[1];
-              }
-            }
 
             if (cookieSafarmarketId && pixelStatus){
               setHotelSafarmarketPixel({
@@ -276,15 +276,6 @@ const Payment: NextPage = () => {
         <OnlinePayment
           coordinatorPrice={coordinatorPrice}
           onSubmit={(bankId) => { 
-            
-            let cookieSafarmarketId;
-            let cookies = decodeURIComponent(document?.cookie).split(';');
-            for (const item of cookies){
-              if (item.includes("safarMarketHotelSmId=")){
-                cookieSafarmarketId =item.split("=")[1];
-              }
-            }
-
             if(domesticHotelReserveData && process.env.SAFAR_MARKET_SITE_NAME && cookieSafarmarketId){              
               setHotelSafarmarketPixel({
                 reserveData: domesticHotelReserveData,
@@ -312,7 +303,7 @@ const Payment: NextPage = () => {
 
   ];
 
-  if (!isHotelban) {
+  if (!isHotelban || !cookieSafarmarketId) {
     tabItems.push({
       key: '3',
       label: ("اعتباری"),
@@ -477,7 +468,7 @@ const Payment: NextPage = () => {
           <div className={`${theme2?"md:col-span-7":"md:col-span-2"}`}>
             <div className={`mb-4 ${theme1 ? "bg-white rounded-lg border border-neutral-300 p-4" : ""}`}>
 
-              {isHotelban ? (
+              {isHotelban && cookieSafarmarketId ? (
                 <OnlinePayment
                   coordinatorPrice={coordinatorPrice}
                   onSubmit={(bankId) => { goTobank(bankId) }}
@@ -491,7 +482,7 @@ const Payment: NextPage = () => {
                 <>
                   <h2 className='text-2xl mt-4 mb-8'> چگونه می خواهید پرداخت کنید؟ </h2>
                   <Tab
-                    style={theme1 ? '2' : 'radioStyle'}
+                    style={'2'}
                     items={tabItems}
                   />
 
