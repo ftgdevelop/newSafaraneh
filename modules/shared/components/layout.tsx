@@ -10,6 +10,8 @@ import { getCurrentUserProfile } from "@/modules/authentication/actions";
 import Notification from "./Notification";
 import { setProgressLoading } from "../store/stylesSlice";
 import { FooterStrapi } from "../types/common";
+import Script from "next/script";
+import { GTM_ID } from "../helpers";
 
 type Props = {
   logo: string;
@@ -87,6 +89,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
             user: {},
             getUserLoading: false
           }));
+          localStorage.removeItem('Token');
         }
 
       }
@@ -136,12 +139,20 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         footerStrapi={props.footerStrapi}
       />}
 
-      {props.scripts ? <script
-          id="script_footer_api_scripts"
+      {props.scripts && <Script id="footer_api_scripts" strategy="afterInteractive">
+        {props.scripts}
+      </Script>}
+
+      {isHotelban && GTM_ID ? <script
+          id="google_tag_manager_2"
           dangerouslySetInnerHTML={{
-              __html: `${props.scripts}`,
+              __html:`window.dataLayer = window.dataLayer || [];
+                      function gtag(){dataLayer.push(arguments);}
+                      gtag('js', new Date());
+                      gtag('config', ${GTM_ID});`
           }}
       /> : null}
+
 
     </div>
 

@@ -5,7 +5,7 @@ import { ArrowLeft, Tik, Bed, User, Calendar, DefaultRoom } from "@/modules/shar
 import { dateDiplayFormat, getDatesDiff, numberWithCommas } from "@/modules/shared/helpers";
 import { useTranslation } from "next-i18next";
 import Image from "next/image";
-import { AsideHotelInfoType, AsideReserveInfoType, DomesticHotelGetValidateResponse } from "../../types/hotel";
+import { AsideHotelInfoType, AsideReserveInfoRoomItemType, AsideReserveInfoType, DomesticHotelGetValidateResponse } from "../../types/hotel";
 
 type Props = {
     reserveInformation?: AsideReserveInfoType;
@@ -30,27 +30,9 @@ const Aside: React.FC<Props> = props => {
     const { t } = useTranslation('common');
     const { t: tHotel } = useTranslation('hotel');
 
+    const isHotelban = process.env.PROJECT === "HOTELBAN";
+
     const { hotelInformation, reserveInformation, roomExtraBed, discountResponse, discountLoading } = props;
-
-    const board = (code: string) => {
-        switch (code) {
-            case "BB":
-                return "به همراه صبحانه";
-            case "HB":
-                return "صبحانه + ناهار یا شام";
-            case "FB":
-                return "تمام وعده های غذایی شامل می شود";
-            case "RO":
-                return "بدون صبحانه";
-            case "Hour6":
-                return "اقامت به مدت ۶ ساعت";
-            case "Hour10":
-                return "اقامت به مدت ۱۰ ساعت";
-
-            default:
-                return code;
-        }
-    }
 
     const hasDiscount = reserveInformation?.salePrice && reserveInformation.boardPrice && reserveInformation.boardPrice > reserveInformation.salePrice;
 
@@ -143,6 +125,28 @@ const Aside: React.FC<Props> = props => {
         )
     }
 
+    const roomsTax = reserveInformation?.rooms?.reduce((total: number, item: AsideReserveInfoRoomItemType) => {
+        const taxPrice = item.pricing.find(i => i.type === "Tax")?.amount
+        return total + (taxPrice || 0)
+    }, 0);
+
+    const roomsBase = reserveInformation?.rooms?.reduce((total: number, item: AsideReserveInfoRoomItemType) => {
+        const basePrice = item.pricing.find(i => i.type === "Base")?.amount
+        return total + (basePrice || 0)
+    }, 0);
+
+    let totalPrice = 0;
+
+    if(reserveInformation.salePrice && reserveInformation.salePrice > 500000){
+        
+        totalPrice = reserveInformation.salePrice + (activeExtraBedPrice || 0) - (reserveInformation.promoCodePrice || 0); 
+
+        if(!!discountResponse && discountResponse.orderSubTotalDiscount >= 10000){
+            totalPrice =  discountResponse.orderSubTotalDiscount + (activeExtraBedPrice || 0);
+        }
+    }
+
+
     return (
         <div className={`bg-white rounded-lg border border-neutral-300 mb-4 ${props.className}`} >
 
@@ -217,7 +221,7 @@ const Aside: React.FC<Props> = props => {
                         </div>
                     )}
 
-                    {reserveInformation.rooms.map((roomItem: any, roomIndex: number) => {
+                    {reserveInformation.rooms.map((roomItem: AsideReserveInfoRoomItemType, roomIndex: number) => {
 
                         //TODO check cancelation
                         let cancellation = null;
@@ -234,6 +238,8 @@ const Aside: React.FC<Props> = props => {
                             default:
                                 cancellation = <div className="margin-bottom-5">{roomItem.cancellationPolicyStatus}</div>;
                         }
+                        
+                        if (isHotelban) cancellation = null;
 
                         let childPriceBlock = null;
                         let extraBedPriceBlock = null;
@@ -277,8 +283,9 @@ const Aside: React.FC<Props> = props => {
                                     <User className="w-4.5 h-4.5 fill-current" />
                                     {roomItem.bed} {tHotel('guest')} {extraBedPriceBlock}
                                 </div>
-
-                                <div className="text-green-600 text-sm">{board(roomItem.board)}</div>
+                               
+                                {roomItem.boardName && <div className="text-green-600 text-sm">{roomItem.boardName}</div> }
+                                {roomItem.boardExtra && <div className="text-green-600 text-sm">{roomItem.boardExtra}</div> }
 
                                 {cancellation}
 
@@ -310,9 +317,9 @@ const Aside: React.FC<Props> = props => {
                                                     })}
                                                 </header>
                                                 <div className="p-2">
-                                                    {!!night.board && <div className="text-neutral-400 text-xs line-through">
+                                                    {night.board && night.amount && (night.board > night.amount) ? <div className="text-neutral-400 text-xs line-through">
                                                         {numberWithCommas(night.board)} ریال
-                                                    </div>}
+                                                    </div>:null}
 
                                                     {!!night.amount && <div className="font-semibold text-md">
                                                         {numberWithCommas(night.amount)} ریال
@@ -335,10 +342,10 @@ const Aside: React.FC<Props> = props => {
 
                         {reserveInformation.salePrice && reserveInformation.salePrice > 500000 ? (
                             <>
-                                {(hasDiscount || !!activeExtraBedPrice || !!reserveInformation.promoCodePrice || !!promoCodePrice) && (
+                                {(hasDiscount || !!activeExtraBedPrice || !!reserveInformation.promoCodePrice || !!promoCodePrice || !!roomsTax) && ( (reserveInformation.boardPrice || reserveInformation.salePrice) >= totalPrice ) && (
                                     <div className="flex items-center justify-between">
-                                        {t("sum")}
-                                        <span>{numberWithCommas(reserveInformation.boardPrice)} {t('rial')} </span>
+                                        قیمت پایه
+                                        <span>{numberWithCommas( reserveInformation.boardPrice || reserveInformation.salePrice)} {t('rial')} </span>
                                     </div>
                                 )}
 
@@ -365,15 +372,25 @@ const Aside: React.FC<Props> = props => {
                                         <span>{numberWithCommas(promoCodePrice)} {t('rial')}</span>
                                     </div>
                                 )}
+                                
+                                {!!roomsTax && (
+                                    <>
+                                        <div className="flex items-center justify-between">
+                                            قیمت بدون مالیات
+                                            <span>{numberWithCommas(roomsBase)} {t('rial')} </span>
+                                        </div>
+                                        <div className="flex items-center justify-between">
+                                            مالیات
+                                            <span>{numberWithCommas(roomsTax)} {t('rial')} </span>
+                                        </div>
+                                    </>
+                                )}
+
                                 {!!reserveInformation.salePrice && (
                                     <div className="flex items-center justify-between">
                                         {t("price-paid")}
                                         <strong className="font-bold text-sm">
-                                            {!!discountResponse && discountResponse.orderSubTotalDiscount >= 10000 ?
-                                                numberWithCommas(discountResponse.orderSubTotalDiscount + (activeExtraBedPrice || 0)) + " " + t('rial')
-                                                :
-                                                numberWithCommas(reserveInformation.salePrice + (activeExtraBedPrice || 0) - (reserveInformation.promoCodePrice || 0)) + " " + t('rial')
-                                            }
+                                            {numberWithCommas(totalPrice) + " " + t('rial')}
                                         </strong>
                                     </div>
                                 )}

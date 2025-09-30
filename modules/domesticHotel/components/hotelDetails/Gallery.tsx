@@ -31,18 +31,12 @@ const Gallery: React.FC<Props> = props => {
     const [open, setOpen] = useState(false);
     const [slideIndex, setSlideIndex] = useState(0);
 
-    if (!images) {
-        return <div>
-            no image message...
-        </div>
-    }
-
     const openLightBox = (index?: number) => {
         setSlideIndex(index || 0);
         setOpen(true);
     }
 
-    if (!images.length){
+    if (!images?.length){
         return(
             null
         )

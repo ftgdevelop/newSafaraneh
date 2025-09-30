@@ -26,6 +26,7 @@ type Props<T> = {
     checkTypingLanguage?: boolean;
     type: "hotel" | "flight" | "cip";
     sortListFunction?: (a:T, b:T) => 1 | -1;
+    grayBg?: boolean;
 }
 
 function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
@@ -75,7 +76,7 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
         try {
 
             let axiosParams;
-            if (props.type === 'flight') {
+            if (props?.type === 'flight') {
                 axiosParams = {
                     method: "post",
                     url: url,
@@ -89,7 +90,7 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
                         "Accept-Language": acceptLanguage || "fa-IR",
                     }
                 }
-            } else if (props.type === 'hotel') {
+            } else if (props?.type === 'hotel') {
                 axiosParams = {
                     method: "post",
                     url: `${url}?input=${val}`,
@@ -100,7 +101,7 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
                         "Accept-Language": acceptLanguage || "fa-IR",
                     }
                 }
-            } else if (props.type === 'cip') {
+            } else if (props?.type === 'cip') {
                 axiosParams = {
                     method: "post",
                     url: `${url}?input=${val}`,
@@ -317,7 +318,7 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
                 {iconElement}
 
                 {loading && <span className={`animate-spin block border-2 border-neutral-400 rounded-full border-r-transparent border-t-transparent  w-6 h-6 absolute top-1/2 -mt-3.5 ${!direction ? "ltr:right-3 rtl:left-3" : direction === 'rtl' ? "left-3" : "right-3"}`} />}
-                {!!value && <span onClick={resetInput} className={`absolute bg-white top-2/4 -mt-3.5 cursor-pointer ${!direction ? "ltr:right-3 rtl:left-3" : direction === 'rtl' ? "left-3" : "right-3"}`}>
+                {!!value && <span onClick={resetInput} className={`absolute ${props.grayBg?"bg-neutral-200":"bg-white"} top-2/4 -mt-3.5 cursor-pointer ${!direction ? "ltr:right-3 rtl:left-3" : direction === 'rtl' ? "left-3" : "right-3"}`}>
                     <Close className="w-7" />
                 </span>}
             </div>

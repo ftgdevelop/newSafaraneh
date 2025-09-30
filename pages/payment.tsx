@@ -34,6 +34,7 @@ const Payment: NextPage = () => {
 
   const theme2 = process.env.THEME === "THEME2";
   const theme1 = process.env.THEME === "THEME1";
+  const isHotelban = process.env.PROJECT=== "HOTELBAN";
 
   const { t } = useTranslation('common');
 
@@ -58,7 +59,7 @@ const Payment: NextPage = () => {
   const [domesticFlightReserveInfo, setDomesticFlightReserveInfo] = useState<DomesticFlightGetReserveByIdType>();
   const [domesticFlightReserveInfoLoading, setDomesticFlightReserveInfoLoading] = useState<boolean>(true);
 
-
+  const [cookieSafarmarketId, setCookieSafarmarketId] = useState<string>("");
 
   const [goToBankLoading, setGoToBankLoading] = useState<boolean>(false);
 
@@ -143,6 +144,14 @@ const Payment: NextPage = () => {
   }
 
   useEffect(()=>{
+      
+    let cookies = decodeURIComponent(document?.cookie).split(';');
+      for (const item of cookies){
+        if (item.includes("safarMarketHotelSmId=")){
+          setCookieSafarmarketId(item.split("=")[1]);
+        }
+      }
+
     return (() => {
       dispatch(emptyReduxSafarmarket());
     });
@@ -154,31 +163,21 @@ const Payment: NextPage = () => {
 
     if (username && reserveId && type === 'HotelDomestic') {
       const fetchDomesticHotelReserve = async () => {
-        const response: any = await domesticHotelGetReserveById({ reserveId: reserveId, userName: username });
+        const response: any = await domesticHotelGetReserveById({ reserveId: reserveId, userName: username, token: token });
         if (response.data.result) {
           setDomesticHotelReserveData(response.data.result);
           setExpireDate(response.data.result.expirTime);         
           
           if(process.env.SAFAR_MARKET_SITE_NAME){
             
-            let pixelStatus : 3|4|5 = 3;
-            if (!status){
-              pixelStatus = 3;
-            } else if (status === "0"){
+            let pixelStatus: 4|5| undefined = undefined;
+             if (status && status === "0"){
               pixelStatus = 5;
-            } else if (status === "1"){
+            } else if (status && status === "1"){
               pixelStatus = 4;
             }
 
-            let cookieSafarmarketId;
-            let cookies = decodeURIComponent(document?.cookie).split(';');
-            for (const item of cookies){
-              if (item.includes("safarMarketHotelSmId=")){
-                cookieSafarmarketId =item.split("=")[1];
-              }
-            }
-
-            if (cookieSafarmarketId){
+            if (cookieSafarmarketId && pixelStatus){
               setHotelSafarmarketPixel({
                 reserveData: response.data.result,
                 safarmarketSiteName: process.env.SAFAR_MARKET_SITE_NAME,
@@ -252,14 +251,14 @@ const Payment: NextPage = () => {
     };
 
     const response = await makeToken(params);
-    if (response.status == 200) {
+    if (response?.status == 200) {
       window.location.replace(
         `https://${ServerAddress.Payment}/fa/Reserves/Payment/PaymentRequest?tokenId=${response.data.result.tokenId}`
       );
     } else {
       dispatch(setReduxError({
         title: t('error'),
-        message: response.data.error.message,
+        message: response?.data?.error?.message,
         isVisible: true
       }));
 
@@ -275,7 +274,18 @@ const Payment: NextPage = () => {
       children: (
         <OnlinePayment
           coordinatorPrice={coordinatorPrice}
-          onSubmit={(bankId) => { goTobank(bankId) }}
+          onSubmit={(bankId) => { 
+            if(domesticHotelReserveData && process.env.SAFAR_MARKET_SITE_NAME && cookieSafarmarketId){              
+              setHotelSafarmarketPixel({
+                reserveData: domesticHotelReserveData,
+                safarmarketSiteName: process.env.SAFAR_MARKET_SITE_NAME,
+                smId: cookieSafarmarketId,
+                statusNumber:3
+              });
+            }
+
+            goTobank(bankId);
+          }}
           bankGatewayList={bankGatewayList}
           expireDate={expireDate}
           status={status}
@@ -289,12 +299,16 @@ const Payment: NextPage = () => {
     //   label: ("کارت به کارت"),
     //   children: (<CardToCard />),
     // },
-    {
+
+  ];
+
+  if (!isHotelban || !cookieSafarmarketId) {
+    tabItems.push({
       key: '3',
       label: ("اعتباری"),
       children: (<CreditPayment price={coordinatorPrice} />),
-    }
-  ];
+    })
+  }
 
 
 
@@ -319,7 +333,7 @@ const Payment: NextPage = () => {
   }
   if (domesticHotelReserveData) {
 
-    if(domesticHotelReserveData.status !== "Pending"){
+    if(domesticHotelReserveData?.status !== "Pending"){
       router.push(`/hotel/capacity?reserveId=${domesticHotelReserveData.id}&username=${domesticHotelReserveData.username}`);
     }
 
@@ -330,11 +344,13 @@ const Payment: NextPage = () => {
       duration: getDatesDiff(new Date(domesticHotelReserveData.checkout), new Date(domesticHotelReserveData.checkin)),
       rooms: domesticHotelReserveData.rooms.map(roomItem => ({
         name: roomItem.name,
-        board: roomItem.boardCode,
+        boardName: roomItem.boardName,
+        boardExtra: roomItem.boardExtra,
         cancellationPolicyStatus: roomItem.cancellationPolicyStatus,
         bed: roomItem.bed,
         pricing: roomItem.pricing,
-        nightly: roomItem.nightly
+        nightly: roomItem.nightly,
+        extraBed: roomItem.extraBed
       })),
       salePrice: domesticHotelReserveData.rooms.reduce((totalPrice: number, roomItem: any) => {
         const roomItemPrice = roomItem.pricing.find(
@@ -450,12 +466,28 @@ const Payment: NextPage = () => {
 
           <div className={`${theme2?"md:col-span-7":"md:col-span-2"}`}>
             <div className={`mb-4 ${theme1 ? "bg-white rounded-lg border border-neutral-300 p-4" : ""}`}>
-              <h2 className='text-2xl mt-4 mb-8'> چگونه می خواهید پرداخت کنید؟ </h2>
 
-              <Tab
-                style = {theme1?'2':'radioStyle'}
-                items={tabItems}
-              />
+              {isHotelban && cookieSafarmarketId ? (
+                <OnlinePayment
+                  coordinatorPrice={coordinatorPrice}
+                  onSubmit={(bankId) => { goTobank(bankId) }}
+                  bankGatewayList={bankGatewayList}
+                  expireDate={expireDate}
+                  status={status}
+                  goToBankLoading={goToBankLoading}
+                  type={type}
+                />
+              ) : (
+                <>
+                  <h2 className='text-2xl mt-4 mb-8'> چگونه می خواهید پرداخت کنید؟ </h2>
+                  <Tab
+                    style={'2'}
+                    items={tabItems}
+                  />
+
+                </>
+              )}              
+
             </div>
 
           </div>

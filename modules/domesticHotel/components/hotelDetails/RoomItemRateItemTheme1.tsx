@@ -24,6 +24,8 @@ const RoomItemRateItemTheme1: React.FC<Props> = props => {
 
     const { rate, room, selectedRoomToken } = props;
 
+    const isHotelban = process.env.PROJECT === "HOTELBAN";
+
     const { t } = useTranslation('common');
     const { t: tHotel } = useTranslation('hotel');
 
@@ -31,26 +33,6 @@ const RoomItemRateItemTheme1: React.FC<Props> = props => {
 
     if (!rate || !room) {
         return null;
-    }
-
-    const board = (code: string) => {
-        switch (code) {
-            case "BB":
-                return "با صبحانه";
-            case "HB":
-                return "صبحانه + ناهار یا شام";
-            case "FB":
-                return "تمام وعده های غذایی شامل می شود";
-            case "RO":
-                return "بدون صبحانه";
-            case "Hour6":
-                return "اقامت به مدت ۶ ساعت";
-            case "Hour10":
-                return "اقامت به مدت ۱۰ ساعت";
-
-            default:
-                return code;
-        }
     }
 
     let cancellation = null;
@@ -73,6 +55,7 @@ const RoomItemRateItemTheme1: React.FC<Props> = props => {
                 <div className='text-xs'>{rate.cancellationPolicy.status}</div>;
         }
     }
+    if (isHotelban) cancellation = null;
 
     const prices = {
         roomPrice: rate.pricing?.find(
@@ -120,7 +103,7 @@ const RoomItemRateItemTheme1: React.FC<Props> = props => {
         price = "";
     } else if (prices?.roomPrice && prices.roomPrice > 1000) {
 
-        if (prices.boardPrice && (prices.boardPrice !== prices.roomPrice)) {
+        if (prices.boardPrice && (prices.boardPrice > prices.roomPrice)) {
             discountBadge = <span className="text-2xs whitespace-nowrap bg-green-700 self-center text-white px-2 py-0.5 leading-4 rounded-xl lg:text-xs inline-block">
                 {calulateDiscount(prices.roomPrice, prices.boardPrice)}% {tHotel('discount')}
             </span>
@@ -239,7 +222,7 @@ const RoomItemRateItemTheme1: React.FC<Props> = props => {
                     </div>}
 
                     <div className='flex gap-x-3 gap-y-1 items-center flex-wrap'>
-                        <span className={`text-sm ${rate.board.code === 'RO' ? "text-neutral-400" : "text-green-600"}`}> {board(rate.board.code)} </span>
+                        {!!rate.board?.name && <span className="text-sm text-green-600"> {rate.board.name} </span>}
                         {cancellation}
                     </div>
 
@@ -270,14 +253,14 @@ const RoomItemRateItemTheme1: React.FC<Props> = props => {
                     {bookBtn}
                 </div>
 
-                {minStayFailed && (
+                {!!minStayFailed && (
                     <div className='md:col-span-5 p-3 border-t text-red-600'>
                         <InfoCircle className='inline-block fill-current w-5 h-5 ml-2' />
                         این اتاق برای رزرو های بیشتر از {rate.minStay} روز در دسترس است
                     </div>
                 )}
 
-                {maxStayFailed && (
+                {!!maxStayFailed && (
                     <div className='md:col-span-5 p-3 border-t text-red-600'>
                         این اتاق برای رزرو های کمتر از {rate.maxStay} روز در دسترس است
                     </div>

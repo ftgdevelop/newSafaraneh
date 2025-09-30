@@ -31,7 +31,7 @@ const RoomsListTheme1: React.FC<Props> = props => {
     }[] = [];
 
     if (props.availabilites?.length) {
-        let refundable = false;
+
         let breakfast = false;
         let extraBed = false;
 
@@ -44,9 +44,6 @@ const RoomsListTheme1: React.FC<Props> = props => {
                 breakfast = true;
             }
 
-            if (availibility.rates?.find(rate => rate.cancellationPolicy?.status === "Refundable")) {
-                refundable = true;
-            }
         }
 
         if (extraBed) availableFilters.push({
@@ -102,7 +99,9 @@ const RoomsListTheme1: React.FC<Props> = props => {
 
     const minPrice = props.availabilites?.flatMap(item => item.rates ? [...item.rates] : []).reduce(
         (min, currentItem) => {
-            if (currentItem.price < min) return currentItem.price;
+            if (currentItem.price < min && currentItem.availablityType !== "Completion" ) {
+                return currentItem.price;
+            }
             return min;
         },
         10000000000
@@ -119,7 +118,7 @@ const RoomsListTheme1: React.FC<Props> = props => {
             return status;
         }).map(rate => {
             
-            if (rate.price === minPrice){
+            if (rate.price === minPrice && rate.availablityType !== "Completion"){
                 return ({
                     ...rate,
                     isTheCheapest: true

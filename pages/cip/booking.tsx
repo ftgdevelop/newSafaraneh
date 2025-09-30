@@ -60,7 +60,7 @@ const Booking: NextPage = ({ portalData }: { portalData?: WebSiteDataType }) => 
             setConfirmLoading(true);
 
             const response: any = await CipConfirm({ reserveId: reserve_id, username: user_name }, 'fa-IR');
-            if (response.status === 200) {
+            if (response?.status === 200) {
 
                 if (response.data?.result?.isCompleted) {
                     setConfirmStatus(response.data.result.reserve?.status);

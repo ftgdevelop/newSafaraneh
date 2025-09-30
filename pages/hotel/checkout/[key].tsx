@@ -8,7 +8,7 @@ import Head from 'next/head';
 
 import { domesticHotelGetValidate, domesticHotelPreReserve, getDomesticHotelSummaryDetailById } from '@/modules/domesticHotel/actions';
 import Aside from '@/modules/domesticHotel/components/shared/Aside';
-import { getDatesDiff } from '@/modules/shared/helpers';
+import { getDatesDiff, numberWithCommas, toPersianDigits } from '@/modules/shared/helpers';
 import { AsideHotelInfoType, AsideReserveInfoType, DomesticHotelGetValidateResponse, DomesticHotelSummaryDetail } from '@/modules/domesticHotel/types/hotel';
 import SpecialReauests from '@/modules/domesticHotel/components/checkout/SpecialRequests';
 import ReserverInformation from '@/modules/domesticHotel/components/checkout/ReserverInformation';
@@ -21,11 +21,13 @@ import { dateFormat } from '@/modules/shared/helpers';
 import Steps from '@/modules/shared/components/ui/Steps';
 import Link from 'next/link';
 import Skeleton from '@/modules/shared/components/ui/Skeleton';
-import { ArrowRight } from '@/modules/shared/components/ui/icons';
+import { ArrowRight, Bed } from '@/modules/shared/components/ui/icons';
 import { UserInformation } from '@/modules/authentication/types/authentication';
 import { getTravelers } from '@/modules/shared/actions';
 import { TravelerItem } from '@/modules/shared/types/common';
 import AsideTheme2 from '@/modules/domesticHotel/components/shared/AsideTheme2';
+import PassengerItemInformation from '@/modules/domesticHotel/components/checkout/PassengerItemInformation';
+import Quantity from '@/modules/shared/components/ui/Quantity';
 
 const Checkout: NextPage = () => {
 
@@ -42,7 +44,7 @@ const Checkout: NextPage = () => {
   const router = useRouter();
   const pathSegments = router.asPath.split("?")[0].split("#")[0].split("/");
   const keySegment = pathSegments.find(item => item.includes('key='));
-  const key = keySegment?.split("key=")[1];
+  const urlKey = keySegment?.split("key=")[1];
 
   const user: UserInformation | undefined = useAppSelector(state => state.authentication.isAuthenticated ? state.authentication.user : undefined);
 
@@ -100,7 +102,9 @@ const Checkout: NextPage = () => {
 
     const fetchData = async (key: string) => {
 
-      const response: any = await domesticHotelGetValidate(key);
+      const token = localStorage.getItem('Token') || "";
+
+      const response: any = await domesticHotelGetValidate({key:key, acceptLanguage:'fa-IR', userToken :token});
 
       if (response?.data?.result) {
         setReserveInfo(response.data.result);
@@ -120,11 +124,11 @@ const Checkout: NextPage = () => {
 
     }
 
-    if (key) {
-      fetchData(key);
+    if (urlKey) {
+      fetchData(urlKey);
     }
 
-  }, [key]);
+  }, [urlKey]);
 
   let hotelInformation: AsideHotelInfoType;
   let reserveInformation: AsideReserveInfoType;
@@ -155,7 +159,8 @@ const Checkout: NextPage = () => {
 
       rooms: reserveInfo.rooms.map((roomItem: DomesticHotelGetValidateResponse['rooms'][0]) => ({
         name: roomItem.name,
-        board: roomItem.boardCode,
+        boardName:roomItem.boardName,
+        boardExtra: roomItem.boardExtra,
         cancellationPolicyStatus: roomItem.cancellationPolicyStatus,
         bed: roomItem.bed,
         extraBed: roomItem.extraBed,
@@ -199,7 +204,10 @@ const Checkout: NextPage = () => {
     setSubmitLoading(true);
 
     const token = localStorage.getItem('Token');
-    const reserveResponse: any = await domesticHotelPreReserve(params, token);
+    if (token){
+     params.userToken = token;
+    }
+    const reserveResponse: any = await domesticHotelPreReserve(params);
 
     if (reserveResponse.data && reserveResponse.data.result) {
       const id = reserveResponse.data.result.id;
@@ -239,6 +247,39 @@ const Checkout: NextPage = () => {
     setReserverIsPassenger(false);
   }
 
+  const getAllPassengers = (process.env.GET_ALL_PASSENFERS_DATA_IN_SAFAR_MARKET === "true") && metaSearchKey;
+
+  let initialPassengers: {
+    gender: true,
+    firstName: '',
+    lastName: '',
+    roomNumber: number,
+    extraBed: 0
+  }[] = [];
+
+  if (reserveInfo) {
+
+    if (getAllPassengers) {
+      initialPassengers = reserveInfo.rooms.flatMap((roomItem, index) => Array(roomItem.bed || 1).fill("P").map(_ => ({
+        gender: true,
+        firstName: '',
+        lastName: '',
+        roomNumber: index + 1,
+        extraBed: 0
+      }))
+      );
+    } else {
+      initialPassengers = reserveInfo?.rooms.map((_, index) => ({
+        gender: true,
+        firstName: '',
+        lastName: '',
+        roomNumber: index + 1,
+        extraBed: 0
+      }))
+    }
+  }
+
+
   const initialValues = {
     reserver: {
       gender: user?.gender || true,
@@ -249,15 +290,9 @@ const Checkout: NextPage = () => {
       phoneNumber: user?.phoneNumber || "",
       passportNumber: ""
     },
-    passengers: reserveInfo?.rooms.map((_, index) => ({
-      gender: true,
-      firstName: '',
-      lastName: '',
-      roomNumber: index + 1,
-      extraBed: 0
-    })) || [],
+    passengers: initialPassengers,
     specialRequest: "",
-    preReserveKey: key
+    preReserveKey: urlKey || ""
   }
 
   const discountSubmitHandler = async (value: string) => {
@@ -266,7 +301,7 @@ const Checkout: NextPage = () => {
     setDiscountData(undefined);
 
     const response = await validateDiscountCode({ 
-      prereserveKey: key!,
+      prereserveKey: urlKey!,
       type: 'HotelDomestic',
       discountPromoCode: value,
       MetaSearchKey:metaSearchKey,
@@ -360,7 +395,85 @@ const Checkout: NextPage = () => {
                       {t('fill-passengers-information')}
                     </h5>
 
-                    {reserveInfo?.rooms?.map((roomItem, roomIndex) => (
+                    {!!getAllPassengers && reserveInfo?.rooms?.map(
+                      (roomItem, roomIndex, roomsArray) => {
+                        
+                        const extraBedPrice = roomItem.pricing?.find((item) => item.type === 'ExtraBed' && item.ageCategoryType === 'ADL')?.amount || 0;
+                        
+                        const roomFirstPassengerIndex = roomsArray.slice(0, roomIndex).reduce(
+                          (count, currentItem) => (count + currentItem.bed) ,
+                          0,
+                        );
+
+                        return (
+                          <div className="bg-white border border-neutral-300 p-5 rounded-lg mb-5" key={roomIndex}>
+
+                            <h5 className='font-semibold text-xl mb-4'>
+                              <Bed className='w-5 h-5 fill-current inline-block align-middle rtl:ml-2 ltr:mr-2' /> {tHotel('room')} {toPersianDigits((roomIndex + 1).toString())} - {toPersianDigits(roomItem.name || "")}
+                            </h5>
+
+                            {Array(roomItem.bed || 1).fill("P").map((_, index) => {
+                              let addedPassengers: number = 0;
+                              if (roomIndex) {
+                                for (let i = 0; i < roomIndex; i++) {
+                                  addedPassengers += roomsArray[i].bed;
+                                }
+                              }
+                              return (
+                                <PassengerItemInformation
+                                  multiPassenger={roomItem.bed > 1}
+                                  fetchingTravelersLoading={fetchingTravelersLoading}
+                                  travelers={travelers}
+                                  fetchTravelers={fetchTravelers}
+                                  clearTravelers={() => { setTravelers(undefined) }}
+                                  values={values}
+                                  errors={errors}
+                                  touched={touched}
+                                  roomIndex={roomIndex}
+                                  passengerIndex={addedPassengers + index}
+                                  roomPassengerIndex={index}
+                                  roomItem={roomItem}
+                                  setFieldValue={setFieldValue}
+                                  key={roomIndex + "-" + index}
+                                  disableSyncedPassenger={(roomIndex === 0 && index === 0) ? disableSyncedPassenger : undefined}
+                                />
+                              )
+                            })}
+
+                            {!!roomItem.extraBed && (
+                              <div className={`border-t border-neutral-300 pt-4 mt-4 flex gap-4 justify-between items-center ${theme1 ? "md:col-span-3" : ""}`}>
+
+                                <strong className="flex flex-wrap gap-1 md:gap-2 items-center font-semibold text-sm">
+                                  تخت اضافه
+                                  <span className="text-xs">
+                                    ({numberWithCommas(extraBedPrice || 0)} {t('rial')} برای هر شب)
+                                  </span>
+                                </strong>
+
+                                <div dir="ltr" className="whitespace-nowrap">
+                                  <Quantity
+                                    min={0}
+                                    max={roomItem.extraBed}
+                                    onChange={value => {
+                                      setRoomsExtraBed(prevState => {
+                                        const updatedValue = [...prevState];
+                                        updatedValue[roomIndex] = value
+                                        return (updatedValue)
+                                      })
+                                      setFieldValue(`passengers.${roomFirstPassengerIndex}.extraBed`, value)
+                                    }}
+                                  />
+                                </div>
+
+                              </div>
+                            )}
+
+                          </div>
+                        )
+                      }
+                    )}
+
+                    {!getAllPassengers && reserveInfo?.rooms?.map((roomItem, roomIndex) => (
                       <RoomItemInformation
 
                         fetchingTravelersLoading={fetchingTravelersLoading}

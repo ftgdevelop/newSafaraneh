@@ -36,7 +36,10 @@ const Capacity: NextPage = () => {
     const reserveId = pathArray?.find(item => item.includes("reserveId="))?.split("reserveId=")[1];
 
     if (reserveId && username) {
-      const response: any = await domesticHotelGetReserveById({ reserveId: reserveId, userName: username });
+      
+      const token = localStorage.getItem('Token') || "";
+
+      const response: any = await domesticHotelGetReserveById({ reserveId: reserveId, userName: username, token: token });
 
       if (response.data) {
         if (!reserveInfo) {

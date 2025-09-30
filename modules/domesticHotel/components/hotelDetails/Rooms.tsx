@@ -86,7 +86,34 @@ const Rooms: React.FC<Props> = props => {
                 setAvailabilities(undefined);
                 setAvailabilitiesLoading(true);
 
-                const response: any = await GetRooms({ id: hotelId, checkin: checkin, checkout: checkout }, i18n?.language === "en" ? "en-US" : i18n?.language === "ar" ? "ar-AE" : "fa-IR");
+                let cookieSafarmarketId;
+                let cookieSafarmarketSource;
+                let cookies = decodeURIComponent(document?.cookie).split(';');
+                for (const item of cookies) {
+                    if (item.includes("safarMarketHotelSmId=")) {
+                        cookieSafarmarketId = item.split("=")[1];
+                    }
+                    if (item.includes("safarMarketHotelUtmSource=")) {
+                        cookieSafarmarketSource = item.split("=")[1];
+                    }
+                }
+
+                let utm: undefined | { utmSource: string; utmKey: string };
+                if (router.query && router.query.utm_source && router.query.safarmarketId) {
+                    utm = {
+                        utmSource: router.query.utm_source! as string,
+                        utmKey: router.query.safarmarketId! as string
+                    }
+                } else if (cookieSafarmarketId) {
+                    utm = {
+                        utmSource: cookieSafarmarketSource || "safarmarket",
+                        utmKey: cookieSafarmarketId
+                    }
+                }
+
+                const token = localStorage.getItem('Token');
+
+                const response: any = await GetRooms({userToken: token || "", id: hotelId, checkin: checkin, checkout: checkout, MetaSearchKey: utm?.utmKey, MetaSearchName: utm?.utmSource }, i18n?.language === "en" ? "en-US" : i18n?.language === "ar" ? "ar-AE" : "fa-IR");
 
                 setAvailabilitiesLoading(false);
 
@@ -131,13 +158,16 @@ const Rooms: React.FC<Props> = props => {
             }
         }
 
+        const userToken = localStorage.getItem('Token') || "";
+
         const preReserveResponse: any = await domesticHotelValidateRoom({
             bookingToken: token,
             checkin: checkin,
             checkout: checkout,
             count: count,
             MetaSearchName: utm?.utmSource || null,
-            MetaSearchKey: utm?.utmKey || null
+            MetaSearchKey: utm?.utmKey || null,
+            userToken: userToken
         });
 
         if (preReserveResponse.data?.result?.preReserveKey) {

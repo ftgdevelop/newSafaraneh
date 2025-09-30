@@ -17,9 +17,9 @@ export const notificationSlice = createSlice({
     initialState,
     reducers:{
         setReduxNotification:(state, action) =>{
-            state.status = action.payload.status || "";
-            state.message = action.payload.message;
-            state.isVisible = action.payload.isVisible;
+            state.status = action.payload?.status || "";
+            state.message = action.payload?.message;
+            state.isVisible = action.payload?.isVisible;
         }
     }
 });

@@ -23,6 +23,8 @@ const RoomItem: React.FC<Props> = props => {
 
     const { rate, room, selectedRoomToken } = props;
 
+    const isHotelban = process.env.PROJECT === "HOTELBAN";
+
     const { t } = useTranslation('common');
     const { t: tHotel } = useTranslation('hotel');
 
@@ -91,6 +93,7 @@ const RoomItem: React.FC<Props> = props => {
                 <div className='text-xs'>{rate.cancellationPolicy.status}</div>;
         }
     }
+    if (isHotelban) cancellation = null;
 
     const prices = {
         roomPrice: rate.pricing?.find(
@@ -127,7 +130,7 @@ const RoomItem: React.FC<Props> = props => {
         price = "";
     } else if (prices?.roomPrice && prices.roomPrice > 1000) {
         price = <>
-            {(prices.boardPrice && (prices.boardPrice !== prices.roomPrice)) && <div>
+            {(prices.boardPrice && (prices.boardPrice > prices.roomPrice)) && <div>
                 <span className="bg-green-700 text-white px-2 py-1 leading-4 rounded-xl text-xs inline-block">{calulateDiscount(prices.roomPrice, prices.boardPrice)}% {tHotel('discount')}</span>
             </div>}
             {prices.roomPrice && (
@@ -147,11 +150,11 @@ const RoomItem: React.FC<Props> = props => {
                         )}
                     >
                         <div className="text-lg my-1 leading-4 font-semibold flex flex-col items-end lg:flex-row gap-x-1.5 lg:items-center">
-                            {prices.boardPrice && (prices.roomPrice < prices.boardPrice) && (
+                            {prices.boardPrice && (prices.roomPrice < prices.boardPrice) ? (
                                 <div className="my-0.5 line-through font-semibold text-xs text-neutral-500">
                                     {numberWithCommas(prices.boardPrice * count)} {t("rial")}
                                 </div>
-                            )}
+                            ):null}
                             <div className='my-0.5'>
                                 {numberWithCommas(prices.roomPrice * count)} {t("rial")}
                                 <InfoCircle className='fill-amber-500 w-5 h-5 inline-block rtl:mr-0.5 ltr:ml-0.5' />

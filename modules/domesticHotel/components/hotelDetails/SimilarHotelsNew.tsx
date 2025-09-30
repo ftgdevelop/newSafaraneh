@@ -24,6 +24,7 @@ type PricesResponseItem = {
     id: number;
     salePrice: number;
     boardPrice: number;
+    availablityType?: "Online"| "Offline"| "Request"| "Completion";
     promotions?: {
         name?: string;
         description?: string;
@@ -100,7 +101,9 @@ const SimilarHotelsNew: React.FC<Props> = props => {
         setPricesLoading(true);
         setPricesData(undefined);
 
-        const pricesResponse = await AvailabilityByHotelId({ checkin: checkin, checkout: checkout, ids: ids });
+        const token = localStorage.getItem('Token') || "";
+        
+        const pricesResponse = await AvailabilityByHotelId({ checkin: checkin, checkout: checkout, ids: ids, userToken: token });
 
         if (pricesResponse.data?.result?.hotels) {
             setPricesData(pricesResponse.data.result.hotels);
@@ -137,16 +140,14 @@ const SimilarHotelsNew: React.FC<Props> = props => {
 
         const hotelPriceData = pricesData?.find(item => item.id === hotel.id);
 
-        let priceInfo: "loading" | "notPriced" | "need-to-inquire" | { boardPrice: number, salePrice: number };
+        let priceInfo: "loading" | "notPriced" | { boardPrice: number, salePrice: number; availablityType?: "Online"| "Offline"| "Request"| "Completion" };
 
         if (!pricesData || pricesLoading) {
             priceInfo = "loading";
         } else if (!hotelPriceData) {
             priceInfo = "notPriced";
-        } else if (hotelPriceData.salePrice < 10000) {
-            priceInfo = "need-to-inquire";
         } else {
-            priceInfo = { boardPrice: hotelPriceData.boardPrice, salePrice: hotelPriceData.salePrice }
+            priceInfo = { boardPrice: hotelPriceData.boardPrice, salePrice: hotelPriceData.salePrice, availablityType:hotelPriceData.availablityType  }
         }
 
         return ({
@@ -214,7 +215,7 @@ const SimilarHotelsNew: React.FC<Props> = props => {
                     <Slider
                         {...settings}
                     >
-                        {hotels.filter(hotel => hotel.priceInfo !== 'need-to-inquire' && hotel.priceInfo !== 'notPriced').map(hotel => (
+                        {hotels.filter(hotel => hotel.priceInfo !== 'notPriced').map(hotel => (
                             <div className='px-2' key={hotel.id} dir="rtl">
                                 <SimilarHotelItemTheme2 
                                     searchInfo={searchInfo} 

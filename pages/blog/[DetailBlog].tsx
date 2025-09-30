@@ -1,4 +1,4 @@
-import { GetBlogPostDetails, GetCategories, getBlogs } from "@/modules/blogs/actions";
+import { GetBlogPostDetails, GetCategories, GetTagName, getBlogs } from "@/modules/blogs/actions";
 import { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import ContentPost from "@/modules/blogs/components/BlogPostDetail/PostContent";
@@ -15,12 +15,13 @@ import NotFound from "@/modules/shared/components/ui/NotFound";
 import PostDetail from "@/modules/blogs/components/theme2/PostDetail";
 
 
-const DetailBlog: NextPage<any> = ({ post, allCategories, recentBlogs, moduleDisabled }:
-    {post: BlogItemType, allCategories: CategoriesNameType[], recentBlogs:BlogItemType[], moduleDisabled?: boolean}) => {
+const DetailBlog: NextPage<any> = ({ post, allCategories, recentBlogs, moduleDisabled, tags }:
+    {post: BlogItemType, allCategories: CategoriesNameType[], recentBlogs:BlogItemType[], moduleDisabled?: boolean, tags?:{label:string, id:number, slug: string}[]}) => {
 
-        const theme2 = process.env.THEME === "THEME2";
+    const theme2 = process.env.THEME === "THEME2";
 
     const [Related, setRelatedPost] = useState<BlogItemType[] | undefined>(undefined);
+
     useEffect(() => {
         const getRelatedPost = async () => {
             let getRelatedPost : any = await getBlogs({ page: 1, category: post?.categories?.[0],per_page:theme2 ? 6 : 4 })
@@ -37,13 +38,13 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, recentBlogs, moduleDis
     }
 
     //data={post.title?.rendered} page="بلاگ" category={[post.categories_names[0], post?.categories[0]]} />
-    const category: string = post?.categories_names?.[0] || ""
+    const categoryId = post.categories?.[0];
+    const categoryName: string = allCategories?.find(cat => cat.id === categoryId)?.name || post?.categories_names?.[0] || "دسته بندی نامشخص";
 
-    const CategoryId : string = post?.categories[0].toString() || ""
     const PostTitle : string = post?.title?.rendered || ""
 
 
-    const postImage = post?.images?.large;
+    const postImage = post?.acf?.image_url_bp || post?.images?.large;
 
     const categories : {
         label: string;
@@ -60,7 +61,7 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, recentBlogs, moduleDis
     }[] = recentBlogs?.map(b => ({
         link: `/blog/${b.slug}`,
         title: b.title.rendered,
-        imageUrl: b.images?.medium
+        imageUrl: b.acf?.image_url_bp || b.images?.medium
     }));
     
     if (theme2){
@@ -92,7 +93,7 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, recentBlogs, moduleDis
             link: `/blog/${r.slug}`,
             title: r.title.rendered,
             date: r.date,
-            imageUrl: r.images?.medium || "",
+            imageUrl: r.acf?.image_url_bp || r.images?.medium || "",
             tags:[]
         }));
 
@@ -130,13 +131,15 @@ const DetailBlog: NextPage<any> = ({ post, allCategories, recentBlogs, moduleDis
             
             <div className="max-w-container m-auto">
                 <div className="pr-5 pl-5 max-sm:p-4">
-                    <BreadCrumpt items={[{ label: "بلاگ", link: "/blog" }, { label: category, link: `category/${CategoryId}` }, { label: PostTitle }]} /> 
+                    <BreadCrumpt items={[{ label: "بلاگ", link: "/blog" }, { label: categoryName , link: `category/${categoryId}` }, { label: PostTitle }]} /> 
                 </div>
-                <TitlePost BlogPost={post} />
-                    <ContentPost content={post} recentBlogs={recentPosts?.slice(0,3)} CategoriesNames={categories} />
+                <TitlePost BlogPost={post} categoryId={categoryId} categoryName={categoryName} />
+                
+                <ContentPost tags={tags} content={post} recentBlogs={recentPosts?.slice(0,3)} CategoriesNames={categories} />
+                
                 <hr className="m-3 mt-10"/>
                 <div className="p-5 max-sm:p-3 mt-10"> 
-                    <RelatedPost Posts={Related} Blog={post} />
+                    {Related && <RelatedPost Posts={Related} Blog={post} />}
                     <DetailBlogAcordion blog={post} />
                     <GetComment />
                     <PostComment postId={post?.id} />
@@ -163,7 +166,31 @@ export async function getServerSideProps(context: any) {
         GetBlogPostDetails(context.query.DetailBlog),
         getBlogs({page:1, per_page:10}),
         GetCategories()
-    ]) 
+    ]);
+
+    
+    const tags : {
+        label: string;
+        id: number;
+        slug: string;
+    }[] = [];
+
+    const tagsIds = BlogPost?.data?.[0]?.tags;
+
+    if(tagsIds?.length){
+        for(let i=0 ; i < tagsIds.length ; i++){
+            const response: any = await GetTagName(tagsIds[i]);
+            if(response?.data){
+                tags.push({
+                    id:response.data.id,
+                    label: response.data.name,
+                    slug: response.data.slug
+                })
+            }
+        }
+    }
+
+
     return (
         {
             props: {
@@ -171,6 +198,7 @@ export async function getServerSideProps(context: any) {
                 post: BlogPost?.data?.[0] || null,
                 recentBlogs: recentBlogs?.data || null,
                 allCategories: Categories?.data || null,
+                tags : tags || null,
             }
         }
     )

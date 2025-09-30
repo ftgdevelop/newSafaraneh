@@ -26,8 +26,7 @@ type Props = {
         url: string;
         imageUrl?: string;
         guestRate?: "loading" | { Satisfaction: number; TotalRowCount: number; };
-        price: "loading" | "notPriced" | "need-to-inquire" | { boardPrice: number; salePrice: number; };
-        availablityType?: "Online"| "Offline"| "Request"| "Completion";
+        price: "loading" | "notPriced" | { boardPrice: number; salePrice: number;availablityType?: "Online"| "Offline"| "Request"| "Completion";};        
     }[];
     closeMapModal: () => void;
     allHotelsLength: number;
@@ -151,7 +150,6 @@ const HotelsOnMap: React.FC<Props> = props => {
                                     imageUrl={hotel.imageUrl}
                                     rating={hotel.rating}
                                     onHoverHotel={setHoveredMarkerId}
-                                    availablityType={hotel.availablityType}
                                 />)}
                             </div>
                         )}

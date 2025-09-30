@@ -139,7 +139,8 @@ const Banner: React.FC<Props> = props => {
   />;
 
   return (
-    <div className={`relative ${theme1 ? "bg-cyan-800/50" :theme3 ? "bg-stone-50 lg:min-h-screen pb-4": ""}`}>
+    <div className={`relative ${theme1 ? "bg-cyan-800/50" :theme3 ? "bg-stone-50 pb-4 lg:pb-12": ""}`}>
+      {!!theme3 && <div className='max-sm:hidden absolute bottom-0 left-0 right-0 h-1/2 z-[11] bg-gradient-to-t from-black/50 to-trabsparent' />}
       
       {!!theme1 || props.bannerImage && <Image
         src={props.bannerImage || '/images/home/banner.jpg'}
@@ -150,7 +151,7 @@ const Banner: React.FC<Props> = props => {
         className='absolute top-0 left-0 w-full h-full object-cover object-center z-10 max-sm:hidden'
       />}
 
-      <div className={`max-w-container mx-auto sm:px-3 relative z-20 ${theme1 ? "sm:py-10 sm:pb-28 pt-5" : theme2 ? "pb-5 sm:pb-8 pt-5" : "sm:pt-5 md:pt-8"}`}>
+      <div className={`max-w-container mx-auto ${theme3?"sm:px-5":"sm:px-3"} relative z-20 ${theme1 ? "sm:py-10 sm:pb-28 pt-5" : theme2 ? "pb-5 sm:pb-8 pt-5" : "sm:pt-5 md:pt-8"}`}>
 
         {!!theme1 && <h1 className="text-white drop-shadow-lg text-center font-bold text-xl sm:text-4xl mb-6 sm:mb-10" > {tHome("Plan-your-trip")} </h1>}
 

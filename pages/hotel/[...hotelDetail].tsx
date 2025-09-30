@@ -31,6 +31,7 @@ import dynamic from 'next/dynamic';
 import { useAppDispatch } from '@/modules/shared/hooks/use-store';
 import { emptyReduxSafarmarket, setReduxSafarmarketPixel } from '@/modules/shared/store/safarmarketSlice';
 import BreadCrumpt from '@/modules/shared/components/ui/BreadCrumpt';
+import GalleryLevel1 from '@/modules/domesticHotel/components/hotelDetails/GalleryLevel1';
 import SimilarHotelsNew from '@/modules/domesticHotel/components/hotelDetails/SimilarHotelsNew';
 
 const SearchForm = dynamic(() => import('@/modules/domesticHotel/components/shared/SearchForm'), {
@@ -70,6 +71,8 @@ const HotelDetail: NextPage<Props> = props => {
   const isSafaraneh = process.env.PROJECT === "SAFARANEH" || process.env.PROJECT === "IRANHOTEL";
 
   const isSafarlife = process.env.PROJECT === "SAFARLIFE";
+
+  const isHotelban = process.env.PROJECT === "HOTELBAN";
 
   const { portalData, allData } = props;
 
@@ -129,41 +132,41 @@ const utm_term = router.query?.utm_term;
 
 useEffect(()=>{
 
-  if (!process.env.SAFAR_MARKET_SITE_NAME){
-    return;
-  }
-
-  let cookieSafarmarketId;
-  let cookies = decodeURIComponent(document.cookie).split(';');
-  for (const item of cookies){
-    if (item.includes("safarMarketHotelSmId=")){
-      cookieSafarmarketId =item.split("=")[1];
+  if (process.env.SAFAR_MARKET_SITE_NAME){
+    
+    let cookieSafarmarketId;
+    let cookies = decodeURIComponent(document.cookie).split(';');
+    for (const item of cookies){
+      if (item.includes("safarMarketHotelSmId=")){
+        cookieSafarmarketId =item.split("=")[1];
+      }
     }
-  }
-
-  if(querySafarmarketId){
-    const expDate = new Date();
-    expDate.setTime(expDate.getTime() + (7*24*60*60*1000));
-    if (document){
-      document.cookie = `safarMarketHotelSmId=${querySafarmarketId}; expires=${expDate.toUTCString()};path=/`;
-      if (utm_source){
-        if (typeof utm_source === 'object'){
-          document.cookie = `safarMarketHotelUtmSource=${utm_source[0]}; expires=${expDate.toUTCString()};path=/`;
-        }else{
-          document.cookie = `safarMarketHotelUtmSource=${utm_source}; expires=${expDate.toUTCString()};path=/`;
+  
+    if(querySafarmarketId){
+      const expDate = new Date();
+      expDate.setTime(expDate.getTime() + (7*24*60*60*1000));
+      if (document){
+        document.cookie = `safarMarketHotelSmId=${querySafarmarketId}; expires=${expDate.toUTCString()};path=/`;
+        if (utm_source){
+          if (typeof utm_source === 'object'){
+            document.cookie = `safarMarketHotelUtmSource=${utm_source[0]}; expires=${expDate.toUTCString()};path=/`;
+          }else{
+            document.cookie = `safarMarketHotelUtmSource=${utm_source}; expires=${expDate.toUTCString()};path=/`;
+          }
         }
       }
     }
+  
+    const smId = querySafarmarketId || cookieSafarmarketId;
+  
+    if(smId){
+      dispatch(setReduxSafarmarketPixel({
+        type: "hotel",
+        pixel : `https://safarmarket.com/api/hotel/v1/pixel/${process.env.SAFAR_MARKET_SITE_NAME}/2/0/?smId=${smId}`
+      }));
+    }
   }
 
-  const smId = querySafarmarketId || cookieSafarmarketId;
-
-  if(smId){
-    dispatch(setReduxSafarmarketPixel({
-      type: "hotel",
-      pixel : `https://safarmarket.com/api/hotel/v1/pixel/${process.env.SAFAR_MARKET_SITE_NAME}/2/0/?smId=${smId}`
-    }));
-  }
 },[querySafarmarketId,utm_source]);
 
 useEffect(() => {
@@ -238,7 +241,7 @@ useEffect(() => {
 
   if (portalData) {
 
-    tel = portalData.billing?.telNumber || portalData?.billing?.phoneNumber || "";
+    tel = portalData.billing?.telNumber || portalData.billing?.phoneNumber || "";
     twitter = portalData.social?.x || "";
     siteLogo = portalData.billing?.logo?.value || "";
     siteName = portalData.billing?.name || "";
@@ -596,7 +599,7 @@ useEffect(() => {
 
         {!!querySafarmarketId && (
           <div className='bg-[#ed6527] text-white px-5 py-3 text-lg md:text-2xl lg:text-4xl xl:text-5xl mb-5 text-center font-semibold'>
-            شما از موتور جستجوی <span className='text-[#ed6527] inline-block mx-2 font-bold p-1 lg:p-3 bg-white rounded-xl'> سفرمارکت </span> به {portalData.billing?.name || " این سایت "} هدایت شده اید
+            شما از موتور جستجوی <span className='text-[#ed6527] inline-block mx-2 font-bold p-1 lg:p-3 bg-white rounded-xl'> سفرمارکت </span> به {portalData?.billing?.name || " این سایت "} هدایت شده اید
           </div>
         )}
 
@@ -630,7 +633,12 @@ useEffect(() => {
 
         </div>
 
-        {!!hotelImages?.length && <Gallery images={hotelImages} hotelName={accommodationData.displayName} />}
+        {isHotelban ? (
+          <GalleryLevel1 images={hotelImages} hotelName={accommodationData.displayName} />
+        ) :(
+          <Gallery images={hotelImages} hotelName={accommodationData.displayName} />
+        )}
+
       </div>
 
       <AnchorTabs
@@ -698,7 +706,7 @@ useEffect(() => {
       {!!reviewData && <Comments siteName={siteName} hotelScoreData={allData.reviews} pageId={sheet.id} />}
 
       {!!(isSafarlife && accommodationData?.similars?.length) && <SimilarHotelsNew similarHotels={accommodationData.similars} />}
-      {!!(isSafaraneh && hotelData?.Similars) && <SimilarHotels similarHotels={hotelData.Similars} />}
+      {!!(isSafaraneh && hotelData?.Similars) && <SimilarHotels similarHotels={hotelData.Similars} checkin={checkin} checkout={checkout} />}
 
       {!!(accommodationData?.faqs?.length && !querySafarmarketId) && <FAQ faqs={accommodationData.faqs} />}
 
