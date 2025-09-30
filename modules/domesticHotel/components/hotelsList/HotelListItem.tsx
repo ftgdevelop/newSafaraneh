@@ -176,7 +176,7 @@ const HotelListItem: React.FC<Props> = props => {
                 target="_blank"
                 className="rounded-lg h-10 px-5 text-sm w-full md:w-48 max-w-full mt-3"
             >
-                {/* {hotel.priceInfo === "need-to-inquire" ? "درخواست رزرو" : tHotel("see-rooms")} */}
+                {hotel.priceInfo.availablityType === "Request" ? "درخواست رزرو" : tHotel("see-rooms")}
             </Button>
         )
     }
