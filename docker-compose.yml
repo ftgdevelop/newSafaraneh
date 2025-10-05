@@ -1,0 +1,9 @@
+version: '3'
+services:
+  shab_hotelban_service:
+    image: shab_hotelban_image
+    restart: always
+    build: ./
+    command: 'yarn start -p 2093'
+    ports:
+      - '2093:2093'
