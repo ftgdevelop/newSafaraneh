@@ -19,6 +19,7 @@ const HeaderStyle3: React.FC<Props> = props => {
 
     const { logo, siteName } = props;
 
+    const isShab = process.env.PROJECT === "SHAB";
 
     if (props.withoutContainer) {
         return (
@@ -36,10 +37,10 @@ const HeaderStyle3: React.FC<Props> = props => {
 
                     {/* <Language className="hidden md:block" buttonClassName="h-12" /> */}
 
-                    <HeaderAuthentication
+                    {isShab ? null :<HeaderAuthentication
                         logo={logo}
                         siteName={siteName}
-                    />
+                    />}
 
                     {!userIsAuthenticated && <TrackOrder />}
 
@@ -65,11 +66,11 @@ const HeaderStyle3: React.FC<Props> = props => {
 
                         {/* <Language className="hidden md:block" buttonClassName="h-12" /> */}
 
-                        <HeaderAuthentication
+                        {isShab ? null :<HeaderAuthentication
                             logo={logo}
                             siteName={siteName}
                         />
-
+}
                         {!userIsAuthenticated && <TrackOrder />}
 
                     </div>

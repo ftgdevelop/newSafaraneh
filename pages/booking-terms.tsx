@@ -108,8 +108,9 @@ export default BookingTerms;
 export async function getStaticProps(context: any) {
 
     const isHotelban = process.env.PROJECT === "HOTELBAN";
+    const isShab = process.env.PROJECT === "SHAB";
 
-    if (!isHotelban) {
+    if (!(isHotelban || isShab)) {
         return {
             redirect: {
                 destination: '/',

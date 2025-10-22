@@ -25,6 +25,7 @@ const BookingContent: React.FC<Props> = props => {
     const { t: tHotel } = useTranslation('hotel');
 
     const isHotelban = process.env.PROJECT === "HOTELBAN";
+    const isShab = process.env.PROJECT === "SHAB";
 
     const { reserveInfo, username, reserveId, confirmStatus, confirmLoading } = props;
 
@@ -182,7 +183,7 @@ const BookingContent: React.FC<Props> = props => {
                                 cancellation = <div className="margin-bottom-5">{item.cancellationPolicyStatus}</div>;
                         }
                         
-                        if(isHotelban) cancellation = null;
+                        if(isHotelban || isShab) cancellation = null;
 
                         return (
                             <div key={index} className="border border-neutral-300 rounded-sm">
