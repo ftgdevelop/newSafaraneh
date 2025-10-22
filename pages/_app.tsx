@@ -238,13 +238,14 @@ MyApp.getInitialProps = async (
   
   const isSafarlife = process.env.PROJECT === "SAFARLIFE";
   const isHotelban = process.env.PROJECT === "HOTELBAN";
+  const isShab = process.env.PROJECT === "SHAB";
 
   let footerStrapiQueri ="";
   if(hasStrapi){
     if(isSafarlife){
       footerStrapiQueri = "populate[LinkRows][populate]=*";
     }
-    if(isHotelban){
+    if(isHotelban || isShab){
       footerStrapiQueri = `filters[Tenant][$eq]=${strapiTenant}&populate[LinkRows][populate]=*`;
     }
   }

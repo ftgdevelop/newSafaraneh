@@ -42,6 +42,8 @@ const Footer: React.FC<Props> = props => {
 
     const isHotelBan =process.env.PROJECT === "HOTELBAN";
 
+    const isShab =process.env.PROJECT === "SHAB";
+
     const theme3 = process.env.THEME === "THEME3";
     
     if (theme2) {
@@ -124,14 +126,14 @@ const Footer: React.FC<Props> = props => {
                 <div className="max-w-container mx-auto p-3 text-neutral-700 pt-8 pb-14">
 
                     <div className="flex justify-center gap-1 sm:gap-4 mb-10" onContextMenu={e => { e.preventDefault() }}>
-                        {!isHotelBan && (<>
+
+                        {!(isHotelBan || isShab) && (<>
                             <Image src='/images/footer/tandis-01.png' className="h-11 sm:h-18 object-contain" alt='' width={62} height={72} />
                             <Image src='/images/footer/tandis-02.png' className="h-11 sm:h-18 object-contain" alt='' width={62} height={72} />
                             <Image src='/images/footer/tandis-03.png' className="h-11 sm:h-18 object-contain" alt='' width={62} height={72} />
                             <Image src='/images/footer/tandis-04.png' className="h-11 sm:h-18 object-contain" alt='' width={62} height={72} />
                             <Image src='/images/footer/tandis-05.png' className="h-11 sm:h-18 object-contain" alt='' width={62} height={72} />
                         </>)}
-
 
                         {!!props.enamad && (
                             <a className="footer-enamad" referrerPolicy="origin" target="_blank" href={props.enamad}>
