@@ -241,6 +241,7 @@ export const getStaticProps = async (context: any) => {
 
   const isSafarlife = process.env.PROJECT === "SAFARLIFE";
   const isHotelban = process.env.PROJECT === "HOTELBAN";
+  const isShab = process.env.PROJECT === "SHAB";
 
   let StrapiQueri1: string = "";
   let StrapiQueri2: string = "";
@@ -250,7 +251,7 @@ export const getStaticProps = async (context: any) => {
       StrapiQueri1 = 'filters[Page][$eq]=home&populate[Sections][populate][Items][populate]=*';
       StrapiQueri2 = 'filters[Page][$eq]=home&populate[Sections][populate]=*';
     }
-    if(isHotelban){
+    if(isHotelban || isShab){
       StrapiQueri1 = `filters[Slug][$eq]=home&filters[Tenant][$eq]=${strapiTenant}&populate[Sections][populate][Items][populate]=*`;
       StrapiQueri2 = `filters[Slug][$eq]=home&filters[Tenant][$eq]=${strapiTenant}&populate[Sections][populate][Item][populate]=*`;
     }
@@ -279,7 +280,7 @@ export const getStaticProps = async (context: any) => {
     }
   }
 
-  if(hasStrapi && isHotelban){
+  if(hasStrapi && (isHotelban || isShab)){
     
     homeSections = strapiResponse?.data?.data[0]?.attributes?.Sections?.filter((section:any) => section.Keyword !== "top-banners");
     const topBannerSection = strapiResponse2?.data?.data[0]?.attributes?.Sections?.find((section:any) => section.Keyword === "top-banners");
