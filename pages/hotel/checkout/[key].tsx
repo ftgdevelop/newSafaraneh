@@ -28,6 +28,7 @@ import { TravelerItem } from '@/modules/shared/types/common';
 import AsideTheme2 from '@/modules/domesticHotel/components/shared/AsideTheme2';
 import PassengerItemInformation from '@/modules/domesticHotel/components/checkout/PassengerItemInformation';
 import Quantity from '@/modules/shared/components/ui/Quantity';
+import Checkbox from '@/modules/shared/components/ui/Checkbox';
 
 const Checkout: NextPage = () => {
 
@@ -38,6 +39,8 @@ const Checkout: NextPage = () => {
   const theme2 = process.env.THEME === "THEME2";
 
   const theme1 = process.env.THEME === "THEME1";
+  
+  const isHotelban = process.env.PROJECT === "HOTELBAN";
 
   const dispatch = useAppDispatch();
 
@@ -207,6 +210,9 @@ const Checkout: NextPage = () => {
     if (token){
      params.userToken = token;
     }
+
+    delete params.agreeToRules;
+
     const reserveResponse: any = await domesticHotelPreReserve(params);
 
     if (reserveResponse.data && reserveResponse.data.result) {
@@ -292,7 +298,8 @@ const Checkout: NextPage = () => {
     },
     passengers: initialPassengers,
     specialRequest: "",
-    preReserveKey: urlKey || ""
+    preReserveKey: urlKey || "",
+    agreeToRules: false
   }
 
   const discountSubmitHandler = async (value: string) => {
@@ -358,9 +365,16 @@ const Checkout: NextPage = () => {
 
         {reserveInfo ? (
           <Formik
-            validate={() => { return {} }}
             initialValues={initialValues}
             onSubmit={submitHandler}
+            validate={(values) => {
+              const errors: any = {};
+              if (isHotelban && !values.agreeToRules) {
+                errors.agreeToRules = 'لطفاً قوانین و مقررات را بپذیرید.';
+              }
+              return errors;
+            }}
+
           >
             {({ errors, touched, isValid, isSubmitting, setFieldValue, values }) => {
               if (isSubmitting && !isValid) {
@@ -504,6 +518,22 @@ const Checkout: NextPage = () => {
                       loading={discountLoading}
                       onSubmit={discountSubmitHandler}
                     />
+
+
+                    { isHotelban && <div className={`my-5 ${touched.agreeToRules && errors.agreeToRules ? "has-validation-error" : ""}`} >
+                      <Checkbox
+                        className='ml-2'
+                        onChange={(e: boolean) => { setFieldValue("agreeToRules", e, true)}}
+                        value=""
+                        name='agreeToRules'
+                      />
+                      من <Link target='_blank' href="/booking-terms" className="text-blue-600 underline">قوانین و مقررات رزرو</Link> را مطالعه کرده‌ام و آن را می‌پذیرم.
+
+                      {touched.agreeToRules && errors.agreeToRules && (
+                        <div className="text-red-500 text-sm mt-2">{errors.agreeToRules}</div>
+                      )}
+                    </div>}
+
 
                   </div>
 
