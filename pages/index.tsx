@@ -9,8 +9,12 @@ import HomeTheme1 from '@/modules/home/components/theme1/HomeTheme1';
 import HomeTheme2 from '@/modules/home/components/theme2/HomeTheme2';
 import HomeTheme3 from '@/modules/home/components/theme3/HomeTheme3';
 import { getStrapiPages } from '@/modules/shared/actions/strapiActions';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 const Home: NextPage<{ blogs?: BlogItemType[], portalData?: WebSiteDataType, homeSections: any }> = ({ blogs, portalData, homeSections }) => {
+  
+  const router = useRouter();
 
   const logo = portalData?.billing.logo?.value || "";
   const siteName = portalData?.billing.name || "";
@@ -36,6 +40,18 @@ const Home: NextPage<{ blogs?: BlogItemType[], portalData?: WebSiteDataType, hom
   if (process.env.PROJECT_MODULES?.includes("CIP")){
     modules.push("cip");
   }
+
+    const urlShabTrackerId = router.query?.tracker_id;
+  
+    useEffect(() => {
+      if (urlShabTrackerId && process.env.USE_SHAB_TRACKER_ID === "true") {
+        const expDate = new Date();
+        expDate.setTime(expDate.getTime() + (7 * 24 * 60 * 60 * 1000));
+        if (document) {
+          document.cookie = `shabTrackerId=${urlShabTrackerId}; expires=${expDate.toUTCString()};path=/`;
+        }
+      }
+    }, [urlShabTrackerId]);
 
 
   return (
