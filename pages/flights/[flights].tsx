@@ -60,6 +60,20 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
     const { t } = useTranslation("common");
     const { t: tFlight } = useTranslation("flight");
 
+    const router = useRouter();
+
+    const urlShabTrackerId = router.query?.tracker_id;
+    
+    useEffect(() => {
+        if (urlShabTrackerId && process.env.USE_SHAB_TRACKER_ID === "true") {
+        const expDate = new Date();
+        expDate.setTime(expDate.getTime() + (7 * 24 * 60 * 60 * 1000));
+        if (document) {
+            document.cookie = `shabTrackerId=${urlShabTrackerId}; expires=${expDate.toUTCString()};path=/`;
+        }
+        }
+    }, [urlShabTrackerId]);
+
     const SidebarFilter = useSelector((state: RootState) => state.flightFilters.filterOption)
     let [flightsInFilter, setFlightsInFilter] = useState<FlightItemType[]>()
     let [sortFlights, setSortFlights] = useState<FlightSortFactorType>('LowestPrice')
@@ -82,8 +96,6 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
     const [prereserveLoading, setPrereserveLoading] = useState<boolean>(false);
 
     const [showChangeDateModal, setShowChangeDateModal] = useState<boolean>(false);
-
-    const router = useRouter();
 
     const { query, locale } = router;
 
