@@ -38,6 +38,20 @@ type Props = {
 }
 
 const HotelList: NextPage<Props> = props => {
+      
+  const router = useRouter();
+
+  const urlShabTrackerId = router.query?.tracker_id;
+  
+  useEffect(() => {
+    if (urlShabTrackerId && process.env.USE_SHAB_TRACKER_ID === "true") {
+      const expDate = new Date();
+      expDate.setTime(expDate.getTime() + (7 * 24 * 60 * 60 * 1000));
+      if (document) {
+        document.cookie = `shabTrackerId=${urlShabTrackerId}; expires=${expDate.toUTCString()};path=/`;
+      }
+    }
+  }, [urlShabTrackerId]);
 
   useEffect(()=>{
     const fetchPageData = async (url:string) => {
@@ -132,7 +146,6 @@ const HotelList: NextPage<Props> = props => {
   let checkin = today;
   let checkout = tomorrow;
 
-  const router = useRouter();
   const locale = router.locale;
   const acceptLanguage = locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR";
 
