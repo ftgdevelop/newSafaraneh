@@ -489,7 +489,7 @@ const Payment: NextPage = () => {
           <div className={`${theme2?"md:col-span-7":"md:col-span-2"}`}>
             <div className={`mb-4 ${theme1 ? "bg-white rounded-lg border border-neutral-300 p-4" : ""}`}>
 
-              {(isHotelban || isShab) && cookieSafarmarketId ? (
+              {(isShab || (isHotelban && cookieSafarmarketId)) ? (
                 <OnlinePayment
                   coordinatorPrice={coordinatorPrice}
                   onSubmit={(bankId) => { goTobank(bankId) }}
