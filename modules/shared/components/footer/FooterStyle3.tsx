@@ -174,7 +174,7 @@ const FooterStyle3: React.FC<Props> = props => {
                 </div>
 
                 <p className="text-center text-2xs border-t p-7">
-                    © 1403 - تمام حقوق مربوط به وب سایت هتل بان می باشد.
+                    © 1403 - تمام حقوق مربوط به وب سایت {props.siteName || "هتل بان"} می باشد.
                 </p>
 
             </footer>
