@@ -113,7 +113,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     showHeader = false;
   }
 
-  const isHotelban = process.env.PROJECT === "HOTELBAN";
+  // const isHotelban = process.env.PROJECT === "HOTELBAN";
   
   return (
 
