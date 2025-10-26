@@ -50,6 +50,8 @@ type Props = {
 
 const ReserverInformation: React.FC<Props> = props => {
 
+    const theme3 =process.env.THEME === "THEME3";
+
     const { t } = useTranslation('common');
 
     const { errors, touched, setFieldValue, values } = props;
@@ -92,6 +94,7 @@ const ReserverInformation: React.FC<Props> = props => {
                                 setFieldValue('reserver.gender', val);
                             }} 
                             checked={values.reserver.gender} 
+                            labelIsSimple={!!theme3}
                         />
                         مرد
                     </label>
@@ -104,6 +107,7 @@ const ReserverInformation: React.FC<Props> = props => {
                                 setFieldValue('reserver.gender', val);
                             }} 
                             checked={!values.reserver.gender} 
+                            labelIsSimple={!!theme3}
                         />
                         زن
                     </label>
@@ -120,6 +124,7 @@ const ReserverInformation: React.FC<Props> = props => {
                     onChange={(value: string) => {
                     }}
                     value={values.reserver.firstName}
+                    labelIsSimple={!!theme3}
                 />
 
                 <FormikField
@@ -131,6 +136,7 @@ const ReserverInformation: React.FC<Props> = props => {
                     label={t('last-name')}
                     validateFunction={(value: string) => validateRequiedPersianAndEnglish(value, t('please-enter-last-name'), t('just-english-persian-letter-and-space'))}
                     value={values.reserver.lastName}
+                    labelIsSimple={!!theme3}
                 />
 
 
@@ -150,6 +156,7 @@ const ReserverInformation: React.FC<Props> = props => {
                     label={t("phone-number") + " (بدون صفر)"}
                     errorText={errors.reserver?.phoneNumber}
                     initialValue={values.reserver.phoneNumber || ""}
+                    labelIsSimple={!!theme3}
                 />
 
                 <FormikField
@@ -161,6 +168,7 @@ const ReserverInformation: React.FC<Props> = props => {
                     label={t('email')}
                     validateFunction={(value: string) => validateEmail({ value: value,reqiredMessage:t('enter-email-address'), invalidMessage: t('invalid-email') })}
                     value={values.reserver.email}
+                    labelIsSimple={!!theme3}
                 />
             </div>
 
