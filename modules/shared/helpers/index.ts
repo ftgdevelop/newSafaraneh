@@ -190,3 +190,17 @@ export const shamsiToMiladi = (j_y: number, j_m: number, j_d: number) => {
 
 
 export const GTM_ID = process.env.GOOGLE_TAG_MANAGER_ID
+
+export const replaceBrandNames = (text: string) => {
+
+    const isShab = process.env.PROJECT === "SHAB";
+
+    if (!text || !isShab) return text;
+
+    return text
+        .replace(/هتل\s?‌?\s?بان|هتلبان/gi, 'شب')
+        .replace(/سفرانه/gi, 'شب')
+        .replace(/ایران\s?‌?\s?هتل/gi, 'شب')
+        .replace(/info@hotelban\.com/gi, 'info@shab.ir')
+        .replace(/hotelban\.com/gi, 'shab.hotelban.com')
+};
