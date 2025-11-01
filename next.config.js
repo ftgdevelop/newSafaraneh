@@ -75,6 +75,7 @@ const nextConfig = {
     PROJECT_SERVER_TRAVELER:"traveller.safaraneh.com",
     PROJECT_SERVER_CIP:"cip.safaraneh.com",
     PROJECT_SERVER_FLIGHT: "flightdomestic.hotelban.com",
+    PROJECT_SERVER_SHAB_CRM:"shabcrm.hotelban.com",
 
     PROJECT_SERVER_TENANTID: "1048",
 
