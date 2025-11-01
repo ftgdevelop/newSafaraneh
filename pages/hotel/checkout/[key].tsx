@@ -28,6 +28,7 @@ import { TravelerItem } from '@/modules/shared/types/common';
 import AsideTheme2 from '@/modules/domesticHotel/components/shared/AsideTheme2';
 import PassengerItemInformation from '@/modules/domesticHotel/components/checkout/PassengerItemInformation';
 import Quantity from '@/modules/shared/components/ui/Quantity';
+import { shabReserve } from '@/modules/shab/actions';
 
 const Checkout: NextPage = () => {
 
@@ -38,7 +39,9 @@ const Checkout: NextPage = () => {
   const theme2 = process.env.THEME === "THEME2";
 
   const theme1 = process.env.THEME === "THEME1";
-  
+
+  const isShab = process.env.PROJECT === "SHAB";
+
   const dispatch = useAppDispatch();
 
   const router = useRouter();
@@ -227,10 +230,52 @@ const Checkout: NextPage = () => {
       
       }
 
-      if (reserveResponse.data.result.status === "Pending") {
-        router.push(`/payment?reserveId=${id}&username=${username}`);
+      //only in Shab
+      let shabTracerId = "";
+      if (isShab) {
+        const cookies = decodeURIComponent(document?.cookie).split(';');
+        for (const item of cookies) {
+          if (item.includes("shabTrackerId=")) {
+            shabTracerId = item.split("=")[1];
+          }
+        }
+      }
+
+      if (shabTracerId) {
+        const reserveShabRes: any = await shabReserve({
+          Id: id,
+          ReserveType: "HotelDomestic",
+          TrackerId: shabTracerId,
+          Username: username
+        });
+
+        if (reserveShabRes?.message) {
+          dispatch(setReduxError({
+            title: tHotel('error-in-reserve-room'),
+            message: reserveShabRes.message,
+            isVisible: true,
+            closeErrorLink: backUrl || "/",
+            closeButtonText: backUrl ? tHotel('choose-room') : t("home")
+          }))
+        }
+        console.log(reserveShabRes?.data);
+
+        debugger;
+
+        if (reserveResponse?.data) {
+          // if (reserveResponse.data.result.status === "Pending") {
+          //   router.push(`/payment?reserveId=${id}&username=${username}`);
+          // } else {
+          //   router.push(`/hotel/capacity?reserveId=${id}&username=${username}`);
+          // }
+        }
+
       } else {
-        router.push(`/hotel/capacity?reserveId=${id}&username=${username}`);
+        if (reserveResponse.data.result.status === "Pending") {
+          router.push(`/payment?reserveId=${id}&username=${username}`);
+        } else {
+          router.push(`/hotel/capacity?reserveId=${id}&username=${username}`);
+        }
       }
 
     } else {

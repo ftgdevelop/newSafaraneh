@@ -2,6 +2,7 @@ import Accordion from "@/modules/shared/components/ui/Accordion";
 import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
 import { QuestionCircle } from "@/modules/shared/components/ui/icons";
 import Tab from "@/modules/shared/components/ui/Tab";
+import { replaceBrandNames } from "@/modules/shared/helpers";
 import Markdown from 'react-markdown';
 
 type Props = {
@@ -38,11 +39,11 @@ const FaqWithTabs: React.FC<Props> = props => {
                                 <Accordion
                                     key={item.id}
                                     WrapperClassName="mb-4"
-                                    content={<Markdown>{item.Answer}</Markdown>}
+                                    content={<Markdown>{replaceBrandNames(item.Answer || "")}</Markdown>}
                                     title={(
                                         <>
                                             <QuestionCircle className='w-5 h-5 mt-.5 rtl:ml-2 ltr:mr-2 fill-current inline-block' />
-                                            {item.Question}
+                                            {replaceBrandNames(item.Question || "")}
                                         </>
                                     )}
                                 />

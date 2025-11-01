@@ -5,6 +5,7 @@ import Image from "next/image";
 import TrackOrder from "./TrackOrder";
 import HeaderAuthentication from "@/modules/authentication/components/HeaderAuthentication";
 import { useAppSelector } from "../../hooks/use-store";
+import HeaderShabUser from "../../../shab/components/HeaderShabUser";
 
 type Props = {
     logo: string;
@@ -37,12 +38,14 @@ const HeaderStyle3: React.FC<Props> = props => {
 
                     {/* <Language className="hidden md:block" buttonClassName="h-12" /> */}
 
-                    {isShab ? null :<HeaderAuthentication
+                    {isShab ? null : <HeaderAuthentication
                         logo={logo}
                         siteName={siteName}
                     />}
 
-                    {!userIsAuthenticated && <TrackOrder />}
+                    {!userIsAuthenticated && !isShab && <TrackOrder />}
+
+                    {isShab && <HeaderShabUser />}
 
                 </div>
 
@@ -51,7 +54,7 @@ const HeaderStyle3: React.FC<Props> = props => {
     }
 
     return (
-        <header className="bg-white border-b">
+        <header className={`bg-white border-b ${isShab?"relative z-20":""}`}>
             <div className="max-w-container mx-auto">
                 <div className="flex justify-between gap-3 sm:gap-5 p-3 sm:p-5">
                     <Link href="/" className="block self-center">
@@ -66,12 +69,13 @@ const HeaderStyle3: React.FC<Props> = props => {
 
                         {/* <Language className="hidden md:block" buttonClassName="h-12" /> */}
 
-                        {isShab ? null :<HeaderAuthentication
+                        {isShab ? null : <HeaderAuthentication
                             logo={logo}
                             siteName={siteName}
                         />
 }
-                        {!userIsAuthenticated && <TrackOrder />}
+                        {!userIsAuthenticated && !isShab && <TrackOrder />}
+                        {isShab && <HeaderShabUser />}
 
                     </div>
                 </div>

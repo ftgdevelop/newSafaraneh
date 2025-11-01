@@ -1,5 +1,6 @@
 import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
 import Tab from "@/modules/shared/components/ui/Tab";
+import { replaceBrandNames } from "@/modules/shared/helpers";
 import Markdown from 'react-markdown';
 
 type Props = {
@@ -32,13 +33,17 @@ const TermsWithTabs: React.FC<Props> = props => {
                     items={props.tabItems.map(tabItem => ({
                         children: <div className="mt-6">
                             {/* <h2 className="mt-6 mb-6 fnt-bold text-lg"> {tabItem.Title} </h2> */}
-                            {tabItem.Items?.map(item =>
-                                <div key={item.id} className="mb-10 ">
-                                    <h3 className="mb-4 text-xl font-bold"> {item.Question} </h3>
-                                    <div className="inserted-content text-justify">
-                                        <Markdown>{item.Answer}</Markdown>
+                            {tabItem.Items?.map(item => {                            
+                                const renderedMarkdown = replaceBrandNames(item.Answer || "");
+                                return (
+                                    <div key={item.id} className="mb-10 ">
+                                        <h3 className="mb-4 text-xl font-bold"> {replaceBrandNames(item.Question || "")} </h3>
+                                        <div className="inserted-content text-justify">
+                                            <Markdown>{renderedMarkdown}</Markdown>
+                                        </div>
                                     </div>
-                                </div>
+                                )
+                            }
                             )}
                         </div>,
                         key: tabItem.id,
