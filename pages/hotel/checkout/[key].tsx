@@ -258,16 +258,12 @@ const Checkout: NextPage = () => {
             closeButtonText: backUrl ? tHotel('choose-room') : t("home")
           }))
         }
-        console.log(reserveShabRes?.data);
-
-        debugger;
-
-        if (reserveResponse?.data) {
-          // if (reserveResponse.data.result.status === "Pending") {
-          //   router.push(`/payment?reserveId=${id}&username=${username}`);
-          // } else {
-          //   router.push(`/hotel/capacity?reserveId=${id}&username=${username}`);
-          // }
+        if (reserveResponse?.data?.success) {
+          if (reserveResponse.data.result.status === "Pending") {
+            router.push(`/payment?reserveId=${id}&username=${username}`);
+          } else {
+            router.push(`/hotel/capacity?reserveId=${id}&username=${username}`);
+          }
         }
 
       } else {

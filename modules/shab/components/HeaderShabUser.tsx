@@ -83,10 +83,10 @@ const HeaderShabUser = () => {
             <div
                 className={`absolute left-0 top-full min-w-full bg-[#eeeeee] flex gap-px flex-col shadow rounded-2xl transition-all duration-200 ${open ? "visible  opacity-100 mt-1" : "mt-3 invisible opacity-0"}`}
             >
-                <Link href="/reserves/hotel" className="px-5 block text-sm py-1 bg-white hover:bg-blue-50 rounded-t-2xl">
+                <Link href="/reserves/hotel" className="px-5 block text-sm py-1 bg-white hover:bg-blue-50 rounded-t-2xl" onClick={()=>{setOpen(false)}}>
                     لیست هتل
                 </Link>
-                <Link href="/reserves/flight" className="px-5 block text-sm py-1 bg-white hover:bg-blue-50 rounded-b-2xl">
+                <Link href="/reserves/flight" className="px-5 block text-sm py-1 bg-white hover:bg-blue-50 rounded-b-2xl" onClick={()=>{setOpen(false)}}>
                     لیست پرواز
                 </Link>
             </div>
