@@ -243,10 +243,10 @@ const Checkout: NextPage = () => {
 
       if (shabTracerId) {
         const reserveShabRes: any = await shabReserve({
-          Id: id,
-          ReserveType: "HotelDomestic",
-          TrackerId: shabTracerId,
-          Username: username
+          id: id,
+          reserveType: "HotelDomestic",
+          trackerId: shabTracerId,
+          username: username
         });
 
         if (reserveShabRes?.message) {
