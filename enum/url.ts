@@ -40,7 +40,7 @@ export const Header = {
 
   export const ShabCrm = {
     getUser: "/api/services/app/User/Get",
-    reserve:"/api/services/app/Reserve/Get",
+    reserve:"/api/services/app/Reserve/Create",
     getReservedHotelList:"/api/services/app/HotelReserve/GetAll",
     getReservedFlightList:"/api/services/app/FlightReserve/GetAll"
   }
