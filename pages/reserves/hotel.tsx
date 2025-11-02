@@ -1,13 +1,11 @@
 import ReserveListItem from '@/modules/authentication/components/reservesList/ReserveListItem';
-import ReserveListSearchForm from '@/modules/authentication/components/reservesList/ReserveListSearchForm';
 import { shabGetReservedHotel } from '@/modules/shab/actions';
 import Pagination from '@/modules/shared/components/ui/Pagination';
 import Skeleton from '@/modules/shared/components/ui/Skeleton';
 import { ErrorCircle } from '@/modules/shared/components/ui/icons';
 import { useAppDispatch } from '@/modules/shared/hooks/use-store';
 import { setReduxError } from '@/modules/shared/store/errorSlice';
-//import { setReduxError } from '@/modules/shared/store/errorSlice';
-import { ReserveType, UserReserveListItem } from '@/modules/shared/types/common';
+import { UserReserveListItem } from '@/modules/shared/types/common';
 import type { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -17,120 +15,50 @@ import { useEffect, useState } from 'react';
 const ShabHotelReserveList: NextPage = () => {
 
     const { t } = useTranslation('common');
-    const { t: tHotel } = useTranslation('hotel');
 
-    const [reserveList, setReserveList] = useState<UserReserveListItem[]>([]);
+    interface reserveItem {
+        checkin?: string;
+        creationTime: string;
+        id?: number;
+        totalPrice: number;
+        username?: string;
+        status?: string;
+        accommodation: {
+            filePath?: string;
+            name?: string;
+        }
+    }
+
+    const [reserveList, setReserveList] = useState<reserveItem[]>([]);
     const [total, setTotal] = useState<number>();
     const [page, setPage] = useState<number>(1);
     const [loading, setLoading] = useState<boolean>(false);
 
     const dispatch = useAppDispatch();
 
-    const [ids, setIds] = useState<number>();
-    const [types, setTypes] = useState<ReserveType>();
-
-    const [startDate, setStartDate] = useState<string>();
-    const [endDate, setEndDate] = useState<string>();
-
-    type SearchParametesType = {
-        SkipCount?: number;
-        MaxResultCount?: number;
-        Statue?: string;
-        Types?: ReserveType;
-        FromReturnTime?: string;
-        ToReturnTime?: string;
-        Ids?: number;
-    }
-
-    // const fetchReserves = async (params: SearchParametesType) => {
-
-    //     const token = localStorage.getItem('Token');
-    //     if (!token) {
-    //         router.push("/")
-    //     }
-    //     setLoading(true);
-    //     const response: any = await getUserAllReserves(params, token!);
-
-    //     if (response?.data?.result) {
-    //         setTotal(response.data.result.totalCount);
-    //         setReserveList(response.data.result.items);
-
-    //     } else {
-    //         dispatch(setReduxError({
-    //             title: t('error'),
-    //             message: response?.response?.data?.error?.message || "خطا در ارسال درخواست!",
-    //             isVisible: true
-    //         }))
-    //     }
-
-    //     setLoading(false);
-    // }
-
-
-    useEffect(() => {
-
-        const parameters: SearchParametesType = { MaxResultCount: 10, SkipCount: (page - 1) * 10 };
-
-        if (ids) {
-            parameters.Ids = +ids;
-        }
-
-        if (types) {
-            parameters.Types = types;
-        }
-
-        if (startDate) {
-            parameters.FromReturnTime = startDate;
-        }
-
-        if (endDate) {
-            parameters.ToReturnTime = endDate;
-        }
-
-        //fetchReserves(parameters);
-
-    }, [page, ids, types, startDate, endDate]);
-
-
-    const searchSubmitHandle = (values: {
-        SkipCount?: number;
-        MaxResultCount?: number;
-        Statue?: string;
-        type?: string;
-        FromReturnTime?: string;
-        ToReturnTime?: string;
-        reserveId?: string;
+    const fetchReserves = async (params: {
+        TrackerId: string;
+        SkipCount: string;
+        MaxResultCount: string;
     }) => {
 
-        setPage(1);
+        setLoading(true);
+        const response: any = await shabGetReservedHotel(params);
 
-        if (values.reserveId) {
-            setIds(+values.reserveId);
+        if (response?.data?.result) {
+            setReserveList(response.data.result.items || []);
+            setTotal(response.data.result.totalCount);
         } else {
-            setIds(undefined);
+            dispatch(setReduxError({
+                title: t('error'),
+                message: response.message || response?.response?.data?.error?.message || "خطا در ارسال درخواست!",
+                isVisible: true
+            }))
         }
 
-        if (values.type) {
-            setTypes(values.type as ReserveType)
-        } else {
-            setTypes(undefined);
-        }
-
-        if (values.FromReturnTime) {
-            setStartDate(values.FromReturnTime);
-        } else {
-            setStartDate(undefined);
-        }
-
-        if (values.ToReturnTime) {
-            setEndDate(values.ToReturnTime);
-        } else {
-            setEndDate(undefined);
-        }
-
+        setLoading(false);
     }
 
-    const isShab = process.env.PROJECT === "SHAB";
 
     useEffect(() => {
 
@@ -144,32 +72,18 @@ const ShabHotelReserveList: NextPage = () => {
             }
         }
 
-
-
-        const fetchList = async (id: string) => {
-            setLoading(true);
-            const response: any = await shabGetReservedHotel({ 
-                TrackerId: id ,
-                MaxResultCount: "50",
-                SkipCount:"0"
+        if(shabTracerId){
+            fetchReserves({
+                MaxResultCount:"10",
+                SkipCount:  `${(page - 1) * 10}`,
+                TrackerId: shabTracerId
             });
-            if (response.message) {
-                dispatch(setReduxError({
-                    title: tHotel('error'),
-                    message: response.message,
-                    isVisible: true
-                }))
-            }
-
-            debugger;
-            setLoading(false);
         }
 
-        if (shabTracerId) {
-            fetchList(shabTracerId);
-        }
+    }, [page]);
 
-    }, []);
+
+    const isShab = process.env.PROJECT === "SHAB";
 
     return (
         <>
@@ -193,10 +107,6 @@ const ShabHotelReserveList: NextPage = () => {
                         {loading || reserveList.length ? (
                             <div>
 
-                                <ReserveListSearchForm
-                                    submitHandle={searchSubmitHandle}
-                                />
-
                                 <div className='border border-neutral-200 rounded-t bg-gray-50 grid grid-cols-6 text-xs mb-3 max-md:hidden'>
                                     <div className='p-2'> شماره سفارش </div>
                                     <div className='p-2'> نوع سفارش </div>
@@ -217,7 +127,14 @@ const ShabHotelReserveList: NextPage = () => {
                                 ))}
 
                                 {reserveList.map(item => (
-                                    <ReserveListItem key={item.id} item={item} />
+                                    <ReserveListItem key={item.id} item={{
+                                        creationTime: item.creationTime,
+                                        id: item.id || 0,
+                                        salePrice: item.totalPrice,
+                                        status: item.status as UserReserveListItem["status"],
+                                        type: "HotelDomestic",
+                                        username: item.username,
+                                    }} />
                                 ))}
 
                             </div>
@@ -259,7 +176,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
     return ({
         props: {
-            ...await (serverSideTranslations(context.locale, ['common', 'payment']))
+            ...await (serverSideTranslations(context.locale, ['common', 'hotel', 'payment']))
         },
     })
 }
