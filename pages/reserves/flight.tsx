@@ -161,7 +161,6 @@ const ShabFlightReserveList: NextPage = () => {
                 }))
             }
 
-            debugger;
             setLoading(false);
         }
 
