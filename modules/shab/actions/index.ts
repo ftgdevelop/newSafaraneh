@@ -20,18 +20,18 @@ export const getShabUser = async (params: { reserveId: string }, acceptLanguage:
     }
 }
 
-export const shabReserve = async (params: {
-    TrackerId: string;
-    Username: string;
-    ReserveType: "HotelDomestic" | "FlightDomestic" | "Cip";
-    Id: string;
-}, acceptLanguage: string = 'fa-IR') => {
+export const shabReserve = async (params : {
+    trackerId: string;
+    username: string;
+    reserveType:"HotelDomestic" | "FlightDomestic" | "Cip";
+    id: number
+
+} , acceptLanguage: string = 'fa-IR') => {
+
     try {
-
-        const queryString = new URLSearchParams(params).toString();
-
-        let response = await axios.get(
-            `${ServerAddress.Type}${ServerAddress.ShabCRM}${ShabCrm.reserve}?${queryString}`,
+        let response = await axios.post(
+            `${ServerAddress.Type}${ServerAddress.ShabCRM}${ShabCrm.reserve}`,
+            params,
             {
                 headers: {
                     Accept: 'application/json;charset=UTF-8',
