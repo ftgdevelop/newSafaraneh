@@ -27,6 +27,7 @@ export const Header = {
     Flight: process.env.PROJECT_SERVER_FLIGHT,
     Crm:process.env.PROJECT_SERVER_CRM,
     Cip: process.env.PROJECT_SERVER_CIP,
+    ShabCRM: process.env.PROJECT_SERVER_SHAB_CRM,
     Traveler : process.env.PROJECT_SERVER_TRAVELER,
     Strapi : process.env.PROJECT_SERVER_STRAPI
   };
@@ -35,6 +36,13 @@ export const Header = {
     GetByUrl: "/api/services/app/Page/GetByUrl",
     CreateComment : '/api/services/app/Review/Create',
     GetAllPages:"/api/services/app/Page/GetAll"
+  }
+
+  export const ShabCrm = {
+    getUser: "/api/services/app/User/Get",
+    reserve:"/api/services/app/Reserve/Create",
+    getReservedHotelList:"/api/services/app/HotelReserve/GetAll",
+    getReservedFlightList:"/api/services/app/FlightReserve/GetAll"
   }
 
   export const Strapi = {

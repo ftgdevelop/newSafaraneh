@@ -4,6 +4,7 @@ import parse from 'html-react-parser';
 import { DomesticAccomodationType } from '@/modules/domesticHotel/types/hotel';
 import Accordion from '@/modules/shared/components/ui/Accordion';
 import { QuestionCircle } from '@/modules/shared/components/ui/icons';
+import { replaceBrandNames } from '@/modules/shared/helpers';
 
 type Props = {
     faqs?: DomesticAccomodationType['faqs'];
@@ -19,6 +20,15 @@ const FAQ: React.FC<Props> = props => {
         return null;
     }
 
+    const options = {
+        replace: (domNode: any) => {
+            if (domNode.type === 'text') {
+                domNode.data = replaceBrandNames(domNode.data);
+                return domNode;
+            }
+        },
+    };
+
     return (
         <div className="max-w-container mx-auto px-3 sm:px-5">
             <div className='p-3 sm:p-5 lg:p-7 bg-white rounded-xl text-sm leading-7 md:text-base md:leading-7'>
@@ -30,9 +40,9 @@ const FAQ: React.FC<Props> = props => {
                         key={item.question}
                         title={<>
                             <QuestionCircle className='w-5 h-5 mt-.5 rtl:ml-2 ltr:mr-2 fill-current inline-block' />
-                            {item.question}
+                            {parse(item.question || "", options)}
                         </>}
-                        content={parse(item.answer || "")}
+                        content={parse(item.answer || "", options)}
                         WrapperClassName='mb-4'
                     />
                 ))}
