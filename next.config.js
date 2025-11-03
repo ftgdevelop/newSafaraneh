@@ -47,10 +47,9 @@ const nextConfig = {
   i18n,
   env: {
     PROJECT: "HOTELBAN",
-    SITE_NAME: 'https://www.hotelban.com',
+    SITE_NAME: 'https://hotel.torbeh.com/',
     THEME: "THEME3",
     HOTEL_LIST_LAZY_LOAD: "",
-    SAFAR_MARKET_SITE_NAME: "hotelban",
     USE_SHAB_TRACKER_ID:"false",
     GET_ALL_PASSENFERS_DATA_IN_SAFAR_MARKET: "false",
     PROJECT_SERVER_TYPE: "https://",
