@@ -1,0 +1,9 @@
+version: '3'
+services:
+  hotel_torbeh_service:
+    image: hotel_torbeh_image
+    restart: always
+    build: ./
+    command: 'yarn start -p 2094'
+    ports:
+      - '2094:2094'
