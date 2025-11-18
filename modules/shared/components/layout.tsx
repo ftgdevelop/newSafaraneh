@@ -113,6 +113,8 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
     showHeader = false;
   }
 
+  const isHotelban = process.env.PROJECT === "HOTELBAN";
+  
   return (
 
     <div className={`${theme3?"bg-white":""} wrapper leading-7 ${process.env.THEME || ""} lang-${locale} ${locale !== "en" ? "rtl" : ""} ${isBodyScrollable ? "" : "overflow-hidden h-screen"}`} >

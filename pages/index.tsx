@@ -9,8 +9,12 @@ import HomeTheme1 from '@/modules/home/components/theme1/HomeTheme1';
 import HomeTheme2 from '@/modules/home/components/theme2/HomeTheme2';
 import HomeTheme3 from '@/modules/home/components/theme3/HomeTheme3';
 import { getStrapiPages } from '@/modules/shared/actions/strapiActions';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 const Home: NextPage<{ blogs?: BlogItemType[], portalData?: WebSiteDataType, homeSections: any }> = ({ blogs, portalData, homeSections }) => {
+  
+  const router = useRouter();
 
   const logo = portalData?.billing.logo?.value || "";
   const siteName = portalData?.billing.name || "";
@@ -39,6 +43,18 @@ const Home: NextPage<{ blogs?: BlogItemType[], portalData?: WebSiteDataType, hom
   if (process.env.PROJECT_MODULES?.includes("Accommodation")){
     modules.push("accommodation");
   }
+
+    const urlShabTrackerId = router.query?.tracker_id;
+  
+    useEffect(() => {
+      if (urlShabTrackerId && process.env.USE_SHAB_TRACKER_ID === "true") {
+        const expDate = new Date();
+        expDate.setTime(expDate.getTime() + (7 * 24 * 60 * 60 * 1000));
+        if (document) {
+          document.cookie = `shabTrackerId=${urlShabTrackerId}; expires=${expDate.toUTCString()};path=/`;
+        }
+      }
+    }, [urlShabTrackerId]);
 
 
   return (
@@ -244,6 +260,7 @@ export const getStaticProps = async (context: any) => {
 
   const isSafarlife = process.env.PROJECT === "SAFARLIFE";
   const isHotelban = process.env.PROJECT === "HOTELBAN";
+  const isShab = process.env.PROJECT === "SHAB";
 
   let StrapiQueri1: string = "";
   let StrapiQueri2: string = "";
@@ -253,7 +270,7 @@ export const getStaticProps = async (context: any) => {
       StrapiQueri1 = 'filters[Page][$eq]=home&populate[Sections][populate][Items][populate]=*';
       StrapiQueri2 = 'filters[Page][$eq]=home&populate[Sections][populate]=*';
     }
-    if(isHotelban){
+    if(isHotelban || isShab){
       StrapiQueri1 = `filters[Slug][$eq]=home&filters[Tenant][$eq]=${strapiTenant}&populate[Sections][populate][Items][populate]=*`;
       StrapiQueri2 = `filters[Slug][$eq]=home&filters[Tenant][$eq]=${strapiTenant}&populate[Sections][populate][Item][populate]=*`;
     }
@@ -282,7 +299,7 @@ export const getStaticProps = async (context: any) => {
     }
   }
 
-  if(hasStrapi && isHotelban){
+  if(hasStrapi && (isHotelban || isShab)){
     
     homeSections = strapiResponse?.data?.data[0]?.attributes?.Sections?.filter((section:any) => section.Keyword !== "top-banners");
     const topBannerSection = strapiResponse2?.data?.data[0]?.attributes?.Sections?.find((section:any) => section.Keyword === "top-banners");

@@ -183,7 +183,8 @@ const faq: NextPage<Props> = props => {
     ]
 
     const isHotelban = process.env.PROJECT === "HOTELBAN";
-    if (isHotelban){
+    const isShab = process.env.PROJECT === "SHAB";
+    if (isHotelban || isShab){
         return(
             <FaqWithTabs 
                 tabItems={props.strapiData?.[0]?.attributes?.Sections}

@@ -95,6 +95,8 @@ const PassengerItemInformation: React.FC<Props> = props => {
 
   const { t } = useTranslation('common');
 
+  const theme3 =process.env.THEME === "THEME3";
+
   const [reserveWithPassport, setReserveWithPassport] = useState<boolean>(false);
 
   const [selectedFormertraveler, setSelectedFormertraveler] = useState<TravelerItem>();
@@ -238,6 +240,7 @@ const PassengerItemInformation: React.FC<Props> = props => {
         {!reserveWithPassport && (
           <>
             <FormikField
+              labelIsSimple={!!theme3}
               setFieldValue={setFieldValue}
               id={`passengers_${props.index}_persianFirstName`}
               errorText={errors.passengers ? (errors.passengers[props.index] as FormikErrors<{
@@ -254,6 +257,7 @@ const PassengerItemInformation: React.FC<Props> = props => {
             />
 
             <FormikField
+              labelIsSimple={!!theme3}
               setFieldValue={setFieldValue}
               id={`passengers_${props.index}_lastName_En`}
               errorText={errors.passengers ? (errors.passengers[props.index] as FormikErrors<{
@@ -273,6 +277,7 @@ const PassengerItemInformation: React.FC<Props> = props => {
 
 
         <FormikField
+          labelIsSimple={!!theme3}
           setFieldValue={setFieldValue}
           id={`passengers_${props.index}_firstName`}
           errorText={errors.passengers ? (errors.passengers[props.index] as FormikErrors<{
@@ -289,6 +294,7 @@ const PassengerItemInformation: React.FC<Props> = props => {
         />
 
         <FormikField
+          labelIsSimple={!!theme3}
           setFieldValue={setFieldValue}
           id={`passengers_${props.index}_lastName`}
           errorText={errors.passengers ? (errors.passengers[props.index] as FormikErrors<{
@@ -306,6 +312,7 @@ const PassengerItemInformation: React.FC<Props> = props => {
 
 
         {!reserveWithPassport && <FormikField
+          labelIsSimple={!!theme3}
           setFieldValue={setFieldValue}
           errorText={errors.passengers ? (errors.passengers[props.index] as FormikErrors<{
             gender: boolean;
@@ -324,6 +331,7 @@ const PassengerItemInformation: React.FC<Props> = props => {
         />}
 
         {!!props.countries && !!reserveWithPassport && <SelectWithSearch
+          labelIsSimple={!!theme3}
           showRequiredStar
           setFieldValue={setFieldValue}
           isTouched={(touched.passengers && touched.passengers[props.index]) ? touched.passengers[props.index].nationality : false}
@@ -340,6 +348,7 @@ const PassengerItemInformation: React.FC<Props> = props => {
 
 
         <DatePickerSelect
+          labelIsSimple={!!theme3}
           setFieldValue={setFieldValue}
           max={maxBirthDate}
           min={minBirthDate}
@@ -359,6 +368,7 @@ const PassengerItemInformation: React.FC<Props> = props => {
         {!!reserveWithPassport && (
           <>
             <FormikField
+              labelIsSimple={!!theme3}
               setFieldValue={setFieldValue}
               id={`passengers_${props.index}_passportNumber`}
               errorText={errors.passengers ? (errors.passengers[props.index] as FormikErrors<{
@@ -372,6 +382,7 @@ const PassengerItemInformation: React.FC<Props> = props => {
             />
 
             <DatePickerSelect
+              labelIsSimple={!!theme3}
               setFieldValue={setFieldValue}
               max={maxPassportExpDate}
               min={minPassportExpDate}

@@ -3,6 +3,7 @@ import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
 import Markdown from 'react-markdown';
 import { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { replaceBrandNames } from "@/modules/shared/helpers";
 
 type Props = {
     strapiData?: {
@@ -21,6 +22,8 @@ const privacy: NextPage<Props> = props => {
     const title = props.strapiData?.[0]?.attributes?.Sections?.[0]?.Title || "حفظ حریم خصوصی";
     const strapiContent = props.strapiData?.[0]?.attributes?.Sections?.[0]?.Body;
 
+    const renderedMarkdown = replaceBrandNames(strapiContent || "");
+
     return (
 
         <div className="max-w-container m-auto p-5 max-sm:p-3 ">
@@ -29,7 +32,7 @@ const privacy: NextPage<Props> = props => {
 
             {strapiContent ? (
                 <div className='inserted-content text-justify bg-white rounded-md border-2 border-gray mt-10 p-7 max-md:p-3 pt-10 pb-10 space-y-7' >
-                    <Markdown>{strapiContent}</Markdown>
+                    <Markdown>{renderedMarkdown}</Markdown>
                 </div>
             ) : (
                 <div className="bg-white border-2 border-gray space-y-6 p-5 max-md:p-3 max-md:pt-7 rounded-md">

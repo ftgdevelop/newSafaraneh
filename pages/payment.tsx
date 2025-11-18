@@ -16,7 +16,7 @@ import Tab from '@/modules/shared/components/ui/Tab';
 import OnlinePayment from '@/modules/payment/components/OnlinePayment';
 import CardToCard from '@/modules/payment/components/CardToCard';
 import CreditPayment from '@/modules/payment/components/CreditPayment';
-import { getReserveBankGateway, makeToken } from '@/modules/payment/actions';
+import { getReserveBankGateway, makeToken, MakeTokenParams } from '@/modules/payment/actions';
 import { useAppDispatch } from '@/modules/shared/hooks/use-store';
 import { setReduxError } from '@/modules/shared/store/errorSlice';
 import CipAside from '@/modules/cip/components/shared/CipAside';
@@ -35,6 +35,7 @@ const Payment: NextPage = () => {
   const theme2 = process.env.THEME === "THEME2";
   const theme1 = process.env.THEME === "THEME1";
   const isHotelban = process.env.PROJECT=== "HOTELBAN";
+  const isShab = process.env.PROJECT=== "SHAB";
 
   const { t } = useTranslation('common');
 
@@ -238,23 +239,44 @@ const Payment: NextPage = () => {
 
   const goTobank = async (gatewayId: number) => {
 
+    
+    let shabTrackerId = "";
+    
+    if(process.env.USE_SHAB_TRACKER_ID === "true"){
+      const cookies = decodeURIComponent(document?.cookie)?.split(';');
+      for (const item of cookies){
+        if (item.includes("shabTrackerId=")){
+          shabTrackerId = item.split("=")[1];
+        }
+      }
+    }
+
     if (!reserveId) return;
 
     setGoToBankLoading(true);
 
     const callbackUrl = window?.location?.origin + (process.env.LocaleInUrl === "off"?"": i18n?.language === "fa" ? "/fa" : "/en") + "/callback";
 
-    const params = {
+    const params : MakeTokenParams = {
       gatewayId: gatewayId,
       callBackUrl: callbackUrl,
-      reserveId: reserveId,
+      reserveId: reserveId
     };
+    
+    if(shabTrackerId){
+      params.tracker_id = shabTrackerId;
+    }
 
     const response = await makeToken(params);
+
     if (response?.status == 200) {
-      window.location.replace(
-        `https://${ServerAddress.Payment}/fa/Reserves/Payment/PaymentRequest?tokenId=${response.data.result.tokenId}`
-      );
+      let url = `https://${ServerAddress.Payment}/fa/Reserves/Payment/PaymentRequest?tokenId=${response.data.result.tokenId}`;
+    
+      if(shabTrackerId){
+        url+=`&tracker_id=${shabTrackerId}`
+      }
+      
+      window.location.replace(url);
     } else {
       dispatch(setReduxError({
         title: t('error'),
@@ -302,7 +324,7 @@ const Payment: NextPage = () => {
 
   ];
 
-  if (!isHotelban || !cookieSafarmarketId) {
+  if (!(isHotelban || isShab) || !cookieSafarmarketId) {
     tabItems.push({
       key: '3',
       label: ("اعتباری"),
@@ -467,7 +489,7 @@ const Payment: NextPage = () => {
           <div className={`${theme2?"md:col-span-7":"md:col-span-2"}`}>
             <div className={`mb-4 ${theme1 ? "bg-white rounded-lg border border-neutral-300 p-4" : ""}`}>
 
-              {isHotelban && cookieSafarmarketId ? (
+              {(isShab || (isHotelban && cookieSafarmarketId)) ? (
                 <OnlinePayment
                   coordinatorPrice={coordinatorPrice}
                   onSubmit={(bankId) => { goTobank(bankId) }}

@@ -50,7 +50,7 @@ const HomeTheme3: React.FC<Props> = props => {
 
             {props.modules.includes("cip") && <Cip />}
 
-            <About logo={props.logo} strapiContent={strapiAboutContent} />
+            <About logo={props.logo} siteName={props.siteName} strapiContent={strapiAboutContent} />
 
             {props.blogs ? <RecentPostsTheme3 blogs={props.blogs} /> : <br />}
 
