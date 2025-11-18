@@ -24,7 +24,7 @@ const Home: NextPage<{ blogs?: BlogItemType[], portalData?: WebSiteDataType, hom
   const theme2 = process.env.THEME === "THEME2";
   const theme3 = process.env.THEME === "THEME3";
 
-  type ModuleItem = "domesticHotel"| "domesticFlight"| "cip";
+  type ModuleItem = "domesticHotel"| "domesticFlight"| "cip" | "accommodation";
   const modules :  ModuleItem[] = [];
 
   if (process.env.PROJECT_MODULES?.includes("DomesticHotel")){
@@ -35,6 +35,9 @@ const Home: NextPage<{ blogs?: BlogItemType[], portalData?: WebSiteDataType, hom
   }
   if (process.env.PROJECT_MODULES?.includes("CIP")){
     modules.push("cip");
+  }
+  if (process.env.PROJECT_MODULES?.includes("Accommodation")){
+    modules.push("accommodation");
   }
 
 

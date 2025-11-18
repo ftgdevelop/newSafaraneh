@@ -50,7 +50,7 @@ const SearchForm: React.FC<Props> = props => {
     const [defaultDestinations, setDefaultDestinations] = useState<EntitySearchResultItemType[] | undefined>();
 
     const [selectedDestination, setSelectedDestination] = useState<EntitySearchResultItemType>();
-
+    
     useEffect(() => {
         if (defaultDestination) {
             setSelectedDestination(defaultDestination);
@@ -337,7 +337,6 @@ const SearchForm: React.FC<Props> = props => {
                     rtl
                     locale={localeFa}
                 />
-
             </div>
 
             <div className={`${theme3?"pt-4 sm:pt-7":"pt-5 md:pt-0"}`}>

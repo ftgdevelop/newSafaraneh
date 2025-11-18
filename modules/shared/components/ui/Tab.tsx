@@ -1,6 +1,6 @@
 
 import { TabItem } from '@/modules/shared/types/common';
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Tik } from './icons';
 import { useRouter } from 'next/router';
 import RadioInputField from './RadioInputField';
@@ -21,7 +21,18 @@ const Tab: React.FC<Props> = props => {
 
     const router = useRouter();
 
-    const [activetabKey, setActiveTabKey] = useState(items[0]?.key);
+    const getActiveKey = () => {
+        if (router.pathname === '/accommodation') return '4';
+        return '1';
+    };
+
+    const [activetabKey, setActiveTabKey] = useState(getActiveKey());
+    
+    // const [activetabKey, setActiveTabKey] = useState(items[0]?.key);
+
+    useEffect(() => {
+        setActiveTabKey(getActiveKey());
+    }, [router.pathname]);
 
     let tabClassName = (active: boolean) => {
         if(style === 'theme3'){

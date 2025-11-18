@@ -97,6 +97,8 @@ const ReserveListItem: React.FC<Props> = props => {
                 return "پرواز خارجی"
             case "FlightDomestic":
                 return "پرواز داخلی"
+            case "Accommodation":
+                return "اقامتگاه"
             default:
                 return type;
         }

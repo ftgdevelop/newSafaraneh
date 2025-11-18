@@ -1,30 +1,32 @@
 import { useTranslation } from 'next-i18next';
 
 import SearchForm from '../../domesticHotel/components/shared/SearchForm';
-import { Apartment, Bed4, Suitcase, Suitcase2, Travel, Travel2 } from '../../shared/components/ui/icons';
+import { Apartment, Bed4, Suitcase, Suitcase2, Travel, Travel2, Accommodation } from '../../shared/components/ui/icons';
 import Tab from '../../shared/components/ui/Tab';
 import { TabItem } from '@/modules/shared/types/common';
 import Image from 'next/image';
 import { addSomeDays, dateFormat } from '@/modules/shared/helpers';
 import FlightSearch from '@/modules/flights/components/shared/searchForm';
 import CipSearchForm from '@/modules/cip/components/searchForm';
+import AccommodationSearchForm from '@/modules/accommodation/components/shared/searchForm';
 import RecentSearches from '@/modules/domesticHotel/components/home/HotelRecentSearches';
 import FlightRecentSearches from '@/modules/flights/components/home/FlightRecentSearches';
 import CipRecentSearches from '@/modules/cip/components/home/CipRecentSearches';
 import Header from '@/modules/shared/components/header';
 import { ReactNode } from 'react';
+import Link from 'next/link';
 
 
 type Props = {
-  modules: ("domesticHotel" | "domesticFlight" | "cip")[];
+  modules: ("domesticHotel" | "domesticFlight" | "cip" | "accommodation")[];
   innerElement?: React.ReactNode;
   bannerImage?: string;
   logo?: string;
   siteName?: string;
+  activeTab?: string;
 }
 
 const Banner: React.FC<Props> = props => {
-
 
   const { t } = useTranslation('common');
   const { t: tHome } = useTranslation('home');
@@ -60,13 +62,18 @@ const Banner: React.FC<Props> = props => {
     items.push(
       {
         key: '1',
-        label: (<div className='text-center'> {icon} {t('domestic-hotel')} </div>),
+        // label: (<div className='text-center'> {icon} {t('domestic-hotel')} </div>),
+        label: (
+          <Link href="/" legacyBehavior>
+            <a className="text-center">{icon} {t('domestic-hotel')}</a>
+          </Link>
+        ),
         children: (<>
           <SearchForm wrapperClassName={`${theme3 ? "py-3 sm:py-8" :theme2 ? "p-5" : "py-5"}`} defaultDates={domesticHotelDefaultDates} />
           {!!theme1 && <RecentSearches />}
         </>
         ),
-        children2: children2
+        children2: children2,
       }
     )
   }
@@ -127,6 +134,34 @@ const Banner: React.FC<Props> = props => {
       children2: children2
     })
 
+  }
+
+  if (props.modules.includes('accommodation') && process.env.PROJECT_MODULES?.includes("Accommodation")) {
+    
+    let icon: ReactNode = null;
+    let children2 : ReactNode = null;
+    if (theme3){
+      icon = <Accommodation className='w-6 h-6 fill-current inline-block rtl:ml-1' />;
+      // children2 = <div className='max-sm:px-3' ><RecentSearches /></div>;
+    }
+
+    items.push(
+      {
+        key: '4',
+        // label: (<div className='text-center'> {icon} {t('accommodation')} </div>),
+        label: (
+          <Link href="/accommodation" legacyBehavior>
+            <a className="text-center">{icon} {t('accommodation')}</a>
+          </Link>
+        ),
+        children: (<>
+          <AccommodationSearchForm wrapperClassName={`${theme3 ? "py-3 sm:py-8" :theme2 ? "p-5" : "py-5"}`} defaultDates={domesticHotelDefaultDates} />
+          {!!theme1 && <RecentSearches />}
+        </>
+        ),
+        children2: children2,
+      }
+    )
   }
 
   const tabs = <Tab

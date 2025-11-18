@@ -23,7 +23,7 @@ type Props = {
     siteName: string;
     logo: string;
     blogs?: BlogItemType[];
-    modules: ("domesticHotel" | "domesticFlight" | "cip")[];
+    modules: ("domesticHotel" | "domesticFlight" | "cip" | "accommodation")[];
     sections?: SectionItem[];
 }
 
@@ -43,7 +43,7 @@ const HomeTheme3: React.FC<Props> = props => {
             />
 
             <TopCities />
-
+        
             <Services />
 
             <Promotions />
