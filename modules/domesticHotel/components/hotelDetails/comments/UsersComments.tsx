@@ -68,7 +68,7 @@ const UsersComments: React.FC<Props> = props => {
                     max={10}
                 />
 
-                {data.ratings.map(item => (
+                {data.ratings?.map(item => (
                     <Fragment key={item.category.keyword}>
                         <div className="mb-1 mt-5 text-sm">
                             {item.category.name}

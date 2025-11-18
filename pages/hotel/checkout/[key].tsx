@@ -28,6 +28,7 @@ import { TravelerItem } from '@/modules/shared/types/common';
 import AsideTheme2 from '@/modules/domesticHotel/components/shared/AsideTheme2';
 import PassengerItemInformation from '@/modules/domesticHotel/components/checkout/PassengerItemInformation';
 import Quantity from '@/modules/shared/components/ui/Quantity';
+import { shabReserve } from '@/modules/shab/actions';
 
 const Checkout: NextPage = () => {
 
@@ -39,12 +40,14 @@ const Checkout: NextPage = () => {
 
   const theme1 = process.env.THEME === "THEME1";
 
+  const isShab = process.env.PROJECT === "SHAB";
+
   const dispatch = useAppDispatch();
 
   const router = useRouter();
   const pathSegments = router.asPath.split("?")[0].split("#")[0].split("/");
   const keySegment = pathSegments.find(item => item.includes('key='));
-  const key = keySegment?.split("key=")[1];
+  const urlKey = keySegment?.split("key=")[1];
 
   const user: UserInformation | undefined = useAppSelector(state => state.authentication.isAuthenticated ? state.authentication.user : undefined);
 
@@ -102,7 +105,9 @@ const Checkout: NextPage = () => {
 
     const fetchData = async (key: string) => {
 
-      const response: any = await domesticHotelGetValidate(key);
+      const token = localStorage.getItem('Token') || "";
+
+      const response: any = await domesticHotelGetValidate({key:key, acceptLanguage:'fa-IR', userToken :token});
 
       if (response?.data?.result) {
         setReserveInfo(response.data.result);
@@ -122,11 +127,11 @@ const Checkout: NextPage = () => {
 
     }
 
-    if (key) {
-      fetchData(key);
+    if (urlKey) {
+      fetchData(urlKey);
     }
 
-  }, [key]);
+  }, [urlKey]);
 
   let hotelInformation: AsideHotelInfoType;
   let reserveInformation: AsideReserveInfoType;
@@ -202,7 +207,13 @@ const Checkout: NextPage = () => {
     setSubmitLoading(true);
 
     const token = localStorage.getItem('Token');
-    const reserveResponse: any = await domesticHotelPreReserve(params, token);
+    if (token){
+     params.userToken = token;
+    }
+
+    delete params.agreeToRules;
+
+    const reserveResponse: any = await domesticHotelPreReserve(params);
 
     if (reserveResponse.data && reserveResponse.data.result) {
       const id = reserveResponse.data.result.id;
@@ -219,10 +230,48 @@ const Checkout: NextPage = () => {
       
       }
 
-      if (reserveResponse.data.result.status === "Pending") {
-        router.push(`/payment?reserveId=${id}&username=${username}`);
+      //only in Shab
+      let shabTracerId = "";
+      if (isShab) {
+        const cookies = decodeURIComponent(document?.cookie).split(';');
+        for (const item of cookies) {
+          if (item.includes("shabTrackerId=")) {
+            shabTracerId = item.split("=")[1];
+          }
+        }
+      }
+
+      if (shabTracerId) {
+        const reserveShabRes: any = await shabReserve({
+          id: id,
+          reserveType: "HotelDomestic",
+          trackerId: shabTracerId,
+          username: username
+        });
+
+        if (reserveShabRes?.message) {
+          dispatch(setReduxError({
+            title: tHotel('error-in-reserve-room'),
+            message: reserveShabRes.message,
+            isVisible: true,
+            closeErrorLink: backUrl || "/",
+            closeButtonText: backUrl ? tHotel('choose-room') : t("home")
+          }))
+        }
+        if (reserveResponse?.data?.success) {
+          if (reserveResponse.data.result.status === "Pending") {
+            router.push(`/payment?reserveId=${id}&username=${username}`);
+          } else {
+            router.push(`/hotel/capacity?reserveId=${id}&username=${username}`);
+          }
+        }
+
       } else {
-        router.push(`/hotel/capacity?reserveId=${id}&username=${username}`);
+        if (reserveResponse.data.result.status === "Pending") {
+          router.push(`/payment?reserveId=${id}&username=${username}`);
+        } else {
+          router.push(`/hotel/capacity?reserveId=${id}&username=${username}`);
+        }
       }
 
     } else {
@@ -242,9 +291,7 @@ const Checkout: NextPage = () => {
     setReserverIsPassenger(false);
   }
 
-  const isHotelban = process.env.PROJECT === "HOTELBAN";
-
-  const getAllPassengers = !!metaSearchKey && isHotelban;
+  const getAllPassengers = (process.env.GET_ALL_PASSENFERS_DATA_IN_SAFAR_MARKET === "true") && metaSearchKey;
 
   let initialPassengers: {
     gender: true,
@@ -289,7 +336,8 @@ const Checkout: NextPage = () => {
     },
     passengers: initialPassengers,
     specialRequest: "",
-    preReserveKey: key
+    preReserveKey: urlKey || "",
+    agreeToRules: false
   }
 
   const discountSubmitHandler = async (value: string) => {
@@ -298,7 +346,7 @@ const Checkout: NextPage = () => {
     setDiscountData(undefined);
 
     const response = await validateDiscountCode({ 
-      prereserveKey: key!,
+      prereserveKey: urlKey!,
       type: 'HotelDomestic',
       discountPromoCode: value,
       MetaSearchKey:metaSearchKey,
@@ -355,7 +403,6 @@ const Checkout: NextPage = () => {
 
         {reserveInfo ? (
           <Formik
-            validate={() => { return {} }}
             initialValues={initialValues}
             onSubmit={submitHandler}
           >

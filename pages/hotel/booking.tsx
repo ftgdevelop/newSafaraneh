@@ -45,7 +45,10 @@ const Booking: NextPage = ({ portalData }: { portalData?: WebSiteDataType }) => 
 
         if (username && reserveId) {
             const fetchDomesticHotelReserve = async () => {
-                const response: any = await domesticHotelGetReserveById({ reserveId: reserveId, userName: username });
+                
+                const token = localStorage.getItem('Token') || "";
+
+                const response: any = await domesticHotelGetReserveById({ reserveId: reserveId, userName: username, token: token });
                 if (response.data.result) {
                     setDomesticHotelReserveData(response.data.result)
 
@@ -62,8 +65,11 @@ const Booking: NextPage = ({ portalData }: { portalData?: WebSiteDataType }) => 
             const confirm = async () => {
 
                 setConfirmLoading(true);
+                
+                const token = localStorage.getItem('Token');
 
-                const response: any = await DomesticHotelConfirm({ reserveId: reserveId, username: username }, 'fa-IR');
+                const response: any = await DomesticHotelConfirm({ reserveId: reserveId, username: username, token: token || undefined }, 'fa-IR');
+
                 if (response?.status === 200) {
                     if (response.data.result.isCompleted) {
                         setConfirmData(response.data.result);

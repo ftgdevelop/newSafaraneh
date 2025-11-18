@@ -191,7 +191,7 @@ const PhoneInput: React.FC<Props> = props => {
         inputClassNames2.push(`${theme2?"border-neutral-400 focus:border-2":"border-neutral-300"} focus:border-blue-500`);
     }
     return (
-        <div className={props.className || ""}>
+        <div className={`${props.errorText?"has-validation-error":""} ${props.className || ""}`}>
             <div className='relative'>
                 <div className='flex justify-between items-start'>
                     {!!props.label ? (

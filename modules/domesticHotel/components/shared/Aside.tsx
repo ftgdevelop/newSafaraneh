@@ -1,11 +1,12 @@
 import Button from "@/modules/shared/components/ui/Button";
 import Rating from "@/modules/shared/components/ui/Rating";
 import Skeleton from "@/modules/shared/components/ui/Skeleton";
-import { ArrowLeft, Tik, Bed, User, Calendar, DefaultRoom } from "@/modules/shared/components/ui/icons";
+import { ArrowLeft, Tik, Bed, User, Calendar, DefaultRoom, InfoCircle } from "@/modules/shared/components/ui/icons";
 import { dateDiplayFormat, getDatesDiff, numberWithCommas } from "@/modules/shared/helpers";
 import { useTranslation } from "next-i18next";
 import Image from "next/image";
 import { AsideHotelInfoType, AsideReserveInfoRoomItemType, AsideReserveInfoType, DomesticHotelGetValidateResponse } from "../../types/hotel";
+import Link from "next/link";
 
 type Props = {
     reserveInformation?: AsideReserveInfoType;
@@ -31,6 +32,7 @@ const Aside: React.FC<Props> = props => {
     const { t: tHotel } = useTranslation('hotel');
 
     const isHotelban = process.env.PROJECT === "HOTELBAN";
+    const isShab = process.env.PROJECT === "SHAB";
 
     const { hotelInformation, reserveInformation, roomExtraBed, discountResponse, discountLoading } = props;
 
@@ -239,7 +241,7 @@ const Aside: React.FC<Props> = props => {
                                 cancellation = <div className="margin-bottom-5">{roomItem.cancellationPolicyStatus}</div>;
                         }
                         
-                        if (isHotelban) cancellation = null;
+                        if (isHotelban || isShab) cancellation = null;
 
                         let childPriceBlock = null;
                         let extraBedPriceBlock = null;
@@ -404,6 +406,22 @@ const Aside: React.FC<Props> = props => {
 
                     {props.hasSubmit && (
                         <div className="mt-2 max-sm:fixed max-sm:bg-white max-sm:border-t max-sm:bottom-0 max-sm:left-0 max-sm:right-0 max-sm:z-50 max-sm:p-4">
+
+                            {isHotelban && (
+                               <p className="text-sm mt-6 mb-2 text-neutral-700">
+                                    <InfoCircle className="w-5 h-5 inline-block ml-2 fill-current" />
+                                 با کلیک روی تکمیل خرید و دریافت تاییدیه با 
+                                <Link
+                                    target='_blank' 
+                                    href="/booking-terms" 
+                                    className="text-blue-600 underline mx-1"
+                                >
+                                    قوانین و مقررات رزرو 
+                                </Link>
+                                موافقت کرده اید. 
+                                </p> 
+                            )}
+
                             <Button type="submit" loading={props.submitLoading} className="h-12 px-2 w-full mb-2" >
                                 {t('complete-reserve-and-get-confirmation')}
                             </Button>

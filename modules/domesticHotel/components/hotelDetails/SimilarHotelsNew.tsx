@@ -101,7 +101,9 @@ const SimilarHotelsNew: React.FC<Props> = props => {
         setPricesLoading(true);
         setPricesData(undefined);
 
-        const pricesResponse = await AvailabilityByHotelId({ checkin: checkin, checkout: checkout, ids: ids });
+        const token = localStorage.getItem('Token') || "";
+        
+        const pricesResponse = await AvailabilityByHotelId({ checkin: checkin, checkout: checkout, ids: ids, userToken: token });
 
         if (pricesResponse.data?.result?.hotels) {
             setPricesData(pricesResponse.data.result.hotels);

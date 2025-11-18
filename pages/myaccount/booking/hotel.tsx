@@ -28,6 +28,8 @@ const DomesticHotelReserveDetail: NextPage = ({ portalData }: { portalData?: Web
     const { t: tHotel } = useTranslation('hotel');
     const { t: tPayment } = useTranslation('payment');
 
+    const isShab = process.env.PROJECT === "SHAB";
+
     const router = useRouter();
 
     const theme2 = process.env.THEME === "THEME2";
@@ -55,7 +57,10 @@ const DomesticHotelReserveDetail: NextPage = ({ portalData }: { portalData?: Web
 
         if (username && reserveId) {
             const fetchDomesticHotelReserve = async () => {
-                const response: any = await domesticHotelGetReserveById({ reserveId: reserveId, userName: username });
+                
+                const token = localStorage.getItem('Token') || "";
+
+                const response: any = await domesticHotelGetReserveById({ reserveId: reserveId, userName: username, token:token });
                 if (response.data.result) {
                     setReserveData(response.data.result)
 
@@ -155,18 +160,20 @@ const DomesticHotelReserveDetail: NextPage = ({ portalData }: { portalData?: Web
         <>
             <div className='max-w-container mx-auto px-5 py-4'>
 
-                <div className='grid gap-4 md:grid-cols-3'>
-                    <div className='max-md:hidden'>
-                    {userIsAuthenticated ? (
-                        <AccountSidebar />
-                    ) : (
-                        <div className='border border-neutral-300 bg-white rounded-md mb-4 py-6'>
-                            <LoginSidebar
-                                isNotModal
-                            />
+                <div className={`grid gap-4 ${isShab?"md:grid-cols-2":"md:grid-cols-3"}`}>
+                    {!isShab && (
+                        <div className='max-md:hidden'>
+                            {userIsAuthenticated ? (
+                                <AccountSidebar />
+                            ) : (
+                                <div className='border border-neutral-300 bg-white rounded-md mb-4 py-6'>
+                                    <LoginSidebar
+                                        isNotModal
+                                    />
+                                </div>
+                            )}
                         </div>
                     )}
-                    </div>
                     <div className='md:col-span-2'>
                         <div className='border border-neutral-300 bg-white rounded-md mb-4'>
 
