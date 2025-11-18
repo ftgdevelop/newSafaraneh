@@ -8,7 +8,7 @@ import "yet-another-react-lightbox/plugins/captions.css";
 import { useAppDispatch } from '@/modules/shared/hooks/use-store';
 import { setBodyScrollable } from '@/modules/shared/store/stylesSlice';
 import ModalPortal from '@/modules/shared/components/ui/ModalPortal';
-import GalleryLevel2 from './GalleryLevel2';
+
 
 type Props = {
     images?: {
@@ -100,7 +100,6 @@ const GalleryLevel1: React.FC<Props> = props => {
                             <Close className='w-7 h-7 fill-current' /> 
                         </button>
                     </header>
-                    <GalleryLevel2 hotelName={props.hotelName} images={props.images} />
                 </div>
 
             </ModalPortal>

@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import AccommodationListLazyLoad from "./accommodationListLazyLoad";
-import Pagination from "@/modules/shared/components/ui/Pagination";
 import AccommodationListItem from "./AccommodationListItem";
 
 const AccommodationsList: React.FC = () => {
@@ -18,13 +16,13 @@ const AccommodationsList: React.FC = () => {
 
     return (
         <>
-            <Pagination
+            {/* <Pagination
                 onChange={(page: number) => { setCurrentPage(page) }}
                 itemsPerPage={10}
                 totalItems={2 || 0}
                 currentPage={currentPage}
                 wrapperClassName="mb-4"
-            />
+            /> */}
 
             <AccommodationListItem />
             <AccommodationListItem />
@@ -33,13 +31,13 @@ const AccommodationsList: React.FC = () => {
             <AccommodationListItem />
             <AccommodationListItem />
 
-            <Pagination
+            {/* <Pagination
                 onChange={(page: number) => { setCurrentPage(page) }}
                 itemsPerPage={10}
                 totalItems={2 || 0}
                 currentPage={currentPage}
                 wrapperClassName="mb-4"
-            />
+            /> */}
         </>
     );
 };

@@ -137,14 +137,14 @@ const SearchForm: React.FC<Props> = (props) => {
 
         let url: string = "";
 
-        switch (selectedDestination?.type) {
-            case "Accommodation":
-                url = `/accommodations/${selectedDestination.name!.replace(/ /g, "-")}`;
-                break;
+        // switch (selectedDestination?.type) {
+        //     case "Accommodation":
+        //         url = `/accommodations/${selectedDestination.name!.replace(/ /g, "-")}`;
+        //         break;
 
-            default:
-                url = "";
-        }
+        //     default:
+        //         url = "";
+        // }
 
         if (!url) {
             dispatch(

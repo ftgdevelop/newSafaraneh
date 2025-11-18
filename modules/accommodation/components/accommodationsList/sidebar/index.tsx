@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 
 import { useAppDispatch } from "@/modules/shared/hooks/use-store";
 import { setBodyScrollable, setHeaderUnderMain } from "@/modules/shared/store/stylesSlice";
-import AccommodationFilters from "./AccommodationFilters";
 
 type Props = {
     
@@ -41,7 +40,7 @@ const AccommodationListSideBar: React.FC<Props> = props => {
                 ${open ? "max-lg:translate-x-0" : "max-lg:translate-x-full"}`}
             >
 
-                <AccommodationFilters/>
+                {/* <AccommodationFilters/> */}
 
             </div>
         </>

@@ -1,14 +1,7 @@
-import dynamic from "next/dynamic";
 import ModalPortal from "@/modules/shared/components/ui/ModalPortal";
 import { useEffect, useState } from "react";
 import { Close, Filter, List } from "@/modules/shared/components/ui/icons";
 import Button from "@/modules/shared/components/ui/Button";
-import Select from "@/modules/shared/components/ui/Select";
-import AccommodationFilters from "./sidebar/AccommodationFilters";
-
-const LeafletNoSsr = dynamic(() => import('../../../shared/components/ui/LeafletMap'), {
-    ssr: false
-});
 
 type Props = {
     fallbackLocation?: [number, number];
@@ -43,11 +36,7 @@ const AccommodationOnMap: React.FC<Props> = props => {
 
                     <div className='bg-white p-2 pt-14 sm:p-5 sm:rounded-lg w-full h-full sm:h-5/6 sm:w-5/6 lg:w-full lg:h-full lg:rounded-none relative z-20 lg:grid grid-cols-3 xl:grid-cols-4'>
                         <div className='h-full w-full lg:col-span-2 xl:col-span-3 bg-neutral-300'>
-                            <LeafletNoSsr
-                                className='h-full w-full rounded-xl hotelListMap'
-                                zoom={15}
-                                center={fallbackLocation}
-                            />
+                            
                         </div>
 
                         <div className='max-lg:hidden'>
@@ -58,7 +47,7 @@ const AccommodationOnMap: React.FC<Props> = props => {
                             </div>
 
                             <div className='grid grid-cols-2 gap-4 p-4'>
-                                <Select
+                                {/* <Select
                                     items={[
                                         { value: "priority", label: "priority" },
                                         { value: "price", label: "lowest-price" },
@@ -69,7 +58,7 @@ const AccommodationOnMap: React.FC<Props> = props => {
                                     onChange={type => { }}
                                     label={'sortBy'}
                                     wrapperClassName='max-sm:grow sm:full'
-                                />
+                                /> */}
 
                                 <button
                                     type='button'
@@ -87,7 +76,7 @@ const AccommodationOnMap: React.FC<Props> = props => {
                             </div>
 
                             <div className='hotels-map-sidebar-height overflow-auto'>
-                                <AccommodationFilters />
+                                {/* <AccommodationFilters /> */}
                             </div>
                         </div>
                     </div>

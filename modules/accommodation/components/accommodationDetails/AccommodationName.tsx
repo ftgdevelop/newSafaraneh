@@ -5,12 +5,6 @@ import { Directions, Location } from "@/modules/shared/components/ui/icons";
 import HotelScore from "../shared/AccommodationScore";
 import Rating from "@/modules/shared/components/ui/Rating";
 import Image from 'next/image';
-import Attractions from './Attractions';
-// import HotelMap from './HotelMap';
-import GuestRating from '@/modules/shared/components/ui/GuestRating';
-// import HotelMapButton from './HotelMapButton';
-// import AccommodationFacilityIcon from './AccommodationFacilityIcon';
-import Link from 'next/link';
 
 type Props = {
     accomodationData: DomesticAccomodationType;
@@ -60,11 +54,7 @@ const AccommodationName: React.FC<Props> = props => {
                     }
             </div>
 
-            <HotelMapButton 
-                onClick={() => { setShowMap(true) }}
-                Latitude={accomodationData.coordinates?.latitude}
-                Longitude={accomodationData.coordinates?.longitude}
-            />
+     
 
             {
                 (accomodationData.facilities?.length 
@@ -90,7 +80,6 @@ const AccommodationName: React.FC<Props> = props => {
                                 <Fragment key={facilityItem.keyword} >
                                     {facilityItem.items.filter(i => i.isImportant).map(a => (
                                         <span key={a.name} className='text-xs sm:text-sm block border border-neutral-200 font-semibold text-neutral-500 px-1 sm:p-2 rounded whitespace-nowrap'>
-                                            <AccommodationFacilityIcon keyword={a.keyword} />
                                             {a.name}
                                         </span>
                                     ))}
@@ -105,11 +94,6 @@ const AccommodationName: React.FC<Props> = props => {
             ):(
                 <div className='lg:col-span-2' />
             )}
-
-            {!!(showMap && accomodationData.coordinates?.latitude && accomodationData.coordinates?.longitude) && <HotelMap
-                closeMapModal={closeMapModal}
-                latLong={[accomodationData.coordinates.latitude, accomodationData.coordinates.longitude]}
-            />}
 
         </div>
     )

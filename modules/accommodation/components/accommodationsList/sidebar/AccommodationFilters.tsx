@@ -1,14 +1,4 @@
 import { useTranslation } from "next-i18next";
-import HotelNameFilter from "./AccommodationNameFilter";
-import HotelRatingFilter from "./HotelRatingFilter";
-import Skeleton from "@/modules/shared/components/ui/Skeleton";
-import HotelPriceFilter from "./HotelPriceFilter";
-import HotelAvailabilityFilter from "./HotelAvailabilityFilter";
-import HotelFacilityFilter from "./HotelFacilityFilter";
-import HotelGuestPointFilter from "./HotelGuestPointFilter";
-import HotelTypeFilter from "./HotelTypeFilter";
-import HotelPromotionFilter from "./HotelPromotionFilter";
-import { toPersianDigits } from "@/modules/shared/helpers";
 import AccommodationNameFilter from "./AccommodationNameFilter";
 import AccommodationPriceFilter from "./AccommodationPriceFilter";
 import AccommodationTypeFilter from "./AccommodationTypeFilter";
