@@ -59,6 +59,7 @@ const nextConfig = {
 
     PROJECT_SERVER_APIKEY: '602d3109-6e40-4653-42a4-08dbc10a4f4a',
     PROJECT_PORTAL_APIKEY: '92ba7928-ab01-4011-be49-5bed7556ae2a',
+    PROJECT_ACCOMMODATION_APIKEY: '92ba7928-ab01-4011-be49-5bed7556ae2a',
     
     PROJECT_SERVER_CMS:"cms.hotelban.com",
     
@@ -69,11 +70,11 @@ const nextConfig = {
     PROJECT_SERVER_BLOG :"blogonline.ir",
     PROJECT_SERVER_CRM:"crm.hotelban.com",
     PROJECT_SERVER_PAYMENT: "payline.hotelban.com",
-    PROJECT_SERVER_IDENTITY:"identity.safaraneh.com",
+    PROJECT_SERVER_IDENTITY:"identity.hotelban.com",
     PROJECT_SERVER_TRAVELER:"traveller.safaraneh.com",
     PROJECT_SERVER_CIP:"cip.safaraneh.com",
     PROJECT_SERVER_FLIGHT: "flightdomestic.hotelban.com",
-
+    PROJECT_SERVER_ACCOMMODATION_DATA: "stays.hotelban.com",
     PROJECT_SERVER_TENANTID: "1047",
 
     PROJECT_SERVER_STRAPI:"strapi.safaraneh.com",
@@ -82,12 +83,13 @@ const nextConfig = {
 
     PROJECT_SERVER_NATIONALITY: "",
     PORT: '',
-    //PROJECT_MODULES: "Flight Hotel CIP Blog ForeignFlight ForeignHotel",
-    PROJECT_MODULES: "DomesticHotel DomesticFlight",
+    //PROJECT_MODULES: "DomesticHotel DomesticFlight CIP Blog ForeignFlight ForeignHotel Accommodation",
+    PROJECT_MODULES: "DomesticHotel DomesticFlight Accommodation",
     // DEFAULT_lAN:"US",
     // LANGUAGES:["US","NO","FA"]
 
   }
+
 }
 
 module.exports = nextConfig;

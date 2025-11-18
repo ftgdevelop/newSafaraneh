@@ -109,7 +109,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
   }
   const theme3 = process.env.THEME === "THEME3";
 
-  if(  theme3 && (router.pathname === "/" || router.pathname === "/hotels-home" || router.pathname === "/flights-home")){
+  if( theme3 && (router.pathname === "/" || router.pathname === "/hotels-home" || router.pathname === "/flights-home" || router.pathname === "/accommodation")){
     showHeader = false;
   }
 

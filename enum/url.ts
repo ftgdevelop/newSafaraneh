@@ -9,7 +9,15 @@
 export const Header = {
     "Content-Type": "application/json",
     "Accept-Language": "en-US",
-    "apikey": process.env.PROJECT_SERVER_APIKEY,
+    "apikey": process.env.PROJECT_SERVER_APIKEY,    
+    // "tenantid": process.env.PROJECT_SERVER_TENANTID,
+  };
+
+  export const HeaderAccommodation = {
+    "Content-Type": "application/json",
+    "accept": "text/plain",
+    "Accept-Language": "fa-IR",
+    "apikey": process.env.PROJECT_ACCOMMODATION_APIKEY,    
     // "tenantid": process.env.PROJECT_SERVER_TENANTID,
   };
   //to do: static header parameters!
@@ -29,7 +37,8 @@ export const Header = {
     Cip: process.env.PROJECT_SERVER_CIP,
     ShabCRM: process.env.PROJECT_SERVER_SHAB_CRM,
     Traveler : process.env.PROJECT_SERVER_TRAVELER,
-    Strapi : process.env.PROJECT_SERVER_STRAPI
+    Strapi : process.env.PROJECT_SERVER_STRAPI,
+    Accommodation_Data: process.env.PROJECT_SERVER_ACCOMMODATION_DATA
   };
 
   export const Cms = {
@@ -156,10 +165,16 @@ export const Flight = {
     Delete:"/api/services/app/Passenger/Delete"
   }
   
+  export const Accommodation = {
+    GetEntity: "/api/services/app/Entity/GetAll",
+    // Search: "/api/services/app/Accommodation/Search",
+    // Availability: "/api/services/app/Accommodation/Availability",
+  };
+
   export const ServerStatus = {
     Success: 1,
     Error: 2,
     SummaryError: 3,
   };
 
-  
+

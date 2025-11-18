@@ -547,7 +547,7 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
                             defaultValues={defaultValues}
                             research={research}
                         />
-
+    
                         <div
                             className={`text-blue-600 mx-auto ${showSearchFormTheme2 ? "lg:hidden" : "hidden"}`}
                             onClick={() => { setShowSearchFormTheme2(false) }}

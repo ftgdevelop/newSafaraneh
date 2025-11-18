@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import { useState, useEffect, useRef } from "react";
 
-import { Menu, DownCaret, Home, Close, User, UserAdd,Wallet, Bed, Blog, Suitcase, Travel, Loading } from "../ui/icons";
+import { Menu, DownCaret, Home, Close, User, UserAdd,Wallet, Bed, Blog, Suitcase, Travel, Loading, Accommodation } from "../ui/icons";
 import Image from "next/image";
 import TrackOrder from "./TrackOrder";
 import { useAppDispatch, useAppSelector } from "../../hooks/use-store";
@@ -205,6 +205,16 @@ const TravelServices: React.FC<Props> = props => {
                         {!!(process.env.PROJECT_MODULES?.includes("Blog")) && <Link prefetch={false} onClick={()=>{setOpenMenu(false)}} shallow href='/blog' className={`border-b border-neutral-200 md:border-none mb-5 md:mb-0 pb-5 md:pb-0 ${linkWithIconClassName}`}>
                             <Blog className={iconClassName} />
                             {t('blog')}
+                        </Link>}
+
+                        {process.env.PROJECT_MODULES?.includes("Accommodation") && <Link 
+                            prefetch={false}
+                            onClick={()=>{setOpenMenu(false)}} 
+                            href="/accommodation-home"
+                            className={linkWithIconClassName} 
+                        >
+                            <Accommodation className={iconClassName} />
+                            {t('accommodation')}
                         </Link>}
                         
                         <div>

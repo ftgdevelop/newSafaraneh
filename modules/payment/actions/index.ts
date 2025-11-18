@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Header, ServerAddress, Payment } from "../../../enum/url";
 import { GetTransactionParams } from '../types';
 
-type DiscountType = "Undefined"| "HotelDomestic"| "FlightDomestic"| "Bus"| "Package"| "Flight"| "Hotel"| "PnrOutside"| "Cip"| "Activity";
+type DiscountType = "Undefined"| "HotelDomestic"| "FlightDomestic"| "Bus"| "Package"| "Flight"| "Hotel"| "PnrOutside"| "Cip"| "Activity"| "Accommodation";
 
 type ValidateDiscountCodeType = {
   prereserveKey:string;

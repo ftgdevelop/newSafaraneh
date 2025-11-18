@@ -48,7 +48,7 @@ const Payment: NextPage = () => {
   const reserveId = pathArray.find(item => item.includes("reserveId="))?.split("reserveId=")[1];
   const status: string | undefined = pathArray.find(item => item.includes("status="))?.split("status=")[1];
 
-  const [type, setType] = useState<"Undefined" | "HotelDomestic" | "FlightDomestic" | "Bus" | "Package" | "Flight" | "Hotel" | "PnrOutside" | "Cip" | "Activity">();
+  const [type, setType] = useState<"Undefined" | "HotelDomestic" | "FlightDomestic" | "Bus" | "Package" | "Flight" | "Hotel" | "PnrOutside" | "Cip" | "Activity"| "Accommodation">();
   const [coordinatorPrice, setCoordinatorPrice] = useState<number>();
   const [domesticHotelReserveData, setDomesticHotelReserveData] = useState<DomesticHotelGetReserveByIdData>();
   const [domesticHotelData, setDomesticHotelData] = useState<DomesticHotelSummaryDetail>();

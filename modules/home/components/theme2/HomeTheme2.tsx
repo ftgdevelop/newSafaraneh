@@ -46,7 +46,7 @@ type Props = {
     siteName: string;
     logo: string;
     blogs?: BlogItemType[];
-    modules: ("domesticHotel" | "domesticFlight" | "cip")[];
+    modules: ("domesticHotel" | "domesticFlight" | "cip" | "accommodation")[];
     sections?: SectionItem[]
 }
 

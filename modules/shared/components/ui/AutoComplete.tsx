@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, useRef, ReactNode, PropsWithChildren, memo } from 'react';
 import axios from 'axios';
 
-import { Header } from '../../../../enum/url';
+import { Header, HeaderAccommodation } from '../../../../enum/url';
 import { Close, Location } from '../ui/icons';
 import Skeleton from './Skeleton';
 import { useAppDispatch } from '../../hooks/use-store';
@@ -24,7 +24,7 @@ type Props<T> = {
     createTextFromOptionsObject: (object: T) => string;
     noResultMessage?: string;
     checkTypingLanguage?: boolean;
-    type: "hotel" | "flight" | "cip";
+    type: "hotel" | "flight" | "cip" | "accommodation";
     sortListFunction?: (a:T, b:T) => 1 | -1;
     grayBg?: boolean;
 }
@@ -112,20 +112,39 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
                         "Accept-Language": acceptLanguage || "fa-IR",
                     }
                 }
+            } else if (props?.type === 'accommodation') {
+                axiosParams = {
+                    method: "get",
+                    url: `${url}?Title=${val}`,
+                    cancelToken: source.token,
+                    headers: {
+                        ...HeaderAccommodation,
+                        apikey: process.env.PROJECT_ACCOMMODATION_APIKEY,
+                        "Accept-Language": acceptLanguage || "fa-IR",
+                    }
+                }
             }
 
             if (!axiosParams) return;
 
             const response = await axios(axiosParams);
 
-            if (response?.data?.result?.length) {
-                setItems(response.data.result);
+            let resultList: T[] = [];
+
+            if (props.type === "accommodation") {
+                resultList = response.data?.result?.items || [];
             } else {
-                setItems([]);
-                if (response.data?.success) {
-                    setErrorText(noResultMessage || 'No result found!');
-                }
+                resultList = response.data?.result || [];
             }
+
+            if (resultList.length > 0) {
+                setItems(resultList);
+            } else {
+            setItems([]);
+            if (response.data?.success) {
+                setErrorText(noResultMessage || 'No result found!');
+            }
+}
 
         } catch (error: any) {
             if (error.message && error.message !== "canceled") {
