@@ -17,9 +17,10 @@ import { store } from '../modules/shared/store';
 import { FooterStrapi, GetPageByUrlDataType, WebSiteDataType } from '@/modules/shared/types/common';
 import { getPortal } from '@/modules/shared/actions/portalActions';
 import Layout from '@/modules/shared/components/layout';
-import { GTM_ID } from '@/modules/shared/helpers';
+
 import { getPageByUrl } from '@/modules/shared/actions';
 import { getStrapiFooter } from '@/modules/shared/actions/strapiActions';
+import dynamic from 'next/dynamic';
 
 type TProps = Pick<AppProps, "Component" | "pageProps"> & {
   portalData?: WebSiteDataType;
@@ -27,7 +28,12 @@ type TProps = Pick<AppProps, "Component" | "pageProps"> & {
   footerStrapiData?: FooterStrapi;
 };
 
+const ElmahLogError = dynamic(() => import('../modules/shared/components/ElmahLogError'), {
+  ssr: false
+});
+
 function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }: TProps) {
+
   const router = useRouter();
 
   const { locale } = router;
@@ -130,9 +136,11 @@ function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }:
         /> */}
         {/* _-_-_E_N_D_-_-_ delete when mobiscroll is activated */}
 
-        <meta name="robots" content="index, follow" />
+        <meta name="robots" content="noindex, nofollow, max-image-preview:large" />
         <meta name="theme-color" content="#0a438b" />
         <meta charSet="utf-8" />
+        
+        <meta name="samandehi" content="124933150"/>
 
         {!!portalAuthor && <meta name="author" content={portalAuthor} />}
         {!!portalCreator && <meta name="creator" content={portalCreator} />}
@@ -172,16 +180,10 @@ function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }:
 
         {!!portalEnamadMetaTag && <meta name='enamad' content={portalEnamadMetaTag} />}
 
-      </Head>
+        {/* toDO: use samandehi from portalData meta tags */}
+        <meta name="samandehi" content="743180156"/>
 
-      <noscript>
-        <iframe
-          src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
-          height="0"
-          width="0"
-          style={{ display: 'none', visibility: 'hidden' }}
-        />
-      </noscript>
+      </Head>
 
       <Layout
         contactInfo={
@@ -206,6 +208,8 @@ function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }:
         <Component {...pageProps} portalData={portalData} />
 
       </Layout>
+
+      <ElmahLogError />
 
     </Provider>
   )

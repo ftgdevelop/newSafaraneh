@@ -11,7 +11,7 @@ import Notification from "./Notification";
 import { setProgressLoading } from "../store/stylesSlice";
 import { FooterStrapi } from "../types/common";
 import Script from "next/script";
-import { GTM_ID } from "../helpers";
+//import { GTM_ID } from "../helpers";
 
 type Props = {
   logo: string;

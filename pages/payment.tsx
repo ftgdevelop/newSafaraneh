@@ -174,9 +174,10 @@ const Payment: NextPage = () => {
             let pixelStatus: 4|5| undefined = undefined;
              if (status && status === "0"){
               pixelStatus = 5;
-            } else if (status && status === "1"){
-              pixelStatus = 4;
-            }
+            } 
+            // else if (status && status === "1"){
+            //   pixelStatus = 4;
+            // }
 
             if (cookieSafarmarketId && pixelStatus){
               setHotelSafarmarketPixel({

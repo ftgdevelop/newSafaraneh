@@ -35,6 +35,7 @@ type Props = {
   accomodations?: SearchAccomodationItem[];
   strapiData?: any;
   url?: string;
+  searchParams?: any;
 }
 
 const HotelList: NextPage<Props> = props => {
@@ -61,6 +62,15 @@ const HotelList: NextPage<Props> = props => {
       fetchPageData(props.url);
     }
   },[props.url]);
+
+  useEffect(()=>{
+    const fetchAccomodations = async (p:any) => {
+      const response : any = SearchAccomodation(p, "fa-IR")
+    }
+    if(props.searchParams){
+      fetchAccomodations(props.searchParams);
+    }
+  },[props.searchParams]);
 
   let advBanner:{
     imageUrl: string;
@@ -952,7 +962,8 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       accomodations: searchAccomodationResponse?.data?.result || null,
       pageData: pageResponse?.data?.result || null,
       strapiData: strapiResponse?.data?.data[0]?.attributes?.Sections || null,
-      url: url || null
+      url: url || null,
+      searchParams: searchParameters || null
     },
   })
 }

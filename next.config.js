@@ -49,17 +49,8 @@ const nextConfig = {
     PROJECT: "HOTELBAN",
     SITE_NAME: 'https://www.hotelban.com',
     THEME: "THEME3",
-    HOTEL_LIST_LAZY_LOAD: "lazy",
+    HOTEL_LIST_LAZY_LOAD: "",
     SAFAR_MARKET_SITE_NAME: "hotelban",
-    USE_SHAB_TRACKER_ID:"true",
-
-    // PROJECT: "SAFARANEH",
-    // SITE_NAME: 'https://www.safaraneh.com',
-    // THEME: "THEME1",
-    // HOTEL_LIST_LAZY_LOAD: "lazy",
-    // SAFAR_MARKET_SITE_NAME: "",
-    // USE_SHAB_TRACKER_ID:"true",
-    GET_ALL_PASSENFERS_DATA_IN_SAFAR_MARKET: "false",
     PROJECT_SERVER_TYPE: "https://",
     PROJECT_SERVER_USER: "",
     
@@ -74,7 +65,7 @@ const nextConfig = {
     
     PROJECT_SERVER_HOTEL_WP:"performance.hotelban.com",
     PROJECT_SERVER_HOTEL_DATA: "hoteldomesticdata.hotelban.com",
-    PROJECT_SERVER_HOTEL_AVAILABILITY: "hotelv5.safaraneh.com",
+    PROJECT_SERVER_HOTEL_AVAILABILITY: "hotelv6.safaraneh.com",
     PROJECT_SERVER_COORDINATOR:"coordinator.safaraneh.com",
     PROJECT_SERVER_BLOG :"blogonline.ir",
     PROJECT_SERVER_CRM:"crm.hotelban.com",
@@ -83,9 +74,7 @@ const nextConfig = {
     PROJECT_SERVER_TRAVELER:"traveller.safaraneh.com",
     PROJECT_SERVER_CIP:"cip.safaraneh.com",
     PROJECT_SERVER_FLIGHT: "flightdomestic.hotelban.com",
-
     PROJECT_SERVER_ACCOMMODATION_DATA: "stays.hotelban.com",
-
     PROJECT_SERVER_TENANTID: "1047",
 
     PROJECT_SERVER_STRAPI:"strapi.safaraneh.com",
