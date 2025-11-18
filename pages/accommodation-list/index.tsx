@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import AccommodationSearchForm from '@/modules/accommodation/components/shared/searchForm';
+// import AccommodationSearchForm from '@/modules/accommodation/components/shared/AccommodationSearchForm';
 import type { GetServerSideProps, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { getPageByUrl } from '@/modules/shared/actions';
@@ -30,7 +30,7 @@ const AccommodationList: NextPage = () => {
       <>
         <div className="max-w-container mx-auto px-5 py-4">
             <div>
-                <AccommodationSearchForm wrapperClassName="relative z-[2] mb-4" defaultDates={domesticAccommodationDefaultDates} />
+                {/* <AccommodationSearchForm wrapperClassName="relative z-[2] mb-4" defaultDates={domesticAccommodationDefaultDates} /> */}
 
                 <ProgressBarWithLabel
                     className="mt-4 mb-4"

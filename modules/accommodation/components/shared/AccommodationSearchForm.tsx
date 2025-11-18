@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 import { ServerAddress, Accommodation, HeaderAccommodation } from "../../../../enum/url";
 import AutoComplete from "../../../shared/components/ui/AutoComplete";
-import { ApartmentOutline, Calendar, Home2, Loading, Location, Search, SearchTheme3 } from "../../../shared/components/ui/icons";
+import { Loading, Location, SearchTheme3 } from "../../../shared/components/ui/icons";
 import { EntitySearchResultItemType, AccommodationRecentSearchItem } from "@/modules/accommodation/types/accommodation";
 import { useAppDispatch } from "@/modules/shared/hooks/use-store";
 import { setReduxError } from "@/modules/shared/store/errorSlice";
@@ -23,7 +23,7 @@ type Props = {
     labelsWhite?: boolean; // Added missing property
 };
 
-const SearchForm: React.FC<Props> = (props) => {
+const AccommodationSearchForm: React.FC<Props> = (props) => {
     const { t } = useTranslation("common");
 
     const theme3 = process.env.THEME === "THEME3";
@@ -263,4 +263,4 @@ const SearchForm: React.FC<Props> = (props) => {
     );
 };
 
-export default SearchForm;
+export default AccommodationSearchForm;

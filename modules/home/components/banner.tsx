@@ -8,13 +8,13 @@ import Image from 'next/image';
 import { addSomeDays, dateFormat } from '@/modules/shared/helpers';
 import FlightSearch from '@/modules/flights/components/shared/searchForm';
 import CipSearchForm from '@/modules/cip/components/searchForm';
-import AccommodationSearchForm from '@/modules/accommodation/components/shared/searchForm';
 import RecentSearches from '@/modules/domesticHotel/components/home/HotelRecentSearches';
 import FlightRecentSearches from '@/modules/flights/components/home/FlightRecentSearches';
 import CipRecentSearches from '@/modules/cip/components/home/CipRecentSearches';
 import Header from '@/modules/shared/components/header';
 import { ReactNode } from 'react';
 import Link from 'next/link';
+import AccommodationSearchForm from '@/modules/accommodation/components/shared/AccommodationSearchForm';
 
 
 type Props = {
@@ -156,7 +156,6 @@ const Banner: React.FC<Props> = props => {
         ),
         children: (<>
           <AccommodationSearchForm wrapperClassName={`${theme3 ? "py-3 sm:py-8" :theme2 ? "p-5" : "py-5"}`} defaultDates={domesticHotelDefaultDates} />
-          {!!theme1 && <RecentSearches />}
         </>
         ),
         children2: children2,

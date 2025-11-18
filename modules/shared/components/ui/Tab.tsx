@@ -26,7 +26,7 @@ const Tab: React.FC<Props> = props => {
         return '1';
     };
 
-    const [activetabKey, setActiveTabKey] = useState(getActiveKey());
+    const [activetabKey, setActiveTabKey] = useState<string | number>(getActiveKey());
     
     // const [activetabKey, setActiveTabKey] = useState(items[0]?.key);
 
