@@ -137,7 +137,7 @@ const FooterStyle3: React.FC<Props> = props => {
                             ))}
                         </div>
 
-                        <div className="sm:col-span-3 lg:col-span-1">
+                        {/* <div className="sm:col-span-3 lg:col-span-1">
                             <h5 className="hidden lg:flex items-center gap-2 text-sm mb-3 font-semibold"> <span className="inline-block bg-[#ff684b] w-3 h-3 rounded-full" /> نمادها </h5>
 
                             <div className="flex justify-center gap-4">
@@ -167,14 +167,15 @@ const FooterStyle3: React.FC<Props> = props => {
                                 />
 
                             </div>
-                        </div>
+                        </div> */}
 
                     </div>
 
                 </div>
 
                 <p className="text-center text-2xs border-t p-7">
-                    © 1403 - تمام حقوق مربوط به وب سایت {props.siteName || "هتل بان"} می باشد.
+                    {/* © 1403 - تمام حقوق مربوط به وب سایت {props.siteName || "هتل بان"} می باشد. */}
+                    © 1404 - تمام حقوق مربوط به وب سایت جستجو گشت رامان می باشد.
                 </p>
 
             </footer>
