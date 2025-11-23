@@ -137,7 +137,7 @@ const FooterStyle3: React.FC<Props> = props => {
                             ))}
                         </div>
 
-                        {/* <div className="sm:col-span-3 lg:col-span-1">
+                         <div className="sm:col-span-3 lg:col-span-1">
                             <h5 className="hidden lg:flex items-center gap-2 text-sm mb-3 font-semibold"> <span className="inline-block bg-[#ff684b] w-3 h-3 rounded-full" /> نمادها </h5>
 
                             <div className="flex justify-center gap-4">
@@ -155,7 +155,7 @@ const FooterStyle3: React.FC<Props> = props => {
                                     </a>
                                 )}
 
-                                <img
+                                {/* <img
                                     referrerPolicy='origin'
                                     id='rgvjjzpefukzapfuesgtsizp'
                                     onClick={() => {
@@ -164,10 +164,10 @@ const FooterStyle3: React.FC<Props> = props => {
                                     alt='logo-samandehi'
                                     //src='https://logo.samandehi.ir/logo.aspx?id=376509&p=qftiyndtwlbqujynlymabsiy'
                                     src="/images/footer/resaneh.png"
-                                />
+                                /> */}
 
                             </div>
-                        </div> */}
+                        </div> 
 
                     </div>
 
