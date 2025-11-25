@@ -12,9 +12,8 @@ import FormikField from '@/modules/shared/components/ui/FormikField';
 import { cipDefaultAirportOptions } from './defaultList';
 import { CipAutoCompleteType, CipRecentSearchItem } from '../../types/cip';
 import AutoCompleteZoom from '@/modules/shared/components/ui/AutoCompleteZoom';
-import DatePickerMobiscroll from '@/modules/shared/components/ui/DatePickerMobiscroll';
-import { localeFa } from '@mobiscroll/react';
 import { dateFormat } from '@/modules/shared/helpers';
+import DatePicker2 from '@/modules/shared/components/ui/DatePicker2';
 
 type SearchFormValues = {
     airportUrl: string;
@@ -244,15 +243,14 @@ const SearchForm: React.FC<Props> = props => {
                                             value={values.flightDate}
                                         /> */}
 
-                                        <DatePickerMobiscroll
-                                            minDate={dateFormat(new Date())}
-                                            inputStyle='theme1'
+                                        <DatePicker2
+                                            min={dateFormat(new Date())}
                                             onChange={a => {
                                                 setFieldValue("flightDate", a.value, true)
                                             }}
                                             rtl
-                                            locale={localeFa}
-                                            value={values.flightDate}
+                                            locale={'fa'}
+                                            setFieldValue={setFieldValue}
                                         />
 
                                         {theme2 ?(

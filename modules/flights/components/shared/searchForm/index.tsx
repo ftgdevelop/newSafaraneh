@@ -13,9 +13,8 @@ import { Flight, ServerAddress } from '@/enum/url';
 import { validateRequied } from '@/modules/shared/helpers/validation';
 import { addSomeDays, dateFormat } from '@/modules/shared/helpers';
 import { defaultAirportOptions } from './defaultList';
-import DatePickerMobiscroll from '@/modules/shared/components/ui/DatePickerMobiscroll';
-import { localeFa } from '@mobiscroll/react';
 import AutoCompleteZoom from '@/modules/shared/components/ui/AutoCompleteZoom';
+import DatePicker2 from '@/modules/shared/components/ui/DatePicker2';
 
 type Props = {
     defaultValues?: FlightSearchDefaultValues;
@@ -32,7 +31,7 @@ const SearchForm: React.FC<Props> = props => {
 
     const { defaultValues } = props;
 
-    const [locale, setLocale] = useState<any>(localeFa);
+    const [locale, setLocale] = useState<any>('fa');
 
     const [locations, setLocations] = useState<[AirportAutoCompleteType | undefined, AirportAutoCompleteType | undefined]>([defaultValues?.originObject || undefined, defaultValues?.destinationObject || undefined]);
 
@@ -410,17 +409,20 @@ const SearchForm: React.FC<Props> = props => {
                                         )}
 
                                         <div className='relative'>
-                                            <DatePickerMobiscroll
-                                                minDate={dateFormat(new Date())}
-                                                inputStyle={theme3 ? "theme3" : 'theme1'}
-                                                onChange={a => {
-                                                    setFieldValue("departureDate", a.value, true)
-                                                }}
-                                                rtl
-                                                locale={locale}
-                                                onChangeLocale={setLocale}
-                                                value={values.departureDate}
-                                            />
+                                        <DatePicker2
+                                            min={dateFormat(new Date())}             
+                                            inputStyle={theme3 ? "theme3" : "theme1"} 
+                                            onChange={(a) => {
+                                                setFieldValue("departureDate", a, true); 
+                                            }}
+                                            rtl
+                                            locale={locale}
+                                            onChangeLocale={setLocale}
+                                            value={values.departureDate}              
+                                            name="departureDate"
+                                                id="departureDate"
+                                                setFieldValue={setFieldValue} 
+                                        />
 
                                             {theme2 ? (
                                                 <CalendarFill className='w-5 h-5 fill-neutral-600 top-1/2 -translate-y-1/2 right-3 absolute select-none pointer-events-none' />
@@ -452,7 +454,7 @@ const SearchForm: React.FC<Props> = props => {
                                             )}
 
                                             <div className='relative'>
-                                                <DatePickerMobiscroll
+                                                <DatePicker2
                                                     inputStyle={theme3 ? "theme3" : 'theme1'}
                                                     onChange={a => {
                                                         setFieldValue("returnDate", a.value, true)
@@ -461,7 +463,8 @@ const SearchForm: React.FC<Props> = props => {
                                                     locale={locale}
                                                     onChangeLocale={setLocale}
                                                     value={values.returnDate}
-                                                    minDate={values.departureDate ? dateFormat(addSomeDays(new Date(values.departureDate))) : dateFormat(addSomeDays(new Date()))}
+                                                    min={values.departureDate ? dateFormat(addSomeDays(new Date(values.departureDate))) : dateFormat(addSomeDays(new Date()))}
+                                                setFieldValue={setFieldValue}
                                                 />
 
                                                 {theme2 ? (
