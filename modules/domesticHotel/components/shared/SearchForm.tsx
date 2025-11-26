@@ -334,7 +334,6 @@ const SearchForm: React.FC<Props> = props => {
                     value={dates}
                     onChange={dateChangeHandle}
                     rtl
-                    locale={'fa'}
                 />
 
             </div>

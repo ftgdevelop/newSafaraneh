@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import { useTranslation } from "next-i18next";
 import { Calendar, CalendarFill, CalendarToggle } from "./icons";
@@ -8,7 +8,9 @@ import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import gregorian from "react-date-object/calendars/gregorian";
 import gregorian_en from "react-date-object/locales/gregorian_en";
-// TYPES
+import Toolbar from "react-multi-date-picker/plugins/toolbar";
+import CustomToolbar from "./CustomToolbar";
+
 
 type Props = {
     onChange: (args: any, inst: any) => void;
@@ -23,16 +25,15 @@ const RangePicker2: React.FC<Props> = (props) => {
     const theme2 = process.env.THEME === "THEME2";
     const theme3 = process.env.THEME === "THEME3";
 
-    const [isFa, setIsFa] = useState<boolean>(props.locale === "fa");
+    const [isFa, setIsFa] = useState<boolean>(true);
 	
     const [values, setValues] = useState<(DateObject | null)[]>([
         props.value?.[0] ? new DateObject(props.value[0]) : null,
         props.value?.[1] ? new DateObject(props.value[1]) : null,
     ]);
 
-    useEffect(() => {
-        setIsFa(props.locale === "fa");
-    }, [props.locale]);
+    const pickerRef =  useRef<any>(null);
+
 
     const handleChange = (val: any) => {
         setValues(val);
@@ -60,6 +61,9 @@ const RangePicker2: React.FC<Props> = (props) => {
               locale: isFa ? "fa" : "en",
           })
         : "";
+    
+    console.log({values});
+    
 
     return (
         <div
@@ -79,7 +83,6 @@ const RangePicker2: React.FC<Props> = (props) => {
                     </>
                 )}
 
-                {/* START DATE */}
                 <div className="relative">
                     {!theme3 && (
                         <label
@@ -106,7 +109,6 @@ const RangePicker2: React.FC<Props> = (props) => {
                     />
                 </div>
 
-                {/* END DATE */}
                 <div className="relative">
                     {!theme3 && (
                         <label
@@ -125,7 +127,7 @@ const RangePicker2: React.FC<Props> = (props) => {
 
                     <input
                         id="checkout_date"
-                        className={`w-full h-12 rtl:rounded-l-lg ltr:rounded-r-lg rtl:pr-10 ltr:pl-10 ${
+                        className={`w-full  h-12 rtl:rounded-l-lg ltr:rounded-r-lg rtl:pr-10 ltr:pl-10 ${
                             theme3 ? "bg-neutral-200" : "border border-neutral-400 pt-5 leading-4"
                         }`}
                         value={endValue}
@@ -134,9 +136,9 @@ const RangePicker2: React.FC<Props> = (props) => {
                 </div>
             </div>
 
-            {/* DATE PICKER */}
             <div className="absolute top-12 left-0 right-0 z-50">
                 <DatePicker
+                    ref={pickerRef}
                     value={values}
                     onChange={handleChange}
                     range
@@ -147,27 +149,20 @@ const RangePicker2: React.FC<Props> = (props) => {
                     arrow={false}
                     className="custom-range-picker"
                     portal
-                    weekStartDayIndex={isFa ? 6 : 0}
+                    weekStartDayIndex={isFa ? 7 : 0}
+                    plugins={[
+                        <CustomToolbar
+                            key="custom_toolbar"
+                            isFa={isFa}
+                            setIsFa={setIsFa}
+                            t={t}  
+                            position={"bottom"}
+                            state={pickerRef.current?.state}
+                            handleChange={pickerRef.current?.handleChange}
+                            handleFocusedDate={pickerRef.current?.handleFocusedDate}
+                        />,
+                    ]}
                 />
-
-                <div className="flex justify-between items-center mt-3 px-2">
-                    <button
-                        type="button"
-                        onClick={() => handleChange([new DateObject(), new DateObject()])}
-                        className="text-primary-700 text-sm"
-                    >
-                        {t("goToToday")}
-                    </button>
-
-                    <button
-                        type="button"
-                        onClick={() => setIsFa((prev) => !prev)}
-                        className="text-primary-700 text-sm flex gap-2 items-center"
-                    >
-                        <CalendarToggle className="w-5 h-5" />
-                        {isFa ? t("gregorianCalendar") : t("iranianCalendar")}
-                    </button>
-                </div>
             </div>
         </div>
     );
