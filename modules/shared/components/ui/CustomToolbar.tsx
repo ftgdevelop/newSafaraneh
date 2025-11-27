@@ -1,11 +1,11 @@
 import React from "react";
 import { DateObject } from "react-multi-date-picker";
 import { CalendarToggle } from "./icons";
+import { useTranslation } from "next-i18next";
 
 interface CustomToolbarProps {
     isFa: boolean;
     setIsFa: React.Dispatch<React.SetStateAction<boolean>>;
-    t: (key: string) => string;
     position: "top" | "bottom";
     state: any;
     handleChange: (value: any, state: any) => void;
@@ -15,26 +15,29 @@ interface CustomToolbarProps {
 const CustomToolbar: React.FC<CustomToolbarProps> = ({
     isFa,
     setIsFa,
-    t,
     state,
     handleChange,
     handleFocusedDate,
 }) => {
     const { range, multiple } = state;
+  const { t } = useTranslation("common");
 
     return (
         <div className="rmdp-toolbar bottom text-primary-700 flex justify-between px-3 py-2">
-            <div className="cursor-pointer" onClick={selectToday}>
-                {isFa ? "برو به امروز" : "Today"}
-            </div>
 
             <div
                 onClick={() => setIsFa((p) => !p)}
-                className="cursor-pointer flex items-center gap-2 text-white"
+                className="cursor-pointer flex items-center gap-2"
             >
                 {isFa ? t("gregorianCalendar") : t("iranianCalendar")}
                 <CalendarToggle className="w-4 h-4 text-white" />
             </div>
+
+            <div className="cursor-pointer" onClick={selectToday}>
+                {isFa ? "برو به امروز" : "Today"}
+            </div>
+
+
         </div>
     );
 
@@ -55,12 +58,12 @@ const CustomToolbar: React.FC<CustomToolbarProps> = ({
                 newSelection = [newSelection[0], today].sort((a, b) => a - b);
             }
         } else if (multiple) {
-            newSelection = [today];
+            newSelection = [today, undefined];
         } else {
             newSelection = today;
         }
 
-        handleChange(newSelection, { ...state, selectedDate: newSelection });
+        handleChange(newSelection, { ...state, selectedDate: newSelection, focusedDate: today });
         handleFocusedDate(today);
     }
 };

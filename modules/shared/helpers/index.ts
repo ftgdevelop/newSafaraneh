@@ -1,3 +1,10 @@
+
+import DateObject from "react-date-object";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
+import gregorian from "react-date-object/calendars/gregorian";
+import english from "react-date-object/locales/gregorian_en";
+
 export const toPersianDigits = (x: string) => {
     if (x) {                   
         const persianNumbers = ["۰","۱","۲","۳","۴","۵","۶", "۷", "۸", "۹"];
@@ -19,67 +26,86 @@ export const numberWithCommas = (x: number) => {
     }
 }
 
-export const dateDiplayFormat = ({ date, format, locale }: { date: string; format?: "weekDayNumber" | "m" | "d" | "HH:mm"| "dd mm"| "ddd dd mm"| "ddd dd mm yyyy" | "dd mm yyyy" | "yyyy/mm/dd" | "YYYY-MM-DD" | "yyyy/mm/dd h:m" , locale?: string }): string => {
+export const dateDisplayFormat = ({
+  date,
+  format,
+  locale,
+}: {
+  date: string;
+  format?:
+    | "weekDayNumber"
+    | "m"
+    | "d"
+    | "HH:mm"
+    | "dd mm"
+    | "ddd dd mm"
+    | "dddd dd MMMM"
+    | "ddd dd mm yyyy"
+    | "dd mm yyyy"
+    | "yyyy/mm/dd"
+    | "YYYY-MM-DD"
+    | "yyyy/mm/dd h:m";
+  locale?: "fa" | "en";
+}): string => {
+  if (!date) return "";
 
-    if (!date) return "";
+  const cleaned = date.trim();
 
-    const dateObject = new Date(date);
-    const day = dateObject.toLocaleString(locale, { day: "numeric" });
-    const weekDay = dateObject.toLocaleString(locale, { weekday: 'short' });
-    const weekDayNumber = dateObject.getDay();
-    const month = dateObject.toLocaleString(locale, { month: "long" });
-    const day2digit = dateObject.toLocaleString(locale, { day: "2-digit" })
-    const month2digit = dateObject.toLocaleString(locale, { month: "2-digit" });
-    const year = dateObject.toLocaleString(locale, { year: "numeric" });
+  const hasPersianDigits = /[۰-۹]/.test(cleaned);
 
-    let h = dateObject.getHours().toString().padStart(2, '0');
-    let m = dateObject.getMinutes().toString().padStart(2, '0');
+  const faToEnDigits = (str: string) =>
+    str.replace(/[۰-۹]/g, d => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)));
 
-    if (format === "HH:mm"){
-        const h = dateObject.toLocaleString(locale, { hour: "2-digit" }).padStart(2, '0');
-        const m = dateObject.toLocaleString(locale, { minute: "2-digit" }).padStart(2, '0');
-        return(h+":"+m);
-    }
+  const normalized = hasPersianDigits ? faToEnDigits(cleaned) : cleaned;
 
-    if (format === "ddd dd mm") {
-        return (`${weekDay} ${day} ${month}`)
-    }
+  let obj: DateObject;
 
-    if (format === "dd mm yyyy") {
-        return (`${day} ${month} ${year}`)
-    }
+  // Detect if input is Persian-format YYYY/MM/DD
+  const isJalaliInput = /^\d{4}\/\d{2}\/\d{2}$/.test(normalized) &&
+                        Number(normalized.substring(0, 4)) > 1300;
 
-    if (format === "yyyy/mm/dd") {
-        return (`${year}/${month2digit}/${day2digit}`)
-    }
-    if (format === "YYYY-MM-DD") {
-        return (`${year}-${month2digit}-${day2digit}`)
-    }
+  if (isJalaliInput) {
+    obj = new DateObject({
+      date: normalized,
+      format: "YYYY/MM/DD",
+      calendar: persian,
+      locale: persian_fa,
+    }).convert(gregorian, english);
+  } else {
+    obj = new DateObject({
+      date: normalized,
+      format: "MM/DD/YYYY",
+      calendar: gregorian,
+      locale: english,
+    });
+  }
 
-    if (format === "yyyy/mm/dd h:m"){
-        return (`${year}/${month2digit}/${day2digit} - ${h}:${m}`)
-    }
+  if (!obj.isValid) return "";
 
-    if (format === "dd mm"){
-        return (`${day} ${month}`)
-    }
-    if (format === "d"){
-        return (day2digit)
-    }
-    if (format === "m"){
-        return (month)
-    }
+  // Output locale conversion
+  if (locale === "fa") {
+    obj = obj.convert(persian, persian_fa);
+  }
 
-    if(format === "weekDayNumber"){
-        return weekDayNumber.toString()
-    }
+  const map: Record<string, string> = {
+    "HH:mm": obj.format("HH:mm"),
+    "ddd dd mm": obj.format("ddd DD MMM"),
+    "ddd dd mm yyyy": obj.format("ddd DD MMM YYYY"),
+    "dddd dd MMMM": obj.format("dddd DD MMMM"),
+    "dd mm": obj.format("DD MMM"),
+    "dd mm yyyy": obj.format("DD MMM YYYY"),
+    "yyyy/mm/dd": obj.format("YYYY/MM/DD"),
+    "YYYY-MM-DD": obj.format("YYYY-MM-DD"),
+    "yyyy/mm/dd h:m": obj.format("YYYY/MM/DD HH:mm"),
+    d: obj.format("DD"),
+    m: obj.format("MMM"),
+    weekDayNumber: obj.weekDay.index.toString(),
+  };
 
-    if (format === "ddd dd mm yyyy"){
-        return (`${weekDay} ${day} ${month} ${year}`)
-    }
+  if (format && map[format]) return map[format];
 
-    return date;
-}
+  return obj.format("YYYY/MM/DD");
+};
 
 export const dateFormat = (date: Date) => {
 

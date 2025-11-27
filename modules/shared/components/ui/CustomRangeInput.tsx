@@ -2,6 +2,7 @@ import React, { ChangeEvent } from "react";
 import { Locale } from "react-date-object";
 import { Calendar, CalendarFill } from "./icons";
 import { useTranslation } from "next-i18next";
+import { dateDisplayFormat } from "../../helpers";
 
 
 interface CustomRangeInputProps {
@@ -22,21 +23,41 @@ function CustomRangeInput({
   isFa
 }: CustomRangeInputProps) {
     const values = value?.split(String(separator)) || [];
-    const startValue = values[0] || "";
-    const endValue = values[1] || "";
+    let startValue 
+    let endValue 
+
     const theme2 = process.env.THEME === "THEME2";
     const theme3 = process.env.THEME === "THEME3";
     const { t } = useTranslation("common");
-    
 
+    let startFormated = t('checkin-date');
+    let endFormated = t('checkout-date');
+    
+    
+    if (values && values[0]) {
+        startValue = dateDisplayFormat({date:values[0], format:theme3 ? "yyyy/mm/dd" : "dddd dd MMMM", locale:isFa ? "fa": "en" });
+    }
+
+    if (values && values[1]) {
+        endValue = dateDisplayFormat({ date: values[1], format: theme3 ? "yyyy/mm/dd" : "dddd dd MMMM", locale: isFa ? "fa" : "en" });
+        
+        
+    }
+    console.log({
+        val1: values[0],
+        val2: values[1],
+        startValue,
+        endValue
+    });
+    
   return   <div className={`grid w-full grid-cols-2 ${theme3 ? "gap-x-1" : ""}`}>
                 {theme3 && (
                     <>
                         <label htmlFor="checkin_date" className="text-sm">
-                            {t("checkin-date")}
+                            {startFormated}
                         </label>
                         <label htmlFor="checkout_date" className="text-sm">
-                            {t("checkout-date")}
+                           {endFormated}
                         </label>
                     </>
                 )}
@@ -47,7 +68,7 @@ function CustomRangeInput({
                             htmlFor="checkin_date"
                             className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5 pointer-events-none"
                         >
-                            {t("checkin-date")}
+                            {startFormated}
                         </label>
                     )}
 
@@ -59,7 +80,7 @@ function CustomRangeInput({
 
                     <input
                         id="checkin_date"
-                        className={`w-full h-12 rtl:rounded-r-lg ltr:rounded-l-lg rtl:pr-10 ltr:pl-10 ${
+                        className={`w-full h-12 text-xs rtl:rounded-r-lg ltr:rounded-l-lg rtl:pr-10 ltr:pl-10 ${
                             theme3 ? "bg-neutral-200" : "border border-neutral-400 pt-5 leading-4"
                         } ${!isFa ? "font-sans" : ""}`}
                         value={startValue}
@@ -73,7 +94,7 @@ function CustomRangeInput({
                             htmlFor="checkout_date"
                             className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5 pointer-events-none"
                         >
-                            {t("checkout-date")}
+                            {endFormated}
                         </label>
                     )}
 
@@ -85,7 +106,7 @@ function CustomRangeInput({
 
                     <input
                         id="checkout_date"
-                        className={`w-full  h-12 rtl:rounded-l-lg ltr:rounded-r-lg rtl:pr-10 ltr:pl-10 ${
+                        className={`w-full h-12 text-xs rtl:rounded-l-lg ltr:rounded-r-lg rtl:pr-10 ltr:pl-10 ${
                             theme3 ? "bg-neutral-200" : "border border-neutral-400 pt-5 leading-4"
                         }`}
                         value={endValue}

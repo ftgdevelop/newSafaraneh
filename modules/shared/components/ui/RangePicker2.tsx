@@ -8,9 +8,8 @@ import gregorian from "react-date-object/calendars/gregorian";
 import gregorian_en from "react-date-object/locales/gregorian_en";
 import CustomToolbar from "./CustomToolbar";
 import { useTranslation } from "next-i18next";
-import { Locale } from "react-date-object";
-import { Calendar, CalendarFill } from "./icons";
 import CustomRangeInput from "./CustomRangeInput";
+
 
 
 
@@ -39,7 +38,6 @@ const RangePicker2 = () => {
           key="custom_toolbar"
           isFa={isFa}
           setIsFa={setIsFa}
-          t={t}
           position="bottom"
           state={pickerRef.current?.state}
           handleChange={pickerRef.current?.handleChange}
@@ -56,6 +54,7 @@ const RangePicker2 = () => {
               isFa={isFa}
         />
       )}
+        minDate={new Date()}
     />
   );
 };
