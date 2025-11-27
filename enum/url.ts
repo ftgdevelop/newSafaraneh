@@ -17,7 +17,7 @@ export const Header = {
     "Content-Type": "application/json",
     "accept": "text/plain",
     "Accept-Language": "fa-IR",
-    "apikey": process.env.PROJECT_ACCOMMODATION_APIKEY,    
+    "apikey": process.env.PROJECT_ACCOMMODATION_APIKEY,
     // "tenantid": process.env.PROJECT_SERVER_TENANTID,
   };
   //to do: static header parameters!
@@ -167,8 +167,8 @@ export const Flight = {
   
   export const Accommodation = {
     GetEntity: "/api/services/app/Entity/GetAll",
-    // Search: "/api/services/app/Accommodation/Search",
-    // Availability: "/api/services/app/Accommodation/Availability",
+    SearchFilter: "/api/services/app/Booking/SearchFilter",
+    Availability: "/api/services/app/Booking/Availability",
   };
 
   export const ServerStatus = {

@@ -19,6 +19,7 @@ const autoCompleteUrl = `${ServerAddress.Type}${ServerAddress.Accommodation_Data
 type Props = {
     defaultDestination?: EntitySearchResultItemType;
     defaultDates?: [string, string];
+    defaultCapacity?: number;
     wrapperClassName?: string;
     labelsWhite?: boolean; // Added missing property
 };
@@ -36,6 +37,10 @@ const AccommodationSearchForm: React.FC<Props> = (props) => {
     const [defaultDestinations, setDefaultDestinations] = useState<EntitySearchResultItemType[] | undefined>();
     const [selectedDestination, setSelectedDestination] = useState<EntitySearchResultItemType | undefined>(props.defaultDestination); // Fixed initialization
 
+    useEffect(() => {
+        setSelectedDestination(props.defaultDestination);
+    }, [props.defaultDestination]);
+
     const dateChangeHandle = (event: any) => {
         if (event.value[0] && event.value[1]) {
             setDates(event.value);
@@ -43,8 +48,14 @@ const AccommodationSearchForm: React.FC<Props> = (props) => {
     };
 
     const [passengerValues, setPassengerValues] = useState({
-        adult: 1,
+        adult: props.defaultCapacity || 1,
     });
+
+    useEffect(() => {
+        if (props.defaultCapacity) {
+            setPassengerValues({ adult: props.defaultCapacity });
+        }
+    }, [props.defaultCapacity]);
 
     const setFieldValue = (field: string, value: any) => {
         setPassengerValues(prev => ({
@@ -137,25 +148,27 @@ const AccommodationSearchForm: React.FC<Props> = (props) => {
 
         let url: string = "";
 
-        // switch (selectedDestination?.type) {
-        //     case "Accommodation":
-        //         url = `/accommodations/${selectedDestination.name!.replace(/ /g, "-")}`;
-        //         break;
+        switch (selectedDestination?.type) {
+            case "City":
+                url = `/accommodations/${selectedDestination.slug!.replace(/ /g, "-")}`;
+                break;
 
-        //     default:
-        //         url = "";
-        // }
+            default:
+                url = "";
+        }
 
         if (!url) {
             dispatch(
                 setReduxError({
                     title: t("error"),
-                    message: t("No information found for this destination!"),
+                    message: "متاسفانه برای این مقصد اطلاعاتی یافت نشد!",
                     isVisible: true,
                 })
             );
             return;
         }
+
+        url += `/checkin-${dates[0]}/checkout-${dates[1]}/capacity-${passengerValues.adult}`;
 
         const localStorageRecentSearches = localStorage?.getItem("accommodationRecentSearches");
         const recentSearches: AccommodationRecentSearchItem[] = localStorageRecentSearches
@@ -180,10 +193,14 @@ const AccommodationSearchForm: React.FC<Props> = (props) => {
         router.push(url);
     };
 
-    const { defaultDestination, defaultDates, wrapperClassName, labelsWhite } = props;
+    const { labelsWhite } = props;
 
     const onChangeHandle = (value: EntitySearchResultItemType | undefined) => {
-        setSelectedDestination(value); // Adjusted to match expected type
+        if (!value && props.defaultDestination) {
+            setSelectedDestination(props.defaultDestination);
+        } else {
+            setSelectedDestination(value);
+        }
     };
 
     let buttonInnerHtml : ReactNode = t('search');

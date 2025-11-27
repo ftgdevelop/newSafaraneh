@@ -1,7 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
 import Quantity from '@/modules/shared/components/ui/Quantity';
-import { FormikErrors } from 'formik';
 import { DownCaretThick, User } from '@/modules/shared/components/ui/icons';
 import Button from '@/modules/shared/components/ui/Button';
 
@@ -11,6 +10,7 @@ type Props = {
         adult: number;
     }
     wrapperClassNames?: string;
+    simple?: boolean;
 }
 
 const SelectPassengers: React.FC<Props> = props => {
@@ -19,7 +19,7 @@ const SelectPassengers: React.FC<Props> = props => {
 
     const wrapperRef = useRef<HTMLDivElement>(null);
 
-    const { setFieldValue, values, wrapperClassNames } = props;
+    const { setFieldValue, values, wrapperClassNames, simple } = props;
 
     const [show, setShow] = useState(false);
 
@@ -46,6 +46,27 @@ const SelectPassengers: React.FC<Props> = props => {
 
     const boxClassNames = `bg-white absolute w-60 z-[1] top-full left-0 right-0 shadow border mt-1 rounded ${theme2 ? "p-2 scale-20" : ""} invisible opacity-0`
     const openBoxClassNames = `bg-white absolute w-60 z-[1] top-full left-0 right-0 shadow border mt-1 rounded transition-all visible opacity-100 ${theme2 ? "p-2 rtl:origin-top-right ltr:origin-top-left scale-100" : " "}`
+
+    if (simple) {
+        return (
+            <div className="flex justify-between items-center p-2">
+                <div className={theme2 ? "text-gray-500 leading-5" : "flex gap-1"}>
+                    <div className={theme2 ? "font-semibold" : ""}> تعداد نفرات  </div>
+                </div>
+                <div className='whitespace-nowrap flex items-center'>
+                    <Quantity
+                        style={theme2 ? "BTheme2" : "B"}
+                        min={1}
+                        max={9}
+                        onChange={value => {
+                            setFieldValue("adult", value);
+                        }}
+                        initialValue={values.adult}
+                    />
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className={`relative ${wrapperClassNames || ""}`} ref={wrapperRef}>

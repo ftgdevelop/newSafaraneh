@@ -1,8 +1,9 @@
 export interface EntitySearchResultItemType {
-    id: string;
     name: string;
     title?: string;
-    type: "Village";
+    type: "City" | "Village";
+    id?: number;
+    slug?: string;
 }
 
 export interface AccommodationRecentSearchItem {
