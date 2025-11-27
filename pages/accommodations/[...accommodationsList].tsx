@@ -9,6 +9,20 @@ import FilterSearch from "@/modules/accommodation/components/accommodationsList/
 import AccommodationList from "@/modules/accommodation/components/accommodationsList/list/AccommodationList";
 import { Accommodation, ServerAddress } from "@/enum/url";
 
+type FilterValues = {
+  capacity: number | null;
+  bedroomCount: number;
+  isInstant: boolean;
+  categories: string[];
+  notSharedFeatures: string[];
+  pool: {
+    exists: boolean;
+    hasWarmWater: boolean;
+    type: string[];
+  };
+  textureType: string[];
+};
+
 const AccommodationPage: NextPage = () => {
   const router = useRouter();
 
@@ -35,29 +49,25 @@ const AccommodationPage: NextPage = () => {
     ? decodeURIComponent(segments[accommodationsIndex + 1])
     : undefined;
 
-  const defaultDestination = {
-    // id: locationId,
-    // name: destinationName,
-    // displayName: destinationName,
-    // type: "City",
-  };
+  const defaultDestination = undefined;
 
   const accommodationDefaultDates: [string, string] = [checkin, checkout];
 
   const [loading, setLoading] = useState(false);
   const [items, setItems] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
-  const [filterValues, setFilterValues] = useState({
-    capacity: Number(getValue("capacity-")) || 1,
+  const [filterValues, setFilterValues] = useState<FilterValues>({
+    capacity: getValue("capacity-") ? Number(getValue("capacity-")) : null,
     bedroomCount: Number(getValue("bedroomCount-")) || 0,
     isInstant: router.query.isInstant === "true" || false,
-    categories: router.query.category ? (router.query.category as string).split(",") : [],
+    categories: router.query.category ? (router.query.category as string).split(",") : [] as string[],
     notSharedFeatures,
     pool: {
       exists: false,
       hasWarmWater: false,
-      type: [],
+      type: [] as string[],
     },
+    textureType: router.query.textureType ? (router.query.textureType as string).split(",") : [] as string[],
   });
 
   const page = Number(router.query.page || 1);
@@ -82,7 +92,7 @@ const AccommodationPage: NextPage = () => {
           category: filterValues.categories,
           perpage: 8,
           page: pageNumber,
-          capacity: filterValues.capacity,
+          capacity: filterValues.capacity ?? 1,
           notSharedFeatures: filterValues.notSharedFeatures || [],
           pool: filterValues.pool,
         }),
@@ -106,7 +116,7 @@ const AccommodationPage: NextPage = () => {
 
       const capacityIndex = segments.findIndex(s => s.startsWith("capacity-"));
 
-      const newCapacitySegment = `capacity-${filterValues.capacity}`;
+      const newCapacitySegment = `capacity-${filterValues.capacity ?? 1}`;
 
       if (capacityIndex !== -1) {
         segments[capacityIndex] = newCapacitySegment;
@@ -139,12 +149,12 @@ const AccommodationPage: NextPage = () => {
           wrapperClassName="relative z-[2] mb-4"
           defaultDates={accommodationDefaultDates}
           defaultDestination={defaultDestination}
-          defaultCapacity={filterValues.capacity}
+          defaultCapacity={filterValues.capacity ?? 1}
         />
 
         <FilterSearch 
           filterValues={filterValues} 
-          setFilterValues={setFilterValues} 
+          setFilterValues={(v: any) => setFilterValues(v)} 
         />
 
         <AccommodationList

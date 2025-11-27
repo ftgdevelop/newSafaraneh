@@ -3,14 +3,25 @@ import axios from "axios";
 import { ServerAddress, Accommodation, HeaderAccommodation } from "@/enum/url";
 import FiltersByCategory from "./FiltersByCategory";
 import FiltersByGuestCapacity from "./FiltersByGuestCapacity";
-import FiltersByBedroomCount from "./FiltersByBedroomCount";
-import FilterByIsInstant from "./FilterByisInstant";
 import FiltersByTagCategory from "./FiltersByTagCategory";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import FiltersModal from "./FiltersModal";
 import FilterSearchSkeleton from "./FilterSearchSkeleton";
-import { FilterValues } from "./types";
+
+type FilterValues = {
+  categories: string[];
+  capacity: number | null;
+  bedroomCount?: number | null;
+  isInstant?: boolean;
+  notSharedFeatures: string[];
+  pool: {
+    exists: boolean;
+    hasWarmWater: boolean;
+    type: string[];
+  };
+  textureType: string[];
+};
 
 type FilterSearchProps = {
   filterValues: FilterValues;

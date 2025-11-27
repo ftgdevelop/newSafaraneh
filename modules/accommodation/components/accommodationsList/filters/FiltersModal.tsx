@@ -4,16 +4,57 @@ import FilterByIsInstant from "./FilterByIsInstant";
 import FiltersByBedroomCount from "./FiltersByBedroomCount";
 import FilterByNotSharedFeatures from "./FilterByNotSharedFeatures";
 import FiltersByPool from "./FiltersByPool";
-import { FilterValues } from "./types";
 import { Close } from "@/modules/shared/components/ui/icons";
 import { useRouter } from "next/router";
 import FiltersByTextureType from "./FiltersByTextureType";
 
+type PoolFilter = {
+  exists: boolean;
+  hasWarmWater: boolean;
+  type: string[];
+};
+
+type FilterValues = {
+  capacity: number | null;
+  bedroomCount?: number | null;
+  isInstant?: boolean;
+  categories: string[];
+  notSharedFeatures: string[];
+  pool: PoolFilter;
+  textureType: string[];
+};
+
 type FiltersModalProps = {
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
-  filterValues: FilterValues;
-  setFilterValues: React.Dispatch<React.SetStateAction<FilterValues>>;
+  filterValues: {
+    categories: string[];
+    capacity: number | null;
+    bedroomCount?: number | null;
+    isInstant?: boolean;
+    notSharedFeatures: string[];
+    pool: {
+      exists: boolean;
+      hasWarmWater: boolean;
+      type: string[];
+    };
+    textureType: string[];
+  };
+  setFilterValues: React.Dispatch<
+    React.SetStateAction<{
+      categories: string[];
+      capacity: number | null;
+      bedroomCount?: number | null;
+      isInstant?: boolean;
+      notSharedFeatures: string[];
+      pool: {
+        exists: boolean;
+        hasWarmWater: boolean;
+        type: string[];
+      };
+      textureType: string[];
+    }>
+  >;
   maxBedrooms: number;
   notSharedFeaturesItems: { value: string; label: string }[];
 };
@@ -101,9 +142,9 @@ const FiltersModal: React.FC<FiltersModalProps> = ({
 
           <div className="overflow-y-auto max-h-[320px] sm:max-h-[420px] pl-4">
             <hr className="mb-4" />
-            <FilterByIsInstant checked={tempFilters.isInstant} onChange={val => setTempFilters(prev => ({ ...prev, isInstant: val }))} />
+            <FilterByIsInstant checked={!!tempFilters.isInstant} onChange={val => setTempFilters(prev => ({ ...prev, isInstant: val }))} />
             <hr className="my-4" />
-            <FiltersByBedroomCount min={0} max={maxBedrooms} value={tempFilters.bedroomCount} onChange={val => setTempFilters(prev => ({ ...prev, bedroomCount: val }))} />
+            <FiltersByBedroomCount min={0} max={maxBedrooms} value={tempFilters.bedroomCount ?? 0} onChange={val => setTempFilters(prev => ({ ...prev, bedroomCount: val }))} />
             <hr className="my-4" />
             <FilterByNotSharedFeatures values={tempFilters.notSharedFeatures} items={notSharedFeaturesItems} onChange={selected => setTempFilters(prev => ({ ...prev, notSharedFeatures: selected }))} />
             <hr className="mt-2 mb-4" />

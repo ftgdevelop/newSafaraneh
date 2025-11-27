@@ -5,22 +5,22 @@ import SelectPassengers from "@/modules/accommodation/components/shared/SelectPa
 type Props = {
   min: number;
   max: number;
-  defaultValue: number;
+  defaultValue: number | null;
   onChange?: (value: number) => void;
 };
 
 function FiltersByGuestCapacity({ min, max, defaultValue, onChange }: Props) {
-  const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState<number>(defaultValue);
-  const router = useRouter();
-  const dropdownRef = useRef<HTMLDivElement>(null);
+const [open, setOpen] = useState(false);
+const [selected, setSelected] = useState<number>(defaultValue ?? min);
+const router = useRouter();
+const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // For SelectPassengers
-  const [passengerValues, setPassengerValues] = useState({ adult: defaultValue });
+// For SelectPassengers
+const [passengerValues, setPassengerValues] = useState<{ adult: number }>({ adult: defaultValue ?? min });
 
-  useEffect(() => {
-  setPassengerValues({ adult: defaultValue });
-  setSelected(defaultValue);
+useEffect(() => {
+  setPassengerValues({ adult: defaultValue ?? min });
+  setSelected(defaultValue ?? min);
 }, [defaultValue]);
 
   // Close dropdown on outside click
@@ -40,7 +40,8 @@ function FiltersByGuestCapacity({ min, max, defaultValue, onChange }: Props) {
 
   const handleSubmit = () => {
     setOpen(false);
-    onChange?.(passengerValues.adult);
+    const adultValue = passengerValues.adult ?? min;
+    onChange?.(adultValue);
 
     let segments = Array.isArray(router.query.accommodationsList)
       ? [...router.query.accommodationsList]
@@ -49,7 +50,7 @@ function FiltersByGuestCapacity({ min, max, defaultValue, onChange }: Props) {
         : [];
 
     const capacityIndex = segments.findIndex(seg => seg.startsWith("capacity-"));
-    const newCapacitySegment = `capacity-${passengerValues.adult}`;
+    const newCapacitySegment = `capacity-${adultValue}`;
 
     if (capacityIndex !== -1) {
       segments[capacityIndex] = newCapacitySegment;
@@ -129,7 +130,7 @@ function FiltersByGuestCapacity({ min, max, defaultValue, onChange }: Props) {
         className="w-full text-right border rounded px-3 py-2 mb-2 font-bold bg-white text-sm"
         onClick={() => setOpen((v) => !v)}
       >
-        تعداد مسافران {passengerValues.adult > 0 && `(${passengerValues.adult})`}
+        تعداد مسافران {(passengerValues.adult ?? 0) > 0 && `(${passengerValues.adult ?? 0})`}
       </button>
       {open && (
         <div className="absolute z-10 bg-white border rounded shadow-md p-4 w-64 mt-2 right-0">
@@ -137,8 +138,8 @@ function FiltersByGuestCapacity({ min, max, defaultValue, onChange }: Props) {
             values={passengerValues}
             setFieldValue={setFieldValue}
             wrapperClassNames="shrink-0"
-            min={min}
-            max={max}
+            // min={min}
+            // max={max}
             simple
           />
           <div className="flex justify-between mt-4">
