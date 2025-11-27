@@ -40,10 +40,10 @@ const SearchForm: React.FC<Props> = props => {
 
     const [submitLoading, setSubmitLoading] = useState<boolean>(false);
 
-    const dateChangeHandle = (event: any) => {
+    const dateChangeHandle = (value: any) => {
 
-        if (event.value[0] && event.value[1]) {
-            setDates(event.value)
+        if (value[0] && value[1]) {
+            setDates(value)
         }
     }
 

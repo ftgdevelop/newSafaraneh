@@ -27,7 +27,7 @@ interface RangePicker2Props {
 }
 
 
-const RangePicker2 = ({value}:RangePicker2Props) => {
+const RangePicker2 = ({value, onChange}:RangePicker2Props) => {
   const [isFa, setIsFa] = useState(true);
 
   const [props, setProps] = useState<RangeCalendarProps>({
@@ -54,6 +54,7 @@ const pickerRef = useRef<any>(null);
         if (Array.isArray(values) && values[0] && values[1]) {
           pickerRef.current?.closeCalendar();
         }
+        onChange(values)
       }}
 
       plugins={[
