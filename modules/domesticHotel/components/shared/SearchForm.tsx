@@ -13,12 +13,13 @@ import { setReduxError } from "@/modules/shared/store/errorSlice";
 import Button from "../../../shared/components/ui/Button";
 import AutoCompleteZoom from "@/modules/shared/components/ui/AutoCompleteZoom";
 import RangePicker2 from "@/modules/shared/components/ui/RangePicker2";
+import { RangeValue } from "@/modules/date/types";
 
 
 
 type Props = {
     defaultDestination?: EntitySearchResultItemType;
-    defaultDates?: [string, string];
+    defaultDates?: RangeValue;
     wrapperClassName?: string;
 }
 
@@ -35,7 +36,7 @@ const SearchForm: React.FC<Props> = props => {
 
     const dispatch = useAppDispatch();
 
-    const [dates, setDates] = useState<[string, string] | undefined>(props.defaultDates);
+    const [dates, setDates] = useState<RangeValue | undefined>(props.defaultDates);
 
     const [submitLoading, setSubmitLoading] = useState<boolean>(false);
 
@@ -333,7 +334,6 @@ const SearchForm: React.FC<Props> = props => {
                 <RangePicker2
                     value={dates}
                     onChange={dateChangeHandle}
-                    rtl
                 />
 
             </div>

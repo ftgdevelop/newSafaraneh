@@ -13,6 +13,14 @@ import FlightRecentSearches from '@/modules/flights/components/home/FlightRecent
 import CipRecentSearches from '@/modules/cip/components/home/CipRecentSearches';
 import Header from '@/modules/shared/components/header';
 import { ReactNode } from 'react';
+import { DateObject } from 'react-multi-date-picker';
+
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
+import gregorian from "react-date-object/calendars/gregorian";
+import gregorian_en from "react-date-object/locales/gregorian_en";
+import { RangeValue } from '@/modules/date/types';
+;
 
 
 type Props = {
@@ -23,6 +31,7 @@ type Props = {
   siteName?: string;
 }
 
+
 const Banner: React.FC<Props> = props => {
 
 
@@ -31,10 +40,22 @@ const Banner: React.FC<Props> = props => {
   
   const isSafarLife = process.env.SITE_NAME === 'https://www.safarlife.com';
 
-  const today = dateFormat(new Date());
-  const tomorrow = dateFormat(addSomeDays(new Date()));
+  const today = new DateObject({
+    date: new Date(),
+    format: "YYYY/MM/DD",
+    calendar: persian,
+    locale: persian_fa,
+  });
 
-  const domesticHotelDefaultDates: [string, string] = [today, tomorrow];
+  const tomorrow = new DateObject({
+    date: new Date(new Date().setDate(new Date().getDate() + 1)),
+    format: "YYYY/MM/DD",
+    calendar: persian,
+    locale: persian_fa,
+  });
+
+
+  const domesticHotelDefaultDates: RangeValue = [today, tomorrow];
 
   const items: TabItem[] = [];
 

@@ -1,3 +1,4 @@
+import { RangeValue } from "@/modules/date/types";
 import React from "react";
 
 export interface EntitySearchResultItemType {
@@ -739,7 +740,7 @@ export interface DomesticHotelSummaryDetail {
 export type HotelRecentSearchItem = {
     url: string;
     title: string;
-    dates: string[];
+    dates: RangeValue;
 }
 
 export interface DomesticHotelReviewCommentItem {
