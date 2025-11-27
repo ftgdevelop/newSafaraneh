@@ -6,21 +6,19 @@ import { dateDisplayFormat } from "../../helpers";
 
 
 interface CustomRangeInputProps {
-  value: string;
-  openCalendar: () => void;
-  handleValueChange: (e: ChangeEvent) => void;
-  locale: Locale;
+    value: string;
+    openCalendar: () => void;
+    handleValueChange: (e: ChangeEvent) => void;
+    locale: Locale;
     separator: string;
     isFa: Boolean;
 }
 
 function CustomRangeInput({
-  value,
-  openCalendar,
-  handleValueChange,
-  locale,
+    value,
+    openCalendar,
     separator,
-  isFa
+    isFa
 }: CustomRangeInputProps) {
     const values = value?.split(String(separator)) || [];
     let startValue 
