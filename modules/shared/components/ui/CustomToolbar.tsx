@@ -58,11 +58,11 @@ const CustomToolbar: React.FC<CustomToolbarProps> = ({
                 newSelection = [newSelection[0], today].sort((a, b) => a - b);
             }
         } else if (multiple) {
-            newSelection = [today, undefined];
+            newSelection = [today];
         } else {
             newSelection = today;
         }
-
+        
         handleChange(newSelection, { ...state, selectedDate: newSelection, focusedDate: today });
         handleFocusedDate(today);
     }

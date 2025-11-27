@@ -33,23 +33,11 @@ function CustomRangeInput({
     let startFormated = t('checkin-date');
     let endFormated = t('checkout-date');
     
-    
-    if (values && values[0]) {
-        startValue = dateDisplayFormat({date:values[0], format:theme3 ? "yyyy/mm/dd" : "dddd dd MMMM", locale:isFa ? "fa": "en" });
+    if (values ) {
+        startValue = values[0] ?  dateDisplayFormat({ date: values[0], format: theme3 ? "yyyy/mm/dd" : "dddd dd MMMM", locale: isFa ? "fa" : "en" }) : '';
+        endValue = values[1] ? dateDisplayFormat({ date: values[1], format: theme3 ? "yyyy/mm/dd" : "dddd dd MMMM", locale: isFa ? "fa" : "en" }) : '';     
     }
 
-    if (values && values[1]) {
-        endValue = dateDisplayFormat({ date: values[1], format: theme3 ? "yyyy/mm/dd" : "dddd dd MMMM", locale: isFa ? "fa" : "en" });
-        
-        
-    }
-    console.log({
-        val1: values[0],
-        val2: values[1],
-        startValue,
-        endValue
-    });
-    
   return   <div className={`grid w-full grid-cols-2 ${theme3 ? "gap-x-1" : ""}`}>
                 {theme3 && (
                     <>

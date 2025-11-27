@@ -23,39 +23,45 @@ const RangePicker2 = () => {
   const pickerRef = useRef<any>(null);
 
   return (
-    <DatePicker
-      {...props}
-      ref={pickerRef}
-      onPropsChange={setProps}
-      range
-      calendar={isFa ? persian : gregorian}
-      locale={isFa ? persian_fa : gregorian_en}
-      numberOfMonths={2}
-      weekStartDayIndex={isFa ? 7 : 0}
-      format={isFa ? "YYYY/MM/DD" : "MM/DD/YYYY"}
-      plugins={[
-        <CustomToolbar
-          key="custom_toolbar"
-          isFa={isFa}
-          setIsFa={setIsFa}
-          position="bottom"
-          state={pickerRef.current?.state}
-          handleChange={pickerRef.current?.handleChange}
-          handleFocusedDate={pickerRef.current?.handleFocusedDate}
-        />,
-      ]}
-      render={(value, openCalendar, handleValueChange, locale, separator) => (
-        <CustomRangeInput
-          value={value}
-          openCalendar={openCalendar}
-          handleValueChange={handleValueChange}
-          locale={locale}
-              separator={separator}
-              isFa={isFa}
-        />
-      )}
-        minDate={new Date()}
-    />
+  <DatePicker
+    {...props}
+    ref={pickerRef}
+    onPropsChange={setProps}
+    range
+    calendar={isFa ? persian : gregorian}
+    locale={isFa ? persian_fa : gregorian_en}
+    numberOfMonths={2}
+    weekStartDayIndex={isFa ? 7 : 0}
+    format={isFa ? "YYYY/MM/DD" : "MM/DD/YYYY"}
+      onChange={(values) => {
+      
+      if (Array.isArray(values) && values.length === 2 && values[0] && values[1]) {
+        pickerRef.current?.closeCalendar();
+      }
+    }}
+    plugins={[
+      <CustomToolbar
+        key="custom_toolbar"
+        isFa={isFa}
+        setIsFa={setIsFa}
+        position="bottom"
+        state={pickerRef.current?.state}
+        handleChange={pickerRef.current?.handleChange}
+        handleFocusedDate={pickerRef.current?.handleFocusedDate}
+      />,
+    ]}
+    render={(value, openCalendar, handleValueChange, locale, separator) => (
+      <CustomRangeInput
+        value={value}
+        openCalendar={openCalendar}
+        handleValueChange={handleValueChange}
+        locale={locale}
+        separator={separator}
+        isFa={isFa}
+      />
+    )}
+    minDate={new Date()}
+  />
   );
 };
 
