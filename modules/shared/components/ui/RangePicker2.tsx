@@ -14,7 +14,7 @@ import CustomToolbar from "./CustomToolbar";
 import CustomRangeInput from "./CustomRangeInput";
 import CustomHeaderPlugin from "./CustomHeaderRangePicker";
 import DateObject from "react-date-object";
-import { RangeValue } from "@/modules/date/types";
+import { RangeValue } from "../../types/common";
 
 
 type RangeCalendarProps = CalendarProps<false, true> & {
@@ -27,7 +27,7 @@ interface RangePicker2Props {
 }
 
 
-const RangePicker2 = ({value}:RangeCalendarProps) => {
+const RangePicker2 = ({value}:RangePicker2Props) => {
   const [isFa, setIsFa] = useState(true);
 
   const [props, setProps] = useState<RangeCalendarProps>({

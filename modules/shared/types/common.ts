@@ -1,3 +1,8 @@
+import {
+  DateObject as MultiDateObject,
+} from "react-multi-date-picker"
+
+
 export type TabItem = {
     key: string | number;
     label: React.ReactNode;
@@ -183,4 +188,6 @@ export interface FooterStrapi {
         id: number;        
       }[];
     }[];
-  }
+}
+  
+export type RangeValue = [MultiDateObject, MultiDateObject] | undefined;

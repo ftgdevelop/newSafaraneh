@@ -13,7 +13,7 @@ import { setReduxError } from "@/modules/shared/store/errorSlice";
 import Button from "../../../shared/components/ui/Button";
 import AutoCompleteZoom from "@/modules/shared/components/ui/AutoCompleteZoom";
 import RangePicker2 from "@/modules/shared/components/ui/RangePicker2";
-import { RangeValue } from "@/modules/date/types";
+import { RangeValue } from "@/modules/shared/types/common";
 
 
 

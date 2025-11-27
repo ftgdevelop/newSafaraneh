@@ -3,7 +3,7 @@ import { useTranslation } from 'next-i18next';
 import SearchForm from '../../domesticHotel/components/shared/SearchForm';
 import { Apartment, Bed4, Suitcase, Suitcase2, Travel, Travel2 } from '../../shared/components/ui/icons';
 import Tab from '../../shared/components/ui/Tab';
-import { TabItem } from '@/modules/shared/types/common';
+import { RangeValue, TabItem } from '@/modules/shared/types/common';
 import Image from 'next/image';
 import { addSomeDays, dateFormat } from '@/modules/shared/helpers';
 import FlightSearch from '@/modules/flights/components/shared/searchForm';
@@ -17,9 +17,6 @@ import { DateObject } from 'react-multi-date-picker';
 
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
-import gregorian from "react-date-object/calendars/gregorian";
-import gregorian_en from "react-date-object/locales/gregorian_en";
-import { RangeValue } from '@/modules/date/types';
 ;
 
 

@@ -1,4 +1,4 @@
-import { RangeValue } from "@/modules/date/types";
+import { RangeValue } from "@/modules/shared/types/common";
 import React from "react";
 
 export interface EntitySearchResultItemType {
