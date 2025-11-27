@@ -38,7 +38,8 @@ const nextConfig = {
       {protocol: 'https', hostname: 'www.facebook.com', pathname: '**'},
       {protocol: 'https', hostname: 'cdn.mehrbooking.net', pathname: '**'},
       {protocol: 'https', hostname: 'iranhotel.app', pathname: '**'},
-      {protocol: 'https', hostname: 'blogonline.ir', pathname: '**'}
+      {protocol: 'https', hostname: 'blogonline.ir', pathname: '**'},
+      {protocol: 'https', hostname: 's3gw.shab.ir', pathname: '**'},
     ],
     formats: ['image/avif', 'image/webp'],
   },
