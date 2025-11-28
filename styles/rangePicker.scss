@@ -47,8 +47,20 @@
             height: 50px;
             width: 50px;
           }
+          
         }
       }
+       .rmdp-toolbar div:nth-child(3) {
+          display: none;
+        }
+        .rmdp-toolbar {
+          &.top{
+            background-color: #cccccc50;
+          }
+          div{
+          background-color: transparent;
+          color: #0074d9;
+        }}
     }
   }
 }

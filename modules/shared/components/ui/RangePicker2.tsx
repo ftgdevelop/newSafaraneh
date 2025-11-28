@@ -14,6 +14,7 @@ import CustomToolbar from "./CustomToolbar";
 import CustomRangeInput from "./CustomRangeInput";
 import CustomHeaderPlugin from "./CustomHeaderRangePicker";
 import { RangeValue } from "../../types/common";
+import Toolbar from "react-multi-date-picker/plugins/toolbar";
 
 const calendarSettings = {
   fa: {
@@ -93,12 +94,25 @@ const RangePicker2 = ({ value, onChange }: RangePicker2Props) => {
           handleFocusedDate={pickerRef.current?.handleFocusedDate}
           ref={pickerRef}
         />,
+        <Toolbar
+          key='top-toolbar'  
+          position="top" 
+          sort={["close","deselect",  "today"]} 
+          className="md:!hidden"
+          names={ {
+            today: "امروز", 
+            deselect: "انصراف", 
+            close: "تایید" 
+          }}
+          
+        />,
         <CustomHeaderPlugin
           key="header"
           position="top"
           isFa={isFa}
           values={props.value}
         />,
+
       ]}
 
       render={(value, openCalendar, handleValueChange, locale, separator) => (
