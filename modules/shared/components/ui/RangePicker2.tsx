@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import DatePicker, {
   CalendarProps,
   Value,
@@ -13,50 +13,75 @@ import gregorian_en from "react-date-object/locales/gregorian_en";
 import CustomToolbar from "./CustomToolbar";
 import CustomRangeInput from "./CustomRangeInput";
 import CustomHeaderPlugin from "./CustomHeaderRangePicker";
-import DateObject from "react-date-object";
 import { RangeValue } from "../../types/common";
 
+const calendarSettings = {
+  fa: {
+    calendar: persian,
+    locale: persian_fa,
+    format: "YYYY/MM/DD",
+    weekStartDayIndex: 7,
+  },
+  en: {
+    calendar: gregorian,
+    locale: gregorian_en,
+    format: "MM/DD/YYYY",
+    weekStartDayIndex: 0,
+  },
+};
 
 type RangeCalendarProps = CalendarProps<false, true> & {
   value: RangeValue | null;
 };
 
 interface RangePicker2Props {
-  value: RangeValue,
-  onChange: (event: any) => void
+  value: RangeValue;
+  onChange: (event: any) => void;
 }
 
-
-const RangePicker2 = ({value, onChange}:RangePicker2Props) => {
+const RangePicker2 = ({ value, onChange }: RangePicker2Props) => {
   const [isFa, setIsFa] = useState(true);
 
+  const settings = isFa ? calendarSettings.fa : calendarSettings.en;
+
+  const [isMobile, setIsMobile] = useState(false);
   const [props, setProps] = useState<RangeCalendarProps>({
-    value, 
-    locale: persian_fa,
+    value,
   });
 
-const pickerRef = useRef<any>(null);
+  const pickerRef = useRef<any>(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+
+
   return (
     <DatePicker
       {...props}
       ref={pickerRef}
       onPropsChange={(p) => setProps(p as RangeCalendarProps)}
       range
-      calendar={isFa ? persian : gregorian}
-      locale={isFa ? persian_fa : gregorian_en}
-      numberOfMonths={2}
-      weekStartDayIndex={isFa ? 7 : 0}
-      format={isFa ? "YYYY/MM/DD" : "MM/DD/YYYY"}
+      calendar={settings.calendar}
+      locale={settings.locale}
+      format={settings.format}
+      weekStartDayIndex={settings.weekStartDayIndex}
+      numberOfMonths={isMobile ? 1 : 2}
       monthYearSeparator=""
       minDate={new Date()}
-
       onChange={(values) => {
         if (Array.isArray(values) && values[0] && values[1]) {
           pickerRef.current?.closeCalendar();
         }
-        onChange(values)
+        onChange(values);
       }}
-
+      arrow={false}
       plugins={[
         <CustomToolbar
           key="toolbar"
@@ -86,6 +111,32 @@ const pickerRef = useRef<any>(null);
           isFa={isFa}
         />
       )}
+
+      //!! this part is for adding price can be useful
+      // mapDays={({ date, currentMonth }) => {
+      //   if (date.monthIndex !== currentMonth.index) {
+      //     return {}
+      //   }
+      //   return {
+      //     children: (
+      //       <div
+      //         style={{
+      //           display: "flex",
+      //           flexDirection: "column",
+      //           padding: "0 10px",
+      //           fontSize: "11px",
+      //           gap: "10px",
+      //           height: "30px",
+      //         }}
+      //       >
+      //         <div style={{ textAlign: "center" }}>{date.format("D")}</div>
+      //         {
+      //           date.format("D") &&  <div style={{ textAlign: "center", fontSize: "8px" }}>قیمت</div>
+      //         }
+      //       </div>
+      //     ),
+      //   };
+      // }}
     />
   );
 };

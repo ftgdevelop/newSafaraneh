@@ -12,13 +12,15 @@ interface CustomRangeInputProps {
     locale: Locale;
     separator: string;
     isFa: Boolean;
+    show?: Boolean
 }
 
 function CustomRangeInput({
     value,
     openCalendar,
     separator,
-    isFa
+    isFa,
+    show = true
 }: CustomRangeInputProps) {
     const values = value?.split(String(separator)) || [];
     let startValue 
@@ -36,7 +38,7 @@ function CustomRangeInput({
         endValue = values[1] ? dateDisplayFormat({ date: values[1], format: theme3 ? "yyyy/mm/dd" : "dddd dd MMMM", locale: isFa ? "fa" : "en" }) : '';     
     }
 
-  return   <div className={`grid w-full grid-cols-2 ${theme3 ? "gap-x-1" : ""}`}>
+  return   <div className={`${show ? 'grid w-full grid-cols-2' :'hidden'}  ${theme3 ? "gap-x-1" : ""}`}>
                 {theme3 && (
                     <>
                         <label htmlFor="checkin_date" className="text-sm">
@@ -93,7 +95,7 @@ function CustomRangeInput({
                     <input
                         id="checkout_date"
                         className={`w-full h-12 text-xs rtl:rounded-l-lg ltr:rounded-r-lg rtl:pr-10 ltr:pl-10 ${
-                            theme3 ? "bg-neutral-200" : "border border-neutral-400 pt-5 leading-4"
+                            theme3 ? "bg-neutral-200" : "border-y border-l border-neutral-400 pt-5 leading-4"
                         }`}
                         value={endValue}
                         readOnly

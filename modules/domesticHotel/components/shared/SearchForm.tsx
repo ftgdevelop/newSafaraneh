@@ -281,8 +281,8 @@ const SearchForm: React.FC<Props> = props => {
     }
     return (
         <div className={`domestic-hotel-search-form ${theme3?"flex flex-col sm:flex-row":"grid grid-cols-1 md:grid-cols-7"} gap-2 ${props.wrapperClassName || ""}`}>
-            
-            <div className={`relative z-20 ${theme3?"sm:grow xl:basis-7/12":"col-span-1 md:col-span-3"}`}>
+            {/* !! removed z-20 from down code if there is issue you must fix range picker  */}
+            <div className={`relative  ${theme3?"sm:grow xl:basis-7/12":"col-span-1 md:col-span-3"}`}>
                 {theme2 ? (
                     <AutoCompleteZoom
                         defaultListLabel="محبوب ترین ها"

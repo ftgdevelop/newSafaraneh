@@ -6,3 +6,49 @@
 .rmdp-container {
     width: 100%;
 }
+
+@media screen and (width <= 768px) {
+  .rmdp-container > div:nth-child(2) {
+    width: 100vw;
+    height: 100svh;
+    position: fixed !important;
+    bottom: 0;
+    top: auto !important;
+
+    display: flex;
+    justify-content: end;
+    align-items: end;
+
+    overflow-y: scroll;
+    transform: translateY(100%) !important;
+    opacity: 0;
+    transition: transform 0.35s ease, opacity 0.35s ease;
+    &:has(div[role='dialog']) {
+    transform: translateY(0) !important;
+    opacity: 1;
+    }
+
+    & > div {
+      width: 100%;
+
+      .rmdp-wrapper.rmdp-shadow {
+        width: 100%;
+
+        .rmdp-calendar {
+          width: 100%;
+
+          .rmdp-day-picker {
+            justify-content: center;
+            align-items: center;
+          }
+
+          .rmdp-day,
+          .rmdp-week-day {
+            height: 50px;
+            width: 50px;
+          }
+        }
+      }
+    }
+  }
+}

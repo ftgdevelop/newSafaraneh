@@ -88,7 +88,12 @@ const nextConfig = {
     // DEFAULT_lAN:"US",
     // LANGUAGES:["US","NO","FA"]
 
-  }
+  },
+    transpilePackages: [
+    "react-multi-date-picker",
+    "react-date-object",
+    "react-element-popper",
+  ],
 }
 
 module.exports = nextConfig;

@@ -17,6 +17,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "modules/shared/components/SitePage/Contact/ContactLeafletMap.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "modules/shared/components/SitePage/Contact/ContactLeafletMap.tsx", "types/**/*.d.ts"],
   "exclude": ["node_modules"]
 }
