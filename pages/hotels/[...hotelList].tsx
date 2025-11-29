@@ -5,7 +5,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { EntitySearchResultItemType, PricedHotelItem, SearchAccomodationItem, SortTypes } from '@/modules/domesticHotel/types/hotel';
 import SearchForm from '@/modules/domesticHotel/components/shared/SearchForm';
 import HotelsList from '@/modules/domesticHotel/components/hotelsList';
-import { addSomeDays, checkDateIsAfterDate, dateDiplayFormat, dateFormat, toPersianDigits } from '@/modules/shared/helpers';
+import { addSomeDays, checkDateIsAfterDate, dateDiplayFormat, dateFormat, replaceBrandNames, toPersianDigits } from '@/modules/shared/helpers';
 import ProgressBarWithLabel from '@/modules/shared/components/ui/ProgressBarWithLabel';
 import { useTranslation } from 'next-i18next';
 import Select from '@/modules/shared/components/ui/Select';
@@ -38,6 +38,20 @@ type Props = {
 }
 
 const HotelList: NextPage<Props> = props => {
+      
+  const router = useRouter();
+
+  const urlShabTrackerId = router.query?.tracker_id;
+  
+  useEffect(() => {
+    if (urlShabTrackerId && process.env.USE_SHAB_TRACKER_ID === "true") {
+      const expDate = new Date();
+      expDate.setTime(expDate.getTime() + (7 * 24 * 60 * 60 * 1000));
+      if (document) {
+        document.cookie = `shabTrackerId=${urlShabTrackerId}; expires=${expDate.toUTCString()};path=/`;
+      }
+    }
+  }, [urlShabTrackerId]);
 
   useEffect(()=>{
     const fetchPageData = async (url:string) => {
@@ -132,7 +146,6 @@ const HotelList: NextPage<Props> = props => {
   let checkin = today;
   let checkout = tomorrow;
 
-  const router = useRouter();
   const locale = router.locale;
   const acceptLanguage = locale === "en" ? "en-US" : locale === "ar" ? "ar-AE" : "fa-IR";
 
@@ -609,6 +622,17 @@ const HotelList: NextPage<Props> = props => {
   const theme2 = process.env.THEME === "THEME2";
 
   const faqItems = pageData?.widget?.faqs || [];
+
+
+  const options = {
+      replace: (domNode: any) => {
+          if (domNode.type === 'text') {
+              domNode.data = replaceBrandNames(domNode.data);
+              return domNode;
+          }
+      },
+  };
+
   return (
 
     <>
@@ -813,7 +837,7 @@ const HotelList: NextPage<Props> = props => {
 
               {pageData?.widget?.content?.description ? (
                 <div className='py-10 text-justify inserted-content'>
-                  {parse(pageData.widget.content.description)}
+                  {parse(pageData.widget.content.description, options)}
                 </div>
               ):null}
 
@@ -826,9 +850,9 @@ const HotelList: NextPage<Props> = props => {
                       key={faq.question}
                       title={(<>
                         <QuestionCircle className='w-5 h-5 mt-.5 rtl:ml-2 ltr:mr-2 fill-current inline-block' />
-                        {faq.question}
+                        {replaceBrandNames(faq.question || "")}
                       </>)}
-                      content={parse(faq.answer!)}
+                      content={parse(faq.answer!, options)}
                       WrapperClassName='mt-5'
                     />
                   ))}

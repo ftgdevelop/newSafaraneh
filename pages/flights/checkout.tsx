@@ -30,6 +30,8 @@ const Checkout: NextPage = () => {
 
   const dispatch = useAppDispatch();
 
+  const isShab =process.env.PROJECT === "SHAB";
+
   const router = useRouter();
 
   const { key } = router.query;
@@ -269,7 +271,7 @@ const Checkout: NextPage = () => {
       return;
     }
 
-    if(userIsLoggedIn){
+    if(userIsLoggedIn || isShab){
       preReserveFlight(values);
     }else{
       setSubmitedValues(values);

@@ -68,13 +68,15 @@ const HotelDetail: NextPage<Props> = props => {
 
   const theme1 = process.env.THEME === "THEME1";
 
-  const isSafaraneh = process.env.PROJECT === "SAFARANEH" || process.env.PROJECT === "IRANHOTEL";
+  const isSafaraneh = process.env.PROJECT === "SAFARANEH" || process.env.PROJECT === "IRANHOTEL" || process.env.PROJECT === "HOTELBAN"|| process.env.PROJECT === "SHAB";
 
   const isSafarlife = process.env.PROJECT === "SAFARLIFE";
 
   const isHotelban = process.env.PROJECT === "HOTELBAN";
 
   const { portalData, allData } = props;
+
+  const isShab = process.env.PROJECT=== "SHAB";
 
   const { t } = useTranslation('common');
   const { t: tHotel } = useTranslation('hotel');
@@ -129,6 +131,18 @@ const utm_source = router.query?.utm_source;
 // "safarmarket"
 const utm_term = router.query?.utm_term; 
 // "hotel"
+
+  const urlShabTrackerId = router.query?.tracker_id;
+
+  useEffect(() => {
+    if (urlShabTrackerId && process.env.USE_SHAB_TRACKER_ID === "true") {
+      const expDate = new Date();
+      expDate.setTime(expDate.getTime() + (7 * 24 * 60 * 60 * 1000));
+      if (document) {
+        document.cookie = `shabTrackerId=${urlShabTrackerId}; expires=${expDate.toUTCString()};path=/`;
+      }
+    }
+  }, [urlShabTrackerId]);
 
 useEffect(()=>{
 
@@ -633,7 +647,7 @@ useEffect(() => {
 
         </div>
 
-        {isHotelban ? (
+        {(isHotelban || isShab) ? (
           <GalleryLevel1 images={hotelImages} hotelName={accommodationData.displayName} />
         ) :(
           <Gallery images={hotelImages} hotelName={accommodationData.displayName} />
@@ -725,7 +739,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   const { locale, query } = context;
 
-  const isSafaraneh = process.env.PROJECT === "SAFARANEH" || process.env.PROJECT === "IRANHOTEL";
+  const isSafaraneh = process.env.PROJECT === "SAFARANEH" || process.env.PROJECT === "IRANHOTEL" || process.env.PROJECT === "HOTELBAN"|| process.env.PROJECT === "SHAB";
 
   let checkin = dateFormat(new Date());
   let checkout = dateFormat(addSomeDays(new Date()));

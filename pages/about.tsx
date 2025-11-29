@@ -10,6 +10,7 @@ import honor4 from '../public/images/about/download (3).png';
 import BreadCrumpt from "@/modules/shared/components/ui/BreadCrumpt";
 import { WebSiteDataType } from "@/modules/shared/types/common";
 import { getStrapiPages } from "@/modules/shared/actions/strapiActions";
+import { replaceBrandNames } from "@/modules/shared/helpers";
 
 type Props = {
     portalData?: WebSiteDataType;
@@ -60,6 +61,7 @@ const About: NextPage<Props> = props => {
     const title = props.strapiData?.[0]?.attributes?.Sections?.[0]?.Title || "درباره ما";
     const strapiContent = props.strapiData?.[0]?.attributes?.Sections?.[0]?.Body;
 
+    const renderedMarkdown = replaceBrandNames(strapiContent || "");
     return (
         <>
             <div className="max-w-container m-auto p-5 max-sm:p-3">
@@ -67,8 +69,8 @@ const About: NextPage<Props> = props => {
                 <h2 className="text-3xl font-bold mt-10"> {title} </h2>
 
                 {strapiContent ? (
-                    <div className='inserted-content text-justify bg-white rounded-md border-2 border-gray mt-10 p-7 max-md:p-3 pt-10 pb-10 space-y-7' >                        
-                        <Markdown>{strapiContent}</Markdown>
+                    <div className='inserted-content text-justify bg-white rounded-md border-2 border-gray mt-10 p-7 max-md:p-3 pt-10 pb-10 space-y-7' >
+                        <Markdown>{renderedMarkdown}</Markdown>
                     </div>
                 ) : (
                     <div className="bg-white rounded-md border-2 border-gray mt-10 p-7 max-md:p-3 pt-10 pb-10 space-y-7">

@@ -30,8 +30,9 @@ const ModulesBanner: React.FC<Props> = props => {
   const linkClassName = "rounded-lg overflow-hidden block relative before:block before:absolute before:top-0 before:left-0 before:right-0 before:h-40 before:bg-gradient-to-b before:from-black/75 before:to-transparent";
 
   const isHotelban = process.env.PROJECT === "HOTELBAN";
+  const isShab = process.env.PROJECT === "SHAB";
 
-  if (isHotelban && !props.strapiData?.Item?.length) {
+  if ((isHotelban || isShab) && !props.strapiData?.Item?.length) {
     return null
   }
 
@@ -41,7 +42,7 @@ const ModulesBanner: React.FC<Props> = props => {
 
       <div className='grid grid-cols-1 md:grid-cols-2 gap-3 mb-6 md:mb-10'>
 
-        {isHotelban ? (
+        {(isHotelban || isShab) ? (
           props.strapiData?.Item?.map((item, index) => (
             <Link
               key={item.Title}

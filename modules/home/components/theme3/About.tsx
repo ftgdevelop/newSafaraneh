@@ -1,10 +1,14 @@
+import { replaceBrandNames } from "@/modules/shared/helpers";
 import Image from "next/image";
 import Markdown from "react-markdown";
 type Props = {
     logo?: string;
     strapiContent?: string;
+    siteName?: string;
 }
 const About: React.FC<Props> = props => {
+
+    const renderedMarkdown = replaceBrandNames(props.strapiContent || "");
 
     return (
         <section className="max-w-container m-auto px-5 max-xl:p-5 mb-5 sm:mb-10" >
@@ -17,7 +21,7 @@ const About: React.FC<Props> = props => {
             />}
 
             {props.strapiContent && <div className="inserted-content hotelban-strapi-about">
-                <Markdown>{props.strapiContent}</Markdown>
+                <Markdown>{renderedMarkdown}</Markdown>
             </div>}
         </section>
     )
