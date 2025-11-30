@@ -365,7 +365,7 @@ export interface CipPrereservePayload {
     nationalId?: string;
     nationality?: string;
     birthday?: string;
-    services: number[]
+    services?: number[]
   }[];
 
   reserver: {
