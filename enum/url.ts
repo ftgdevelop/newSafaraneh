@@ -169,6 +169,12 @@ export const Flight = {
     GetEntity: "/api/services/app/Entity/GetAll",
     SearchFilter: "/api/services/app/Booking/SearchFilter",
     Availability: "/api/services/app/Booking/Availability",
+    GetBySlug: "/api/services/app/Entity/GetBySlug",
+    GetHouse: "/api/services/app/Booking/GetHouse",
+    CancellationRules: "/api/services/app/Booking/CancellationRules",
+    Calendar: "/api/services/app/Booking/Calendar",
+    Review: "/api/services/app/Booking/Review",
+    Similer: "/api/services/app/Booking/Similer",
   };
 
   export const ServerStatus = {

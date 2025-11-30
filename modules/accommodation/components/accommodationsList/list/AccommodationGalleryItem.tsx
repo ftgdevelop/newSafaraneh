@@ -4,10 +4,11 @@ import Slider from "react-slick";
 import { ArrowLeft, ArrowRight } from "@/modules/shared/components/ui/icons";
 import { useRouter } from "next/router";
 
-type AccommodationItemProps = {
+type AccommodationGalleryItemProps = {
+  id: number | string;
   title: string;
   location?: { province?: string; city?: string } | null;
-  photos?: { thumbnailAbsoluteUrl?: string }[] | null; // <-- changed from coverPhoto
+  photos?: { thumbnailAbsoluteUrl?: string }[] | null;
   salePrice: number;
   boardPrice: number;
   discountPercent?: number;
@@ -45,7 +46,8 @@ function PrevArrow(props: any) {
   );
 }
 
-export default function AccommodationItem({
+export default function AccommodationGalleryItem({
+  id,
   title,
   location,
   photos,
@@ -53,11 +55,10 @@ export default function AccommodationItem({
   boardPrice,
   discountPercent,
   discountPrice,
-  id,
   checkin,
   checkout,
   capacity,
-}: AccommodationItemProps & { id: number | string }) {
+}: AccommodationGalleryItemProps) {
   const router = useRouter();
   const locale = router.locale || "fa";
 
@@ -70,7 +71,7 @@ export default function AccommodationItem({
 
   const images = photos && photos.length > 0
     ? photos
-    : [{ thumbnailAbsoluteUrl: undefined }];
+    : [{ thumbnailAbsoluteUrl: "/placeholder.jpg" }];
 
   const sliderSettings = {
     dots: false,
@@ -83,53 +84,55 @@ export default function AccommodationItem({
     arrows: images.length > 1,
   };
 
+  const thumbnailSettings = {
+    dots: false,
+    infinite: false,
+    speed: 300,
+    slidesToShow: Math.min(images.length, 4),
+    slidesToScroll: 1,
+    focusOnSelect: true,
+  };
+
   return (
     <Link
       href={detailUrl}
       className="bg-white rounded-2xl group relative block overflow-hidden border border-neutral-200"
       title={title}
     >
-      <div className="relative h-40 w-full">
+      <div className="relative">
+        {/* Main Slider */}
         <Slider {...sliderSettings}>
-          {images.map((img, idx) =>
-            img.thumbnailAbsoluteUrl ? (
-              <div
-                key={idx}
-                className="h-40 w-full overflow-hidden" // <-- Add overflow-hidden here
-              >
+          {images.map((img, idx) => (
+            <div key={idx} className="h-40 w-full overflow-hidden">
+              <Image
+                onContextMenu={(e) => e.preventDefault()}
+                src={img.thumbnailAbsoluteUrl || "/placeholder.jpg"}
+                alt={title}
+                width={600}
+                height={400}
+                className="h-40 w-full object-cover transition-all duration-300 group-hover:scale-105"
+                priority={idx === 0}
+              />
+            </div>
+          ))}
+        </Slider>
+
+        {/* Thumbnail Gallery */}
+        <div className="mt-2">
+          <Slider {...thumbnailSettings}>
+            {images.map((img, idx) => (
+              <div key={idx} className="h-16 w-16 p-1">
                 <Image
-                  onContextMenu={(e) => e.preventDefault()}
-                  src={img.thumbnailAbsoluteUrl}
-                  alt={title}
-                  width={600}
-                  height={400}
-                  className="h-40 w-full object-cover transition-all duration-300 group-hover:scale-105"
-                  priority={idx === 0}
+                  src={img.thumbnailAbsoluteUrl || "/placeholder.jpg"}
+                  alt={`Thumbnail ${idx}`}
+                  width={100}
+                  height={100}
+                  className="h-full w-full object-cover rounded"
                 />
               </div>
-            ) : (
-              <div
-                key={idx}
-                className="h-40 w-full flex items-center justify-center bg-gray-200 text-gray-400"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-12 w-12"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3 7v10c0 1.104.896 2 2 2h14c1.104 0 2-.896 2-2V7M3 7l9 6 9-6M3 7l9 6 9-6M3 7v10c0 1.104.896 2 2 2h14c1.104 0 2-.896 2-2V7"
-                  />
-                </svg>
-              </div>
-            )
-          )}
-        </Slider>
+            ))}
+          </Slider>
+        </div>
       </div>
 
       <div className="p-3">
@@ -141,13 +144,15 @@ export default function AccommodationItem({
           <div className="flex flex-col items-end gap-1 mb-2">
             {discountPrice && Math.abs(discountPrice) > 0 ? (
               <>
-                <span className="bg-green-700 text-white rounded-xl leading-7 text-xs px-1 py-0 select-none"> {discountPercent}% تخفیف </span>
+                <span className="bg-green-700 text-white rounded-xl leading-7 text-xs px-1 py-0 select-none">
+                  {discountPercent}% تخفیف
+                </span>
                 <div className="flex flex-row items-end">
                   <div className="text-xs text-neutral-500 line-through whitespace-nowrap">
-                    {salePrice.toLocaleString("fa-IR")} ریال
+                    {boardPrice.toLocaleString("fa-IR")} ریال
                   </div>
                   <div className="text-xs font-bold text-green-600 whitespace-nowrap">
-                    {boardPrice.toLocaleString("fa-IR")} ریال
+                    {salePrice.toLocaleString("fa-IR")} ریال
                   </div>
                 </div>
               </>

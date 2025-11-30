@@ -4,38 +4,40 @@ import { ServerAddress, Accommodation, HeaderAccommodation } from "@/enum/url";
 import FiltersByCategory from "./FiltersByCategory";
 import FiltersByGuestCapacity from "./FiltersByGuestCapacity";
 import FiltersByTagCategory from "./FiltersByTagCategory";
-import Image from "next/image";
-import { useRouter } from "next/router";
 import FiltersModal from "./FiltersModal";
 import FilterSearchSkeleton from "./FilterSearchSkeleton";
-
-type FilterValues = {
-  categories: string[];
-  capacity: number | null;
-  bedroomCount?: number | null;
-  isInstant?: boolean;
-  notSharedFeatures: string[];
-  pool: {
-    exists: boolean;
-    hasWarmWater: boolean;
-    type: string[];
-  };
-  textureType: string[];
-};
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { FilterValues } from "@/modules/accommodation/types/FilterValues";
 
 type FilterSearchProps = {
   filterValues: FilterValues;
   setFilterValues: React.Dispatch<React.SetStateAction<FilterValues>>;
+  onCategoryChange?: (categories: string[]) => void;
 };
 
-const FilterSearch: React.FC<FilterSearchProps> = ({ filterValues, setFilterValues }) => {
+const featuresCategoryLabelsFa: Record<string, string> = {
+  Main: "اصلی",
+  HeatingSystem: "سیستم گرمایش",
+  CoolingSystem: "سیستم سرمایش",
+  Spaces: "فضاها",
+  KitchenFacilities: "امکانات آشپزخانه",
+  Amenities: "امکانات",
+  Health_Facilities: "امکانات بهداشتی",
+  SpecialFacilities: "امکانات ویژه",
+  AccommodationServices: "خدمات اقامتگاه",
+  SafetyFacilities: "امکانات ایمنی",
+  CctvCamera: "دوربین مداربسته",
+};
+
+
+const FilterSearch: React.FC<FilterSearchProps> = ({ filterValues, setFilterValues, onCategoryChange }) => {
   const [filters, setFilters] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const router = useRouter();
 
-  // fetch filters metadata
   useEffect(() => {
     const fetchSearchFilter = async () => {
       setLoading(true);
@@ -56,50 +58,11 @@ const FilterSearch: React.FC<FilterSearchProps> = ({ filterValues, setFilterValu
     fetchSearchFilter();
   }, []);
 
-  // Sync URL whenever filterValues changes
-  useEffect(() => {
-    if (!router.isReady) return;
-
-    const { accommodationsList, ...restQuery } = router.query;
-    const newQuery: any = { ...restQuery };
-
-    // categories
-    if (filterValues.categories.length) newQuery.category = filterValues.categories.join(",");
-    else delete newQuery.category;
-
-    // bedroomCount
-    if (filterValues.bedroomCount && filterValues.bedroomCount > 0) newQuery.bedroomCount = filterValues.bedroomCount;
-    else delete newQuery.bedroomCount;
-
-    // isInstant
-    if (filterValues.isInstant) newQuery.isInstant = "true";
-    else delete newQuery.isInstant;
-
-    // notSharedFeatures
-    if (filterValues.notSharedFeatures.length) newQuery.notSharedFeatures = filterValues.notSharedFeatures.join(",");
-    else delete newQuery.notSharedFeatures;
-
-    // pool filters
-    if (filterValues.pool.exists) newQuery.poolExists = "1";
-    else delete newQuery.poolExists;
-
-    if (filterValues.pool.hasWarmWater) newQuery.poolWarm = "1";
-    else delete newQuery.poolWarm;
-
-    if (filterValues.pool.type.length) newQuery.poolType = filterValues.pool.type.join(",");
-    else delete newQuery.poolType;
-
-    router.replace(
-      { pathname: router.pathname, query: { accommodationsList, ...newQuery } },
-      undefined,
-      { shallow: true }
-    );
-  }, [filterValues, router.isReady]);
-
   if (loading) return <FilterSearchSkeleton />;
   if (error) return <div>{error}</div>;
   if (!filters) return null;
 
+  // دسته‌بندی‌ها
   const categoryIcons: Record<string, JSX.Element> = {
     Apartment: <Image src="/images/accommodation/category/apartment.png" alt="Apartment" width={24} height={24} />,
     Boomgardi: <Image src="/images/accommodation/category/boomgardi.png" alt="Boomgardi" width={24} height={24} />,
@@ -118,13 +81,21 @@ const FilterSearch: React.FC<FilterSearchProps> = ({ filterValues, setFilterValu
     icon: categoryIcons[key] ?? null,
   }));
 
+  const featuresCategoryItems = filters.featuresCategory
+  ? (filters.featuresCategory.values as string[]).map((key) => ({
+      value: key,
+      label: featuresCategoryLabelsFa[key] || key,
+    }))
+  : [];
+
+
   return (
     <div>
       <div className="flex flex-row gap-2 mb-4">
         <FiltersByCategory
+          items={tagCategoryItems}
           values={filterValues.categories}
-          items={Object.entries(filters.category.values).map(([key, value]) => ({ value: key, label: value as string }))}
-          onChange={(val) => setFilterValues(prev => ({ ...prev, categories: val }))}
+          onChange={onCategoryChange ? onCategoryChange : (val) => setFilterValues(prev => ({ ...prev, categories: val }))}
         />
 
         <FiltersByGuestCapacity
@@ -140,7 +111,11 @@ const FilterSearch: React.FC<FilterSearchProps> = ({ filterValues, setFilterValu
       </div>
 
       <div className="border-y my-4">
-        <FiltersByTagCategory items={tagCategoryItems} values={filterValues.categories} onChange={(val) => setFilterValues(prev => ({ ...prev, categories: val }))} />
+        <FiltersByTagCategory
+          items={tagCategoryItems}
+          values={filterValues.categories}
+          onChange={onCategoryChange ? onCategoryChange : (val) => setFilterValues(prev => ({ ...prev, categories: val }))}
+        />
       </div>
 
       <FiltersModal
@@ -149,7 +124,12 @@ const FilterSearch: React.FC<FilterSearchProps> = ({ filterValues, setFilterValu
         filterValues={filterValues}
         setFilterValues={setFilterValues}
         maxBedrooms={filters.bedroomCount.values.max}
-        notSharedFeaturesItems={filters.notSharedFeatures ? Object.entries(filters.notSharedFeatures.values).map(([key, label]) => ({ value: key, label: label as string })) : []}
+        notSharedFeaturesItems={filters.notSharedFeatures
+          ? Object.entries(filters.notSharedFeatures.values).map(([key, label]) => ({ value: key, label: label as string }))
+          : []
+        }
+        featuresCategoryItems={featuresCategoryItems}
+        filters={filters}
       />
     </div>
   );
