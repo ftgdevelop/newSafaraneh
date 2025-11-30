@@ -38,6 +38,10 @@ const AccommodationSearchForm: React.FC<Props> = (props) => {
     const [selectedDestination, setSelectedDestination] = useState<EntitySearchResultItemType | undefined>(props.defaultDestination); // Fixed initialization
 
     useEffect(() => {
+        setSubmitLoading(false);
+    }, [router.asPath]);
+    
+    useEffect(() => {
         setSelectedDestination(props.defaultDestination);
     }, [props.defaultDestination]);
 

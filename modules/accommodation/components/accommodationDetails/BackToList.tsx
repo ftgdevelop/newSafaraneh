@@ -1,5 +1,4 @@
 import { ArrowRight } from "@/modules/shared/components/ui/icons";
-import { useTranslation } from 'next-i18next';
 import Link from "next/link"
 
 type Props = {
