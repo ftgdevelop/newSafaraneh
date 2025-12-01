@@ -3,19 +3,20 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { ServerAddress, Accommodation } from "@/enum/url";
-import AccommodationName from "@/modules/accommodation/components/accommodationDetails/AccommodationName";
-import Gallery from "@/modules/accommodation/components/accommodationDetails/Gallery";
-import BackToList from "@/modules/accommodation/components/accommodationDetails/BackToList";
-import Review from "@/modules/accommodation/components/accommodationDetails/Review";
-import Similar from "@/modules/accommodation/components/accommodationDetails/Similar";
-import Host from "@/modules/accommodation/components/accommodationDetails/Host";
-import Spaces from "@/modules/accommodation/components/accommodationDetails/spaces";
-import About from "@/modules/accommodation/components/accommodationDetails/About";
-import Features from "@/modules/accommodation/components/accommodationDetails/Features";
-import Distances from "@/modules/accommodation/components/accommodationDetails/Distances";
-import Rules from "@/modules/accommodation/components/accommodationDetails/Rules";
-import Rates from "@/modules/accommodation/components/accommodationDetails/rates";
+import AccommodationName from "@/modules/accommodation/components/accommodationDetails/Section/AccommodationName";
+import Gallery from "@/modules/accommodation/components/accommodationDetails/Section/Gallery";
+import BackToList from "@/modules/accommodation/components/accommodationDetails/Section/BackToList";
+import Review from "@/modules/accommodation/components/accommodationDetails/Section/Review";
+import Similar from "@/modules/accommodation/components/accommodationDetails/Section/Similar";
+import Host from "@/modules/accommodation/components/accommodationDetails/Section/Host";
+import Spaces from "@/modules/accommodation/components/accommodationDetails/Section/Spaces";
+import About from "@/modules/accommodation/components/accommodationDetails/Section/About";
+import Features from "@/modules/accommodation/components/accommodationDetails/Section/Features";
+import Distances from "@/modules/accommodation/components/accommodationDetails/Section/Distances";
+import Rules from "@/modules/accommodation/components/accommodationDetails/Section/Rules";
+import Rates from "@/modules/accommodation/components/accommodationDetails/Section/Rates";
 import AnchorTabs from "@/modules/shared/components/ui/AnchorTabs";
+import Calendar from "@/modules/accommodation/components/accommodationDetails/Aside/Calendar";
 
 const AccommodationDetailPage: NextPage = () => {
   const router = useRouter();
@@ -73,28 +74,41 @@ const AccommodationDetailPage: NextPage = () => {
     { id: "similar", title: "اقامتگاه‌های مشابه" },
   ];
 
+  const [checkinState, setCheckin] = useState(checkin);
+  const [checkoutState, setCheckout] = useState(checkout);
+  const [capacityState, setCapacity] = useState(capacity ? Number(capacity) : 1);
+
+  const handleUpdate = (newCheckin: string, newCheckout: string, newCapacity: number) => {
+    setCheckin(newCheckin);
+    setCheckout(newCheckout);
+    setCapacity(newCapacity);
+  };
+
   return (
     <div className="max-w-container mx-auto px-5 py-4">
-
-      {/* Loading State */}
-      {loading && <div className="text-gray-400">در حال بارگذاری...</div>}
-
-      {/* Back to List */}
+      {/* Skeleton for BackToList */}
       <div className="mt-4 mb-6">
-        <BackToList cityName="تهران" url="/#" />
+        {loading ? (
+          <div className="flex items-center gap-2">
+            <div className="hidden md:block bg-gray-300 w-4 h-4 rounded-md"></div>
+            <div className="hidden md:block bg-gray-300 w-24 h-4 rounded-md"></div>
+          </div>
+        ) : (
+          <BackToList cityName="تهران" url="/#" />
+        )}
       </div>
 
-      {/* Accommodation Details */}
-      {!loading && house ? (
+      {loading ? (
+        <div className="text-gray-400">در حال بارگذاری...</div>
+      ) : house ? (
         <>
-            <Gallery images={house.pictures?.records || []} />
+          <Gallery images={house.pictures?.records || []} />
 
-            {/* AnchorTabs */}
-            <AnchorTabs items={anchorItems} />
+          <AnchorTabs items={anchorItems} />
 
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-              <div className="lg:col-span-3">
-                
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 min-h-screen">
+            <div className="lg:col-span-3">
+              <div id="spaces">
                 <AccommodationName
                   title={house.title}
                   location={house.location}
@@ -103,53 +117,62 @@ const AccommodationDetailPage: NextPage = () => {
                 />
 
                 <Host host={house.host} />
-                
-                <div id="spaces">
-                  <Spaces spaces={house.spaces} />
-                </div>
 
-                <div id="about">
-                  <About about={house.about} />
-                </div>
-
-                <div id="features">
-                  <Features features={house.features || { emptyCategories: [], filledCategories: {} }} />
-                </div>
-
-                <div id="distances">
-                  <Distances distances={house.distances || { records: [] }} />
-                </div>
-
-                <div id="rules">
-                  <Rules rules={house.rules.records} />
-                </div>
-
-                <div id="rates">
-                  <Rates rates={house.rates} />
-                </div>
-
-                {id && <Review id={id} />}
-
-                <div id="similar">
-                  {id && (
-                    <Similar
-                      id={id}
-                      checkin={checkin}
-                      checkout={checkout}
-                      capacity={capacity}
-                    />
-                  )}
-                </div>
+                <Spaces spaces={house.spaces} />
               </div>
-              <aside className="lg:col-span-1 bg-white p-4 border rounded-xl mt-8 sticky top-8">
-                مبلغ قابل پرداخت: {house.salePrice?.toLocaleString("fa-IR")} تومان
-              </aside>
+
+              <div id="about">
+                <About about={house.about} />
+              </div>
+
+              <div id="features">
+                <Features features={house.features || { emptyCategories: [], filledCategories: {} }} />
+              </div>
+
+              <div id="distances">
+                <Distances distances={house.distances || { records: [] }} />
+              </div>
+
+              <div id="rules">
+                <Rules rules={house.rules.records} />
+              </div>
+
+              <div id="rates">
+                <Rates rates={house.rates} />
+              </div>
+
+              {id && <Review id={id} />}
+
+              <div id="similar">
+                {id && (
+                  <Similar
+                    id={id!}
+                    checkin={checkin}
+                    checkout={checkout}
+                    capacity={capacity}
+                  />
+                )}
+              </div>
             </div>
+
+            <aside className="lg:col-span-2 mt-8">
+              <div className="sticky top-18">
+                {id !== null && (
+                  <Calendar
+                    id={id}
+                    checkin={checkinState || ""}
+                    checkout={checkoutState || ""}
+                    capacity={capacityState}
+                    onUpdate={handleUpdate}
+                  />
+                )}
+              </div>
+            </aside>
+          </div>
         </>
       ) : (
-        !loading && <div className="text-red-500">اقامتگاه پیدا نشد.</div>
+        <div className="text-red-500">اقامتگاه پیدا نشد.</div>
       )}
-
     </div>
   );
 };
