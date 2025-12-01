@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 import { ServerAddress, Accommodation, HeaderAccommodation } from "../../../../enum/url";
 import AutoComplete from "../../../shared/components/ui/AutoComplete";
-import { Loading, Location, SearchTheme3 } from "../../../shared/components/ui/icons";
+import { ApartmentOutline, Home2, Loading, Location, SearchTheme3, Village } from "../../../shared/components/ui/icons";
 import { EntitySearchResultItemType, AccommodationRecentSearchItem } from "@/modules/accommodation/types/accommodation";
 import { useAppDispatch } from "@/modules/shared/hooks/use-store";
 import { setReduxError } from "@/modules/shared/store/errorSlice";
@@ -123,11 +123,11 @@ const AccommodationSearchForm: React.FC<Props> = (props) => {
                     !direction ? "" : direction === "rtl" ? "rtl" : "ltr"
                 }`}
             >
-                {option?.type === "Village" ? (
-                    <Location className="w-5 h-5 fill-current" />
-                ) : (
-                    <Location className="w-5 h-5 fill-current" />
-                )}
+
+                {option?.type === "City" ? <Location className="w-5 h-5 fill-current" /> 
+                    : option?.type === "Province" ? <Home2 className="w-5 h-5 fill-current" /> 
+                    : <Village className="w-5 h-5 fill-current" />}
+
                 <div className="leading-5 text-neutral-600">
                     <div className="text-xs font-bold">{option.name}</div>
                     <div className="text-3xs">{option.title}</div>
@@ -154,6 +154,14 @@ const AccommodationSearchForm: React.FC<Props> = (props) => {
 
         switch (selectedDestination?.type) {
             case "City":
+                url = `/accommodations/${selectedDestination.slug!.replace(/ /g, "-")}`;
+                break;
+
+            case "Province":
+                url = `/accommodations/${selectedDestination.slug!.replace(/ /g, "-")}`;
+                break;
+
+            case "Village":
                 url = `/accommodations/${selectedDestination.slug!.replace(/ /g, "-")}`;
                 break;
 
