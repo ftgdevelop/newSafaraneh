@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import DatePicker, {
   CalendarProps,
-  Value,
-  DateObject as MultiDateObject,
 } from "react-multi-date-picker";
 
 import persian from "react-date-object/calendars/persian";
@@ -11,10 +9,10 @@ import gregorian from "react-date-object/calendars/gregorian";
 import gregorian_en from "react-date-object/locales/gregorian_en";
 
 import CustomToolbar from "./CustomToolbar";
-import CustomRangeInput from "./CustomRangeInput";
 import CustomHeaderPlugin from "./CustomHeaderRangePicker";
 import { RangeValue } from "../../types/common";
 import Toolbar from "react-multi-date-picker/plugins/toolbar";
+import CustomRangeInput from "./CustomRangeInput";
 
 const calendarSettings = {
   fa: {

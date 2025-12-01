@@ -1,5 +1,6 @@
 import {
   DateObject as MultiDateObject,
+  Value,
 } from "react-multi-date-picker"
 
 
@@ -191,3 +192,4 @@ export interface FooterStrapi {
 }
   
 export type RangeValue = [MultiDateObject, MultiDateObject] | undefined;
+export type DatePickerValue =  Value | Value[] | null;

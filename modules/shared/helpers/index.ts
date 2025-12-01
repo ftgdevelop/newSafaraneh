@@ -49,14 +49,14 @@ export const dateDisplayFormat = ({
 }): string => {
   if (!date) return "";
 
-  const cleaned = date.trim();
+  // const cleaned = date.trim();  
 
-  const hasPersianDigits = /[۰-۹]/.test(cleaned);
+  const hasPersianDigits = /[۰-۹]/.test(date);
 
   const faToEnDigits = (str: string) =>
     str.replace(/[۰-۹]/g, d => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)));
 
-  const normalized = hasPersianDigits ? faToEnDigits(cleaned) : cleaned;
+  const normalized = hasPersianDigits ? faToEnDigits(date) : date;
 
   let obj: DateObject;
 

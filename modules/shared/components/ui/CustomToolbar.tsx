@@ -1,5 +1,5 @@
 import React, { MutableRefObject } from "react";
-import { DateObject, DatePickerRef } from "react-multi-date-picker";
+import { DateObject } from "react-multi-date-picker";
 import { CalendarToggle } from "./icons";
 import { useTranslation } from "next-i18next";
 
@@ -21,11 +21,11 @@ const CustomToolbar: React.FC<CustomToolbarProps> = ({
     handleFocusedDate,
     ref
 }) => {
-    const { range, multiple } = state;
+    const { range, multiple} = state;
   const { t } = useTranslation("common");
 
     return (
-        <div className="rmdp-toolbar text-sm bottom text-primary-700 flex justify-between px-3 py-2">
+        <div className=" text-sm bottom text-primary-700 flex justify-between px-3 py-2">
 
             <div
                 onClick={() => setIsFa((p) => !p)}
@@ -55,9 +55,9 @@ const CustomToolbar: React.FC<CustomToolbarProps> = ({
 
         const today = new DateObject({ calendar, locale, format });
 
-        let newSelection = selectedDate;
+        let newSelection = selectedDate ? selectedDate : today;        
 
-        const current = Array.isArray(selectedDate) ? selectedDate[0] : selectedDate;
+        const current = Array.isArray(selectedDate) && selectedDate ? selectedDate[0] : today;
 
         const yearDiff = today.year - current.year;
         const monthDiff = today.month.index - current.month.index;
