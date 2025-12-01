@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import DatePicker, { Value } from "react-multi-date-picker";
 
 import persian from "react-date-object/calendars/persian";
@@ -12,12 +12,15 @@ import CustomToolbar from "./CustomToolbar";
 import { addSomeDays, dateDisplayFormat, DateFormat } from "../../helpers";
 import DateObject from "react-date-object";
 
-const calendars: Record<"fa" | "en", {
-  calendar: any;
-  locale: any;
-  format: DateFormat;
-  weekStartDayIndex: number;
-}> = {
+const calendars: Record<
+  "fa" | "en",
+  {
+    calendar: any;
+    locale: any;
+    format: DateFormat;
+    weekStartDayIndex: number;
+  }
+> = {
   fa: {
     calendar: persian,
     locale: persian_fa,
@@ -31,6 +34,8 @@ const calendars: Record<"fa" | "en", {
     weekStartDayIndex: 0,
   },
 };
+
+const directionToFields = ["returnDate", "ToReturnTime"] as const;
 
 type Props = {
   name: string;
@@ -56,71 +61,63 @@ const DatePicker2: React.FC<Props> = ({
   setIsFa,
   Input,
 }) => {
-  const [pickerLocaleConfig, setPickerLocaleConfig] = useState(
-    isFa ? calendars.fa : calendars.en
-  );
+  const localeKey = isFa ? "fa" : "en";
+
+  const localeConfig = calendars[localeKey];
+
+  const minDate = useMemo(() => {
+    if (directionToFields.includes(name as any) && values?.departureDate) {
+      return new Date(values.departureDate);
+    }
+    return new Date();
+  }, [name, values]);
 
   useEffect(() => {
-    setPickerLocaleConfig(isFa ? calendars.fa : calendars.en);
-  }, [isFa]);
+    if (!directionToFields.includes(name as any)) return;
 
-  const minDate =
-    name === "returnDate" && values?.departureDate
-      ? new Date(values.departureDate)
-      : new Date();
-  
-    useEffect(() => {
-      if (name === "returnDate") {
-        if (values?.departureDate && values?.returnDate) {
+    const dep = values?.departureDate ? new Date(values.departureDate) : null;
+    const ret = values?.returnDate ? new Date(values.returnDate) : null;
 
-          const dep = new Date(values.departureDate);
-          const ret = new Date(values.returnDate);
+    if (dep && ret && dep > ret) {
+      const newDate = addSomeDays(dep);
 
-          if (dep > ret) {
-            const newDate = addSomeDays(dep);
-
-            const dateObj = new DateObject({
-              date: newDate,
-              calendar: isFa ? persian : gregorian,
-              locale: isFa ? persian_fa : gregorian_en,
-            });
-
-            handleChange(dateObj);
-          }
-        }
-      }
-    }, [name, values, isFa]);
-
-  function formatForOutput(v: Value, fa: boolean) {
-    if (!v) return "";    
-    try {
-      const str = dateDisplayFormat({
-        date: v.toString(),
-        format: calendars[fa ? "fa" : "en"].format,
-        locale: fa ? "fa" : "en",
+      const adjusted = new DateObject({
+        date: newDate,
+        calendar: localeConfig.calendar,
+        locale: localeConfig.locale,
       });
-      
-      return str;
+
+      handleChange(adjusted);
+    }
+  }, [name, values, localeConfig]);
+
+  const formatForOutput = (v: Value) => {
+    if (!v) return "";
+    try {
+      return dateDisplayFormat({
+        date: v.toString(),
+        format: localeConfig.format,
+        locale: localeKey,
+      });
     } catch {
       return v.toString();
     }
-  }
+  };
 
-  function handleChange(v: Value | null) {
-    const formatted = v ? formatForOutput(v, isFa) : "";
-
+  const handleChange = (v: Value | null) => {
+    const formatted = v ? formatForOutput(v) : "";
     setFieldValue(name, v);
     if (onChange) onChange(formatted);
-  }
+  };
 
   return (
     <DatePicker
       value={value || null}
       onChange={handleChange}
-      calendar={pickerLocaleConfig.calendar}
-      locale={pickerLocaleConfig.locale}
-      format={pickerLocaleConfig.format}
-      weekStartDayIndex={pickerLocaleConfig.weekStartDayIndex}
+      calendar={localeConfig.calendar}
+      locale={localeConfig.locale}
+      format={localeConfig.format}
+      weekStartDayIndex={localeConfig.weekStartDayIndex}
       numberOfMonths={1}
       minDate={minDate}
       arrow={false}

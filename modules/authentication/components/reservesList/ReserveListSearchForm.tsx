@@ -4,6 +4,7 @@ import { Field, Form, Formik } from 'formik';
 import FormikField from '@/modules/shared/components/ui/FormikField';
 import Button from '@/modules/shared/components/ui/Button';
 import DatePicker2 from '@/modules/shared/components/ui/DatePicker2';
+import DomesticFlightDatePickerInput from '@/modules/shared/components/ui/DomesticFlightDatePickerInput';
 
 type SearchValues = {
     FromReturnTime?: string;
@@ -20,6 +21,8 @@ const ReserveListSearchForm: React.FC<Props> = ({ submitHandle }) => {
     const { t } = useTranslation('common');
 
     const [locale, setLocale] = useState<any>('fa');
+    const [isFa, setIsFa] = useState(true);
+
     const theme2 = process.env.THEME === "THEME2";
 
     const initialValues: SearchValues = {
@@ -81,40 +84,26 @@ const ReserveListSearchForm: React.FC<Props> = ({ submitHandle }) => {
                             </Field>
                         </div>
 
-                        <div className="relative modernDatePicker-checkin">
-                            <label className="block leading-4 mb-2 text-sm">
-                                از تاریخ
-                            </label>
 
-                            <DatePicker2
-                                inputStyle="simple"
-                                rtl
-                                locale={locale}
-                                onChangeLocale={setLocale}
-                                onChange={(selection) => {
-                                    setFieldValue("FromReturnTime", selection.value, true);
-                                }}
-                                setFieldValue={setFieldValue}
-                            />
-                        </div>
+                        <DatePicker2
+                            name="FromReturnTime"
+                            value={values.FromReturnTime}
+                            values={values}
+                            setFieldValue={setFieldValue}
+                            isFa={isFa}
+                            setIsFa={setIsFa}
+                            Input={DomesticFlightDatePickerInput}
+                        />
 
-                        <div className="relative modernDatePicker-checkin">
-                            <label className="block leading-4 mb-2 text-sm">
-                                تا تاریخ
-                            </label>
-
-                            <DatePicker2
-                                inputStyle="simple"
-                                rtl
-                                locale={locale}
-                                onChangeLocale={setLocale}
-                                min={values.FromReturnTime || undefined}
-                                onChange={(selection) => {
-                                    setFieldValue("ToReturnTime", selection.value, true);
-                                }}
-                                setFieldValue={setFieldValue}
-                            />
-                        </div>
+                        <DatePicker2
+                            name="ToReturnTime"
+                            value={values.ToReturnTime}
+                            values={values}
+                            setFieldValue={setFieldValue}
+                            isFa={isFa}
+                            setIsFa={setIsFa}
+                            Input={DomesticFlightDatePickerInput}
+                        />
 
                         {/* Submit Button */}
                         <div className="flex flex-col justify-end">
