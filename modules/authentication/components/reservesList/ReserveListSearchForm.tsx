@@ -20,7 +20,6 @@ type Props = {
 const ReserveListSearchForm: React.FC<Props> = ({ submitHandle }) => {
     const { t } = useTranslation('common');
 
-    const [locale, setLocale] = useState<any>('fa');
     const [isFa, setIsFa] = useState(true);
 
     const theme2 = process.env.THEME === "THEME2";

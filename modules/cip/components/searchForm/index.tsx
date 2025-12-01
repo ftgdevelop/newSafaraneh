@@ -14,6 +14,7 @@ import { CipAutoCompleteType, CipRecentSearchItem } from '../../types/cip';
 import AutoCompleteZoom from '@/modules/shared/components/ui/AutoCompleteZoom';
 import { dateFormat } from '@/modules/shared/helpers';
 import DatePicker2 from '@/modules/shared/components/ui/DatePicker2';
+import CipDatePickerInput from '@/modules/shared/components/ui/CipDatePickerInput';
 
 type SearchFormValues = {
     airportUrl: string;
@@ -37,6 +38,7 @@ const SearchForm: React.FC<Props> = props => {
     const { defaultValues } = props;
 
     const [submitPending, setSubmitPending] = useState<boolean>(false);
+    const [isFa, setIsFa] = useState(true);
 
     const [selectedAirportName, setSelectedAirportName] = useState<string>("");
 
@@ -243,15 +245,17 @@ const SearchForm: React.FC<Props> = props => {
                                             value={values.flightDate}
                                         /> */}
 
+
+
                                         <DatePicker2
-                                            min={dateFormat(new Date())}
-                                            onChange={a => {
-                                                setFieldValue("flightDate", a.value, true)
-                                            }}
-                                            rtl
-                                            locale={'fa'}
-                                            setFieldValue={setFieldValue}
-                                        />
+                                        name="flightDate"
+                                        value={values.flightDate}
+                                        values={values}
+                                        setFieldValue={setFieldValue}
+                                        isFa={isFa}
+                                        setIsFa={setIsFa}
+                                        Input={CipDatePickerInput}
+                                    />
 
                                         {theme2 ?(
                                             <CalendarFill className='w-5 h-5 fill-neutral-600 top-1/2 -mt-2.5 right-3 absolute select-none pointer-events-none' />

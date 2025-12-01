@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { dateDiplayFormat, dateFormat, persianNumbersToEnglish, shamsiToMiladi } from '../../helpers';
+import { dateDisplayFormat, dateFormat, persianNumbersToEnglish, shamsiToMiladi } from '../../helpers';
 import { Field } from 'formik';
 import styles from './DatePickerSelect.module.scss';
 
@@ -28,9 +28,9 @@ const DatePickerSelect: React.FC<Props> = props => {
     const theme2 = process.env.THEME === "THEME2";
     const theme3 = process.env.THEME === "THEME3";
 
-    const localizedInitialValue = props.initialValue ? persianNumbersToEnglish(dateDiplayFormat({ date: props.initialValue, locale: shamsi ? 'fa' : 'en', format: "YYYY-MM-DD" })) : "";
-    const localalizedMin = persianNumbersToEnglish(dateDiplayFormat({ date: min, locale: shamsi ? 'fa' : 'en', format: "YYYY-MM-DD" }));
-    const localalizedMax = persianNumbersToEnglish(dateDiplayFormat({ date: max, locale: shamsi ? 'fa' : 'en', format: "YYYY-MM-DD" }));
+    const localizedInitialValue = props.initialValue ? persianNumbersToEnglish(dateDisplayFormat({ date: props.initialValue, locale: shamsi ? 'fa' : 'en', format: "YYYY-MM-DD" })) : "";
+    const localalizedMin = persianNumbersToEnglish(dateDisplayFormat({ date: min, locale: shamsi ? 'fa' : 'en', format: "YYYY-MM-DD" }));
+    const localalizedMax = persianNumbersToEnglish(dateDisplayFormat({ date: max, locale: shamsi ? 'fa' : 'en', format: "YYYY-MM-DD" }));
 
     const minYear = localalizedMin.split('-')[0];
     const maxYear = localalizedMax.split('-')[0];
@@ -78,7 +78,7 @@ const DatePickerSelect: React.FC<Props> = props => {
 
     useEffect(() => {
         if (props.value) {
-            const localizedPropsValue = persianNumbersToEnglish(dateDiplayFormat({ date: props.value, locale: shamsi ? 'fa' : 'en', format: "YYYY-MM-DD" }));
+            const localizedPropsValue = persianNumbersToEnglish(dateDisplayFormat({ date: props.value, locale: shamsi ? 'fa' : 'en', format: "YYYY-MM-DD" }));
             const formatedValueArray = localizedPropsValue.split("-");
             setYear(formatedValueArray[0]);
             setMonth(formatedValueArray[1]);

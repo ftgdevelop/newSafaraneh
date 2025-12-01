@@ -34,11 +34,6 @@ function DomesticFlightDatePickerInput({
   setFieldValue,
   value,
   openCalendar,
-  handleValueChange,
-  locale,
-  separator,
-  isFa,
-  show = true,
   tripType,
 }: CustomDatePickerInputProps) {
   const theme2 = process.env.THEME === "THEME2";

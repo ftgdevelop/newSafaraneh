@@ -42,6 +42,7 @@ type Props = {
   value?: Value;
   values?: any;
   setFieldValue: (field: string, value: any) => void;
+  label?: string;
 
   onChange?: (x: string) => void;
 
@@ -60,6 +61,7 @@ const DatePicker2: React.FC<Props> = ({
   isFa,
   setIsFa,
   Input,
+  label
 }) => {
   const localeKey = isFa ? "fa" : "en";
 
@@ -151,6 +153,7 @@ const DatePicker2: React.FC<Props> = ({
           isFa={isFa}
           setFieldValue={setFieldValue}
           tripType={name}
+          label={label}
         />
       )}
     />

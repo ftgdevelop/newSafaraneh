@@ -1,7 +1,9 @@
+import CipDatePickerInput from "@/modules/shared/components/ui/CipDatePickerInput";
 import DatePicker2 from "@/modules/shared/components/ui/DatePicker2";
 import FormikField from "@/modules/shared/components/ui/FormikField"
 import { validateRequied } from "@/modules/shared/helpers/validation";
 import { FormikErrors, FormikTouched } from "formik";
+import { useState } from "react";
 
 type Props = {
     setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => Promise<void | FormikErrors<{
@@ -41,6 +43,7 @@ type Props = {
 const CipAirportInformation: React.FC<Props> = props => {
 
     const { setFieldValue, errors, touched, values } = props;
+    const [isFa, setIsFa] = useState(true);
 
     const theme2 = process.env.THEME === "THEME2";
 
@@ -97,18 +100,16 @@ const CipAirportInformation: React.FC<Props> = props => {
                     value={values.flightNumber}
                 />
 
-                <DatePicker2
-                    setFieldValue={setFieldValue}
-                    label="تاریخ پرواز"
-                    errorText={errors.flightDate as string}
-                    isTouched={touched.flightDate}
-                    fieldClassName="pt-1 text-base"
-                    name="flightDate"
-                    id="flightDate"
-                    initialvalue={values.flightDate}
-                    validateFunction={(value: string) => validateRequied(value, "لطفا تاریخ پرواز را وارد نمایید")}
-                />
 
+                <DatePicker2
+                    name="flightDate"
+                    value={values.flightDate}
+                    values={values}
+                    setFieldValue={setFieldValue}
+                    isFa={isFa}
+                    setIsFa={setIsFa}
+                    Input={CipDatePickerInput}
+                />
                 {/* <TimePickerMobiscroll 
                     label="ساعت پرواز"
                     value={values.flightTime}
