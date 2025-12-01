@@ -111,12 +111,7 @@ export async function getStaticProps(context: any) {
     const isShab = process.env.PROJECT === "SHAB";
 
     if (!(isHotelban || isShab)) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false
-            },
-        }
+        return { notFound: true };
     }
 
     return (

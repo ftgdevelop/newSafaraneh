@@ -223,13 +223,26 @@ export const GTM_ID = process.env.GOOGLE_TAG_MANAGER_ID
 export const replaceBrandNames = (text: string) => {
 
     const isShab = process.env.PROJECT === "SHAB";
+    const isTorbeh = process.env.SITE_NAME === 'https://hotel.torbeh.com/';
 
-    if (!text || !isShab) return text;
+    if(!text) return text;
 
-    return text
+    if(isTorbeh){
+               return text
+        .replace(/هتل\s?‌?\s?بان|هتلبان/gi, 'تربه')
+        .replace(/سفرانه/gi, 'تربه')
+        .replace(/ایران\s?‌?\s?هتل/gi, 'تربه')
+        .replace(/info@hotelban\.com/gi, 'info@torbeh.com')
+        .replace(/hotelban\.com/gi, 'hotel.torbeh.com') 
+    }
+    if (isShab) {
+        return text
         .replace(/هتل\s?‌?\s?بان|هتلبان/gi, 'شب')
         .replace(/سفرانه/gi, 'شب')
         .replace(/ایران\s?‌?\s?هتل/gi, 'شب')
         .replace(/info@hotelban\.com/gi, 'info@shab.ir')
         .replace(/hotelban\.com/gi, 'shab.hotelban.com')
+    }
+
+    return text;
 };
