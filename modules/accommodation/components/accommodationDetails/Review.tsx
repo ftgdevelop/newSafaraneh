@@ -35,7 +35,10 @@ function Review({ id }: { id: number }) {
         );
 
         const data = await response.json();
-        setReviews(data.result.reviews || []);
+        const filteredReviews = (data.result.reviews || []).filter(
+          (review: any) => review.comment && review.comment.trim() !== ""
+        );
+        setReviews(filteredReviews);
         setTotalRows(data.result.totalRows || 0);
       } catch (error) {
         console.error("Error fetching reviews:", error);
@@ -94,37 +97,39 @@ function Review({ id }: { id: number }) {
   };
 
   return (
-    <div className="bg-white p-4 rounded shadow">
+    <div className="py-16 border-b">
       <h2 className="font-bold text-lg mb-4">نظرات کاربران</h2>
       {loading ? (
         <p>در حال بارگذاری...</p>
       ) : reviews.length > 0 ? (
-        <div>
+        <>
           <p className="text-sm text-gray-500 mb-4">
-            تعداد کل نظرات: {totalRows}
+            تعداد کل نظرات: {totalRows} نظر
           </p>
           <Slider {...sliderSettings}>
             {reviews.map((review, index) => (
-              <div key={index} className="p-10 flex flex-col text-right border rounded">
-                <p className="text-sm font-bold text-gray-800">
-                  {review.user?.name || "کاربر ناشناس"}
-                </p>
-                <p className="text-xs text-gray-500">
-                  تاریخ: {review.createdAt || "نامشخص"}
-                </p>
-                <p className="text-sm text-gray-700 mt-2">
-                  {review.comment || "بدون نظر"}
-                </p>
-                <div className="flex flex-wrap gap-2 mt-2 text-xs text-gray-600">
-                  <span>نظافت: {review.cleanliness || "-"}</span>
-                  <span>دقت: {review.accuracy || "-"}</span>
-                  <span>کیفیت: {review.quality || "-"}</span>
-                  <span>موقعیت: {review.location || "-"}</span>
+              <div className="px-2" key={index}>
+                <div className="p-10 flex flex-col text-right border rounded-xl bg-white">
+                  <p className="text-sm font-bold text-gray-800">
+                    {review.user?.name || "کاربر ناشناس"}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    تاریخ: {review.createdAt || "نامشخص"}
+                  </p>
+                  <p className="text-sm text-gray-700 mt-2">
+                    {review.comment}
+                  </p>
+                  <div className="flex flex-wrap gap-2 mt-2 text-xs text-gray-600">
+                    <span>نظافت: {review.cleanliness || "-"}</span>
+                    <span>دقت: {review.accuracy || "-"}</span>
+                    <span>کیفیت: {review.quality || "-"}</span>
+                    <span>موقعیت: {review.location || "-"}</span>
+                  </div>
                 </div>
               </div>
             ))}
           </Slider>
-        </div>
+        </>
       ) : (
         <p className="text-red-500">هیچ نظری یافت نشد.</p>
       )}

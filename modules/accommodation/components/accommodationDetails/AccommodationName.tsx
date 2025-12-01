@@ -1,53 +1,57 @@
-import Image from 'next/image';
+import { Location, Star } from "@/modules/shared/components/ui/icons";
 import Rating from "@/modules/shared/components/ui/Rating";
-import HotelScore from "../shared/AccommodationScore";
-import { Location } from "@/modules/shared/components/ui/icons";
 
-function AccommodationName(props: any) {
-    return (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 bg-white rounded-b-xl">
-            <div className="lg:col-span-2 pt-3">
-                <h1 className="font-semibold text-2xl lg:text-4xl mb-3 sm:mb-4 lg:mb-5">
-                    اقامتگاه نمونه
-                </h1>
+type AccommodationNameProps = {
+  title: string;
+  location?: {
+    province?: string;
+    city?: string;
+    village?: string;
+  };
+  rank?: number;
+  reviews?: number;
+};
 
-                <Rating number={4} className="mb-3" />
+function AccommodationName({ title, location, rank, reviews }: AccommodationNameProps) {
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 bg-white rounded-b-xl">
+      <div className="lg:col-span-2 pt-8">
+        {/* Title */}
+        <h2 className="text-xl font-bold text-gray-800">{title}</h2>
 
-                <p className="text-neutral-500 text-sm mb-3 sm:mb-6">
-                    <Location className="w-4 h-4 fill-current inline-block align-middle" />
-                    تهران، خیابان نمونه، پلاک ۱۲۳
-                </p>
+        {/* Location */}
+        {location && (
+          <div className="text-sm text-gray-500">
+            <Location className="w-4 h-4 fill-current inline-block align-middle" /> {location.province || "نامشخص"}، {location.city || "نامشخص"}، {location.village || "نامشخص"}
+          </div>
+        )}
 
-                <HotelScore
-                    reviews={120}
-                    score={8.7}
-                    className="text-md lg:text-lg font-semibold"
-                    max={10}
-                />
-            </div>
+        {/* 
 
-            <div className="lg:col-span-2">
-                <strong className="block font-semibold text-md lg:text-lg mb-3">
-                    امکانات محبوب هتل
-                </strong>
+        <HotelScore
+            reviews={120}
+            score={8.7}
+            className="text-md lg:text-lg font-semibold"
+            max={10}
+        />
+         */}
 
-                <div className="mb-5 flex flex-wrap gap-1 sm:gap-3">
-                    <span className="text-xs sm:text-sm block border border-neutral-200 font-semibold text-neutral-500 px-1 sm:p-2 rounded whitespace-nowrap">
-                        استخر
-                    </span>
-                    <span className="text-xs sm:text-sm block border border-neutral-200 font-semibold text-neutral-500 px-1 sm:p-2 rounded whitespace-nowrap">
-                        وای‌فای رایگان
-                    </span>
-                    <span className="text-xs sm:text-sm block border border-neutral-200 font-semibold text-neutral-500 px-1 sm:p-2 rounded whitespace-nowrap">
-                        رستوران
-                    </span>
-                    <span className="text-xs sm:text-sm block border border-neutral-200 font-semibold text-neutral-500 px-1 sm:p-2 rounded whitespace-nowrap">
-                        پارکینگ
-                    </span>
-                </div>
-            </div>
+        {/* Rank and Reviews */}
+        <div className="flex items-center gap-2 mt-2">
+          {rank && (
+            <span className="text-sm text-yellow-500">
+                <Star className="w-4.5 h-4.5 fill-amber-400" /> {rank.toFixed(1)}
+            </span>
+          )}
+          {reviews && (
+            <span className="text-sm text-gray-500">
+              ({reviews} نظر)
+            </span>
+          )}
         </div>
-    )
+      </div>
+    </div>
+  )
 }
 
 export default AccommodationName;

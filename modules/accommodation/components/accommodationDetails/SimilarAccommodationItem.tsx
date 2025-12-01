@@ -1,123 +1,97 @@
 import Link from "next/link";
 import Image from "next/image";
-import Slider from "react-slick";
-import { ArrowLeft, ArrowRight } from "@/modules/shared/components/ui/icons";
 
 type SimilarAccommodationItemProps = {
   id: number | string;
   title: string;
   location?: { province?: string; city?: string } | null;
-  photos?: { thumbnailAbsoluteUrl?: string }[] | null;
-  salePrice?: number;
-  boardPrice?: number;
-  discountPercent?: number;
-  discountPrice?: number;
+  coverPhoto?: { thumbnailAbsoluteUrl?: string } | null;
+  pricing?: {
+    boardPrice: number;
+    salePrice: number;
+    discountPercent: number;
+    discountPrice: number;
+  };
+  rank?: number;
+  reviews?: number;
+  maxAccommodates?: number;
   checkin?: string;
-    checkout?: string;
-    capacity?: string | number;
+  checkout?: string;
+  capacity?: string | number;
 };
-
-function NextArrow(props: any) {
-  const { onClick } = props;
-  return (
-    <button
-      type="button"
-      className="absolute top-1/2 right-2 z-10 bg-white/80 rounded-full p-1 shadow -translate-y-1/2"
-      onClick={onClick}
-    >
-      <ArrowRight className="w-4 h-4 text-gray-700" />
-    </button>
-  );
-}
-
-function PrevArrow(props: any) {
-  const { onClick } = props;
-  return (
-    <button
-      type="button"
-      className="absolute top-1/2 left-2 z-10 bg-white/80 rounded-full p-1 shadow -translate-y-1/2"
-      onClick={onClick}
-    >
-      <ArrowLeft className="w-4 h-4 text-gray-700" />
-    </button>
-  );
-}
 
 function SimilarAccommodationItem({
   id,
   title,
   location,
-  photos,
-  salePrice,
-  boardPrice,
-  discountPercent,
+  coverPhoto,
+  pricing,
+  checkin,
+  checkout,
+  capacity,
 }: SimilarAccommodationItemProps) {
-  const images = photos && photos.length > 0
-    ? photos
-    : [{ thumbnailAbsoluteUrl: "/placeholder.jpg" }];
+  const imageUrl = coverPhoto?.thumbnailAbsoluteUrl || "/placeholder.jpg";
 
-  const sliderSettings = {
-    dots: false,
-    infinite: images.length > 1,
-    speed: 300,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
-    arrows: images.length > 1,
-  };
+  // Build the detail URL with checkin, checkout, and capacity
+  const detailUrl =
+    `/accommodation/${id}` +
+    (checkin ? `/checkin-${checkin}` : "") +
+    (checkout ? `/checkout-${checkout}` : "") +
+    (capacity ? `/capacity-${capacity}` : "");
 
   return (
     <Link
-      href={`/accommodation/${id}`}
+      href={detailUrl}
       className="block bg-white rounded-lg shadow hover:shadow-md transition-shadow"
     >
-      {/* Image Gallery Section */}
-      <div className="relative">
-        <Slider {...sliderSettings}>
-          {images.map((img, idx) => (
-            <div key={idx} className="h-40 w-full overflow-hidden rounded-t-lg">
-              <Image
-                src={img.thumbnailAbsoluteUrl || "/placeholder.jpg"}
-                alt={title}
-                width={600}
-                height={400}
-                className="h-full w-full object-cover hover:scale-105 transition-transform"
-                priority={idx === 0}
-              />
-            </div>
-          ))}
-        </Slider>
+      {/* Cover Photo */}
+      <div className="relative h-40 w-full overflow-hidden rounded-t-lg">
+        <Image
+          src={imageUrl}
+          alt={title}
+          width={600}
+          height={400}
+          className="h-full w-full object-cover"
+          priority={false}
+        />
       </div>
 
       {/* Content Section */}
       <div className="p-4">
         {/* Title */}
-        <h3 className="text-sm font-bold text-gray-800 truncate">{title}</h3>
-
-        {/* Location */}
-        <p className="text-xs text-gray-500">
-          {location?.province || "نامشخص"}، {location?.city || "نامشخص"}
-        </p>
+        <h3 className="text-sm font-bold text-gray-800 truncate text-right">
+          {title}
+        </h3>
+        <div className="text-xs leading-4 mb-2 text-neutral-500 text-right">
+          {location?.province}، {location?.city}
+        </div>
 
         {/* Pricing */}
-        <div className="mt-2">
-          {discountPercent && discountPercent > 0 ? (
-            <div className="flex items-center gap-2">
-              {/* Original Price */}
-              <span className="text-xs text-gray-500 line-through">
-                {boardPrice?.toLocaleString("fa-IR") || "0"} ریال
-              </span>
-              {/* Sale Price */}
-              <span className="text-sm font-bold text-green-600">
-                {salePrice?.toLocaleString("fa-IR") || "0"} ریال
-              </span>
-            </div>
-          ) : (
-            <span className="text-sm font-bold text-gray-800">
-              {boardPrice?.toLocaleString("fa-IR") || "0"} ریال
-            </span>
-          )}
+        <div className="flex flex-col items-start justify-end mt-2">
+          <div className="flex flex-col items-end gap-1 mb-2">
+            {pricing?.discountPrice && Math.abs(pricing?.discountPrice) > 0 ? (
+              <>
+                <span className="bg-green-700 text-white rounded-xl leading-7 text-xs px-1 py-0 select-none">
+                  {pricing?.discountPercent}% تخفیف
+                </span>
+                <div className="flex flex-row items-end">
+                  <div className="text-xs text-neutral-500 line-through whitespace-nowrap">
+                    {pricing?.boardPrice?.toLocaleString("fa-IR")} ریال
+                  </div>
+                  <div className="text-xs font-bold text-green-600 whitespace-nowrap">
+                    {pricing?.salePrice?.toLocaleString("fa-IR")} ریال
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="text-xs font-bold text-green-600 whitespace-nowrap">
+                {pricing?.salePrice?.toLocaleString("fa-IR")} ریال
+              </div>
+            )}
+          </div>
+          <div className="text-xs text-neutral-500 leading-4">
+            شروع قیمت برای 1 شب
+          </div>
         </div>
       </div>
     </Link>

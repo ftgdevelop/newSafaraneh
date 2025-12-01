@@ -61,6 +61,9 @@ function Similar({ id, checkin, checkout, capacity }: SimilarProps) {
             },
             body: JSON.stringify({
               id,
+              checkin,
+              checkout,
+              capacity,
             }),
           }
         );
@@ -76,7 +79,7 @@ function Similar({ id, checkin, checkout, capacity }: SimilarProps) {
     };
 
     fetchSimilarAccommodations();
-  }, [id]);
+  }, [id, checkin, checkout, capacity]);
 
   const sliderSettings = {
     dots: false,
@@ -103,23 +106,20 @@ function Similar({ id, checkin, checkout, capacity }: SimilarProps) {
   };
 
   return (
-    <div className="container mx-auto py-6">
+    <div className="container mx-auto py-16">
       <h2 className="text-lg font-bold mb-4">اقامتگاه‌های مشابه</h2>
       {loading ? (
         <p>در حال بارگذاری...</p>
       ) : similarItems.length > 0 ? (
         <Slider {...sliderSettings}>
           {similarItems.map((item: any) => (
-            <div key={item.id} className="px-2">
+            <div key={item.id} className="p-2">
               <SimilarAccommodationItem
                 id={item.id}
                 title={item.title || "بدون عنوان"}
-                location={item.location || { province: "نامشخص", city: "نامشخص" }}
-                photos={item.with?.photos || []}
-                salePrice={item.salePrice || 0}
-                boardPrice={item.boardPrice || 0}
-                discountPercent={item.discountPercent || 0}
-                discountPrice={item.discountPrice}
+                location={item.location}
+                coverPhoto={item.coverPhoto}
+                pricing={item.pricing?.priceWithDiscount || item.pricing?.price}
                 checkin={checkin}
                 checkout={checkout}
                 capacity={capacity}
