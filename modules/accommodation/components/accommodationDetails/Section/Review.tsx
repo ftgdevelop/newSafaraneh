@@ -109,7 +109,7 @@ function Review({ id }: { id: number }) {
           <Slider {...sliderSettings}>
             {reviews.map((review, index) => (
               <div className="px-2" key={index}>
-                <div className="p-10 flex flex-col text-right border rounded-xl bg-white">
+                <div className="p-6 flex flex-col text-right border rounded-xl bg-white">
                   <p className="text-sm font-bold text-gray-800">
                     {review.user?.name || "کاربر ناشناس"}
                   </p>

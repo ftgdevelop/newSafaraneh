@@ -59,7 +59,7 @@ function SimilarAccommodationItem({
       {/* Content Section */}
       <div className="p-4">
         {/* Title */}
-        <h3 className="text-sm font-bold text-gray-800 truncate text-right">
+        <h3 className="text-sm font-bold text-gray-800 leading-2 min-h-14 text-right">
           {title}
         </h3>
         <div className="text-xs leading-4 mb-2 text-neutral-500 text-right">

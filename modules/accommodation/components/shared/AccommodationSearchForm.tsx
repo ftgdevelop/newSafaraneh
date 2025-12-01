@@ -126,7 +126,7 @@ const AccommodationSearchForm: React.FC<Props> = (props) => {
 
                 {option?.type === "City" ? <Location className="w-5 h-5 fill-current" /> 
                     : option?.type === "Province" ? <Home2 className="w-5 h-5 fill-current" /> 
-                    : <Village className="w-5 h-5 fill-current" />}
+                    : <Village className="w-4 h-4 fill-current" />}
 
                 <div className="leading-5 text-neutral-600">
                     <div className="text-xs font-bold">{option.name}</div>
