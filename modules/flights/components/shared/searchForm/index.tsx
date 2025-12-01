@@ -32,7 +32,7 @@ const SearchForm: React.FC<Props> = props => {
 
     const { defaultValues } = props;
 
-    const [locale, setLocale] = useState<any>('fa');
+    const [isFa, setIsFa] = useState(true);
 
     const [locations, setLocations] = useState<[AirportAutoCompleteType | undefined, AirportAutoCompleteType | undefined]>([defaultValues?.originObject || undefined, defaultValues?.destinationObject || undefined]);
 
@@ -402,22 +402,23 @@ const SearchForm: React.FC<Props> = props => {
                                     </div>
 
                                     <DatePicker2
-                                        name='departureDate'
-                                        setFieldValue={setFieldValue}
-                                        errorText={errors}
-                                        touched={touched}
+                                        name="departureDate"
                                         value={values.departureDate}
-                                        Input={DomesticFlightDatePickerInput}    
                                         values={values}
-                                    />
-                                    <DatePicker2
-                                        name='returnDate'
                                         setFieldValue={setFieldValue}
-                                        errorText={errors}
-                                        touched={touched}
+                                        isFa={isFa}
+                                        setIsFa={setIsFa}
+                                        Input={DomesticFlightDatePickerInput}
+                                    />
+
+                                    <DatePicker2
+                                        name="returnDate"
                                         value={values.returnDate}
-                                        Input={DomesticFlightDatePickerInput}    
                                         values={values}
+                                        setFieldValue={setFieldValue}
+                                        isFa={isFa}
+                                        setIsFa={setIsFa}
+                                        Input={DomesticFlightDatePickerInput}
                                     />
                                     {!theme1 && <div className={theme3?"md:col-span-3 xl:w-1/6":""}>
                                         {theme3 && (

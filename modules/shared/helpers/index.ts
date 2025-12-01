@@ -25,6 +25,21 @@ export const numberWithCommas = (x: number) => {
         return "0";
     }
 }
+export type DateFormat =
+  | "weekDayNumber"
+  | "m"
+  | "d"
+  | "HH:mm"
+  | "dd mm"
+  | "ddd dd mm"
+  | "dddd dd MMMM"
+  | "ddd dd mm yyyy"
+  | "dd mm yyyy"
+  | "yyyy/mm/dd"
+  | "YYYY-MM-DD"
+  | "MM/DD/YYYY"
+  | "YYYY/MM/DD"
+  | "yyyy/mm/dd h:m";
 
 export const dateDisplayFormat = ({
   date,
@@ -32,24 +47,11 @@ export const dateDisplayFormat = ({
   locale,
 }: {
   date: string;
-  format?:
-    | "weekDayNumber"
-    | "m"
-    | "d"
-    | "HH:mm"
-    | "dd mm"
-    | "ddd dd mm"
-    | "dddd dd MMMM"
-    | "ddd dd mm yyyy"
-    | "dd mm yyyy"
-    | "yyyy/mm/dd"
-    | "YYYY-MM-DD"
-    | "yyyy/mm/dd h:m";
+    format?: DateFormat;
   locale?: "fa" | "en";
 }): string => {
   if (!date) return "";
 
-  // const cleaned = date.trim();  
 
   const hasPersianDigits = /[۰-۹]/.test(date);
 
@@ -60,32 +62,34 @@ export const dateDisplayFormat = ({
 
   let obj: DateObject;
 
-  // Detect if input is Persian-format YYYY/MM/DD
   const isJalaliInput = /^\d{4}\/\d{2}\/\d{2}$/.test(normalized) &&
-                        Number(normalized.substring(0, 4)) > 1300;
+    Number(normalized.substring(0, 4)) > 1300;
+  
+    
+    
+    if (isJalaliInput) {
+      obj = new DateObject({
+        date: normalized,
+        format: "YYYY/MM/DD",
+        calendar: persian,
+        locale: persian_fa,
+      }).convert(gregorian, english);
+    } else {
+      obj = new DateObject({
+        date: normalized,
+        format: "MM/DD/YYYY",
+        calendar: gregorian,
+        locale: english,
+      });
+    }
+        console.log({normalized, isJalaliInput},obj);
 
-  if (isJalaliInput) {
-    obj = new DateObject({
-      date: normalized,
-      format: "YYYY/MM/DD",
-      calendar: persian,
-      locale: persian_fa,
-    }).convert(gregorian, english);
-  } else {
-    obj = new DateObject({
-      date: normalized,
-      format: "MM/DD/YYYY",
-      calendar: gregorian,
-      locale: english,
-    });
-  }
-
-  if (!obj.isValid) return "";
-
-  // Output locale conversion
-  if (locale === "fa") {
-    obj = obj.convert(persian, persian_fa);
-  }
+    if (!obj.isValid) return "";
+    
+    // Output locale conversion
+    if (locale === "fa") {
+      obj = obj.convert(persian, persian_fa);
+    }
 
   const map: Record<string, string> = {
     "HH:mm": obj.format("HH:mm"),
@@ -96,6 +100,8 @@ export const dateDisplayFormat = ({
     "dd mm yyyy": obj.format("DD MMM YYYY"),
     "yyyy/mm/dd": obj.format("YYYY/MM/DD"),
     "YYYY-MM-DD": obj.format("YYYY-MM-DD"),
+    "MM/DD/YYYY": obj.format("MM/DD/YYYY"),
+    "YYYY/MM/DD": obj.format("YYYY/MM/DD"),
     "yyyy/mm/dd h:m": obj.format("YYYY/MM/DD HH:mm"),
     d: obj.format("DD"),
     m: obj.format("MMM"),
