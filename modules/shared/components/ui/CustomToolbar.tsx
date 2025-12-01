@@ -1,87 +1,97 @@
-import React, { MutableRefObject } from "react";
+import React from "react";
 import { DateObject } from "react-multi-date-picker";
 import { CalendarToggle } from "./icons";
 import { useTranslation } from "next-i18next";
 
 interface CustomToolbarProps {
-    isFa: boolean;
-    setIsFa: React.Dispatch<React.SetStateAction<boolean>>;
-    position: "top" | "bottom";
-    state: any;
-    handleChange: (value: any, state: any) => void;
-    handleFocusedDate: (date?: any) => void;
-    ref: MutableRefObject<any>
+  isFa: boolean;
+  setIsFa: React.Dispatch<React.SetStateAction<boolean>>;
+  position?: "top" | "bottom";
+
+  state?: any;
+  handleChange?: (value: any, state?: any) => void;
+  handleFocusedDate?: (date?: any) => void;
 }
 
 const CustomToolbar: React.FC<CustomToolbarProps> = ({
-    isFa,
-    setIsFa,
-    state,
-    handleChange,
-    handleFocusedDate,
-    ref
+  isFa,
+  setIsFa,
+  state,
+  handleChange,
+  handleFocusedDate,
 }) => {
-    const { range, multiple} = state;
   const { t } = useTranslation("common");
 
-    return (
-        <div className=" text-sm bottom text-primary-700 flex justify-between px-3 py-2">
+  const safeState = state || {};
+  const { range, multiple, selectedDate, calendar, locale, format, focusedDate } =
+    safeState;
 
-            <div
-                onClick={() => setIsFa((p) => !p)}
-                className="cursor-pointer flex items-center gap-2"
-            >
-                {isFa ? t("gregorianCalendar") : t("iranianCalendar")}
-                <CalendarToggle className="w-4 h-4 text-primary-700" />
-            </div>
+  const safeCurrentDate = (() => {
+    if (focusedDate) return new DateObject(focusedDate);
+    if (selectedDate instanceof DateObject) return selectedDate;
+    if (Array.isArray(selectedDate) && selectedDate[0])
+      return new DateObject(selectedDate[0]);
+    return new DateObject({ calendar, locale, format });
+  })();
 
-            <div className="cursor-pointer " onClick={selectToday}>
-                برو به امروز
-            </div>
+  function updateMonth(diff: number) {
+    if (!safeState || !safeCurrentDate) return;
 
-
-        </div>
+    const next = new DateObject(safeCurrentDate).set(
+      "month",
+      safeCurrentDate.month.index + diff
     );
 
-    function update(key : "month", value : number) {
-    if (!ref?.current) return;
-    let date = ref.current.date;
-    ref.current.set(key, date[key] + value);
-    return new DateObject(date);
+    if (handleFocusedDate) handleFocusedDate(next);
+  }
+
+  function selectToday() {
+    if (!safeState) return;
+
+    const today = new DateObject({ calendar, locale, format });
+
+    let newSelection;
+
+    if (range) {
+      if (!selectedDate || selectedDate.length === 0) {
+        newSelection = [today];
+      } else if (selectedDate.length === 1) {
+        newSelection = [selectedDate[0], today].sort((a, b) => a - b);
+      } else {
+        newSelection = [today];
+      }
+    } else if (multiple) {
+      newSelection = [today];
+    } else {
+      newSelection = today;
     }
 
-    function selectToday() {
-        const { calendar, format, locale, selectedDate } = state;
-
-        const today = new DateObject({ calendar, locale, format });
-
-        let newSelection = selectedDate ? selectedDate : today;        
-
-        const current = Array.isArray(selectedDate) && selectedDate ? selectedDate[0] : today;
-
-        const yearDiff = today.year - current.year;
-        const monthDiff = today.month.index - current.month.index;
-        const totalMonthDiff = yearDiff * 12 + monthDiff;
-
-        update("month", totalMonthDiff);
-
-        if (range) {
-            if (!newSelection || newSelection.length === 0) {
-                newSelection = [today];
-            } else if (newSelection.length === 2) {
-                newSelection = [today];
-            } else if (newSelection.length === 1) {
-                newSelection = [newSelection[0], today].sort((a, b) => a - b);
-            }
-        } else if (multiple) {
-            newSelection = [today];
-        } else {
-            newSelection = today;
-        }
-        
-        handleChange(newSelection, { ...state, selectedDate: newSelection, focusedDate: today });
-        handleFocusedDate(today);
+    if (handleChange) {
+      handleChange(newSelection, {
+        ...safeState,
+        selectedDate: newSelection,
+        focusedDate: today,
+      });
     }
+
+    if (handleFocusedDate) handleFocusedDate(today);
+  }
+
+  return (
+    <div className="text-sm text-primary-700 flex justify-between px-3 py-2">
+      <div
+        onClick={() => setIsFa((p) => !p)}
+        className="cursor-pointer flex items-center gap-2"
+      >
+        {isFa ? t("gregorianCalendar") : t("iranianCalendar")}
+        <CalendarToggle className="w-4 h-4 text-primary-700" />
+      </div>
+
+      <div className="cursor-pointer" onClick={selectToday}>
+        برو به امروز
+      </div>
+    </div>
+  );
 };
 
 export default CustomToolbar;

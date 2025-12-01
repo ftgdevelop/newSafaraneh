@@ -87,10 +87,6 @@ const RangePicker2 = ({ value, onChange }: RangePicker2Props) => {
           isFa={isFa}
           setIsFa={setIsFa}
           position="bottom"
-          state={pickerRef.current?.state}
-          handleChange={pickerRef.current?.handleChange}
-          handleFocusedDate={pickerRef.current?.handleFocusedDate}
-          ref={pickerRef}
         />,
         <Toolbar
           key='top-toolbar'  

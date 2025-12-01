@@ -1,13 +1,13 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
-import DatePicker, { Value } from "react-multi-date-picker";
+import React, { useEffect, useRef, useState } from "react";
+import DatePicker, { Value, DateObject } from "react-multi-date-picker";
 
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import gregorian from "react-date-object/calendars/gregorian";
 import gregorian_en from "react-date-object/locales/gregorian_en";
 
-import CustomToolbar from "./CustomToolbar";
 import Toolbar from "react-multi-date-picker/plugins/toolbar";
+import CustomToolbar from "./CustomToolbar"; 
 
 import { dateDisplayFormat } from "../../helpers";
 
@@ -23,7 +23,6 @@ type Props = {
 
   locale?: "fa" | "en";
   Input: React.ComponentType<any>;
-
 };
 
 const calendars = {
@@ -48,76 +47,83 @@ const DatePicker2: React.FC<Props> = ({
   setFieldValue,
   errorText,
   touched,
-  locale,
+  locale = "fa",
   onChange,
   Input,
 }) => {
-  const [isFa, setIsFa] = useState(locale === "fa");
-  const [props, setProps] = useState<any>({
-    value,
-    locale
-  });
-  
-  const settings = isFa ? calendars.fa : calendars.en;
+  const [isFa, setIsFa] = useState<boolean>(locale === "fa");
 
-  const pickerRef = useRef<any>();
+  const [pickerLocaleConfig, setPickerLocaleConfig] = useState<any>(
+    isFa ? calendars.fa : calendars.en
+  );
+
+  const pickerRef = useRef<any>(null);
 
   useEffect(() => {
-    setProps((p: any) =>({...p , locale:isFa ? persian : gregorian_en}))
-  },[isFa])
+    setPickerLocaleConfig(isFa ? calendars.fa : calendars.en);
+  }, [isFa]);
 
-  // const handleChange = useCallback((v: Value | null) => {   
-  //   console.log({v});
-  
-  //   if (v) pickerRef.current?.closeCalendar();
+  const minDate =
+    name === "returnDate" && values?.departureDate
+      ? new Date(values.departureDate)
+      : new Date();
 
-  //   if (onChange && v && typeof v === "object" && "toDate" in v) {
-  //     const formatted = dateDisplayFormat({
-  //       date: v.toString(),  
-  //       format: "dddd dd MMMM",
-  //       locale: isFa ? "fa" : "en",
-  //     });
-  //     onChange(formatted);
-  //     setFieldValue(name, formatted || "", true);
+  function formatForOutput(v: Value, useLocaleIsFa: boolean) {
+    if (v == null) return "";
 
-  //   }
-  // }, [isFa, locale])
-  
-  const minDate = name === 'returnDate' && values.departureDate ? new Date(values.departureDate) : new Date()
-  console.log({minDate});
-  
+    let candidate: any = Array.isArray(v) ? (v as any[])[0] : v;
+
+    if (candidate && typeof candidate === "object" && "toDate" in candidate) {
+      try {
+        const formatted = dateDisplayFormat({
+          date: candidate.toString(), 
+          format: "dddd dd MMMM",
+          locale: useLocaleIsFa ? "fa" : "en",
+        });
+        return formatted;
+      } catch (e) {
+        return candidate.toString();
+      }
+    }
+
+    if (typeof candidate === "string") return candidate;
+    if (candidate instanceof Date) return candidate.toISOString();
+
+    return String(candidate);
+  }
+
+  function handleChange(v: Value | null) {
+    const output = v ? formatForOutput(v as Value, isFa) : "";
+
+    setFieldValue(name, v ?? "", true);
+
+    if (onChange) {
+      onChange(output);
+    }
+  }
 
   return (
     <DatePicker
-      {...props}
       ref={pickerRef}
-      onPropsChange={(p) => setProps(p)}
-      value={value || null}
-      onChange={(v) => {
-        console.log({v});
-        
-      }}
-      calendar={settings.calendar}
-      locale={settings.locale}
-      format={settings.format}
-      weekStartDayIndex={settings.weekStartDayIndex}
+      value={value ?? null}
+      onChange={handleChange}
+      calendar={pickerLocaleConfig.calendar}
+      locale={pickerLocaleConfig.locale}
+      format={pickerLocaleConfig.format}
+      weekStartDayIndex={pickerLocaleConfig.weekStartDayIndex}
       numberOfMonths={1}
       minDate={minDate}
       arrow={false}
       monthYearSeparator=""
       plugins={[
         <CustomToolbar
-          key="toolbar"
+          key="custom-toolbar"
           isFa={isFa}
           setIsFa={setIsFa}
           position="bottom"
-          state={pickerRef.current?.state}
-          handleChange={pickerRef.current?.handleChange}
-          handleFocusedDate={pickerRef.current?.handleFocusedDate}
-          ref={pickerRef}
         />,
         <Toolbar
-          key="toolbar"
+          key="builtin-toolbar"
           position="top"
           sort={["close", "deselect", "today"]}
           className="md:!hidden"
@@ -137,8 +143,8 @@ const DatePicker2: React.FC<Props> = ({
           locale={loc}
           separator={separator}
           isFa={isFa}
-          errors={errorText?.[name]}          
-          touched={touched?.[name]}           
+          errors={errorText?.[name]}
+          touched={touched?.[name]}
           setFieldValue={setFieldValue}
           tripType={name}
         />
