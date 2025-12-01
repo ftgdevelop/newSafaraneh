@@ -60,8 +60,6 @@ const isRoundTrip = values.airTripType === "RoundTrip";
   const handleClick = () => {
     if (!isDeparture) {
         if (!isRoundTrip && setFieldValue) { 
-            console.log('64');
-            
         setFieldValue("airTripType", "RoundTrip", true);
       }
     }

@@ -82,11 +82,8 @@ export const dateDisplayFormat = ({
         locale: english,
       });
     }
-        console.log({normalized, isJalaliInput},obj);
-
     if (!obj.isValid) return "";
     
-    // Output locale conversion
     if (locale === "fa") {
       obj = obj.convert(persian, persian_fa);
     }
