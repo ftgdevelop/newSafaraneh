@@ -27,7 +27,7 @@ const AccommodationDetailPage: NextPage = () => {
   const [loading, setLoading] = useState(false);
 
   // Extract values from the dynamic route
-  const id = Array.isArray(accommodationDetail) && accommodationDetail[0] ? Number(accommodationDetail[0]) : null;
+  const id = Array.isArray(accommodationDetail) && accommodationDetail[0] ? Number(accommodationDetail[0]) : null;    
   const checkin = Array.isArray(accommodationDetail) && accommodationDetail[1]?.replace("checkin-", "") || undefined;
   const checkout = Array.isArray(accommodationDetail) && accommodationDetail[2]?.replace("checkout-", "") || undefined;
   const capacity = Array.isArray(accommodationDetail) && accommodationDetail[3]?.replace("capacity-", "") || undefined;
@@ -73,7 +73,7 @@ const AccommodationDetailPage: NextPage = () => {
   }, [id]);
 
   const handleUpdate = (newCheckin: string, newCheckout: string, newCapacity: number) => {
-    if (id === null) {
+    if (id === null || id === undefined) {
       console.error("ID is null");
       return;
     }
