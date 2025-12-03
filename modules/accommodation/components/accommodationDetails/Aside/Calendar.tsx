@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import UpdateForm from "@/modules/accommodation/components/accommodationDetails/Aside/UpdateForm";
 import { ServerAddress, Accommodation } from "@/enum/url";
+import Button from "@/modules/shared/components/ui/Button";
 
 type CalendarProps = {
   id: number;
@@ -14,6 +15,9 @@ type CalendarProps = {
 const Calendar: React.FC<CalendarProps> = ({ id, checkin, checkout, capacity, onUpdate }) => {
   const [calendarData, setCalendarData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [nights, setNights] = useState<number>(0);
+  const [startingPrice, setStartingPrice] = useState<number>(0);
 
   const formatDateWithTime = (date: string) => `${date}T00:39:53.644Z`;
 
@@ -39,7 +43,29 @@ const Calendar: React.FC<CalendarProps> = ({ id, checkin, checkout, capacity, on
             },
           }
         );
-        setCalendarData(response.data.result || []);
+
+        const data = response.data.result || {};
+        const calendar = data.calenders?.calendar || {};
+
+        // Flatten the calendar data into a single array of days
+        const flattenedDays = Object.keys(calendar).reduce((acc: any[], month) => {
+          const days = calendar[month].map((day: any) => ({
+            ...day,
+            date: `${month}-${String(day.day).padStart(2, "0")}`, // Add full date
+          }));
+          return acc.concat(days);
+        }, []);
+
+        setCalendarData(flattenedDays);
+
+        // Calculate total price and nights
+        const prices = flattenedDays.map((item: any) => item.price.salePrice);
+        const minPrice = Math.min(...prices);
+        const total = prices.reduce((sum: number, price: number) => sum + price, 0);
+
+        setStartingPrice(minPrice);
+        setTotalPrice(total);
+        setNights(flattenedDays.length);
       } catch (error) {
         console.error("Error fetching calendar data:", error);
       } finally {
@@ -52,20 +78,22 @@ const Calendar: React.FC<CalendarProps> = ({ id, checkin, checkout, capacity, on
 
   return (
     <div className="p-4 bg-white border rounded-lg">
-      <h3 className="text-lg font-bold mb-4">تقویم قیمت‌ها</h3>
+      <h3 className="text-lg font-bold mb-4">جزئیات اقامت</h3>
+
       {loading ? (
-        <p>در حال بارگذاری...</p>
-      ) : calendarData.length > 0 ? (
-        <ul className="space-y-2">
-          {calendarData.map((item, index) => (
-            <li key={index} className="flex justify-between text-sm">
-              <span>{item.date}</span>
-              <span>{item.price} EUR</span>
-            </li>
-          ))}
-        </ul>
+        <div className="mb-4 flex justify-between">
+          <div className="h-6 bg-gray-300 rounded w-24"></div>
+          <div className="h-7 bg-gray-300 rounded w-32"></div>
+        </div>
       ) : (
-        <p>اطلاعاتی یافت نشد.</p>
+        <>
+          <div className="mb-4 flex justify-between">
+            <span className="text-sm text-gray-500">شروع قیمت از:</span>
+            <span className="text-md font-bold">
+              {startingPrice.toLocaleString()} تومان / هر شب
+            </span>
+          </div>
+        </>
       )}
 
       {/* UpdateForm for updating checkin, checkout, and capacity */}
@@ -78,6 +106,48 @@ const Calendar: React.FC<CalendarProps> = ({ id, checkin, checkout, capacity, on
           }}
         />
       </div>
+      
+      {loading ? (
+        <div className="my-6 space-y-4">
+          <div className="mb-4 flex justify-between">
+            <div className="h-6 bg-gray-300 rounded w-24"></div>
+            <div className="h-7 bg-gray-300 rounded w-32"></div>
+          </div>
+          <div className="mb-4 flex justify-between">
+            <div className="h-6 bg-gray-300 rounded w-24"></div>
+            <div className="h-7 bg-gray-300 rounded w-32"></div>
+          </div>
+        </div>
+      ) : (
+        <div className="my-6 space-y-4">
+          <div className="flex justify-between">
+            <span className="text-sm text-gray-500">مدت اقامت:</span>
+            <span className="text-md font-bold">{nights} شب</span>
+          </div>
+
+          <div className="flex justify-between">
+            <span className="text-sm text-gray-500">مبلغ کل:</span>
+            <span className="text-md font-bold">
+              {totalPrice.toLocaleString()} تومان
+            </span>
+          </div>
+
+          <div className="flex justify-between">
+            <span className="text-sm text-gray-500">مبلغ قابل پرداخت:</span>
+            <span className="text-md font-bold">
+              {totalPrice.toLocaleString()} تومان
+            </span>
+          </div>
+        </div>
+      )}
+
+      {loading ? (
+        <div className="h-10 bg-gray-300 rounded"></div>
+      ) : (
+        <Button className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">
+          درخواست رزرو
+        </Button>
+      )}
     </div>
   );
 };

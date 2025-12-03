@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useState, useEffect } from "react";
 
 type HostProps = {
   host: {
@@ -9,6 +10,27 @@ type HostProps = {
 };
 
 function Host({ host }: HostProps) {
+  const [loading, setLoading] = useState(true);
+
+  // Simulate loading for demonstration purposes
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1000); // Simulate 1 second loading
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    // Skeleton loading placeholders
+    return (
+      <div className="flex items-center gap-4 p-4 bg-white rounded-lg border my-4 animate-pulse">
+        <div className="w-16 h-16 rounded-full bg-gray-300"></div>
+        <div className="flex-1 space-y-2">
+          <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+          <div className="h-3 bg-gray-300 rounded w-1/3"></div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex items-center gap-4 p-4 bg-white rounded-lg border my-4">
       <div className="w-16 h-16 rounded-full overflow-hidden border border-gray-200">

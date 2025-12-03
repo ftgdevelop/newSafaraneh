@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { UpCaret, DownCaret } from "@/modules/shared/components/ui/icons"; // Import the icons
 
 type Feature = {
@@ -19,6 +19,31 @@ type FeaturesProps = {
 
 function Features({ features }: FeaturesProps) {
   const { filledCategories } = features;
+  const [loading, setLoading] = useState(true);
+  const [showAll, setShowAll] = useState(false); // Move this hook above the conditional checks
+
+  // Simulate loading for demonstration purposes
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1000); // Simulate 1 second loading
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    // Skeleton loading placeholders
+    return (
+      <div className="py-16 border-b">
+        <div className="h-6 bg-gray-300 rounded w-32 mb-4"></div>
+        <ul className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <li key={index} className="animate-pulse">
+              <div className="w-6 h-6 bg-gray-300 rounded-full mb-2"></div>
+              <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
 
   // Check if there are no filled categories
   if (!filledCategories || Object.keys(filledCategories).length === 0) {
@@ -30,7 +55,6 @@ function Features({ features }: FeaturesProps) {
     );
   }
 
-  const [showAll, setShowAll] = useState(false);
   const categories = Object.entries(filledCategories);
   const visibleCategories = showAll ? categories : categories.slice(0, 2);
 

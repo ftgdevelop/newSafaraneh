@@ -6,7 +6,7 @@ import Captions from "yet-another-react-lightbox/plugins/captions";
 import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import "yet-another-react-lightbox/plugins/captions.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type GalleryProps = {
   images: {
@@ -20,36 +20,58 @@ type GalleryProps = {
 function Gallery({ images }: GalleryProps) {
   const [open, setOpen] = useState(false);
   const [slideIndex, setSlideIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const openLightBox = (index: number) => {
     setSlideIndex(index);
     setOpen(true);
   };
 
+  // Simulate loading for demonstration purposes
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1000); // Simulate 1 second loading
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 bg-white gap-1 relative">
-      {images.slice(0, 5).map((slide, index) => (
-        <Image
-          key={index}
-          priority={!index}
-          onContextMenu={(e) => e.preventDefault()}
-          src={slide.thumbnailPath || "/images/no-image.jpg"}
-          alt={slide.title || "تصویر اقامتگاه"}
-          title={slide.title || "تصویر اقامتگاه"}
-          width={index ? 287 : 384}
-          height={index ? 191 : 288}
-          sizes="(max-width: 767px) 100vw, 50vw"
-          onClick={() => openLightBox(index)}
-          className={`cursor-pointer w-full object-cover ${
-            index ? "hidden md:block md:col-span-1 md:row-span-1 h-40" : "md:col-span-2 md:row-span-2 h-80"
-          }`}
-        />
-      ))}
+      {loading ? (
+        // Skeleton loading placeholders
+        Array.from({ length: 5 }).map((_, index) => (
+          <div
+            key={index}
+            className={`animate-pulse bg-gray-300 ${
+              index ? "hidden md:block md:col-span-1 md:row-span-1 h-40" : "md:col-span-2 md:row-span-2 h-80"
+            }`}
+          />
+        ))
+      ) : (
+        // Render images when loading is complete
+        images.slice(0, 5).map((slide, index) => (
+          <Image
+            key={index}
+            priority={!index}
+            onContextMenu={(e) => e.preventDefault()}
+            src={slide.thumbnailPath || "/images/no-image.jpg"}
+            alt={slide.title || "تصویر اقامتگاه"}
+            title={slide.title || "تصویر اقامتگاه"}
+            width={index ? 287 : 384}
+            height={index ? 191 : 288}
+            sizes="(max-width: 767px) 100vw, 50vw"
+            onClick={() => openLightBox(index)}
+            className={`cursor-pointer w-full object-cover ${
+              index ? "hidden md:block md:col-span-1 md:row-span-1 h-40" : "md:col-span-2 md:row-span-2 h-80"
+            }`}
+          />
+        ))
+      )}
 
-      <span className="text-xs absolute bottom-3 rtl:left-3 ltr:right-3 bg-black/75 text-white px-5 py-2 rounded-lg pointer-events-none flex gap-2 items-center">
-        <ImageGallery className="w-6 h-6 fill-current" />
-        +{images.length} عکس
-      </span>
+      {!loading && (
+        <span className="text-xs absolute bottom-3 rtl:left-3 ltr:right-3 bg-black/75 text-white px-5 py-2 rounded-lg pointer-events-none flex gap-2 items-center">
+          <ImageGallery className="w-6 h-6 fill-current" />
+          +{images.length} عکس
+        </span>
+      )}
 
       <Lightbox
         index={slideIndex}

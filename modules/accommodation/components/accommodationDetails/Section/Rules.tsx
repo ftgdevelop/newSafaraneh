@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { UpCaret, DownCaret } from "@/modules/shared/components/ui/icons"; // Import the icons
 
 type RulesProps = {
@@ -42,6 +42,13 @@ function Rules({ rules }: RulesProps) {
   } = rules;
 
   const [showAll, setShowAll] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // Simulate loading for demonstration purposes
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1000); // Simulate 1 second loading
+    return () => clearTimeout(timer);
+  }, []);
 
   const rulesList = [
     { label: "ظرفیت استاندارد", value: `${accommodates} نفر` },
@@ -64,6 +71,23 @@ function Rules({ rules }: RulesProps) {
   const toggleShowMore = () => {
     setShowAll((prev) => !prev);
   };
+
+  if (loading) {
+    // Skeleton loading placeholders
+    return (
+      <div className="py-16 border-b">
+        <div className="h-6 bg-gray-300 rounded w-32 mb-4"></div>
+        <ul className="space-y-4">
+          {Array.from({ length: 2 }).map((_, index) => (
+            <li key={index} className="animate-pulse">
+              <div className="h-4 bg-gray-300 rounded w-1/2 mb-2"></div>
+              <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
 
   return (
     <div className="py-16 border-b">

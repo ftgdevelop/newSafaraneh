@@ -106,7 +106,7 @@ function Similar({ id, checkin, checkout, capacity }: SimilarProps) {
   };
 
   return (
-    <div className="container mx-auto py-16">
+    <div className="container mx-auto py-8 md:py-16">
       <h2 className="text-lg font-bold mb-4">اقامتگاه‌های مشابه</h2>
       {loading ? (
         <p>در حال بارگذاری...</p>
