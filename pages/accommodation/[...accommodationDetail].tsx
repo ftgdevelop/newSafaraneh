@@ -73,6 +73,11 @@ const AccommodationDetailPage: NextPage = () => {
   }, [id]);
 
   const handleUpdate = (newCheckin: string, newCheckout: string, newCapacity: number) => {
+    if (id === null) {
+      console.error("ID is null");
+      return;
+    }
+
     // Update the state
     setCheckin(newCheckin);
     setCheckout(newCheckout);
@@ -84,7 +89,7 @@ const AccommodationDetailPage: NextPage = () => {
         pathname: router.pathname,
         query: {
           accommodationDetail: [
-            id!,
+            id,
             `checkin-${newCheckin}`,
             `checkout-${newCheckout}`,
             `capacity-${newCapacity}`,
@@ -163,28 +168,34 @@ const AccommodationDetailPage: NextPage = () => {
               </div>
 
               <div id="calendar">
-                <CalendarPicker id={id!} checkin={checkinState} checkout={checkoutState} />
+                {id !== null && (
+                  <CalendarPicker id={id} checkin={checkinState} checkout={checkoutState} />
+                )}
               </div>
 
               <div id="rates">
                 <Rates rates={house.rates} />
-                <Review id={id!} />
+                {id !== null && <Review id={id} />}
               </div>
 
               <div id="similar">
-                <Similar id={id!} checkin={checkinState} checkout={checkoutState} capacity={capacityState} />
+                {id !== null && (
+                  <Similar id={id} checkin={checkinState} checkout={checkoutState} capacity={capacityState} />
+                )}
               </div>
             </div>
 
             <aside className="lg:col-span-2 md:mt-8">
               <div className="sticky md:top-18">
-                <Calendar
-                  id={id!}
-                  checkin={checkinState}
-                  checkout={checkoutState}
-                  capacity={capacityState}
-                  onUpdate={handleUpdate}
-                />
+                {id !== null && (
+                  <Calendar
+                    id={id}
+                    checkin={checkinState}
+                    checkout={checkoutState}
+                    capacity={capacityState}
+                    onUpdate={handleUpdate}
+                  />
+                )}
               </div>
             </aside>
           </div>
