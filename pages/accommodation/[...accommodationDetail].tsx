@@ -41,7 +41,7 @@ const AccommodationDetailPage: NextPage = () => {
 
   // Fetch accommodation details
   useEffect(() => {
-    if (!id) return;
+    if (id === null) return;
 
     const fetchAccommodationDetails = async () => {
       setLoading(true);
@@ -168,7 +168,7 @@ const AccommodationDetailPage: NextPage = () => {
               </div>
 
               <div id="calendar">
-                {id !== null && (
+                {house && id !== null && (
                   <CalendarPicker id={id} checkin={checkinState} checkout={checkoutState} />
                 )}
               </div>
