@@ -5,6 +5,8 @@ import { useTranslation } from "next-i18next";
 import { FormikErrors } from "formik";
 import { FlightSeachFormValue } from "@/modules/flights/types/flights";
 
+const directionToFields = ["returnDate", "ToReturnTime"];
+
 interface CustomDatePickerInputProps {
   values: {
     departureDate: string;
@@ -20,7 +22,7 @@ interface CustomDatePickerInputProps {
   isFa: boolean;
 
   show?: boolean;
-  tripType: "departureDate" | "returnDate";
+  tripType: string;
 
   errors?: FormikErrors<FlightSeachFormValue>;
   touched?: Record<string, any>;
@@ -40,7 +42,7 @@ function DomesticFlightDatePickerInput({
   const theme3 = process.env.THEME === "THEME3";
   const { t } = useTranslation("common");
 
-  const isDeparture = tripType === "departureDate";
+  const isDeparture = !directionToFields.includes(tripType);
   const label = isDeparture ? "تاریخ رفت" : "تاریخ برگشت";
 
   const fieldName = isDeparture ? "departureDate" : "returnDate";
