@@ -283,7 +283,7 @@ const CipDetails: NextPage = ({ airportData, availabilities, portalData, moduleD
             {
                 ...passengerItem,
                 nationality: "IR",
-                services: passengerItem.services.map(serviceItem => +serviceItem)
+                services: passengerItem?.services.map(serviceItem => +serviceItem)
             }
         ))
 

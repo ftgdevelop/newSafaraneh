@@ -17,6 +17,7 @@ import Rules from "@/modules/accommodation/components/accommodationDetails/Secti
 import Rates from "@/modules/accommodation/components/accommodationDetails/Section/Rates";
 import AnchorTabs from "@/modules/shared/components/ui/AnchorTabs";
 import Calendar from "@/modules/accommodation/components/accommodationDetails/Aside/Calendar";
+import CalendarPicker from "@/modules/accommodation/components/accommodationDetails/Section/CalendarPicker";
 
 const AccommodationDetailPage: NextPage = () => {
   const router = useRouter();
@@ -30,6 +31,13 @@ const AccommodationDetailPage: NextPage = () => {
   const checkin = Array.isArray(accommodationDetail) && accommodationDetail[1]?.replace("checkin-", "") || undefined;
   const checkout = Array.isArray(accommodationDetail) && accommodationDetail[2]?.replace("checkout-", "") || undefined;
   const capacity = Array.isArray(accommodationDetail) && accommodationDetail[3]?.replace("capacity-", "") || undefined;
+
+  const defaultCheckin = checkin ? checkin : new Date().toISOString().split("T")[0];
+  const defaultCheckout = checkout ? checkout : new Date(new Date().setDate(new Date().getDate() + 30)).toISOString().split("T")[0];
+
+  const [checkinState, setCheckin] = useState(checkin || defaultCheckin);
+  const [checkoutState, setCheckout] = useState(checkout || defaultCheckout);
+  const [capacityState, setCapacity] = useState(capacity ? Number(capacity) : 1);
 
   // Fetch accommodation details
   useEffect(() => {
@@ -64,29 +72,33 @@ const AccommodationDetailPage: NextPage = () => {
     fetchAccommodationDetails();
   }, [id]);
 
-  const anchorItems = [
-    { id: "spaces", title: "مشخصات کلی" },
-    { id: "about", title: "درباره اقامتگاه" },
-    { id: "features", title: "ویژگی‌ها" },
-    { id: "distances", title: "فاصله‌ها" },
-    { id: "rules", title: "قوانین اقامتگاه" },
-    { id: "rates", title: "امتیاز و نظرات کاربران" },
-    { id: "similar", title: "اقامتگاه‌های مشابه" },
-  ];
-
-  const [checkinState, setCheckin] = useState(checkin);
-  const [checkoutState, setCheckout] = useState(checkout);
-  const [capacityState, setCapacity] = useState(capacity ? Number(capacity) : 1);
-
   const handleUpdate = (newCheckin: string, newCheckout: string, newCapacity: number) => {
+    // Update the state
     setCheckin(newCheckin);
     setCheckout(newCheckout);
     setCapacity(newCapacity);
+
+    // Update the URL with the new query parameters
+    router.push(
+      {
+        pathname: router.pathname,
+        query: {
+          accommodationDetail: [
+            id!,
+            `checkin-${newCheckin}`,
+            `checkout-${newCheckout}`,
+            `capacity-${newCapacity}`,
+          ],
+        },
+      },
+      undefined,
+      { shallow: true } // Use shallow routing to avoid a full page reload
+    );
   };
 
   return (
     <div className="max-w-container mx-auto px-5 py-4">
-      {/* Skeleton for BackToList */}
+      {/* Back to List */}
       <div className="mt-4 mb-6">
         {loading ? (
           <div className="flex items-center gap-2">
@@ -98,16 +110,29 @@ const AccommodationDetailPage: NextPage = () => {
         )}
       </div>
 
-      {loading ? (
-        <div className="text-gray-400">در حال بارگذاری...</div>
-      ) : house ? (
+      {house && (
         <>
-          <Gallery images={house.pictures?.records || []} />
-
-          <AnchorTabs items={anchorItems} />
+          <div id="gallery">
+            <Gallery images={house.pictures?.records || []} />
+          </div>
+          
+          <AnchorTabs
+            items={[
+              { id: "gallery", title: "گالری تصاویر" },
+              { id: "spaces", title: "مشخصات کلی" },
+              { id: "about", title: "درباره اقامتگاه" },
+              { id: "features", title: "ویژگی‌ها" },
+              { id: "distances", title: "فاصله‌ها" },
+              { id: "rules", title: "قوانین اقامتگاه" },
+              { id: "calendar", title: "تقویم" },
+              { id: "rates", title: "نظرات کاربران" },
+              { id: "similar", title: "اقامتگاه‌های مشابه" },
+            ]}
+          />
 
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 min-h-screen">
             <div className="lg:col-span-3">
+              
               <div id="spaces">
                 <AccommodationName
                   title={house.title}
@@ -137,42 +162,41 @@ const AccommodationDetailPage: NextPage = () => {
                 <Rules rules={house.rules.records} />
               </div>
 
-              <div id="rates">
-                <Rates rates={house.rates} />
+              <div id="calendar">
+                <CalendarPicker id={id!} checkin={checkinState} checkout={checkoutState} />
               </div>
 
-              {id && <Review id={id} />}
+              <div id="rates">
+                <Rates rates={house.rates} />
+                <Review id={id!} />
+              </div>
 
               <div id="similar">
-                {id && (
-                  <Similar
-                    id={id!}
-                    checkin={checkin}
-                    checkout={checkout}
-                    capacity={capacity}
-                  />
-                )}
+                <Similar id={id!} checkin={checkinState} checkout={checkoutState} capacity={capacityState} />
               </div>
             </div>
 
-            <aside className="lg:col-span-2 mt-8">
-              <div className="sticky top-18">
-                {id !== null && (
-                  <Calendar
-                    id={id}
-                    checkin={checkinState || ""}
-                    checkout={checkoutState || ""}
-                    capacity={capacityState}
-                    onUpdate={handleUpdate}
-                  />
-                )}
+            <aside className="lg:col-span-2 md:mt-8">
+              <div className="sticky md:top-18">
+                <Calendar
+                  id={id!}
+                  checkin={checkinState}
+                  checkout={checkoutState}
+                  capacity={capacityState}
+                  onUpdate={handleUpdate}
+                />
               </div>
             </aside>
           </div>
         </>
-      ) : (
-        <div className="text-red-500">اقامتگاه پیدا نشد.</div>
       )}
+      
+      {!house && !loading && (
+        <div className="text-center py-20 text-gray-500">
+          اقامتگاهی یافت نشد.
+        </div>
+      )}
+      
     </div>
   );
 };
