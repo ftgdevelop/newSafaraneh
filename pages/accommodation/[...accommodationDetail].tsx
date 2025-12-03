@@ -110,9 +110,7 @@ const AccommodationDetailPage: NextPage = () => {
         )}
       </div>
 
-      {loading ? (
-        <div className="text-gray-400">در حال بارگذاری...</div>
-      ) : house ? (
+      {house && (
         <>
           <div id="gallery">
             <Gallery images={house.pictures?.records || []} />
@@ -191,9 +189,14 @@ const AccommodationDetailPage: NextPage = () => {
             </aside>
           </div>
         </>
-      ) : (
-        <div className="text-red-500">اقامتگاه پیدا نشد.</div>
       )}
+      
+      {!house && !loading && (
+        <div className="text-center py-20 text-gray-500">
+          اقامتگاهی یافت نشد.
+        </div>
+      )}
+      
     </div>
   );
 };
