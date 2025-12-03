@@ -1,8 +1,9 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { ServerAddress, Accommodation } from "@/enum/url";
+
 import AccommodationName from "@/modules/accommodation/components/accommodationDetails/Section/AccommodationName";
 import Gallery from "@/modules/accommodation/components/accommodationDetails/Section/Gallery";
 import BackToList from "@/modules/accommodation/components/accommodationDetails/Section/BackToList";
@@ -26,25 +27,44 @@ const AccommodationDetailPage: NextPage = () => {
   const [house, setHouse] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
-  // Extract values from the dynamic route
-  const id = Array.isArray(accommodationDetail) && accommodationDetail[0] ? Number(accommodationDetail[0]) : null;    
-  const checkin = Array.isArray(accommodationDetail) && accommodationDetail[1]?.replace("checkin-", "") || undefined;
-  const checkout = Array.isArray(accommodationDetail) && accommodationDetail[2]?.replace("checkout-", "") || undefined;
-  const capacity = Array.isArray(accommodationDetail) && accommodationDetail[3]?.replace("capacity-", "") || undefined;
+  const id = useMemo(() => {
+    if (Array.isArray(accommodationDetail) && accommodationDetail[0]) {
+      const parsed = Number(accommodationDetail[0]);
+      return isNaN(parsed) ? null : parsed;
+    }
+    return null;
+  }, [accommodationDetail]);
 
-  const defaultCheckin = checkin ? checkin : new Date().toISOString().split("T")[0];
-  const defaultCheckout = checkout ? checkout : new Date(new Date().setDate(new Date().getDate() + 30)).toISOString().split("T")[0];
+  const checkin = Array.isArray(accommodationDetail)
+    ? accommodationDetail[1]?.replace("checkin-", "")
+    : undefined;
 
-  const [checkinState, setCheckin] = useState(checkin || defaultCheckin);
-  const [checkoutState, setCheckout] = useState(checkout || defaultCheckout);
-  const [capacityState, setCapacity] = useState(capacity ? Number(capacity) : 1);
+  const checkout = Array.isArray(accommodationDetail)
+    ? accommodationDetail[2]?.replace("checkout-", "")
+    : undefined;
 
-  // Fetch accommodation details
+  const capacity = Array.isArray(accommodationDetail)
+    ? Number(accommodationDetail[3]?.replace("capacity-", "")) || 1
+    : 1;
+
+  const today = new Date();
+  const defaultCheckin = checkin || today.toISOString().split("T")[0];
+  const defaultCheckout =
+    checkout ||
+    new Date(today.setDate(today.getDate() + 30))
+      .toISOString()
+      .split("T")[0];
+
+  const [checkinState, setCheckin] = useState(defaultCheckin);
+  const [checkoutState, setCheckout] = useState(defaultCheckout);
+  const [capacityState, setCapacity] = useState(capacity);
+
   useEffect(() => {
     if (id === null) return;
 
     const fetchAccommodationDetails = async () => {
       setLoading(true);
+
       try {
         const response = await fetch(
           `${ServerAddress.Type}${ServerAddress.Accommodation_Data}${Accommodation.GetHouse}?Id=${id}`,
@@ -59,6 +79,7 @@ const AccommodationDetailPage: NextPage = () => {
             },
           }
         );
+
         const data = await response.json();
         setHouse(data.result || null);
       } catch (error) {
@@ -73,23 +94,18 @@ const AccommodationDetailPage: NextPage = () => {
   }, [id]);
 
   const handleUpdate = (newCheckin: string, newCheckout: string, newCapacity: number) => {
-    if (id === null || id === undefined) {
-      console.error("ID is null");
-      return;
-    }
+    if (id === null) return;
 
-    // Update the state
     setCheckin(newCheckin);
     setCheckout(newCheckout);
     setCapacity(newCapacity);
 
-    // Update the URL with the new query parameters
     router.push(
       {
         pathname: router.pathname,
         query: {
           accommodationDetail: [
-            id,
+            id.toString(),
             `checkin-${newCheckin}`,
             `checkout-${newCheckout}`,
             `capacity-${newCapacity}`,
@@ -97,13 +113,12 @@ const AccommodationDetailPage: NextPage = () => {
         },
       },
       undefined,
-      { shallow: true } // Use shallow routing to avoid a full page reload
+      { shallow: true }
     );
   };
 
   return (
     <div className="max-w-container mx-auto px-5 py-4">
-      {/* Back to List */}
       <div className="mt-4 mb-6">
         {loading ? (
           <div className="flex items-center gap-2">
@@ -120,7 +135,7 @@ const AccommodationDetailPage: NextPage = () => {
           <div id="gallery">
             <Gallery images={house.pictures?.records || []} />
           </div>
-          
+
           <AnchorTabs
             items={[
               { id: "gallery", title: "گالری تصاویر" },
@@ -137,7 +152,7 @@ const AccommodationDetailPage: NextPage = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 min-h-screen">
             <div className="lg:col-span-3">
-              
+
               <div id="spaces">
                 <AccommodationName
                   title={house.title}
@@ -147,7 +162,6 @@ const AccommodationDetailPage: NextPage = () => {
                 />
 
                 <Host host={house.host} />
-
                 <Spaces spaces={house.spaces} />
               </div>
 
@@ -156,7 +170,9 @@ const AccommodationDetailPage: NextPage = () => {
               </div>
 
               <div id="features">
-                <Features features={house.features || { emptyCategories: [], filledCategories: {} }} />
+                <Features
+                  features={house.features || { emptyCategories: [], filledCategories: {} }}
+                />
               </div>
 
               <div id="distances">
@@ -168,8 +184,12 @@ const AccommodationDetailPage: NextPage = () => {
               </div>
 
               <div id="calendar">
-                {house && id !== null && (
-                  <CalendarPicker id={id} checkin={checkinState} checkout={checkoutState} />
+                {id !== null && (
+                  <CalendarPicker
+                    id={id}
+                    checkin={checkinState}
+                    checkout={checkoutState}
+                  />
                 )}
               </div>
 
@@ -180,9 +200,15 @@ const AccommodationDetailPage: NextPage = () => {
 
               <div id="similar">
                 {id !== null && (
-                  <Similar id={id} checkin={checkinState} checkout={checkoutState} capacity={capacityState} />
+                  <Similar
+                    id={id}
+                    checkin={checkinState}
+                    checkout={checkoutState}
+                    capacity={capacityState}
+                  />
                 )}
               </div>
+
             </div>
 
             <aside className="lg:col-span-2 md:mt-8">
@@ -201,13 +227,13 @@ const AccommodationDetailPage: NextPage = () => {
           </div>
         </>
       )}
-      
+
       {!house && !loading && (
         <div className="text-center py-20 text-gray-500">
           اقامتگاهی یافت نشد.
         </div>
       )}
-      
+
     </div>
   );
 };
