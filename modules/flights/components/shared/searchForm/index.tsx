@@ -13,9 +13,9 @@ import { Flight, ServerAddress } from '@/enum/url';
 import { validateRequied } from '@/modules/shared/helpers/validation';
 import { addSomeDays, dateFormat } from '@/modules/shared/helpers';
 import { defaultAirportOptions } from './defaultList';
+import DatePickerMobiscroll from '@/modules/shared/components/ui/DatePickerMobiscroll';
+import { localeFa } from '@mobiscroll/react';
 import AutoCompleteZoom from '@/modules/shared/components/ui/AutoCompleteZoom';
-import DatePicker2 from '@/modules/shared/components/ui/DatePicker2';
-import DomesticFlightDatePickerInput from '@/modules/shared/components/ui/DomesticFlightDatePickerInput';
 
 type Props = {
     defaultValues?: FlightSearchDefaultValues;
@@ -32,7 +32,7 @@ const SearchForm: React.FC<Props> = props => {
 
     const { defaultValues } = props;
 
-    const [isFa, setIsFa] = useState(true);
+    const [locale, setLocale] = useState<any>(localeFa);
 
     const [locations, setLocations] = useState<[AirportAutoCompleteType | undefined, AirportAutoCompleteType | undefined]>([defaultValues?.originObject || undefined, defaultValues?.destinationObject || undefined]);
 
@@ -401,25 +401,114 @@ const SearchForm: React.FC<Props> = props => {
 
                                     </div>
 
-                                    <DatePicker2
-                                        name="departureDate"
-                                        value={values.departureDate}
-                                        values={values}
-                                        setFieldValue={setFieldValue}
-                                        isFa={isFa}
-                                        setIsFa={setIsFa}
-                                        Input={DomesticFlightDatePickerInput}
-                                    />
+                                    <div className={`${theme3 ? "md:col-span-3" : theme2 ? "sm:col-span-2 lg:col-span-1 xl:col-span-2" : ""}`} >
 
-                                    <DatePicker2
-                                        name="returnDate"
-                                        value={values.returnDate}
-                                        values={values}
-                                        setFieldValue={setFieldValue}
-                                        isFa={isFa}
-                                        setIsFa={setIsFa}
-                                        Input={DomesticFlightDatePickerInput}
-                                    />
+                                        {theme3 && (
+                                            <label className={`leading-5 select-none pointer-events-none ${props.lebelsWhite ? "text-white" : ""}`}>
+                                                تاریخ رفت
+                                            </label>
+                                        )}
+
+                                        <div className='relative'>
+                                            <DatePickerMobiscroll
+                                                minDate={dateFormat(new Date())}
+                                                inputStyle={theme3 ? "theme3" : 'theme1'}
+                                                onChange={a => {
+                                                    setFieldValue("departureDate", a.value, true)
+                                                }}
+                                                rtl
+                                                locale={locale}
+                                                onChangeLocale={setLocale}
+                                                value={values.departureDate}
+                                            />
+
+                                            {theme2 ? (
+                                                <CalendarFill className='w-5 h-5 fill-neutral-600 top-1/2 -translate-y-1/2 right-3 absolute select-none pointer-events-none' />
+                                            ) : (
+                                                <Calendar className='w-5 h-5 fill-neutral-600 top-1/2 -translate-y-1/2 right-3 absolute select-none pointer-events-none' />
+                                            )}
+
+                                            {theme3 || <label className={`absolute leading-5 rtl:right-10 select-none pointer-events-none transition-all ${values.departureDate ? "top-1.5 text-4xs " : "top-1/2 -translate-y-1/2 text-sm "}`}>
+                                                تاریخ رفت
+                                            </label>}
+                                        </div>
+
+                                        <Field
+                                            validate={(value: string) => validateRequied(value, values.airTripType === 'RoundTrip' ? "تاریخ رفت را انتخاب کنید." : "تاریخ پرواز را انتخاب کنید.")}
+                                            type='hidden'
+                                            name="departureDate"
+                                            value={values.departureDate}
+                                        />
+                                        {touched.departureDate && errors.departureDate && <div className='text-xs text-red-500'> {errors.departureDate as string}</div>}
+                                    </div>
+
+                                    {values.airTripType === 'RoundTrip' ? (
+                                        <div className={`${theme3 ? "md:col-span-3" : theme2 ? "sm:col-span-2 lg:col-span-1 xl:col-span-2" : ""}`} >
+
+                                            {theme3 && (
+                                                <label className={`leading-5 select-none pointer-events-none ${props.lebelsWhite ? "text-white" : ""}`}>
+                                                    تاریخ برگشت
+                                                </label>
+                                            )}
+
+                                            <div className='relative'>
+                                                <DatePickerMobiscroll
+                                                    inputStyle={theme3 ? "theme3" : 'theme1'}
+                                                    onChange={a => {
+                                                        setFieldValue("returnDate", a.value, true)
+                                                    }}
+                                                    rtl
+                                                    locale={locale}
+                                                    onChangeLocale={setLocale}
+                                                    value={values.returnDate}
+                                                    minDate={values.departureDate ? dateFormat(addSomeDays(new Date(values.departureDate))) : dateFormat(addSomeDays(new Date()))}
+                                                />
+
+                                                {theme2 ? (
+                                                    <CalendarFill className='w-5 h-5 fill-neutral-600 top-1/2 -translate-y-1/2 right-3 absolute select-none pointer-events-none' />
+                                                ) : (
+                                                    <Calendar className='w-5 h-5 fill-neutral-600 top-1/2 -translate-y-1/2 right-3 absolute select-none pointer-events-none' />
+                                                )}
+
+                                                <label className={`absolute leading-5 rtl:right-10 select-none pointer-events-none transition-all ${values.returnDate ? "top-1.5 text-4xs " : "top-1/2 -translate-y-1/2 text-sm "}`}>
+                                                    تاریخ برگشت
+                                                </label>
+                                                <button
+                                                    type='button'
+                                                    className='p-1 border border-neutral-300 rounded bg-neutral-600 absolute top-1/2 -mt-3 left-3'
+                                                    onClick={() => {
+                                                        setFieldValue("returnDate", undefined, true);
+                                                        setFieldValue("airTripType", 'OneWay', true);
+                                                    }
+                                                    }
+                                                >
+                                                    <Minus className='w-4 h-4 fill-white' />
+                                                </button>
+                                            </div>
+
+                                            <Field
+                                                validate={(value: string) => validateRequied(value, "تاریخ برگشت را انتخاب کنید.")}
+                                                type='hidden'
+                                                name="returnDate"
+                                                value={values.returnDate}
+                                            />
+                                            {touched.returnDate && errors.returnDate && <div className='text-xs text-red-500'> {errors.returnDate as string}</div>}
+                                        </div>
+                                    ) : (
+                                        <div
+                                            className={`relative flex justify-center items-center h-12 rounded-lg text-xs w-full cursor-pointer ${theme3 ? "max-sm:hidden md:col-span-3 xl:w-1/6" : theme2 ? "sm:col-span-2 lg:col-span-1 xl:col-span-2" : ""} bg-white ${theme3 ? "mt-7 border-2 text-[#fdaf16] border-[#fdaf16]" : "border border-neutral-400 hover:bg-neutral-100"}`}
+                                            onClick={() => { setFieldValue("airTripType", 'RoundTrip', true); }}
+                                        >
+                                            {theme2 ? (
+                                                <CalendarFill className='w-7 h-7 fill-neutral-600 top-1/2 -mt-3.5 right-3 absolute select-none pointer-events-none' />
+                                            ) : (
+                                                <Calendar className={`w-7 h-7 top-1/2 -mt-3.5 right-3 absolute select-none pointer-events-none ${theme3 ? "fill-[#fdaf16]" : "fill-neutral-600"}`} />
+                                            )}
+
+                                            تاریخ برگشت
+                                        </div>
+                                    )}
+
                                     {!theme1 && <div className={theme3?"md:col-span-3 xl:w-1/6":""}>
                                         {theme3 && (
                                             <label className={`leading-5 select-none pointer-events-none ${props.lebelsWhite ? "text-white" : ""}`}>

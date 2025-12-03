@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mobiscroll/react": "npm:@mobiscroll/datepicker-react-next@^5.30.0",
     "@reduxjs/toolkit": "^1.9.7",
     "axios": "^1.6.2",
     "formik": "^2.4.5",

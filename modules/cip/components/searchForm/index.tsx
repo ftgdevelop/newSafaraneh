@@ -12,9 +12,9 @@ import FormikField from '@/modules/shared/components/ui/FormikField';
 import { cipDefaultAirportOptions } from './defaultList';
 import { CipAutoCompleteType, CipRecentSearchItem } from '../../types/cip';
 import AutoCompleteZoom from '@/modules/shared/components/ui/AutoCompleteZoom';
+import DatePickerMobiscroll from '@/modules/shared/components/ui/DatePickerMobiscroll';
+import { localeFa } from '@mobiscroll/react';
 import { dateFormat } from '@/modules/shared/helpers';
-import DatePicker2 from '@/modules/shared/components/ui/DatePicker2';
-import CipDatePickerInput from '@/modules/shared/components/ui/CipDatePickerInput';
 
 type SearchFormValues = {
     airportUrl: string;
@@ -38,7 +38,6 @@ const SearchForm: React.FC<Props> = props => {
     const { defaultValues } = props;
 
     const [submitPending, setSubmitPending] = useState<boolean>(false);
-    const [isFa, setIsFa] = useState(true);
 
     const [selectedAirportName, setSelectedAirportName] = useState<string>("");
 
@@ -245,17 +244,16 @@ const SearchForm: React.FC<Props> = props => {
                                             value={values.flightDate}
                                         /> */}
 
-
-
-                                        <DatePicker2
-                                        name="flightDate"
-                                        value={values.flightDate}
-                                        values={values}
-                                        setFieldValue={setFieldValue}
-                                        isFa={isFa}
-                                        setIsFa={setIsFa}
-                                        Input={CipDatePickerInput}
-                                    />
+                                        <DatePickerMobiscroll
+                                            minDate={dateFormat(new Date())}
+                                            inputStyle='theme1'
+                                            onChange={a => {
+                                                setFieldValue("flightDate", a.value, true)
+                                            }}
+                                            rtl
+                                            locale={localeFa}
+                                            value={values.flightDate}
+                                        />
 
                                         {theme2 ?(
                                             <CalendarFill className='w-5 h-5 fill-neutral-600 top-1/2 -mt-2.5 right-3 absolute select-none pointer-events-none' />

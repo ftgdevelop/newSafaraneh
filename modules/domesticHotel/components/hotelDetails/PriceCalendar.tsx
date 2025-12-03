@@ -1,19 +1,17 @@
-import { useMemo } from "react";
-import DatePicker, { DateObject } from "react-multi-date-picker";
-import persian from "react-date-object/calendars/persian";
-import persianFa from "react-date-object/locales/persian_fa";
-
 import { DomesticHotelRateItem } from "../../types/hotel";
 import { dateFormat, numberWithCommas } from "@/modules/shared/helpers";
 
+import '@mobiscroll/react/dist/css/mobiscroll.min.css';
+import { Datepicker as MobiscrollDatepicker, localeFa, MbscCalendarLabel } from '@mobiscroll/react';
+
 type Props = {
-    calendar?: DomesticHotelRateItem["calendar"];
+    calendar?: DomesticHotelRateItem['calendar'];
     selectedDates: string[];
     roomName: string;
-};
+}
 
-type CalendarArrayItem = {
-    date: string;
+type CalendarArrayItemType = {
+    date?: string;
     day?: number;
     month?: string;
     weekDayindex?: string;
@@ -24,110 +22,76 @@ type CalendarArrayItem = {
     closeToDeparture?: boolean;
 };
 
-const PriceCalendar: React.FC<Props> = ({ calendar, selectedDates }) => {
-    // ---------------------------------------
-    // Convert calendar object to array
-    // ---------------------------------------
-    const calendarArray: CalendarArrayItem[] = useMemo(() => {
-        if (!calendar) return [];
-        return Object.keys(calendar).map((key) => ({
+const PriceCalendar: React.FC<Props> = props => {
+
+    const { calendar } = props;
+
+    let calendarArray: CalendarArrayItemType[] = [];
+
+    if (calendar) {
+        calendarArray = Object.keys(calendar).map((key) => ({
             date: key,
-            ...calendar[key],
+            ...calendar[key]
         }));
-    }, [calendar]);
+    }
 
-    // ---------------------------------------
-    // Date range from props
-    // ---------------------------------------
-    const value = useMemo(() => {
-        if (!selectedDates || selectedDates.length === 0) return [];
-        return [selectedDates[0], selectedDates[selectedDates.length - 1]];
-    }, [selectedDates]);
+    let value : (string|undefined)[] = [undefined , undefined];
 
-    // ---------------------------------------
-    // Convert calendar metadata to a lookup map
-    // ---------------------------------------
-    const calendarMap = useMemo(() => {
-        const map = new Map<string, CalendarArrayItem>();
-        calendarArray.forEach((item) => map.set(item.date, item));
-        return map;
-    }, [calendarArray]);
+    if(props.selectedDates){
+        value = [props.selectedDates[0], props.selectedDates[props.selectedDates.length - 1]]
+    }
 
-    // ---------------------------------------
-    // Map price + restrictions to day cells
-    // ---------------------------------------
-    const mapDays = ({ date }: { date: DateObject }) => {
-        const iso = date.format("YYYY-MM-DD");
-        const item = calendarMap.get(iso);
+    let labels : MbscCalendarLabel[] = [];
 
-        if (!item) {
-            return {
-                children: (
-                    <div className="flex flex-col items-center text-gray-300">
-                        <span>{date.day}</span>
-                        <span className="text-2xs">—</span>
-                    </div>
-                ),
-            };
-        }
+    if (calendarArray){
+        labels = calendarArray.map(item => {
+            
+            let title = "قیمت نامشخص";
+            let textColor = "#bbbbbb";
 
-        // Price
-        let title = "قیمت نامشخص";
-        let color = "#bbb";
+            if(item.amount){
+                title = numberWithCommas(item.amount)?.toString();
+                textColor = "#555"; 
+            }
 
-        if (item.amount) {
-            title = numberWithCommas(item.amount)?.toString() ?? "—";
-            color = "#444";
-        }
+            if(item.type === "Completion"){
+                title = "ظرفیت تکمیل";
+                textColor = "red";
+            }
 
-        // Special Types
-        if (item.type === "Completion") {
-            title = "ظرفیت تکمیل";
-            color = "red";
-        }
+            if(item.closeToDeparture){
+                title = "محدودیت خروج";
+                textColor = "orange";
+            }
+            
+            if(item.closeToArrival){
+                title = "محدودیت ورود";
+                textColor = "orange";
+            }
 
-        if (item.closeToArrival) {
-            title = "محدودیت ورود";
-            color = "orange";
-        }
+            return ({
+                title: title,
+                textColor: textColor,
+                date: item.date
+            })
+        })
+    }else{
+        debugger;
+    }
 
-        if (item.closeToDeparture) {
-            title = "محدودیت خروج";
-            color = "orange";
-        }
-
-        return {
-            children: (
-                <div className="flex flex-col items-center text-center">
-                    <span style={{ color }}>{date.day}</span>
-                    <span style={{ color }} className="text-2xs">
-                        {title}
-                    </span>
-                </div>
-            ),
-        };
-    };
-
-    return (
-        <div className="price-calendar-wrapper">
-            <DatePicker
-                value={value}
-                range
-                onChange={() => {}}
-                calendar={persian}
-                locale={persianFa}
-                mapDays={mapDays}
-                numberOfMonths={2}
-                disableMonthPicker
-                disableYearPicker
-                className="price-calendar"
-                minDate={dateFormat(new Date())}
-                calendarPosition="bottom-center"
-                readOnly
-                style={{ width: "100%" }}
-            />
-        </div>
+    return(
+        <MobiscrollDatepicker 
+            cssClass="price-calendar"
+            display="inline"
+            touchUi={false}
+            locale={localeFa}
+            labels={labels}
+            select="range"
+            value={value}
+            showRangeLabels={false}
+            min = {dateFormat(new Date())}
+        /> 
     );
-};
+}
 
 export default PriceCalendar;

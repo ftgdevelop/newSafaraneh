@@ -10,16 +10,16 @@ import { ApartmentOutline, Calendar, Home2, Loading, Location, Search, SearchThe
 import { EntitySearchResultItemType, HotelRecentSearchItem } from "@/modules/domesticHotel/types/hotel";
 import { useAppDispatch } from "@/modules/shared/hooks/use-store";
 import { setReduxError } from "@/modules/shared/store/errorSlice";
+import RangePicker from "../../../shared/components/ui/RangePicker";
+import { localeFa } from "@mobiscroll/react";
 import Button from "../../../shared/components/ui/Button";
 import AutoCompleteZoom from "@/modules/shared/components/ui/AutoCompleteZoom";
-import RangePicker2 from "@/modules/shared/components/ui/RangePicker2";
-import { RangeValue } from "@/modules/shared/types/common";
 
 
 
 type Props = {
     defaultDestination?: EntitySearchResultItemType;
-    defaultDates?: RangeValue;
+    defaultDates?: [string, string];
     wrapperClassName?: string;
 }
 
@@ -36,14 +36,14 @@ const SearchForm: React.FC<Props> = props => {
 
     const dispatch = useAppDispatch();
 
-    const [dates, setDates] = useState<RangeValue | undefined>(props.defaultDates);
+    const [dates, setDates] = useState<[string, string] | undefined>(props.defaultDates);
 
     const [submitLoading, setSubmitLoading] = useState<boolean>(false);
 
-    const dateChangeHandle = (value: any) => {
+    const dateChangeHandle = (event: any) => {
 
-        if (value[0] && value[1]) {
-            setDates(value)
+        if (event.value[0] && event.value[1]) {
+            setDates(event.value)
         }
     }
 
@@ -281,8 +281,8 @@ const SearchForm: React.FC<Props> = props => {
     }
     return (
         <div className={`domestic-hotel-search-form ${theme3?"flex flex-col sm:flex-row":"grid grid-cols-1 md:grid-cols-7"} gap-2 ${props.wrapperClassName || ""}`}>
-            {/* !! removed z-20 from down code if there is issue you must fix range picker  */}
-            <div className={`relative  ${theme3?"sm:grow xl:basis-7/12":"col-span-1 md:col-span-3"}`}>
+            
+            <div className={`relative z-20 ${theme3?"sm:grow xl:basis-7/12":"col-span-1 md:col-span-3"}`}>
                 {theme2 ? (
                     <AutoCompleteZoom
                         defaultListLabel="محبوب ترین ها"
@@ -331,9 +331,11 @@ const SearchForm: React.FC<Props> = props => {
             </div>
 
             <div className={`relative z-10 ${theme3?"flex sm:grow":"col-span-1 md:col-span-3"}`}>
-                <RangePicker2
+                <RangePicker
                     value={dates}
                     onChange={dateChangeHandle}
+                    rtl
+                    locale={localeFa}
                 />
 
             </div>

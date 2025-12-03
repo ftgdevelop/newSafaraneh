@@ -1,9 +1,8 @@
-import CipDatePickerInput from "@/modules/shared/components/ui/CipDatePickerInput";
-import DatePicker2 from "@/modules/shared/components/ui/DatePicker2";
+import DatePicker from "@/modules/shared/components/ui/DatePicker";
 import FormikField from "@/modules/shared/components/ui/FormikField"
+import TimePickerMobiscroll from "@/modules/shared/components/ui/TimePickerMobiscroll";
 import { validateRequied } from "@/modules/shared/helpers/validation";
 import { FormikErrors, FormikTouched } from "formik";
-import { useState } from "react";
 
 type Props = {
     setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => Promise<void | FormikErrors<{
@@ -43,7 +42,6 @@ type Props = {
 const CipAirportInformation: React.FC<Props> = props => {
 
     const { setFieldValue, errors, touched, values } = props;
-    const [isFa, setIsFa] = useState(true);
 
     const theme2 = process.env.THEME === "THEME2";
 
@@ -100,17 +98,20 @@ const CipAirportInformation: React.FC<Props> = props => {
                     value={values.flightNumber}
                 />
 
-
-                <DatePicker2
-                    name="flightDate"
-                    value={values.flightDate}
-                    values={values}
+                <DatePicker
+                    min={new Date()}
                     setFieldValue={setFieldValue}
-                    isFa={isFa}
-                    setIsFa={setIsFa}
-                    Input={CipDatePickerInput}
+                    label="تاریخ پرواز"
+                    errorText={errors.flightDate as string}
+                    isTouched={touched.flightDate}
+                    fieldClassName="pt-1 text-base"
+                    name="flightDate"
+                    id="flightDate"
+                    initialvalue={values.flightDate}
+                    validateFunction={(value: string) => validateRequied(value, "لطفا تاریخ پرواز را وارد نمایید")}
                 />
-                {/* <TimePickerMobiscroll 
+
+                <TimePickerMobiscroll 
                     label="ساعت پرواز"
                     value={values.flightTime}
                     setFieldValue={setFieldValue}
@@ -119,7 +120,7 @@ const CipAirportInformation: React.FC<Props> = props => {
                     errorText={errors.flightTime as string}
                     isTouched={touched.flightTime}
                     validateFunction={(value: string) => validateRequied(value, "لطفا ساعت پرواز را وارد نمایید")}
-                /> */}
+                />
 
             </div>
         </div>

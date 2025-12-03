@@ -3,7 +3,7 @@ import { useTranslation } from 'next-i18next';
 import SearchForm from '../../domesticHotel/components/shared/SearchForm';
 import { Apartment, Bed4, Suitcase, Suitcase2, Travel, Travel2 } from '../../shared/components/ui/icons';
 import Tab from '../../shared/components/ui/Tab';
-import { RangeValue, TabItem } from '@/modules/shared/types/common';
+import { TabItem } from '@/modules/shared/types/common';
 import Image from 'next/image';
 import { addSomeDays, dateFormat } from '@/modules/shared/helpers';
 import FlightSearch from '@/modules/flights/components/shared/searchForm';
@@ -13,11 +13,6 @@ import FlightRecentSearches from '@/modules/flights/components/home/FlightRecent
 import CipRecentSearches from '@/modules/cip/components/home/CipRecentSearches';
 import Header from '@/modules/shared/components/header';
 import { ReactNode } from 'react';
-import { DateObject } from 'react-multi-date-picker';
-
-import persian from "react-date-object/calendars/persian";
-import persian_fa from "react-date-object/locales/persian_fa";
-;
 
 
 type Props = {
@@ -28,7 +23,6 @@ type Props = {
   siteName?: string;
 }
 
-
 const Banner: React.FC<Props> = props => {
 
 
@@ -37,22 +31,10 @@ const Banner: React.FC<Props> = props => {
   
   const isSafarLife = process.env.SITE_NAME === 'https://www.safarlife.com';
 
-  const today = new DateObject({
-    date: new Date(),
-    format: "YYYY/MM/DD",
-    calendar: persian,
-    locale: persian_fa,
-  });
+  const today = dateFormat(new Date());
+  const tomorrow = dateFormat(addSomeDays(new Date()));
 
-  const tomorrow = new DateObject({
-    date: new Date(new Date().setDate(new Date().getDate() + 1)),
-    format: "YYYY/MM/DD",
-    calendar: persian,
-    locale: persian_fa,
-  });
-
-
-  const domesticHotelDefaultDates: RangeValue = [today, tomorrow];
+  const domesticHotelDefaultDates: [string, string] = [today, tomorrow];
 
   const items: TabItem[] = [];
 
