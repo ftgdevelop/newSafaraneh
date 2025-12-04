@@ -26,14 +26,14 @@ interface CustomDatePickerInputProps {
 
   errors?: FormikErrors<FlightSeachFormValue>;
   touched?: Record<string, any>;
-  setFieldValue?: (field: string, value: any, shouldValidate?: boolean) => void;
+  onChange?: (field: string, value: any, shouldValidate?: boolean) => void;
 }
 
 function DomesticFlightDatePickerInput({
   values,
   errors = {},
   touched = {},
-  setFieldValue,
+  onChange,
   value,
   openCalendar,
   tripType,
@@ -56,30 +56,13 @@ const isRoundTrip = values.airTripType === "RoundTrip";
 
   const handleClick = () => {
     if (!isDeparture) {
-        if (!isRoundTrip && setFieldValue) { 
-        setFieldValue("airTripType", "RoundTrip", true);
+        if (!isRoundTrip && onChange) { 
+        onChange("airTripType", "RoundTrip", true);
       }
     }
     openCalendar();
   };
     
-    const handleDateChange = (field: string, date: string) => {
-        if (!setFieldValue) return;
-
-        setFieldValue(field, date);
-
-        if (field === "departureDate" && values.returnDate) {
-            const dep = new Date(date);
-            const ret = new Date(values.returnDate);
-
-            if (dep > ret) {
-            const nextDay = new Date(dep);
-            nextDay.setDate(dep.getDate() + 1);
-
-            setFieldValue("returnDate", nextDay.toISOString().slice(0, 10));
-            }
-        }
-    };
     
 
   return (

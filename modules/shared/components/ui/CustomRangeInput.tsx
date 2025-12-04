@@ -1,5 +1,12 @@
 import React, { ChangeEvent } from "react";
-import { Locale } from "react-date-object";
+import DateObject, { Locale } from "react-date-object";
+
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
+import gregorian from "react-date-object/calendars/gregorian";
+import gregorian_en from "react-date-object/locales/gregorian_en";
+
+
 import { Calendar, CalendarFill } from "./icons";
 import { useTranslation } from "next-i18next";
 import { dateDisplayFormat } from "../../helpers";
@@ -26,6 +33,8 @@ function CustomRangeInput({
     let startValue 
     let endValue 
 
+    console.log({values});
+    
     const theme2 = process.env.THEME === "THEME2";
     const theme3 = process.env.THEME === "THEME3";
     const { t } = useTranslation("common");

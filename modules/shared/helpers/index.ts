@@ -106,12 +106,13 @@ export const dateFormat = (date: Date) => {
     return `${year}-${month}-${day}`
 }
 
-export const addSomeDays = (date: Date, increment: number = 1) => {
+export const addSomeDays = (date: DateObject, increment: number = 1) => {
+  const jsDate = date.toDate(); 
 
-    const newDate = new Date(date.getTime() + increment * 24 * 60 * 60 * 1000)
+  const newDate = new Date(jsDate.getTime() + increment * 24 * 60 * 60 * 1000);
 
-    return newDate;
-}
+  return newDate;
+};
 
 export const goBackYears = (date: Date, years: number = 1) => {
 

@@ -2,7 +2,7 @@ import CipDatePickerInput from '@/modules/shared/components/ui/CipDatePickerInpu
 import DatePicker2 from '@/modules/shared/components/ui/DatePicker2'
 import DomesticFlightDatePickerInput from '@/modules/shared/components/ui/DomesticFlightDatePickerInput';
 import RangePicker2 from '@/modules/shared/components/ui/RangePicker2'
-import { addSomeDays, dateFormat } from '@/modules/shared/helpers';
+import { addSomeDays, dateDisplayFormat, dateFormat } from '@/modules/shared/helpers';
 import { RangeValue } from '@/modules/shared/types/common';
 import React, { useState } from 'react';
 import { DateObject } from 'react-multi-date-picker';
@@ -31,11 +31,16 @@ import english from "react-date-object/locales/gregorian_en";
 const TestPage = () => {
 
   const [dates, setDates] = useState<RangeValue>(domesticHotelDefaultDates);
-  const [simpleValues, setSimpleValues] = useState({
+  const [simpleValues, setSimpleValues] = useState<{
+    flightDate: DateObject | string;
+  }>({
     flightDate: ''
   });
 
-  const [datepicker2Values, setDatepicker2Values] = useState({
+  const [datepicker2Values, setDatepicker2Values] = useState<{
+    FromReturnTime: DateObject | string;
+    ToReturnTime: DateObject | string;
+  }>({
     FromReturnTime: '',
     ToReturnTime: ''
   });
@@ -48,17 +53,12 @@ const TestPage = () => {
             setDates(value)
         }
   } 
-  console.log(dates && {v1:new DateObject({
-                  date: dates[0],
-                  format: "YYYY/MM/DD",
-                  calendar: gregorian,
-                  locale: english,
-              }).convert(gregorian, english).format('YYYY MM DD'), v2:new DateObject({
-                  date: dates[1],
-                  format: "YYYY/MM/DD",
-                  calendar: gregorian,
-                  locale: english,
-              }).convert(gregorian, english).format('YYYY MM DD')});
+  const handleChangeSimple = (name: string, value: DateObject) => {
+    setSimpleValues(prev => ({ ...prev, [name]: value }));
+  }
+  const handleChangeDatepicker2 = (name: string, value: DateObject) => {    
+    setDatepicker2Values(prev => ({ ...prev, [name]: value }));
+  };
   
   return (
     <div className='flex flex-col gap-8 max-w-xl m-auto mt-8'>
@@ -66,19 +66,8 @@ const TestPage = () => {
         <div>Simple Date picker</div>
           <DatePicker2
               name="flightDate"
-              value={simpleValues.flightDate}
               values={simpleValues}
-          setFieldValue={(n, v) =>
-            console.log({
-              n,
-              v: new DateObject({
-                  date: v,
-                  format: "YYYY/MM/DD",
-                  calendar: gregorian,
-                  locale: english,
-              }).convert(gregorian, english).format('YYYY MM DD')
-            }
-              , "Simple Date picker")}
+              onChange={handleChangeSimple}
               isFa={isFa}
               setIsFa={setIsFa}
               Input={CipDatePickerInput}
@@ -86,37 +75,24 @@ const TestPage = () => {
       </div>
       <div className='flex flex-col gap-2 items-center justify-center'>
         <div>2 Date picker</div>
-              <div className='flex gap-2 items-center justify-center'>
-
-          <DatePicker2
-                name="FromReturnTime"
-                value={datepicker2Values.FromReturnTime}
-                values={datepicker2Values}
-                setFieldValue={(n, v)=>console.log({n, v: new DateObject({
-                  date: v,
-                  format: "YYYY/MM/DD",
-                  calendar: gregorian,
-                  locale: english,
-              }).convert(gregorian, english).format('YYYY MM DD')}, "2 Date picker")}
-                isFa={isFa}
-                setIsFa={setIsFa}
-                Input={DomesticFlightDatePickerInput}
+            <div className='flex gap-2 items-center justify-center'>
+            <DatePicker2
+              name="FromReturnTime"
+              values={datepicker2Values}
+              onChange={handleChangeDatepicker2}
+              isFa={isFa}
+              setIsFa={setIsFa}
+              Input={DomesticFlightDatePickerInput}
             />
 
             <DatePicker2
-                name="ToReturnTime"
-                value={datepicker2Values.ToReturnTime}
-                values={datepicker2Values}
-                setFieldValue={(n, v)=>console.log({n, v: new DateObject({
-                  date: v,
-                  format: "YYYY/MM/DD",
-                  calendar: gregorian,
-                  locale: english,
-              }).convert(gregorian, english).format('YYYY MM DD')}, "2 Date picker")}
-                isFa={isFa}
-                setIsFa={setIsFa}
-                Input={DomesticFlightDatePickerInput}
-          />
+              name="ToReturnTime"
+              values={datepicker2Values}
+              onChange={handleChangeDatepicker2}
+              isFa={isFa}
+              setIsFa={setIsFa}
+              Input={DomesticFlightDatePickerInput}
+            />
           </div>
       </div>
       <div className='flex flex-col gap-2 items-center justify-center'>

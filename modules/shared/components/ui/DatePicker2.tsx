@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { use, useEffect, useMemo, useState } from "react";
 import DatePicker, { Value } from "react-multi-date-picker";
 
 import persian from "react-date-object/calendars/persian";
@@ -34,94 +34,88 @@ const calendars: Record<
     weekStartDayIndex: 0,
   },
 };
-
-const directionToFields = ["returnDate", "ToReturnTime"] as const;
-
+const directionToFields = ["returnDate", "ToReturnTime"];
 type Props = {
   name: string;
-  value?: Value;
   values?: any;
-  setFieldValue: (field: string, value: any) => void;
   label?: string;
-
-  onChange?: (x: string) => void;
-
   isFa: boolean;
   setIsFa: React.Dispatch<React.SetStateAction<boolean>>;
-
+  onChange: (field: string, value: any, shouldValidate?: boolean) => void;
   Input: React.ComponentType<any>;
 };
 
 const DatePicker2: React.FC<Props> = ({
   name,
-  value,
   values,
-  setFieldValue,
   onChange,
   isFa,
   setIsFa,
   Input,
   label
 }) => {
+  const [minDate, setMinDate] = useState<Date | DateObject>(new Date());
+  const [value, setValue] = useState<DateObject | null>(null)
   const localeKey = isFa ? "fa" : "en";
 
   const localeConfig = calendars[localeKey];
 
-  const minDate = useMemo(() => {
-    if (directionToFields.includes(name as any) && values?.departureDate) {
-      return new Date(values.departureDate);
-    }
-    return new Date();
-  }, [name, values]);
 
   useEffect(() => {
-    if (!directionToFields.includes(name as any)) return;
+    let dep
+    let ret
+    setMinDate(new Date());
+    Object.values(values).map((value, index) => {
+      if (index === 0) {
+        dep = new DateObject({
+          date: value as DateObject,
+          format: 'YYYY/MM/DD',
+          locale: localeConfig.locale
+        })
+      } else {
+        ret = new DateObject({
+          date: value as DateObject,
+          format: 'YYYY/MM/DD',
+          locale: localeConfig.locale
+        })
+      }
+    })
+    
+    if (dep && ret && dep > ret && directionToFields.includes(name)) {
+      
+        const newDate = addSomeDays(dep, 1);
 
-    const dep = values?.departureDate ? new Date(values.departureDate) : null;
-    const ret = values?.returnDate ? new Date(values.returnDate) : null;
-
-    if (dep && ret && dep > ret) {
-      const newDate = addSomeDays(dep);
-
-      const adjusted = new DateObject({
-        date: newDate,
-        calendar: localeConfig.calendar,
-        locale: localeConfig.locale,
-      });
-
-      handleChange(adjusted);
+        const adjusted = new DateObject({
+          date: newDate,
+          calendar: localeConfig.calendar,
+          locale: localeConfig.locale,
+        });
+        setMinDate(adjusted);
+        handleChange(adjusted);
+        return;
     }
-  }, [name, values, localeConfig]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [values]);
+console.log({values});
 
-  const handleChange = (v: DateObject | null) => {
-    const formatted = v ? dateDisplayFormat({
-      date: v,
-      format: localeConfig.format,
-      locale: localeKey,
-    }) : "";
-    setFieldValue(name, v);
-    if (onChange) onChange(formatted);
-  };
-
-console.log(
-  dateDisplayFormat({
-    date: new DateObject({
-      date: minDate,
-      calendar: localeConfig.calendar,
-      locale: localeConfig.locale,
-    }),
-    format:localeConfig.format,
-    locale:localeConfig.locale,
-  }),
-  'minDate',
-  {values,name, minDate,value}
-);
   
+
+  const handleChange = (v: DateObject) => {
+    setValue(v)
+    onChange(
+      name,
+      dateDisplayFormat({
+        date: v,
+        format: 'YYYY/MM/DD',
+        locale: 'en',
+      })
+    );
+  };
 
   return (
     <DatePicker
-      value={value || null}
+      value={value}
       onChange={handleChange}
       calendar={localeConfig.calendar}
       locale={localeConfig.locale}
@@ -158,7 +152,6 @@ console.log(
           locale={loc}
           separator={sep}
           isFa={isFa}
-          setFieldValue={setFieldValue}
           tripType={name}
           label={label}
         />
