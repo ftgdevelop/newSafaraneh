@@ -46,47 +46,34 @@ export const dateDisplayFormat = ({
   format,
   locale,
 }: {
-  date: string;
-    format?: DateFormat;
+  date: DateObject;
+  format?: DateFormat;
   locale?: "fa" | "en";
 }): string => {
   if (!date) return "";
 
-
-  const hasPersianDigits = /[۰-۹]/.test(date);
-
-  const faToEnDigits = (str: string) =>
-    str.replace(/[۰-۹]/g, d => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)));
-
-  const normalized = hasPersianDigits ? faToEnDigits(date) : date;
-
   let obj: DateObject;
-
-  const isJalaliInput = /^\d{4}\/\d{2}\/\d{2}$/.test(normalized) &&
-    Number(normalized.substring(0, 4)) > 1300;
   
-    
-    
-    if (isJalaliInput) {
-      obj = new DateObject({
-        date: normalized,
-        format: "YYYY/MM/DD",
-        calendar: persian,
-        locale: persian_fa,
-      }).convert(gregorian, english);
-    } else {
-      obj = new DateObject({
-        date: normalized,
-        format: "MM/DD/YYYY",
-        calendar: gregorian,
-        locale: english,
-      });
-    }
-    if (!obj.isValid) return "";
-    
-    if (locale === "fa") {
-      obj = obj.convert(persian, persian_fa);
-    }
+  if (locale === "fa") {
+    obj = new DateObject({
+      date,
+      format: "YYYY/MM/DD",
+      calendar: persian,
+      locale: persian_fa,
+    }).convert(gregorian, english);
+  } else {
+    obj = new DateObject({
+      date,
+      format: "MM/DD/YYYY",
+      calendar: gregorian,
+      locale: english,
+    });
+  }
+  if (!obj.isValid) return "";
+  
+  if (locale === "fa") {
+    obj = obj.convert(persian, persian_fa);
+  }
 
   const map: Record<string, string> = {
     "HH:mm": obj.format("HH:mm"),

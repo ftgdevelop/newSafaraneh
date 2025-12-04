@@ -93,24 +93,31 @@ const DatePicker2: React.FC<Props> = ({
     }
   }, [name, values, localeConfig]);
 
-  const formatForOutput = (v: Value) => {
-    if (!v) return "";
-    try {
-      return dateDisplayFormat({
-        date: v.toString(),
-        format: localeConfig.format,
-        locale: localeKey,
-      });
-    } catch {
-      return v.toString();
-    }
-  };
 
-  const handleChange = (v: Value | null) => {
-    const formatted = v ? formatForOutput(v) : "";
+  const handleChange = (v: DateObject | null) => {
+    const formatted = v ? dateDisplayFormat({
+      date: v,
+      format: localeConfig.format,
+      locale: localeKey,
+    }) : "";
     setFieldValue(name, v);
     if (onChange) onChange(formatted);
   };
+
+console.log(
+  dateDisplayFormat({
+    date: new DateObject({
+      date: minDate,
+      calendar: localeConfig.calendar,
+      locale: localeConfig.locale,
+    }),
+    format:localeConfig.format,
+    locale:localeConfig.locale,
+  }),
+  'minDate',
+  {values,name, minDate,value}
+);
+  
 
   return (
     <DatePicker
