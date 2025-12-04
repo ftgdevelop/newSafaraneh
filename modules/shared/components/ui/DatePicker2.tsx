@@ -138,8 +138,15 @@ const DatePicker2: React.FC<Props> = ({
             deselect: "انصراف",
             close: "تایید",
           }}
+          className="
+            bg-[#f7f7f7]
+            [&>div]:!bg-transparent
+            [&>div]:!text-[#007aff]
+            [&>div:nth-child(3)]:hidden
+          "
         />,
       ]}
+      // className="rounded-lg"
       render={(pickerValue, openCalendar, handleValueChange, loc, sep) => (
         <Input
           values={values}
