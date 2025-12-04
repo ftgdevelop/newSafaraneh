@@ -46,7 +46,7 @@ export const dateDisplayFormat = ({
   format,
   locale,
 }: {
-  date: DateObject;
+  date: DateObject | string;
   format?: DateFormat;
   locale?: "fa" | "en";
 }): string => {

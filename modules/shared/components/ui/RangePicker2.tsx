@@ -13,8 +13,18 @@ import CustomHeaderPlugin from "./CustomHeaderRangePicker";
 import { RangeValue } from "../../types/common";
 import Toolbar from "react-multi-date-picker/plugins/toolbar";
 import CustomRangeInput from "./CustomRangeInput";
+import { dateDisplayFormat, DateFormat } from "../../helpers";
+import DateObject from "react-date-object";
 
-const calendarSettings = {
+const calendars: Record<
+  "fa" | "en",
+  {
+    calendar: any;
+    locale: any;
+    format: DateFormat;
+    weekStartDayIndex: number;
+  }
+> = {
   fa: {
     calendar: persian,
     locale: persian_fa,
@@ -29,24 +39,18 @@ const calendarSettings = {
   },
 };
 
-type RangeCalendarProps = CalendarProps<false, true> & {
-  value: RangeValue | null;
-};
-
 interface RangePicker2Props {
-  value: RangeValue;
-  onChange: (event: any) => void;
+  defaultValue: DateObject[];
+  onChange: ( defaultValue: string[]) => void
 }
 
-const RangePicker2 = ({ value, onChange }: RangePicker2Props) => {
+const RangePicker2 = ({ defaultValue, onChange }: RangePicker2Props) => {
   const [isFa, setIsFa] = useState(true);
+  const [value, setValue] = useState(defaultValue);
 
-  const settings = isFa ? calendarSettings.fa : calendarSettings.en;
+  const localeConfig = isFa ? calendars.fa : calendars.en;
 
   const [isMobile, setIsMobile] = useState(false);
-  const [props, setProps] = useState<RangeCalendarProps>({
-    value,
-  });
 
   const pickerRef = useRef<any>(null);
 
@@ -58,28 +62,39 @@ const RangePicker2 = ({ value, onChange }: RangePicker2Props) => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-
-
-  return (
-    <DatePicker
-      {...props}
-      ref={pickerRef}
-      onPropsChange={(p) => setProps(p as RangeCalendarProps)}
-      range
-      calendar={settings.calendar}
-      locale={settings.locale}
-      format={settings.format}
-      weekStartDayIndex={settings.weekStartDayIndex}
-      numberOfMonths={isMobile ? 1 : 2}
-      monthYearSeparator=""
-      minDate={new Date()}
-      onChange={(values) => {
+  const handleChange = (values: DateObject[]) => {
+    
         if (Array.isArray(values) && values[0] && values[1]) {
           pickerRef.current?.closeCalendar();
         }
-        onChange(values);
-      }}
+        const [dep, ret] = values;
+        const adjustedDep = dateDisplayFormat({
+          date: dep,
+          format: 'YYYY/MM/DD',
+          locale: 'en',
+        });
+        const adjustedRet = dateDisplayFormat({
+          date: ret,
+          format: 'YYYY/MM/DD',
+          locale: 'en',
+        });
+        setValue(values)
+        onChange([adjustedDep, adjustedRet]);
+      }
+
+  return (
+    <DatePicker
+      value={value}
+      ref={pickerRef}
+      range
+      calendar={localeConfig.calendar}
+      locale={localeConfig.locale}
+      format={localeConfig.format}
+      weekStartDayIndex={localeConfig.weekStartDayIndex}
+      numberOfMonths={isMobile ? 1 : 2}
+      monthYearSeparator=""
+      minDate={new Date()}
+      onChange={handleChange}
       arrow={false}
       plugins={[
         <CustomToolbar
@@ -104,14 +119,14 @@ const RangePicker2 = ({ value, onChange }: RangePicker2Props) => {
           key="header"
           position="top"
           isFa={isFa}
-          values={props.value}
+          values={value}
         />,
 
       ]}
 
-      render={(value, openCalendar, handleValueChange, locale, separator) => (
+      render={(val, openCalendar, handleValueChange, locale, separator) => (
         <CustomRangeInput
-          value={value}
+          value={val}
           openCalendar={openCalendar}
           handleValueChange={handleValueChange}
           locale={locale}

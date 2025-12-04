@@ -20,30 +20,12 @@ const CustomToolbar: React.FC<CustomToolbarProps> = ({
   handleChange,
   handleFocusedDate,
 }) => {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation('common');
 
   const safeState = state || {};
   const { range, multiple, selectedDate, calendar, locale, format, focusedDate } =
     safeState;
 
-  const safeCurrentDate = (() => {
-    if (focusedDate) return new DateObject(focusedDate);
-    if (selectedDate instanceof DateObject) return selectedDate;
-    if (Array.isArray(selectedDate) && selectedDate[0])
-      return new DateObject(selectedDate[0]);
-    return new DateObject({ calendar, locale, format });
-  })();
-
-  function updateMonth(diff: number) {
-    if (!safeState || !safeCurrentDate) return;
-
-    const next = new DateObject(safeCurrentDate).set(
-      "month",
-      safeCurrentDate.month.index + diff
-    );
-
-    if (handleFocusedDate) handleFocusedDate(next);
-  }
 
   function selectToday() {
     if (!safeState) return;

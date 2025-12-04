@@ -1,16 +1,9 @@
 import React, { ChangeEvent } from "react";
-import DateObject, { Locale } from "react-date-object";
-
-import persian from "react-date-object/calendars/persian";
-import persian_fa from "react-date-object/locales/persian_fa";
-import gregorian from "react-date-object/calendars/gregorian";
-import gregorian_en from "react-date-object/locales/gregorian_en";
-
+import { Locale } from "react-date-object";
 
 import { Calendar, CalendarFill } from "./icons";
 import { useTranslation } from "next-i18next";
 import { dateDisplayFormat } from "../../helpers";
-
 
 interface CustomRangeInputProps {
     value: string;
@@ -32,15 +25,13 @@ function CustomRangeInput({
     const values = value?.split(String(separator)) || [];
     let startValue 
     let endValue 
-
-    console.log({values});
     
     const theme2 = process.env.THEME === "THEME2";
     const theme3 = process.env.THEME === "THEME3";
     const { t } = useTranslation("common");
 
-    let startFormated = t('checkin-date');
-    let endFormated = t('checkout-date');
+    let startFormatted = t('checkin-date');
+    let endFormatted = t('checkout-date');
     
     if (values ) {
         startValue = values[0] ?  dateDisplayFormat({ date: values[0], format: theme3 ? "yyyy/mm/dd" : "dddd dd MMMM", locale: isFa ? "fa" : "en" }) : '';
@@ -51,10 +42,10 @@ function CustomRangeInput({
                 {theme3 && (
                     <>
                         <label htmlFor="checkin_date" className="text-sm">
-                            {startFormated}
+                            {startFormatted}
                         </label>
                         <label htmlFor="checkout_date" className="text-sm">
-                           {endFormated}
+                           {endFormatted}
                         </label>
                     </>
                 )}
@@ -65,7 +56,7 @@ function CustomRangeInput({
                             htmlFor="checkin_date"
                             className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5 pointer-events-none"
                         >
-                            {startFormated}
+                            {startFormatted}
                         </label>
                     )}
 
@@ -91,7 +82,7 @@ function CustomRangeInput({
                             htmlFor="checkout_date"
                             className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5 pointer-events-none"
                         >
-                            {endFormated}
+                            {endFormatted}
                         </label>
                     )}
 

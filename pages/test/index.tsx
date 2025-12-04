@@ -2,14 +2,11 @@ import CipDatePickerInput from '@/modules/shared/components/ui/CipDatePickerInpu
 import DatePicker2 from '@/modules/shared/components/ui/DatePicker2'
 import DomesticFlightDatePickerInput from '@/modules/shared/components/ui/DomesticFlightDatePickerInput';
 import RangePicker2 from '@/modules/shared/components/ui/RangePicker2'
-import { addSomeDays, dateDisplayFormat, dateFormat } from '@/modules/shared/helpers';
 import { RangeValue } from '@/modules/shared/types/common';
 import React, { useState } from 'react';
 import { DateObject } from 'react-multi-date-picker';
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
-import gregorian from "react-date-object/calendars/gregorian";
-import english from "react-date-object/locales/gregorian_en";
 
   const today = new DateObject({
     date: new Date(),
@@ -30,7 +27,7 @@ import english from "react-date-object/locales/gregorian_en";
 
 const TestPage = () => {
 
-  const [dates, setDates] = useState<RangeValue>(domesticHotelDefaultDates);
+  const [dates, setDates] = useState<Record<'rangeData', string[]>>({rangeData: ['', '']});
   const [simpleValues, setSimpleValues] = useState<{
     flightDate: DateObject | string;
   }>({
@@ -47,11 +44,9 @@ const TestPage = () => {
 
   const [isFa, setIsFa] = useState(true);
 
-   const dateChangeHandle = (value: any) => {
+   const handleChangeRange = ( value: string[]) => {
+    setDates({rangeData: value });
 
-        if (value[0] && value[1]) {
-            setDates(value)
-        }
   } 
   const handleChangeSimple = (name: string, value: DateObject) => {
     setSimpleValues(prev => ({ ...prev, [name]: value }));
@@ -70,7 +65,8 @@ const TestPage = () => {
               onChange={handleChangeSimple}
               isFa={isFa}
               setIsFa={setIsFa}
-              Input={CipDatePickerInput}
+          Input={CipDatePickerInput}
+          label='flightDate'
           />
       </div>
       <div className='flex flex-col gap-2 items-center justify-center'>
@@ -100,9 +96,9 @@ const TestPage = () => {
           Range Picker
         </div>
           <RangePicker2
-                value={dates}
-                onChange={dateChangeHandle}
-            />
+              defaultValue={domesticHotelDefaultDates}
+              onChange={handleChangeRange}
+          />
       </div>
       
     </div>

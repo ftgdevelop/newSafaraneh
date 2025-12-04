@@ -1,5 +1,5 @@
-import React, { use, useEffect, useMemo, useState } from "react";
-import DatePicker, { Value } from "react-multi-date-picker";
+import React, {  useEffect, useState } from "react";
+import DatePicker from "react-multi-date-picker";
 
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
@@ -97,9 +97,6 @@ const DatePicker2: React.FC<Props> = ({
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values]);
-console.log({values});
-
-  
 
   const handleChange = (v: DateObject) => {
     setValue(v)
