@@ -34,7 +34,7 @@ const calendars: Record<
     weekStartDayIndex: 0,
   },
 };
-const directionToFields = ["returnDate", "ToReturnTime"];
+const endDatesName = ["returnDate", "ToReturnTime"];
 type Props = {
   name: string;
   values?: any;
@@ -62,18 +62,18 @@ const DatePicker2: React.FC<Props> = ({
 
 
   useEffect(() => {
-    let dep
-    let ret
+    let startDate
+    let endDate
     setMinDate(new Date());
     Object.values(values).map((value, index) => {
       if (index === 0) {
-        dep = new DateObject({
+        startDate = new DateObject({
           date: value as DateObject,
           format: 'YYYY/MM/DD',
           locale: localeConfig.locale
         })
       } else {
-        ret = new DateObject({
+        endDate = new DateObject({
           date: value as DateObject,
           format: 'YYYY/MM/DD',
           locale: localeConfig.locale
@@ -81,9 +81,9 @@ const DatePicker2: React.FC<Props> = ({
       }
     })
     
-    if (dep && ret && dep > ret && directionToFields.includes(name)) {
+    if (startDate && endDate && startDate > endDate && endDatesName.includes(name)) {
       
-        const newDate = addSomeDays(dep, 1);
+        const newDate = addSomeDays(startDate, 1);
 
         const adjusted = new DateObject({
           date: newDate,
