@@ -1,4 +1,3 @@
-import { RangeValue } from "@/modules/shared/types/common";
 import React from "react";
 
 export interface EntitySearchResultItemType {
@@ -740,7 +739,7 @@ export interface DomesticHotelSummaryDetail {
 export type HotelRecentSearchItem = {
     url: string;
     title: string;
-    dates: RangeValue;
+    dates: string[];
 }
 
 export interface DomesticHotelReviewCommentItem {
