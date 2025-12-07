@@ -1,4 +1,6 @@
-import React, {  useEffect, useState } from "react";
+import React, { ChangeEvent } from "react";
+import { DateObject } from "react-multi-date-picker";
+import { Locale } from "react-date-object";
 import DatePicker from "react-multi-date-picker";
 
 import persian from "react-date-object/calendars/persian";
@@ -9,10 +11,8 @@ import gregorian_en from "react-date-object/locales/gregorian_en";
 import Toolbar from "react-multi-date-picker/plugins/toolbar";
 import CustomToolbar from "./CustomToolbar";
 
-import { addSomeDays, dateDisplayFormat, DateFormat } from "../../helpers";
-import DateObject from "react-date-object";
-
-const calendars: Record<
+import {  DateFormat } from "../../helpers";
+export const calendars: Record<
   "fa" | "en",
   {
     calendar: any;
@@ -34,79 +34,43 @@ const calendars: Record<
     weekStartDayIndex: 0,
   },
 };
-const endDatesName = ["returnDate", "ToReturnTime"];
-type Props = {
-  name: string;
-  values?: any;
-  label?: string;
-  isFa: boolean;
-  setIsFa: React.Dispatch<React.SetStateAction<boolean>>;
-  onChange: (field: string, value: any, shouldValidate?: boolean) => void;
-  Input: React.ComponentType<any>;
-};
+export interface InternalInputProps {
+  value: string;
+  openCalendar: () => void;
+  handleValueChange: (e: ChangeEvent<Element>) => void;
+  locale: Locale;
+  separator: string;
+}
 
-const DatePicker2: React.FC<Props> = ({
+interface DatePicker2Props<TInputProps> {
+  name: string;
+  value: DateObject | null;
+  onChange: (name: string, value: DateObject) => void;
+  isFa: boolean;
+  setIsFa: (x: boolean) => void;
+  minDate?: DateObject | Date;
+  Input: React.ComponentType<TInputProps & InternalInputProps>;
+  inputProps?: TInputProps;
+}
+
+function DatePicker2<TInputProps>({
   name,
-  values,
+  value,
   onChange,
   isFa,
   setIsFa,
+  minDate,
   Input,
-  label
-}) => {
-  const [minDate, setMinDate] = useState<Date | DateObject>(new Date());
-  const [value, setValue] = useState<DateObject | null>(null)
+  inputProps = {} as TInputProps,
+}: DatePicker2Props<TInputProps>) {
   const localeKey = isFa ? "fa" : "en";
 
   const localeConfig = calendars[localeKey];
 
-
-  useEffect(() => {
-    let startDate
-    let endDate
-    setMinDate(new Date());
-    Object.values(values).map((value, index) => {
-      if (index === 0) {
-        startDate = new DateObject({
-          date: value as DateObject,
-          format: 'YYYY/MM/DD',
-          locale: localeConfig.locale
-        })
-      } else {
-        endDate = new DateObject({
-          date: value as DateObject,
-          format: 'YYYY/MM/DD',
-          locale: localeConfig.locale
-        })
-      }
-    })
-    
-    if (startDate && endDate && startDate > endDate && endDatesName.includes(name)) {
-      
-        const newDate = addSomeDays(startDate, 1);
-
-        const adjusted = new DateObject({
-          date: newDate,
-          calendar: localeConfig.calendar,
-          locale: localeConfig.locale,
-        });
-        setMinDate(adjusted);
-        handleChange(adjusted);
-        return;
-    }
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [values]);
-
   const handleChange = (v: DateObject) => {
-    setValue(v)
     onChange(
       name,
-      dateDisplayFormat({
-        date: v,
-        format: 'YYYY/MM/DD',
-        locale: 'en',
-      })
+      v
     );
   };
 
@@ -146,10 +110,9 @@ const DatePicker2: React.FC<Props> = ({
           "
         />,
       ]}
-      // className="rounded-lg"
       render={(pickerValue, openCalendar, handleValueChange, loc, sep) => (
         <Input
-          values={values}
+          {...inputProps}
           value={pickerValue}
           openCalendar={openCalendar}
           handleValueChange={handleValueChange}
@@ -157,11 +120,10 @@ const DatePicker2: React.FC<Props> = ({
           separator={sep}
           isFa={isFa}
           tripType={name}
-          label={label}
         />
       )}
     />
   );
-};
+}
 
 export default DatePicker2;

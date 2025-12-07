@@ -67,19 +67,19 @@ const RangePicker2 = ({ defaultValue, onChange }: RangePicker2Props) => {
         if (Array.isArray(values) && values[0] && values[1]) {
           pickerRef.current?.closeCalendar();
         }
-        const [dep, ret] = values;
-        const adjustedDep = dateDisplayFormat({
-          date: dep,
+        const [startDate, endDate] = values;
+        const adjustedStartDate = dateDisplayFormat({
+          date: startDate,
           format: 'YYYY/MM/DD',
           locale: 'en',
         });
-        const adjustedRet = dateDisplayFormat({
-          date: ret,
+        const adjustedEndDate = dateDisplayFormat({
+          date: endDate,
           format: 'YYYY/MM/DD',
           locale: 'en',
         });
         setValue(values)
-        onChange([adjustedDep, adjustedRet]);
+        onChange([adjustedStartDate, adjustedEndDate]);
       }
 
   return (
@@ -95,6 +95,7 @@ const RangePicker2 = ({ defaultValue, onChange }: RangePicker2Props) => {
       monthYearSeparator=""
       minDate={new Date()}
       onChange={handleChange}
+      rangeHover
       arrow={false}
       plugins={[
         <CustomToolbar

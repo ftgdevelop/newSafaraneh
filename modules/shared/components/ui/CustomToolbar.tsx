@@ -5,7 +5,7 @@ import { useTranslation } from "next-i18next";
 
 interface CustomToolbarProps {
   isFa: boolean;
-  setIsFa: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsFa:  (v: boolean) => void;
   position?: "top" | "bottom";
 
   state?: any;
@@ -62,7 +62,7 @@ const CustomToolbar: React.FC<CustomToolbarProps> = ({
   return (
     <div className="text-sm text-primary-700 flex justify-between px-3 py-2">
       <div
-        onClick={() => setIsFa((p) => !p)}
+        onClick={() => setIsFa(!isFa)}
         className="cursor-pointer flex items-center gap-2"
       >
         {isFa ? t("gregorianCalendar") : t("iranianCalendar")}
