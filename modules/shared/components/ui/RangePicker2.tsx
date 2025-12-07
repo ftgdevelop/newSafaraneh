@@ -10,7 +10,6 @@ import gregorian_en from "react-date-object/locales/gregorian_en";
 
 import CustomToolbar from "./CustomToolbar";
 import CustomHeaderPlugin from "./CustomHeaderRangePicker";
-import { RangeValue } from "../../types/common";
 import Toolbar from "react-multi-date-picker/plugins/toolbar";
 import CustomRangeInput from "./CustomRangeInput";
 import { dateDisplayFormat, DateFormat } from "../../helpers";
