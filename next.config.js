@@ -47,7 +47,7 @@ const nextConfig = {
   i18n,
   env: {
     PROJECT: "HOTELBAN",
-    SITE_NAME: 'https://www.hotelban.com',
+    SITE_NAME: 'https://tripmap.ir',
     THEME: "THEME3",
     HOTEL_LIST_LAZY_LOAD: "",
     SAFAR_MARKET_SITE_NAME: "",
