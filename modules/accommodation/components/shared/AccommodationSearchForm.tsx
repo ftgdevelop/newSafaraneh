@@ -13,6 +13,7 @@ import RangePicker from "../../../shared/components/ui/RangePicker";
 import { localeFa } from "@mobiscroll/react";
 import Button from "../../../shared/components/ui/Button";
 import SelectPassengers from "./SelectPassengers";
+import Link from "next/link";
 
 const autoCompleteUrl = `${ServerAddress.Type}${ServerAddress.Accommodation_Data}${Accommodation.GetEntity}`;
 
@@ -91,10 +92,6 @@ const AccommodationSearchForm: React.FC<Props> = (props) => {
                             },
                         });
 
-                        console.log("response", response);
-
-                        console.log("Default Destinations Response:", response);
-
                         if (response?.data?.result?.items?.length) {
                             setDefaultDestinations(response.data.result.items);
                             localStorage?.setItem("accommodationSearchDefaultDestinations", JSON.stringify(response.data.result.items));
@@ -144,7 +141,11 @@ const AccommodationSearchForm: React.FC<Props> = (props) => {
         }
 
         if (!selectedDestination) {
-            // TODO validation message
+            // اگر مقصد انتخاب نشده باشد، هدایت به صفحه جستجو با کلمه وارد شده
+            const searchQuery = document.getElementById("destination")?.value || "";
+            if (searchQuery) {
+              router.push(`/accommodations/${encodeURIComponent(searchQuery)}`);
+            }
             return;
         }
 
@@ -154,13 +155,7 @@ const AccommodationSearchForm: React.FC<Props> = (props) => {
 
         switch (selectedDestination?.type) {
             case "City":
-                url = `/accommodations/${selectedDestination.slug!.replace(/ /g, "-")}`;
-                break;
-
             case "Province":
-                url = `/accommodations/${selectedDestination.slug!.replace(/ /g, "-")}`;
-                break;
-
             case "Village":
                 url = `/accommodations/${selectedDestination.slug!.replace(/ /g, "-")}`;
                 break;
@@ -207,9 +202,18 @@ const AccommodationSearchForm: React.FC<Props> = (props) => {
 
     const { labelsWhite } = props;
 
+    // const onChangeHandle = (value: EntitySearchResultItemType | undefined) => {
+    //     if (!value && props.defaultDestination) {
+    //         setSelectedDestination(props.defaultDestination);
+    //     } else {
+    //         setSelectedDestination(value);
+    //     }
+    // };
+
     const onChangeHandle = (value: EntitySearchResultItemType | undefined) => {
-        if (!value && props.defaultDestination) {
-            setSelectedDestination(props.defaultDestination);
+        if (!value && selectedDestination?.name) {
+            // هدایت به صفحه جستجو با استفاده از مقدار وارد شده
+            router.push(`/accommodations/${encodeURIComponent(selectedDestination.name)}`);
         } else {
             setSelectedDestination(value);
         }
@@ -244,14 +248,16 @@ const AccommodationSearchForm: React.FC<Props> = (props) => {
                     type="accommodation"
                     defaultList={defaultDestinations}
                     inputId="destination"
-                    noResultMessage={t("NoResultsFound")}
+                    noResultMessage= {t("NoResultsFound")}
                     createTextFromOptionsObject={(item: EntitySearchResultItemType) =>
                         item.title || item.name || ""
                     }
                     acceptLanguage="fa-IR"
                     renderOption={renderOption}
                     icon="location"
-                    inputClassName={`w-full outline-none rounded-lg ${theme3?"bg-neutral-200":"border border-neutral-400 pt-4"} h-12 text-sm text-neutral-500 placeholder:text-neutral-500 focus:border-neutral-900`}
+                    inputClassName={`w-full outline-none rounded-lg ${
+                        theme3 ? "bg-neutral-200" : "border border-neutral-400 pt-4"
+                    } h-12 text-sm text-neutral-500 placeholder:text-neutral-500 focus:border-neutral-900`}
                     placeholder={t("search-accommodation-or-city")}
                     min={2}
                     value={selectedDestination}

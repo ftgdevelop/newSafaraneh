@@ -175,6 +175,10 @@ export const Flight = {
     Calendar: "/api/services/app/Booking/Calendar",
     Review: "/api/services/app/Booking/Review",
     Similer: "/api/services/app/Booking/Similer",
+    Validate: "/api/services/app/Booking/Validate",
+    PreReserve: "/api/services/app/Booking/PreReserve",
+    GetValidate: "/api/services/app/Booking/GetValidate",
+    Confirm: "/api/services/app/Booking/Confirm",
   };
 
   export const ServerStatus = {

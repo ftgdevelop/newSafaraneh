@@ -144,7 +144,7 @@ const AccommodationDetailPage: NextPage = () => {
               { id: "features", title: "ویژگی‌ها" },
               { id: "distances", title: "فاصله‌ها" },
               { id: "rules", title: "قوانین اقامتگاه" },
-              { id: "calendar", title: "تقویم" },
+              { id: "calendar", title: "قیمتی تقویم" },
               { id: "rates", title: "نظرات کاربران" },
               { id: "similar", title: "اقامتگاه‌های مشابه" },
             ]}
@@ -219,6 +219,7 @@ const AccommodationDetailPage: NextPage = () => {
                     checkin={checkinState}
                     checkout={checkoutState}
                     capacity={capacityState}
+                    bookingToken={house.bookingToken} // Pass the bookingToken here
                     onUpdate={handleUpdate}
                   />
                 )}

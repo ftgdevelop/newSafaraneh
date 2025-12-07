@@ -10,9 +10,10 @@ type CalendarProps = {
   checkout: string;
   capacity: number;
   onUpdate: (checkin: string, checkout: string, capacity: number) => void;
+  bookingToken: string; // Add bookingToken as a prop
 };
 
-const Calendar: React.FC<CalendarProps> = ({ id, checkin, checkout, capacity, onUpdate }) => {
+const Calendar: React.FC<CalendarProps> = ({ id, checkin, checkout, capacity, onUpdate, bookingToken }) => {
   const [calendarData, setCalendarData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [totalPrice, setTotalPrice] = useState<number>(0);
@@ -75,6 +76,43 @@ const Calendar: React.FC<CalendarProps> = ({ id, checkin, checkout, capacity, on
 
     fetchCalendarData();
   }, [id, checkin, checkout]);
+
+  const handleReservation = async () => {
+    try {
+      const response = await axios.post(
+        `${ServerAddress.Type}${ServerAddress.Accommodation_Data}${Accommodation.Validate}`,
+        {
+          checkin: formatDateWithTime(checkin),
+          checkout: formatDateWithTime(checkout),
+          bookingToken,
+          guestsCount: capacity,
+          metaSearchName: "",
+          metaSearchKey: "",
+        },
+        {
+          headers: {
+            accept: "text/plain",
+            tenantId: 7,
+            apikey: "ACE01BF4-AAEE-45D6-ABE7-F3FF519052DB",
+            "accept-language": "fa-IR",
+            currency: "EUR",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const { preReserveKey } = response.data.result;
+
+      // Redirect to the checkout page with query parameters
+      // const checkoutUrl = `/fa/accommodation/checkout/key=${preReserveKey}?houseId=${id}&checkIn=${checkin}&checkOut=${checkout}&guestsCount=${capacity}`;
+      const checkoutUrl = `/fa/accommodation/checkout/key=${preReserveKey}`;
+      console.log("Redirecting to:", checkoutUrl);
+      window.location.href = checkoutUrl; // Redirect to the checkout page
+    } catch (error) {
+      console.error("Error validating reservation:", error);
+      alert("خطا در تایید رزرو. لطفا دوباره تلاش کنید.");
+    }
+  };
 
   return (
     <div className="p-4 bg-white border rounded-lg">
@@ -144,7 +182,10 @@ const Calendar: React.FC<CalendarProps> = ({ id, checkin, checkout, capacity, on
       {loading ? (
         <div className="h-10 bg-gray-300 rounded"></div>
       ) : (
-        <Button className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">
+        <Button
+          className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
+          onClick={handleReservation}
+        >
           درخواست رزرو
         </Button>
       )}

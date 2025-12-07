@@ -28,6 +28,8 @@ import Aside from '@/modules/flights/components/shared/Aside';
 import { ServerAddress } from '@/enum/url';
 import { emptyReduxSafarmarket, setReduxSafarmarketPixel } from '@/modules/shared/store/safarmarketSlice';
 import { bankGatewayItem } from '@/modules/payment/types';
+import AccommodationAside from '@/modules/accommodation/components/shared/Aside';
+import { confirmAccommodation } from '@/modules/accommodation/actions';
 
 
 const Payment: NextPage = () => {
@@ -65,6 +67,8 @@ const Payment: NextPage = () => {
   const [goToBankLoading, setGoToBankLoading] = useState<boolean>(false);
 
   const [expireDate, setExpireDate] = useState();
+
+  console.log("domesticHotelReserveData:", type);
 
   useEffect(() => {
 
@@ -234,6 +238,27 @@ const Payment: NextPage = () => {
 
       fetchDomesticFlightData(reserveId, username);
 
+    }
+
+    if (username && reserveId && type === 'Accommodation') {
+      const fetchAccommodationReserveData = async () => {
+        try {
+          const token = localStorage.getItem('Token') || "";
+          const response = await confirmAccommodation({ userName: username, reserveId, token });
+
+          if (response?.success) {
+            console.log("Accommodation reserve data fetched successfully:", response);
+            // در صورت نیاز، داده‌های دریافتی را در state ذخیره کنید
+            // setAccommodationReserveData(response.data);
+          } else {
+            console.error("Failed to fetch accommodation reserve data:", response);
+          }
+        } catch (error) {
+          console.error("Error fetching accommodation reserve data:", error);
+        }
+      };
+
+      fetchAccommodationReserveData();
     }
 
   }, [type, username, reserveId]);
@@ -541,6 +566,8 @@ const Payment: NextPage = () => {
                 passengers={domesticFlightPassengers}
                 returnFlight={domesticFlightReserveInfo?.returnFlight}
               />
+            ) : type === 'Accommodation' ? (
+              <AccommodationAside />
             ) : null}
 
             {!!theme1 && (
