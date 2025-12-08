@@ -1,8 +1,8 @@
 import { DomesticHotelRateItem } from "../../types/hotel";
 import { dateFormat, numberWithCommas } from "@/modules/shared/helpers";
 
-import '@mobiscroll/react/dist/css/mobiscroll.min.css';
-import { Datepicker as MobiscrollDatepicker, localeFa, MbscCalendarLabel } from '@mobiscroll/react';
+// import '@mobiscroll/react/dist/css/mobiscroll.min.css';
+// import { Datepicker as MobiscrollDatepicker, localeFa, MbscCalendarLabel } from '@mobiscroll/react';
 
 type Props = {
     calendar?: DomesticHotelRateItem['calendar'];
@@ -41,7 +41,7 @@ const PriceCalendar: React.FC<Props> = props => {
         value = [props.selectedDates[0], props.selectedDates[props.selectedDates.length - 1]]
     }
 
-    let labels : MbscCalendarLabel[] = [];
+    let labels = [];
 
     if (calendarArray){
         labels = calendarArray.map(item => {
@@ -79,19 +79,20 @@ const PriceCalendar: React.FC<Props> = props => {
         debugger;
     }
 
-    return(
-        <MobiscrollDatepicker 
-            cssClass="price-calendar"
-            display="inline"
-            touchUi={false}
-            locale={localeFa}
-            labels={labels}
-            select="range"
-            value={value}
-            showRangeLabels={false}
-            min = {dateFormat(new Date())}
-        /> 
-    );
+    // return(
+    //     <MobiscrollDatepicker
+    //         cssClass="price-calendar"
+    //         display="inline"
+    //         touchUi={false}
+    //         locale={localeFa}
+    //         labels={labels}
+    //         select="range"
+    //         value={value}
+    //         showRangeLabels={false}
+    //         min = {dateFormat(new Date())}
+    //     />
+    // );
+    return null
 }
 
 export default PriceCalendar;

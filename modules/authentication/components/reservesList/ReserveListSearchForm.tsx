@@ -5,7 +5,6 @@ import FormikField from '@/modules/shared/components/ui/FormikField';
 // import DatePickerModern from '@/modules/shared/components/ui/DatePickerModern';
 import Button from '@/modules/shared/components/ui/Button';
 import DatePickerMobiscroll from '@/modules/shared/components/ui/DatePickerMobiscroll';
-import { localeFa } from '@mobiscroll/react';
 
 type Props = {
     submitHandle: (values: { FromReturnTime?: string, ToReturnTime?: string, reserveId: string, type: string }) => void;
@@ -15,7 +14,7 @@ const ReserveListSearchForm: React.FC<Props> = props => {
 
     const { t } = useTranslation('common');
 
-    const [locale, setLocale] = useState<any>(localeFa);
+    const [locale, setLocale] = useState<any>('fa');
     
     const theme2 = process.env.THEME === "THEME2";
 
@@ -81,7 +80,7 @@ const ReserveListSearchForm: React.FC<Props> = props => {
                                 از تاریخ
                             </label>
 
-                            <DatePickerMobiscroll
+                            {/* <DatePickerMobiscroll
                                 placeholder='از تاریخ'
                                 inputStyle='simple'
                                 onChange={a => {
@@ -90,7 +89,7 @@ const ReserveListSearchForm: React.FC<Props> = props => {
                                 rtl
                                 locale={locale}
                                 onChangeLocale={setLocale}
-                            />
+                            /> */}
 
 
                             {/* <DatePickerModern
@@ -110,7 +109,7 @@ const ReserveListSearchForm: React.FC<Props> = props => {
                                 تا تاریخ
                             </label>
 
-                            <DatePickerMobiscroll
+                            {/* <DatePickerMobiscroll
                                 placeholder='تا تاریخ'
                                 inputStyle='simple'
                                 onChange={a => {
@@ -120,7 +119,7 @@ const ReserveListSearchForm: React.FC<Props> = props => {
                                 minDate={values.FromReturnTime}
                                 locale={locale}
                                 onChangeLocale={setLocale}
-                            />
+                            /> */}
 
                             {/* <DatePickerModern
                                 wrapperClassName="block"

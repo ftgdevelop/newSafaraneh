@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Bed, Cancel, CipIcon, CreditCard, DownCaret, ErrorIcon, TikCircle, TimeSand, Travel } from "@/modules/shared/components/ui/icons";
-import { dateDiplayFormat, numberWithCommas } from "@/modules/shared/helpers";
+import { dateDisplayFormat, numberWithCommas } from "@/modules/shared/helpers";
 import { UserReserveListItem } from "@/modules/shared/types/common";
 import { domesticHotelGetReserveById } from '@/modules/domesticHotel/actions';
 import Skeleton from '@/modules/shared/components/ui/Skeleton';
@@ -259,7 +259,7 @@ const ReserveListItem: React.FC<Props> = props => {
                 <div className="px-2 py-1.5 col-span-3 md:col-span-1 rtl:max-md:text-left ltr:max-md:text-right">
                     {typeIcon(type)} {typeName(type)}
                 </div>
-                <div className="px-2 py-1.5 whitespace-nowrap col-span-3 md:col-span-1 text-xs"> {dateDiplayFormat({ date: creationTime, locale: "fa", format: "ddd dd mm" })} </div>
+                <div className="px-2 py-1.5 whitespace-nowrap col-span-3 md:col-span-1 text-xs"> {dateDisplayFormat({ date: creationTime, locale: "fa", format: "ddd dd mm" })} </div>
                 <div className="px-2 py-1.5 col-span-3 md:col-span-1 md:text-center rtl:max-md:text-left ltr:max-md:text-right whitespace-nowrap">  {numberWithCommas(salePrice || 0)}  <span className='md:hidden'> ریال </span></div>
                 <div className="px-2 py-1.5 whitespace-nowrap col-span-6 md:col-span-1 max-md:hidden"> {statusIcon} {statusText} </div>
                 <div className="md:px-2 md:py-1.5 max-md:absolute max-md:bottom-0 max-md:left-0 max-md:right-0 md:rtl:text-left md:ltr:text-right">
@@ -305,7 +305,7 @@ const ReserveListItem: React.FC<Props> = props => {
                                 <span> {reserveDetail?.accommodation?.displayName || " -- "} </span>
 
                                 <span className='hidden md:block' title={reserveDetail?.checkin}>
-                                    {reserveDetail?.checkin ? dateDiplayFormat({ date: reserveDetail.checkin, locale: "fa", format: "ddd dd mm" }) : " -- "}
+                                    {reserveDetail?.checkin ? dateDisplayFormat({ date: reserveDetail.checkin, locale: "fa", format: "ddd dd mm" }) : " -- "}
                                 </span>
                             </>
                         ) : type === "Cip" ? (
@@ -322,7 +322,7 @@ const ReserveListItem: React.FC<Props> = props => {
                                 <span className='leading-4'> {reserveDetail?.airport?.name || " -- "} </span>
 
                                 <span className='hidden md:block' title={reserveDetail?.flightTime}>
-                                    {reserveDetail?.flightTime ? dateDiplayFormat({ date: reserveDetail.flightTime, locale: "fa", format: "ddd dd mm" }) : " -- "}
+                                    {reserveDetail?.flightTime ? dateDisplayFormat({ date: reserveDetail.flightTime, locale: "fa", format: "ddd dd mm" }) : " -- "}
                                 </span>
                             </>
                         ) : type === 'FlightDomestic' ? (
@@ -346,9 +346,9 @@ const ReserveListItem: React.FC<Props> = props => {
 
                                 {reserveDetail?.departureTime ? (
                                 <div className='hidden md:block' title={reserveDetail.departureTime}>
-                                    {dateDiplayFormat({ date: reserveDetail.departureTime, locale: "fa", format: 'dd mm yyyy'})}
+                                    {dateDisplayFormat({ date: reserveDetail.departureTime, locale: "fa", format: 'dd mm yyyy'})}
                                     <br/>
-                                    {dateDiplayFormat({ date: reserveDetail.departureTime, locale: "fa", format: 'HH:mm' })}
+                                    {dateDisplayFormat({ date: reserveDetail.departureTime, locale: "fa", format: 'HH:mm' })}
                                 </div>
                                 ):(
                                     <span className='hidden md:block' > -- </span>

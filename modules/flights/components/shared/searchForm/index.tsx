@@ -13,8 +13,8 @@ import { Flight, ServerAddress } from '@/enum/url';
 import { validateRequied } from '@/modules/shared/helpers/validation';
 import { addSomeDays, dateFormat } from '@/modules/shared/helpers';
 import { defaultAirportOptions } from './defaultList';
-import DatePickerMobiscroll from '@/modules/shared/components/ui/DatePickerMobiscroll';
-import { localeFa } from '@mobiscroll/react';
+// import DatePickerMobiscroll from '@/modules/shared/components/ui/DatePickerMobiscroll';
+// import { localeFa } from '@mobiscroll/react';
 import AutoCompleteZoom from '@/modules/shared/components/ui/AutoCompleteZoom';
 
 type Props = {
@@ -32,7 +32,6 @@ const SearchForm: React.FC<Props> = props => {
 
     const { defaultValues } = props;
 
-    const [locale, setLocale] = useState<any>(localeFa);
 
     const [locations, setLocations] = useState<[AirportAutoCompleteType | undefined, AirportAutoCompleteType | undefined]>([defaultValues?.originObject || undefined, defaultValues?.destinationObject || undefined]);
 
@@ -408,7 +407,7 @@ const SearchForm: React.FC<Props> = props => {
                                                 تاریخ رفت
                                             </label>
                                         )}
-
+{/* 
                                         <div className='relative'>
                                             <DatePickerMobiscroll
                                                 minDate={dateFormat(new Date())}
@@ -431,7 +430,7 @@ const SearchForm: React.FC<Props> = props => {
                                             {theme3 || <label className={`absolute leading-5 rtl:right-10 select-none pointer-events-none transition-all ${values.departureDate ? "top-1.5 text-4xs " : "top-1/2 -translate-y-1/2 text-sm "}`}>
                                                 تاریخ رفت
                                             </label>}
-                                        </div>
+                                        </div> */}
 
                                         <Field
                                             validate={(value: string) => validateRequied(value, values.airTripType === 'RoundTrip' ? "تاریخ رفت را انتخاب کنید." : "تاریخ پرواز را انتخاب کنید.")}
@@ -451,7 +450,7 @@ const SearchForm: React.FC<Props> = props => {
                                                 </label>
                                             )}
 
-                                            <div className='relative'>
+                                            {/* <div className='relative'>
                                                 <DatePickerMobiscroll
                                                     inputStyle={theme3 ? "theme3" : 'theme1'}
                                                     onChange={a => {
@@ -484,7 +483,7 @@ const SearchForm: React.FC<Props> = props => {
                                                 >
                                                     <Minus className='w-4 h-4 fill-white' />
                                                 </button>
-                                            </div>
+                                            </div> */}
 
                                             <Field
                                                 validate={(value: string) => validateRequied(value, "تاریخ برگشت را انتخاب کنید.")}

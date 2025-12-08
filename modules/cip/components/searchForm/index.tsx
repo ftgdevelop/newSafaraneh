@@ -13,7 +13,7 @@ import { cipDefaultAirportOptions } from './defaultList';
 import { CipAutoCompleteType, CipRecentSearchItem } from '../../types/cip';
 import AutoCompleteZoom from '@/modules/shared/components/ui/AutoCompleteZoom';
 import DatePickerMobiscroll from '@/modules/shared/components/ui/DatePickerMobiscroll';
-import { localeFa } from '@mobiscroll/react';
+// import { localeFa } from '@mobiscroll/react';
 import { dateFormat } from '@/modules/shared/helpers';
 
 type SearchFormValues = {
@@ -244,7 +244,7 @@ const SearchForm: React.FC<Props> = props => {
                                             value={values.flightDate}
                                         /> */}
 
-                                        <DatePickerMobiscroll
+                                        {/* <DatePickerMobiscroll
                                             minDate={dateFormat(new Date())}
                                             inputStyle='theme1'
                                             onChange={a => {
@@ -253,9 +253,9 @@ const SearchForm: React.FC<Props> = props => {
                                             rtl
                                             locale={localeFa}
                                             value={values.flightDate}
-                                        />
+                                        /> */}
 
-                                        {theme2 ?(
+                                        {/* {theme2 ?(
                                             <CalendarFill className='w-5 h-5 fill-neutral-600 top-1/2 -mt-2.5 right-3 absolute select-none pointer-events-none' />
                                         ):(
                                             <Calendar className='w-5 h-5 fill-neutral-600 top-1/2 -mt-2.5 right-3 absolute select-none pointer-events-none' />
@@ -264,14 +264,14 @@ const SearchForm: React.FC<Props> = props => {
 
                                         <label className={`absolute leading-5 rtl:right-10 select-none pointer-events-none transition-all ${values.flightDate ? "top-1.5 text-4xs " : "top-1/2 -translate-y-1/2 text-sm "}`}>
                                             تاریخ پرواز
-                                        </label>
+                                        </label> */}
                                     </div>
 
-                                    <Field
+                                    {/* <Field
                                         type='hidden'
                                         name="flightDate"
                                         value={values.flightDate}
-                                    />
+                                    /> */}
 
                                 </div>
 
