@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { dateDiplayFormat } from "@/modules/shared/helpers";
+import { dateDisplayFormat } from "@/modules/shared/helpers";
 import { i18n } from "next-i18next";
 import { CipRecentSearchItem } from "../../types/cip";
 import RecentSearches from "@/modules/home/components/RecentSearches";
@@ -31,7 +31,7 @@ const CipRecentSearches: React.FC = () => {
 
         return ({
             title: item.airportName,
-            subtitle: theme1 ? dateDiplayFormat({ date: item.flightDate, format: "dd mm", locale: i18n?.language }) : (theme2 || theme3) ?  dateDiplayFormat({ date: item.flightDate, format: "ddd dd mm", locale: i18n?.language }) : "",
+            subtitle: theme1 ? dateDisplayFormat({ date: item.flightDate, format: "dd mm", locale: i18n?.language }) : (theme2 || theme3) ?  dateDisplayFormat({ date: item.flightDate, format: "ddd dd mm", locale: i18n?.language }) : "",
             url: item.url
         })
     })

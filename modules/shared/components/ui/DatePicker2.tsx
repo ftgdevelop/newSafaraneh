@@ -51,6 +51,7 @@ interface DatePicker2Props<TInputProps> {
   minDate?: DateObject | Date;
   Input: React.ComponentType<TInputProps & InternalInputProps>;
   inputProps?: TInputProps;
+  className?: string;
 }
 
 function DatePicker2<TInputProps>({
@@ -62,6 +63,7 @@ function DatePicker2<TInputProps>({
   minDate,
   Input,
   inputProps = {} as TInputProps,
+  className
 }: DatePicker2Props<TInputProps>) {
   const localeKey = isFa ? "fa" : "en";
 
@@ -86,6 +88,7 @@ function DatePicker2<TInputProps>({
       minDate={minDate}
       arrow={false}
       monthYearSeparator=""
+      className={`${className} [&_.rmdp-week-day]:text-black`}
       plugins={[
         <CustomToolbar
           key="custom-toolbar"
@@ -102,7 +105,7 @@ function DatePicker2<TInputProps>({
             deselect: "انصراف",
             close: "تایید",
           }}
-          className="
+          className=" lg:!hidden
             bg-[#f7f7f7]
             [&>div]:!bg-transparent
             [&>div]:!text-[#007aff]
@@ -119,7 +122,6 @@ function DatePicker2<TInputProps>({
           locale={loc}
           separator={sep}
           isFa={isFa}
-          tripType={name}
         />
       )}
     />

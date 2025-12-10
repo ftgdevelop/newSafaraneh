@@ -281,7 +281,11 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
         } else {
             inputClassNames.push("pl-3");
         }
+    } else if (errorElement) {
+        inputClassNames.push("border border-red-500");
     }
+    
+
     const iconClassName = `pointer-events-none h-5 w-5 fill-current absolute z-20 top-1/2 -translate-y-1/2 ${!direction ? "rtl:right-3 ltr:left-3" : direction === 'rtl' ? "right-3" : "left-3"}`;
 
     let iconElement = null;

@@ -5,22 +5,24 @@ import { useRouter } from 'next/router';
 import { Field, Form, Formik } from 'formik';
 import Button from '@/modules/shared/components/ui/Button';
 import AutoComplete from '@/modules/shared/components/ui/AutoComplete';
-import { Calendar, CalendarFill, Location } from '@/modules/shared/components/ui/icons';
+import { Location } from '@/modules/shared/components/ui/icons';
 import { Cip, ServerAddress } from '@/enum/url';
 import { validateRequied } from '@/modules/shared/helpers/validation';
 import FormikField from '@/modules/shared/components/ui/FormikField';
 import { cipDefaultAirportOptions } from './defaultList';
 import { CipAutoCompleteType, CipRecentSearchItem } from '../../types/cip';
 import AutoCompleteZoom from '@/modules/shared/components/ui/AutoCompleteZoom';
-import DatePickerMobiscroll from '@/modules/shared/components/ui/DatePickerMobiscroll';
 // import { localeFa } from '@mobiscroll/react';
-import { dateFormat } from '@/modules/shared/helpers';
+import { dateDisplayFormat, dateFormat } from '@/modules/shared/helpers';
+import DatePicker2 from '@/modules/shared/components/ui/DatePicker2';
+import CipDatePickerInput, { CipInputProps } from '@/modules/shared/components/ui/CipDatePickerInput';
+import { DateObject } from 'react-multi-date-picker';
 
 type SearchFormValues = {
     airportUrl: string;
     airlineName: string;
     flightNumber: string;
-    flightDate: string;
+    flightDate: DateObject | null;
 }
 
 type Props = {
@@ -40,7 +42,9 @@ const SearchForm: React.FC<Props> = props => {
     const [submitPending, setSubmitPending] = useState<boolean>(false);
 
     const [selectedAirportName, setSelectedAirportName] = useState<string>("");
-
+    
+    const [isFa, setIsFa] = useState(true);
+    
     const renderOption = useCallback((option: CipAutoCompleteType, direction: "ltr" | "rtl" | undefined) => (
         <div className={`px-3 py-2 flex gap-3 hover:bg-neutral-800 hover:text-white items-center ${!direction ? "" : direction === 'rtl' ? "rtl" : "ltr"}`}>
             <Location className="w-5 h-5 fill-current" />
@@ -74,7 +78,9 @@ const SearchForm: React.FC<Props> = props => {
         const searchObject: CipRecentSearchItem = {
             url: url,
             airportName: selectedAirportName,
-            flightDate: values.flightDate
+            flightDate: dateDisplayFormat({
+                date: values.flightDate ? values.flightDate : new Date().toISOString(),
+            })
         };
 
         if (!(recentSearches.find(item => item.url === searchObject.url))) {
@@ -94,10 +100,10 @@ const SearchForm: React.FC<Props> = props => {
         airportUrl: string;
         airlineName: string;
         flightNumber: string;
-        flightDate: string;
+        flightDate: DateObject | null;
     } = defaultValues || {
         airlineName: "",
-        flightDate: "",
+        flightDate: null,
         flightNumber: "",
         airportUrl: ""
     }
@@ -228,50 +234,25 @@ const SearchForm: React.FC<Props> = props => {
 
                                     <div className="relative modernDatePicker-checkin">
 
-
-                                        {/* <DatePickerModern
-                                            wrapperClassName="block"
-                                            minimumDate={dateDiplayFormat({ date: new Date().toISOString(), locale: 'en', format: "YYYY-MM-DD" })}
-                                            inputPlaceholder="تاریخ پرواز"
-                                            inputClassName="border border-neutral-400 h-12 rounded-lg focus:border-neutral-900 outline-none pt-7 text-xs w-full pr-10"
-                                            toggleLocale={() => { setLocale(prevState => prevState === 'fa' ? "en" : "fa") }}
-                                            locale={locale}
-                                            onChange={(v: string) => {
-                                                if (v) {
-                                                    setFieldValue("flightDate", v, true);
-                                                }
-                                            }}
+                                        <DatePicker2<CipInputProps>
+                                            name="flightDate"
                                             value={values.flightDate}
-                                        /> */}
-
-                                        {/* <DatePickerMobiscroll
-                                            minDate={dateFormat(new Date())}
-                                            inputStyle='theme1'
-                                            onChange={a => {
-                                                setFieldValue("flightDate", a.value, true)
-                                            }}
-                                            rtl
-                                            locale={localeFa}
-                                            value={values.flightDate}
-                                        /> */}
-
-                                        {/* {theme2 ?(
-                                            <CalendarFill className='w-5 h-5 fill-neutral-600 top-1/2 -mt-2.5 right-3 absolute select-none pointer-events-none' />
-                                        ):(
-                                            <Calendar className='w-5 h-5 fill-neutral-600 top-1/2 -mt-2.5 right-3 absolute select-none pointer-events-none' />
-                                        )}
-
-
-                                        <label className={`absolute leading-5 rtl:right-10 select-none pointer-events-none transition-all ${values.flightDate ? "top-1.5 text-4xs " : "top-1/2 -translate-y-1/2 text-sm "}`}>
-                                            تاریخ پرواز
-                                        </label> */}
+                                            onChange={(v)=> setFieldValue("flightDate", v)}
+                                            isFa={isFa}
+                                            setIsFa={setIsFa}
+                                            Input={CipDatePickerInput}
+                                            minDate={new Date()}
+                                            inputProps={
+                                                {
+                                                    id: "flightDate",
+                                                    name: "flightDate",
+                                                    fieldClassName: "",
+                                                    isTouched: false,
+                                                    errorText: "",
+                                                    label: "تاریخ پرواز"
+                                                }}
+                                            />   
                                     </div>
-
-                                    {/* <Field
-                                        type='hidden'
-                                        name="flightDate"
-                                        value={values.flightDate}
-                                    /> */}
 
                                 </div>
 

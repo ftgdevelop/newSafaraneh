@@ -14,6 +14,7 @@ import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import Button from "@/modules/shared/components/ui/Button";
 import { addSomeDays, dateDisplayFormat } from "@/modules/shared/helpers";
+import TestOne from "@/modules/shared/components/test/test1";
 
 const today = new DateObject({
   date: new Date(),
@@ -58,9 +59,6 @@ const TestPage = () => {
     setDates({ rangeData: value });
   };
 
-  const handleChangeSimple = (name: string, value: DateObject) => {
-    setSimpleValues((prev) => ({ ...prev, [name]: value }));
-  };
 
   const handleChangeDatepicker2 = (name: string, value: DateObject) => {
     setDatepicker2Values((prev) => ({ ...prev, [name]: value }));
@@ -134,35 +132,15 @@ const TestPage = () => {
       item ? fixDate(item) : null
     );
   };
-  console.log({
-    f2v: acceptedBackendFormatted(datepicker2Values),
-    f1v: acceptedBackendFormatted(simpleValues),
-    dates
-  });
+
 
 
   return (
-    <div className="flex flex-col gap-8 max-w-xl m-auto mt-8">
+    <div className="flex flex-col gap-8 px-8 mt-8">
       {/* SIMPLE DATE PICKER */}
       <div className="flex flex-col gap-2 items-center justify-center">
-        <div>Simple Date Picker</div>
-
-        <DatePicker2<CipInputProps>
-          name="flightDate"
-          value={simpleValues.flightDate}
-          onChange={handleChangeSimple}
-          isFa={isFa}
-          setIsFa={setIsFa}
-          Input={CipDatePickerInput}
-          inputProps={{
-            id: "flightDate",
-            name: "flightDate",
-            fieldClassName: "",
-            isTouched: false,
-            errorText: "",
-            label: "flightDate"
-          }}
-        />
+        
+      <TestOne wrapperClassName="bg-white p-4 w-full rounded-lg border border-neutral-200"/>
       </div>
 
       {/* TWO DATE PICKERS */}
