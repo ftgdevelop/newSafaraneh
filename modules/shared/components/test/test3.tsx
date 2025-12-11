@@ -100,7 +100,7 @@ const TestThree: React.FC<Props> = props => {
         flightDate: [DateObject | null, DateObject | null];
     } = defaultValues || {
             airportUrl: "",
-            flightDate: [today, tomorrow],
+            flightDate: [null, null],
         }
 
     const defaultList = cipDefaultAirportOptions;
@@ -176,7 +176,9 @@ const TestThree: React.FC<Props> = props => {
                                         defaultValue={initialValues.flightDate}
                                         Input={CustomRangeInput}
                                         inputProps={{
-                                            theme3
+                                            theme3,
+                                            isTouched: touched.flightDate,
+                                            validateFunction:(value: string) => validateRequied(value, "تاریخ  را وارد کنید")
                                         }}
                                     />
                                 </div>

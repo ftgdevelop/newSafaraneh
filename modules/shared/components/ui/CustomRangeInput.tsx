@@ -10,6 +10,8 @@ export interface OuterProps {
     theme1?: boolean;
     theme2?: boolean;
     theme3?: boolean;
+    isTouched?: boolean;
+    validateFunction?: (value: any) => string | undefined;
 }
 
 interface CustomRangeInputProps {
@@ -32,6 +34,8 @@ function CustomRangeInput({
     theme1 = false,
     theme2 = false,
     theme3 = false,
+    validateFunction,
+    isTouched
 }: Props) {
     const values = value?.split(String(separator)) || [];
 
@@ -60,6 +64,7 @@ function CustomRangeInput({
               })
             : "";
     }
+console.log({startValue, endValue});
 
     return (
         <div className={`min-h-[104px] ${show ? "grid w-full grid-cols-2" : "hidden"} ${theme3 ? "gap-x-1" : ""}`}>
@@ -95,13 +100,17 @@ function CustomRangeInput({
                     id="checkin_date"
                     className={`w-full h-12 text-xs rtl:rounded-r-lg ltr:rounded-l-lg rtl:pr-10 ltr:pl-10 ${
                         theme3 ? "bg-neutral-200" : "border border-neutral-400 pt-5 leading-4"
-                    } ${!isFa ? "font-sans" : ""}`}
+                        } ${!isFa ? "font-sans" : ""}
+                     ${isTouched && !startValue && validateFunction && validateFunction(startValue) && 'border border-red-500'}
+`}
                     value={isFa ? startValue : persianNumbersToEnglish(startValue)}
                     readOnly
                 />
 
                 </div>
-                <div className="text-xs text-red-500 h-7"></div>
+                <div className="text-xs text-red-500 h-7">
+                    {isTouched && !startValue && validateFunction && validateFunction(startValue)}
+                </div>
 
                 </div>
             <div>
@@ -125,12 +134,16 @@ function CustomRangeInput({
                         id="checkout_date"
                         className={`w-full h-12 text-xs rtl:rounded-l-lg ltr:rounded-r-lg rtl:pr-10 ltr:pl-10 ${
                             theme3 ? "bg-neutral-200" : "border-y border-l border-neutral-400 pt-5 leading-4"
-                        }`}
+                            }
+                        ${isTouched && !endValue && validateFunction && validateFunction(endValue) && 'border border-red-500'}
+                            `}
                         value={isFa ? endValue : persianNumbersToEnglish(endValue)}
                         readOnly
                     />
                 </div>
-                <div className="text-xs text-red-500 h-7"></div>
+                <div className="text-xs text-red-500 h-7">
+                    {isTouched && !endValue && validateFunction && validateFunction(endValue)}
+                </div>
             </div>
 
         </div>

@@ -7,7 +7,7 @@ import Button from '@/modules/shared/components/ui/Button';
 import AutoComplete from '@/modules/shared/components/ui/AutoComplete';
 import { Location } from '@/modules/shared/components/ui/icons';
 import { Cip, ServerAddress } from '@/enum/url';
-import { validateRequied } from '@/modules/shared/helpers/validation';
+import {  validateRequied } from '@/modules/shared/helpers/validation';
 import AutoCompleteZoom from '@/modules/shared/components/ui/AutoCompleteZoom';
 import { DateObject } from 'react-multi-date-picker';
 import { CipAutoCompleteType } from '@/modules/cip/types/cip';
@@ -220,6 +220,10 @@ const TestTow: React.FC<Props> = props => {
                                         defaultValue={[today, tomorrow]}
                                         onChange={(v) => setFieldValue("rangeDate", v)}
                                         Input={CustomRangeInput}
+                                        inputProps={{
+                                            isTouched: touched.rangeDate,
+                                            validateFunction:(value: string) => validateRequied(value, "تاریخ پرواز را وارد کنید")
+                                        }}
                                     />
                                 </div>
  
