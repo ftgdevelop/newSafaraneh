@@ -1,8 +1,6 @@
 import React from "react";
 import { Locale } from "react-date-object";
 import { Calendar } from "./icons";
-import FormikField from "./FormikField";
-import { Field } from "formik";
 
 export interface CipInputProps {
   id: string;

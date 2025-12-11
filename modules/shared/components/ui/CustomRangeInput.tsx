@@ -5,104 +5,128 @@ import { Calendar, CalendarFill } from "./icons";
 import { useTranslation } from "next-i18next";
 import { dateDisplayFormat } from "../../helpers";
 
-interface CustomRangeInputProps {
-    value: string;
-    openCalendar: () => void;
-    handleValueChange: (e: ChangeEvent) => void;
-    locale: Locale;
-    separator: string;
-    isFa: Boolean;
-    show?: Boolean
+export interface OuterProps {
+    show?: boolean;
+    theme1?: boolean;
+    theme2?: boolean;
+    theme3?: boolean;
 }
 
+interface CustomRangeInputProps {
+    value?: string;
+    openCalendar?: () => void;
+    handleValueChange?: (e: ChangeEvent) => void;
+    locale?: Locale;
+    separator?: string;
+    isFa?: boolean;
+}
+
+type Props = CustomRangeInputProps & OuterProps;
+
 function CustomRangeInput({
-    value,
-    openCalendar,
-    separator,
-    isFa,
-    show = true
-}: CustomRangeInputProps) {
+    value = "",
+    openCalendar = () => {},
+    separator = "-",
+    isFa = false,
+    show = true,
+    theme1 = false,
+    theme2 = false,
+    theme3 = false,
+}: Props) {
     const values = value?.split(String(separator)) || [];
-    let startValue 
-    let endValue 
-    
-    const theme2 = process.env.THEME === "THEME2";
-    const theme3 = process.env.THEME === "THEME3";
+
+    let startValue = "";
+    let endValue = "";
+
     const { t } = useTranslation("common");
 
-    let startFormatted = t('checkin-date');
-    let endFormatted = t('checkout-date');
-    
-    if (values ) {
-        startValue = values[0] ?  dateDisplayFormat({ date: values[0], format: theme3 ? "yyyy/mm/dd" : "dddd dd MMMM", locale: isFa ? "fa" : "en" }) : '';
-        endValue = values[1] ? dateDisplayFormat({ date: values[1], format: theme3 ? "yyyy/mm/dd" : "dddd dd MMMM", locale: isFa ? "fa" : "en" }) : '';     
+    let startFormatted = t("checkin-date");
+    let endFormatted = t("checkout-date");
+
+    if (values) {
+        startValue = values[0]
+            ? dateDisplayFormat({
+                  date: values[0],
+                  format: theme3 ? "yyyy/mm/dd" : "dddd dd MMMM",
+                  locale: isFa ? "fa" : "en",
+              })
+            : "";
+
+        endValue = values[1]
+            ? dateDisplayFormat({
+                  date: values[1],
+                  format: theme3 ? "yyyy/mm/dd" : "dddd dd MMMM",
+                  locale: isFa ? "fa" : "en",
+              })
+            : "";
     }
 
-  return   <div className={`${show ? 'grid w-full grid-cols-2' :'hidden'}  ${theme3 ? "gap-x-1" : ""}`}>
-                {theme3 && (
-                    <>
-                        <label htmlFor="checkin_date" className="text-sm">
-                            {startFormatted}
-                        </label>
-                        <label htmlFor="checkout_date" className="text-sm">
-                           {endFormatted}
-                        </label>
-                    </>
+    return (
+        <div className={`${show ? "grid w-full grid-cols-2" : "hidden"} ${theme3 ? "gap-x-1" : ""}`}>
+            {theme3 && (
+                <>
+                    <label htmlFor="checkin_date" className="text-sm">
+                        {startFormatted}
+                    </label>
+                    <label htmlFor="checkout_date" className="text-sm">
+                        {endFormatted}
+                    </label>
+                </>
+            )}
+
+            <div className="relative" onClick={openCalendar}>
+                {!theme3 && (
+                    <label
+                        htmlFor="checkin_date"
+                        className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5 pointer-events-none"
+                    >
+                        {startFormatted}
+                    </label>
                 )}
 
-                <div className="relative" onClick={openCalendar}>
-                    {!theme3 && (
-                        <label
-                            htmlFor="checkin_date"
-                            className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5 pointer-events-none"
-                        >
-                            {startFormatted}
-                        </label>
-                    )}
+                {theme2 ? (
+                    <CalendarFill className="w-5 h-5 absolute rtl:right-2 ltr:left-2 top-1/2 -mt-2.5 z-10" />
+                ) : (
+                    <Calendar className="w-5 h-5 absolute rtl:right-2 ltr:left-2 top-1/2 -mt-2.5 z-10" />
+                )}
 
-                    {theme2 ? (
-                        <CalendarFill className="w-5 h-5 absolute rtl:right-2 ltr:left-2 top-1/2 -mt-2.5 z-10" />
-                    ) : (
-                        <Calendar className="w-5 h-5 absolute rtl:right-2 ltr:left-2 top-1/2 -mt-2.5 z-10" />
-                    )}
-
-                    <input
-                        id="checkin_date"
-                        className={`w-full h-12 text-xs rtl:rounded-r-lg ltr:rounded-l-lg rtl:pr-10 ltr:pl-10 ${
-                            theme3 ? "bg-neutral-200" : "border border-neutral-400 pt-5 leading-4"
-                        } ${!isFa ? "font-sans" : ""}`}
-                        value={startValue}
-                        readOnly
-                    />
-                </div>
-
-                <div className="relative" onClick={openCalendar}>
-                    {!theme3 && (
-                        <label
-                            htmlFor="checkout_date"
-                            className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5 pointer-events-none"
-                        >
-                            {endFormatted}
-                        </label>
-                    )}
-
-                    {theme2 ? (
-                        <CalendarFill className="w-5 h-5 absolute rtl:right-2 ltr:left-2 top-1/2 -mt-2.5 z-10" />
-                    ) : (
-                        <Calendar className="w-5 h-5 absolute rtl:right-2 ltr:left-2 top-1/2 -mt-2.5 z-10" />
-                    )}
-
-                    <input
-                        id="checkout_date"
-                        className={`w-full h-12 text-xs rtl:rounded-l-lg ltr:rounded-r-lg rtl:pr-10 ltr:pl-10 ${
-                            theme3 ? "bg-neutral-200" : "border-y border-l border-neutral-400 pt-5 leading-4"
-                        }`}
-                        value={endValue}
-                        readOnly
-                    />
-                </div>
+                <input
+                    id="checkin_date"
+                    className={`w-full h-12 text-xs rtl:rounded-r-lg ltr:rounded-l-lg rtl:pr-10 ltr:pl-10 ${
+                        theme3 ? "bg-neutral-200" : "border border-neutral-400 pt-5 leading-4"
+                    } ${!isFa ? "font-sans" : ""}`}
+                    value={startValue}
+                    readOnly
+                />
             </div>
 
+            <div className="relative" onClick={openCalendar}>
+                {!theme3 && (
+                    <label
+                        htmlFor="checkout_date"
+                        className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5 pointer-events-none"
+                    >
+                        {endFormatted}
+                    </label>
+                )}
+
+                {theme2 ? (
+                    <CalendarFill className="w-5 h-5 absolute rtl:right-2 ltr:left-2 top-1/2 -mt-2.5 z-10" />
+                ) : (
+                    <Calendar className="w-5 h-5 absolute rtl:right-2 ltr:left-2 top-1/2 -mt-2.5 z-10" />
+                )}
+
+                <input
+                    id="checkout_date"
+                    className={`w-full h-12 text-xs rtl:rounded-l-lg ltr:rounded-r-lg rtl:pr-10 ltr:pl-10 ${
+                        theme3 ? "bg-neutral-200" : "border-y border-l border-neutral-400 pt-5 leading-4"
+                    }`}
+                    value={endValue}
+                    readOnly
+                />
+            </div>
+        </div>
+    );
 }
 
 export default CustomRangeInput;

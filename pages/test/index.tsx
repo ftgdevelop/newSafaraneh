@@ -15,6 +15,8 @@ import persian_fa from "react-date-object/locales/persian_fa";
 import Button from "@/modules/shared/components/ui/Button";
 import { addSomeDays, dateDisplayFormat } from "@/modules/shared/helpers";
 import TestOne from "@/modules/shared/components/test/test1";
+import TestTow from "@/modules/shared/components/test/test2";
+import TestThree from "@/modules/shared/components/test/test3";
 
 const today = new DateObject({
   date: new Date(),
@@ -139,12 +141,17 @@ const TestPage = () => {
     <div className="flex flex-col gap-8 px-8 mt-8">
       {/* SIMPLE DATE PICKER */}
       <div className="flex flex-col gap-2 items-center justify-center">
-        
       <TestOne wrapperClassName="bg-white p-4 w-full rounded-lg border border-neutral-200"/>
       </div>
 
-      {/* TWO DATE PICKERS */}
       <div className="flex flex-col gap-2 items-center justify-center">
+      <TestTow wrapperClassName="bg-white p-4 w-full rounded-lg border border-neutral-200"/>
+      </div>
+      <div className="flex flex-col gap-2 items-center justify-center">
+      <TestThree wrapperClassName="bg-white p-4 w-full rounded-lg border border-neutral-200"/>
+      </div>
+      {/* TWO DATE PICKERS */}
+      {/* <div className="flex flex-col gap-2 items-center justify-center">
         <div className="flex justify-center items-center gap-2">
           Two-Date Picker
           <Button className="p-2" onClick={() => {
@@ -188,17 +195,17 @@ const TestPage = () => {
             }}
           />
         </div>
-      </div>
+      </div> */}
 
       {/* RANGE PICKER */}
-      <div className="flex flex-col gap-2 items-center justify-center">
+      {/* <div className="flex flex-col gap-2 items-center justify-center">
         <div>Range Picker</div>
 
         <RangePicker2
           defaultValue={domesticHotelDefaultDates}
           onChange={handleChangeRange}
         />
-      </div>
+      </div> */}
     </div>
   );
 };

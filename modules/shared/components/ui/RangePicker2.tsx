@@ -1,6 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, ChangeEvent } from "react";
 import DatePicker, {
-  CalendarProps,
 } from "react-multi-date-picker";
 
 import persian from "react-date-object/calendars/persian";
@@ -12,8 +11,8 @@ import CustomToolbar from "./CustomToolbar";
 import CustomHeaderPlugin from "./CustomHeaderRangePicker";
 import Toolbar from "react-multi-date-picker/plugins/toolbar";
 import CustomRangeInput from "./CustomRangeInput";
-import { dateDisplayFormat, DateFormat } from "../../helpers";
-import DateObject from "react-date-object";
+import { DateFormat } from "../../helpers";
+import DateObject, { Locale } from "react-date-object";
 
 const calendars: Record<
   "fa" | "en",
@@ -38,14 +37,28 @@ const calendars: Record<
   },
 };
 
-interface RangePicker2Props {
-  defaultValue: DateObject[];
-  onChange: ( defaultValue: string[]) => void
+export interface InternalInputProps {
+  value: string;
+  openCalendar: () => void;
+  handleValueChange: (e: ChangeEvent<Element>) => void;
+  locale: Locale;
+  separator: string;
 }
 
-const RangePicker2 = ({ defaultValue, onChange }: RangePicker2Props) => {
+
+interface RangePicker2Props<TInputProps>{
+  defaultValue:[DateObject | null, DateObject | null];
+  onChange: (defaultValue: [DateObject | null, DateObject | null]) => void;
+  value: [DateObject | null, DateObject | null];
+  inputProps?: TInputProps;
+    Input: React.ComponentType<TInputProps & InternalInputProps>;
+  
+}
+
+function RangePicker2<TInputProps>({ defaultValue, onChange, value , Input,  inputProps = {} as TInputProps,
+}: RangePicker2Props<TInputProps>){
   const [isFa, setIsFa] = useState(true);
-  const [value, setValue] = useState(defaultValue);
+  const [innerValue, setInnerValue] = useState(defaultValue);
 
   const localeConfig = isFa ? calendars.fa : calendars.en;
 
@@ -61,29 +74,23 @@ const RangePicker2 = ({ defaultValue, onChange }: RangePicker2Props) => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  const handleChange = (values: DateObject[]) => {
-    
-        if (Array.isArray(values) && values[0] && values[1]) {
-          pickerRef.current?.closeCalendar();
-        }
-        const [startDate, endDate] = values;
-        const adjustedStartDate = dateDisplayFormat({
-          date: startDate,
-          format: 'YYYY/MM/DD',
-          locale: 'en',
-        });
-        const adjustedEndDate = dateDisplayFormat({
-          date: endDate,
-          format: 'YYYY/MM/DD',
-          locale: 'en',
-        });
-        setValue(values)
-        onChange([adjustedStartDate, adjustedEndDate]);
-      }
+  
+    const handleChange = (
+      dates: DateObject[],
+    ) => {
+      const tuple: [DateObject | null, DateObject | null] = [
+        dates[0] ?? null,
+        dates[1] ?? null,
+      ];
+
+      setInnerValue(tuple);
+      onChange(tuple);
+    };
+
 
   return (
     <DatePicker
-      value={value}
+      value={innerValue}
       ref={pickerRef}
       range
       calendar={localeConfig.calendar}
@@ -125,7 +132,9 @@ const RangePicker2 = ({ defaultValue, onChange }: RangePicker2Props) => {
       ]}
 
       render={(val, openCalendar, handleValueChange, locale, separator) => (
-        <CustomRangeInput
+
+        <Input
+          {...inputProps}
           value={val}
           openCalendar={openCalendar}
           handleValueChange={handleValueChange}
