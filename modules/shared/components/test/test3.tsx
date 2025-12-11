@@ -16,6 +16,7 @@ import RangePicker2 from '../ui/RangePicker2';
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import CustomRangeInput, { OuterProps } from '../ui/CustomRangeInput';
+import { dateDisplayFormat, persianNumbersToEnglish } from '../../helpers';
 
 type SearchFormValues = {
     airportUrl: string;
@@ -49,7 +50,36 @@ const TestThree: React.FC<Props> = props => {
 
     const submitHandle = (values: SearchFormValues) => {
 
-        console.log({values});
+        const finalValues: Record<string, any> = {};
+
+        Object.entries(values).forEach(([key, value]) => {
+            if (value instanceof Array) {
+                let formattedStart = null;
+                let formattedEnd = null;
+                
+
+                if (value[0] instanceof DateObject) {
+                    formattedStart = dateDisplayFormat({
+                        date: value[0],
+                        locale: "en",
+                    });    
+                }
+                if (value[1] instanceof DateObject) {
+                    formattedEnd = dateDisplayFormat({
+                        date: value[1],
+                        locale: "en",
+                    });   
+                }
+                
+                let formatted = [formattedStart ? persianNumbersToEnglish(formattedStart) : formattedStart, formattedEnd ?  persianNumbersToEnglish(formattedEnd) : null];
+
+                finalValues[key] = formatted;
+            } else {
+                finalValues[key] = value;
+            }
+        });
+       console.log({finalValues});
+       
         
     }
     const today = new DateObject({
@@ -105,7 +135,7 @@ const TestThree: React.FC<Props> = props => {
 
                         <Form autoComplete='off' >
 
-                            <div className={`grid grid-cols-1 md:grid-cols-5  gap-3 gap-y-5  relative`}>
+                            <div className={`grid grid-cols-1 md:grid-cols-4 ${theme1 ? "lg:grid-cols-5" : "lg:grid-cols-6"} gap-3 gap-y-5 relative`}>
 
                                 {theme3 && (
                                     <div className='lg:col-span-2 relative '>
@@ -115,7 +145,7 @@ const TestThree: React.FC<Props> = props => {
                                         <AutoComplete
                                             defaultList={defaultList}
                                             noResultMessage={t('NoResultsFound')}
-                                            placeholder='جستجوی نام فرودگاه یا شهر'
+                                            placeholder='جستجوی هتل / مقصد'
                                             acceptLanguage={i18n?.language === "ar" ? "ar-AE" : i18n?.language === "en" ? "en-US" : "fa-IR"}
                                             inputClassName={`w-full outline-none rounded-lg bg-neutral-200 py-4 h-12 text-sm text-neutral-500 placeholder:text-neutral-500 focus:border-neutral-900`}
                                             type="cip"
@@ -132,7 +162,7 @@ const TestThree: React.FC<Props> = props => {
                                             }
                                         />
                                         <Field
-                                            validate={(value: string) => validateRequied(value, "فرودگاه را انتخاب کنید.")}
+                                            validate={(value: string) => validateRequied(value, "مقصد را انتخاب کنید.")}
                                             type='hidden'
                                             name="airportUrl"
                                             value={values.airportUrl}
@@ -142,16 +172,15 @@ const TestThree: React.FC<Props> = props => {
                                 )}
                                 <div className='col-span-2 flex items-center'>
                                     <RangePicker2<OuterProps>
-                                        onChange={() => setFieldValue('flightDate', [null, null])}
+                                        onChange={(v) => setFieldValue('flightDate', v)}
                                         defaultValue={initialValues.flightDate}
-                                        value={values.flightDate}
                                         Input={CustomRangeInput}
                                         inputProps={{
-                                            theme3:true
+                                            theme3
                                         }}
                                     />
                                 </div>
-                                <div className={`relative flex  items-end col-span-1`}>
+                                <div className={`relative flex justify-center items-center col-span-1`}>
                                     <Button
                                         color='blue'
                                         type='submit'

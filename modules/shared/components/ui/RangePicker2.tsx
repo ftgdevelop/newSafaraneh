@@ -10,7 +10,6 @@ import gregorian_en from "react-date-object/locales/gregorian_en";
 import CustomToolbar from "./CustomToolbar";
 import CustomHeaderPlugin from "./CustomHeaderRangePicker";
 import Toolbar from "react-multi-date-picker/plugins/toolbar";
-import CustomRangeInput from "./CustomRangeInput";
 import { DateFormat } from "../../helpers";
 import DateObject, { Locale } from "react-date-object";
 
@@ -49,13 +48,12 @@ export interface InternalInputProps {
 interface RangePicker2Props<TInputProps>{
   defaultValue:[DateObject | null, DateObject | null];
   onChange: (defaultValue: [DateObject | null, DateObject | null]) => void;
-  value: [DateObject | null, DateObject | null];
   inputProps?: TInputProps;
     Input: React.ComponentType<TInputProps & InternalInputProps>;
   
 }
 
-function RangePicker2<TInputProps>({ defaultValue, onChange, value , Input,  inputProps = {} as TInputProps,
+function RangePicker2<TInputProps>({ defaultValue, onChange, Input, inputProps = {} as TInputProps,
 }: RangePicker2Props<TInputProps>){
   const [isFa, setIsFa] = useState(true);
   const [innerValue, setInnerValue] = useState(defaultValue);
@@ -67,6 +65,9 @@ function RangePicker2<TInputProps>({ defaultValue, onChange, value , Input,  inp
   const pickerRef = useRef<any>(null);
 
   useEffect(() => {
+    if (defaultValue.length > 0 && (defaultValue[0] || defaultValue[1])) {
+      onChange(defaultValue)
+    }
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
@@ -126,7 +127,7 @@ function RangePicker2<TInputProps>({ defaultValue, onChange, value , Input,  inp
           key="header"
           position="top"
           isFa={isFa}
-          values={value}
+          values={innerValue}
         />,
 
       ]}

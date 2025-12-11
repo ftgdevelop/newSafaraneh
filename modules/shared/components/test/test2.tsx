@@ -57,29 +57,6 @@ const TestTow: React.FC<Props> = props => {
 
     const submitHandle = (values: SearchFormValues) => {
 
-        if (!values.airportUrl) return;
-
-        setSubmitPending(true);
-
-        let url = "/" + values.airportUrl;
-
-        const localStorageRecentSearches = localStorage?.getItem("cipRecentSearches");
-        const recentSearches: CipRecentSearchItem[] = localStorageRecentSearches ? JSON.parse(localStorageRecentSearches) : [];
-
-        const searchObject: CipRecentSearchItem = {
-            url: url,
-            airportName: selectedAirportName,
-            rangeDate: []
-        };
-
-        if (!(recentSearches.find(item => item.url === searchObject.url))) {
-            recentSearches.unshift(searchObject);
-
-            const slicedArray = recentSearches.slice(0, 10);
-
-            const updatedRecentSearches = JSON.stringify(slicedArray);
-            localStorage?.setItem("cipRecentSearches", updatedRecentSearches)
-        }
         const finalValues: Record<string, any> = {};
 
         Object.entries(values).forEach(([key, value]) => {
@@ -143,7 +120,9 @@ const TestTow: React.FC<Props> = props => {
 
     return (
         <div className={`text-sm ${props.wrapperClassName || ""}`}>
-
+            <div className='pb-6 font-semibold text-lg'>
+                اطلاعات سفر
+            </div>
             <Formik
                 validate={() => { return {} }}
                 initialValues={formInitialValue}
@@ -239,8 +218,7 @@ const TestTow: React.FC<Props> = props => {
                                 <div className='col-span-2'>
                                     <RangePicker2<OuterProps>
                                         defaultValue={[today, tomorrow]}
-                                        onChange={(v) => setFieldValue("rangeData", v)}
-                                        value={values.rangeDate}
+                                        onChange={(v) => setFieldValue("rangeDate", v)}
                                         Input={CustomRangeInput}
                                     />
                                 </div>

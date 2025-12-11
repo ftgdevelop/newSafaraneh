@@ -3,7 +3,7 @@ import { Locale } from "react-date-object";
 
 import { Calendar, CalendarFill } from "./icons";
 import { useTranslation } from "next-i18next";
-import { dateDisplayFormat } from "../../helpers";
+import { dateDisplayFormat, persianNumbersToEnglish } from "../../helpers";
 
 export interface OuterProps {
     show?: boolean;
@@ -62,7 +62,7 @@ function CustomRangeInput({
     }
 
     return (
-        <div className={`${show ? "grid w-full grid-cols-2" : "hidden"} ${theme3 ? "gap-x-1" : ""}`}>
+        <div className={`min-h-[104px] ${show ? "grid w-full grid-cols-2" : "hidden"} ${theme3 ? "gap-x-1" : ""}`}>
             {theme3 && (
                 <>
                     <label htmlFor="checkin_date" className="text-sm">
@@ -74,7 +74,8 @@ function CustomRangeInput({
                 </>
             )}
 
-            <div className="relative" onClick={openCalendar}>
+            <div>
+                            <div className="relative" onClick={openCalendar}>
                 {!theme3 && (
                     <label
                         htmlFor="checkin_date"
@@ -95,36 +96,43 @@ function CustomRangeInput({
                     className={`w-full h-12 text-xs rtl:rounded-r-lg ltr:rounded-l-lg rtl:pr-10 ltr:pl-10 ${
                         theme3 ? "bg-neutral-200" : "border border-neutral-400 pt-5 leading-4"
                     } ${!isFa ? "font-sans" : ""}`}
-                    value={startValue}
+                    value={isFa ? startValue : persianNumbersToEnglish(startValue)}
                     readOnly
                 />
-            </div>
 
+                </div>
+                <div className="text-xs text-red-500 h-7"></div>
+
+                </div>
+            <div>
             <div className="relative" onClick={openCalendar}>
-                {!theme3 && (
-                    <label
-                        htmlFor="checkout_date"
-                        className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5 pointer-events-none"
-                    >
-                        {endFormatted}
-                    </label>
-                )}
+                    {!theme3 && (
+                        <label
+                            htmlFor="checkout_date"
+                            className="absolute top-1 rtl:right-10 ltr:left-10 text-4xs z-10 leading-5 pointer-events-none"
+                        >
+                            {endFormatted}
+                        </label>
+                    )}
 
-                {theme2 ? (
-                    <CalendarFill className="w-5 h-5 absolute rtl:right-2 ltr:left-2 top-1/2 -mt-2.5 z-10" />
-                ) : (
-                    <Calendar className="w-5 h-5 absolute rtl:right-2 ltr:left-2 top-1/2 -mt-2.5 z-10" />
-                )}
+                    {theme2 ? (
+                        <CalendarFill className="w-5 h-5 absolute rtl:right-2 ltr:left-2 top-1/2 -mt-2.5 z-10" />
+                    ) : (
+                        <Calendar className="w-5 h-5 absolute rtl:right-2 ltr:left-2 top-1/2 -mt-2.5 z-10" />
+                    )}
 
-                <input
-                    id="checkout_date"
-                    className={`w-full h-12 text-xs rtl:rounded-l-lg ltr:rounded-r-lg rtl:pr-10 ltr:pl-10 ${
-                        theme3 ? "bg-neutral-200" : "border-y border-l border-neutral-400 pt-5 leading-4"
-                    }`}
-                    value={endValue}
-                    readOnly
-                />
+                    <input
+                        id="checkout_date"
+                        className={`w-full h-12 text-xs rtl:rounded-l-lg ltr:rounded-r-lg rtl:pr-10 ltr:pl-10 ${
+                            theme3 ? "bg-neutral-200" : "border-y border-l border-neutral-400 pt-5 leading-4"
+                        }`}
+                        value={isFa ? endValue : persianNumbersToEnglish(endValue)}
+                        readOnly
+                    />
+                </div>
+                <div className="text-xs text-red-500 h-7"></div>
             </div>
+
         </div>
     );
 }
