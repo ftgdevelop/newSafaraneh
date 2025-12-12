@@ -128,9 +128,8 @@ const TestOne: React.FC<Props> = props => {
                                     <div className="relative modernDatePicker-checkin">
 
                                         <DatePicker2<CipInputProps>
-                                            name="flightDate"
                                             value={values.flightDate}
-                                            onChange={(name: string, value: DateObject) => {
+                                            onChange={(value: DateObject) => {
                                                            
                                                 setFieldValue("flightDate", value)
                                             }}

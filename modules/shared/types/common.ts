@@ -191,5 +191,3 @@ export interface FooterStrapi {
     }[];
 }
   
-export type RangeValue = [MultiDateObject, MultiDateObject] | undefined;
-export type DatePickerValue =  Value | Value[] | null;

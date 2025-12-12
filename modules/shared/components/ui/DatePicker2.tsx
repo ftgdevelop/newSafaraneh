@@ -43,9 +43,8 @@ export interface InternalInputProps {
 }
 
 interface DatePicker2Props<TInputProps> {
-  name: string;
   value: DateObject | null;
-  onChange: (name: string, value: DateObject) => void;
+  onChange: (value: DateObject) => void;
   isFa: boolean;
   setIsFa: (x: boolean) => void;
   minDate?: DateObject | Date;
@@ -55,7 +54,6 @@ interface DatePicker2Props<TInputProps> {
 }
 
 function DatePicker2<TInputProps>({
-  name,
   value,
   onChange,
   isFa,
@@ -71,7 +69,6 @@ function DatePicker2<TInputProps>({
 
   const handleChange = (v: DateObject) => {
     onChange(
-      name,
       v
     );
   };

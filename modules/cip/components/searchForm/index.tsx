@@ -235,7 +235,6 @@ const SearchForm: React.FC<Props> = props => {
                                     <div className="relative modernDatePicker-checkin">
 
                                         <DatePicker2<CipInputProps>
-                                            name="flightDate"
                                             value={values.flightDate}
                                             onChange={(v)=> setFieldValue("flightDate", v)}
                                             isFa={isFa}
