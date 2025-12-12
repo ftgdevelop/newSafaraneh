@@ -76,17 +76,19 @@ function RangePicker2<TInputProps>({ defaultValue, onChange, Input, inputProps =
     return () => window.removeEventListener("resize", handleResize);
   }, []);
   
-    const handleChange = (
-      dates: DateObject[],
-    ) => {
-      const tuple: [DateObject | null, DateObject | null] = [
-        dates[0] ?? null,
-        dates[1] ?? null,
-      ];
+const handleChange = (dates: DateObject[]) => {
+  const tuple: [DateObject | null, DateObject | null] = [
+    dates[0] ?? null,
+    dates[1] ?? null,
+  ];
 
-      setInnerValue(tuple);
-      onChange(tuple);
-    };
+  setInnerValue(tuple);
+  onChange(tuple);
+
+  if (dates.length === 2 && dates[0] && dates[1]) {
+    pickerRef.current?.closeCalendar();
+  }
+};
 
 
   return (
@@ -100,6 +102,7 @@ function RangePicker2<TInputProps>({ defaultValue, onChange, Input, inputProps =
       weekStartDayIndex={localeConfig.weekStartDayIndex}
       numberOfMonths={isMobile ? 1 : 2}
       monthYearSeparator=""
+    
       minDate={new Date()}
       onChange={handleChange}
       rangeHover
