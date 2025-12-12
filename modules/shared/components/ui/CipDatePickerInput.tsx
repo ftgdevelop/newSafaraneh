@@ -34,11 +34,13 @@ export default function CipDatePickerInput({
   validateFunction
 }: Props) {
 
-  console.log(value)
+
+  
+
   return (
     <div className="relative ">
       {
-        !validateFunction?.(value) &&       <Calendar className="w-5 h-5 fill-neutral-600 top-1/2 -translate-y-1/2 right-3 absolute pointer-events-none" />
+        !validateFunction?.(value) && <Calendar className="w-5 h-5 fill-neutral-600 top-1/2 -translate-y-1/2 right-3 absolute pointer-events-none" />
 
       }
 
@@ -60,8 +62,9 @@ export default function CipDatePickerInput({
         value={value}
         className={`w-full h-12 text-xs rtl:rounded-lg 
           border border-neutral-400  leading-4 ${fieldClassName}
-          ${isTouched && validateFunction?.(value) ? "border-red-500" : ""}
-          ${value ? "pt-5 rtl:pr-10 ltr:pl-10" : 'py-5 placeholder:text-black rtl:pr-5 ltr:pl-5'}
+          ${value ? "pt-5 rtl:pr-10 ltr:pl-10" : 'py-5 placeholder:text-black rtl:pr-10 ltr:pl-5'}
+          ${isTouched && validateFunction?.(value) ? "border-red-500 rtl:pr-5 ltr:pl-5" : ""}
+
         `}
       />
 
