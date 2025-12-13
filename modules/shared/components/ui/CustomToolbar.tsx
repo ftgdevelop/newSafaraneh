@@ -3,42 +3,71 @@ import { DateObject } from "react-multi-date-picker";
 import { CalendarToggle } from "./icons";
 import { useTranslation } from "next-i18next";
 
+/**
+ * Values that react-multi-date-picker can emit
+ */
+type PickerValue =
+  | DateObject
+  | [DateObject | null, DateObject | null]
+  | DateObject[];
+
 interface CustomToolbarProps {
   isFa: boolean;
-  setIsFa:  (v: boolean) => void;
+  setIsFa: (v: boolean) => void;
   position?: "top" | "bottom";
-
-  state?: any;
-  handleChange?: (value: any, state?: any) => void;
-  handleFocusedDate?: (date?: any) => void;
+  onChange: (value: PickerValue) => void;
+  state?: {
+    range?: boolean;
+    multiple?: boolean;
+    selectedDate?: any;
+    calendar?: any;
+    locale?: any;
+    format?: string;
+    focusedDate?: DateObject;
+  };
+  handleChange?: (value: PickerValue, state?: any) => void;
+  handleFocusedDate?: (date?: DateObject) => void;
 }
 
 const CustomToolbar: React.FC<CustomToolbarProps> = ({
   isFa,
   setIsFa,
   state,
+  onChange,
   handleChange,
   handleFocusedDate,
 }) => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation("common");
 
-  const safeState = state || {};
-  const { range, multiple, selectedDate, calendar, locale, format, focusedDate } =
-    safeState;
-
+  const safeState = state ?? {};
+  const {
+    range,
+    multiple,
+    selectedDate,
+    calendar,
+    locale,
+    format,
+  } = safeState;
 
   function selectToday() {
-    if (!safeState) return;
-
     const today = new DateObject({ calendar, locale, format });
 
-    let newSelection;
+    // Trigger picker onChange
+    if (range) {
+      onChange([today, null]);
+    } else {
+      onChange(today);
+    }
+
+    let newSelection: PickerValue;
 
     if (range) {
       if (!selectedDate || selectedDate.length === 0) {
         newSelection = [today];
       } else if (selectedDate.length === 1) {
-        newSelection = [selectedDate[0], today].sort((a, b) => a - b);
+        newSelection = [selectedDate[0], today].sort(
+          (a: DateObject, b: DateObject) => +a - +b
+        );
       } else {
         newSelection = [today];
       }
@@ -48,15 +77,13 @@ const CustomToolbar: React.FC<CustomToolbarProps> = ({
       newSelection = today;
     }
 
-    if (handleChange) {
-      handleChange(newSelection, {
-        ...safeState,
-        selectedDate: newSelection,
-        focusedDate: today,
-      });
-    }
+    handleChange?.(newSelection, {
+      ...safeState,
+      selectedDate: newSelection,
+      focusedDate: today,
+    });
 
-    if (handleFocusedDate) handleFocusedDate(today);
+    handleFocusedDate?.(today);
   }
 
   return (

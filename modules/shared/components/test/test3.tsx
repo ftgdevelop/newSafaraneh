@@ -170,7 +170,7 @@ const TestThree: React.FC<Props> = props => {
                                         {touched.airportUrl && errors.airportUrl && <div className='text-xs text-red-500'> {errors.airportUrl as string}</div>}
                                     </div>
                                 )}
-                                <div className='col-span-2 flex items-center'>
+                                <div className='col-span-2 flex'>
                                     <RangePicker2<OuterProps>
                                         onChange={(v) => setFieldValue('flightDate', v)}
                                         defaultValue={initialValues.flightDate}
@@ -182,7 +182,7 @@ const TestThree: React.FC<Props> = props => {
                                         }}
                                     />
                                 </div>
-                                <div className={`relative flex justify-center items-center col-span-1`}>
+                                <div className={`relative flex max-h-[76px]  items-end col-span-1`}>
                                     <Button
                                         color='blue'
                                         type='submit'

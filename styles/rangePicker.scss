@@ -45,15 +45,28 @@
 }
 
 @media screen and (width > 768px) {
-  .rmdp-container > div:nth-child(2) {
-    width: inherit;
-    .rmdp-wrapper.datepicker-single-screen {
-          max-width: 296px;
-          .rmdp-top-class ,.rmdp-calendar  ,.rmdp-day-picker, .rmdp-day-picker div {
-            width: 100%;
-          }
+   .rmdp-container > div:nth-child(2){
+    box-shadow: 0 11px 15px -7px rgba(0,0,0,.2),0 24px 38px 3px rgba(0,0,0,.14),0 9px 46px 8px rgba(0,0,0,.12);
+    div[role='dialog']{
+      border-radius: 0.5em;
+      .rmdp-calendar{
+        width: 100%;
+
+      } 
+
+      &.rmdp-wrapper.datepicker-single-screen {
+          min-width: 296px;
+          width: 100%;
+          
+        }
+      &.rmdp-wrapper.range-datepicker {
+        min-width: 592px;
+        width: 100%;
+
+      }
     }
 
+       
   }
 }
 

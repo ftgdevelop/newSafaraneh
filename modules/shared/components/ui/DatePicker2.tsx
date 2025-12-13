@@ -11,7 +11,10 @@ import gregorian_en from "react-date-object/locales/gregorian_en";
 import Toolbar from "react-multi-date-picker/plugins/toolbar";
 import CustomToolbar from "./CustomToolbar";
 
-import {  DateFormat } from "../../helpers";
+import { DateFormat } from "../../helpers";
+import opacity from "react-element-popper/animations/opacity";
+
+
 export const calendars: Record<
   "fa" | "en",
   {
@@ -34,6 +37,7 @@ export const calendars: Record<
     weekStartDayIndex: 0,
   },
 };
+
 export interface InternalInputProps {
   value: string;
   openCalendar: () => void;
@@ -41,6 +45,7 @@ export interface InternalInputProps {
   locale: Locale;
   separator: string;
 }
+
 
 interface DatePicker2Props<TInputProps> {
   value: DateObject | null;
@@ -53,6 +58,7 @@ interface DatePicker2Props<TInputProps> {
   className?: string;
 }
 
+
 function DatePicker2<TInputProps>({
   value,
   onChange,
@@ -61,22 +67,25 @@ function DatePicker2<TInputProps>({
   minDate,
   Input,
   inputProps = {} as TInputProps,
-  className
+  className,
 }: DatePicker2Props<TInputProps>) {
   const localeKey = isFa ? "fa" : "en";
-
   const localeConfig = calendars[localeKey];
 
-  const handleChange = (v: DateObject) => {
-    onChange(
-      v
-    );
+  const handleToolbarChange = (
+    v: DateObject | [DateObject | null, DateObject | null] | DateObject[]
+  ) => {
+    if (v instanceof DateObject) {
+      onChange(v);
+    } else if (Array.isArray(v) && v[0] instanceof DateObject) {
+      onChange(v[0]);
+    }
   };
 
   return (
     <DatePicker
       value={value}
-      onChange={handleChange}
+      onChange={onChange}
       calendar={localeConfig.calendar}
       locale={localeConfig.locale}
       format={localeConfig.format}
@@ -85,6 +94,11 @@ function DatePicker2<TInputProps>({
       minDate={minDate}
       arrow={false}
       monthYearSeparator=""
+      showOtherDays
+      portal
+      animations={[
+        opacity({ from: 0.1, to: 1, duration: 1000 })
+      ]} 
       className={`datepicker-single-screen ${className ?? ""} [&_.rmdp-week-day]:text-black`}
       plugins={[
         <CustomToolbar
@@ -92,6 +106,7 @@ function DatePicker2<TInputProps>({
           isFa={isFa}
           setIsFa={setIsFa}
           position="bottom"
+          onChange={handleToolbarChange}
         />,
         <Toolbar
           key="toolbar"
@@ -102,7 +117,7 @@ function DatePicker2<TInputProps>({
             deselect: "انصراف",
             close: "تایید",
           }}
-          className=" lg:!hidden
+          className="lg:!hidden
             bg-[#f7f7f7]
             [&>div]:!bg-transparent
             [&>div]:!text-[#007aff]

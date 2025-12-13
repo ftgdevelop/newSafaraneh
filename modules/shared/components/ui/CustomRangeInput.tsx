@@ -15,7 +15,7 @@ export interface OuterProps {
 }
 
 interface CustomRangeInputProps {
-    value?: string;
+    value?: string | string[];
     openCalendar?: () => void;
     handleValueChange?: (e: ChangeEvent) => void;
     locale?: Locale;
@@ -28,7 +28,7 @@ type Props = CustomRangeInputProps & OuterProps;
 function CustomRangeInput({
     value = "",
     openCalendar = () => {},
-    separator = "-",
+    separator = "~",
     isFa = false,
     show = true,
     theme1 = false,
@@ -37,7 +37,8 @@ function CustomRangeInput({
     validateFunction,
     isTouched
 }: Props) {
-    const values = value ? value.split(separator) : [];
+
+    const values = value ?  value instanceof Array ? value[0].split(separator)  : value.split(separator)  : [];
 
     let startValue = "";
     let endValue = "";
@@ -66,7 +67,7 @@ function CustomRangeInput({
     }
 
     return (
-        <div className={`min-h-[104px] ${show ? "grid w-full grid-cols-2" : "hidden"} ${theme3 ? "gap-x-1" : ""}`}>
+        <div className={`${show ? "grid w-full grid-cols-2" : "hidden"} ${theme3 ? "gap-x-1" : ""}`}>
             {theme3 && (
                 <>
                     <label htmlFor="checkin_date" className="text-sm">
@@ -107,9 +108,12 @@ function CustomRangeInput({
                 />
 
                 </div>
-                <div className="text-xs text-red-500 h-7">
-                    {isTouched && !startValue && validateFunction && validateFunction(startValue)}
-                </div>
+                {
+                    isTouched && !startValue &&  <div className="text-xs text-red-500 h-7">
+                    { validateFunction && validateFunction(startValue)}
+                    </div>
+                }
+
 
                 </div>
             <div>
@@ -140,9 +144,12 @@ function CustomRangeInput({
                         readOnly
                     />
                 </div>
-                <div className="text-xs text-red-500 h-7">
-                    {isTouched && !endValue && validateFunction && validateFunction(endValue)}
-                </div>
+                {
+                    isTouched && !endValue &&  <div className="text-xs text-red-500 h-7">
+                    { validateFunction && validateFunction(endValue)}
+                    </div>
+                }
+
             </div>
 
         </div>
