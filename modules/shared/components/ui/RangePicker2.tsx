@@ -102,11 +102,11 @@ const handleChange = (dates: DateObject[]) => {
       weekStartDayIndex={localeConfig.weekStartDayIndex}
       numberOfMonths={isMobile ? 1 : 2}
       monthYearSeparator=""
-    
       minDate={new Date()}
       onChange={handleChange}
       rangeHover
       arrow={false}
+      showOtherDays
       plugins={[
         <CustomToolbar
           key="toolbar"
@@ -134,7 +134,6 @@ const handleChange = (dates: DateObject[]) => {
         />,
 
       ]}
-
       render={(val, openCalendar, handleValueChange, locale, separator) => (
 
         <Input

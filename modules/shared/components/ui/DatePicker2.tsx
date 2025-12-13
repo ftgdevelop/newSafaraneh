@@ -85,7 +85,7 @@ function DatePicker2<TInputProps>({
       minDate={minDate}
       arrow={false}
       monthYearSeparator=""
-      className={`${className} [&_.rmdp-week-day]:text-black`}
+      className={`datepicker-single-screen ${className ?? ""} [&_.rmdp-week-day]:text-black`}
       plugins={[
         <CustomToolbar
           key="custom-toolbar"

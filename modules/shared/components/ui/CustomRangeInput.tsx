@@ -37,7 +37,7 @@ function CustomRangeInput({
     validateFunction,
     isTouched
 }: Props) {
-    const values = value?.split(String(separator)) || [];
+    const values = value ? value.split(separator) : [];
 
     let startValue = "";
     let endValue = "";
@@ -64,7 +64,6 @@ function CustomRangeInput({
               })
             : "";
     }
-console.log({startValue, endValue});
 
     return (
         <div className={`min-h-[104px] ${show ? "grid w-full grid-cols-2" : "hidden"} ${theme3 ? "gap-x-1" : ""}`}>
@@ -80,7 +79,7 @@ console.log({startValue, endValue});
             )}
 
             <div>
-                            <div className="relative" onClick={openCalendar}>
+                <div className="relative" onClick={openCalendar}>
                 {!theme3 && (
                     <label
                         htmlFor="checkin_date"

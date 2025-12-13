@@ -1,9 +1,11 @@
 
 import DateObject from "react-date-object";
-import persian from "react-date-object/calendars/persian";
-import persian_fa from "react-date-object/locales/persian_fa";
 import gregorian from "react-date-object/calendars/gregorian";
-import english from "react-date-object/locales/gregorian_en";
+import gregorian_en from "react-date-object/locales/gregorian_en";
+
+import persian from "react-date-object/calendars/persian";
+import persian_en from "react-date-object/locales/persian_en";
+import persian_fa from "react-date-object/locales/persian_fa";
 
 export const toPersianDigits = (x: string) => {
     if (x) {                   
@@ -60,21 +62,18 @@ export const dateDisplayFormat = ({
       format: "YYYY/MM/DD",
       calendar: persian,
       locale: persian_fa,
-    }).convert(gregorian, english);
+    })
   } else {
     obj = new DateObject({
       date,
       format: "MM/DD/YYYY",
       calendar: gregorian,
-      locale: english,
+      locale: gregorian_en,
     });
   }
+
   if (!obj.isValid) return "";
   
-  if (locale === "fa") {
-    obj = obj.convert(persian, persian_fa);
-  }
-
   const map: Record<string, string> = {
     "HH:mm": obj.format("HH:mm"),
     "ddd dd mm": obj.format("ddd DD MMM"),

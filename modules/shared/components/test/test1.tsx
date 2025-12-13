@@ -144,14 +144,12 @@ const TestOne: React.FC<Props> = props => {
                                                     fieldClassName: "",
                                                     isTouched: touched.flightDate,
                                                     label: "تاریخ پرواز",
-                                                    validateFunction: (value: any) => {
-                                                        console.log({value});
-                                                        
+                                                    validateFunction: (value: any) => {                                                        
                                                         return validateRequied(String(value instanceof Array ? value[0] : value), "تاریخ پرواز را وارد کنید")
-                                                    }
-
+                                                    },
+                                                    errorText: errors.flightDate
                                                 }}
-                                            />   
+                                        />   
                                     </div>
 
                                 </div>

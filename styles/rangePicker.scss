@@ -5,6 +5,56 @@
 }
 .rmdp-container {
     width: 100%;
+
+    .rmdp-header-values{
+      font-size: 18px;
+    }
+    .rmdp-week-day{
+      font-size: 10px;
+      justify-content: start;
+    }
+    .rmdp-week {
+        & .rmdp-day{
+          display: flex;
+          justify-content: start;
+          align-items: center;
+          aspect-ratio: 1;
+          height: auto;
+          span{
+            aspect-ratio: 1;
+          }
+        }
+    }
+    .rmdp-day-picker{
+      width: 100%;
+      div{
+        width: 100%;
+      }
+    }
+    .rmdp-arrow-container{
+      width: 30px;
+      height: 30px;
+      align-items: center;
+      .rmdp-arrow{
+        margin-top: 0;
+        width: 12px;
+        height: 12px;
+      }
+    }
+
+}
+
+@media screen and (width > 768px) {
+  .rmdp-container > div:nth-child(2) {
+    width: inherit;
+    .rmdp-wrapper.datepicker-single-screen {
+          max-width: 296px;
+          .rmdp-top-class ,.rmdp-calendar  ,.rmdp-day-picker, .rmdp-day-picker div {
+            width: 100%;
+          }
+    }
+
+  }
 }
 
 @media screen and (width <= 768px) {
@@ -36,31 +86,39 @@
 
         .rmdp-calendar {
           width: 100%;
-
-          .rmdp-day-picker {
-            justify-content: center;
-            align-items: center;
+          .rmdp-week-day{
+            font-size: 16px;
+          
           }
-
-          .rmdp-day,
-          .rmdp-week-day {
-            height: 50px;
-            width: 50px;
+          .rmdp-day-picker{
+              .rmdp-day{
+                  span{
+                    font-size: 16px;
+                  }
+              }
           }
           
         }
+
       }
-       .rmdp-toolbar div:nth-child(3) {
-          display: none;
-        }
         .rmdp-toolbar {
+          div:nth-child(3) {
+            display: none;
+          }
           &.top{
             background-color: #cccccc50;
           }
           div{
-          background-color: transparent;
-          color: #0074d9;
-        }}
+            background-color: transparent;
+            color: #0074d9;
+            font-size: 16px;
+            &:hover{
+              box-shadow: none;
+            }
+
+          }
+          justify-content: space-between;
+      }
     }
   }
 }

@@ -15,11 +15,9 @@ export default function CustomHeaderPlugin({ values, isFa, position }: { values?
     date: values?.[1],
     format: "YYYY/MM/DD",
     locale: isFa ? "fa" : 'en'
-  })
-  console.log({startValue, endValue});
+  })  
   
-  
-  return <header className="mobi-date-picker-header px-5 py-3 border-b border-neutral-300 flex max-md:justify-center justify-end items-center gap-5 text-sm h-12">
+  return <header className="mobi-date-picker-header max-md:hidden px-5 py-3 border-b border-neutral-300 flex max-md:justify-center justify-end items-center gap-5 text-sm h-12">
 
         <div
           className={`font-semibold text-sm border-b-2 border-transparent ${

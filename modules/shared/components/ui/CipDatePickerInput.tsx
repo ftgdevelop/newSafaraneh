@@ -35,13 +35,10 @@ export default function CipDatePickerInput({
 }: Props) {
 
 
-  
-
   return (
     <div className="relative ">
       {
-        !validateFunction?.(value) && <Calendar className="w-5 h-5 fill-neutral-600 top-1/2 -translate-y-1/2 right-3 absolute pointer-events-none" />
-
+         !errorText && <Calendar className="w-5 h-5 fill-neutral-600 top-1/2 -translate-y-1/2 right-3 absolute pointer-events-none" />
       }
 
       <label
