@@ -1,51 +1,49 @@
+.rmdp-container {
+    width: 100%;
+  }
 .rmdp-header-values{
     span{
         font-weight: 700;
     }
 }
-.rmdp-container {
-    width: 100%;
-
-    .rmdp-header-values{
-      font-size: 18px;
-    }
-    .rmdp-week-day{
-      font-size: 10px;
-      justify-content: start;
-    }
-    .rmdp-week {
-        & .rmdp-day{
-          display: flex;
-          justify-content: start;
-          align-items: center;
+  .rmdp-header-values{
+    font-size: 18px;
+  }
+  .rmdp-week-day{
+    font-size: 10px;
+    justify-content: start;
+  }
+  .rmdp-week {
+      & .rmdp-day{
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        aspect-ratio: 1;
+        height: auto;
+        span{
           aspect-ratio: 1;
-          height: auto;
-          span{
-            aspect-ratio: 1;
-          }
         }
-    }
-    .rmdp-day-picker{
+      }
+  }
+  .rmdp-day-picker{
+    width: 100%;
+    div{
       width: 100%;
-      div{
-        width: 100%;
-      }
     }
-    .rmdp-arrow-container{
-      width: 30px;
-      height: 30px;
-      align-items: center;
-      .rmdp-arrow{
-        margin-top: 0;
-        width: 12px;
-        height: 12px;
-      }
+  }
+  .rmdp-arrow-container{
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    .rmdp-arrow{
+      margin-top: 0;
+      width: 12px;
+      height: 12px;
     }
-
-}
+  }
 
 @media screen and (width > 768px) {
-   .rmdp-container > div:nth-child(2){
+   div:has(> div > div[role='dialog']) {
     box-shadow: 0 11px 15px -7px rgba(0,0,0,.2),0 24px 38px 3px rgba(0,0,0,.14),0 9px 46px 8px rgba(0,0,0,.12);
     div[role='dialog']{
       border-radius: 0.5em;
@@ -71,24 +69,22 @@
 }
 
 @media screen and (width <= 768px) {
-  .rmdp-container > div:nth-child(2) {
+  div:has(> div > div[role='dialog']) {
     width: 100vw;
     height: 100svh;
     position: fixed !important;
     bottom: 0;
     top: auto !important;
-
     display: flex;
     justify-content: end;
     align-items: end;
-
     overflow-y: scroll;
-    transform: translateY(100%) !important;
     opacity: 0;
-    transition: transform 0.35s ease, opacity 0.35s ease;
-    &:has(div[role='dialog']) {
+    transform: scale(0.95) !important;
     transform: translateY(0) !important;
-    opacity: 1;
+    animation: scaleUp 0.3s ease-out forwards;
+    &:has(div[role='dialog']) {
+      opacity: 1;
     }
 
     & > div {
@@ -99,22 +95,30 @@
 
         .rmdp-calendar {
           width: 100%;
+          & div:nth-child(2){
+            .rmdp-day-picker{
+              width: 100%;
+              div{
+                width: 100%;
+                .rmdp-day{
+                  span{
+                    font-size: 16px;
+                  }
+                }
+              }
+          
+          }
+          }
           .rmdp-week-day{
             font-size: 16px;
           
           }
-          .rmdp-day-picker{
-              .rmdp-day{
-                  span{
-                    font-size: 16px;
-                  }
-              }
-          }
+
           
         }
 
       }
-        .rmdp-toolbar {
+      .rmdp-toolbar {
           div:nth-child(3) {
             display: none;
           }

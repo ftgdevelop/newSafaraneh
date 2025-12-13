@@ -129,14 +129,13 @@ const TestOne: React.FC<Props> = props => {
 
                                         <DatePicker2<CipInputProps>
                                             value={values.flightDate}
-                                            onChange={(value: DateObject) => {
-                                                           
+                                            onChange={(value: DateObject) => {                                                           
                                                 setFieldValue("flightDate", value)
                                             }}
                                             isFa={isFa}
                                             setIsFa={setIsFa}
                                             Input={CipDatePickerInput}
-                                            minDate={new Date()}
+                                            minDate={new DateObject({ date: new Date() })}
                                             inputProps={
                                                 {
                                                     id: "flightDate",
@@ -148,7 +147,8 @@ const TestOne: React.FC<Props> = props => {
                                                         return validateRequied(String(value instanceof Array ? value[0] : value), "تاریخ پرواز را وارد کنید")
                                                     },
                                                     errorText: errors.flightDate
-                                                }}
+                                                }
+                                            }
                                         />   
                                     </div>
 

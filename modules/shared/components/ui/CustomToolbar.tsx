@@ -3,10 +3,8 @@ import { DateObject } from "react-multi-date-picker";
 import { CalendarToggle } from "./icons";
 import { useTranslation } from "next-i18next";
 
-/**
- * Values that react-multi-date-picker can emit
- */
-type PickerValue =
+
+export type PickerValue =
   | DateObject
   | [DateObject | null, DateObject | null]
   | DateObject[];
@@ -50,9 +48,9 @@ const CustomToolbar: React.FC<CustomToolbarProps> = ({
   } = safeState;
 
   function selectToday() {
-    const today = new DateObject({ calendar, locale, format });
+    const today = new DateObject({date : new Date, calendar, locale, format });
+console.log(today);
 
-    // Trigger picker onChange
     if (range) {
       onChange([today, null]);
     } else {

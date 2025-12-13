@@ -8,7 +8,7 @@ import gregorian_en from "react-date-object/locales/gregorian_en";
 import transition from "react-element-popper/animations/transition";
 import opacity from "react-element-popper/animations/opacity"
 
-import CustomToolbar from "./CustomToolbar";
+import CustomToolbar, { PickerValue } from "./CustomToolbar";
 import CustomHeaderPlugin from "./CustomHeaderRangePicker";
 import Toolbar from "react-multi-date-picker/plugins/toolbar";
 
@@ -49,7 +49,7 @@ export interface InternalInputProps {
 
 interface RangePicker2Props<TInputProps> {
   defaultValue: [DateObject | null, DateObject | null];
-  onChange: (value: [DateObject | null, DateObject | null]) => void;
+  onChange: (value: PickerValue) => void;
   inputProps?: TInputProps;
   Input: React.ComponentType<TInputProps & InternalInputProps>;
 }
@@ -86,35 +86,23 @@ function RangePicker2<TInputProps>({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleChange = (dates: DateObject[]) => {
-    const tuple: [DateObject | null, DateObject | null] = [
-      dates[0] ?? null,
-      dates[1] ?? null,
-    ];
-    
-    setInnerValue(tuple);
-    onChange(tuple);
-
-    if (dates.length === 2 && dates[0] && dates[1]) {
-      pickerRef.current?.closeCalendar();
-    }
-  };
-  const handleToolbarChange = (
-    value:
-      | DateObject
-      | DateObject[]
-      | [DateObject | null, DateObject | null]
-  ) => {
-    if (Array.isArray(value)) {
+  const handleChange = (dates: PickerValue) => {
+    if (dates instanceof Array) {
       const tuple: [DateObject | null, DateObject | null] = [
-        value[0] ?? null,
-        value[1] ?? null,
+        dates[0] ?? null,
+        dates[1] ?? null,
       ];
+      
       setInnerValue(tuple);
       onChange(tuple);
-    }
-  };
 
+      if (dates.length === 2 && dates[0] && dates[1]) {
+        pickerRef.current?.closeCalendar();
+      }
+    }
+
+  };
+  const propsAnimations = isMobile ? {} : {animations : [opacity({ from: 0.1, to: 1, duration: 1000 })]};
   return (
     <DatePicker
       ref={pickerRef}
@@ -127,22 +115,20 @@ function RangePicker2<TInputProps>({
       weekStartDayIndex={localeConfig.weekStartDayIndex}
       numberOfMonths={isMobile ? 1 : 2}
       monthYearSeparator=""
-      minDate={new Date()}
+      minDate={new DateObject({ date: new Date() })}
       onChange={handleChange}
       arrow={false}
       showOtherDays
       className="range-datepicker"
       portal
-      animations={[
-        opacity({ from: 0.1, to: 1, duration: 1000 })
-      ]} 
+      {...propsAnimations}
       plugins={[
         <CustomToolbar
           key="toolbar"
           isFa={isFa}
           setIsFa={setIsFa}
           position="bottom"
-          onChange={handleToolbarChange}
+          onChange={handleChange}
         />,
         <Toolbar
           key="top-toolbar"
