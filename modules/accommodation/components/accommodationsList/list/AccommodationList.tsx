@@ -49,7 +49,7 @@ export default function AccommodationList({
                 key={item.id}
                 title={item.title}
                 location={item.location}
-                photos={item.with?.photos} // <-- pass the gallery here!
+                photos={item.with?.photos}
                 salePrice={item.salePrice}
                 boardPrice={item.boardPrice}
                 discountPercent={item.discountPercent}
@@ -58,6 +58,12 @@ export default function AccommodationList({
                 checkin={checkin}
                 checkout={checkout}
                 capacity={capacity}
+                rooms={item.rooms}
+                reviews={item.reviews}
+                rank={item.rank}
+                totalBeds={item.totalBeds}
+                maxAccommodates={item.maxAccommodates}
+                badges={item.badges}
               />
             ))}
       </div>

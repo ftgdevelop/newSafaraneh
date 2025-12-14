@@ -11,5 +11,6 @@ export type FilterValues = {
   };
   textureType: string[];
   featuresCategory: string[];
-  parking: { type: string[]; capacity: number };
+  parking: string[];
+  ruleType: string[];
 };

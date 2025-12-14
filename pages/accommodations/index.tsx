@@ -60,10 +60,10 @@ const AccommodationPage: NextPage = () => {
         method: "GET",
         headers: {
           accept: "text/plain",
-          apikey: process.env.PROJECT_SERVER_APIKEY || "",
-          tenantId: process.env.PROJECT_SERVER_TENANTID || "",
+          apikey: process.env.PROJECT_SERVER_APIKEY,
+          tenantId: process.env.PROJECT_SERVER_TENANTID,
           "accept-language": "fa-IR",
-        },
+        } as HeadersInit,
       }
     )
       .then((res) => res.json())
@@ -215,7 +215,8 @@ const AccommodationPage: NextPage = () => {
           <>
             <h1 className="font-bold">
               {/* اجاره ویلا و سوئیت در {defaultDestination ? defaultDestination.title : "همه نقاط"} */}
-              اجاره ویلا و سوئیت در {phrase ? phrase : defaultDestination ? defaultDestination.title : "همه نقاط"}
+              {phrase ? "جستجوی عبارت " + phrase : defaultDestination ? "اجاره ویلا و سوئیت در" + defaultDestination.title : "همه نقاط"}
+
             </h1>
             <div>({total} اقامتگاه)</div>
           </>

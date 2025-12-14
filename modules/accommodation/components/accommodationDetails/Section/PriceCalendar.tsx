@@ -3,26 +3,30 @@ import { dateFormat, numberWithCommas } from "@/modules/shared/helpers";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import { Datepicker as MobiscrollDatepicker, localeFa, MbscCalendarLabel } from "@mobiscroll/react";
 
+// type Props = {
+//   calendar: { date: string; price: number; isBookable: boolean }[];
+//   selectedDates: string[];
+//   onDateSelect?: (dates: { date: string; price: number | null }[]) => void;
+// };
+
+type CalendarDay = { date: string; price: number; isBookable: boolean; isInstant?: boolean };
 type Props = {
-  calendar: { date: string; price: number; isBookable: boolean }[];
+  calendar: CalendarDay[];
   selectedDates: string[];
   onDateSelect?: (dates: { date: string; price: number | null }[]) => void;
 };
 
-// Helper function to convert Jalali date to Gregorian
 const convertJalaliToGregorian = (jalaliDate: string): string => {
   const [jy, jm, jd] = jalaliDate.split("-").map(Number);
-
-  // Basic Jalali-to-Gregorian conversion logic
   const gy = jy + 621;
-  const daysInMonth = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29]; // Jalali months
+  const daysInMonth = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29];
   let dayOfYear = jd;
 
   for (let i = 0; i < jm - 1; i++) {
     dayOfYear += daysInMonth[i];
   }
 
-  const gregorianStart = new Date(gy, 2, 20); // Approximate start of Jalali year in Gregorian
+  const gregorianStart = new Date(gy, 2, 20);
   const gregorianDate = new Date(gregorianStart.getTime() + (dayOfYear - 1) * 86400000);
 
   const gYear = gregorianDate.getFullYear();
@@ -35,22 +39,28 @@ const convertJalaliToGregorian = (jalaliDate: string): string => {
 const PriceCalendar: React.FC<Props> = ({ calendar, selectedDates, onDateSelect }) => {
   let value: (string | undefined)[] = [undefined, undefined];
 
-  // Ensure selectedDates are used to set the value
   if (selectedDates && selectedDates.length === 2) {
     value = [selectedDates[0], selectedDates[1]];
   }
 
-  // Convert Jalali dates to Gregorian and generate labels
+  // const labels: MbscCalendarLabel[] = calendar.map((item) => ({
+  //   title: item.isBookable ? `${numberWithCommas(item.price)}` : "غیرقابل رزرو",
+  //   textColor: item.isBookable ? "#555" : "red",
+  //   date: convertJalaliToGregorian(item.date),
+  // }));
+
   const labels: MbscCalendarLabel[] = calendar.map((item) => ({
-    title: item.isBookable ? `${numberWithCommas(item.price)}` : "غیرقابل رزرو", // Only show the price
+    title: item.isBookable
+      ? `${numberWithCommas(item.price)}${item.isInstant ? ' ⚡️' : ''}`
+      : "غیرقابل رزرو",
     textColor: item.isBookable ? "#555" : "red",
-    date: convertJalaliToGregorian(item.date), // Convert Jalali to Gregorian
+    date: convertJalaliToGregorian(item.date),
   }));
 
   const handleDateChange = (selectedRange: string[]) => {
     if (onDateSelect) {
       const selectedWithPrices = calendar
-        .filter((item) => selectedRange.includes(convertJalaliToGregorian(item.date))) // Match Gregorian dates
+        .filter((item) => selectedRange.includes(convertJalaliToGregorian(item.date)))
         .map((item) => ({
           date: item.date,
           price: item.isBookable ? item.price : null,

@@ -179,6 +179,8 @@ export const Flight = {
     PreReserve: "/api/services/app/Booking/PreReserve",
     GetValidate: "/api/services/app/Booking/GetValidate",
     Confirm: "/api/services/app/Booking/Confirm",
+    GetAllChats: "/api/services/app/Chat/GetAll",
+    CreateChat: "/api/services/app/Chat/Create",
   };
 
   export const ServerStatus = {

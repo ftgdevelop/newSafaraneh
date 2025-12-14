@@ -20,12 +20,12 @@ function Review({ id }: { id: number }) {
             method: "POST",
             headers: {
               accept: "text/plain",
-              tenantId: id.toString(),
-              apikey: "ACE01BF4-AAEE-45D6-ABE7-F3FF519052DB",
+              apikey: process.env.PROJECT_SERVER_APIKEY,
+              tenantId: process.env.PROJECT_SERVER_TENANTID,
               "accept-language": "fa-IR",
               currency: "EUR",
               "Content-Type": "application/json",
-            },
+            } as HeadersInit,
             body: JSON.stringify({
               id,
               perPage: 5,

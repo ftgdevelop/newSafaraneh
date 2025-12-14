@@ -53,12 +53,12 @@ function Similar({ id, checkin, checkout, capacity }: SimilarProps) {
             method: "POST",
             headers: {
               accept: "text/plain",
-              tenantId: "7",
-              apikey: "ACE01BF4-AAEE-45D6-ABE7-F3FF519052DB",
+              apikey: process.env.PROJECT_SERVER_APIKEY,
+              tenantId: process.env.PROJECT_SERVER_TENANTID,
               "accept-language": "fa-IR",
               currency: "EUR",
               "Content-Type": "application/json",
-            },
+            } as HeadersInit,
             body: JSON.stringify({
               id,
               checkin,

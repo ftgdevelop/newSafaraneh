@@ -10,11 +10,11 @@ type Props = {
   types: Option[];
 };
 
-export default function FiltersByParking({ values, onChange, types }: Props) {
+export default function FiltersByRuleType({ values, onChange, types }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [height, setHeight] = useState(0);
   const contentRef = useRef<HTMLDivElement>(null);
-  const [parkingValue, setParkingValue] = useState<string[]>(values);
+  const [ruleTypeValue, setParkingValue] = useState<string[]>(values);
 
   useEffect(() => setParkingValue(values), [values]);
 
@@ -22,7 +22,7 @@ export default function FiltersByParking({ values, onChange, types }: Props) {
     if (contentRef.current) {
       setHeight(isOpen ? contentRef.current.scrollHeight : 0);
     }
-  }, [isOpen, parkingValue]);
+  }, [isOpen, ruleTypeValue]);
 
   const handleTypeChange = (selected: string[]) => {
     setParkingValue(selected);
@@ -35,7 +35,7 @@ export default function FiltersByParking({ values, onChange, types }: Props) {
         onClick={() => setIsOpen(prev => !prev)}
         className="cursor-pointer font-semibold flex justify-between items-center select-none"
       >
-        پارکینگ
+        ویژگی های اقامتگاه
         <span className={`transition-transform duration-300 ${isOpen ? "rotate-180" : "rotate-0"}`}>
           <UpCaret className="w-5 h-5" />
         </span>
@@ -48,7 +48,7 @@ export default function FiltersByParking({ values, onChange, types }: Props) {
       >
         <div className="pl-2 mt-1 flex flex-col gap-2">
           <CheckboxGroup
-            values={parkingValue}
+            values={ruleTypeValue}
             items={types}
             onChange={handleTypeChange}
           />

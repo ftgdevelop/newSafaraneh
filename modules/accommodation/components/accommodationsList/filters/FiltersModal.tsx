@@ -10,6 +10,7 @@ import FiltersByParking from "./FiltersByParking";
 import { Close } from "@/modules/shared/components/ui/icons";
 import { useRouter } from "next/router";
 import { FilterValues } from "@/modules/accommodation/types/FilterValues";
+import FiltersByRuleType from "./FiltersByRuleType";
 
 
 const initialFilters: FilterValues = {
@@ -21,7 +22,8 @@ const initialFilters: FilterValues = {
   pool: { exists: false, hasWarmWater: false, type: [] },
   textureType: [],
   featuresCategory: [],
-  parking: { type: [], capacity: 0 },
+  parking: [],
+  ruleType: [],
 };
 
 type FiltersModalProps = {
@@ -83,11 +85,11 @@ const FiltersModal: React.FC<FiltersModalProps> = ({
     if (filters.featuresCategory.length) newQuery.featuresCategory = filters.featuresCategory.join(",");
     else delete newQuery.featuresCategory;
 
-    if (filters.parking.type.length) newQuery.parkingType = filters.parking.type.join(",");
+    if (filters.parking.length) newQuery.parkingType = filters.parking.join(",");
     else delete newQuery.parkingType;
 
-    if (filters.parking.capacity > 0) newQuery.parkingCapacity = filters.parking.capacity;
-    else delete newQuery.parkingCapacity;
+    if (filters.ruleType && filters.ruleType.length) newQuery.ruleType = filters.ruleType.join(",");
+    else delete newQuery.ruleType;
 
     router.replace(
       { pathname: router.pathname, query: { accommodationsList, ...newQuery } },
@@ -170,10 +172,19 @@ const FiltersModal: React.FC<FiltersModalProps> = ({
               onChange={(val) => setTempFilters(prev => ({ ...prev, parking: val }))}
               types={filters.parking?.values.type.values.map((val: string) => ({
                 value: val,
-                label: val === "WithCeiling" ? "با سقف" : "بدون سقف",
+                label: val === "WithCeiling" ? "پارکینگ مسقف" : "پارکینگ روباز",
               })) || []}
-              capacityMin={filters.parking?.values.capacity.values.min || 0}
-              capacityMax={filters.parking?.values.capacity.values.max || 10}
+            />
+            <hr className="mt-2 mb-4" />
+            <FiltersByRuleType
+              values={tempFilters.ruleType}
+              onChange={(val) => setTempFilters(prev => ({ ...prev, ruleType: val }))}
+              types={[
+                { value: "IdOnly", label: "فقط با کارت ملی" },
+                { value: "CeremonyAllowed", label: "امکان برگزاری مراسم" },
+                { value: "PetsAllowed", label: "امکان ورود حیوانات خانگی" },
+                { value: "SingleGroup", label: "دربست" },
+              ]}
             />
             <hr className="mt-2 mb-4" />
           </div>

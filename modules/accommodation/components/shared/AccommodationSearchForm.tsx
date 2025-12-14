@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 import { ServerAddress, Accommodation, HeaderAccommodation } from "../../../../enum/url";
 import AutoComplete from "../../../shared/components/ui/AutoComplete";
-import { ApartmentOutline, Home2, Loading, Location, SearchTheme3, Village } from "../../../shared/components/ui/icons";
+import { ArrowLeft, Home2, Loading, Location, SearchTheme3, Village } from "../../../shared/components/ui/icons";
 import { EntitySearchResultItemType, AccommodationRecentSearchItem } from "@/modules/accommodation/types/accommodation";
 import { useAppDispatch } from "@/modules/shared/hooks/use-store";
 import { setReduxError } from "@/modules/shared/store/errorSlice";
@@ -22,7 +22,7 @@ type Props = {
     defaultDates?: [string, string];
     defaultCapacity?: number;
     wrapperClassName?: string;
-    labelsWhite?: boolean; // Added missing property
+    labelsWhite?: boolean;
 };
 
 const AccommodationSearchForm: React.FC<Props> = (props) => {
@@ -36,7 +36,7 @@ const AccommodationSearchForm: React.FC<Props> = (props) => {
     const [dates, setDates] = useState<[string, string] | undefined>(props.defaultDates);
     const [submitLoading, setSubmitLoading] = useState<boolean>(false);
     const [defaultDestinations, setDefaultDestinations] = useState<EntitySearchResultItemType[] | undefined>();
-    const [selectedDestination, setSelectedDestination] = useState<EntitySearchResultItemType | undefined>(props.defaultDestination); // Fixed initialization
+    const [selectedDestination, setSelectedDestination] = useState<EntitySearchResultItemType | undefined>(props.defaultDestination);
 
     useEffect(() => {
         setSubmitLoading(false);
@@ -86,8 +86,8 @@ const AccommodationSearchForm: React.FC<Props> = (props) => {
                             url: autoCompleteUrl,
                             headers: {
                                 ...HeaderAccommodation,
-                                apikey: process.env.PROJECT_ACCOMMODATION_APIKEY,
-                                tenantId: 7,
+                                apikey: process.env.PROJECT_SERVER_APIKEY,
+                                tenantId: process.env.PROJECT_SERVER_TENANTID,
                                 "Accept-Language": acceptLanguage || "fa-IR",
                             },
                         });
@@ -136,13 +136,11 @@ const AccommodationSearchForm: React.FC<Props> = (props) => {
 
     const submitHandler = async () => {
         if (!dates || dates.length < 2) {
-            // TODO validation message
             return;
         }
 
         if (!selectedDestination) {
-            // اگر مقصد انتخاب نشده باشد، هدایت به صفحه جستجو با کلمه وارد شده
-            const searchQuery = document.getElementById("destination")?.value || "";
+            const searchQuery = (document.getElementById("destination") as HTMLInputElement)?.value || "";
             if (searchQuery) {
               router.push(`/accommodations/${encodeURIComponent(searchQuery)}`);
             }
@@ -228,6 +226,20 @@ const AccommodationSearchForm: React.FC<Props> = (props) => {
         }
     }
 
+    const renderNoResult = (inputValue: string) => {
+        if (!inputValue) return null;
+        const url = `/fa/accommodations?phrase=${encodeURIComponent(inputValue)}`;
+        return (
+            <Link
+                href={url}
+                className="block px-3 py-4 text-center"
+            >
+                <span>جستجوی عبارت <b className="px-2 bg-blue-50 rounded-full text-[#412691]">{inputValue}</b> در سایت</span>
+                <ArrowLeft className="inline-block mr-2 size-4" />
+            </Link>
+        );
+    };
+
     return (
         <div
             className={`accommodation-search-form ${
@@ -248,7 +260,8 @@ const AccommodationSearchForm: React.FC<Props> = (props) => {
                     type="accommodation"
                     defaultList={defaultDestinations}
                     inputId="destination"
-                    noResultMessage= {t("NoResultsFound")}
+                    // noResultMessage= {t("NoResultsFound")}
+                    renderNoResult={renderNoResult}
                     createTextFromOptionsObject={(item: EntitySearchResultItemType) =>
                         item.title || item.name || ""
                     }

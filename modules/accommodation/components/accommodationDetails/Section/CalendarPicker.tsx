@@ -32,12 +32,12 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({ id, checkin, checkout }
             method: "POST",
             headers: {
               accept: "text/plain",
-              tenantId: "7",
-              // apikey: "ACE01BF4-AAEE-45D6-ABE7-F3FF519052DB",
+              apikey: process.env.PROJECT_SERVER_APIKEY,
+              tenantId: process.env.PROJECT_SERVER_TENANTID,
               "accept-language": "fa-IR",
               currency: "EUR",
               "Content-Type": "application/json",
-            },
+            } as HeadersInit,
             body: JSON.stringify({
               checkIn: `${tomorrow.toISOString().split("T")[0]}T00:00:00.000Z`, // Start from tomorrow
               checkOut: `${twoMonthsFromTomorrow.toISOString().split("T")[0]}T00:00:00.000Z`, // End two months from tomorrow
@@ -74,8 +74,9 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({ id, checkin, checkout }
       const date = `${month}-${String(day.day).padStart(2, "0")}`; // Format date as YYYY-MM-DD
       acc.push({
         date,
-        price: day.price.salePrice, // Extract the sale price
+        price: day.price.salePrice,
         isBookable: day.isBookable,
+        isInstant: day.isInstant,
       });
     });
     return acc;

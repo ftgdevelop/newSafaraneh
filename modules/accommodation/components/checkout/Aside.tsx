@@ -11,11 +11,37 @@ type AsideProps = {
 };
 
 function Aside({ house }: AsideProps) {
-  if (!house) return null;
+    if (!house) {
+        return (
+            <div className="p-4 bg-white border rounded-lg">
+                <div className="grid grid-cols-3 gap-4 items-start">
+                    <div className="w-full h-24 bg-gray-200 rounded-lg mb-4 animate-pulse" />
+                    <div className="col-span-2 flex flex-col justify-center">
+                        <div className="w-32 h-5 bg-gray-200 rounded mb-2 animate-pulse" />
+                        <div className="w-40 h-4 bg-gray-200 rounded animate-pulse" />
+                    </div>
+                </div>
+                <hr className="pt-4" />
+                <div className="mb-2 flex justify-between">
+                    <div className="w-24 h-4 bg-gray-200 rounded animate-pulse" />
+                    <div className="w-20 h-5 bg-gray-200 rounded animate-pulse" />
+                </div>
+                <div className="mb-2 flex justify-between">
+                    <div className="w-32 h-4 bg-gray-200 rounded animate-pulse" />
+                    <div className="w-16 h-5 bg-gray-200 rounded animate-pulse" />
+                </div>
+                <hr className="pt-4 border-dashed" />
+                <div className="mb-2 flex justify-between">
+                    <div className="w-32 h-5 bg-gray-200 rounded animate-pulse" />
+                    <div className="w-24 h-6 bg-gray-200 rounded animate-pulse" />
+                </div>
+            </div>
+        );
+    }
 
-  const title = house.title || "عنوان نامشخص";
+  const title = house.title;
   const image = house.pictures?.records?.[0]?.path || "/default-image.jpg";
-  const address = house.location || { address: "آدرس نامشخص" };
+  const address = house.location;
 
   return (
     <div className="p-4 bg-white border rounded-lg">

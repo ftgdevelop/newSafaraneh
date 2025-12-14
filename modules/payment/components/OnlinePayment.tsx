@@ -14,7 +14,7 @@ type Props = {
     expireDate?: string;
     bankGatewayList: bankGatewayItem[];
     status?: any;
-    type?: "Undefined" | "HotelDomestic" | "FlightDomestic" | "Bus" | "Package" | "Flight" | "Hotel" | "PnrOutside" | "Cip" | "Activity"| "Accommodation";
+    type?: "Undefined" | "HotelDomestic" | "FlightDomestic" | "Bus" | "Package" | "Flight" | "Hotel" | "PnrOutside" | "Cip" | "Activity" | "House";
     coordinatorPrice?: number;
 }
 

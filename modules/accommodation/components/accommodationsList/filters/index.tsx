@@ -45,7 +45,8 @@ const FilterSearch: React.FC<FilterSearchProps> = ({ filterValues, setFilterValu
         const response = await axios.post(
           `${ServerAddress.Type}${ServerAddress.Accommodation_Data}${Accommodation.SearchFilter}`,
           {},
-          { headers: { ...HeaderAccommodation, tenantId: 7, currency: "EUR" } }
+          { headers: { ...HeaderAccommodation, apikey: process.env.PROJECT_SERVER_APIKEY,
+              tenantId: process.env.PROJECT_SERVER_TENANTID, currency: "EUR" } }
         );
         if (response?.data?.result) setFilters(response.data.result);
         else setError("No data found");

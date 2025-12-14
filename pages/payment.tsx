@@ -50,7 +50,7 @@ const Payment: NextPage = () => {
   const reserveId = pathArray.find(item => item.includes("reserveId="))?.split("reserveId=")[1];
   const status: string | undefined = pathArray.find(item => item.includes("status="))?.split("status=")[1];
 
-  const [type, setType] = useState<"Undefined" | "HotelDomestic" | "FlightDomestic" | "Bus" | "Package" | "Flight" | "Hotel" | "PnrOutside" | "Cip" | "Activity"| "Accommodation">();
+  const [type, setType] = useState<"Undefined" | "HotelDomestic" | "FlightDomestic" | "Bus" | "Package" | "Flight" | "Hotel" | "PnrOutside" | "Cip" | "Activity" | "House" | undefined>();
   const [coordinatorPrice, setCoordinatorPrice] = useState<number>();
   const [domesticHotelReserveData, setDomesticHotelReserveData] = useState<DomesticHotelGetReserveByIdData>();
   const [domesticHotelData, setDomesticHotelData] = useState<DomesticHotelSummaryDetail>();
@@ -61,14 +61,14 @@ const Payment: NextPage = () => {
 
   const [domesticFlightReserveInfo, setDomesticFlightReserveInfo] = useState<DomesticFlightGetReserveByIdType>();
   const [domesticFlightReserveInfoLoading, setDomesticFlightReserveInfoLoading] = useState<boolean>(true);
+  const [houseReserveInfo, setHouseReserveInfo] = useState();
+  const [houseReserveInfoLoading, setHouseReserveInfoLoading] = useState<boolean>(true);
 
   const [cookieSafarmarketId, setCookieSafarmarketId] = useState<string>("");
 
   const [goToBankLoading, setGoToBankLoading] = useState<boolean>(false);
 
   const [expireDate, setExpireDate] = useState();
-
-  console.log("domesticHotelReserveData:", type);
 
   useEffect(() => {
 
@@ -240,25 +240,57 @@ const Payment: NextPage = () => {
 
     }
 
-    if (username && reserveId && type === 'Accommodation') {
-      const fetchAccommodationReserveData = async () => {
-        try {
-          const token = localStorage.getItem('Token') || "";
-          const response = await confirmAccommodation({ userName: username, reserveId, token });
+    if (username && reserveId && type === 'House') {
 
-          if (response?.success) {
-            console.log("Accommodation reserve data fetched successfully:", response);
-            // در صورت نیاز، داده‌های دریافتی را در state ذخیره کنید
-            // setAccommodationReserveData(response.data);
+      const ConfirmAccommodationReserveData = async () => {
+      
+          setHouseReserveInfoLoading(true);
+
+          const phone = decodeURIComponent(username);
+          const response: any = await confirmAccommodation({ reserveId: reserveId, userName: phone, token: token }, 'fa-IR');
+        
+          if (response?.status === 200) {
+              if (response.data?.result?.isCompleted) {
+                  // setConfirmStatus(response.data?.result?.reserve?.status);
+                  setHouseReserveInfoLoading(false);
+
+                  if (response.data?.result) {
+                    setHouseReserveInfo(response.data.result.reserve);
+                  }
+
+              } else {
+                  setTimeout(ConfirmAccommodationReserveData, 4000);
+              }
           } else {
-            console.error("Failed to fetch accommodation reserve data:", response);
-          }
-        } catch (error) {
-          console.error("Error fetching accommodation reserve data:", error);
-        }
-      };
+              setHouseReserveInfoLoading(false);
 
-      fetchAccommodationReserveData();
+              dispatch(setReduxError({
+                  title: t('error'),
+                  message: response.data.error.message,
+                  isVisible: true
+              }));
+
+          }
+      }
+
+      // const fetchAccommodationReserveData = async () => {
+      //   try {
+      //     const token = localStorage.getItem('Token') || "";
+      //     const response = await confirmAccommodation({ userName: username, reserveId, token });
+
+      //     if (response?.success) {
+      //       console.log("Accommodation reserve data fetched successfully:", response);
+      //       // در صورت نیاز، داده‌های دریافتی را در state ذخیره کنید
+      //       // setAccommodationReserveData(response.data);
+      //     } else {
+      //       console.error("Failed to fetch accommodation reserve data:", response);
+      //     }
+      //   } catch (error) {
+      //     console.error("Error fetching accommodation reserve data:", error);
+      //   }
+      // };
+
+      ConfirmAccommodationReserveData();
     }
 
   }, [type, username, reserveId]);
@@ -566,8 +598,11 @@ const Payment: NextPage = () => {
                 passengers={domesticFlightPassengers}
                 returnFlight={domesticFlightReserveInfo?.returnFlight}
               />
-            ) : type === 'Accommodation' ? (
-              <AccommodationAside />
+            ) : type === 'House' ? (
+              <AccommodationAside
+                loading={houseReserveInfoLoading}
+                reserveInfo={houseReserveInfo}
+              />
             ) : null}
 
             {!!theme1 && (

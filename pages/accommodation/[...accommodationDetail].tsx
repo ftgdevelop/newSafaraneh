@@ -72,11 +72,11 @@ const AccommodationDetailPage: NextPage = () => {
             method: "GET",
             headers: {
               accept: "text/plain",
-              tenantId: "7",
-              apikey: "ACE01BF4-AAEE-45D6-ABE7-F3FF519052DB",
+              apikey: process.env.PROJECT_SERVER_APIKEY,
+              tenantId: process.env.PROJECT_SERVER_TENANTID,
               "accept-language": "fa-IR",
               currency: "EUR",
-            },
+            } as HeadersInit,
           }
         );
 
@@ -180,7 +180,7 @@ const AccommodationDetailPage: NextPage = () => {
               </div>
 
               <div id="rules">
-                <Rules rules={house.rules.records} />
+                <Rules rules={house.rules?.records} />
               </div>
 
               <div id="calendar">

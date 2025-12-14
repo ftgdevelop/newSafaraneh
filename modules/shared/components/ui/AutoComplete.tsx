@@ -27,6 +27,7 @@ type Props<T> = {
     type: "hotel" | "flight" | "cip" | "accommodation";
     sortListFunction?: (a:T, b:T) => 1 | -1;
     grayBg?: boolean;
+    renderNoResult?: (inputValue: string) => ReactNode;
 }
 
 function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
@@ -242,11 +243,13 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
     }
 
     if (errorText) {
-        errorElement = (
-            <div className='mt-2 py-2 px-4 text-red-500'>
-                {errorText}
-            </div>
-        )
+        errorElement = props.renderNoResult
+            ? props.renderNoResult(text)
+            : (
+                <div className='mt-2 py-2 px-4 text-red-500'>
+                    {errorText}
+                </div>
+            );
     }
 
     const propsValueText = props.value ? createTextFromOptionsObject(props.value) : undefined;
