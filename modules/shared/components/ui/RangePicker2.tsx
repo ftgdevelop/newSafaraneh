@@ -102,7 +102,11 @@ function RangePicker2<TInputProps>({
     }
 
   };
-  const propsAnimations = isMobile ? {} : {animations : [opacity({ from: 0.1, to: 1, duration: 1000 })]};
+  const propsAnimations = isMobile ? {} : {animations : [opacity(),
+        transition({
+          from: 40,
+          transition: "all 400ms cubic-bezier(0.335, 0.010, 0.030, 1.360)",
+        }),]};
   return (
     <DatePicker
       ref={pickerRef}

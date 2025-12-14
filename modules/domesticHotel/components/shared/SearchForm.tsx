@@ -10,22 +10,25 @@ import { ApartmentOutline, Calendar, Home2, Loading, Location, Search, SearchThe
 import { EntitySearchResultItemType, HotelRecentSearchItem } from "@/modules/domesticHotel/types/hotel";
 import { useAppDispatch } from "@/modules/shared/hooks/use-store";
 import { setReduxError } from "@/modules/shared/store/errorSlice";
-// import RangePicker from "../../../shared/components/ui/RangePicker";
-// import { localeFa } from "@mobiscroll/react";
+
 import Button from "../../../shared/components/ui/Button";
 import AutoCompleteZoom from "@/modules/shared/components/ui/AutoCompleteZoom";
+import RangePicker2 from "@/modules/shared/components/ui/RangePicker2";
+import CustomRangeInput, { OuterProps } from "@/modules/shared/components/ui/CustomRangeInput";
+import { DateObject } from "react-multi-date-picker";
+import { dateDisplayFormat } from "@/modules/shared/helpers";
 
 
 
 type Props = {
     defaultDestination?: EntitySearchResultItemType;
-    defaultDates?: [string, string];
+    defaultDates?: [DateObject | null, DateObject | null];
     wrapperClassName?: string;
 }
 
-const SearchForm: React.FC<Props> = props => {
+const SearchForm: React.FC<Props> = ({ defaultDestination, defaultDates = [null, null], wrapperClassName }) => {
 
-    const { defaultDestination } = props;
+
 
     const { t } = useTranslation('common');
   
@@ -36,15 +39,13 @@ const SearchForm: React.FC<Props> = props => {
 
     const dispatch = useAppDispatch();
 
-    const [dates, setDates] = useState<[string, string] | undefined>(props.defaultDates);
+    const [dates, setDates] = useState<[DateObject | null, DateObject | null]>(defaultDates);
 
     const [submitLoading, setSubmitLoading] = useState<boolean>(false);
 
-    const dateChangeHandle = (event: any) => {
+    const dateChangeHandle = (value: any) => {
 
-        if (event.value[0] && event.value[1]) {
-            setDates(event.value)
-        }
+        setDates(value)
     }
 
     const [defaultDestinations, setDefaultDestinations] = useState<EntitySearchResultItemType[] | undefined>();
@@ -215,8 +216,9 @@ const SearchForm: React.FC<Props> = props => {
             }))
             return;
         }
+        const formattedDate = dates.map(d=>  d ? dateDisplayFormat({date:d}) : '')
 
-        url += `/checkin-${dates[0]}/checkout-${dates[1]}`;
+        url += `/checkin-${formattedDate[0]}/checkout-${formattedDate[1]}`;
 
         const localStorageRecentSearches = localStorage?.getItem("hotelRecentSearches");
         const recentSearches: HotelRecentSearchItem[] = localStorageRecentSearches ? JSON.parse(localStorageRecentSearches) : [];
@@ -224,7 +226,7 @@ const SearchForm: React.FC<Props> = props => {
         const searchObject: HotelRecentSearchItem = {
             url: url,
             title: selectedDestination.displayName || selectedDestination.name || "",
-            dates: dates,
+            dates: formattedDate,
         };
 
         if (!(recentSearches.find(item => item.url === searchObject.url))) {
@@ -280,7 +282,7 @@ const SearchForm: React.FC<Props> = props => {
         }
     }
     return (
-        <div className={`domestic-hotel-search-form ${theme3?"flex flex-col sm:flex-row":"grid grid-cols-1 md:grid-cols-7"} gap-2 ${props.wrapperClassName || ""}`}>
+        <div className={`domestic-hotel-search-form ${theme3?"flex flex-col sm:flex-row":"grid grid-cols-1 md:grid-cols-7"} gap-2 ${wrapperClassName}`}>
             
             <div className={`relative z-20 ${theme3?"sm:grow xl:basis-7/12":"col-span-1 md:col-span-3"}`}>
                 {theme2 ? (
@@ -330,15 +332,15 @@ const SearchForm: React.FC<Props> = props => {
                 )}
             </div>
 
-            {/* <div className={`relative z-10 ${theme3?"flex sm:grow":"col-span-1 md:col-span-3"}`}>
-                <RangePicker
-                    value={dates}
-                    onChange={dateChangeHandle}
-                    rtl
-                    locale={localeFa}
-                />
+            <div className={`relative z-10 ${theme3?"flex sm:grow":"col-span-1 md:col-span-3"}`}>
 
-            </div> */}
+                <RangePicker2<OuterProps>
+                    defaultValue={dates}
+                    onChange={dateChangeHandle}
+                    Input={CustomRangeInput}
+
+                />
+            </div>
 
             <div className={`${theme3?"pt-4 sm:pt-7":"pt-5 md:pt-0"}`}>
                 <Button

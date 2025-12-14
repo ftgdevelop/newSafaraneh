@@ -85,13 +85,13 @@ console.log(today);
   }
 
   return (
-    <div className="text-sm text-primary-700 flex justify-between px-3 py-2">
+    <div className="text-sm text-primary-700 flex justify-between px-3 py-3">
       <div
         onClick={() => setIsFa(!isFa)}
         className="cursor-pointer flex items-center gap-2"
       >
         {isFa ? t("gregorianCalendar") : t("iranianCalendar")}
-        <CalendarToggle className="w-4 h-4 text-primary-700" />
+        <CalendarToggle className="w-4 h-4 fill-primary-700" />
       </div>
 
       <div className="cursor-pointer" onClick={selectToday}>
