@@ -23,6 +23,9 @@ const RecentSearches : React.FC<Props>= props => {
     
     const slicedItems = theme2 ? items.slice(0, 4) : items.slice(0, 5);
 
+    console.log({slicedItems});
+    
+
     return (
         <>
            {!theme3 && <div className="flex gap-2 mb-4 md:mt-3">

@@ -16,7 +16,7 @@ import AutoCompleteZoom from "@/modules/shared/components/ui/AutoCompleteZoom";
 import RangePicker2 from "@/modules/shared/components/ui/RangePicker2";
 import CustomRangeInput, { OuterProps } from "@/modules/shared/components/ui/CustomRangeInput";
 import { DateObject } from "react-multi-date-picker";
-import { dateDisplayFormat } from "@/modules/shared/helpers";
+import { dateDisplayFormat, persianNumbersToEnglish } from "@/modules/shared/helpers";
 
 
 
@@ -27,8 +27,6 @@ type Props = {
 }
 
 const SearchForm: React.FC<Props> = ({ defaultDestination, defaultDates = [null, null], wrapperClassName }) => {
-
-
 
     const { t } = useTranslation('common');
   
@@ -216,7 +214,9 @@ const SearchForm: React.FC<Props> = ({ defaultDestination, defaultDates = [null,
             }))
             return;
         }
-        const formattedDate = dates.map(d=>  d ? dateDisplayFormat({date:d}) : '')
+        const formattedDate = dates.map(d => d ? persianNumbersToEnglish(dateDisplayFormat({ date: d, format: "YYYY-MM-DD" })) : '') 
+        console.log({formattedDate});
+        
 
         url += `/checkin-${formattedDate[0]}/checkout-${formattedDate[1]}`;
 

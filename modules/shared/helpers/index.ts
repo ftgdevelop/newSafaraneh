@@ -1,5 +1,5 @@
 
-import DateObject from "react-date-object";
+import DateObject, { Locale } from "react-date-object";
 import gregorian from "react-date-object/calendars/gregorian";
 import gregorian_en from "react-date-object/locales/gregorian_en";
 
@@ -93,8 +93,17 @@ export const dateDisplayFormat = ({
 
   if (format && map[format]) return map[format];
 
-  return obj.format("YYYY/MM/DD");
+  return obj.format("YYYY-MM-DD");
 };
+
+export const dateStringToDateObject = (date: string, format: DateFormat, locale ?: Locale) => {
+  const dateObject = new DateObject({
+    date,
+    format: format || "YYYY-MM-DD",
+    locale
+  });
+  return dateObject
+}
 
 export const dateFormat = (date: Date) => {
 

@@ -76,6 +76,7 @@ function DatePicker2<TInputProps>({
     v: DateObject | [DateObject | null, DateObject | null] | DateObject[]
   ) => {
     if (v instanceof DateObject) {
+
       onChange(v);
     } else if (Array.isArray(v) && v[0] instanceof DateObject) {
       onChange(v[0]);
@@ -84,7 +85,7 @@ function DatePicker2<TInputProps>({
 
   return (
     <DatePicker
-      value={value}
+      // value={value}
       onChange={onChange}
       calendar={localeConfig.calendar}
       locale={localeConfig.locale}

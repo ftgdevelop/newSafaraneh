@@ -28,6 +28,7 @@ import LoginLinkBanner from '@/modules/shared/components/theme2/LoginLinkBanner'
 import { getStrapiPages } from '@/modules/shared/actions/strapiActions';
 import Link from 'next/link';
 import { ServerAddress } from '@/enum/url';
+import { DateObject } from 'react-multi-date-picker';
 
 type Props = {
   pageData:GetPageByUrlDataType;
@@ -153,6 +154,10 @@ const HotelList: NextPage<Props> = props => {
 
   const checkinSegment = pathSegments.find(item => item.includes("checkin"))?.split("?")[0]?.split("#")[0];
   const checkoutSegment = pathSegments.find(item => item.includes("checkout"))?.split("?")[0]?.split("#")[0];
+  console.log({
+    checkinSegment, checkoutSegment
+  });
+  
 
   const locationId = pageData?.entityId;
 
@@ -509,7 +514,7 @@ const HotelList: NextPage<Props> = props => {
 
   const cityName = hotels && hotels[0]?.city?.name || "";
 
-  const domesticHotelDefaultDates: [string, string] = [checkin, checkout];
+  const domesticHotelDefaultDates: [DateObject, DateObject] = [checkin, checkout];
 
   const defaultDestination: EntitySearchResultItemType = {
     name: entity?.EntityName,
