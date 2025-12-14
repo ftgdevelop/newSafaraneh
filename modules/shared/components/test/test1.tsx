@@ -129,7 +129,7 @@ const TestOne: React.FC<Props> = props => {
 
                                         <DatePicker2<CipInputProps>
                                             value={values.flightDate}
-                                            onChange={(value: DateObject) => {                                                           
+                                            onChange={(value: string) => {                                                           
                                                 setFieldValue("flightDate", value)
                                             }}
                                             isFa={isFa}

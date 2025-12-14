@@ -57,35 +57,7 @@ const TestTow: React.FC<Props> = props => {
 
     const submitHandle = (values: SearchFormValues) => {
 
-        const finalValues: Record<string, any> = {};
-
-        Object.entries(values).forEach(([key, value]) => {
-            if (value instanceof Array) {
-                let formattedStart = null;
-                let formattedEnd = null;
-
-                if (value[0] instanceof DateObject) {
-                    formattedStart = dateDisplayFormat({
-                        date: value[0],
-                        locale: "en",
-                    });    
-                }
-                if (value[1] instanceof DateObject) {
-                    formattedEnd = dateDisplayFormat({
-                        date: value[1],
-                        locale: "en",
-                    });   
-                }
-                
-                let formatted = [formattedStart ? persianNumbersToEnglish(formattedStart) : formattedStart, formattedEnd ?  persianNumbersToEnglish(formattedEnd) : null];
-
-                finalValues[key] = formatted;
-            } else {
-                finalValues[key] = value;
-            }
-        });
-
-        console.log({finalValues});
+        console.log({values});
         // router.push(url);
 
     }

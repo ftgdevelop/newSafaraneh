@@ -13,7 +13,7 @@ import CustomHeaderPlugin from "./CustomHeaderRangePicker";
 import Toolbar from "react-multi-date-picker/plugins/toolbar";
 
 import DateObject, { Locale } from "react-date-object";
-import { DateFormat } from "../../helpers";
+import { dateDisplayFormat, DateFormat, persianNumbersToEnglish } from "../../helpers";
 
 
 const calendars: Record<
@@ -49,7 +49,7 @@ export interface InternalInputProps {
 
 interface RangePicker2Props<TInputProps> {
   defaultValue: [DateObject | null, DateObject | null];
-  onChange: (value: PickerValue) => void;
+  onChange: (value: string[]) => void;
   inputProps?: TInputProps;
   Input: React.ComponentType<TInputProps & InternalInputProps>;
 }
@@ -73,7 +73,15 @@ function RangePicker2<TInputProps>({
 
   useEffect(() => {
     if (defaultValue[0] || defaultValue[1]) {
-      onChange(defaultValue);
+            const tupleString : string[] = [
+         defaultValue[0]? persianNumbersToEnglish(dateDisplayFormat({
+                date: defaultValue[0],
+              })) : '',
+       defaultValue[1] ? persianNumbersToEnglish(dateDisplayFormat({
+                date: defaultValue[1],
+              })) : '',
+      ];
+      onChange(tupleString);
     }
 
     const handleResize = () => {
@@ -92,9 +100,17 @@ function RangePicker2<TInputProps>({
         dates[0] ?? null,
         dates[1] ?? null,
       ];
+      const tupleString : string[] = [
+         dates[0]? persianNumbersToEnglish(dateDisplayFormat({
+                date: dates[0],
+              })) : '',
+       dates[1] ? persianNumbersToEnglish(dateDisplayFormat({
+                date: dates[1],
+              })) : '',
+      ];
       
       setInnerValue(tuple);
-      onChange(tuple);
+      onChange(tupleString);
 
       if (dates.length === 2 && dates[0] && dates[1]) {
         pickerRef.current?.closeCalendar();
@@ -106,7 +122,9 @@ function RangePicker2<TInputProps>({
         transition({
           from: 40,
           transition: "all 400ms cubic-bezier(0.335, 0.010, 0.030, 1.360)",
-        }),]};
+        }),]
+  };
+  
   return (
     <DatePicker
       ref={pickerRef}

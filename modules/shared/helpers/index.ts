@@ -43,19 +43,19 @@ export type DateFormat =
   | "YYYY/MM/DD"
   | "yyyy/mm/dd h:m";
 
+  type AppLocale = "fa" | "en";
+interface DateDisplayFormatArgs {
+  date: DateObject | string;
+  format?: DateFormat;
+  locale?: AppLocale;
+}
 export const dateDisplayFormat = ({
   date,
   format,
-  locale,
-}: {
-  date: DateObject | string;
-  format?: DateFormat;
-  locale?: string;
-}): string => {
+  locale = "en",
+}: DateDisplayFormatArgs): string => {
   if (!date) return "";
-
-  let obj: DateObject;
-  
+    let obj: DateObject;
   if (locale === "fa") {
     obj = new DateObject({
       date,
@@ -66,15 +66,15 @@ export const dateDisplayFormat = ({
   } else {
     obj = new DateObject({
       date,
-      format: "MM/DD/YYYY",
+      format: "YYYY/MM/DD",
       calendar: gregorian,
       locale: gregorian_en,
     });
   }
 
   if (!obj.isValid) return "";
-  
-  const map: Record<string, string> = {
+
+  const map: Record<DateFormat | string, string> = {
     "HH:mm": obj.format("HH:mm"),
     "ddd dd mm": obj.format("ddd DD MMM"),
     "ddd dd mm yyyy": obj.format("ddd DD MMM YYYY"),
@@ -91,19 +91,50 @@ export const dateDisplayFormat = ({
     weekDayNumber: obj.weekDay.index.toString(),
   };
 
-  if (format && map[format]) return map[format];
-
-  return obj.format("YYYY-MM-DD");
+  return format && map[format] ? map[format] : obj.format("YYYY-MM-DD");
 };
 
-export const dateStringToDateObject = (date: string, format: DateFormat, locale ?: Locale) => {
-  const dateObject = new DateObject({
-    date,
-    format: format || "YYYY-MM-DD",
-    locale
-  });
-  return dateObject
+
+interface NormalizeOptions {
+  localeKey?: "fa" | "en";
+  format?: DateFormat;
 }
+
+export const normalizeToDateObject = (
+  value: DateObject | Date | string | null | undefined,
+  options: NormalizeOptions = {}
+): DateObject | null => {
+  if (!value) return null;
+
+  if (value instanceof DateObject) {
+    return value;
+  }
+
+  const isFa = options.localeKey === "fa";
+
+  const calendar = isFa ? persian : gregorian;
+  const locale = isFa ? persian_fa : gregorian_en;
+  const format = options.format ?? "YYYY-MM-DD";
+
+  if (value instanceof Date) {
+    return new DateObject({
+      date: value,
+      calendar,
+      locale,
+    });
+  }
+
+  if (typeof value === "string") {
+    return new DateObject({
+      date: value,
+      format,
+      calendar,
+      locale,
+    });
+  }
+
+  return null;
+};
 
 export const dateFormat = (date: Date) => {
 

@@ -1,6 +1,7 @@
 import React from "react";
 import { Locale } from "react-date-object";
 import { Calendar } from "./icons";
+import { dateDisplayFormat } from "../../helpers";
 
 export interface CipInputProps {
   id: string;
@@ -33,8 +34,8 @@ export default function CipDatePickerInput({
   label,
   validateFunction
 }: Props) {
-
-
+  
+  
   return (
     <div className="relative ">
       {

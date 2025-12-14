@@ -11,7 +11,7 @@ import gregorian_en from "react-date-object/locales/gregorian_en";
 import Toolbar from "react-multi-date-picker/plugins/toolbar";
 import CustomToolbar from "./CustomToolbar";
 
-import { DateFormat } from "../../helpers";
+import { dateDisplayFormat, DateFormat, normalizeToDateObject, persianNumbersToEnglish } from "../../helpers";
 import opacity from "react-element-popper/animations/opacity";
 
 
@@ -49,7 +49,7 @@ export interface InternalInputProps {
 
 interface DatePicker2Props<TInputProps> {
   value: DateObject | null;
-  onChange: (value: DateObject) => void;
+  onChange: (value: string) => void;
   isFa: boolean;
   setIsFa: (x: boolean) => void;
   minDate?: DateObject | Date;
@@ -57,6 +57,8 @@ interface DatePicker2Props<TInputProps> {
   inputProps?: TInputProps;
   className?: string;
 }
+
+
 
 
 function DatePicker2<TInputProps>({
@@ -72,21 +74,36 @@ function DatePicker2<TInputProps>({
   const localeKey = isFa ? "fa" : "en";
   const localeConfig = calendars[localeKey];
 
+
   const handleToolbarChange = (
     v: DateObject | [DateObject | null, DateObject | null] | DateObject[]
   ) => {
     if (v instanceof DateObject) {
+      const date = v ? persianNumbersToEnglish(dateDisplayFormat({
+        date: v,
+      })) : '';
 
-      onChange(v);
-    } else if (Array.isArray(v) && v[0] instanceof DateObject) {
-      onChange(v[0]);
+      onChange(date);
     }
   };
 
+  const handleChange = (v: DateObject | null) => {
+    
+      const date = v ? persianNumbersToEnglish(dateDisplayFormat({
+        date: v,
+      })) : '';
+
+      onChange(date);
+  }
+
+  const normalizedValue = normalizeToDateObject(value);
+  
+  
+
   return (
     <DatePicker
-      // value={value}
-      onChange={onChange}
+      value={normalizedValue}
+      onChange={handleChange}
       calendar={localeConfig.calendar}
       locale={localeConfig.locale}
       format={localeConfig.format}
