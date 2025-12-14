@@ -5,7 +5,7 @@ import { Apartment, Bed4, Suitcase, Suitcase2, Travel, Travel2 } from '../../sha
 import Tab from '../../shared/components/ui/Tab';
 import { TabItem } from '@/modules/shared/types/common';
 import Image from 'next/image';
-import { addSomeDays, dateFormat } from '@/modules/shared/helpers';
+import { addSomeDays, dateDisplayFormat, dateFormat, persianNumbersToEnglish } from '@/modules/shared/helpers';
 import FlightSearch from '@/modules/flights/components/shared/searchForm';
 import CipSearchForm from '@/modules/cip/components/searchForm';
 import RecentSearches from '@/modules/domesticHotel/components/home/HotelRecentSearches';
@@ -35,21 +35,21 @@ const Banner: React.FC<Props> = props => {
   
   const isSafarLife = process.env.SITE_NAME === 'https://www.safarlife.com';
 
-    const today = new DateObject({
-    date: new Date(),
-    format: "YYYY/MM/DD",
-    calendar: persian,
-    locale: persian_fa,
-    });
+    const today = persianNumbersToEnglish(dateDisplayFormat({date: new DateObject({
+            date: new Date(),
+            format: "YYYY/MM/DD",
+            calendar: persian,
+            locale: persian_fa,
+            })}))
 
-    const tomorrow = new DateObject({
-    date: new Date(new Date().setDate(new Date().getDate() + 1)),
-    format: "YYYY/MM/DD",
-    calendar: persian,
-    locale: persian_fa,
-    });
-
-  const domesticHotelDefaultDates: [DateObject, DateObject] = [today, tomorrow];
+    const tomorrow = persianNumbersToEnglish(dateDisplayFormat({date:new DateObject({
+                date: new Date(new Date().setDate(new Date().getDate() + 1)),
+                format: "YYYY/MM/DD",
+                calendar: persian,
+                locale: persian_fa,
+                })
+                }))
+  const domesticHotelDefaultDates: string[] = [today, tomorrow];
 
   const items: TabItem[] = [];
 
