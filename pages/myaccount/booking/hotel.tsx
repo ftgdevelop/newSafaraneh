@@ -9,7 +9,7 @@ import Image from 'next/image';
 import { domesticHotelGetReserveById, getDomesticHotelSummaryDetailById } from '@/modules/domesticHotel/actions';
 import { WebSiteDataType } from '@/modules/shared/types/common';
 import { DomesticHotelGetReserveByIdData, DomesticHotelSummaryDetail } from '@/modules/domesticHotel/types/hotel';
-import { dateDiplayFormat, getDatesDiff, numberWithCommas } from '@/modules/shared/helpers';
+import { dateDisplayFormat, getDatesDiff, numberWithCommas } from '@/modules/shared/helpers';
 
 import { Bed, DefaultRoom, DefaultRoomTheme2, Directions, Email, EmailGrayIcon, Location, Lock, Phone, PhoneGrayIcon, RightCaret, Tik, User, WhatsappGrayIcon } from '@/modules/shared/components/ui/icons';
 
@@ -266,7 +266,7 @@ const DomesticHotelReserveDetail: NextPage = ({ portalData }: { portalData?: Web
 
                                             {!!guests && <> {guests} <User className='w-5 h-5 fill-current rtl:ml-2 ltr:mr-2' /></>}
 
-                                            {dateDiplayFormat({ date: reserveData.checkin, format: 'dd mm yyyy', locale: "fa" })} - {dateDiplayFormat({ date: reserveData.checkout, format: 'dd mm yyyy', locale: "fa" })}
+                                            {dateDisplayFormat({ date: reserveData.checkin, format: 'dd mm yyyy', locale: "fa" })} - {dateDisplayFormat({ date: reserveData.checkout, format: 'dd mm yyyy', locale: "fa" })}
 
                                         </div>
 
@@ -388,14 +388,14 @@ const DomesticHotelReserveDetail: NextPage = ({ portalData }: { portalData?: Web
                                     <div className='flex justify-between items-center mb-1' >
                                         {t("checkin-date")}
                                         <span>
-                                            {dateDiplayFormat({ date: reserveData.checkin, format: 'dd mm yyyy', locale: "fa" })}
+                                            {dateDisplayFormat({ date: reserveData.checkin, format: 'dd mm yyyy', locale: "fa" })}
                                         </span>
                                     </div>
 
                                     <div className='flex justify-between items-center mb-1'>
                                         {t("checkout-date")}
                                         <span>
-                                            {dateDiplayFormat({ date: reserveData.checkout, format: 'dd mm yyyy', locale: "fa" })}
+                                            {dateDisplayFormat({ date: reserveData.checkout, format: 'dd mm yyyy', locale: "fa" })}
                                         </span>
                                     </div>
 

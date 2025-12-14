@@ -1,5 +1,5 @@
 import CheckboxSwitch from "@/modules/shared/components/ui/CheckboxSwitch";
-import { dateDiplayFormat } from "@/modules/shared/helpers";
+import { dateDisplayFormat } from "@/modules/shared/helpers";
 import { useAppDispatch, useAppSelector } from "@/modules/shared/hooks/use-store";
 import { useTranslation } from "next-i18next";
 import { useState } from "react";
@@ -75,7 +75,7 @@ const ProfileContentTheme2: React.FC<Props> = props => {
             value: user?.firstName ? (user.firstName + " " + user.lastName) : "نامشخص"
         },{
             label:"تاریخ تولد",
-            value: user.birthDay ? dateDiplayFormat({
+            value: user.birthDay ? dateDisplayFormat({
                 date: user.birthDay,
                 format: 'dd mm yyyy',
                 locale: "fa"

@@ -1,4 +1,4 @@
-import { dateDiplayFormat, numberWithCommas } from "@/modules/shared/helpers";
+import { dateDisplayFormat, numberWithCommas } from "@/modules/shared/helpers";
 import { FlightItemType } from "../../types/flights"
 import Image from "next/image";
 
@@ -27,7 +27,7 @@ const FlightItemTheme2: React.FC<Props> = props => {
                 <div className="py-2 px-4 gap-x-4 gap-y-1 grid grid-cols-2 lg:grid-cols-3">
                     <div className="text-sm">
                         <strong className="block font-semibold text-lg">
-                            {flight.departureTime ? dateDiplayFormat({ date: flight.departureTime, format: "HH:mm", locale: "fa" }) : "--"}  - {flight.arrivalTime ? dateDiplayFormat({ date: flight.arrivalTime, format: "HH:mm", locale: "fa" }) : "--"}
+                            {flight.departureTime ? dateDisplayFormat({ date: flight.departureTime, format: "HH:mm", locale: "fa" }) : "--"}  - {flight.arrivalTime ? dateDisplayFormat({ date: flight.arrivalTime, format: "HH:mm", locale: "fa" }) : "--"}
                         </strong>
 
                         {flight.departureAirport?.city?.name} ({flight.departureAirport?.city?.code}) - {flight.arrivalAirport?.city?.name} ({flight.arrivalAirport?.city?.code})

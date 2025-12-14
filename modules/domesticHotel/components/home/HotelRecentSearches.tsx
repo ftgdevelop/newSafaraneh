@@ -1,6 +1,6 @@
 import { HotelRecentSearchItem } from "../../types/hotel";
 import { useEffect, useState } from "react";
-import { dateDiplayFormat } from "@/modules/shared/helpers";
+import { dateDisplayFormat } from "@/modules/shared/helpers";
 import { i18n, useTranslation } from "next-i18next";
 import RecentSearches from "@/modules/home/components/RecentSearches";
 
@@ -35,10 +35,10 @@ const HotelRecentSearches: React.FC = () => {
         let subtitle = "";
 
         if(theme1 || theme3){
-            const checkinDay = dateDiplayFormat({ date: item.dates[0], format: "d", locale: i18n?.language });
-            const checkoutMonth = dateDiplayFormat({ date: item.dates[1], format: "m", locale: i18n?.language });
-            const checkoutDay = dateDiplayFormat({ date: item.dates[1], format: "d", locale: i18n?.language });
-            const checkinMonth = dateDiplayFormat({ date: item.dates[0], format: "m", locale: i18n?.language });
+            const checkinDay = dateDisplayFormat({ date: item.dates[0], format: "d", locale: i18n?.language });
+            const checkoutMonth = dateDisplayFormat({ date: item.dates[1], format: "m", locale: i18n?.language });
+            const checkoutDay = dateDisplayFormat({ date: item.dates[1], format: "d", locale: i18n?.language });
+            const checkinMonth = dateDisplayFormat({ date: item.dates[0], format: "m", locale: i18n?.language });
 
             if (checkinMonth === checkoutMonth) {
                 subtitle = t("checkinTillCheckout", { checkinDay: checkinDay, checkoutDay: checkoutDay, month: checkinMonth });
@@ -48,8 +48,8 @@ const HotelRecentSearches: React.FC = () => {
         }
         
         if(theme2){
-            const checkin = dateDiplayFormat({ date: item.dates[0], format: "ddd dd mm", locale: i18n?.language });
-            const checkout = dateDiplayFormat({ date: item.dates[1], format: "ddd dd mm", locale: i18n?.language });
+            const checkin = dateDisplayFormat({ date: item.dates[0], format: "ddd dd mm", locale: i18n?.language });
+            const checkout = dateDisplayFormat({ date: item.dates[1], format: "ddd dd mm", locale: i18n?.language });
 
             subtitle = checkin + " - " + checkout;
         }

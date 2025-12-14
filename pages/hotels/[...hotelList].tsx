@@ -5,7 +5,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { EntitySearchResultItemType, PricedHotelItem, SearchAccomodationItem, SortTypes } from '@/modules/domesticHotel/types/hotel';
 import SearchForm from '@/modules/domesticHotel/components/shared/SearchForm';
 import HotelsList from '@/modules/domesticHotel/components/hotelsList';
-import { addSomeDays, checkDateIsAfterDate, dateDiplayFormat, dateFormat, replaceBrandNames, toPersianDigits } from '@/modules/shared/helpers';
+import { addSomeDays, checkDateIsAfterDate, dateDisplayFormat, dateFormat, replaceBrandNames, toPersianDigits } from '@/modules/shared/helpers';
 import ProgressBarWithLabel from '@/modules/shared/components/ui/ProgressBarWithLabel';
 import { useTranslation } from 'next-i18next';
 import Select from '@/modules/shared/components/ui/Select';
@@ -680,7 +680,7 @@ const HotelList: NextPage<Props> = props => {
         minutes={20}
         onRefresh={() => { window.location.reload() }}
         type='hotel'
-        description={t("GetTheLatestPriceAndAvailabilityForYourSearchTo", { destination: cityName, dates: `${dateDiplayFormat({ date: checkin, locale: locale, format: "dd mm" })} - ${dateDiplayFormat({ date: checkout, locale: locale, format: "dd mm" })}` })}
+        description={t("GetTheLatestPriceAndAvailabilityForYourSearchTo", { destination: cityName, dates: `${dateDisplayFormat({ date: checkin, locale: locale, format: "dd mm" })} - ${dateDisplayFormat({ date: checkout, locale: locale, format: "dd mm" })}` })}
       />}
 
       <ModalPortal

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { dateDiplayFormat } from "@/modules/shared/helpers";
+import { dateDisplayFormat } from "@/modules/shared/helpers";
 import { i18n } from "next-i18next";
 import { FlightRecentSearchItem } from "../../types/flights";
 import { ArrowRight, Swap } from "@/modules/shared/components/ui/icons";
@@ -22,9 +22,9 @@ const FlightRecentSearches: React.FC = () => {
             {
                 url: item.url,
                 subtitle: item.returnDate ?
-                    dateDiplayFormat({ date: item.departureDate, format: "dd mm", locale: i18n?.language }) + " - " + dateDiplayFormat({ date: item.returnDate, format: "dd mm", locale: i18n?.language })
+                    dateDisplayFormat({ date: item.departureDate, format: "dd mm", locale: i18n?.language }) + " - " + dateDisplayFormat({ date: item.returnDate, format: "dd mm", locale: i18n?.language })
                     :
-                    dateDiplayFormat({ date: item.departureDate, format: "ddd dd mm", locale: i18n?.language }),
+                    dateDisplayFormat({ date: item.departureDate, format: "ddd dd mm", locale: i18n?.language }),
                 title: (<div>
                     {item.origin}
                     {item.returnDate ? (

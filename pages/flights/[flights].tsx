@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/modules/shared/store";
 import { SidebarFilterChange } from "@/modules/flights/templates/SidebarFilterChange";
 import { SortHightestPrice, SortCapacity, SortTime } from "@/modules/flights/templates/SortFlightItem";
-import { addSomeDays, checkDateIsAfterDate, dateDiplayFormat, dateFormat, numberWithCommas } from "@/modules/shared/helpers";
+import { addSomeDays, checkDateIsAfterDate, dateDisplayFormat, dateFormat, numberWithCommas } from "@/modules/shared/helpers";
 import { useRouter } from "next/router";
 import ProgressBarWithLabel from "@/modules/shared/components/ui/ProgressBarWithLabel";
 import { useTranslation } from "next-i18next";
@@ -539,7 +539,7 @@ const Flights: NextPage = ({ airports, routeCodes, portalData, moduleDisabled }:
                             <h3 className="text-lg">
                                 {origin} به {destination}
                             </h3>
-                            {!!defaultValues?.departureDate && dateDiplayFormat({ date: defaultValues.departureDate, format: "dd mm yyyy", locale: "fa" })} . {allPassengers} مسافر
+                            {!!defaultValues?.departureDate && dateDisplayFormat({ date: defaultValues.departureDate, format: "dd mm yyyy", locale: "fa" })} . {allPassengers} مسافر
                         </div>
 
                         <SearchForm

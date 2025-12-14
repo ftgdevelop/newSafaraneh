@@ -4,7 +4,7 @@
 // import { useTranslation } from 'next-i18next';
 
 // import { ArrowLeft, Calendar, CalendarFill, CalendarToggle } from './icons';
-// import { dateDiplayFormat } from '../../helpers';
+// import { dateDisplayFormat } from '../../helpers';
 
 // type Props = {
 //     onChange: (args: any, inst: any) => void;
@@ -81,13 +81,13 @@
 //     let endFormated = t('checkout-date');
 
 //     if (values && values[0]) {
-//         startFormated = dateDiplayFormat({date:values[0], format:"yyyy/mm/dd", locale:locale === localeFa ? "fa": "en" });
-//         start = dateDiplayFormat({date:values[0], format:theme3 ? "yyyy/mm/dd" : "ddd dd mm", locale:locale === localeFa ? "fa": "en" });
+//         startFormated = dateDisplayFormat({date:values[0], format:"yyyy/mm/dd", locale:locale === localeFa ? "fa": "en" });
+//         start = dateDisplayFormat({date:values[0], format:theme3 ? "yyyy/mm/dd" : "ddd dd mm", locale:locale === localeFa ? "fa": "en" });
 //     }
 
 //     if (values && values[1]) {
-//         endFormated = dateDiplayFormat({date:values[1], format:"yyyy/mm/dd", locale:locale === localeFa ? "fa": "en" });
-//         end = dateDiplayFormat({date:values[1], format:theme3 ? "yyyy/mm/dd" : "ddd dd mm", locale:locale === localeFa ? "fa": "en" });
+//         endFormated = dateDisplayFormat({date:values[1], format:"yyyy/mm/dd", locale:locale === localeFa ? "fa": "en" });
+//         end = dateDisplayFormat({date:values[1], format:theme3 ? "yyyy/mm/dd" : "ddd dd mm", locale:locale === localeFa ? "fa": "en" });
 //     }
 
 //     return (

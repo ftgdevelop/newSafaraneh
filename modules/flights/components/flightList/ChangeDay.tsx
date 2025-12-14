@@ -1,7 +1,7 @@
 import { useRouter } from "next/router"
 import FlightSidebarFilterResult from "./SidebarFilterResult"
 import { RightCaret } from "@/modules/shared/components/ui/icons"
-import { addSomeDays, dateDiplayFormat, dateFormat } from "@/modules/shared/helpers"
+import { addSomeDays, dateDisplayFormat, dateFormat } from "@/modules/shared/helpers"
 
 const ChangeDay: React.FC = () => {
 
@@ -50,8 +50,8 @@ const ChangeDay: React.FC = () => {
                             روز قبل
                         </button>
 
-                        <p className="pr-2 pl-2 p-1 w-full whitespace-nowrap text-center">{dateDiplayFormat({ date: (router.query.departing as string), locale: 'fa', format: 'ddd dd mm' }) ||
-                            dateDiplayFormat({ date: today, locale: 'fa', format: 'ddd dd mm' })}
+                        <p className="pr-2 pl-2 p-1 w-full whitespace-nowrap text-center">{dateDisplayFormat({ date: (router.query.departing as string), locale: 'fa', format: 'ddd dd mm' }) ||
+                            dateDisplayFormat({ date: today, locale: 'fa', format: 'ddd dd mm' })}
                         </p>
 
                         <button

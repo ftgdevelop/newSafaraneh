@@ -6,7 +6,7 @@ import { CipGetReserveByIdResponse } from "@/modules/cip/types/cip"
 import Skeleton from "@/modules/shared/components/ui/Skeleton"
 import Tag from "@/modules/shared/components/ui/Tag"
 import { DefaultRoom, DefaultRoomTheme2, EmailGrayIcon, PhoneGrayIcon, RightCaret, Tik, Travel, WhatsappGrayIcon } from "@/modules/shared/components/ui/icons"
-import { dateDiplayFormat } from "@/modules/shared/helpers"
+import { dateDisplayFormat } from "@/modules/shared/helpers"
 import { useAppDispatch, useAppSelector } from "@/modules/shared/hooks/use-store"
 import { WebSiteDataType } from "@/modules/shared/types/common"
 import { GetServerSideProps, NextPage } from "next"
@@ -179,7 +179,7 @@ const CipReserveDetail: NextPage = ({ portalData }: { portalData?: WebSiteDataTy
                                     <h1 className='text-center font-semibold text-2xl mb-3'> {`تشریفات فرودگاهی ${cipReserveInfo.airport.name}`} </h1>
 
                                     <div className='text-center'>
-                                        {dateDiplayFormat({ date: cipReserveInfo.flightTime, format: 'dd mm yyyy', locale: "fa" })}
+                                        {dateDisplayFormat({ date: cipReserveInfo.flightTime, format: 'dd mm yyyy', locale: "fa" })}
                                     </div>
 
                                     {((cipReserveInfo.status === 'Issued' || cipReserveInfo.status === 'ContactProvider') && reserveId && username) ? (
@@ -272,7 +272,7 @@ const CipReserveDetail: NextPage = ({ portalData }: { portalData?: WebSiteDataTy
                             <div className="flex items-center justify-between text-sm">
                                 <div>تاریخ پرواز</div>
                                 <div>
-                                    {dateDiplayFormat({ date: cipReserveInfo.flightTime, locale: "fa", format: 'yyyy/mm/dd' })}
+                                    {dateDisplayFormat({ date: cipReserveInfo.flightTime, locale: "fa", format: 'yyyy/mm/dd' })}
                                 </div>
                             </div>
                             <div className="flex items-center justify-between text-sm">

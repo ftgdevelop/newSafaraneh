@@ -1,4 +1,4 @@
-import { dateDiplayFormat } from "../helpers";
+import { dateDisplayFormat } from "../helpers";
 import { TravelerItem } from "../types/common";
 import Button from "./ui/Button";
 
@@ -24,8 +24,8 @@ const FormerTravelerItem: React.FC<Props> = props => {
             <td className="p-1 md:p-2 group-hover:bg-neutral-50"> {passengerName}</td>
             <td className="p-1 md:p-2 group-hover:bg-neutral-50"> {traveller.gender ? "مرد" : "زن"} </td>
             <td className="p-1 md:p-2 group-hover:bg-neutral-50"> {traveller.nationalId || traveller.passportNumber || "--"} </td>
-            {!isHotel && <td className="p-1 md:p-2 group-hover:bg-neutral-50"> {traveller.passportExpirationDate ? dateDiplayFormat({ date: traveller.passportExpirationDate, format: "yyyy/mm/dd", locale: "en" }) : "--"} </td>}
-            <td className="p-1 md:p-2 group-hover:bg-neutral-50"> {traveller.birthDate ? dateDiplayFormat({ date: traveller.birthDate, format: "yyyy/mm/dd", locale: "en" }) : "--"} </td>
+            {!isHotel && <td className="p-1 md:p-2 group-hover:bg-neutral-50"> {traveller.passportExpirationDate ? dateDisplayFormat({ date: traveller.passportExpirationDate, format: "yyyy/mm/dd", locale: "en" }) : "--"} </td>}
+            <td className="p-1 md:p-2 group-hover:bg-neutral-50"> {traveller.birthDate ? dateDisplayFormat({ date: traveller.birthDate, format: "yyyy/mm/dd", locale: "en" }) : "--"} </td>
             <td className="p-1 md:p-2 group-hover:bg-neutral-50">
                 <div className="flex justify-center gap-3">
                     <Button

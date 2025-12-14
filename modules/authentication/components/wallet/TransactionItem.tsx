@@ -1,7 +1,7 @@
 import { getTransactionDeposit } from '@/modules/payment/actions';
 import { GetTransactionParams } from '@/modules/payment/types';
 import { Plus } from '@/modules/shared/components/ui/icons';
-import { dateDiplayFormat, numberWithCommas } from '@/modules/shared/helpers';
+import { dateDisplayFormat, numberWithCommas } from '@/modules/shared/helpers';
 import { useEffect, useState } from 'react';
 
 type Props = {
@@ -34,7 +34,7 @@ const TransactionItem: React.FC<Props> = props => {
                         </button>
                     )}
                 </td>
-                <td className='p-2 md:p-3 rtl:text-right ltr:text-left' dir="ltr"> {dateDiplayFormat({ date: creationTime, format: 'yyyy/mm/dd h:m', locale: "fa" })} </td>
+                <td className='p-2 md:p-3 rtl:text-right ltr:text-left' dir="ltr"> {dateDisplayFormat({ date: creationTime, format: 'yyyy/mm/dd h:m', locale: "fa" })} </td>
                 <td className='p-2 md:p-3 text-2xs'> {type} </td>
                 <td className={`p-2 md:p-3 rtl:text-right ltr:text-left ${amount > 0 ? 'text-green-600' : "text-red-500"}`} dir="ltr" > {numberWithCommas(amount)} </td>
                 <td className='p-2 md:p-3 rtl:text-right ltr:text-left font-semibold' dir="ltr"> {numberWithCommas(initialAmount)} </td>

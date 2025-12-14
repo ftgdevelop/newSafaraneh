@@ -2,7 +2,7 @@ import Button from "@/modules/shared/components/ui/Button";
 import Rating from "@/modules/shared/components/ui/Rating";
 import Skeleton from "@/modules/shared/components/ui/Skeleton";
 import { ArrowLeft, Tik, Bed, User, Calendar, DefaultRoom, InfoCircle } from "@/modules/shared/components/ui/icons";
-import { dateDiplayFormat, getDatesDiff, numberWithCommas } from "@/modules/shared/helpers";
+import { dateDisplayFormat, getDatesDiff, numberWithCommas } from "@/modules/shared/helpers";
 import { useTranslation } from "next-i18next";
 import Image from "next/image";
 import { AsideHotelInfoType, AsideReserveInfoRoomItemType, AsideReserveInfoType, DomesticHotelGetValidateResponse } from "../../types/hotel";
@@ -210,11 +210,11 @@ const Aside: React.FC<Props> = props => {
 
                             <Calendar className="w-5 h-5 fill-neutral-600" />
 
-                            {dateDiplayFormat({ date: reserveInformation.checkin, format: "dd mm yyyy", locale: "fa" })}
+                            {dateDisplayFormat({ date: reserveInformation.checkin, format: "dd mm yyyy", locale: "fa" })}
 
                             <ArrowLeft className="w-4 h-4 fill-neutral-700" />
 
-                            {dateDiplayFormat({ date: reserveInformation.checkout, format: "dd mm yyyy", locale: "fa" })}
+                            {dateDisplayFormat({ date: reserveInformation.checkout, format: "dd mm yyyy", locale: "fa" })}
 
                             <span>
                                 {getDatesDiff(new Date(reserveInformation.checkout), new Date(reserveInformation.checkin))} {tHotel('night')}
@@ -312,7 +312,7 @@ const Aside: React.FC<Props> = props => {
                                                 className="border rounded-lg text-xs bg-white whitespace-nowrap"
                                             >
                                                 <header className="bg-neutral-200 p-2 leading-4 rounded-t-lg">
-                                                    {dateDiplayFormat({
+                                                    {dateDisplayFormat({
                                                         date: night.date!,
                                                         format: "ddd dd mm",
                                                         locale: "fa"

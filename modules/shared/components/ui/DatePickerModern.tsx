@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 // import DatePicker from "@hassanmojab/react-modern-calendar-datepicker";
-import { dateDiplayFormat, persianNumbersToEnglish, shamsiToMiladi } from "../../helpers";
+import { dateDisplayFormat, persianNumbersToEnglish, shamsiToMiladi } from "../../helpers";
 
 type Props = {
     wrapperClassName?: string;
@@ -33,7 +33,7 @@ const DatePickerModern: React.FC<Props> = props => {
             return undefined;
         }
         if (locale === 'fa') {
-            const transformedToShamsi = dateDiplayFormat({ date: d, format: "YYYY-MM-DD", locale: "fa" });
+            const transformedToShamsi = dateDisplayFormat({ date: d, format: "YYYY-MM-DD", locale: "fa" });
             const valueArray = persianNumbersToEnglish(transformedToShamsi).split("-");
             return ({
                 year: +valueArray[0],

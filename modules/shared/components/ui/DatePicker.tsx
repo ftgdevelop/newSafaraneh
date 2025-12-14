@@ -4,7 +4,7 @@
 // import { useTranslation } from 'next-i18next';
 
 // import { CalendarToggle } from './icons';
-// // import { dateDiplayFormat } from '../../helpers';
+// // import { dateDisplayFormat } from '../../helpers';
 // import { Field } from 'formik';
 
 // type Props = {
@@ -76,7 +76,7 @@
 //     let dateValue = "";
 
 //     if (value) {
-//         dateValue = dateDiplayFormat({date:value, format:"yyyy/mm/dd", locale:locale === localeFa ? "fa": "en" });
+//         dateValue = dateDisplayFormat({date:value, format:"yyyy/mm/dd", locale:locale === localeFa ? "fa": "en" });
 //     }
 
 //     useEffect(()=>{

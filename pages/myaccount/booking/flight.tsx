@@ -6,7 +6,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Link from 'next/link';
 import Image from 'next/image';
 import { WebSiteDataType } from '@/modules/shared/types/common';
-import { dateDiplayFormat, numberWithCommas } from '@/modules/shared/helpers';
+import { dateDisplayFormat, numberWithCommas } from '@/modules/shared/helpers';
 import { Airpalne2, ArrowRight, EmailGrayIcon, Lock, PhoneGrayIcon, RightCaret, TakeOff, Tik, WhatsappGrayIcon } from '@/modules/shared/components/ui/icons';
 import Skeleton from '@/modules/shared/components/ui/Skeleton';
 import Tag from '@/modules/shared/components/ui/Tag';
@@ -241,7 +241,7 @@ const DomesticFlightReserveDetail: NextPage = ({ portalData }: { portalData?: We
                                         </h1>
 
                                         <div className='text-sm text-center' >
-                                            {dateDiplayFormat({ date: reserveData.departureTime, format: 'dd mm yyyy', locale: "fa" })}
+                                            {dateDisplayFormat({ date: reserveData.departureTime, format: 'dd mm yyyy', locale: "fa" })}
                                         </div>
 
                                         {status}
@@ -365,11 +365,11 @@ const DomesticFlightReserveDetail: NextPage = ({ portalData }: { portalData?: We
                                             {departureFlight.departureAirport?.city?.name}
                                         </b>
                                         <span className="text-base font-semibold">
-                                            {dateDiplayFormat({ date: departureFlight.departureTime, format: "HH:mm", locale: 'fa' })}
+                                            {dateDisplayFormat({ date: departureFlight.departureTime, format: "HH:mm", locale: 'fa' })}
                                         </span>
 
                                         <div className="text-xs sm:text-sm">
-                                            {dateDiplayFormat({ date: departureFlight.departureTime, format: "ddd dd mm", locale: "fa" })}
+                                            {dateDisplayFormat({ date: departureFlight.departureTime, format: "ddd dd mm", locale: "fa" })}
                                         </div>
                                     </div>
 
@@ -378,11 +378,11 @@ const DomesticFlightReserveDetail: NextPage = ({ portalData }: { portalData?: We
                                             {departureFlight.arrivalAirport.city.name}
                                         </b>
                                         <span className="text-base font-semibold">
-                                            {dateDiplayFormat({ date: departureFlight.arrivalTime, format: "HH:mm", locale: 'fa' })}
+                                            {dateDisplayFormat({ date: departureFlight.arrivalTime, format: "HH:mm", locale: 'fa' })}
                                         </span>
 
                                         <div className="text-xs sm:text-sm">
-                                            {dateDiplayFormat({ date: departureFlight.arrivalTime, format: "ddd dd mm", locale: "fa" })}
+                                            {dateDisplayFormat({ date: departureFlight.arrivalTime, format: "ddd dd mm", locale: "fa" })}
                                         </div>
                                     </div>}
 
@@ -441,11 +441,11 @@ const DomesticFlightReserveDetail: NextPage = ({ portalData }: { portalData?: We
                                                     {returnFlight.departureAirport.city.name}
                                                 </b>
                                                 <span className="text-base font-semibold">
-                                                    {dateDiplayFormat({ date: returnFlight.departureTime, format: "HH:mm", locale: 'fa' })}
+                                                    {dateDisplayFormat({ date: returnFlight.departureTime, format: "HH:mm", locale: 'fa' })}
                                                 </span>
 
                                                 <div className="text-xs sm:text-sm">
-                                                    {dateDiplayFormat({ date: returnFlight.departureTime, format: "ddd dd mm", locale: "fa" })}
+                                                    {dateDisplayFormat({ date: returnFlight.departureTime, format: "ddd dd mm", locale: "fa" })}
                                                 </div>
                                             </div>
 
@@ -454,11 +454,11 @@ const DomesticFlightReserveDetail: NextPage = ({ portalData }: { portalData?: We
                                                     {returnFlight.arrivalAirport.city.name}
                                                 </b>
                                                 <span className="text-base font-semibold">
-                                                    {dateDiplayFormat({ date: returnFlight.arrivalTime, format: "HH:mm", locale: 'fa' })}
+                                                    {dateDisplayFormat({ date: returnFlight.arrivalTime, format: "HH:mm", locale: 'fa' })}
                                                 </span>
 
                                                 <div className="text-xs sm:text-sm">
-                                                    {dateDiplayFormat({ date: returnFlight.arrivalTime, format: "ddd dd mm", locale: "fa" })}
+                                                    {dateDisplayFormat({ date: returnFlight.arrivalTime, format: "ddd dd mm", locale: "fa" })}
                                                 </div>
                                             </div>}
 

@@ -4,7 +4,7 @@
 // import { useTranslation } from 'next-i18next';
 
 // import { ArrowLeft, Calendar, CalendarToggle } from './icons';
-// import { dateDiplayFormat } from '../../helpers';
+// import { dateDisplayFormat } from '../../helpers';
 
 // type Props = {
 //     onChange: (args: any, inst: any) => void;

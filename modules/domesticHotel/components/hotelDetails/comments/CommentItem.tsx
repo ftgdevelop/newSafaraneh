@@ -2,7 +2,7 @@ import { openLoginForm } from '@/modules/authentication/store/authenticationSlic
 import { disLikeComment, likeComment } from '@/modules/domesticHotel/actions';
 import { DomesticHotelReviewCommentItem } from '@/modules/domesticHotel/types/hotel';
 import { Business, Couple, DisLike, Group3, Individual, Like, Sad, Smile } from '@/modules/shared/components/ui/icons';
-import { dateDiplayFormat } from '@/modules/shared/helpers';
+import { dateDisplayFormat } from '@/modules/shared/helpers';
 import { useAppDispatch, useAppSelector } from '@/modules/shared/hooks/use-store';
 import { setReduxNotification } from '@/modules/shared/store/notificationSlice';
 import parse from 'html-react-parser';
@@ -149,7 +149,7 @@ const CommentItem: React.FC<Props> = props => {
             <div className='font-semibold'> {comment.userDisplayName || "کاربر ناشناس"}  {travelTypeElement && <div className='inline-flex gap-1 items-center border rounded px-2 py-1 align-middle mx-3 leading-5 text-neutral-500'> {travelTypeElement} </div>} </div>
 
             <div className='text-neutral-500 text-xs'>
-                {dateDiplayFormat({ date: comment.creationTime || "", format: "dd mm yyyy", locale: "fa" })}
+                {dateDisplayFormat({ date: comment.creationTime || "", format: "dd mm yyyy", locale: "fa" })}
             </div>
 
             {!!comment.positivePoints && (

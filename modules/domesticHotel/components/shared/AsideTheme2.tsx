@@ -2,7 +2,7 @@ import Button from "@/modules/shared/components/ui/Button";
 import Rating from "@/modules/shared/components/ui/Rating";
 import Skeleton from "@/modules/shared/components/ui/Skeleton";
 import { Tik, User, DefaultRoomTheme2 } from "@/modules/shared/components/ui/icons";
-import { dateDiplayFormat, numberWithCommas, toPersianDigits } from "@/modules/shared/helpers";
+import { dateDisplayFormat, numberWithCommas, toPersianDigits } from "@/modules/shared/helpers";
 import { useTranslation } from "next-i18next";
 import Image from "next/image";
 import { AsideHotelInfoType, AsideReserveInfoRoomItemType, AsideReserveInfoType } from "../../types/hotel";
@@ -156,7 +156,7 @@ const AsideTheme2: React.FC<Props> = props => {
                             </label>
 
                             <div className="text-lg font-semibold mb-5">
-                                {dateDiplayFormat({ date: reserveInformation.checkin, format: "ddd dd mm yyyy", locale: "fa" })} 
+                                {dateDisplayFormat({ date: reserveInformation.checkin, format: "ddd dd mm yyyy", locale: "fa" })} 
                                 {props.checkinTime ? 
                                     <span className="text-neutral-500 text-sm rtl:mr-4 ltr:ml-4">
                                         از ساعت {toPersianDigits(props.checkinTime)}
@@ -169,7 +169,7 @@ const AsideTheme2: React.FC<Props> = props => {
                             </label>
 
                             <div className="text-lg font-semibold mb-5">
-                                {dateDiplayFormat({ date: reserveInformation.checkout, format: "ddd dd mm yyyy", locale: "fa" })} 
+                                {dateDisplayFormat({ date: reserveInformation.checkout, format: "ddd dd mm yyyy", locale: "fa" })} 
                                 {props.checkoutTime ? 
                                     <span className="text-neutral-500 text-sm rtl:mr-4 ltr:ml-4"> 
                                         تا ساعت {toPersianDigits(props.checkoutTime)}
@@ -273,7 +273,7 @@ const AsideTheme2: React.FC<Props> = props => {
                                         className="border rounded-lg text-xs bg-white whitespace-nowrap"
                                     >
                                         <header className="bg-neutral-200 p-2 leading-4 rounded-t-lg">
-                                            {dateDiplayFormat({
+                                            {dateDisplayFormat({
                                                 date: night.date!,
                                                 format: "ddd dd mm",
                                                 locale: "fa"

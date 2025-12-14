@@ -1,5 +1,5 @@
 import { LeftCaret, RightCaret } from "@/modules/shared/components/ui/icons";
-import { addSomeDays, dateDiplayFormat, dateFormat } from "@/modules/shared/helpers";
+import { addSomeDays, dateDisplayFormat, dateFormat } from "@/modules/shared/helpers";
 import { useTranslation } from "next-i18next";
 import { useEffect, useState } from "react";
 import Slider from "react-slick";
@@ -248,7 +248,7 @@ const WeekendDeals: React.FC = () => {
                 رزرو لحظه آخری برای آخر هفته
             </h2>
             <p className="text-xs md:text-sm mb-3">
-                برای تاریخ:  {dateDiplayFormat({ date: checkin, format: "dd mm", locale: "fa" })} تا {dateDiplayFormat({ date: checkout, format: "dd mm", locale: "fa" })}
+                برای تاریخ:  {dateDisplayFormat({ date: checkin, format: "dd mm", locale: "fa" })} تا {dateDisplayFormat({ date: checkout, format: "dd mm", locale: "fa" })}
             </p>
 
             <div className="-mx-2">

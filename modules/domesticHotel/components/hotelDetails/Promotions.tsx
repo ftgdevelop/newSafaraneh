@@ -1,4 +1,4 @@
-import { dateDiplayFormat } from "@/modules/shared/helpers";
+import { dateDisplayFormat } from "@/modules/shared/helpers";
 import { DomesticHotelRoomItem } from "../../types/hotel";
 import React from "react";
 import { CheckTag } from "@/modules/shared/components/ui/icons";
@@ -22,14 +22,14 @@ const Promotions: React.FC<Props> = props => {
                         let endDate: string = "";
 
                         if (promotion.endDate) {
-                            endDate = dateDiplayFormat({
+                            endDate = dateDisplayFormat({
                                 date: promotion.endDate,
                                 format: 'yyyy/mm/dd',
                                 locale: "fa"
                             })
                         }
                         if (promotion.startDate) {
-                            startDate = dateDiplayFormat({
+                            startDate = dateDisplayFormat({
                                 date: promotion.startDate,
                                 format: 'yyyy/mm/dd',
                                 locale: "fa"

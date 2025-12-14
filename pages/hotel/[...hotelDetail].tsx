@@ -18,7 +18,7 @@ import FAQ from '@/modules/domesticHotel/components/hotelDetails/FAQ';
 import SimilarHotels from '@/modules/domesticHotel/components/hotelDetails/SimilarHotels';
 import Comments from '@/modules/domesticHotel/components/hotelDetails/comments';
 import Rooms from '@/modules/domesticHotel/components/hotelDetails/Rooms';
-import { addSomeDays, checkDateIsAfterDate, dateDiplayFormat, dateFormat } from '@/modules/shared/helpers';
+import { addSomeDays, checkDateIsAfterDate, dateDisplayFormat, dateFormat } from '@/modules/shared/helpers';
 import AnchorTabs from '@/modules/shared/components/ui/AnchorTabs';
 import NotFound from '@/modules/shared/components/ui/NotFound';
 import { useEffect, useRef, useState } from 'react';
@@ -718,7 +718,7 @@ useEffect(() => {
         minutes={20}
         onRefresh={() => {window.location.reload()}}
         type='hotel'
-        description={t("GetTheLatestPriceAndAvailabilityForYourSearchTo", { destination: `${accommodationData.displayName}`, dates: `${dateDiplayFormat({ date: checkin || today, locale: locale, format: "dd mm" })} - ${dateDiplayFormat({ date: checkout || tomorrow, locale: locale, format: "dd mm" })}` })}
+        description={t("GetTheLatestPriceAndAvailabilityForYourSearchTo", { destination: `${accommodationData.displayName}`, dates: `${dateDisplayFormat({ date: checkin || today, locale: locale, format: "dd mm" })} - ${dateDisplayFormat({ date: checkout || tomorrow, locale: locale, format: "dd mm" })}` })}
       />
 
     </>

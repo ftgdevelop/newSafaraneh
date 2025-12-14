@@ -1,6 +1,6 @@
 import Skeleton from "@/modules/shared/components/ui/Skeleton";
 import { Child, Group, User3 } from "@/modules/shared/components/ui/icons";
-import { dateDiplayFormat, numberWithCommas } from "@/modules/shared/helpers";
+import { dateDisplayFormat, numberWithCommas } from "@/modules/shared/helpers";
 import { useTranslation } from "next-i18next";
 import Image from "next/image";
 import { CipGetReserveByIdResponse } from "../../types/cip";
@@ -80,7 +80,7 @@ const CipAside: React.FC<Props> = props => {
                             <div className="flex items-center justify-between text-xs">
                                 <div>تاریخ پرواز</div>
                                 <div>
-                                    {dateDiplayFormat({ date: reserveInfo.flightTime, locale: "fa", format: 'yyyy/mm/dd' })}
+                                    {dateDisplayFormat({ date: reserveInfo.flightTime, locale: "fa", format: 'yyyy/mm/dd' })}
                                 </div>
                             </div>
                             <div className="flex items-center justify-between text-xs">

@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { ArrowLeft } from "../../../shared/components/ui/icons";
 import { useDispatch } from "react-redux";
 import { setSearchChangeOn } from "../../store/flightsSlice";
-import { dateDiplayFormat, dateFormat } from "@/modules/shared/helpers";
+import { dateDisplayFormat, dateFormat } from "@/modules/shared/helpers";
 
 type Props = {
     airports:any;
@@ -36,14 +36,14 @@ const SearchData: React.FC<Props> = props => {
             
             <div>
                 <p className="text-xs max-lg:text-4xs text-gray-400">تاریخ رفت</p>
-                <p className="text-sm max-md:text-2xs">{dateDiplayFormat({ date: query.departing, locale: 'fa', format: 'ddd dd mm' }) ||
-                dateDiplayFormat({ date: today, locale: 'fa', format: 'ddd dd mm' })}</p>
+                <p className="text-sm max-md:text-2xs">{dateDisplayFormat({ date: query.departing, locale: 'fa', format: 'ddd dd mm' }) ||
+                dateDisplayFormat({ date: today, locale: 'fa', format: 'ddd dd mm' })}</p>
             </div>
             {
                 query.returning && 
                     <div>
                         <p className="text-xs max-lg:text-4xs text-gray-400">تاریخ برگشت</p>
-                        <p className="text-sm max-md:text-2xs">{dateDiplayFormat({ date:query.returning,locale:'fa',format:'ddd dd mm'})}</p>
+                        <p className="text-sm max-md:text-2xs">{dateDisplayFormat({ date:query.returning,locale:'fa',format:'ddd dd mm'})}</p>
                     </div>
             }
             <div>

@@ -1,4 +1,4 @@
-import { dateDiplayFormat, numberWithCommas } from "@/modules/shared/helpers";
+import { dateDisplayFormat, numberWithCommas } from "@/modules/shared/helpers";
 import { FlightItemType } from "../../types/flights"
 import Image from "next/image";
 import { FlightLanding, FlightTakeOff } from "@/modules/shared/components/ui/icons";
@@ -23,13 +23,13 @@ const FlightDetailsTheme2: React.FC<Props> = props => {
                 <FlightTakeOff className="w-7 h-7 fill-current rtl:mirror" />
                 <div className="text-sm">
                     <h4 className="font-semibold text-base mb-1">
-                        {flight.departureTime ? dateDiplayFormat({ date: flight.departureTime, format: "HH:mm", locale: "fa" }) : "--"} - {flight.departureAirport?.city?.name}
+                        {flight.departureTime ? dateDisplayFormat({ date: flight.departureTime, format: "HH:mm", locale: "fa" }) : "--"} - {flight.departureAirport?.city?.name}
                     </h4>
                     <p className="mb-1">
                         {flight.departureAirport?.name}
                     </p>
                     <p>
-                        {flight.departureTime ? dateDiplayFormat({ date: flight.departureTime, format: "ddd dd mm", locale: "fa" }) : null}
+                        {flight.departureTime ? dateDisplayFormat({ date: flight.departureTime, format: "ddd dd mm", locale: "fa" }) : null}
                     </p>
                 </div>
             </div>
@@ -38,13 +38,13 @@ const FlightDetailsTheme2: React.FC<Props> = props => {
                 <FlightLanding className="w-7 h-7 fill-current rtl:mirror" />
                 <div className="text-sm">
                     <h4 className="font-semibold text-base mb-1">
-                        {flight.arrivalTime ? dateDiplayFormat({ date: flight.arrivalTime, format: "HH:mm", locale: "fa" }) : "--"} - {flight.arrivalAirport?.city?.name}
+                        {flight.arrivalTime ? dateDisplayFormat({ date: flight.arrivalTime, format: "HH:mm", locale: "fa" }) : "--"} - {flight.arrivalAirport?.city?.name}
                     </h4>
                     <p className="mb-1">
                         {flight.arrivalAirport?.name}
                     </p>
                     <p>
-                        {flight.arrivalTime ? dateDiplayFormat({ date: flight.arrivalTime, format: "ddd dd mm", locale: "fa" }) : null}
+                        {flight.arrivalTime ? dateDisplayFormat({ date: flight.arrivalTime, format: "ddd dd mm", locale: "fa" }) : null}
                     </p>
                 </div>
             </div>
