@@ -13,7 +13,7 @@ import CustomHeaderPlugin from "./CustomHeaderRangePicker";
 import Toolbar from "react-multi-date-picker/plugins/toolbar";
 
 import DateObject, { Locale } from "react-date-object";
-import { dateDisplayFormat, DateFormat, persianNumbersToEnglish } from "../../helpers";
+import { dateDisplayFormat, DateFormat, normalizeToDateObject, persianNumbersToEnglish } from "../../helpers";
 
 
 const calendars: Record<
@@ -48,7 +48,8 @@ export interface InternalInputProps {
 }
 
 interface RangePicker2Props<TInputProps> {
-  defaultValue: [DateObject | null, DateObject | null];
+  initialValue?: string[];
+  value: string[];
   onChange: (value: string[]) => void;
   inputProps?: TInputProps;
   Input: React.ComponentType<TInputProps & InternalInputProps>;
@@ -56,14 +57,13 @@ interface RangePicker2Props<TInputProps> {
 
 
 function RangePicker2<TInputProps>({
-  defaultValue,
+  initialValue,
+  value,
   onChange,
   Input,
   inputProps = {} as TInputProps,
 }: RangePicker2Props<TInputProps>) {
   const [isFa, setIsFa] = useState(true);
-  const [innerValue, setInnerValue] =
-    useState<[DateObject | null, DateObject | null]>(defaultValue);
 
   const localeConfig = isFa ? calendars.fa : calendars.en;
 
@@ -72,16 +72,8 @@ function RangePicker2<TInputProps>({
 
 
   useEffect(() => {
-    if (defaultValue[0] || defaultValue[1]) {
-            const tupleString : string[] = [
-         defaultValue[0]? persianNumbersToEnglish(dateDisplayFormat({
-                date: defaultValue[0],
-              })) : '',
-       defaultValue[1] ? persianNumbersToEnglish(dateDisplayFormat({
-                date: defaultValue[1],
-              })) : '',
-      ];
-      onChange(tupleString);
+    if (initialValue && initialValue.length > 0 && (initialValue[0] || initialValue[1])) {
+      onChange(initialValue)
     }
 
     const handleResize = () => {
@@ -96,10 +88,7 @@ function RangePicker2<TInputProps>({
 
   const handleChange = (dates: PickerValue) => {
     if (dates instanceof Array) {
-      const tuple: [DateObject | null, DateObject | null] = [
-        dates[0] ?? null,
-        dates[1] ?? null,
-      ];
+
       const tupleString : string[] = [
          dates[0]? persianNumbersToEnglish(dateDisplayFormat({
                 date: dates[0],
@@ -109,7 +98,6 @@ function RangePicker2<TInputProps>({
               })) : '',
       ];
       
-      setInnerValue(tuple);
       onChange(tupleString);
 
       if (dates.length === 2 && dates[0] && dates[1]) {
@@ -125,10 +113,12 @@ function RangePicker2<TInputProps>({
         }),]
   };
   
+  const normalizedValue =   [normalizeToDateObject(value[0]),normalizeToDateObject(value[1])];
+  
   return (
     <DatePicker
       ref={pickerRef}
-      value={innerValue}
+      value={normalizedValue}
       range
       rangeHover
       calendar={localeConfig.calendar}
@@ -167,7 +157,7 @@ function RangePicker2<TInputProps>({
           key="header"
           position="top"
           isFa={isFa}
-          values={innerValue}
+          values={value}
         />,
       ]}
       render={(value, openCalendar, handleValueChange, locale, separator) => (

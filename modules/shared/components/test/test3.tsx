@@ -20,7 +20,7 @@ import { dateDisplayFormat, persianNumbersToEnglish } from '../../helpers';
 
 type SearchFormValues = {
     airportUrl: string;
-    flightDate: [DateObject | null, DateObject | null];
+    flightDate: [string , string ];
 }
 
 type Props = {
@@ -69,10 +69,10 @@ const TestThree: React.FC<Props> = props => {
     });
     const formInitialValue: {
         airportUrl: string;
-        flightDate: [DateObject | null, DateObject | null];
+        flightDate: [string , string ];
     } = defaultValues || {
             airportUrl: "",
-            flightDate: [null, null],
+            flightDate: ['',''],
         }
 
     const defaultList = cipDefaultAirportOptions;
@@ -145,7 +145,7 @@ const TestThree: React.FC<Props> = props => {
                                 <div className='col-span-2 flex'>
                                     <RangePicker2<OuterProps>
                                         onChange={(v) => setFieldValue('flightDate', v)}
-                                        defaultValue={initialValues.flightDate}
+                                        value={values.flightDate}
                                         Input={CustomRangeInput}
                                         inputProps={{
                                             theme3,

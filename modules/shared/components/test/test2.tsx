@@ -21,7 +21,7 @@ import CustomRangeInput, { OuterProps } from '../ui/CustomRangeInput';
 
 type SearchFormValues = {
     airportUrl: string;
-    rangeDate: [DateObject | null, DateObject | null];
+    rangeDate: [string , string];
 }
 
 type Props = {
@@ -32,7 +32,7 @@ type Props = {
 export type CipRecentSearchItem = {
     url: string;
     airportName:string;
-    rangeDate: string[] | null[];
+    rangeDate:  [string , string];
 }
 
 const TestTow: React.FC<Props> = props => {
@@ -62,11 +62,26 @@ const TestTow: React.FC<Props> = props => {
 
     }
 
+    const today = persianNumbersToEnglish(dateDisplayFormat({date: new DateObject({
+            date: new Date(),
+            format: "YYYY/MM/DD",
+            calendar: persian,
+            locale: persian_fa,
+            })}))
+
+    const tomorrow = persianNumbersToEnglish(dateDisplayFormat({date:new DateObject({
+                date: new Date(new Date().setDate(new Date().getDate() + 1)),
+                format: "YYYY/MM/DD",
+                calendar: persian,
+                locale: persian_fa,
+                })
+                }))
+    
     const formInitialValue: {
         airportUrl: string;
-        rangeDate: [DateObject | null, DateObject | null];
+        rangeDate: [string, string];
     } = defaultValues || {
-        rangeDate:[null,null],
+        rangeDate:[today, tomorrow],
         airportUrl: ""
     }
 
@@ -76,19 +91,8 @@ const TestTow: React.FC<Props> = props => {
 
     const theme1 = process.env.THEME === "THEME1";
 
-    const today = new DateObject({
-    date: new Date(),
-    format: "YYYY/MM/DD",
-    calendar: persian,
-    locale: persian_fa,
-    });
+    
 
-    const tomorrow = new DateObject({
-    date: new Date(new Date().setDate(new Date().getDate() + 1)),
-    format: "YYYY/MM/DD",
-    calendar: persian,
-    locale: persian_fa,
-    });
 
     return (
         <div className={`text-sm ${props.wrapperClassName || ""}`}>
@@ -100,7 +104,7 @@ const TestTow: React.FC<Props> = props => {
                 initialValues={formInitialValue}
                 onSubmit={submitHandle}
             >
-                {({ errors, touched, setFieldValue, values, isValid, isSubmitting }) => {
+                {({ errors, touched, setFieldValue, values, isValid, isSubmitting , initialValues}) => {
 
                     if (isSubmitting && !isValid) {
                         setTimeout(() => {
@@ -109,8 +113,7 @@ const TestTow: React.FC<Props> = props => {
                                 formFirstError.scrollIntoView({ behavior: "smooth" });
                             }
                         }, 100)
-                    }
-
+                    }                    
                     return (
 
                         <Form autoComplete='off' >
@@ -189,7 +192,8 @@ const TestTow: React.FC<Props> = props => {
                                 )}
                                 <div className='col-span-2'>
                                     <RangePicker2<OuterProps>
-                                        defaultValue={[today, tomorrow]}
+                                        initialValue={initialValues.rangeDate}
+                                        value={values.rangeDate}
                                         onChange={(v) => setFieldValue("rangeDate", v)}
                                         Input={CustomRangeInput}
                                         inputProps={{
