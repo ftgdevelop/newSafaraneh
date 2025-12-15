@@ -43,11 +43,10 @@ export type DateFormat =
   | "YYYY/MM/DD"
   | "yyyy/mm/dd h:m";
 
-  type AppLocale = "fa" | "en";
 interface DateDisplayFormatArgs {
   date: DateObject | string;
   format?: DateFormat;
-  locale?: AppLocale;
+  locale?: string;
 }
 export const dateDisplayFormat = ({
   date,

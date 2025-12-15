@@ -514,7 +514,7 @@ const HotelList: NextPage<Props> = props => {
 
   const cityName = hotels && hotels[0]?.city?.name || "";
 
-  const domesticHotelDefaultDates: [DateObject, DateObject] = [checkin, checkout];
+  const domesticHotelDefaultDates: [string, string] = [checkin, checkout];
 
   const defaultDestination: EntitySearchResultItemType = {
     name: entity?.EntityName,

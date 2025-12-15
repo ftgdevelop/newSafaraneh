@@ -12,17 +12,15 @@ import FormikField from '@/modules/shared/components/ui/FormikField';
 import { cipDefaultAirportOptions } from './defaultList';
 import { CipAutoCompleteType, CipRecentSearchItem } from '../../types/cip';
 import AutoCompleteZoom from '@/modules/shared/components/ui/AutoCompleteZoom';
-// import { localeFa } from '@mobiscroll/react';
-import { dateDisplayFormat, dateFormat } from '@/modules/shared/helpers';
+import { dateDisplayFormat } from '@/modules/shared/helpers';
 import DatePicker2 from '@/modules/shared/components/ui/DatePicker2';
 import CipDatePickerInput, { CipInputProps } from '@/modules/shared/components/ui/CipDatePickerInput';
-import { DateObject } from 'react-multi-date-picker';
 
 type SearchFormValues = {
     airportUrl: string;
     airlineName: string;
     flightNumber: string;
-    flightDate: DateObject | null;
+    flightDate: string;
 }
 
 type Props = {
@@ -100,10 +98,10 @@ const SearchForm: React.FC<Props> = props => {
         airportUrl: string;
         airlineName: string;
         flightNumber: string;
-        flightDate: DateObject | null;
+        flightDate: string;
     } = defaultValues || {
         airlineName: "",
-        flightDate: null,
+        flightDate: '',
         flightNumber: "",
         airportUrl: ""
     }

@@ -12,7 +12,7 @@ import { dateDisplayFormat, persianNumbersToEnglish } from '../../helpers';
 
 type SearchFormValues = {
     airlineName : string;
-    flightDate: DateObject | null;
+    flightDate: string;
 }
 
 type Props = {
@@ -36,33 +36,17 @@ const TestOne: React.FC<Props> = props => {
 
 
     const submitHandle = (values: SearchFormValues) => {
-        const finalValues: Record<string, any> = {};
 
-        Object.entries(values).forEach(([key, value]) => {
-            if (value instanceof DateObject) {
-                let formatted = dateDisplayFormat({
-                    date: value,
-                    locale: "en",
-                });
-
-                formatted = persianNumbersToEnglish(formatted);
-
-                finalValues[key] = formatted;
-            } else {
-                finalValues[key] = value;
-            }
-        });
-
-        console.log({finalValues});
+        console.log({values});
         
     };
 
     const formInitialValue: {
         airlineName: string;
-        flightDate: DateObject | null;
+        flightDate: string;
     } = defaultValues || {
         airlineName: "",
-        flightDate: null,
+        flightDate: '',
     }
 
 
