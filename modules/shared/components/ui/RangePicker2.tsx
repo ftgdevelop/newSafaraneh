@@ -106,13 +106,18 @@ function RangePicker2<TInputProps>({
     }
 
   };
-  const propsAnimations = isMobile ? {} : {animations : [opacity(),
+const propsAnimations = isMobile
+  ? {}
+  : {
+      animations: [
         transition({
           from: 40,
-          transition: "all 400ms cubic-bezier(0.335, 0.010, 0.030, 1.360)",
-        }),]
-  };
-  
+          to: 0,
+          property: "translateY",
+          transition: "all 400ms cubic-bezier(0.4, 0.0, 0.2, 1)",
+        }),
+      ],
+    };
   const normalizedValue =   [normalizeToDateObject(value[0]),normalizeToDateObject(value[1])];
   
   return (

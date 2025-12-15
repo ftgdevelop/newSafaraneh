@@ -13,6 +13,7 @@ import CustomToolbar from "./CustomToolbar";
 
 import { dateDisplayFormat, DateFormat, normalizeToDateObject, persianNumbersToEnglish } from "../../helpers";
 import opacity from "react-element-popper/animations/opacity";
+import transition from "react-element-popper/animations/transition";
 
 
 export const calendars: Record<
@@ -115,7 +116,12 @@ function DatePicker2<TInputProps>({
       showOtherDays
       portal
       animations={[
-        opacity({ from: 0.1, to: 1, duration: 1000 })
+        transition({
+          from: 40,
+          to: 0,
+          property: "translateY",
+          transition: "all 400ms cubic-bezier(0.4, 0.0, 0.2, 1)",
+        }),
       ]} 
       className={`datepicker-single-screen ${className ?? ""} [&_.rmdp-week-day]:text-black`}
       plugins={[
