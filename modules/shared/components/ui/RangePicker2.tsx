@@ -93,7 +93,7 @@ function RangePicker2<TInputProps>({
          dates[0]? persianNumbersToEnglish(dateDisplayFormat({
                 date: dates[0],
               })) : '',
-       dates[1] ? persianNumbersToEnglish(dateDisplayFormat({
+          dates[1] ? persianNumbersToEnglish(dateDisplayFormat({
                 date: dates[1],
               })) : '',
       ];
