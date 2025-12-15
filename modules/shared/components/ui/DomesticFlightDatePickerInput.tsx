@@ -73,7 +73,7 @@ export default function DomesticFlightDatePickerInput({
         onClick={handleOpenCalendar}
         value={value}
         className={`w-full h-12 text-xs rtl:rounded-lg rtl:pr-10 ltr:pl-10 
-          ${theme3 ? "bg-neutral-200 pt-5" : "border border-neutral-400 pt-5 leading-4"}
+          ${theme3 ? "bg-neutral-200 py-5" : "border border-neutral-400 pt-5 leading-4"}
         `}
       />
         {isTouched && errors && <div className='text-xs text-red-500'> {errors as string}</div>}
