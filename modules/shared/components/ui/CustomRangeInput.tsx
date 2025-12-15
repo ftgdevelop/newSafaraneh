@@ -53,7 +53,7 @@ function CustomRangeInput({
     const theme3 = process.env.THEME === "THEME3";
 
     return (
-        <div className={`${show ? "grid w-full grid-cols-2" : "hidden"} ${theme3 ? "gap-x-1" : ""}`}>
+        <div className={`${show ? "grid w-full grid-cols-2" : "hidden"} ${theme3 ? "gap-x-1" : ""} ${isFa ? 'font-vazir': 'font-sans'}`}>
             {theme3 && (
                 <>
                     <label htmlFor="checkin_date" className="text-sm">

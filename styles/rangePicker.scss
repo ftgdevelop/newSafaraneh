@@ -1,3 +1,11 @@
+.font-fa{
+  font-family: 'samim' 'vazir';
+}
+.font-en{
+  font-family:sans-serif
+
+}
+
 .rmdp-container {
     width: 100%;
   }
@@ -6,41 +14,41 @@
         font-weight: 700;
     }
 }
-  .rmdp-header-values{
-    font-size: 18px;
-  }
-  .rmdp-week-day{
-    font-size: 10px;
-    justify-content: start;
-  }
-  .rmdp-week {
-      & .rmdp-day{
-        display: flex;
-        justify-content: start;
-        align-items: center;
+.rmdp-header-values{
+  font-size: 18px;
+}
+.rmdp-week-day{
+  font-size: 10px;
+  justify-content: start;
+}
+.rmdp-week {
+    & .rmdp-day{
+      display: flex;
+      justify-content: start;
+      align-items: center;
+      aspect-ratio: 1;
+      height: auto;
+      span{
         aspect-ratio: 1;
-        height: auto;
-        span{
-          aspect-ratio: 1;
-        }
       }
-  }
-  .rmdp-day-picker{
+    }
+}
+.rmdp-day-picker{
+  width: 100%;
+  div{
     width: 100%;
-    div{
-      width: 100%;
-    }
   }
-  .rmdp-arrow-container{
-    width: 30px;
-    height: 30px;
-    align-items: center;
-    .rmdp-arrow{
-      margin-top: 0;
-      width: 12px;
-      height: 12px;
-    }
+}
+.rmdp-arrow-container{
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  .rmdp-arrow{
+    margin-top: 0;
+    width: 12px;
+    height: 12px;
   }
+}
 
 @media screen and (width > 768px) {
    div:has(> div > div[role='dialog']) {

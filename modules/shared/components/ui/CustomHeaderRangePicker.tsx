@@ -21,7 +21,7 @@ export default function CustomHeaderPlugin({
 
   
   return (
-    <header className="mobi-date-picker-header max-md:hidden px-5 py-3 border-b border-neutral-300 flex max-md:justify-center justify-end items-center gap-5 text-sm h-12">
+    <header className={`mobi-date-picker-header max-md:hidden px-5 py-3 border-b border-neutral-300 flex max-md:justify-center justify-end items-center gap-5 text-sm h-12 ${isFa ? 'font-vazir': 'font-sans'}`}>
       <div
         className={`font-semibold text-sm border-b-2 border-transparent ${
           values && values[0] && !values[1] ? "border-blue-600" : ""

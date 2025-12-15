@@ -136,7 +136,7 @@ const propsAnimations = isMobile
       onChange={handleChange}
       arrow={false}
       showOtherDays
-      className="range-datepicker"
+      className={`range-datepicker ${isFa ? 'font-fa' : 'font-en'}`}
       portal
       {...propsAnimations}
       plugins={[

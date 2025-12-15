@@ -19,6 +19,7 @@ interface InternalInputProps {
   handleValueChange: (e: React.ChangeEvent<Element>) => void;
   locale: Locale;
   separator: string;
+  isFa: boolean;
 }
 
 type Props = CipInputProps & InternalInputProps;
@@ -32,12 +33,13 @@ export default function CipDatePickerInput({
   isTouched,
   fieldClassName = "",
   label,
+  isFa,
   validateFunction
 }: Props) {
   
   
   return (
-    <div className="relative ">
+    <div className={`relative ${isFa ? 'font-vazir': 'font-sans'}`}>
       {
          !errorText && <Calendar className="w-5 h-5 fill-neutral-600 top-1/2 -translate-y-1/2 right-3 absolute pointer-events-none" />
       }

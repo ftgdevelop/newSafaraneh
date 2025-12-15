@@ -10,6 +10,7 @@ export interface DomesticFlightInputProps {
   isTouched?: boolean;
   errors?: string;
   
+  
 }
 
 interface InternalInputProps {
@@ -17,6 +18,7 @@ interface InternalInputProps {
   openCalendar: () => void;
   locale: Locale;
   separator: string;
+  isFa: boolean;
 }
 
 type Props = DomesticFlightInputProps & InternalInputProps;
@@ -29,6 +31,7 @@ export default function DomesticFlightDatePickerInput({
   label,
   isTouched,
   errors,
+  isFa,
   ...props
 }: Props) {
   const theme2 = process.env.THEME === "THEME2";
@@ -74,7 +77,7 @@ export default function DomesticFlightDatePickerInput({
         value={value}
         className={`w-full h-12 text-xs rtl:rounded-lg rtl:pr-10 ltr:pl-10 
           ${theme3 ? "bg-neutral-200 py-5" : "border border-neutral-400 pt-5 leading-4"}
-        `}
+        ${isFa ? 'font-vazir': 'font-sans'}`}
       />
         {isTouched && errors && <div className='text-xs text-red-500'> {errors as string}</div>}
         {isEnd && isDisabled && (
