@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { localeFa } from "@mobiscroll/react";
-import RangePicker from "@/modules/shared/components/ui/RangePicker";
 import SelectCounter from "@/modules/accommodation/components/shared/SelectCounter";
 import Button from "@/modules/shared/components/ui/Button";
+import RangePicker2 from "@/modules/shared/components/ui/RangePicker2";
+import CustomRangeInput, { OuterProps } from "@/modules/shared/components/ui/CustomRangeInput";
 
 type Props = {
   defaultDates?: [string, string];
@@ -38,11 +38,10 @@ const UpdateFormModal: React.FC<Props> = ({ defaultDates, defaultCapacity, onSav
   return (
     <div className="update-form">
       <div className="mb-4">
-        <RangePicker
+        <RangePicker2<OuterProps>
           value={[checkinState, checkoutState]}
           onChange={dateChangeHandle}
-          rtl
-          locale={localeFa}
+          Input={CustomRangeInput}
         />
       </div>
 

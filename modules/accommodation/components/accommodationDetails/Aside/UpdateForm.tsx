@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { localeFa } from "@mobiscroll/react";
+// import { localeFa } from "@mobiscroll/react";
 import RangePicker from "@/modules/shared/components/ui/RangePicker";
 import SelectCounter from "@/modules/accommodation/components/shared/SelectCounter";
 
@@ -36,14 +36,15 @@ const UpdateForm: React.FC<Props> = ({ defaultDates, defaultCapacity, onUpdate }
 
   return (
     <div className="update-form">
-      <div className="mb-4">
+      {/* !! Todo change this range with range picker 2  */}
+      {/* <div className="mb-4">
         <RangePicker
           value={[checkinState, checkoutState]}
           onChange={dateChangeHandle}
           rtl
           locale={localeFa}
         />
-      </div>
+      </div> */}
 
       <div className="my-8 flex justify-between items-center">
         <label className="block text-sm font-bold mb-2">تعداد مسافران</label>

@@ -1,7 +1,4 @@
 import React from "react";
-import { dateFormat, numberWithCommas } from "@/modules/shared/helpers";
-import "@mobiscroll/react/dist/css/mobiscroll.min.css";
-import { Datepicker as MobiscrollDatepicker, localeFa, MbscCalendarLabel } from "@mobiscroll/react";
 
 // type Props = {
 //   calendar: { date: string; price: number; isBookable: boolean }[];
@@ -49,13 +46,13 @@ const PriceCalendar: React.FC<Props> = ({ calendar, selectedDates, onDateSelect 
   //   date: convertJalaliToGregorian(item.date),
   // }));
 
-  const labels: MbscCalendarLabel[] = calendar.map((item) => ({
-    title: item.isBookable
-      ? `${numberWithCommas(item.price)}${item.isInstant ? ' ⚡️' : ''}`
-      : "غیرقابل رزرو",
-    textColor: item.isBookable ? "#555" : "red",
-    date: convertJalaliToGregorian(item.date),
-  }));
+  // const labels: MbscCalendarLabel[] = calendar.map((item) => ({
+  //   title: item.isBookable
+  //     ? `${numberWithCommas(item.price)}${item.isInstant ? ' ⚡️' : ''}`
+  //     : "غیرقابل رزرو",
+  //   textColor: item.isBookable ? "#555" : "red",
+  //   date: convertJalaliToGregorian(item.date),
+  // }));
 
   const handleDateChange = (selectedRange: string[]) => {
     if (onDateSelect) {
@@ -70,20 +67,21 @@ const PriceCalendar: React.FC<Props> = ({ calendar, selectedDates, onDateSelect 
     }
   };
 
-  return (
-    <MobiscrollDatepicker
-      cssClass="price-calendar"
-      display="inline"
-      touchUi={false}
-      locale={localeFa}
-      labels={labels}
-      select="range"
-      value={value}
-      showRangeLabels={false}
-      min={dateFormat(new Date())}
-      onSet={(event: { value: string[] }) => handleDateChange(event.value)}
-    />
-  );
+  return 'PriceCalendar'
+  // !this return must be 
+    // <DatePicker2
+    //   cssClass="price-calendar"
+    //   display="inline"
+    //   touchUi={false}
+    //   locale={localeFa}
+    //   labels={labels}
+    //   select="range"
+    //   value={value}
+    //   showRangeLabels={false}
+    //   min={dateFormat(new Date())}
+    //   onSet={(event: { value: string[] }) => handleDateChange(event.value)}
+    // />
+  
 };
 
 export default PriceCalendar;
