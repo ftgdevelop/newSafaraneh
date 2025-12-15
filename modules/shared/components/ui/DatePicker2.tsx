@@ -48,7 +48,7 @@ export interface InternalInputProps {
 
 
 interface DatePicker2Props<TInputProps> {
-  value: DateObject | null;
+  value: string;
   onChange: (value: string) => void;
   isFa: boolean;
   setIsFa: (x: boolean) => void;

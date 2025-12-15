@@ -1,13 +1,15 @@
 import React from "react";
 import { Locale } from "react-date-object";
 import { Calendar, CalendarFill, Minus } from "./icons";
-import { useTranslation } from "next-i18next";
 
 export interface DomesticFlightInputProps {
   isEnd?: boolean;
   isDisabled?: boolean;
   handleRoundTrip?: () => void;
   label: string;
+  isTouched?: boolean;
+  errors?: string;
+  
 }
 
 interface InternalInputProps {
@@ -25,6 +27,8 @@ export default function DomesticFlightDatePickerInput({
   isEnd = false,
   isDisabled = false,
   label,
+  isTouched,
+  errors,
   ...props
 }: Props) {
   const theme2 = process.env.THEME === "THEME2";
@@ -32,11 +36,8 @@ export default function DomesticFlightDatePickerInput({
 
   const handleOpenCalendar = () => {     
     props?.handleRoundTrip?.();
-    if (!isDisabled) {      
-      openCalendar()
-    }
+    openCalendar()
   }
-console.log({label});
 
   return (
     <div className="relative w-full">
@@ -64,12 +65,12 @@ console.log({label});
           ${theme3 ? "bg-neutral-200 pt-5" : "border border-neutral-400 pt-5 leading-4"}
         `}
       />
-
-      {isEnd && isDisabled && (
-        <div className="p-1 border border-neutral-300 rounded bg-neutral-600 top-1/2 -mt-3 absolute left-3">
-          <Minus className="w-4 h-4 fill-white" />
-        </div>
-      )}
+        {isTouched && errors && <div className='text-xs text-red-500'> {errors as string}</div>}
+        {isEnd && isDisabled && (
+          <div className="p-1 border border-neutral-300 rounded bg-neutral-600 top-1/2 -mt-3 absolute left-3">
+            <Minus className="w-4 h-4 fill-white" />
+          </div>
+        )}
     </div>
   );
 };
