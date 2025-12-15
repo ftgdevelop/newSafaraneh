@@ -40,12 +40,23 @@ export default function DomesticFlightDatePickerInput({
   }
 
   return (
-    <div className="relative w-full">
+    <>
+      {theme3 && label && (
+        <label
+          className={'text-sm '}
+        >
+          {label}
+        </label>
+      )}
+          <div className="relative w-full">
+      
       {theme2 ? (
         <CalendarFill className="w-5 h-5 fill-neutral-600 top-1/2 -translate-y-1/2 right-3 absolute pointer-events-none" />
       ) : (
         <Calendar className="w-5 h-5 fill-neutral-600 top-1/2 -translate-y-1/2 right-3 absolute pointer-events-none" />
       )}
+
+
 
       {!theme3 && label && (
         <label
@@ -72,5 +83,8 @@ export default function DomesticFlightDatePickerInput({
           </div>
         )}
     </div>
+    
+    </>
+
   );
 };

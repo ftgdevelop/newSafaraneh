@@ -272,6 +272,7 @@ const SearchForm: React.FC<Props> = ({
 
 
 
+    const theme1 = process.env.THEME === "THEME1";
     const theme2 = process.env.THEME === "THEME2";
 
     let buttonInnerHtml : ReactNode = t('search');

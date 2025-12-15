@@ -91,9 +91,6 @@ const TestTow: React.FC<Props> = props => {
 
     const theme1 = process.env.THEME === "THEME1";
 
-    
-
-
     return (
         <div className={`text-sm ${props.wrapperClassName || ""}`}>
             <div className='pb-6 font-semibold text-lg'>
@@ -198,7 +195,7 @@ const TestTow: React.FC<Props> = props => {
                                         Input={CustomRangeInput}
                                         inputProps={{
                                             isTouched: touched.rangeDate,
-                                            validateFunction:(value: string) => validateRequied(value, "تاریخ پرواز را وارد کنید")
+                                            validateFunction: (value: string) => validateRequied(value, "تاریخ پرواز را وارد کنید"),
                                         }}
                                     />
                                 </div>

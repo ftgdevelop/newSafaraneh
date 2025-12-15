@@ -7,9 +7,6 @@ import { dateDisplayFormat, persianNumbersToEnglish } from "../../helpers";
 
 export interface OuterProps {
     show?: boolean;
-    theme1?: boolean;
-    theme2?: boolean;
-    theme3?: boolean;
     isTouched?: boolean;
     validateFunction?: (value: any) => string | undefined;
 }
@@ -31,9 +28,6 @@ function CustomRangeInput({
     separator = "~",
     isFa = false,
     show = true,
-    theme1 = false,
-    theme2 = false,
-    theme3 = false,
     validateFunction,
     isTouched
 }: Props) {
@@ -53,6 +47,10 @@ function CustomRangeInput({
 
         endValue = values[1] ?? ''
     }
+
+    const theme1 = process.env.THEME === "THEME1";
+    const theme2 = process.env.THEME === "THEME2";
+    const theme3 = process.env.THEME === "THEME3";
 
     return (
         <div className={`${show ? "grid w-full grid-cols-2" : "hidden"} ${theme3 ? "gap-x-1" : ""}`}>
