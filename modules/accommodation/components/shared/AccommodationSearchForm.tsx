@@ -47,9 +47,9 @@ const AccommodationSearchForm: React.FC<Props> = (props) => {
         setSelectedDestination(props.defaultDestination);
     }, [props.defaultDestination]);
 
-    const dateChangeHandle = (event: any) => {
-        if (event.value[0] && event.value[1]) {
-            setDates(event.value);
+    const dateChangeHandle = (value: any) => {
+        if (value[0] && value[1]) {
+            setDates(value);
         }
     };
 
@@ -283,7 +283,7 @@ const AccommodationSearchForm: React.FC<Props> = (props) => {
             <div
                 className={`relative z-10 ${theme3 ? "flex sm:grow" : "col-span-1 md:col-span-3"}`}
             >
-                <RangePicker2 initialValue={dates} onChange={dateChangeHandle} value={dates}                     Input={CustomRangeInput}
+                <RangePicker2 initialValue={dates} onChange={dateChangeHandle} value={dates}Input={CustomRangeInput}
 />
             </div>
 
