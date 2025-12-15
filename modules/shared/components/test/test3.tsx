@@ -148,7 +148,6 @@ const TestThree: React.FC<Props> = props => {
                                         value={values.flightDate}
                                         Input={CustomRangeInput}
                                         inputProps={{
-                                            theme3,
                                             isTouched: touched.flightDate,
                                             validateFunction:(value: string) => validateRequied(value, "تاریخ  را وارد کنید")
                                         }}
