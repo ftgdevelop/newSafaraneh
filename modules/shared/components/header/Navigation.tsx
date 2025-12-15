@@ -54,6 +54,13 @@ const Navigation: React.FC = () => {
                 >
                     {t('blog')}
                 </Link>}
+                
+                {!!(process.env.PROJECT_MODULES?.includes("Accommodation")) && <Link
+                    href='/accommodation-home'
+                    className={linkClassName}
+                >
+                    {t('accommodation')}
+                </Link>}
 
                 {/* <div>
                 <Link href='/organizational-reservation' className={linkClassName} > {t('organizational-reservation')} </Link>

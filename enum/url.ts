@@ -9,7 +9,15 @@
 export const Header = {
     "Content-Type": "application/json",
     "Accept-Language": "en-US",
-    "apikey": process.env.PROJECT_SERVER_APIKEY,
+    "apikey": process.env.PROJECT_SERVER_APIKEY,    
+    // "tenantid": process.env.PROJECT_SERVER_TENANTID,
+  };
+
+  export const HeaderAccommodation = {
+    "Content-Type": "application/json",
+    "accept": "text/plain",
+    "Accept-Language": "fa-IR",
+    "apikey": process.env.PROJECT_ACCOMMODATION_APIKEY,
     // "tenantid": process.env.PROJECT_SERVER_TENANTID,
   };
   //to do: static header parameters!
@@ -29,7 +37,8 @@ export const Header = {
     Cip: process.env.PROJECT_SERVER_CIP,
     ShabCRM: process.env.PROJECT_SERVER_SHAB_CRM,
     Traveler : process.env.PROJECT_SERVER_TRAVELER,
-    Strapi : process.env.PROJECT_SERVER_STRAPI
+    Strapi : process.env.PROJECT_SERVER_STRAPI,
+    Accommodation_Data: process.env.PROJECT_SERVER_ACCOMMODATION_DATA
   };
 
   export const Cms = {
@@ -156,10 +165,28 @@ export const Flight = {
     Delete:"/api/services/app/Passenger/Delete"
   }
   
+  export const Accommodation = {
+    GetEntity: "/api/services/app/Entity/GetAll",
+    SearchFilter: "/api/services/app/Booking/SearchFilter",
+    Availability: "/api/services/app/Booking/Availability",
+    GetBySlug: "/api/services/app/Entity/GetBySlug",
+    GetHouse: "/api/services/app/Booking/GetHouse",
+    CancellationRules: "/api/services/app/Booking/CancellationRules",
+    Calendar: "/api/services/app/Booking/Calendar",
+    Review: "/api/services/app/Booking/Review",
+    Similer: "/api/services/app/Booking/Similer",
+    Validate: "/api/services/app/Booking/Validate",
+    PreReserve: "/api/services/app/Booking/PreReserve",
+    GetValidate: "/api/services/app/Booking/GetValidate",
+    Confirm: "/api/services/app/Booking/Confirm",
+    GetAllChats: "/api/services/app/Chat/GetAll",
+    CreateChat: "/api/services/app/Chat/Create",
+  };
+
   export const ServerStatus = {
     Success: 1,
     Error: 2,
     SummaryError: 3,
   };
 
-  
+

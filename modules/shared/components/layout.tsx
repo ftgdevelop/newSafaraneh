@@ -11,7 +11,7 @@ import Notification from "./Notification";
 import { setProgressLoading } from "../store/stylesSlice";
 import { FooterStrapi } from "../types/common";
 import Script from "next/script";
-import { GTM_ID } from "../helpers";
+//import { GTM_ID } from "../helpers";
 
 type Props = {
   logo: string;
@@ -109,7 +109,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
   }
   const theme3 = process.env.THEME === "THEME3";
 
-  if(  theme3 && (router.pathname === "/" || router.pathname === "/hotels-home" || router.pathname === "/flights-home")){
+  if( theme3 && (router.pathname === "/" || router.pathname === "/hotels-home" || router.pathname === "/flights-home" || router.pathname === "/accommodation")){
     showHeader = false;
   }
 
@@ -145,7 +145,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
         {props.scripts}
       </Script>}
 
-      {isHotelban && GTM_ID ? <script
+      {/* {isHotelban && GTM_ID ? <script
           id="google_tag_manager_2"
           dangerouslySetInnerHTML={{
               __html:`window.dataLayer = window.dataLayer || [];
@@ -153,7 +153,7 @@ const Layout: React.FC<PropsWithChildren<Props>> = props => {
                       gtag('js', new Date());
                       gtag('config', ${GTM_ID});`
           }}
-      /> : null}
+      /> : null} */}
 
 
     </div>

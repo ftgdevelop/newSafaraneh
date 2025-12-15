@@ -114,12 +114,14 @@ const CipPassengerItem: React.FC<Props> = props => {
 
         const minBirthDate = dateFormat(goBackYears(new Date(), 2));
         if( traveler.birthDate && checkDateIsAfterDate(new Date(traveler.birthDate) ,new Date(minBirthDate) )){
-            setFieldValue(`passengers.${passengerIndex}.passengerType`, "Child" || "", true);
+            setFieldValue(`passengers.${passengerIndex}.passengerType`, "Child" , true);
             updatePassenger("type", "Child");
         }else{
-            setFieldValue(`passengers.${passengerIndex}.passengerType`, "Adult" || "", true);
+            setFieldValue(`passengers.${passengerIndex}.passengerType`, "Adult" , true);
             updatePassenger("type", "Adult");
         }
+
+        
 
     }
 

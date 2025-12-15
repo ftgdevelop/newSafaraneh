@@ -41,6 +41,7 @@ const Footer: React.FC<Props> = props => {
     const theme2 = process.env.THEME === "THEME2";
 
     const isHotelBan =process.env.PROJECT === "HOTELBAN";
+
     const isShab =process.env.PROJECT === "SHAB";
 
     const theme3 = process.env.THEME === "THEME3";
@@ -154,7 +155,7 @@ const Footer: React.FC<Props> = props => {
                         <Image src='/images/footer/resaneh.png' className="h-12 sm:h-18 object-contain" alt='' width={60} height={72} />
                     </a> */}
 
-                        {!!props.samandehi && <a
+                        {/* {!!props.samandehi && <a
                             href={props.samandehi}
                             target="_blank"
                             title="logo-samandehi"
@@ -168,7 +169,18 @@ const Footer: React.FC<Props> = props => {
                                 width="70"
                                 height="75"
                             />
-                        </a>}
+                        </a>} */}
+
+                        <img 
+                            referrerPolicy='origin' 
+                            id = 'rgvjjzpejzpeoeukrgvjwlao' 
+                            style ={{cursor: "pointer"}}
+                            onClick = {() => {
+                                window.open("https://logo.samandehi.ir/Verify.aspx?id=377834&p=xlaojyoejyoemcsixlaoaods", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")
+                            }} 
+                            alt = 'logo-samandehi' 
+                            src = 'https://logo.samandehi.ir/logo.aspx?id=377834&p=qftiyndtyndtaqgwqftishwl' 
+                        />
 
                     </div>
 

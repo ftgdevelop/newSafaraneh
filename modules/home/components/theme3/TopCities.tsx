@@ -13,43 +13,43 @@ const TopCities: React.FC = () => {
     }[] = [
             {
                 title: "هتل های تهران",
-                url: "/hotels/هتل-های-تهران",
+                url: "/hotels/هتل-های-تهران/locationId-164",
                 imageUrl: "/images/home/theme3/cities/tehran.jpg",
                 subtitle: "122 هتل"
             },
             {
                 title: "هتل های اصفهان",
-                url: "/hotels/هتل-های-اصفهان",
+                url: "/hotels/هتل-های-اصفهان/locationId-166",
                 imageUrl: "/images/home/theme3/cities/isfahan.jpg",
                 subtitle: "89 هتل"
             },
             {
                 title: "هتل های مشهد",
-                url: "/hotels/هتل-های-مشهد",
+                url: "/hotels/هتل-های-مشهد/locationId-168",
                 imageUrl: "/images/home/theme3/cities/mashad.jpg",
                 subtitle: "190 هتل"
             },
             {
                 title: "هتل های شیراز",
-                url: "/hotels/هتل-های-شیراز",
+                url: "/hotels/هتل-های-شیراز/locationId-215",
                 imageUrl: "/images/home/theme3/cities/shiraz.jpg",
                 subtitle: "102 هتل"
             },
             {
                 title: "هتل های کیش",
-                url: "/hotels/هتل-های-جزیره-کیش",
+                url: "/hotels/هتل-های-جزیره-کیش/locationId-187",
                 imageUrl: "/images/home/theme3/cities/kish.jpg",
                 subtitle: "80 هتل"
             },
             {
                 title: "هتل های تبریز",
-                url: "/hotels/هتل-های-تبریز",
+                url: "/hotels/هتل-های-تبریز/locationId-112",
                 imageUrl: "/images/home/theme3/cities/tabriz.jpg",
                 subtitle: "72 هتل"
             },
             {
                 title: "هتل های قشم",
-                url: "/hotels/هتل-های-جزیره-قشم",
+                url: "/hotels/هتل-های-جزیره-قشم/locationId-137",
                 imageUrl: "/images/home/theme3/cities/qeshm.jpg",
                 subtitle: "75 هتل"
             }
