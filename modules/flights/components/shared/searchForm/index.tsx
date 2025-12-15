@@ -67,6 +67,7 @@ const SearchFormInner: React.FC<InnerProps> = ({
                         setFieldValue,
                         startField: 'departureDate',
                         endField: 'returnDate',
+                        isFa,
                     });
                     if (isSubmitting && !isValid) {
                         setTimeout(() => {

@@ -49,8 +49,7 @@ const CustomToolbar: React.FC<CustomToolbarProps> = ({
 
   function selectToday() {
     const today = new DateObject({date : new Date, calendar, locale, format });
-console.log(today);
-
+    
     if (range) {
       onChange([today, null]);
     } else {

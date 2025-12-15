@@ -12,7 +12,6 @@ import Toolbar from "react-multi-date-picker/plugins/toolbar";
 import CustomToolbar from "./CustomToolbar";
 
 import { dateDisplayFormat, DateFormat, normalizeToDateObject, persianNumbersToEnglish } from "../../helpers";
-import opacity from "react-element-popper/animations/opacity";
 import transition from "react-element-popper/animations/transition";
 
 
@@ -60,8 +59,6 @@ interface DatePicker2Props<TInputProps> {
 }
 
 
-
-
 function DatePicker2<TInputProps>({
   value,
   onChange,
@@ -89,6 +86,7 @@ function DatePicker2<TInputProps>({
   };
 
   const handleChange = (v: DateObject | null) => {
+    console.log('89', v);
     
       const date = v ? persianNumbersToEnglish(dateDisplayFormat({
         date: v,
@@ -97,13 +95,11 @@ function DatePicker2<TInputProps>({
       onChange(date);
   }
 
-  const normalizedValue = normalizeToDateObject(value);
+  const normalizedValue = normalizeToDateObject(value, { localeKey: isFa ? "fa" : "en" });
   
-  
-
   return (
     <DatePicker
-      value={normalizedValue}
+      value={normalizedValue || null}
       onChange={handleChange}
       calendar={localeConfig.calendar}
       locale={localeConfig.locale}

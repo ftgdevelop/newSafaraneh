@@ -53,6 +53,7 @@ export const dateDisplayFormat = ({
   format,
   locale = "en",
 }: DateDisplayFormatArgs): string => {
+
   if (!date) return "";
     let obj: DateObject;
   if (locale === "fa") {
@@ -109,30 +110,39 @@ export const normalizeToDateObject = (
     return value;
   }
 
-  const isFa = options.localeKey === "fa";
+  const localeKey = options.localeKey ?? "en";
 
-  const calendar = isFa ? persian : gregorian;
-  const locale = isFa ? persian_fa : gregorian_en;
+  //! input is always gregorian
+  const inputCalendar = gregorian;
+  const inputLocale = gregorian_en;
+
   const format = options.format ?? "YYYY-MM-DD";
 
-  if (value instanceof Date) {
-    return new DateObject({
-      date: value,
-      calendar,
-      locale,
-    });
-  }
+  let dateObject: DateObject;
 
-  if (typeof value === "string") {
-    return new DateObject({
+  if (value instanceof Date) {
+    dateObject = new DateObject({
+      date: value,
+      calendar: inputCalendar,
+      locale: inputLocale,
+    });
+  } else if (typeof value === "string") {
+    dateObject = new DateObject({
       date: value,
       format,
-      calendar,
-      locale,
+      calendar: inputCalendar,
+      locale: inputLocale,
     });
+  } else {
+    return null;
   }
 
-  return null;
+  // ! just for show is gonna change
+  if (localeKey === "fa") {
+    return dateObject.convert(persian, persian_fa);
+  }
+
+  return dateObject.convert(gregorian, gregorian_en);
 };
 
 export const dateFormat = (date: Date) => {

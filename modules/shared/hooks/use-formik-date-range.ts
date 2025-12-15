@@ -20,6 +20,8 @@ type UseFormikDateRangeParams<T extends FormikValues> = {
   endField: keyof T | string;
 
   minGapDays?: number;
+
+  isFa: boolean;
 };
 
 export function useFormikDateRange<T extends FormikValues>({
@@ -28,6 +30,7 @@ export function useFormikDateRange<T extends FormikValues>({
   startField,
   endField,
   minGapDays = 1,
+  isFa
 }: UseFormikDateRangeParams<T>) {
   const [minEndDate, setMinEndDate] = useState<Date>(
     new Date(new Date().setDate(new Date().getDate() + minGapDays))
@@ -39,8 +42,8 @@ export function useFormikDateRange<T extends FormikValues>({
 
     if (!startValue) return;
 
-    const startDate = normalizeToDateObject(startValue)?.toDate();
-    const endDate = normalizeToDateObject(endValue)?.toDate();
+    const startDate = normalizeToDateObject(startValue, { localeKey: isFa ? "fa" : "en" })?.toDate();
+    const endDate = normalizeToDateObject(endValue,    { localeKey: isFa ? "fa" : "en" })?.toDate();
 
     if (!startDate) return;
 
