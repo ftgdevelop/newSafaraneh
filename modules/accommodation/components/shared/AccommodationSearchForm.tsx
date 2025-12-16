@@ -9,12 +9,11 @@ import { ArrowLeft, Home2, Loading, Location, SearchTheme3, Village } from "../.
 import { EntitySearchResultItemType, AccommodationRecentSearchItem } from "@/modules/accommodation/types/accommodation";
 import { useAppDispatch } from "@/modules/shared/hooks/use-store";
 import { setReduxError } from "@/modules/shared/store/errorSlice";
-import RangePicker from "../../../shared/components/ui/RangePicker";
 import Button from "../../../shared/components/ui/Button";
 import SelectPassengers from "./SelectPassengers";
 import Link from "next/link";
-import RangePicker2 from "@/modules/shared/components/ui/RangePicker2";
 import CustomRangeInput from "@/modules/shared/components/ui/CustomRangeInput";
+import MultiRangePicker from "@/modules/shared/components/ui/MultiRangePicker";
 
 const autoCompleteUrl = `${ServerAddress.Type}${ServerAddress.Accommodation_Data}${Accommodation.GetEntity}`;
 
@@ -283,7 +282,7 @@ const AccommodationSearchForm: React.FC<Props> = (props) => {
             <div
                 className={`relative z-10 ${theme3 ? "flex sm:grow" : "col-span-1 md:col-span-3"}`}
             >
-                <RangePicker2 initialValue={dates} onChange={dateChangeHandle} value={dates}Input={CustomRangeInput}
+                <MultiRangePicker initialValue={dates} onChange={dateChangeHandle} value={dates}Input={CustomRangeInput}
 />
             </div>
 

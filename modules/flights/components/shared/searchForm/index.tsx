@@ -13,10 +13,10 @@ import { Flight, ServerAddress } from '@/enum/url';
 import { validateRequied } from '@/modules/shared/helpers/validation';
 import { defaultAirportOptions } from './defaultList';
 import AutoCompleteZoom from '@/modules/shared/components/ui/AutoCompleteZoom';
-import DatePicker2 from '@/modules/shared/components/ui/DatePicker2';
 import DomesticFlightDatePickerInput, { DomesticFlightInputProps } from '@/modules/shared/components/ui/DomesticFlightDatePickerInput';
 import { DateObject } from 'react-multi-date-picker';
 import { useFormikDateRange } from '@/modules/shared/hooks/use-formik-date-range';
+import MultiDatePicker from '@/modules/shared/components/ui/MultiDatePicker';
 
 type Props = {
     defaultValues?: FlightSearchDefaultValues;
@@ -79,7 +79,7 @@ const SearchFormInner: React.FC<InnerProps> = ({
                     }
                     const renderFlightDates = () => <>
                                     <div className={`${theme3 ? "md:col-span-3" : theme2 ? "sm:col-span-2 lg:col-span-1 xl:col-span-2" : ""}`} >
-                                         <DatePicker2<DomesticFlightInputProps>
+                                         <MultiDatePicker<DomesticFlightInputProps>
                                             minDate={new DateObject({ date: new Date() })}
                                             isFa={isFa}
                                             setIsFa={setIsFa}
@@ -97,7 +97,7 @@ const SearchFormInner: React.FC<InnerProps> = ({
                                     {
                                         values.airTripType === 'RoundTrip' ? (
                                             <div className={`${theme3 ? "md:col-span-3" : theme2 ? "sm:col-span-2 lg:col-span-1 xl:col-span-2" : ""}`} >
-                                                <DatePicker2<DomesticFlightInputProps>
+                                                <MultiDatePicker<DomesticFlightInputProps>
                                                     Input={DomesticFlightDatePickerInput}
                                                     isFa={isFa}
                                                     setIsFa={setIsFa}

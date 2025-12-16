@@ -1,8 +1,12 @@
 // import DatePicker from "@/modules/shared/components/ui/DatePicker";
+import CipDatePickerInput, { CipInputProps } from "@/modules/shared/components/ui/CipDatePickerInput";
 import FormikField from "@/modules/shared/components/ui/FormikField"
+import MultiDatePicker from "@/modules/shared/components/ui/MultiDatePicker";
+import { MultiTimePicker } from "@/modules/shared/components/ui/MultiTimePicker";
 // import TimePickerMobiscroll from "@/modules/shared/components/ui/TimePickerMobiscroll";
 import { validateRequied } from "@/modules/shared/helpers/validation";
 import { FormikErrors, FormikTouched } from "formik";
+import { useState } from "react";
 
 type Props = {
     setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => Promise<void | FormikErrors<{
@@ -40,6 +44,8 @@ type Props = {
 }
 
 const CipAirportInformation: React.FC<Props> = props => {
+
+    const [isFa, setIsFa] = useState(true);
 
     const { setFieldValue, errors, touched, values } = props;
 
@@ -98,29 +104,36 @@ const CipAirportInformation: React.FC<Props> = props => {
                     value={values.flightNumber}
                 />
 
-                {/* <DatePicker
-                    min={new Date()}
-                    setFieldValue={setFieldValue}
-                    label="تاریخ پرواز"
-                    errorText={errors.flightDate as string}
-                    isTouched={touched.flightDate}
-                    fieldClassName="pt-1 text-base"
-                    name="flightDate"
-                    id="flightDate"
-                    initialvalue={values.flightDate}
-                    validateFunction={(value: string) => validateRequied(value, "لطفا تاریخ پرواز را وارد نمایید")}
-                />
+                <MultiDatePicker<CipInputProps>
+                    minDate={new Date()}
+                    onChange={(value: string) => { setFieldValue('flightDate', value, true) }}
+                    Input={CipDatePickerInput}
+                    value={values.flightDate}
+                    setIsFa={setIsFa}
+                    isFa={isFa}
+                    inputProps={
+                        {
+                            id: "flightDate",
+                            name: "flightDate",
+                            isTouched: touched.flightDate,
+                            errorText: errors.flightDate as string,
+                            label: "تاریخ پرواز",
+                            validateFunction: (value: string) => validateRequied(value, "لطفا تاریخ پرواز را وارد نمایید")
+                            
+                        }}
+                />  
+                
 
-                <TimePickerMobiscroll 
+               <MultiTimePicker 
                     label="ساعت پرواز"
                     value={values.flightTime}
-                    setFieldValue={setFieldValue}
+                    onChange={(value: string) => { setFieldValue('flightTime', value, true) }}
                     id="flightTime"
                     name="flightTime"
                     errorText={errors.flightTime as string}
                     isTouched={touched.flightTime}
                     validateFunction={(value: string) => validateRequied(value, "لطفا ساعت پرواز را وارد نمایید")}
-                /> */}
+                />  
 
             </div>
         </div>

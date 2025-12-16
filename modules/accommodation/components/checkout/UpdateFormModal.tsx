@@ -1,8 +1,8 @@
 import { useState } from "react";
 import SelectCounter from "@/modules/accommodation/components/shared/SelectCounter";
 import Button from "@/modules/shared/components/ui/Button";
-import RangePicker2 from "@/modules/shared/components/ui/RangePicker2";
 import CustomRangeInput, { OuterProps } from "@/modules/shared/components/ui/CustomRangeInput";
+import MultiRangePicker from "@/modules/shared/components/ui/MultiRangePicker";
 
 type Props = {
   defaultDates?: [string, string];
@@ -38,7 +38,7 @@ const UpdateFormModal: React.FC<Props> = ({ defaultDates, defaultCapacity, onSav
   return (
     <div className="update-form">
       <div className="mb-4">
-        <RangePicker2<OuterProps>
+        <MultiRangePicker<OuterProps>
           value={[checkinState, checkoutState]}
           onChange={dateChangeHandle}
           Input={CustomRangeInput}

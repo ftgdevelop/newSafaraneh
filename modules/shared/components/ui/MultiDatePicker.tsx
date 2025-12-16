@@ -60,7 +60,7 @@ interface DatePicker2Props<TInputProps> {
 }
 
 
-function DatePicker2<TInputProps>({
+function MultiDatePicker<TInputProps>({
   value,
   onChange,
   isFa,
@@ -86,9 +86,7 @@ function DatePicker2<TInputProps>({
     }
   };
 
-  const handleChange = (v: DateObject | null) => {
-    console.log('89', v);
-    
+  const handleChange = (v: DateObject | null) => {    
       const date = v ? persianNumbersToEnglish(getMultiDatePickerFormattedDate({
         date: v,
       })) : '';
@@ -161,4 +159,4 @@ function DatePicker2<TInputProps>({
   );
 }
 
-export default DatePicker2;
+export default MultiDatePicker;

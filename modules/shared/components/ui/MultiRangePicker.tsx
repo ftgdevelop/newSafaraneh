@@ -46,7 +46,7 @@ export interface InternalInputProps {
   separator: string;
 }
 
-interface RangePicker2Props<TInputProps> {
+interface MultiRangePickerProps<TInputProps> {
   initialValue?: string[];
   value: string[];
   onChange: (value: string[]) => void;
@@ -55,13 +55,13 @@ interface RangePicker2Props<TInputProps> {
 }
 
 
-function RangePicker2<TInputProps>({
+function MultiRangePicker<TInputProps>({
   initialValue,
   value,
   onChange,
   Input,
   inputProps = {} as TInputProps,
-}: RangePicker2Props<TInputProps>) {
+}: MultiRangePickerProps<TInputProps>) {
   const [isFa, setIsFa] = useState(true);
 
   const localeConfig = isFa ? calendars.fa : calendars.en;
@@ -179,4 +179,4 @@ const propsAnimations = isMobile
   );
 }
 
-export default RangePicker2;
+export default MultiRangePicker;

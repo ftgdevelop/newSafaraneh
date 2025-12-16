@@ -69,7 +69,7 @@ const PriceCalendar: React.FC<Props> = ({ calendar, selectedDates, onDateSelect 
 
   return 'PriceCalendar'
   // !this return must be 
-    // <DatePicker2
+    // <MultiDatePicker
     //   cssClass="price-calendar"
     //   display="inline"
     //   touchUi={false}

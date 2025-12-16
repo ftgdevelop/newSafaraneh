@@ -10,12 +10,10 @@ import { ApartmentOutline, Calendar, Home2, Loading, Location, Search, SearchThe
 import { EntitySearchResultItemType, HotelRecentSearchItem } from "@/modules/domesticHotel/types/hotel";
 import { useAppDispatch } from "@/modules/shared/hooks/use-store";
 import { setReduxError } from "@/modules/shared/store/errorSlice";
-// import RangePicker from "../../../shared/components/ui/RangePicker";
-// import { localeFa } from "@mobiscroll/react";
 import Button from "../../../shared/components/ui/Button";
 import AutoCompleteZoom from "@/modules/shared/components/ui/AutoCompleteZoom";
-import RangePicker2 from "@/modules/shared/components/ui/RangePicker2";
 import CustomRangeInput, { OuterProps } from "@/modules/shared/components/ui/CustomRangeInput";
+import MultiRangePicker from "@/modules/shared/components/ui/MultiRangePicker";
 
 
 
@@ -335,7 +333,7 @@ const SearchForm: React.FC<Props> = ({
             </div>
 
             <div className={`relative z-10 ${theme3?"flex sm:grow":"col-span-1 md:col-span-3"}`}>
-                <RangePicker2<OuterProps>
+                <MultiRangePicker<OuterProps>
                     value={dates}
                     onChange={dateChangeHandle}
                     Input={CustomRangeInput}

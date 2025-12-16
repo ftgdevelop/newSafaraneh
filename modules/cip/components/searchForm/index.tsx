@@ -13,8 +13,8 @@ import { cipDefaultAirportOptions } from './defaultList';
 import { CipAutoCompleteType, CipRecentSearchItem } from '../../types/cip';
 import AutoCompleteZoom from '@/modules/shared/components/ui/AutoCompleteZoom';
 import { dateDisplayFormat } from '@/modules/shared/helpers';
-import DatePicker2 from '@/modules/shared/components/ui/DatePicker2';
 import CipDatePickerInput, { CipInputProps } from '@/modules/shared/components/ui/CipDatePickerInput';
+import MultiDatePicker from '@/modules/shared/components/ui/MultiDatePicker';
 
 type SearchFormValues = {
     airportUrl: string;
@@ -232,9 +232,9 @@ const SearchForm: React.FC<Props> = props => {
 
                                     <div className="relative modernDatePicker-checkin">
 
-                                        <DatePicker2<CipInputProps>
+                                        <MultiDatePicker<CipInputProps>
                                             value={values.flightDate}
-                                            onChange={(v)=> setFieldValue("flightDate", v)}
+                                            onChange={(v:any)=> setFieldValue("flightDate", v)}
                                             isFa={isFa}
                                             setIsFa={setIsFa}
                                             Input={CipDatePickerInput}
