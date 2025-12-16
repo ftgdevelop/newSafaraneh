@@ -85,7 +85,7 @@ const nextConfig = {
     PROJECT_SERVER_NATIONALITY: "",
     PORT: '',
     //PROJECT_MODULES: "DomesticHotel DomesticFlight CIP Blog ForeignFlight ForeignHotel Accommodation",
-    PROJECT_MODULES: "DomesticHotel DomesticFlight Accommodation",
+    PROJECT_MODULES: "DomesticHotel DomesticFlight CIP Accommodation",
     // DEFAULT_lAN:"US",
     // LANGUAGES:["US","NO","FA"]
 
