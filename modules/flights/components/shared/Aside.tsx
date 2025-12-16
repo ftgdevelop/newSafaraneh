@@ -323,6 +323,7 @@ const Aside: React.FC<Props> = props => {
             <ModalPortal
                 selector='modal_portal'
                 show={open}
+                // eslint-disable-next-line react/no-children-prop
                 children={<div className="fixed w-screen h-screen ovelflow-auto bg-black/75 backdrop-blur top-0 left-0 flex items-center justify-center">
 
                     <div

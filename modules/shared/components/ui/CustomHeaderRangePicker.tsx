@@ -1,4 +1,4 @@
-import { normalizeToDateObject } from "../../helpers";
+import { totoLocalizedGregorianMDPDateObject } from "../../helpers";
 import { ArrowLeft } from "./icons";
 
 export default function CustomHeaderPlugin({
@@ -12,7 +12,7 @@ export default function CustomHeaderPlugin({
 }) {
   const formatValue = (value?: string) => {
     if (!value) return null;
-    return normalizeToDateObject(value, { localeKey: isFa ? "fa" : "en" })?.format("YYYY/MM/DD");
+    return totoLocalizedGregorianMDPDateObject(value, { localeKey: isFa ? "fa" : "en" })?.format("YYYY/MM/DD");
   };
 
   const startValue = formatValue(values?.[0]);

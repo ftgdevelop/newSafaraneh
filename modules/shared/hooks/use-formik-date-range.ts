@@ -4,7 +4,7 @@ import {
   addSomeDays,
   checkDateIsAfterDate,
   dateFormat,
-  normalizeToDateObject,
+  totoLocalizedGregorianMDPDateObject,
 } from '@/modules/shared/helpers';
 
 type UseFormikDateRangeParams<T extends FormikValues> = {
@@ -42,8 +42,8 @@ export function useFormikDateRange<T extends FormikValues>({
 
     if (!startValue) return;
 
-    const startDate = normalizeToDateObject(startValue, { localeKey: isFa ? "fa" : "en" })?.toDate();
-    const endDate = normalizeToDateObject(endValue,    { localeKey: isFa ? "fa" : "en" })?.toDate();
+    const startDate = totoLocalizedGregorianMDPDateObject(startValue, { localeKey: isFa ? "fa" : "en" })?.toDate();
+    const endDate = totoLocalizedGregorianMDPDateObject(endValue,    { localeKey: isFa ? "fa" : "en" })?.toDate();
 
     if (!startDate) return;
 

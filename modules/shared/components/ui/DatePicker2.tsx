@@ -11,7 +11,7 @@ import gregorian_en from "react-date-object/locales/gregorian_en";
 import Toolbar from "react-multi-date-picker/plugins/toolbar";
 import CustomToolbar from "./CustomToolbar";
 
-import { dateDisplayFormat, DateFormat, normalizeToDateObject, persianNumbersToEnglish } from "../../helpers";
+import { getMultiDatePickerFormattedDate, DateFormat, totoLocalizedGregorianMDPDateObject, persianNumbersToEnglish } from "../../helpers";
 import transition from "react-element-popper/animations/transition";
 
 
@@ -78,7 +78,7 @@ function DatePicker2<TInputProps>({
     v: DateObject | [DateObject | null, DateObject | null] | DateObject[]
   ) => {
     if (v instanceof DateObject) {
-      const date = v ? persianNumbersToEnglish(dateDisplayFormat({
+      const date = v ? persianNumbersToEnglish(getMultiDatePickerFormattedDate({
         date: v,
       })) : '';
 
@@ -89,14 +89,14 @@ function DatePicker2<TInputProps>({
   const handleChange = (v: DateObject | null) => {
     console.log('89', v);
     
-      const date = v ? persianNumbersToEnglish(dateDisplayFormat({
+      const date = v ? persianNumbersToEnglish(getMultiDatePickerFormattedDate({
         date: v,
       })) : '';
 
       onChange(date);
   }
 
-  const normalizedValue = normalizeToDateObject(value, { localeKey: isFa ? "fa" : "en" });
+  const normalizedValue = totoLocalizedGregorianMDPDateObject(value, { localeKey: isFa ? "fa" : "en" });
   
   return (
     <DatePicker

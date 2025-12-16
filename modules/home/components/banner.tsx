@@ -5,7 +5,7 @@ import { Apartment, Bed4, Suitcase, Suitcase2, Travel, Travel2, Accommodation } 
 import Tab from '../../shared/components/ui/Tab';
 import { TabItem } from '@/modules/shared/types/common';
 import Image from 'next/image';
-import { dateDisplayFormat,  persianNumbersToEnglish } from '@/modules/shared/helpers';
+import { getMultiDatePickerFormattedDate,  persianNumbersToEnglish } from '@/modules/shared/helpers';
 import FlightSearch from '@/modules/flights/components/shared/searchForm';
 import CipSearchForm from '@/modules/cip/components/searchForm';
 import RecentSearches from '@/modules/domesticHotel/components/home/HotelRecentSearches';
@@ -37,14 +37,18 @@ const Banner: React.FC<Props> = props => {
   
   const isSafarLife = process.env.SITE_NAME === 'https://www.safarlife.com';
 
-    const today = persianNumbersToEnglish(dateDisplayFormat({date: new DateObject({
+  const today = persianNumbersToEnglish(
+    getMultiDatePickerFormattedDate({
+      date: new DateObject({
             date: new Date(),
             format: "YYYY/MM/DD",
             calendar: persian,
             locale: persian_fa,
             })}))
 
-    const tomorrow = persianNumbersToEnglish(dateDisplayFormat({date:new DateObject({
+  const tomorrow = persianNumbersToEnglish(
+    getMultiDatePickerFormattedDate({
+      date: new DateObject({
                 date: new Date(new Date().setDate(new Date().getDate() + 1)),
                 format: "YYYY/MM/DD",
                 calendar: persian,

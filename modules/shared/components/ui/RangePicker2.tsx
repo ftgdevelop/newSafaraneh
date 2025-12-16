@@ -6,14 +6,13 @@ import persian_fa from "react-date-object/locales/persian_fa";
 import gregorian from "react-date-object/calendars/gregorian";
 import gregorian_en from "react-date-object/locales/gregorian_en";
 import transition from "react-element-popper/animations/transition";
-import opacity from "react-element-popper/animations/opacity"
 
 import CustomToolbar, { PickerValue } from "./CustomToolbar";
 import CustomHeaderPlugin from "./CustomHeaderRangePicker";
 import Toolbar from "react-multi-date-picker/plugins/toolbar";
 
 import DateObject, { Locale } from "react-date-object";
-import { dateDisplayFormat, DateFormat, normalizeToDateObject, persianNumbersToEnglish } from "../../helpers";
+import { getMultiDatePickerFormattedDate,  DateFormat, totoLocalizedGregorianMDPDateObject, persianNumbersToEnglish } from "../../helpers";
 
 
 const calendars: Record<
@@ -90,10 +89,10 @@ function RangePicker2<TInputProps>({
     if (dates instanceof Array) {
 
       const tupleString : string[] = [
-         dates[0]? persianNumbersToEnglish(dateDisplayFormat({
+         dates[0]? persianNumbersToEnglish(getMultiDatePickerFormattedDate({
                 date: dates[0],
               })) : '',
-          dates[1] ? persianNumbersToEnglish(dateDisplayFormat({
+          dates[1] ? persianNumbersToEnglish(getMultiDatePickerFormattedDate({
                 date: dates[1],
               })) : '',
       ];
@@ -118,7 +117,7 @@ const propsAnimations = isMobile
         }),
       ],
     };
-  const normalizedValue =   [normalizeToDateObject(value[0]),normalizeToDateObject(value[1])];
+  const normalizedValue =   [totoLocalizedGregorianMDPDateObject(value[0]),totoLocalizedGregorianMDPDateObject(value[1])];
   
   return (
     <DatePicker
