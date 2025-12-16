@@ -1,5 +1,5 @@
 // import DatePicker from "@/modules/shared/components/ui/DatePicker";
-import CipDatePickerInput, { CipInputProps } from "@/modules/shared/components/ui/CipDatePickerInput";
+import CipDatePickerInputSinglePage, { CipDatePickerInputSinglePageProps } from "@/modules/shared/components/ui/CipDatePickerInputSinglePage";
 import FormikField from "@/modules/shared/components/ui/FormikField"
 import MultiDatePicker from "@/modules/shared/components/ui/MultiDatePicker";
 import { MultiTimePicker } from "@/modules/shared/components/ui/MultiTimePicker";
@@ -104,10 +104,10 @@ const CipAirportInformation: React.FC<Props> = props => {
                     value={values.flightNumber}
                 />
 
-                <MultiDatePicker<CipInputProps>
+                <MultiDatePicker<CipDatePickerInputSinglePageProps>
                     minDate={new Date()}
                     onChange={(value: string) => { setFieldValue('flightDate', value, true) }}
-                    Input={CipDatePickerInput}
+                    Input={CipDatePickerInputSinglePage}
                     value={values.flightDate}
                     setIsFa={setIsFa}
                     isFa={isFa}
@@ -118,7 +118,7 @@ const CipAirportInformation: React.FC<Props> = props => {
                             isTouched: touched.flightDate,
                             errorText: errors.flightDate as string,
                             label: "تاریخ پرواز",
-                            validateFunction: (value: string) => validateRequied(value, "لطفا تاریخ پرواز را وارد نمایید")
+                            validateFunction: () => validateRequied(values.flightDate, "لطفا تاریخ پرواز را وارد نمایید")
                             
                         }}
                 />  
@@ -127,7 +127,7 @@ const CipAirportInformation: React.FC<Props> = props => {
                <MultiTimePicker 
                     label="ساعت پرواز"
                     value={values.flightTime}
-                    onChange={(value: string) => { setFieldValue('flightTime', value, true) }}
+                    onChange={(value: string) =>  setFieldValue('flightTime', value, true)}
                     id="flightTime"
                     name="flightTime"
                     errorText={errors.flightTime as string}

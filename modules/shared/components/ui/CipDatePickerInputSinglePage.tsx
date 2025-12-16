@@ -2,7 +2,7 @@ import React from "react";
 import { Locale } from "react-date-object";
 import { Calendar } from "./icons";
 
-export interface CipInputProps {
+export interface CipDatePickerInputSinglePageProps {
   id: string;
   name: string;
   fieldClassName?: string;
@@ -21,9 +21,9 @@ interface InternalInputProps {
   isFa: boolean;
 }
 
-type Props = CipInputProps & InternalInputProps;
+type Props = CipDatePickerInputSinglePageProps & InternalInputProps;
 
-export default function CipDatePickerInput({
+export default function CipDatePickerInputSinglePage({
   id,
   name,
   value = "",
@@ -39,18 +39,6 @@ export default function CipDatePickerInput({
   
   return (
     <div className={`relative ${isFa ? 'font-vazir': 'font-sans'}`}>
-      {
-         !errorText && !validateFunction?.() && <Calendar className="w-5 h-5 fill-neutral-600 top-1/2 -translate-y-1/2 right-3 absolute pointer-events-none" />
-      }
-
-      <label
-        htmlFor={id}
-        className={`absolute select-none rtl:right-10 transition-all pointer-events-none
-          ${value ? "top-0 text-4xs " : "hidden"}
-        `}
-      >
-        {label}
-      </label>
 
       <input
         id={id}
@@ -60,8 +48,8 @@ export default function CipDatePickerInput({
         placeholder={label}
         value={value}
         className={`w-full h-12 text-xs rtl:rounded-lg 
-          border border-neutral-400  leading-4 ${fieldClassName}
-          ${value ? "pt-5 rtl:pr-10 ltr:pl-10" : 'py-5 placeholder:text-black rtl:pr-10 ltr:pl-5'}
+          border border-neutral-400 py-5  leading-4 ${fieldClassName}
+          ${value ? "rtl:pr-5 ltr:pl-5" : ' placeholder:text-black rtl:pr-5 ltr:pl-5'}
           ${isTouched && validateFunction?.() ? "border-red-500 rtl:pr-5 ltr:pl-5" : ""}
 
         `}

@@ -18,7 +18,7 @@ interface MultiTimePickerProps {
 export const MultiTimePicker = ({ value, onChange , label = '', labelIsSimple = false, errorText = '', isTouched = false, name, id, validateFunction, fieldClassName, }: MultiTimePickerProps) => {
    
     const handleChange = (v: DateObject) => {
-        const date = v ? v.format("HH:mm") : '';
+        const date = v ? v.format("HH:mm") : '';        
         onChange(date);
     }
     
@@ -45,7 +45,7 @@ export const MultiTimePicker = ({ value, onChange , label = '', labelIsSimple = 
                     </label>
                 )}
                 <DatePicker
-                    value={value}
+                    // value={value}
                     onChange={handleChange}
                     disableDayPicker
                     format="HH:mm"
@@ -54,18 +54,15 @@ export const MultiTimePicker = ({ value, onChange , label = '', labelIsSimple = 
                     ]} 
                     render={(pickerValue, openCalendar, handleValueChange, loc, sep) =>
                         <input
-                            
                             id={id}
                             name={name}
                             readOnly
                             onClick={openCalendar}
-                            placeholder={label}
                             value={pickerValue}
                             className={`w-full h-12 text-xs rtl:rounded-lg 
-                            border border-neutral-400  leading-4 ${fieldClassName}
-                            ${value ? "pt-5 rtl:pr-10 ltr:pl-10" : 'py-5 placeholder:text-black rtl:pr-10 ltr:pl-5'}
-                            ${isTouched && validateFunction?.(value) ? "border-red-500 rtl:pr-5 ltr:pl-5" : ""}
-
+                                border border-neutral-400 py-5 leading-4 ${fieldClassName}
+                                ${value ? "rtl:pr-5 ltr:pl-10" : ' placeholder:text-black rtl:pr-5 ltr:pl-5'}
+                                ${isTouched && validateFunction?.(value) ? "border-red-500 rtl:pr-5 ltr:pl-5" : ""}
                             `}
                         />}
                 />
