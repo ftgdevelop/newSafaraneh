@@ -12,6 +12,12 @@
   .breakInsideAvoid{
     break-inside:avoid;
   }
+  .hidden-scrollbar {
+    &::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+  }
   .columnCount4 {
     column-count: 4;
   }
