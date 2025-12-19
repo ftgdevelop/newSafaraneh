@@ -105,13 +105,9 @@ const Calendar: React.FC<CalendarProps> = ({ id, checkin, checkout, capacity, on
         }
       );
 
-      const { preReserveKey } = response.data.result || {};
-      // console.log("preReserveKey:", preReserveKey, "result:", response);
-      if (response.status === 200) {
-        window.location.href = `/${router.locale}/accommodation/checkout/key=${preReserveKey}`;
-        // router.push(`/${router.locale}/accommodation/checkout/key=${preReserveKey}`);
-        // console.log("Reservation validated successfully.");
-        // console.log("URL:",`/${router.locale}/accommodation/checkout/key=${preReserveKey}`);
+      if (response.data.result.preReserveKey) {
+        router.push(`/accommodation/checkout?key=${response.data.result.preReserveKey}`);
+        console.log(`/accommodation/checkout?key=${response.data.result.preReserveKey}`);
       } else {
         alert("خطا در دریافت کلید رزرو. لطفا دوباره تلاش کنید.");
       }
@@ -144,7 +140,6 @@ const Calendar: React.FC<CalendarProps> = ({ id, checkin, checkout, capacity, on
         </>
       )}
 
-      {/* UpdateForm for updating checkin, checkout, and capacity */}
       <div className="mt-6">
         <UpdateForm
           defaultDates={[checkin, checkout]}

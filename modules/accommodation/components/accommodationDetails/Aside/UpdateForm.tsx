@@ -14,24 +14,18 @@ const UpdateForm: React.FC<Props> = ({ defaultDates, defaultCapacity, onUpdate }
   const [checkoutState, setCheckout] = useState(defaultDates?.[1] || "2025-12-30");
   const [capacityState, setCapacity] = useState<number>(defaultCapacity || 1);
 
-  // Trigger `onUpdate` whenever the state changes
-  useEffect(() => {
-    if (onUpdate) {
-      onUpdate(checkinState, checkoutState, capacityState);
-    }
-  }, [checkinState, checkoutState, capacityState, onUpdate]);
-
-  // Handle date changes from RangePicker
+  // فقط زمانی که کاربر تغییر داد، onUpdate را صدا بزن
   const dateChangeHandle = (event: any) => {
     if (event.value[0] && event.value[1]) {
       setCheckin(event.value[0]);
       setCheckout(event.value[1]);
+      if (onUpdate) onUpdate(event.value[0], event.value[1], capacityState);
     }
   };
 
-  // Handle capacity changes from SelectCounter
   const handleCapacityChange = (newCapacity: number | string) => {
     setCapacity(Number(newCapacity));
+    if (onUpdate) onUpdate(checkinState, checkoutState, Number(newCapacity));
   };
 
   return (

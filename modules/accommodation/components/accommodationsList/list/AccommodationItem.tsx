@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import Slider from "react-slick";
-import { Bed3, Instant, LeftCaret, RightCaret, Star, User3 } from "@/modules/shared/components/ui/icons";
+import { Bed3, Instant, LeftCaret, Location, RightCaret, Star, TimeSand, User3 } from "@/modules/shared/components/ui/icons";
 import { useRouter } from "next/router";
 
 type AccommodationItemProps = {
@@ -28,7 +28,7 @@ function NextArrow(props: any) {
   return (
     <button
       type="button"
-      className="absolute top-1/2 right-2 z-10 bg-white/80 rounded-full p-1 shadow -translate-y-1/2 opacity-30 group-hover:opacity-100 transition-opacity"
+      className="absolute top-1/2 right-3 z-10 bg-white/80 rounded-full p-1 shadow -translate-y-1/2 opacity-30 group-hover:opacity-100 transition-opacity"
       onClick={onClick}
       tabIndex={-1}
     >
@@ -42,7 +42,7 @@ function PrevArrow(props: any) {
   return (
     <button
       type="button"
-      className="absolute top-1/2 left-2 z-10 bg-white/80 rounded-full p-1 shadow -translate-y-1/2 opacity-30 group-hover:opacity-100 transition-opacity"
+      className="absolute top-1/2 left-3 z-10 bg-white/80 rounded-full p-1 shadow -translate-y-1/2 opacity-30 group-hover:opacity-100 transition-opacity"
       onClick={onClick}
       tabIndex={-1}
     >
@@ -115,7 +115,7 @@ export default function AccommodationItem({
                   alt={title}
                   width={600}
                   height={400}
-                  className="h-40 w-full object-cover transition-all duration-300 group-hover:scale-105"
+                  className="h-40 w-full object-cover rounded-2xl px-2 pt-2"
                   priority={idx === 0}
                 />
               </div>
@@ -158,34 +158,14 @@ export default function AccommodationItem({
               </span>
             ) : null}
           </div>
-        <b className="font-bold mb-1 block text-md">{title}</b>        
-        <span className="text-xs leading-4 text-neutral-500 mb-2">{location?.province}، {location?.city}، {location?.village}</span>
-
-        <div className="leading-6 text-2xs select-none flex gap-1 mt-2">
-          {rooms > 0 ? (
-            <div className="flex flex-row items-center gap-1 bg-neutral-50 text-neutral-700 px-2 rounded-xl ">
-              {/* <Village className="w-3.5 h-3.5 inline-block" /> */}
-              <span>{rooms > 0 ? `${rooms} اتاق` : null}</span>
-            </div>
-          ) : null}
-
-          {totalBeds > 0 ? (
-            <div className="flex flex-row items-center gap-1 bg-neutral-50 text-neutral-700 px-2 rounded-xl ">
-              <Bed3 className="w-4 h-4 inline-block" />
-              <span>{totalBeds > 0 ? `${totalBeds} جای خواب` : null}</span>
-            </div>
-          ) : null}
-
-          {maxAccommodates > 0 ? (
-            <div className="flex flex-row items-center gap-1 bg-neutral-50 text-neutral-700 px-2 rounded-xl ">
-              <User3 className="w-4 h-4 inline-block" />
-              <span>{maxAccommodates > 0 ? `تا ${maxAccommodates} مهمان` : null}</span>
-            </div>
-          ) : null}
+        <b className="font-bold mb-1 block text-md">{title}</b>
+        <div className="flex items-center gap-1 my-2">
+          <Location className="size-4 fill-neutral-600" />
+          <span className="text-xs leading-4 text-neutral-500">{location?.province}، {location?.city}، {location?.village}</span>
         </div>
 
-        <div className="flex flex-col mt-2">
-          <div className="flex flex-col gap-1 mb-2">
+        <div className="flex flex-col">
+          <div className="flex flex-col gap-1">
             {discountPrice && Math.abs(discountPrice) > 0 ? (
               <div className="flex flex-col gap-2">
                 <div className="flex flex-row items-end gap-2">
@@ -212,15 +192,38 @@ export default function AccommodationItem({
           </div>
         </div>
 
-        <div className="flex gap-2">
+        <div className="leading-6 text-2xs select-none flex gap-1 mt-2 grid grid-cols-5">
+          {rooms > 0 ? (
+            <div className="flex flex-row items-center gap-1 bg-neutral-50 text-neutral-700 px-1 md:px-2 py-1 rounded-md">
+              {/* <Village className="w-3.5 h-3.5 inline-block" /> */}
+              <span>{rooms > 0 ? `${rooms} اتاق` : null}</span>
+            </div>
+          ) : null}
+
+          {totalBeds > 0 ? (
+            <div className="flex flex-row items-center gap-1 bg-neutral-50 text-neutral-700 px-1 md:px-2 py-1 rounded-md col-span-2">
+              <Bed3 className="h-4 md:w-5 h-4 md:h-5 inline-block" />
+              <span>{totalBeds > 0 ? `${totalBeds} جای خواب` : null}</span>
+            </div>
+          ) : null}
+
+          {maxAccommodates > 0 ? (
+            <div className="flex flex-row items-center gap-1 bg-neutral-50 text-neutral-700 px-1 md:px-2 py-1 rounded-md col-span-2">
+              <User3 className="h-4 md:w-5 h-4 md:h-5 inline-block" />
+              <span>{maxAccommodates > 0 ? `تا ${maxAccommodates} مهمان` : null}</span>
+            </div>
+          ) : null}
+        </div>
+
+        <div className="grid grid-cols-2 gap-1">
           {badges.includes("is_instant") && (
-            <span className="rounded-lg px-2 text-2xs border border-gray-200 select-none">
+            <span className="rounded-lg px-2 text-2xs bg-[#412691]/5 select-none mt-2 text-center">
               <Instant className="w-4 h-4 inline-block ml-1 fill-[#412691]" />
               <span className="text-[#412691]">رزرو آنی و قطعی</span>
             </span>
           )}
           {badges.includes("is_prime") && (
-            <span className="rounded-lg px-2 text-2xs border border-gray-200 select-none">
+            <span className="rounded-lg px-2 text-2xs bg-[#412691]/5 select-none mt-2 text-center">
               {/* <TimeSand className="w-4 h-4 inline-block ml-1 fill-[#412691]" /> */}
               <span className="text-[#412691]">رزرو اولویت دار</span>
             </span>

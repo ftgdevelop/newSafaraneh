@@ -46,9 +46,8 @@ const AccomodationCategories: React.FC = () => {
         ]
 
     return (
-        <section className="max-w-container m-auto px-5 lg:pt-14 max-xl:p-5 mb-5 sm:mb-10" >
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">
+        <section className="max-w-container m-auto px-5 lg:pt-14 max-xl:p-5 mb-5 sm:mb-10">
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 md:gap-4">
                 {categories.map(category => {
                     let url = category.url;
 
@@ -56,12 +55,12 @@ const AccomodationCategories: React.FC = () => {
                         url = url.replace("fa/", "");
                     }
                     return (
-                        <div >
+                        <div>
                             <Link
                                 href={url}
                                 target='_blank'
                                 title={category.title}
-                                className="flex flex-col items-center justify-center p-4 group"
+                                className="flex flex-col items-center justify-center px-2 sm:px-4 py-4 sm:py-8 group bg-[#ece9f2]/30 rounded-lg hover:bg-[#ece9f2] transition-all duration-300"
                             >
                                 <Image
                                     onContextMenu={e => { e.preventDefault() }}
@@ -69,9 +68,9 @@ const AccomodationCategories: React.FC = () => {
                                     alt={category.title}
                                     width={72}
                                     height={72}
-                                    className="size-[64px] md:size-[72px]"
+                                    className="size-[64px] md:size-[72px] rounded-full"
                                 />
-                                <b className='font-semibold mb-1 block text-sm md:text-md'> {category.title} </b>
+                                <b className='font-bold mt-2 mb-1 block text-sm md:text-md'> {category.title} </b>
                             </Link>
                         </div>
                     )
