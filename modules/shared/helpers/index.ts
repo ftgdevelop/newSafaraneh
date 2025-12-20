@@ -195,11 +195,21 @@ export const replaceBrandNames = (text: string) => {
 
     const isShab = process.env.PROJECT === "SHAB";
     const isTorbeh = process.env.SITE_NAME === 'https://hotel.torbeh.com/';
+    const isTripMap = process.env.SITE_NAME === 'https://tripmap.ir';
 
     if(!text) return text;
 
+    if(isTripMap){
+        return text
+        .replace(/هتل\s?‌?\s?بان|هتلبان/gi, 'تریپ مپ')
+        .replace(/سفرانه/gi, 'تریپ مپ')
+        .replace(/ایران\s?‌?\s?هتل/gi, 'تریپ مپ')
+        .replace(/info@hotelban\.com/gi, 'info@tripmap.ir')
+        .replace(/hotelban\.com/gi, 'tripmap.ir') 
+
+    }
     if(isTorbeh){
-               return text
+        return text
         .replace(/هتل\s?‌?\s?بان|هتلبان/gi, 'تربه')
         .replace(/سفرانه/gi, 'تربه')
         .replace(/ایران\s?‌?\s?هتل/gi, 'تربه')
