@@ -1,0 +1,9 @@
+version: '3'
+services:
+  tripmap_service:
+    image: tripmap_image
+    restart: always
+    build: ./
+    command: 'yarn start -p 2095'
+    ports:
+      - '2095:2095'
