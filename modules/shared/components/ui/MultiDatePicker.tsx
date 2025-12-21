@@ -94,6 +94,12 @@ function MultiDatePicker<TInputProps>({
       onChange(date);
   }
 
+  const WEEK_DAYS_MAP: Record<'fa' | 'en', string[]> = {
+    fa: ["ش", "ی", "د", "س", "چ", "پ", "ج"],
+    en: ["S", "M", "T", "W", "T", "F", "S"],
+  };
+
+  const weekDays = WEEK_DAYS_MAP[localeKey];
   const normalizedValue = totoLocalizedGregorianMDPDateObject(value, { localeKey: isFa ? "fa" : "en" });
   
   return (
@@ -107,8 +113,9 @@ function MultiDatePicker<TInputProps>({
         numberOfMonths={1}
         minDate={minDate}
         arrow={false}
-        monthYearSeparator=""
-        showOtherDays
+        monthYearSeparator=" "
+      showOtherDays
+      weekDays={weekDays}
         // portal
         animations={[
           transition({

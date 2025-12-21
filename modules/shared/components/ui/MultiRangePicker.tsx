@@ -65,6 +65,8 @@ function MultiRangePicker<TInputProps>({
   const [isFa, setIsFa] = useState(true);
 
   const localeConfig = isFa ? calendars.fa : calendars.en;
+  const localeKey = isFa ? "fa" : "en";
+
 
   const [isMobile, setIsMobile] = useState(false);
   const pickerRef = useRef<any>(null);
@@ -118,7 +120,12 @@ const propsAnimations = isMobile
       ],
     };
   const normalizedValue =   [totoLocalizedGregorianMDPDateObject(value[0]),totoLocalizedGregorianMDPDateObject(value[1])];
-  
+    const WEEK_DAYS_MAP: Record<'fa' | 'en', string[]> = {
+    fa: ["ش", "ی", "د", "س", "چ", "پ", "ج"],
+    en: ["S", "M", "T", "W", "T", "F", "S"],
+  };
+
+  const weekDays = WEEK_DAYS_MAP[localeKey];
   return (
         <DatePicker
         ref={pickerRef}
@@ -130,11 +137,12 @@ const propsAnimations = isMobile
         format={localeConfig.format}
         weekStartDayIndex={localeConfig.weekStartDayIndex}
         numberOfMonths={isMobile ? 1 : 2}
-        monthYearSeparator=""
+        monthYearSeparator=" "
         minDate={new DateObject({ date: new Date() })}
         onChange={handleChange}
         arrow={false}
         showOtherDays
+        weekDays={weekDays}
         className={`range-datepicker ${isFa ? 'font-fa' : 'font-en'}`}
         // portal
         {...propsAnimations}
