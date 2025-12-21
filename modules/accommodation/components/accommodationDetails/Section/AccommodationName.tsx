@@ -1,9 +1,8 @@
 import { Instant, Location, Star } from "@/modules/shared/components/ui/icons";
-import Rating from "@/modules/shared/components/ui/Rating";
 import { useState, useEffect } from "react";
 
 type AccommodationNameProps = {
-  title: string;
+  title?: string;
   location?: {
     province?: string;
     city?: string;

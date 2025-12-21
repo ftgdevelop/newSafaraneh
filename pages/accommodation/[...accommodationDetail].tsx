@@ -123,13 +123,15 @@ const AccommodationDetailPage: NextPage = () => {
   return (
     <>
       <div className="max-w-container mx-auto px-5 pb-4">
-        <AccommodationName
+        {house && (
+          <AccommodationName
             title={house.title}
             location={house.location}
             rank={house.rates.rank}
             reviews={house.reviews}
             isInstant={house.isInstant}
           />
+        )}
         <div id="gallery" className="pt-4">
           <Gallery images={house?.pictures?.records || []} />
         </div>
