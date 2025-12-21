@@ -32,8 +32,8 @@ function CustomRangeInput({
     isTouched
 }: Props) {
 
-    const values = value ?  value instanceof Array ? value[0].split(separator)  : value.split(separator)  : [];
-
+    const stringValue = Array.isArray(value) ? value[0] ?? "" : value ?? "";
+    const values = stringValue.split(separator);
     let startValue = "";
     let endValue = "";
 

@@ -97,65 +97,66 @@ function MultiDatePicker<TInputProps>({
   const normalizedValue = totoLocalizedGregorianMDPDateObject(value, { localeKey: isFa ? "fa" : "en" });
   
   return (
-    <DatePicker
-      value={normalizedValue || null}
-      onChange={handleChange}
-      calendar={localeConfig.calendar}
-      locale={localeConfig.locale}
-      format={localeConfig.format}
-      weekStartDayIndex={localeConfig.weekStartDayIndex}
-      numberOfMonths={1}
-      minDate={minDate}
-      arrow={false}
-      monthYearSeparator=""
-      showOtherDays
-      portal
-      animations={[
-        transition({
-          from: 40,
-          to: 0,
-          property: "translateY",
-          transition: "all 400ms cubic-bezier(0.4, 0.0, 0.2, 1)",
-        }),
-      ]} 
-      className={`datepicker-single-screen ${className ?? ""} [&_.rmdp-week-day]:text-black ${isFa ? 'font-fa' : 'font-en'}`}
-      plugins={[
-        <CustomToolbar
-          key="custom-toolbar"
-          isFa={isFa}
-          setIsFa={setIsFa}
-          position="bottom"
-          onChange={handleToolbarChange}
-        />,
-        <Toolbar
-          key="toolbar"
-          position="top"
-          sort={["close", "deselect", "today"]}
-          names={{
-            today: "امروز",
-            deselect: "انصراف",
-            close: "تایید",
-          }}
-          className="lg:!hidden
-            bg-[#f7f7f7]
-            [&>div]:!bg-transparent
-            [&>div]:!text-[#007aff]
-            [&>div:nth-child(3)]:hidden
-          "
-        />,
-      ]}
-      render={(pickerValue, openCalendar, handleValueChange, loc, sep) => (
-        <Input
-          {...inputProps}
-          value={pickerValue}
-          openCalendar={openCalendar}
-          handleValueChange={handleValueChange}
-          locale={loc}
-          separator={sep}
-          isFa={isFa}
-        />
-      )}
-    />
+      <DatePicker
+        value={normalizedValue || null}
+        onChange={handleChange}
+        calendar={localeConfig.calendar}
+        locale={localeConfig.locale}
+        format={localeConfig.format}
+        weekStartDayIndex={localeConfig.weekStartDayIndex}
+        numberOfMonths={1}
+        minDate={minDate}
+        arrow={false}
+        monthYearSeparator=""
+        showOtherDays
+        // portal
+        animations={[
+          transition({
+            from: 40,
+            to: 0,
+            property: "translateY",
+            transition: "all 400ms cubic-bezier(0.4, 0.0, 0.2, 1)",
+          }),
+        ]} 
+        className={`datepicker-single-screen ${className ?? ""} [&_.rmdp-week-day]:text-black ${isFa ? 'font-fa' : 'font-en'}`}
+        plugins={[
+          <CustomToolbar
+            key="custom-toolbar"
+            isFa={isFa}
+            setIsFa={setIsFa}
+            position="bottom"
+            onChange={handleToolbarChange}
+          />,
+          <Toolbar
+            key="toolbar"
+            position="top"
+            sort={["close", "deselect", "today"]}
+            names={{
+              today: "امروز",
+              deselect: "انصراف",
+              close: "تایید",
+            }}
+            className="lg:!hidden
+              bg-[#f7f7f7]
+              [&>div]:!bg-transparent
+              [&>div]:!text-[#007aff]
+              [&>div:nth-child(3)]:hidden
+            "
+          />,
+        ]}
+        render={(pickerValue, openCalendar, handleValueChange, loc, sep) => (
+          <Input
+            {...inputProps}
+            value={pickerValue}
+            openCalendar={openCalendar}
+            handleValueChange={handleValueChange}
+            locale={loc}
+            separator={sep}
+            isFa={isFa}
+          />
+        )}
+      />
+
   );
 }
 
