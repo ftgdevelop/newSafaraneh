@@ -65,6 +65,8 @@ function MultiRangePicker<TInputProps>({
   const [isFa, setIsFa] = useState(true);
 
   const localeConfig = isFa ? calendars.fa : calendars.en;
+  const localeKey = isFa ? "fa" : "en";
+
 
   const [isMobile, setIsMobile] = useState(false);
   const pickerRef = useRef<any>(null);
@@ -118,64 +120,70 @@ const propsAnimations = isMobile
       ],
     };
   const normalizedValue =   [totoLocalizedGregorianMDPDateObject(value[0]),totoLocalizedGregorianMDPDateObject(value[1])];
-  
+    const WEEK_DAYS_MAP: Record<'fa' | 'en', string[]> = {
+    fa: ["ش", "ی", "د", "س", "چ", "پ", "ج"],
+    en: ["S", "M", "T", "W", "T", "F", "S"],
+  };
+
+  const weekDays = WEEK_DAYS_MAP[localeKey];
   return (
-    <DatePicker
-      ref={pickerRef}
-      value={normalizedValue}
-      range
-      rangeHover
-      calendar={localeConfig.calendar}
-      locale={localeConfig.locale}
-      format={localeConfig.format}
-      weekStartDayIndex={localeConfig.weekStartDayIndex}
-      numberOfMonths={isMobile ? 1 : 2}
-      monthYearSeparator=""
-      minDate={new DateObject({ date: new Date() })}
-      onChange={handleChange}
-      arrow={false}
-      showOtherDays
-      className={`range-datepicker ${isFa ? 'font-fa' : 'font-en'}`}
-      portal
-      {...propsAnimations}
-      plugins={[
-        <CustomToolbar
-          key="toolbar"
-          isFa={isFa}
-          setIsFa={setIsFa}
-          position="bottom"
-          onChange={handleChange}
-        />,
-        <Toolbar
-          key="top-toolbar"
-          position="top"
-          sort={["close", "deselect", "today"]}
-          className="md:!hidden"
-          names={{
-            today: "امروز",
-            deselect: "انصراف",
-            close: "تایید",
-          }}
-        />,
-        <CustomHeaderPlugin
-          key="header"
-          position="top"
-          isFa={isFa}
-          values={value}
-        />,
-      ]}
-      render={(value, openCalendar, handleValueChange, locale, separator) => (
-        <Input
-          {...inputProps}
-          value={value}
-          openCalendar={openCalendar}
-          handleValueChange={handleValueChange}
-          locale={locale}
-          separator={separator}
-          isFa={isFa}
+        <DatePicker
+        ref={pickerRef}
+        value={normalizedValue}
+        range
+        rangeHover
+        calendar={localeConfig.calendar}
+        locale={localeConfig.locale}
+        format={localeConfig.format}
+        weekStartDayIndex={localeConfig.weekStartDayIndex}
+        numberOfMonths={isMobile ? 1 : 2}
+        monthYearSeparator=" "
+        minDate={new DateObject({ date: new Date() })}
+        onChange={handleChange}
+        arrow={false}
+        showOtherDays
+        weekDays={weekDays}
+        className={`range-datepicker ${isFa ? 'font-fa' : 'font-en'}`}
+        // portal
+        {...propsAnimations}
+        plugins={[
+          <CustomToolbar
+            key="toolbar"
+            isFa={isFa}
+            setIsFa={setIsFa}
+            position="bottom"
+            onChange={handleChange}
+          />,
+          <Toolbar
+            key="top-toolbar"
+            position="top"
+            sort={["close", "deselect", "today"]}
+            className="md:!hidden"
+            names={{
+              today: "امروز",
+              deselect: "انصراف",
+              close: "تایید",
+            }}
+          />,
+          <CustomHeaderPlugin
+            key="header"
+            position="top"
+            isFa={isFa}
+            values={value}
+          />,
+        ]}
+        render={(value, openCalendar, handleValueChange, locale, separator) => (
+          <Input
+            {...inputProps}
+            value={value}
+            openCalendar={openCalendar}
+            handleValueChange={handleValueChange}
+            locale={locale}
+            separator={separator}
+            isFa={isFa}
+          />
+        )}
         />
-      )}
-    />
   );
 }
 
