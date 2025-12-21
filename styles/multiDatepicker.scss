@@ -167,16 +167,23 @@
           margin: 0%;
           width: 100%;
           text-align: start;
-          font-size: 16px;
+          font-size: 17px;
         }
         .rmdp-arrow-container{
           width: 20px;
           height: 20px;
           &:hover{
-            
+            background-color: transparent;
+            box-shadow: none;
+            .rmdp-arrow{
+
+              border:1 solid #0074d980;
+
+            }
           }
           .rmdp-arrow{
-            padding: 6px;
+            padding: 4px;
+
 
           }
         }
@@ -201,7 +208,7 @@
             height: calc(100%/6);
             &:first-child{
               .rmdp-week-day{
-                justify-content: start;
+                // justify-content: start;
               }
             }
            }

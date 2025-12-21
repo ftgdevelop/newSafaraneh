@@ -29,7 +29,17 @@ const MultiCalendar = ({ value, onChange, fullScreen, readonly = false, mapDays 
     const start = totoLocalizedGregorianMDPDateObject(value[0]);
     const end = totoLocalizedGregorianMDPDateObject(value[1]);
 
-    const normalizedValue = start && end ? [[start, end]] : [];
+  const normalizedValue = start && end ? [[start, end]] : [];
+  
+  const weekDays = [
+  "ش",
+  "ی",
+  "د", 
+  "س",
+  "چ", 
+  "پ", 
+  "ج", 
+];
   
   
   return (
@@ -42,6 +52,7 @@ const MultiCalendar = ({ value, onChange, fullScreen, readonly = false, mapDays 
         range
         highlightToday={false}
       monthYearSeparator=' '
+      weekDays={weekDays}
         className={`${fullScreen ? "calendar-fullScreen" : ''}`}
         readOnly={readonly}
         minDate={new Date()}
