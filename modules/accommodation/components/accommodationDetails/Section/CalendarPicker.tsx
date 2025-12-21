@@ -92,7 +92,7 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({ id, checkin, checkout }
 
   return (
     <div className="calendar-picker py-16">
-      <h3 className="text-lg font-semibold mb-4">تقویم قیمتی</h3>
+      <h2 className="text-lg md:text-xl text-right font-bold text-[#1d274b] mb-5">تقویم قیمتی</h2>
       <PriceCalendar
         calendar={processedCalendar}
         selectedDates={selectedDates}

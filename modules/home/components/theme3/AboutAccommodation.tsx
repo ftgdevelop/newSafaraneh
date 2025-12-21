@@ -39,7 +39,7 @@ const AboutAccommodation: React.FC<Props> = props => {
                     {isLong && (
                         <button
                             onClick={toggleExpand}
-                            className="flex items-center gap-1 text-blue-500 text-sm mt-2 focus:outline-none"
+                            className="flex items-center gap-1 text-blue-500 text-sm mt-4 focus:outline-none bg-blue-50 px-3 py-1 rounded-full"
                         >
                             {isExpanded ? "نمایش کمتر" : "نمایش بیشتر"}
                             {isExpanded ? (

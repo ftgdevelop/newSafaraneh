@@ -1,4 +1,4 @@
-import { Location, Star } from "@/modules/shared/components/ui/icons";
+import { Instant, Location, Star } from "@/modules/shared/components/ui/icons";
 import Rating from "@/modules/shared/components/ui/Rating";
 import { useState, useEffect } from "react";
 
@@ -11,9 +11,10 @@ type AccommodationNameProps = {
   };
   rank?: number;
   reviews?: number;
+  isInstant?: boolean;
 };
 
-function AccommodationName({ title, location, rank, reviews }: AccommodationNameProps) {
+function AccommodationName({ title, location, rank, reviews, isInstant }: AccommodationNameProps) {
   const [loading, setLoading] = useState(true);
 
   // Simulate loading for demonstration purposes
@@ -35,23 +36,30 @@ function AccommodationName({ title, location, rank, reviews }: AccommodationName
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 bg-white rounded-b-xl pt-18">
-      <div className="lg:col-span-2">
-        {/* Title */}
-        <h2 className="text-xl font-bold text-gray-800">{title}</h2>
+      <div className="lg:col-span-3">
+        <div className="flex flex-col md:flex-row items-start md:justify-between w-full gap-2 md:gap-3 mb-2">
+          <h2 className="text-xl sm:text-3xl xl:text-4xl font-bold text-gray-800 mb-4">{title}</h2>
 
-        {/* Location */}
+          {isInstant && (
+            <div className="rounded-lg px-2 bg-[#412691]/5 select-none text-center inline-block mb-2 mb-4">
+              <Instant className="w-4 sm:w-5 h-4 sm:h-5 inline-block ml-1 fill-[#412691]" />
+              <span className="text-[#412691] text-sm">رزرو آنی و قطعی</span>
+            </div>
+          )}
+        </div>
+
         {location && (
           <div className="text-sm text-gray-500">
             <Location className="w-4 h-4 fill-current inline-block align-middle" /> {location.province || "نامشخص"}، {location.city || "نامشخص"}، {location.village || "نامشخص"}
           </div>
         )}
 
-        {/* Rank and Reviews */}
         <div className="flex items-center gap-2 mt-2">
           {rank && (
-            <span className="text-sm text-yellow-500">
-              <Star className="w-4.5 h-4.5 fill-amber-400" /> {rank.toFixed(1)}
-            </span>
+            <div className="text-sm text-yellow-500 flex gap-1 items-center">
+              <Star className="w-4 h-4 fill-amber-400 mb-1" />
+              <span className="text-md font-semibold">{rank.toFixed(1)}</span>
+            </div>
           )}
           {reviews && (
             <span className="text-sm text-gray-500">

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { UpCaret, DownCaret } from "@/modules/shared/components/ui/icons"; // Import the icons
+import { UpCaret, DownCaret } from "@/modules/shared/components/ui/icons";
+import Image from "next/image";
 
 type Feature = {
   featureLabel: string;
@@ -20,16 +21,14 @@ type FeaturesProps = {
 function Features({ features }: FeaturesProps) {
   const { filledCategories } = features;
   const [loading, setLoading] = useState(true);
-  const [showAll, setShowAll] = useState(false); // Move this hook above the conditional checks
+  const [showAll, setShowAll] = useState(false);
 
-  // Simulate loading for demonstration purposes
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1000); // Simulate 1 second loading
+    const timer = setTimeout(() => setLoading(false), 1000);
     return () => clearTimeout(timer);
   }, []);
 
   if (loading) {
-    // Skeleton loading placeholders
     return (
       <div className="py-16 border-b">
         <div className="h-6 bg-gray-300 rounded w-32 mb-4"></div>
@@ -45,11 +44,10 @@ function Features({ features }: FeaturesProps) {
     );
   }
 
-  // Check if there are no filled categories
   if (!filledCategories || Object.keys(filledCategories).length === 0) {
     return (
       <div className="my-16 border-b pb-16">
-        <h3 className="text-lg font-bold text-gray-800 mb-4">ویژگی‌ها</h3>
+        <h2 className="text-lg md:text-xl text-right font-bold text-[#1d274b] mb-5">ویژگی‌ها</h2>
         <p className="text-sm text-gray-600">هیچ ویژگی‌ای موجود نیست.</p>
       </div>
     );
@@ -64,14 +62,14 @@ function Features({ features }: FeaturesProps) {
 
   return (
     <div className="py-16 border-b">
-      <h3 className="text-lg font-bold text-gray-800 mb-4">ویژگی‌ها</h3>
+      <h2 className="text-lg md:text-xl text-right font-bold text-[#1d274b] mb-5">ویژگی‌ها</h2>
       {visibleCategories.map(([category, features]) => (
         <CategoryFeatures key={category} category={category} features={features} />
       ))}
       {categories.length > 2 && (
         <button
           onClick={toggleShowMore}
-          className="flex items-center gap-1 text-blue-500 text-sm mt-4 focus:outline-none"
+          className="flex items-center gap-1 text-blue-500 text-sm mt-4 focus:outline-none bg-blue-50 px-3 py-1 rounded-full"
         >
           {showAll ? "نمایش کمتر" : "نمایش بیشتر"}
           {showAll ? (
@@ -85,7 +83,6 @@ function Features({ features }: FeaturesProps) {
   );
 }
 
-// Component to handle each category and its features
 function CategoryFeatures({
   category,
   features,
@@ -94,19 +91,19 @@ function CategoryFeatures({
   features: Feature[];
 }) {
   return (
-    <div className="mb-6">
-      {/* Category Title */}
+    <div className="mb-8">
       <h4 className="text-md font-bold text-gray-700 mb-2">
         {translateCategory(category)}
       </h4>
-      {/* Features List */}
-      <ul className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <ul className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {features.map((feature, index) => (
           <li key={index} className="flex items-center gap-2">
-            <img
+            <Image
               src={feature.iconUrl}
               alt={feature.featureLabel}
-              className="w-6 h-6"
+              className="w-8 h-8"
+              width={32}
+              height={32}
             />
             <span className="text-sm text-gray-600">{feature.featureLabel}</span>
           </li>
@@ -116,7 +113,6 @@ function CategoryFeatures({
   );
 }
 
-// Helper function to translate category names
 function translateCategory(category: string): string {
   const translations: { [key: string]: string } = {
     kitchen_facilities: "امکانات آشپزخانه",

@@ -20,6 +20,8 @@ import AnchorTabs from "@/modules/shared/components/ui/AnchorTabs";
 import Calendar from "@/modules/accommodation/components/accommodationDetails/Aside/Calendar";
 import CalendarPicker from "@/modules/accommodation/components/accommodationDetails/Section/CalendarPicker";
 import Button from "@/modules/shared/components/ui/Button";
+import SectionTabs from "@/modules/shared/components/ui/SectionTabs";
+import { Instant } from "@/modules/shared/components/ui/icons";
 
 const AccommodationDetailPage: NextPage = () => {
   const router = useRouter();
@@ -119,128 +121,129 @@ const AccommodationDetailPage: NextPage = () => {
   };
 
   return (
-    <div className="max-w-container mx-auto px-5 py-4">
-      {/* <div className="mt-4 mb-6">
-        {loading ? (
-          <div className="flex items-center gap-2">
-            <div className="hidden md:block bg-gray-300 w-4 h-4 rounded-md"></div>
-            <div className="hidden md:block bg-gray-300 w-24 h-4 rounded-md"></div>
-          </div>
-        ) : (
-          <BackToList cityName="تهران" url="/#" />
-        )}
-      </div> */}
-
-      {house && (
-        <>
-          <div id="gallery">
-            <Gallery images={house.pictures?.records || []} />
-          </div>
-
-          <AnchorTabs
-            items={[
-              { id: "gallery", title: "گالری تصاویر" },
-              { id: "spaces", title: "مشخصات کلی" },
-              { id: "about", title: "درباره اقامتگاه" },
-              { id: "features", title: "ویژگی‌ها" },
-              { id: "distances", title: "فاصله‌ها" },
-              { id: "rules", title: "قوانین اقامتگاه" },
-              { id: "calendar", title: "قیمتی تقویم" },
-              { id: "rates", title: "نظرات کاربران" },
-              { id: "similar", title: "اقامتگاه‌های مشابه" },
-            ]}
-          />
-
-          <button onClick={() => router.push("/")}>تست ریدایرکت</button>
-
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 min-h-screen">
-            <div className="lg:col-span-3">
-
-              <div id="spaces">
-                <AccommodationName
-                  title={house.title}
-                  location={house.location}
-                  rank={house.rank}
-                  reviews={house.reviews}
-                />
-
-                <Host host={house.host} />
-                <Spaces spaces={house.spaces} />
-              </div>
-
-              <div id="about">
-                <About about={house.about} />
-              </div>
-
-              <div id="features">
-                <Features
-                  features={house.features || { emptyCategories: [], filledCategories: {} }}
-                />
-              </div>
-
-              <div id="distances">
-                <Distances distances={house.distances || { records: [] }} />
-              </div>
-
-              <div id="rules">
-                <Rules rules={house.rules?.records} />
-              </div>
-
-              <div id="calendar">
-                {id !== null && (
-                  <CalendarPicker
-                    id={id}
-                    checkin={checkinState}
-                    checkout={checkoutState}
-                  />
-                )}
-              </div>
-
-              <div id="rates">
-                <Rates rates={house.rates} />
-                {id !== null && <Review id={id} />}
-              </div>
-
-              <div id="similar">
-                {id !== null && (
-                  <Similar
-                    id={id}
-                    checkin={checkinState}
-                    checkout={checkoutState}
-                    capacity={capacityState}
-                  />
-                )}
-              </div>
-
+    <>
+      <div id="gallery" className="px-5 pt-4">
+        <Gallery images={house?.pictures?.records || []} />
+      </div>
+      <div className="max-w-container mx-auto px-5 pb-4 mt-4">
+        {/* <div className="mt-4 mb-6">
+          {loading ? (
+            <div className="flex items-center gap-2">
+              <div className="hidden md:block bg-gray-300 w-4 h-4 rounded-md"></div>
+              <div className="hidden md:block bg-gray-300 w-24 h-4 rounded-md"></div>
             </div>
+          ) : (
+            <BackToList cityName="تهران" url="/#" />
+          )}
+        </div> */}
 
-            <aside className="lg:col-span-2 md:mt-8">
-              <div className="sticky md:top-18">
-                {id !== null && (
-                  <>
-                    <Calendar
+        {house && (
+          <>
+            <SectionTabs
+              items={[
+                { id: "gallery", title: "گالری تصاویر" },
+                { id: "spaces", title: "مشخصات کلی" },
+                { id: "about", title: "درباره اقامتگاه" },
+                { id: "features", title: "ویژگی‌ها" },
+                { id: "distances", title: "فاصله‌ها" },
+                { id: "rules", title: "قوانین اقامتگاه" },
+                { id: "calendar", title: "قیمتی تقویم" },
+                { id: "rates", title: "نظرات کاربران" },
+                { id: "similar", title: "اقامتگاه‌های مشابه" },
+              ]}
+            />
+
+            <div className="grid grid-cols-1 lg:grid-cols-6 gap-6 min-h-screen">
+              <div className="lg:col-span-4">
+
+                <div id="spaces">
+                  <AccommodationName
+                    title={house.title}
+                    location={house.location}
+                    rank={house.rates.rank}
+                    reviews={house.reviews}
+                    isInstant={house.isInstant}
+                  />
+
+                  <Host host={house.host} />
+
+                  <Spaces spaces={house.spaces} />
+                </div>
+
+                <div id="about">
+                  <About about={house.about} />
+                </div>
+
+                <div id="features">
+                  <Features
+                    features={house.features || { emptyCategories: [], filledCategories: {} }}
+                  />
+                </div>
+
+                <div id="distances">
+                  <Distances distances={house.distances || { records: [] }} />
+                </div>
+
+                <div id="rules">
+                  <Rules rules={house.rules?.records} />
+                </div>
+
+                <div id="calendar">
+                  {id !== null && (
+                    <CalendarPicker
+                      id={id}
+                      checkin={checkinState}
+                      checkout={checkoutState}
+                    />
+                  )}
+                </div>
+
+                <div id="rates">
+                  <Rates rates={house.rates} />
+                  {id !== null && <Review id={id} />}
+                </div>
+
+                <div id="similar">
+                  {id !== null && (
+                    <Similar
                       id={id}
                       checkin={checkinState}
                       checkout={checkoutState}
                       capacity={capacityState}
-                      bookingToken={house.bookingToken}
-                      onUpdate={handleUpdate}
                     />
-                  </>
-                )}
+                  )}
+                </div>
+
               </div>
-            </aside>
+
+              <aside className="lg:col-span-2 md:mt-8">
+                <div className="sticky md:top-18">
+                  {id !== null && (
+                    <>
+                      <Calendar
+                        id={id}
+                        checkin={checkinState}
+                        checkout={checkoutState}
+                        capacity={capacityState}
+                        bookingToken={house.bookingToken}
+                        onUpdate={handleUpdate}
+                      />
+                    </>
+                  )}
+                </div>
+              </aside>
+            </div>
+          </>
+        )}
+
+        {!house && !loading && (
+          <div className="text-center py-20 text-gray-500">
+            اقامتگاهی یافت نشد.
           </div>
-        </>
-      )}
+        )}
 
-      {!house && !loading && (
-        <div className="text-center py-20 text-gray-500">
-          اقامتگاهی یافت نشد.
-        </div>
-      )}
-
-    </div>
+      </div>
+    </>
   );
 };
 

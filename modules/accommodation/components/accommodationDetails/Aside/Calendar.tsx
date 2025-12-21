@@ -121,7 +121,7 @@ const Calendar: React.FC<CalendarProps> = ({ id, checkin, checkout, capacity, on
   };
 
   return (
-    <div className="p-4 bg-white border rounded-lg">
+    <div className="p-4 bg-white border rounded-xl shadow-xl">
       <h3 className="text-lg font-bold mb-4">جزئیات اقامت</h3>
 
       {loading ? (

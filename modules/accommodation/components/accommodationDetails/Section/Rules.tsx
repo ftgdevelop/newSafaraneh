@@ -7,8 +7,6 @@ type RulesProps = {
     maxAccommodates: number;
     checkin: string | null;
     checkout: string | null;
-    maxCheckinTime: string;
-    maxCheckoutTime: string;
     rulesDescription: string;
     cancellationPlan: number;
     needMaritalDocuments: boolean;
@@ -28,8 +26,6 @@ function Rules({ rules }: RulesProps) {
     maxAccommodates,
     checkin,
     checkout,
-    maxCheckinTime,
-    maxCheckoutTime,
     rulesDescription,
     needMaritalDocuments,
     smoking,
@@ -44,17 +40,16 @@ function Rules({ rules }: RulesProps) {
   const [showAll, setShowAll] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Simulate loading for demonstration purposes
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1000); // Simulate 1 second loading
+    const timer = setTimeout(() => setLoading(false), 1000);
     return () => clearTimeout(timer);
   }, []);
 
   const rulesList = [
     { label: "ظرفیت استاندارد", value: `${accommodates} نفر` },
     { label: "حداکثر ظرفیت", value: `${maxAccommodates} نفر` },
-    { label: "زمان ورود", value: `${checkin || "نامشخص"} (تا ${maxCheckinTime})` },
-    { label: "زمان خروج", value: `${checkout || "نامشخص"} (تا ${maxCheckoutTime})` },
+    { label: "زمان ورود", value: `${checkin || "-"}` },
+    { label: "زمان خروج", value: `${checkout || "-"}` },
     { label: "توضیحات قوانین", value: rulesDescription },
     { label: "نیاز به مدارک ازدواج", value: needMaritalDocuments ? "بله" : "خیر" },
     { label: "سیگار کشیدن", value: smoking ? "مجاز" : "غیرمجاز" },
@@ -73,7 +68,6 @@ function Rules({ rules }: RulesProps) {
   };
 
   if (loading) {
-    // Skeleton loading placeholders
     return (
       <div className="py-16 border-b">
         <div className="h-6 bg-gray-300 rounded w-32 mb-4"></div>
@@ -91,23 +85,35 @@ function Rules({ rules }: RulesProps) {
 
   return (
     <div className="py-16 border-b">
-      <h3 className="text-lg font-bold text-gray-800 mb-4">قوانین اقامتگاه</h3>
-      <ul className="space-y-4 text-sm text-gray-600">
-        {visibleRules.map((rule, index) => (
-          <li key={index}>
-            <span className="font-bold">{rule.label}:</span>{" "}
-            {rule.label === "توضیحات قوانین" ? (
-              <p className="mt-1 whitespace-pre-line">{rule.value}</p>
-            ) : (
-              rule.value
-            )}
-          </li>
-        ))}
+      <h2 className="text-lg md:text-xl text-right font-bold text-[#1d274b] mb-5">قوانین اقامتگاه</h2>
+      <ul className="text-sm text-gray-600 grid grid-cols-1 md:grid-cols-2 list-disc gap-2 md:gap-4">
+        {visibleRules
+          .filter(rule => rule.label !== "توضیحات قوانین")
+          .map((rule, index) => (
+            <li key={index} className="flex flex-row items-center justify-between w-full bg-gray-50 p-1 md:p-2 rounded-xl border border-gray-100">
+              <span className="font-bold">{rule.label}</span>
+              <span>{rule.value}</span>
+            </li>
+          ))}
       </ul>
+      {/* توضیحات قوانین به صورت عنوان جدا */}
+      {/* {visibleRules.some(rule => rule.label === "توضیحات قوانین") && (
+        <>
+          <h3 className="text-base md:text-lg font-bold text-[#1d274b] mt-8 mb-2">توضیحات قوانین</h3>
+          <ul className="space-y-2 text-sm text-gray-600 list-disc mr-4">
+            {(rulesDescription ?? "")
+            .split("\n")
+            .filter(line => line.trim())
+            .map((line, idx) => (
+              <li key={idx}>{line}</li>
+            ))}
+          </ul>
+        </>
+      )} */}
       {rulesList.length > 4 && (
         <button
           onClick={toggleShowMore}
-          className="flex items-center gap-1 text-blue-500 text-sm mt-4 focus:outline-none"
+          className="flex items-center gap-1 text-blue-500 text-sm mt-4 focus:outline-none bg-blue-50 px-3 py-1 rounded-full"
         >
           {showAll ? "نمایش کمتر" : "نمایش بیشتر"}
           {showAll ? (

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Location, Star } from "@/modules/shared/components/ui/icons";
 
 type SimilarAccommodationItemProps = {
   id: number | string;
@@ -29,10 +30,11 @@ function SimilarAccommodationItem({
   checkin,
   checkout,
   capacity,
+  rank,
+  reviews,
 }: SimilarAccommodationItemProps) {
   const imageUrl = coverPhoto?.thumbnailAbsoluteUrl || "/placeholder.jpg";
 
-  // Build the detail URL with checkin, checkout, and capacity
   const detailUrl =
     `/accommodation/${id}` +
     (checkin ? `/checkin-${checkin}` : "") +
@@ -42,32 +44,45 @@ function SimilarAccommodationItem({
   return (
     <Link
       href={detailUrl}
-      className="block bg-white rounded-lg shadow hover:shadow-md transition-shadow"
+      className="bg-white rounded-2xl group relative block overflow-hidden border border-neutral-200"
+      dir="rtl"
     >
-      {/* Cover Photo */}
-      <div className="relative h-40 w-full overflow-hidden rounded-t-lg">
+      <div className="relative h-40 w-full overflow-hidden rounded-t-2xl">
         <Image
           src={imageUrl}
           alt={title}
           width={600}
           height={400}
-          className="h-full w-full object-cover"
+          className="h-40 w-full object-cover rounded-2xl px-2 pt-2"
           priority={false}
         />
       </div>
 
-      {/* Content Section */}
       <div className="p-4">
-        {/* Title */}
-        <h3 className="text-sm font-bold text-gray-800 leading-2 min-h-14 text-right">
+        <div className="flex items-center gap-2">
+            {rank ? (
+              <div className="text-sm text-yellow-500 flex gap-1 items-center">
+                <Star className="w-4 h-4 fill-amber-400" />
+                <span className="text-xs">{rank.toFixed(1)}</span>
+              </div>
+            ) : null}
+            {reviews ? (
+              <span className="text-[11px] text-gray-500">
+                ({reviews} دیدگاه)
+              </span>
+            ) : null}
+          </div>
+        <h3 className="font-bold mb-1 block text-sm line-clamp-1 min-h-14">
           {title}
         </h3>
-        <div className="text-xs leading-4 mb-2 text-neutral-500 text-right">
-          {location?.province}، {location?.city}
+        <div className="flex items-center gap-1 my-2">
+          <Location className="size-4 fill-neutral-600" />
+          <span className="text-xs leading-4 text-neutral-500">
+            {location?.province}، {location?.city}
+          </span>
         </div>
 
-        {/* Pricing */}
-        <div className="flex flex-col items-start justify-end mt-2">
+        {/* <div className="flex flex-col items-start justify-end mt-2">
           <div className="flex flex-col items-end gap-1 mb-2">
             {pricing?.discountPrice && Math.abs(pricing?.discountPrice) > 0 ? (
               <>
@@ -92,7 +107,42 @@ function SimilarAccommodationItem({
           <div className="text-xs text-neutral-500 leading-4">
             شروع قیمت برای 1 شب
           </div>
+        </div> */}
+
+        <div className="flex flex-col">
+          <div className="flex flex-col gap-1">
+            {pricing?.discountPrice && Math.abs(pricing?.discountPrice) > 0 ? (
+              <div className="flex flex-col gap-2">
+                {/* <div className="flex flex-row items-end gap-2">
+                  <span className="bg-green-700 text-white rounded-xl leading-7 text-xs px-1 py-0 select-none inline-block"> {pricing?.discountPercent}% </span>
+                  <div className="text-xs text-neutral-500 line-through whitespace-nowrap">
+                    {pricing?.salePrice.toLocaleString("fa-IR")} ریال
+                  </div>
+                </div> */}
+                <div className="flex flex-row items-center gap-2">
+                  {/* <div className="text-xs text-neutral-500 leading-4"></div> */}
+                  <div className="text-xs font-bold text-red-600 whitespace-nowrap">
+                    {pricing?.boardPrice.toLocaleString("fa-IR")} ریال
+                  </div>
+                  <span className="text-[11px] text-gray-500">
+                    (شروع قیمت هر شب)
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-row items-center gap-2">
+                {/* <div className="text-xs text-neutral-500 leading-4">شروع قیمت هر شب از</div> */}
+                <div className="text-xs font-bold text-red-600 whitespace-nowrap">
+                  {pricing?.salePrice.toLocaleString("fa-IR")} ریال
+                </div>
+                <span className="text-[11px] text-gray-500">
+                    (شروع قیمت هر شب)
+                </span>
+              </div>
+            )}
+          </div>
         </div>
+        
       </div>
     </Link>
   );

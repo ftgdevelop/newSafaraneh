@@ -27,43 +27,49 @@ function Gallery({ images }: GalleryProps) {
     setOpen(true);
   };
 
-  // Simulate loading for demonstration purposes
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1000); // Simulate 1 second loading
+    const timer = setTimeout(() => setLoading(false), 1000);
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 bg-white gap-1 relative">
+    <div className="grid grid-cols-1 md:grid-cols-4 bg-white gap-2 relative">
       {loading ? (
-        // Skeleton loading placeholders
         Array.from({ length: 5 }).map((_, index) => (
           <div
             key={index}
             className={`animate-pulse bg-gray-300 ${
-              index ? "hidden md:block md:col-span-1 md:row-span-1 h-40" : "md:col-span-2 md:row-span-2 h-80"
+              index ? "hidden md:block md:col-span-1 md:row-span-1 h-40" : "md:col-span-2 md:row-span-2 h-[330px]"
             }`}
           />
         ))
       ) : (
-        // Render images when loading is complete
-        images.slice(0, 5).map((slide, index) => (
-          <Image
-            key={index}
-            priority={!index}
-            onContextMenu={(e) => e.preventDefault()}
-            src={slide.thumbnailPath || "/images/no-image.jpg"}
-            alt={slide.title || "تصویر اقامتگاه"}
-            title={slide.title || "تصویر اقامتگاه"}
-            width={index ? 287 : 384}
-            height={index ? 191 : 288}
-            sizes="(max-width: 767px) 100vw, 50vw"
-            onClick={() => openLightBox(index)}
-            className={`cursor-pointer w-full object-cover ${
-              index ? "hidden md:block md:col-span-1 md:row-span-1 h-40" : "md:col-span-2 md:row-span-2 h-80"
-            }`}
-          />
-        ))
+        images.slice(0, 5).map((slide, index) => {
+          let extraClass = "";
+          if (index === 0) extraClass = "rounded-r-2xl";
+          else if (index === 2) extraClass = "rounded-tl-2xl";
+          else if (index === 4) extraClass = "rounded-bl-2xl";
+          
+          return (
+            <Image
+              key={index}
+              priority={!index}
+              onContextMenu={(e) => e.preventDefault()}
+              src={slide.thumbnailPath || "/images/no-image.jpg"}
+              alt={slide.title || "تصویر اقامتگاه"}
+              title={slide.title || "تصویر اقامتگاه"}
+              width={index ? 287 : 384}
+              height={index ? 191 : 288}
+              sizes="(max-width: 767px) 100vw, 50vw"
+              onClick={() => openLightBox(index)}
+              className={`cursor-pointer w-full object-cover max-md:rounded-2xl ${extraClass} ${
+                index
+                  ? "hidden md:block md:col-span-1 md:row-span-1 h-40"
+                  : "md:col-span-2 md:row-span-2 h-[330px]"
+              }`}
+            />
+          );
+        })
       )}
 
       {!loading && (

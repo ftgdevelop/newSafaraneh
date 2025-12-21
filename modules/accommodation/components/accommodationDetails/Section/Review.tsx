@@ -1,12 +1,26 @@
 import { useEffect, useState } from "react";
 import Slider from "react-slick";
 import { ServerAddress, Accommodation } from "@/enum/url";
-import { ArrowLeft, ArrowRight } from "@/modules/shared/components/ui/icons";
+import { ArrowLeft, ArrowRight, LeftCaret, RightCaret, User2 } from "@/modules/shared/components/ui/icons";
+
+const COMMENT_MAX_LENGTH = 180;
+
+function formatJalaliDate(jalaliDate: string): string {
+  if (!jalaliDate) return "";
+  const [year, month, day] = jalaliDate.split("-");
+  const monthNames = [
+    "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور",
+    "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"
+  ];
+  const monthName = monthNames[parseInt(month, 10) - 1] || "";
+  return `${parseInt(day, 10)} ${monthName} ${year}`;
+}
 
 function Review({ id }: { id: number }) {
   const [reviews, setReviews] = useState<any[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0);
   const [loading, setLoading] = useState(false);
+  const [expandedIndexes, setExpandedIndexes] = useState<number[]>([]);
 
   useEffect(() => {
     if (!id) return;
@@ -51,6 +65,14 @@ function Review({ id }: { id: number }) {
     fetchReviews();
   }, [id]);
 
+  const toggleExpand = (idx: number) => {
+    setExpandedIndexes(prev =>
+      prev.includes(idx)
+        ? prev.filter(i => i !== idx)
+        : [...prev, idx]
+    );
+  };
+
   const NextArrow = (props: any) => {
     const { onClick } = props;
     return (
@@ -84,13 +106,14 @@ function Review({ id }: { id: number }) {
     slidesToShow: 2,
     slidesToScroll: 1,
     arrows: true,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
+    nextArrow: <RightCaret />,
+    prevArrow: <LeftCaret />,
+    className: "accommodation-categorylist-slider",
     responsive: [
       {
-        breakpoint: 768, // For screens smaller than 768px
+        breakpoint: 768,
         settings: {
-          slidesToShow: 1, // Show 1 item per slide
+          slidesToShow: 1,
         },
       },
     ],
@@ -98,7 +121,7 @@ function Review({ id }: { id: number }) {
 
   return (
     <div className="py-16 border-b">
-      <h2 className="font-bold text-lg mb-4">نظرات کاربران</h2>
+      <h2 className="text-lg md:text-xl text-right font-bold text-[#1d274b] mb-5">نظرات کاربران</h2>
       {loading ? (
         <p>در حال بارگذاری...</p>
       ) : reviews.length > 0 ? (
@@ -107,27 +130,48 @@ function Review({ id }: { id: number }) {
             تعداد کل نظرات: {totalRows} نظر
           </p>
           <Slider {...sliderSettings}>
-            {reviews.map((review, index) => (
-              <div className="px-2" key={index}>
-                <div className="p-6 flex flex-col text-right border rounded-xl bg-white">
-                  <p className="text-sm font-bold text-gray-800">
-                    {review.user?.name || "کاربر ناشناس"}
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    تاریخ: {review.createdAt || "نامشخص"}
-                  </p>
-                  <p className="text-sm text-gray-700 mt-2">
-                    {review.comment}
-                  </p>
-                  <div className="flex flex-wrap gap-2 mt-2 text-xs text-gray-600">
-                    <span>نظافت: {review.cleanliness || "-"}</span>
-                    <span>دقت: {review.accuracy || "-"}</span>
-                    <span>کیفیت: {review.quality || "-"}</span>
-                    <span>موقعیت: {review.location || "-"}</span>
+            {reviews.map((review, index) => {
+              const isLong = review.comment && review.comment.length > COMMENT_MAX_LENGTH;
+              const shortComment = isLong ? review.comment.slice(0, COMMENT_MAX_LENGTH) + "..." : review.comment;
+              const expanded = expandedIndexes.includes(index);
+
+              return (
+                <div className="px-2" key={index}>
+                  <div className="p-6 flex flex-col text-right bg-gray-50 border border-gray-100 rounded-xl min-h-[320px]">
+                    <div className="flex items-center mb-2 gap-4" dir="rtl">
+                      <div className="flex items-center justify-center w-12 h-12 bg-white rounded-full">
+                        <User2 className="w-8 h-8 text-gray-400 inline-block" />
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-gray-800">
+                          {review.user?.name || "کاربر ناشناس"}
+                        </div>
+                        <div className="text-xs text-gray-500" dir="rtl">
+                          {formatJalaliDate(review.createdAt)}
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-700 mt-2" dir="rtl">
+                      {expanded || !isLong ? review.comment : shortComment}
+                    </p>
+                    {isLong && (
+                      <button
+                        onClick={() => toggleExpand(index)}
+                        className="flex items-center gap-1 text-blue-500 text-xs mt-1 focus:outline-none justify-end mb-4"
+                      >
+                        {expanded ? "نمایش کمتر" : "نمایش بیشتر"}
+                      </button>
+                    )}
+                    <div className="flex flex-wrap justify-end gap-2 mt-2 text-xs text-gray-600">
+                      {review.cleanliness && <span className="bg-white px-2 rounded-full border border-gray-100 text-gray-500">نظافت: <b>{review.cleanliness || ""}</b></span>}
+                      {review.accuracy && <span className="bg-white px-2 rounded-full border border-gray-100 text-gray-500">دقت: <b>{review.accuracy || ""}</b></span>}
+                      {review.quality && <span className="bg-white px-2 rounded-full border border-gray-100 text-gray-500">کیفیت: <b>{review.quality || ""}</b></span>}
+                      {review.location && <span className="bg-white px-2 rounded-full border border-gray-100 text-gray-500">موقعیت: <b>{review.location || " "}</b></span>}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </Slider>
         </>
       ) : (

@@ -35,9 +35,9 @@ function About({ about }: AboutProps) {
 
   return (
     <div className="py-16 border-b pb-16">
-      <h3 className="text-lg font-bold text-gray-800 mb-4">درباره اقامتگاه</h3>
+      <h2 className="text-lg md:text-xl text-right font-bold text-[#1d274b] mb-5">درباره اقامتگاه</h2>
       <p
-        className={`text-sm text-gray-600 leading-6 ${
+        className={`text-sm sm:text-md text-gray-600 leading-6 ${
           isExpanded ? "" : "line-clamp-3"
         }`}
       >
@@ -45,7 +45,7 @@ function About({ about }: AboutProps) {
       </p>
       <button
         onClick={toggleExpand}
-        className="flex items-center gap-1 text-blue-500 text-sm mt-2 focus:outline-none"
+        className="flex items-center gap-1 text-blue-500 text-sm mt-4 focus:outline-none bg-blue-50 px-3 py-1 rounded-full"
       >
         {isExpanded ? "نمایش کمتر" : "نمایش بیشتر"}
         {isExpanded ? <UpCaret className="w-4 h-4 fill-blue-500" /> : <DownCaret className="w-4 h-4 fill-blue-500" />}

@@ -90,7 +90,7 @@ const AccommodationCategoryList: React.FC<Props> = ({ title, categories, titleCo
                                 <div key={category.title}>
                                   <Link
                                     href={url}
-                                    className="bg-white group relative block overflow-hidden "
+                                    className="bg-white group relative block overflow-hidden"
                                     target="_blank"
                                     title={category.title}
                                   >

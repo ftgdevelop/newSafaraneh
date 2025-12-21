@@ -1,3 +1,4 @@
+import { Bed, Bed2, Bed4, BedSpace, DoubleBeds, FloorSleepSets, MasterRooms, NormalRooms, SingleBed, SofaBeds } from "@/modules/shared/components/ui/icons";
 import { useState, useEffect } from "react";
 
 type SpacesProps = {
@@ -40,41 +41,78 @@ function Spaces({ spaces }: SpacesProps) {
 
   return (
     <div className="py-16 border-b">
-      <h3 className="text-lg font-bold text-gray-800 mb-4">مشخصات کلی</h3>
-      <ul className="grid grid-cols-2 gap-4 text-sm text-gray-600">
+      <h2 className="text-lg md:text-xl text-right font-bold text-[#1d274b] mb-5">مشخصات کلی</h2>
+      <ul className="grid grid-cols-1 gap-4 text-sm text-gray-600">
         {spaces.bedSpace > 0 && (
-          <li>
-            <span className="font-bold">فضای خواب:</span> {spaces.bedSpace} نفر
+          <li className="flex items-center max-md:justify-between gap-4">
+            <div className="bg-[#ece9f2]/70 rounded-full p-2 max-md:order-2">
+              <BedSpace className="w-8 h-8 sm:w-10 sm:h-10 inline-block ml-1 fill-current" />
+            </div>
+            <div className="flex items-center gap-2 max-md:order-1">
+              <span>فضای خواب</span> {spaces.bedSpace} نفر
+            </div>
           </li>
         )}
         {spaces.singleBeds > 0 && (
-          <li>
-            <span className="font-bold">تخت‌های تک‌نفره:</span> {spaces.singleBeds}
+          <li className="flex items-center max-md:justify-between gap-4">
+            <div className="bg-[#ece9f2]/70 rounded-full p-2 max-md:order-2">
+              <SingleBed className="w-8 h-8 sm:w-10 sm:h-10 inline-block ml-1 fill-current" />
+            </div>
+            <div className="flex items-center gap-2 max-md:order-1">
+              <span>تخت‌های تک‌نفره</span> {spaces.singleBeds} عدد
+            </div>
           </li>
         )}
+
         {spaces.doubleBeds > 0 && (
-          <li>
-            <span className="font-bold">تخت‌های دونفره:</span> {spaces.doubleBeds}
+          <li className="flex items-center max-md:justify-between gap-4">
+            <div className="bg-[#ece9f2]/70 rounded-full p-2 max-md:order-2">
+              <DoubleBeds className="w-8 h-8 sm:w-10 sm:h-10 inline-block ml-1 fill-current" />
+            </div>
+            <div className="flex items-center gap-2 max-md:order-1">
+              <span>تخت‌های دونفره</span> {spaces.doubleBeds} عدد
+            </div>
           </li>
         )}
+
         {spaces.normalRooms > 0 && (
-          <li>
-            <span className="font-bold">اتاق‌های معمولی:</span> {spaces.normalRooms}
+          <li className="flex items-center gap-4 max-md:justify-between">
+            <div className="bg-[#ece9f2]/70 rounded-full p-2 max-md:order-2">
+              <NormalRooms className="w-8 h-8 sm:w-10 sm:h-10 inline-block ml-1 fill-current" />
+            </div>
+            <div className="flex items-center gap-2 max-md:order-1">
+              <span>اتاق‌های معمولی</span> {spaces.normalRooms} عدد
+            </div>
           </li>
         )}
         {spaces.masterRooms > 0 && (
-          <li>
-            <span className="font-bold">اتاق‌های مستر:</span> {spaces.masterRooms}
+          <li className="flex items-center gap-4 max-md:justify-between">
+            <div className="bg-[#ece9f2]/70 rounded-full p-2 max-md:order-2">
+              <MasterRooms className="w-8 h-8 sm:w-10 sm:h-10 inline-block ml-1 fill-current" />
+            </div>
+            <div className="flex items-center gap-2 max-md:order-1">
+              <span>اتاق‌ مستر</span> {spaces.masterRooms} عدد
+            </div>
           </li>
         )}
         {spaces.sofaBeds > 0 && (
-          <li>
-            <span className="font-bold">تخت‌های مبل:</span> {spaces.sofaBeds}
+          <li className="flex items-center gap-4 max-md:justify-between">
+            <div className="bg-[#ece9f2]/70 rounded-full p-2 max-md:order-2">
+              <SofaBeds className="w-8 h-8 sm:w-10 sm:h-10 inline-block ml-1 fill-current" />
+            </div>
+            <div className="flex items-center gap-2 max-md:order-1">
+              <span>مبل تخت خوابشو</span> {spaces.sofaBeds} عدد
+            </div>
           </li>
         )}
         {spaces.floorSleepSets > 0 && (
-          <li>
-            <span className="font-bold">ست خواب روی زمین:</span> {spaces.floorSleepSets}
+          <li className="flex items-center gap-4 max-md:justify-between">
+            <div className="bg-[#ece9f2]/70 rounded-full p-2 max-md:order-2">
+              <FloorSleepSets className="w-8 h-8 sm:w-10 sm:h-10 inline-block ml-1 fill-current" />
+            </div>
+            <div className="flex items-center gap-2 max-md:order-1">
+              <span>ست خواب روی زمین</span> {spaces.floorSleepSets} عدد
+            </div>
           </li>
         )}
       </ul>
