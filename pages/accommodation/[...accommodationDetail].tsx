@@ -122,8 +122,17 @@ const AccommodationDetailPage: NextPage = () => {
 
   return (
     <>
-      <div id="gallery" className="px-5 pt-4">
-        <Gallery images={house?.pictures?.records || []} />
+      <div className="max-w-container mx-auto px-5 pb-4">
+        <AccommodationName
+            title={house.title}
+            location={house.location}
+            rank={house.rates.rank}
+            reviews={house.reviews}
+            isInstant={house.isInstant}
+          />
+        <div id="gallery" className="pt-4">
+          <Gallery images={house?.pictures?.records || []} />
+        </div>
       </div>
       <div className="max-w-container mx-auto px-5 pb-4 mt-4">
         {/* <div className="mt-4 mb-6">
@@ -156,15 +165,7 @@ const AccommodationDetailPage: NextPage = () => {
             <div className="grid grid-cols-1 lg:grid-cols-6 gap-6 min-h-screen">
               <div className="lg:col-span-4">
 
-                <div id="spaces">
-                  <AccommodationName
-                    title={house.title}
-                    location={house.location}
-                    rank={house.rates.rank}
-                    reviews={house.reviews}
-                    isInstant={house.isInstant}
-                  />
-
+                <div id="spaces" className="mt-8">
                   <Host host={house.host} />
 
                   <Spaces spaces={house.spaces} />
