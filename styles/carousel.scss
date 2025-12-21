@@ -101,25 +101,54 @@
     }
 
 
-        .slick-slider.promotion-carousel {
-            .slick-arrow {
-                bottom: 10px;
-                top: auto;
-    
-                &.slick-prev {
-                    left: 10px;
-                }
-    
-                &.slick-next {
-                    right: auto;
-                    left: 45px;
-                }
-    
-                border: 0 none;
-                background-color: #fff;
-                fill: #402594;
-                width: 30px;
-                height: 30px;
+    .slick-slider.promotion-carousel {
+        .slick-arrow {
+            bottom: 10px;
+            top: auto;
+
+            &.slick-prev {
+                left: 10px;
+            }
+
+            &.slick-next {
+                right: auto;
+                left: 45px;
+            }
+
+            border: 0 none;
+            background-color: #fff;
+            fill: #402594;
+            width: 30px;
+            height: 30px;
+        }
+    }
+
+    .accommodation-categorylist-slider {
+        .slick-arrow {
+            background-color: #ece9f2;
+            border: none;
+            box-shadow: none;
+            fill: #1d274b;
+            width: 28px;
+            &:hover {
+                background-color: #f2f0f6;
+                transition: all .2s ease-in-out;
             }
         }
+        .slick-arrow.slick-prev {
+            left: 0;
+            top: -35px;
         }
+        .slick-arrow.slick-next {
+            left: 40px;
+            top: -35px;
+        }
+        .slick-list {
+            .slick-track {
+                .slick-slide {
+                    float: left;
+                }
+            }
+        }
+    }
+}

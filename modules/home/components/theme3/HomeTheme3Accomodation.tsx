@@ -1,11 +1,11 @@
 import { BlogItemType } from "@/modules/blogs/types/blog";
 import Banner from "../banner";
 import Services from "./Services";
-import Faq from "./Faq";
 import AccomodationCategories from "./AccomodationCategories";
 import AccomodationTopCities from "./AccomodationTopCities";
 import AccommodationCategoryList from "./AccomodationVillage";
-import About from "./About";
+import AboutAccommodation from "./AboutAccommodation";
+import FaqAccommodation from "./FaqAccommodation";
 
 type SectionItem = {
     Keyword: "about-section" | "faq-section";
@@ -83,28 +83,32 @@ const HomeTheme3Accomodation: React.FC<Props> = props => {
                 logo={props.logo}
             />
 
+            <AccomodationCategories />
+            
             <AccomodationTopCities />
 
-            <AccomodationCategories />
 
             <AccommodationCategoryList title="ویلاهای شمال" categories={northVillas} />
             <AccommodationCategoryList title="ویلاهای اطراف تهران" categories={northVillas} />
             <AccommodationCategoryList title="اقامتگاه های تهران" categories={northVillas} />
 
-            <div className="bg-[#ece9f2] pb-8 my-16">
-                <AccommodationCategoryList title="اقامتگاه‌های خوش‌قیمت" categories={northVillas} />
+            <div className="offer-card-bg pb-8 my-16">
+                <AccommodationCategoryList title="اقامتگاه‌های خوش‌قیمت" categories={northVillas} titleColor="text-white" />
             </div>
             <Services />
             <AccommodationCategoryList title="اقامتگاه های جنوب" categories={northVillas} />
             <AccommodationCategoryList title="اقامتگاه های بوم گردی" categories={northVillas} />
 
-            <About logo={props.logo} strapiContent={strapiAboutContent} />
 
-            {strapiFAQ && <Faq items={strapiFAQ.map(item => ({
-                key: item.id,
-                content: item.Answer,
-                title: item.Question
-            }))} />}
+            <section className="max-w-container m-auto border-4 sm:border-7 border-[#ece9f2] rounded-lg p-4 lg:p-8 mb-16 max-md:mx-4">
+                <AboutAccommodation logo={props.logo} strapiContent={strapiAboutContent} />
+
+                {strapiFAQ && <FaqAccommodation items={strapiFAQ.map(item => ({
+                    key: item.id,
+                    content: item.Answer,
+                    title: item.Question
+                }))} />}
+            </section>
         </>
     )
 }

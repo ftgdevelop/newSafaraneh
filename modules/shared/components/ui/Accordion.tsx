@@ -46,7 +46,7 @@ const Accordion: React.FC<Props> = props => {
                 {title}
                 </div>
             ):(
-            <div onClick={toggle} className={`leading-4 relative select-none cursor-pointer p-3 sm:p-5 after:block after:w-2 after:h-2 after:border-b-2 after:border-l-2 after:top-1/2 after:-mt-1 after:border-neutral-400 after:self-center after:transition-all after:absolute after:rtl:left-5 after:ltr:right-5 rtl:pl-12 ltr:pr-12 ${open?"after:rotate-135":"after:-rotate-45"}`}>
+            <div onClick={toggle} className={`leading-4 relative select-none cursor-pointer p-3 sm:p-4 after:block after:w-2 after:h-2 after:border-b-2 after:border-l-2 after:top-1/2 after:-mt-1 after:border-neutral-400 after:self-center after:transition-all after:absolute after:rtl:left-5 after:ltr:right-5 rtl:pl-12 ltr:pr-12 ${open?"after:rotate-135":"after:-rotate-45"}`}>
                 {title}
             </div>
             )}

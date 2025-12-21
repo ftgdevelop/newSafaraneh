@@ -73,7 +73,6 @@ export default function AccommodationItem({
   const router = useRouter();
   const locale = router.locale || "fa";
 
-  // Build the detail URL
   const detailUrl =
     `/${locale}/accommodation/${id}` +
     (checkin ? `/checkin-${checkin}` : "") +
@@ -153,7 +152,7 @@ export default function AccommodationItem({
               </div>
             ) : null}
             {reviews ? (
-              <span className="text-xs text-gray-500">
+              <span className="text-[11px] text-gray-500">
                 ({reviews} دیدگاه)
               </span>
             ) : null}
@@ -175,18 +174,24 @@ export default function AccommodationItem({
                   </div>
                 </div>
                 <div className="flex flex-row items-center gap-2">
-                  <div className="text-xs text-neutral-500 leading-4">شروع قیمت هر شب از</div>
-                  <div className="text-xs font-bold text-green-600 whitespace-nowrap">
+                  {/* <div className="text-xs text-neutral-500 leading-4"></div> */}
+                  <div className="text-xs font-bold text-red-600 whitespace-nowrap">
                     {boardPrice.toLocaleString("fa-IR")} ریال
                   </div>
+                  <span className="text-[11px] text-gray-500">
+                    (شروع قیمت هر شب)
+                  </span>
                 </div>
               </div>
             ) : (
               <div className="flex flex-row items-center gap-2">
-                <div className="text-xs text-neutral-500 leading-4">شروع قیمت هر شب از</div>
-                <div className="text-xs font-bold text-green-600 whitespace-nowrap">
+                {/* <div className="text-xs text-neutral-500 leading-4">شروع قیمت هر شب از</div> */}
+                <div className="text-xs font-bold text-red-600 whitespace-nowrap">
                   {salePrice.toLocaleString("fa-IR")} ریال
                 </div>
+                <span className="text-[11px] text-gray-500">
+                    (شروع قیمت هر شب)
+                </span>
               </div>
             )}
           </div>
