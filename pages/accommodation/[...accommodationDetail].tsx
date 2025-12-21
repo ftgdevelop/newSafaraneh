@@ -19,6 +19,7 @@ import Rates from "@/modules/accommodation/components/accommodationDetails/Secti
 import AnchorTabs from "@/modules/shared/components/ui/AnchorTabs";
 import Calendar from "@/modules/accommodation/components/accommodationDetails/Aside/Calendar";
 import CalendarPicker from "@/modules/accommodation/components/accommodationDetails/Section/CalendarPicker";
+import Button from "@/modules/shared/components/ui/Button";
 
 const AccommodationDetailPage: NextPage = () => {
   const router = useRouter();
@@ -119,7 +120,7 @@ const AccommodationDetailPage: NextPage = () => {
 
   return (
     <div className="max-w-container mx-auto px-5 py-4">
-      <div className="mt-4 mb-6">
+      {/* <div className="mt-4 mb-6">
         {loading ? (
           <div className="flex items-center gap-2">
             <div className="hidden md:block bg-gray-300 w-4 h-4 rounded-md"></div>
@@ -128,7 +129,7 @@ const AccommodationDetailPage: NextPage = () => {
         ) : (
           <BackToList cityName="تهران" url="/#" />
         )}
-      </div>
+      </div> */}
 
       {house && (
         <>
@@ -149,6 +150,8 @@ const AccommodationDetailPage: NextPage = () => {
               { id: "similar", title: "اقامتگاه‌های مشابه" },
             ]}
           />
+
+          <button onClick={() => router.push("/")}>تست ریدایرکت</button>
 
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 min-h-screen">
             <div className="lg:col-span-3">
@@ -214,14 +217,16 @@ const AccommodationDetailPage: NextPage = () => {
             <aside className="lg:col-span-2 md:mt-8">
               <div className="sticky md:top-18">
                 {id !== null && (
-                  <Calendar
-                    id={id}
-                    checkin={checkinState}
-                    checkout={checkoutState}
-                    capacity={capacityState}
-                    bookingToken={house.bookingToken} // Pass the bookingToken here
-                    onUpdate={handleUpdate}
-                  />
+                  <>
+                    <Calendar
+                      id={id}
+                      checkin={checkinState}
+                      checkout={checkoutState}
+                      capacity={capacityState}
+                      bookingToken={house.bookingToken}
+                      onUpdate={handleUpdate}
+                    />
+                  </>
                 )}
               </div>
             </aside>

@@ -7,7 +7,6 @@ function ChatHouse() {
   const router = useRouter();
   const { reserveId, username } = router.query;
 
-  const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -30,7 +29,8 @@ function ChatHouse() {
             },
           }
         );
-        setMessages(response.data.result || []);
+
+        console.log("Fetched messages:", response);
       } catch (err) {
         setError("خطا در دریافت پیام‌ها");
       } finally {
@@ -47,14 +47,14 @@ function ChatHouse() {
       {loading && <div>در حال دریافت پیام‌ها...</div>}
       {error && <div className="text-red-500">{error}</div>}
       <div className="w-full max-w-md space-y-2">
-        {messages.length === 0 && !loading && <div>پیامی وجود ندارد.</div>}
+        {/* {messages.length === 0 && !loading && <div>پیامی وجود ندارد.</div>}
         {messages.map((msg, idx) => (
           <div key={idx} className="p-2 bg-gray-100 rounded">
             <div className="text-sm text-gray-600">{msg.senderName}</div>
             <div className="text-base">{msg.text}</div>
             <div className="text-xs text-gray-400">{msg.creationTime}</div>
           </div>
-        ))}
+        ))} */}
       </div>
     </div>
   );

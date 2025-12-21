@@ -11,6 +11,7 @@ import Button from "@/modules/shared/components/ui/Button";
 function AccommodationCheckout() {
   const router = useRouter();
   const { key } = router.query;
+  console.log("key in checkout page:", key);
 
   const [house, setHouse] = useState<any>(null);
   const [loading, setLoading] = useState(false);
@@ -103,7 +104,8 @@ function AccommodationCheckout() {
       setGeneralError(null); // Clear general error message
 
       // Extract the preReserveKey as a string and remove the "key=" prefix
-      const preReserveKey = Array.isArray(key) ? key[0].replace("key=", "") : key?.replace("key=", "");
+      // const preReserveKey = Array.isArray(key) ? key[0].replace("key=", "") : key?.replace("key=", "");
+      const preReserveKey = Array.isArray(key) ? key[0] : key;
 
       // API Request
       const requestBody = {
