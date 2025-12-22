@@ -28,11 +28,13 @@ type Props<T> = {
     sortListFunction?: (a:T, b:T) => 1 | -1;
     grayBg?: boolean;
     renderNoResult?: (inputValue: string) => ReactNode;
+    onChangeOuter?: (open: boolean) => void; 
+
 }
 
 function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
 
-    const { checkTypingLanguage, url, noResultMessage, acceptLanguage, min, icon, createTextFromOptionsObject } = props;
+    const { checkTypingLanguage, url, noResultMessage, acceptLanguage, min, icon, createTextFromOptionsObject, onChangeOuter } = props;
 
     const { t } = useTranslation("common");
 
@@ -185,6 +187,7 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
 
     const selectItemHandle = (item: T) => {
         setShowList(false);
+        onChangeOuter?.(showList);
         setValue(item);
         const text = createTextFromOptionsObject(item);
         setText(text);
@@ -205,6 +208,8 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
                 setErrorText("");
             }
             setShowList(false);
+            onChangeOuter?.(showList);
+
         }
     }, [items.length, errorText]);
 
@@ -308,7 +313,7 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
     }
     
 
-    const iconClassName = `pointer-events-none h-5 w-5 fill-current absolute z-20 top-1/2 -translate-y-1/2 ${!direction ? "rtl:right-3 ltr:left-3" : direction === 'rtl' ? "right-3" : "left-3"}`;
+    const iconClassName = `pointer-events-none h-5 w-5 fill-current absolute ${showList && 'z-20'} top-1/2 -translate-y-1/2 ${!direction ? "rtl:right-3 ltr:left-3" : direction === 'rtl' ? "right-3" : "left-3"}`;
 
     let iconElement = null;
 
@@ -336,7 +341,10 @@ function AutoComplete<T>(props: PropsWithChildren<Props<T>>) {
                     type="text"
                     onChange={e => {setText(e.target.value)}}
                     value={text}
-                    onFocus={() => { setShowList(true) }}
+                    onFocus={() => {
+                        setShowList(true) 
+                        onChangeOuter?.(showList);
+                    }}
                     className={inputClassNames.join(" ")}
                     placeholder={props.placeholder || ""}
                 />

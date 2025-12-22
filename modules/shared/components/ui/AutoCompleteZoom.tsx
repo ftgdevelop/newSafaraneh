@@ -28,11 +28,12 @@ type Props<T> = {
     sortListFunction?: (a: T, b: T) => 1 | -1;
     defaultListLabel?: string;
     label?: string;
+    onChangeOuter?: (open: boolean) => void; 
 }
 
 function AutoCompleteZoom<T>(props: PropsWithChildren<Props<T>>) {
 
-    const { checkTypingLanguage, url, noResultMessage, acceptLanguage, min, icon, createTextFromOptionsObject } = props;
+    const { checkTypingLanguage, url, noResultMessage, acceptLanguage, min, icon, createTextFromOptionsObject, onChangeOuter } = props;
 
     const { t } = useTranslation("common");
 
@@ -180,6 +181,7 @@ function AutoCompleteZoom<T>(props: PropsWithChildren<Props<T>>) {
 
     const selectItemHandle = (item: T) => {
         setOpen(false);
+        onChangeOuter?.(open);
         setValue(item);
         const text = createTextFromOptionsObject(item);
         setText(text);
@@ -200,6 +202,7 @@ function AutoCompleteZoom<T>(props: PropsWithChildren<Props<T>>) {
                 setErrorText("");
             }
             setOpen(false);
+            onChangeOuter?.(open);
         }
     }, [items.length, errorText]);
 
@@ -324,7 +327,10 @@ function AutoCompleteZoom<T>(props: PropsWithChildren<Props<T>>) {
 
             <button
                 type='button'
-                onClick={() => { setOpen(true) }}
+                onClick={() => {
+                    setOpen(true)
+                    onChangeOuter?.(open);
+                 }}
                 className={inputClassNames.join(" ")}
             >
                 {!!props.label && (
