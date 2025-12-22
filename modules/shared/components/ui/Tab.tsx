@@ -23,7 +23,7 @@ const Tab: React.FC<Props> = props => {
 
     const getActiveKey = () => {
         if (router.pathname === '/accommodation') return '4';
-        return '1';
+        return items[0]?.key;
     };
 
     const [activetabKey, setActiveTabKey] = useState<string | number>(getActiveKey());
