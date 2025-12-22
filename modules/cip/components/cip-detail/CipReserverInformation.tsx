@@ -1,8 +1,6 @@
-import DatePicker from "@/modules/shared/components/ui/DatePicker";
 import FormikField from "@/modules/shared/components/ui/FormikField"
 import PhoneInput from "@/modules/shared/components/ui/PhoneInput";
-import TimePicker from "@/modules/shared/components/ui/TimePicker";
-import { validateEmail, validateNationalId, validateRequied, validateRequiedPersianAndEnglish } from "@/modules/shared/helpers/validation";
+import { validateEmail, validateRequiedPersianAndEnglish } from "@/modules/shared/helpers/validation";
 import { Field, FormikErrors, FormikTouched } from "formik";
 import { useTranslation } from "next-i18next";
 

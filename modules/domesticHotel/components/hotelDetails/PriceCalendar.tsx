@@ -5,9 +5,6 @@ import MultiRangePicker from "@/modules/shared/components/ui/MultiRangePicker";
 import CustomRangeInput from "@/modules/shared/components/ui/CustomRangeInput";
 import MultiCalendar from "@/modules/shared/components/ui/MultiCalendar";
 
-// import '@mobiscroll/react/dist/css/mobiscroll.min.css';
-// import { Datepicker as MobiscrollDatepicker, localeFa, MbscCalendarLabel } from '@mobiscroll/react';
-
 type Props = {
     calendar?: DomesticHotelRateItem['calendar'];
     selectedDates: string[];

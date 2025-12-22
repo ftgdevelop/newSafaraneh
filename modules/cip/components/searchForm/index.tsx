@@ -227,7 +227,6 @@ const SearchForm: React.FC<Props> = props => {
                                     label='شماره پرواز'
                                 />
 
-                                {/* TODO: delete when mobiscroll is activated */}
                                 <div className='modernCalendar-dates-wrapper'>
 
                                     <div className="relative modernDatePicker-checkin">

@@ -8,7 +8,6 @@ import { Provider } from 'react-redux';
 import Head from 'next/head';
 
 import '../styles/carousel.scss';
-import '../styles/mobiscroll.scss';
 import '../styles/globals.scss';
 import '../styles/leaflet.css';
 import '../styles/multiDatepicker.scss'
@@ -128,14 +127,6 @@ function MyApp({ Component, pageProps, portalData, pageData, footerStrapiData }:
   return (
     <Provider store={store}>
       <Head>
-
-        {/* _-_-_S_T_A_R_T_-_-_ delete when mobiscroll is activated */}
-        {/* <link
-          rel="stylesheet"
-          type="text/css"
-          href="https://cdn2.safaraneh.com/libs/react-modern-calendar-datepicker/3.1.6/css/datepicker.min.css"
-        /> */}
-        {/* _-_-_E_N_D_-_-_ delete when mobiscroll is activated */}
 
         <meta name="robots" content="noindex, nofollow, max-image-preview:large" />
         <meta name="theme-color" content="#0a438b" />

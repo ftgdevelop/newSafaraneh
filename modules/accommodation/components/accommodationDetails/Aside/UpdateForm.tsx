@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react";
-// import { localeFa } from "@mobiscroll/react";
-import RangePicker from "@/modules/shared/components/ui/RangePicker";
+import { useState} from "react";
 import SelectCounter from "@/modules/accommodation/components/shared/SelectCounter";
 
 type Props = {

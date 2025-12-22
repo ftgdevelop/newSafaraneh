@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { getDomesticHotelSummaryDetailById } from "@/modules/domesticHotel/actions";
 import { Header, ServerAddress, Hotel } from "../../../../enum/url";
 import AutoComplete from "../../../shared/components/ui/AutoComplete";
-import { ApartmentOutline, Calendar, Home2, Loading, Location, Search, SearchTheme3 } from "../../../shared/components/ui/icons";
+import { ApartmentOutline, Calendar, Home2, Loading, Location, SearchTheme3 } from "../../../shared/components/ui/icons";
 import { EntitySearchResultItemType, HotelRecentSearchItem } from "@/modules/domesticHotel/types/hotel";
 import { useAppDispatch } from "@/modules/shared/hooks/use-store";
 import { setReduxError } from "@/modules/shared/store/errorSlice";
@@ -241,36 +241,6 @@ const SearchForm: React.FC<Props> = ({
 
     }
 
-
-
-    //start sholud be removed when modern datepicker replaced with mobiscroll:
-    // const [locale, setLocale] = useState<"fa" | "en">("fa");
-    // const onChangeCheckin = (d: string) => {
-    //     setDates(prevState => {
-    //         if (!d) { return prevState; }
-    //         const prevCheckout = prevState?.length ? prevState[1] : "";
-    //         if (prevCheckout) {
-    //             const isAfter = checkDateIsAfterDate(new Date(d), new Date(prevCheckout));
-    //             if (isAfter) {
-    //                 const firstAvailableCheckout = dateFormat(addSomeDays(new Date(d)));
-    //                 return ([d, firstAvailableCheckout]);
-    //             }
-    //         }
-    //         return ([d, prevCheckout])
-    //     })
-    // }
-    // const onChangeCheckout = (d: string) => {
-    //     setDates(prevState => {
-    //         if (!d) { return prevState; }
-    //         const prevCheckin = prevState?.length ? prevState[0] : "";
-    //         return ([prevCheckin, d])
-    //     })
-    // }
-    //end sholud be removed when modern datepicker replaced with mobiscroll:
-
-
-
-    const theme1 = process.env.THEME === "THEME1";
     const theme2 = process.env.THEME === "THEME2";
 
     let buttonInnerHtml : ReactNode = t('search');
