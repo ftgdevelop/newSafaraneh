@@ -28,11 +28,10 @@ function AccommodationCheckout() {
     phoneNumber: string;
   } | null>(null);
 
-  const [generalError, setGeneralError] = useState<string | null>(null); // State for general error message
-  const [shakeError, setShakeError] = useState(false); // State to control shake animation
+  const [generalError, setGeneralError] = useState<string | null>(null);
+  const [shakeError, setShakeError] = useState(false);
   const submitFormRef = useRef<() => void>();
 
-  // Fetch validation data using the key
   useEffect(() => {
     const fetchValidationData = async () => {
       if (!key) return;
@@ -53,11 +52,10 @@ function AccommodationCheckout() {
           }
         );
 
-        // ذخیره داده‌های دریافتی در State
         const { checkin, checkout, guestsCount, houseId } = response.data.result;
         setValidationData({ checkin, checkout, guestsCount, houseId });
 
-        // Fetch house details
+
         fetchHouseDetails(houseId);
       } catch (error) {
         console.error("Error fetching validation data:", error);
@@ -101,39 +99,37 @@ function AccommodationCheckout() {
     }
 
     try {
-      setLoading(true); // Show loading state while the request is being processed
-      setGeneralError(null); // Clear general error message
+      setLoading(true);
+      setGeneralError(null);
 
-      // Extract the preReserveKey as a string and remove the "key=" prefix
       // const preReserveKey = Array.isArray(key) ? key[0].replace("key=", "") : key?.replace("key=", "");
       const preReserveKey = Array.isArray(key) ? key[0] : key;
 
-      // API Request
       const requestBody = {
         passengers: [
           {
             roomNumber: 0,
-            gender: true, // Replace with actual gender if available
+            gender: true,
             firstName: info.firstName,
             lastName: info.lastName,
-            nationalId: "", // Replace with actual national ID if available
-            nationality: "AF", // Replace with actual nationality if available
+            nationalId: "",
+            nationality: "AF",
             extraBed: 0,
-            childrenAge: [0], // Replace with actual children ages if available
+            childrenAge: [0],
           },
         ],
         reserver: {
-          nationalId: "", // Replace with actual national ID if available
+          nationalId: "",
           firstName: info.firstName,
           lastName: info.lastName,
           phoneNumber: info.phoneNumber,
-          email: "", // Replace with actual email if available
-          userName: "+989358891888", // Replace with actual username if available
-          gender: true, // Replace with actual gender if available
-          passportNumber: "", // Replace with actual passport number if available
+          email: "",
+          userName: info.phoneNumber,
+          gender: true,
+          passportNumber: "",
         },
-        specialRequest: "", // Replace with actual special request if available
-        preReserveKey: preReserveKey, // Ensure it's a string without "key="
+        specialRequest: "",
+        preReserveKey: preReserveKey,
       };
 
       const response = await axios.post(
@@ -142,8 +138,6 @@ function AccommodationCheckout() {
         {
           headers: {
             accept: "text/plain",
-            // tenantId: 7,
-            // apikey: "ACE01BF4-AAEE-45D6-ABE7-F3FF519052DB",
             apikey: process.env.PROJECT_SERVER_APIKEY,
             tenantId: process.env.PROJECT_SERVER_TENANTID,
             "accept-language": "fa-IR",
@@ -170,11 +164,10 @@ function AccommodationCheckout() {
         setGeneralError("خطا در پردازش رزرو. لطفا دوباره تلاش کنید.");
       }
     } catch (error) {
-      // Handle Error
       console.error("Error during pre-reserve:", error);
       alert("خطا در رزرو اولیه. لطفا دوباره تلاش کنید.");
     } finally {
-      setLoading(false); // Reset loading state
+      setLoading(false);
     }
   };
 

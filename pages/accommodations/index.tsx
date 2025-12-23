@@ -35,7 +35,6 @@ const AccommodationPage: NextPage = () => {
 
   const phrase = typeof router.query.phrase === "string" ? router.query.phrase : undefined;
 
-  // 1. Extract slug (city) from URL after "accommodations"
   const segments = router.asPath.split("/");
   const accommodationsIndex = segments.findIndex((s) => s === "accommodations");
   const citySlug =
@@ -43,11 +42,9 @@ const AccommodationPage: NextPage = () => {
       ? decodeURIComponent(segments[accommodationsIndex + 1])
       : undefined;
 
-  // 2. State for city object
   const [defaultDestination, setDefaultDestination] = useState<any>(undefined);
   const [destinationLoading, setDestinationLoading] = useState(false);
 
-  // 3. Fetch city info by slug
   useEffect(() => {
     if (!citySlug) {
       setDefaultDestination(undefined);
@@ -89,9 +86,9 @@ const AccommodationPage: NextPage = () => {
 
   const [filterValues, setFilterValues] = useState<FilterValues>({
     capacity: getValue("capacity-") ? Number(getValue("capacity-")) : null,
-    bedroomCount: Number(getValue("bedroomCount-")) || 0, // Default to 0
+    bedroomCount: Number(getValue("bedroomCount-")) || 0,
     isInstant: router.query.isInstant === "true" || false,
-    categories: router.query.category ? (router.query.category as string).split(",") : [],
+    categories: typeof router.query.category === "string" ? router.query.category.split(",") : Array.isArray(router.query.category) ? router.query.category : [] as string[],
     notSharedFeatures,
     pool: {
       exists: false,
@@ -110,17 +107,15 @@ const AccommodationPage: NextPage = () => {
     setLoading(true);
 
     try {
-      // شروع با مقادیر پیش‌فرض
       const body: any = {
         bedroomCount: filterValues.bedroomCount,
         checkin,
         checkout,
         isInstant: filterValues.isInstant,
-        // تبدیل category به آرایه
         category: Array.isArray(filterValues.categories)
           ? filterValues.categories
           : typeof filterValues.categories === "string"
-          ? filterValues.categories.split(",")
+          ? String(filterValues.categories).split(",")
           : [],
         capacity: filterValues.capacity ?? 1,
         notSharedFeatures: filterValues.notSharedFeatures || [],
@@ -133,7 +128,6 @@ const AccommodationPage: NextPage = () => {
         skipCount: (pageNumber - 1) * ITEMS_PER_PAGE,
       };
 
-      // اضافه کردن همه پارامترهای کوئری به body به صورت داینامیک
       Object.entries(router.query).forEach(([key, value]) => {
         if (key === "page") return;
         if (key === "category") {
@@ -153,7 +147,6 @@ const AccommodationPage: NextPage = () => {
         }
       });
 
-      // phrase و citySlug را مثل قبل مدیریت کنید
       if (phrase) {
         body.phrase = phrase;
         body.enitites = [];
@@ -241,9 +234,7 @@ const AccommodationPage: NextPage = () => {
         ) : (
           <>
             <h1 className="font-bold">
-              {/* اجاره ویلا و سوئیت در {defaultDestination ? defaultDestination.title : "همه نقاط"} */}
               {phrase ? "جستجوی عبارت " + phrase : defaultDestination ? "اجاره ویلا و سوئیت در" + defaultDestination.title : "همه نقاط"}
-
             </h1>
             <div>({total} اقامتگاه)</div>
           </>
@@ -251,9 +242,9 @@ const AccommodationPage: NextPage = () => {
       </div>
 
       <AccommodationList
-        items={items} // should be array or { hotels: array }
-        totalItems={total} // should be totalCount from API
-        currentPage={page} // should be 1-based
+        items={items}
+        totalItems={total}
+        currentPage={page}
         loading={loading}
         onPageChange={handlePageChange}
         checkin={checkin}

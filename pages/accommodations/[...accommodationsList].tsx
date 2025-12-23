@@ -35,7 +35,6 @@ const AccommodationPage: NextPage = () => {
 
   const phrase = typeof router.query.phrase === "string" ? router.query.phrase : undefined;
 
-  // 1. Extract slug (city) from URL after "accommodations"
   const segments = router.asPath.split("/");
   const accommodationsIndex = segments.findIndex((s) => s === "accommodations");
   const citySlug =
@@ -43,11 +42,9 @@ const AccommodationPage: NextPage = () => {
       ? decodeURIComponent(segments[accommodationsIndex + 1])
       : undefined;
 
-  // 2. State for city object
   const [defaultDestination, setDefaultDestination] = useState<any>(undefined);
   const [destinationLoading, setDestinationLoading] = useState(false);
 
-  // 3. Fetch city info by slug
   useEffect(() => {
     if (!citySlug) {
       setDefaultDestination(undefined);
@@ -89,7 +86,7 @@ const AccommodationPage: NextPage = () => {
 
   const [filterValues, setFilterValues] = useState<FilterValues>({
     capacity: getValue("capacity-") ? Number(getValue("capacity-")) : null,
-    bedroomCount: Number(getValue("bedroomCount-")) || 0, // Default to 0
+    bedroomCount: Number(getValue("bedroomCount-")) || 0,
     isInstant: router.query.isInstant === "true" || false,
     categories: router.query.category ? (router.query.category as string).split(",") : [],
     notSharedFeatures,
@@ -223,9 +220,9 @@ const AccommodationPage: NextPage = () => {
       </div>
 
       <AccommodationList
-        items={items} // should be array or { hotels: array }
-        totalItems={total} // should be totalCount from API
-        currentPage={page} // should be 1-based
+        items={items}
+        totalItems={total}
+        currentPage={page}
         loading={loading}
         onPageChange={handlePageChange}
         checkin={checkin}
