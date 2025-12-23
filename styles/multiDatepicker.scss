@@ -7,145 +7,228 @@
 }
 
 .rmdp-container {
-    width: 100%;
-    .rmdp-header-values{
+  width: 100%;
+  .rmdp-header-values{
     span{
         font-weight: 700;
     }
-}
-.rmdp-header-values{
-  font-size: 18px;
-}
-.rmdp-week-day{
-  font-size: 10px;
-  justify-content: start;
-}
-.rmdp-week {
-    & .rmdp-day{
-      display: flex;
-      justify-content: start;
-      align-items: center;
-      aspect-ratio: 1;
-      height: auto;
-      span{
+  }
+  .rmdp-header-values{
+    font-size: 18px;
+  }
+  .rmdp-week-day{
+    font-size: 10px;
+    justify-content: start;
+  }
+  .rmdp-week {
+      & .rmdp-day{
+        display: flex;
+        justify-content: start;
+        align-items: center;
         aspect-ratio: 1;
-      }
-    }
-}
-.rmdp-day-picker{
-  width: 100%;
-  div{
-    width: 100%;
-  }
-}
-.rmdp-arrow-container{
-  width: 30px;
-  height: 30px;
-  align-items: center;
-  .rmdp-arrow{
-    margin-top: 0;
-    width: 12px;
-    height: 12px;
-  }
-}
-
-@media screen and (width > 768px) {
-       div:has(> div > div[role='dialog']) {
-      box-shadow: 0 11px 15px -7px rgba(0,0,0,.2),0 24px 38px 3px rgba(0,0,0,.14),0 9px 46px 8px rgba(0,0,0,.12);
-      div[role='dialog']{
-        border-radius: 0.5em;
-        .rmdp-calendar{
-          width: 100%;
-
-        } 
-
-        &.rmdp-wrapper.datepicker-single-screen {
-            min-width: 296px;
-            width: 100%;
-            
-          }
-        &.rmdp-wrapper.range-datepicker {
-          min-width: 592px;
-          width: 100%;
-
+        height: auto;
+        span{
+          aspect-ratio: 1;
         }
       }
-
-       
   }
-}
+  .rmdp-day-picker{
+    width: 100%;
+    div{
+      width: 100%;
+    }
+  }
+  .rmdp-arrow-container{
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    .rmdp-arrow{
+      margin-top: 0;
+      width: 12px;
+      height: 12px;
+    }
+  }
+  div:has(> div > div[role='dialog']){
+    div[role='dialog'].custom-selected{
+      .rmdp-day-picker {
 
-@media screen and (width <= 768px) {
-    div:has(> div > div[role='dialog']) {
-      width: 100vw;
-      height: 100svh;
-      position: fixed !important;
-      bottom: 0;
-      top: auto !important;
-      display: flex;
-      justify-content: end;
-      align-items: end;
-      overflow-y: scroll;
-      opacity: 0;
-      transform: scale(0.95) !important;
-      transform: translateY(0) !important;
-      animation: scaleUp 0.3s ease-out forwards;
-      &:has(div[role='dialog']) {
-        opacity: 1;
+        .rmdp-week{
+          margin-bottom: 2px;
+
+          .rmdp-day{
+            border-width: 2px;
+            border-color: transparent;
+
+            &:hover{
+              span{
+                color: #000;
+
+              }
+            }
+            span{
+              right: 0;
+              top: 0;
+              height: 100%;
+              width: 100%;
+              bottom: auto;
+              left: auto;
+            }
+            &:not(.rmdp-disabled,.rmdp-day-hidden) span:hover {
+              background-color: transparent;
+            }
+            &:not(.rmdp-range-hover, .rmdp-range){
+              border-radius: 50%;
+            }
+            
+
+            &.rmdp-range-hover{
+              background-color: transparent;
+              border-top: #cccccc;
+              border-bottom: #cccccc;
+              border-style: dashed;
+              border-width: 2px;
+              color: #000;
+              &.end, &.start{
+                  span{
+                  background-color: #0074d9;
+                  color: white;
+
+                }
+              }
+            }
+             &.rmdp-range{
+               background-color: #cbe2fb;
+               box-shadow: none;
+               color: #000;
+
+              &.start , &.end{
+
+              span{
+                background-color: #0074d9;
+                color: white;
+
+              }
+            }
+             }
+            &.rmdp-today{
+              span{
+                background-color: transparent;
+                color: #0074d9;
+                font-weight: 600;
+
+              }
+            }
+          }
+        }
+        &:not(:has(.rmdp-week .rmdp-day.rmdp-range.end)) {
+          .rmdp-day.rmdp-range{
+            border-radius: 50%;
+          }
+        }
+
       }
 
-      & > div {
-        width: 100%;
+    }
+  }
 
-        .rmdp-wrapper.rmdp-shadow {
+
+  @media screen and (width > 768px) {
+        div:has(> div > div[role='dialog']) {
+        box-shadow: 0 11px 15px -7px rgba(0,0,0,.2),0 24px 38px 3px rgba(0,0,0,.14),0 9px 46px 8px rgba(0,0,0,.12);
+        div[role='dialog']{
+          border-radius: 0.5em;
+          .rmdp-calendar{
+            width: 100%;
+
+          } 
+
+          &.rmdp-wrapper.datepicker-single-screen {
+              min-width: 296px;
+              width: 100%;
+              
+            }
+          &.rmdp-wrapper.range-datepicker {
+            min-width: 592px;
+            width: 100%;
+
+          }
+        }
+
+        
+    }
+  }
+
+  @media screen and (width <= 768px) {
+      div:has(> div > div[role='dialog']) {
+        width: 100vw;
+        height: 100svh;
+        position: fixed !important;
+        bottom: 0;
+        top: auto !important;
+        display: flex;
+        justify-content: end;
+        align-items: end;
+        overflow-y: scroll;
+        opacity: 0;
+        transform: scale(0.95) !important;
+        transform: translateY(0) !important;
+        animation: scaleUp 0.3s ease-out forwards;
+        &:has(div[role='dialog']) {
+          opacity: 1;
+        }
+
+        & > div {
           width: 100%;
 
-          .rmdp-calendar {
+          .rmdp-wrapper.rmdp-shadow {
             width: 100%;
-            & div:nth-child(2){
-              .rmdp-day-picker{
-                width: 100%;
-                div{
+
+            .rmdp-calendar {
+              width: 100%;
+              & div:nth-child(2){
+                .rmdp-day-picker{
                   width: 100%;
-                  .rmdp-day{
-                    span{
-                      font-size: 16px;
+                  div{
+                    width: 100%;
+                    .rmdp-day{
+                      span{
+                        font-size: 16px;
+                      }
                     }
                   }
-                }
-            
-            }
-            }
-            .rmdp-week-day{
-              font-size: 16px;
-            
-            }
-
-            
-          }
-
-        }
-        .rmdp-toolbar {
-            div:nth-child(3) {
-              display: none;
-            }
-            &.top{
-              background-color: #cccccc50;
-            }
-            div{
-              background-color: transparent;
-              color: #0074d9;
-              font-size: 16px;
-              &:hover{
-                box-shadow: none;
+              
+              }
+              }
+              .rmdp-week-day{
+                font-size: 16px;
+              
               }
 
+              
             }
-            justify-content: space-between;
+
+          }
+          .rmdp-toolbar {
+              div:nth-child(3) {
+                display: none;
+              }
+              &.top{
+                background-color: #cccccc50;
+              }
+              div{
+                background-color: transparent;
+                color: #0074d9;
+                font-size: 16px;
+                &:hover{
+                  box-shadow: none;
+                }
+
+              }
+              justify-content: space-between;
+          }
         }
       }
-    }
-}
+  }
 
 }
 
