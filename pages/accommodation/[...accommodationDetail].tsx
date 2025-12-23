@@ -138,6 +138,7 @@ const AccommodationDetailPage: NextPage = () => {
         </div>
       </div>
       <div className="max-w-container mx-auto px-3 pb-4 mt-4">
+
         {/* <div className="mt-4 mb-6">
           {loading ? (
             <div className="flex items-center gap-2">
@@ -219,7 +220,6 @@ const AccommodationDetailPage: NextPage = () => {
                 </div>
 
               </div>
-
               <aside className="lg:col-span-2 md:mt-8">
                 <div className="sticky md:top-18">
                   {id !== null && (
