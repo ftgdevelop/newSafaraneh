@@ -1,14 +1,14 @@
-import React, { useRef } from 'react'
-import { Calendar,  MapDaysProps } from 'react-multi-date-picker'
-import { totoLocalizedGregorianMDPDateObject } from '../../helpers';
+import React, { useMemo, useRef } from "react";
+import { Calendar, MapDaysProps } from "react-multi-date-picker";
+import DateObject, { Calendar as CalendarType } from "react-date-object";
 import persian from "react-date-object/calendars/persian";
-import persian_fa from "react-date-object/locales/persian_fa";
+import persianFa from "react-date-object/locales/persian_fa";
 
+import { totoLocalizedGregorianMDPDateObject } from "../../helpers";
 
-
-interface MultiCalendarProps{
+export interface MultiCalendarProps {
   value: string[];
-  onChange: (v: string[]) => void;
+  onChange: (value: string[]) => void;
   fullScreen?: boolean;
   readonly?: boolean;
   mapDays?: (
@@ -19,48 +19,57 @@ interface MultiCalendarProps{
         hidden?: boolean;
       })
     | void;
+  maxDate?: string; // YYYY-MM-DD
 }
 
+const WEEK_DAYS = ["ش", "ی", "د", "س", "چ", "پ", "ج"] as const;
 
-const MultiCalendar = ({ value, onChange, fullScreen, readonly = false, mapDays }: MultiCalendarProps) => {
-  const pickerRef = useRef<any>(null);
-  
+const MultiCalendar: React.FC<MultiCalendarProps> = ({
+  value,
+  onChange,
+  maxDate,
+  fullScreen,
+  readonly = false,
+  mapDays,
+}) => {
+  const pickerRef = useRef<CalendarType | null>(null);
 
-    const start = totoLocalizedGregorianMDPDateObject(value[0]);
-    const end = totoLocalizedGregorianMDPDateObject(value[1]);
+  const normalizedValue = useMemo(() => {
+    const start = value?.[0]
+      ? totoLocalizedGregorianMDPDateObject(value[0])
+      : null;
+    const end = value?.[1]
+      ? totoLocalizedGregorianMDPDateObject(value[1])
+      : null;
 
-  const normalizedValue = start && end ? [[start, end]] : [];
-  
-  const weekDays = [
-  "ش",
-  "ی",
-  "د", 
-  "س",
-  "چ", 
-  "پ", 
-  "ج", 
-];
-  
-  
+    return start && end ? [[start, end]] : [];
+  }, [value]);
+
+  const normalizedMaxDate = useMemo<DateObject | undefined>(() => {
+    if (!maxDate) return undefined;
+    return totoLocalizedGregorianMDPDateObject(maxDate) ?? undefined;
+  }, [maxDate]);
+
   return (
     <Calendar
-        headerOrder={[ "MONTH_YEAR","LEFT_BUTTON", "RIGHT_BUTTON"]} 
-        ref={pickerRef}
-        value={normalizedValue}
-        showOtherDays
-        multiple
-        range
-        highlightToday={false}
-      monthYearSeparator=' '
-      weekDays={weekDays}
-        className={`${fullScreen ? "calendar-fullScreen" : ''}`}
-        readOnly={readonly}
-        minDate={new Date()}
-        calendar={persian}
-        locale={persian_fa}
-        mapDays={mapDays}
-      />
-  )
-}
+      ref={pickerRef}
+      headerOrder={["MONTH_YEAR", "LEFT_BUTTON", "RIGHT_BUTTON"]}
+      value={normalizedValue}
+      multiple
+      range
+      showOtherDays
+      highlightToday={false}
+      monthYearSeparator=" "
+      weekDays={WEEK_DAYS as unknown as string[]}
+      className={fullScreen ? "calendar-fullScreen" : ''}
+      readOnly={readonly}
+      minDate={new Date()}
+      maxDate={normalizedMaxDate}
+      calendar={persian}
+      locale={persianFa}
+      mapDays={mapDays}
+    />
+  );
+};
 
-export default MultiCalendar
+export default MultiCalendar;

@@ -125,7 +125,7 @@ function MultiDatePicker<TInputProps>({
             transition: "all 400ms cubic-bezier(0.4, 0.0, 0.2, 1)",
           }),
         ]} 
-        className={`datepicker-single-screen ${className ?? ""} [&_.rmdp-week-day]:text-black ${isFa ? 'font-fa' : 'font-en'}`}
+        className={`datepicker-single-screen custom-selected ${className ?? ""} [&_.rmdp-week-day]:text-black ${isFa ? 'font-fa' : 'font-en'}`}
         plugins={[
           <CustomToolbar
             key="custom-toolbar"

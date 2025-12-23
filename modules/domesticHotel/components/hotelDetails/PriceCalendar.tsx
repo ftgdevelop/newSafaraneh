@@ -1,9 +1,10 @@
 import MultiDatePicker from "@/modules/shared/components/ui/MultiDatePicker";
 import { DomesticHotelRateItem } from "../../types/hotel";
-import { dateFormat, getMultiDatePickerFormattedDate, numberWithCommas, persianNumbersToEnglish } from "@/modules/shared/helpers";
+import { dateFormat, getMultiDatePickerFormattedDate, numberWithCommas, persianNumbersToEnglish, totoLocalizedGregorianMDPDateObject } from "@/modules/shared/helpers";
 import MultiRangePicker from "@/modules/shared/components/ui/MultiRangePicker";
 import CustomRangeInput from "@/modules/shared/components/ui/CustomRangeInput";
 import MultiCalendar from "@/modules/shared/components/ui/MultiCalendar";
+import { DateObject } from "react-multi-date-picker";
 
 type Props = {
     calendar?: DomesticHotelRateItem['calendar'];
@@ -135,6 +136,10 @@ const PriceCalendar: React.FC<Props> = props => {
         };
     };
 
+    const lastItem = labels[labels.length - 1];
+
+    
+
     return (
         <div className="flex-auto">
             <MultiCalendar
@@ -143,6 +148,7 @@ const PriceCalendar: React.FC<Props> = props => {
                 fullScreen
                 mapDays={(date) => renderMapDays(date)}
                 readonly
+                maxDate={lastItem.date}
             />
         </div>
     

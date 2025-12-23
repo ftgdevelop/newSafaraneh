@@ -41,6 +41,8 @@ const SearchForm: React.FC<Props> = ({
 
     const [submitLoading, setSubmitLoading] = useState<boolean>(false);
 
+    const [openAutoComplete, setOpenAutoComplete] = useState<boolean>(false);
+
     const dateChangeHandle = (value: any)  => {
 
         if (value[0] && value[1]) {
@@ -254,7 +256,7 @@ const SearchForm: React.FC<Props> = ({
     return (
         <div className={`domestic-hotel-search-form ${theme3?"flex flex-col sm:flex-row":"grid grid-cols-1 md:grid-cols-7"} gap-2 ${wrapperClassName || ""}`}>
             
-            <div className={`relative z-20 ${theme3?"sm:grow xl:basis-7/12":"col-span-1 md:col-span-3"}`}>
+            <div className={`relative ${openAutoComplete && 'z-20'} ${theme3?"sm:grow xl:basis-7/12":"col-span-1 md:col-span-3"}`}>
                 {theme2 ? (
                     <AutoCompleteZoom
                         defaultListLabel="محبوب ترین ها"
@@ -274,6 +276,7 @@ const SearchForm: React.FC<Props> = ({
                         value={selectedDestination}
                         onChangeHandle={setSelectedDestination}
                         url={autoCompleteUrl}
+                        onChangeOuter={(open)=>setOpenAutoComplete(open)}
                     />
                 ) : (
                     <>
@@ -297,6 +300,8 @@ const SearchForm: React.FC<Props> = ({
                             value={selectedDestination}
                             onChangeHandle={setSelectedDestination}
                             url={autoCompleteUrl}
+                            onChangeOuter={(open)=>setOpenAutoComplete(open)}
+
                         />
                     </>
                 )}

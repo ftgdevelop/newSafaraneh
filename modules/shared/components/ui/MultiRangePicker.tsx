@@ -143,7 +143,7 @@ const propsAnimations = isMobile
         arrow={false}
         showOtherDays
         weekDays={weekDays}
-        className={`range-datepicker ${isFa ? 'font-fa' : 'font-en'}`}
+        className={`range-datepicker custom-selected ${isFa ? 'font-fa' : 'font-en'}`}
         // portal
         {...propsAnimations}
         plugins={[
