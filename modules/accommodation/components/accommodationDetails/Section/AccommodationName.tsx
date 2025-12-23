@@ -23,10 +23,12 @@ function AccommodationName({ title, location, rank, reviews, isInstant }: Accomm
 
   if (loading) {
     return (
-      <div className="animate-pulse space-y-4 pt-18">
+      <div className="animate-pulse space-y-4 pt-8">
         <div className="h-6 bg-gray-300 rounded-md w-3/4"></div>
-        <div className="h-4 bg-gray-300 rounded-md w-1/2"></div>
-        <div className="h-4 bg-gray-300 rounded-md w-1/3"></div>
+        <div className="flex flex-row gap-2 items-center">
+          <div className="h-4 bg-gray-300 rounded-md w-1/5"></div>
+          <div className="h-4 bg-gray-300 rounded-md w-1/6"></div>
+        </div>
       </div>
     );
   }

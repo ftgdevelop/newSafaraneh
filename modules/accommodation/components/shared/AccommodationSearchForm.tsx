@@ -127,7 +127,7 @@ const AccommodationSearchForm: React.FC<Props> = (props) => {
 
                 <div className="leading-5 text-neutral-600">
                     <div className="text-xs font-bold">{option.name}</div>
-                    <div className="text-3xs">{option.title}</div>
+                    <div className="text-3xs">{option.displayName}</div>
                 </div>
             </div>
         ),

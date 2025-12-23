@@ -110,12 +110,18 @@ const AccommodationPage: NextPage = () => {
     setLoading(true);
 
     try {
+      // شروع با مقادیر پیش‌فرض
       const body: any = {
         bedroomCount: filterValues.bedroomCount,
         checkin,
         checkout,
         isInstant: filterValues.isInstant,
-        category: filterValues.categories,
+        // تبدیل category به آرایه
+        category: Array.isArray(filterValues.categories)
+          ? filterValues.categories
+          : typeof filterValues.categories === "string"
+          ? filterValues.categories.split(",")
+          : [],
         capacity: filterValues.capacity ?? 1,
         notSharedFeatures: filterValues.notSharedFeatures || [],
         pool: filterValues.pool,
@@ -127,6 +133,27 @@ const AccommodationPage: NextPage = () => {
         skipCount: (pageNumber - 1) * ITEMS_PER_PAGE,
       };
 
+      // اضافه کردن همه پارامترهای کوئری به body به صورت داینامیک
+      Object.entries(router.query).forEach(([key, value]) => {
+        if (key === "page") return;
+        if (key === "category") {
+          body.category = Array.isArray(value)
+            ? value
+            : typeof value === "string"
+            ? value.split(",")
+            : [];
+          return;
+        }
+        if (Array.isArray(value)) {
+          body[key] = value;
+        } else if (!isNaN(Number(value))) {
+          body[key] = Number(value);
+        } else {
+          body[key] = value;
+        }
+      });
+
+      // phrase و citySlug را مثل قبل مدیریت کنید
       if (phrase) {
         body.phrase = phrase;
         body.enitites = [];
@@ -238,6 +265,9 @@ const AccommodationPage: NextPage = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  if (!process.env.PROJECT_MODULES?.includes("Accommodation")) {
+    return { notFound: true };
+  }
   return {
     props: {
       ...(await serverSideTranslations(context.locale, ["common", "hotel", "home"])),

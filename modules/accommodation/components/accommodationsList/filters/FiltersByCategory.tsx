@@ -43,7 +43,7 @@ export default function FiltersByCategory({ values, items, onChange }: Props) {
       <button
         type="button"
         onClick={() => setOpen(o => !o)}
-        className="w-full text-right border rounded px-3 py-2 mb-2 font-bold bg-white text-sm"
+        className="w-full text-right border rounded-full px-3 py-2 mb-2 font-bold bg-white text-sm"
       >
         دسته‌بندی {selected.length > 0 && `(${selected.length})`}
       </button>

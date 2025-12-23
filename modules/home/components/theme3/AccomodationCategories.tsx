@@ -10,42 +10,42 @@ const AccomodationCategories: React.FC = () => {
     }[] = [
             {
                 title: "اجاره ویلا",
-                url: "/#",
+                url: "/accommodations?category=Villa",
                 imageUrl: "/images/home/theme3/accomodation/categories/village.svg",
             },
             {
                 title: "رزرو بومگردی",
-                url: "/#",
+                url: "/accommodations?category=Boomgardi",
                 imageUrl: "/images/home/theme3/accomodation/categories/bomigardi.svg",
             },
             {
                 title: "اجاره کلبه",
-                url: "/#",
+                url: "/accommodations?category=Cottage",
                 imageUrl: "/images/home/theme3/accomodation/categories/kolbeh.svg",
             },
             {
                 title: "اجاره آپارتمان مبله",
-                url: "/#",
+                url: "/accommodations?category=Apartment",
                 imageUrl: "/images/home/theme3/accomodation/categories/apartment.svg",
             },
             {
                 title: "دل جنگل",
-                url: "/#",
+                url: "/accommodations?category=Forest",
                 imageUrl: "/images/home/theme3/accomodation/categories/foresthouse.svg",
             },
             {
-                title: "لب آب",
-                url: "/#",
-                imageUrl: "/images/home/theme3/accomodation/categories/beachhouse.svg",
+                title: "کلبه سوئیسی",
+                url: "/accommodations?category=SwissCottage",
+                imageUrl: "/images/home/theme3/accomodation/categories/swiss-cottage.svg",
             },
             {
-                title: "منظره رویایی",
-                url: "/#",
-                imageUrl: "/images/home/theme3/accomodation/categories/luxuryhouse.svg",
+                title: "خاص و لوکس",
+                url: "/accommodations?category=Omg",
+                imageUrl: "/images/home/theme3/accomodation/categories/omg.svg",
             },
             {
                 title: "حیوان خانگی",
-                url: "/#",
+                url: "/accommodations?ruleType=PetsAllowed",
                 imageUrl: "/images/home/theme3/accomodation/categories/pet.svg",
             },
         ]

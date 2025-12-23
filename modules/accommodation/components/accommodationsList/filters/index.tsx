@@ -106,7 +106,7 @@ const FilterSearch: React.FC<FilterSearchProps> = ({ filterValues, setFilterValu
           onChange={(val) => setFilterValues(prev => ({ ...prev, capacity: val }))}
         />
 
-        <button className="px-2 border rounded bg-white text-sm mb-2 font-bold" onClick={() => setIsFilterModalOpen(true)}>
+        <button className="px-2 border rounded-full bg-white text-sm mb-2 font-bold" onClick={() => setIsFilterModalOpen(true)}>
           فیلترها
         </button>
       </div>

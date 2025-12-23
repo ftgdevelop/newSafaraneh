@@ -1,108 +1,116 @@
-import { ArrowLeft, LeftCaret, RightCaret } from "@/modules/shared/components/ui/icons";
+import { ArrowLeft } from "@/modules/shared/components/ui/icons";
 import Image from "next/image";
 import Link from "next/link";
-import Slider from "react-slick";
 
 const AccomodationTopCities: React.FC = () => {
+
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+
+    const formatDate = (date: Date) => date.toISOString().slice(0, 10);
+    const checkin = formatDate(today);
+    const checkout = formatDate(tomorrow);
+    const capacity = 1;
 
     const categories: {
         imageUrl: string;
         title: string;
-        url: string;
+        citySlug: string;
     }[] = [
             {
                 title: "تهران",
-                url: "/#",
+                citySlug: "tehran",
                 imageUrl: "/images/home/theme3/accomodation/cities/tehran.avif",
             },
             {
                 title: "کردان",
-                url: "/#",
+                citySlug: "kordan",
                 imageUrl: "/images/home/theme3/accomodation/cities/kordan.avif",
             },
             {
                 title: "رامسر",
-                url: "/#",
+                citySlug: "ramsar",
                 imageUrl: "/images/home/theme3/accomodation/cities/ramsar.avif",
             },
             {
                 title: "چالوس",
-                url: "/#",
+                citySlug: "chalus",
                 imageUrl: "/images/home/theme3/accomodation/cities/chalous.avif",
             },
             {
                 title: "ماسال",
-                url: "/#",
+                citySlug: "masal",
                 imageUrl: "/images/home/theme3/accomodation/cities/masal.avif",
             },
             {
                 title: "رشت",
-                url: "/#",
+                citySlug: "rasht",
                 imageUrl: "/images/home/theme3/accomodation/cities/rasht.avif",
             },
             {
                 title: "بندر انزلی",
-                url: "/#",
+                citySlug: "bandar-anzali",
                 imageUrl: "/images/home/theme3/accomodation/cities/bandaranzali.avif",
             },
             {
                 title: "متل قو",
-                url: "/#",
+                citySlug: "motel-qu(salman-shahr)",
                 imageUrl: "/images/home/theme3/accomodation/cities/motelqu.avif",
             },
             {
                 title: "بابلسر",
-                url: "/#",
+                citySlug: "babolsar",
                 imageUrl: "/images/home/theme3/accomodation/cities/babolsar.avif",
             },
             {
                 title: "سوادکوه",
-                url: "/#",
+                citySlug: "savadkuh",
                 imageUrl: "/images/home/theme3/accomodation/cities/savadkuh.avif",
             },
             {
                 title: "تالش",
-                url: "/#",
+                citySlug: "talesh",
                 imageUrl: "/images/home/theme3/accomodation/cities/talesh.avif",
             },
             {
                 title: "کرج",
-                url: "/#",
+                citySlug: "karaj",
                 imageUrl: "/images/home/theme3/accomodation/cities/karaj.avif",
             },
             {
                 title: "شهریار",
-                url: "/#",
+                citySlug: "shahriyar",
                 imageUrl: "/images/home/theme3/accomodation/cities/shahriyar.avif",
             },
             {
                 title: "مشهد",
-                url: "/#",
+                citySlug: "mashhad",
                 imageUrl: "/images/home/theme3/accomodation/cities/mashhad.avif",
             },
             {
                 title: "اصفهان",
-                url: "/#",
+                citySlug: "isfahan",
                 imageUrl: "/images/home/theme3/accomodation/cities/isfahan.avif",
             },
             {
                 title: "شیراز",
-                url: "/#",
+                citySlug: "shiraz",
                 imageUrl: "/images/home/theme3/accomodation/cities/shiraz.avif",
             },
             {
                 title: "کاشان",
-                url: "/#",
+                citySlug: "kashan",
                 imageUrl: "/images/home/theme3/accomodation/cities/kashan.avif",
             },
             {
                 title: "کیش",
-                url: "/#",
+                citySlug: "kish",
                 imageUrl: "/images/home/theme3/accomodation/cities/kish.avif",
             },
             {
                 title: "قشم",
-                url: "/#",
+                citySlug: "qeshm",
                 imageUrl: "/images/home/theme3/accomodation/cities/qeshm.avif",
             },
         ]
@@ -124,7 +132,7 @@ const AccomodationTopCities: React.FC = () => {
                 {firstRow.map(category => (
                     <div key={category.title}>
                         <Link
-                            href={category.url}
+                            href={`/fa/accommodations/${category.citySlug}/checkin-${checkin}/checkout-${checkout}/capacity-${capacity}`}
                             className='rounded-lg group relative block overflow-hidden'
                             target='_blank'
                             title={category.title}
@@ -150,7 +158,7 @@ const AccomodationTopCities: React.FC = () => {
                 {secondRow.map(category => (
                     <div key={category.title}>
                         <Link
-                            href={category.url}
+                            href={`/fa/accommodations/${category.citySlug}/checkin-${checkin}/checkout-${checkout}`}
                             className='rounded-lg group relative block overflow-hidden'
                             target='_blank'
                             title={category.title}
@@ -177,7 +185,7 @@ const AccomodationTopCities: React.FC = () => {
                 {mobileItems.map(category => (
                     <div key={category.title}>
                         <Link
-                            href={category.url}
+                            href={`/fa/accommodations/${category.citySlug}/checkin-${checkin}/checkout-${checkout}`}
                             className='rounded-lg group relative block overflow-hidden'
                             target='_blank'
                             title={category.title}

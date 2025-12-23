@@ -237,6 +237,9 @@ const AccommodationPage: NextPage = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  if (!process.env.PROJECT_MODULES?.includes("Accommodation")) {
+    return { notFound: true };
+  }
   return {
     props: {
       ...(await serverSideTranslations(context.locale, ["common", "hotel", "home"])),

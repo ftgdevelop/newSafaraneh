@@ -7,6 +7,7 @@ import Aside from "@/modules/accommodation/components/checkout/Aside";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import DateSelector from "@/modules/accommodation/components/checkout/DateSelector";
 import Button from "@/modules/shared/components/ui/Button";
+import { GetServerSideProps } from "next";
 
 function AccommodationCheckout() {
   const router = useRouter();
@@ -178,7 +179,7 @@ function AccommodationCheckout() {
   };
 
   return (
-    <div className="max-w-container mx-auto px-5 py-4">
+    <div className="max-w-container mx-auto px-3 py-4">
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 min-h-screen">
         <div className="lg:col-span-3">
           <Section
@@ -231,7 +232,7 @@ function AccommodationCheckout() {
         <div className="lg:col-span-2">
           <Aside house={house} />
           
-          <div className="p-4 bg-white border rounded-lg mt-6">
+          <div className="sm:p-4 bg-white sm:border rounded-full mt-6 max-sm:mb-6">
             {generalError && (
               <div
                 className={`text-red-500 text-sm mb-4 transition-transform duration-300 text-center ${
@@ -243,7 +244,7 @@ function AccommodationCheckout() {
             )}
 
             <Button
-              className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-gray-200"
+              className="w-full !bg-[#412691] hover:!bg-[#412691]/70 text-white py-2 !rounded-full"
               onClick={() => {
                 if (submitFormRef.current) submitFormRef.current();
               }}
@@ -269,10 +270,15 @@ function AccommodationCheckout() {
   );
 }
 
-export const getServerSideProps = async (context: any) => ({
-  props: {
-    ...(await serverSideTranslations(context.locale, ["common", "hotel", "home"])),
-  },
-});
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  if (!process.env.PROJECT_MODULES?.includes("Accommodation")) {
+    return { notFound: true };
+  }
+  return {
+    props: {
+      ...(await serverSideTranslations(context.locale, ["common", "hotel", "home"])),
+    },
+  };
+};
 
 export default AccommodationCheckout;

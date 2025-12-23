@@ -1,6 +1,7 @@
 export interface EntitySearchResultItemType {
     name: string;
     title?: string;
+    displayName?: string;
     type: "City" | "Village" | "Province";
     id?: number;
     slug?: string;

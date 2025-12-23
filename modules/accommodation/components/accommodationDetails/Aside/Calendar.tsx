@@ -122,7 +122,7 @@ const Calendar: React.FC<CalendarProps> = ({ id, checkin, checkout, capacity, on
 
   return (
     <div className="p-4 bg-white border rounded-xl shadow-xl">
-      <h3 className="text-lg font-bold mb-4">جزئیات اقامت</h3>
+      {/* <h3 className="text-lg font-bold mb-4">جزئیات اقامت</h3> */}
 
       {loading ? (
         <div className="mb-4 flex justify-between">
@@ -198,7 +198,7 @@ const Calendar: React.FC<CalendarProps> = ({ id, checkin, checkout, capacity, on
         <>
           {
             loadingButton ? (
-              <div className="h-10 bg-gray-300 rounded flex items-center justify-center">
+              <div className="h-10 bg-gray-300 rounded-full flex items-center justify-center">
                 <div role="status">
                     <svg aria-hidden="true" className="w-7 h-7 text-neutral-tertiary animate-spin fill-brand" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -209,7 +209,7 @@ const Calendar: React.FC<CalendarProps> = ({ id, checkin, checkout, capacity, on
               </div>
             ) :
               <Button
-                className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-gray-200"
+                className="w-full !bg-[#412691] hover:!bg-[#412691]/70 text-white py-2 !rounded-full"
                 onClick={handleReservation}
               >
                 درخواست رزرو

@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import { GetServerSideProps } from "next";
 import { useEffect, useState, useMemo } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { ServerAddress, Accommodation } from "@/enum/url";
@@ -136,7 +137,7 @@ const AccommodationDetailPage: NextPage = () => {
           <Gallery images={house?.pictures?.records || []} />
         </div>
       </div>
-      <div className="max-w-container mx-auto px-5 pb-4 mt-4">
+      <div className="max-w-container mx-auto px-3 pb-4 mt-4">
         {/* <div className="mt-4 mb-6">
           {loading ? (
             <div className="flex items-center gap-2">
@@ -250,10 +251,14 @@ const AccommodationDetailPage: NextPage = () => {
   );
 };
 
-export const getServerSideProps = async (context: any) => ({
-  props: {
-    ...(await serverSideTranslations(context.locale, ["common", "hotel", "home"])),
-  },
-});
-
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  if (!process.env.PROJECT_MODULES?.includes("Accommodation")) {
+    return { notFound: true };
+  }
+  return {
+    props: {
+      ...(await serverSideTranslations(context.locale, ["common", "hotel", "home"])),
+    },
+  };
+};
 export default AccommodationDetailPage;

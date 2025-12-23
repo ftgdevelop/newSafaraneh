@@ -127,7 +127,7 @@ useEffect(() => {
     <div className="relative" ref={dropdownRef}>
       <button
         type="button"
-        className="w-full text-right border rounded px-3 py-2 mb-2 font-bold bg-white text-sm"
+        className="w-full text-right border rounded-full px-3 py-2 mb-2 font-bold bg-white text-sm"
         onClick={() => setOpen((v) => !v)}
       >
         تعداد مسافران {(passengerValues.adult ?? 0) > 0 && `(${passengerValues.adult ?? 0})`}
