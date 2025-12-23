@@ -107,7 +107,6 @@ const Calendar: React.FC<CalendarProps> = ({ id, checkin, checkout, capacity, on
 
       if (response.data.result.preReserveKey) {
         router.push(`/accommodation/checkout?key=${response.data.result.preReserveKey}`);
-        console.log(`/accommodation/checkout?key=${response.data.result.preReserveKey}`);
       } else {
         alert("خطا در دریافت کلید رزرو. لطفا دوباره تلاش کنید.");
       }
@@ -211,6 +210,7 @@ const Calendar: React.FC<CalendarProps> = ({ id, checkin, checkout, capacity, on
               <Button
                 className="w-full !bg-[#412691] hover:!bg-[#412691]/70 text-white py-2 !rounded-full"
                 onClick={handleReservation}
+                disabled={loadingButton}
               >
                 درخواست رزرو
               </Button>

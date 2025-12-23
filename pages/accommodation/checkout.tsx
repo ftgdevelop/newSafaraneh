@@ -173,8 +173,8 @@ function AccommodationCheckout() {
 
   return (
     <div className="max-w-container mx-auto px-3 py-4">
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 min-h-screen">
-        <div className="lg:col-span-3">
+      <div className="grid grid-cols-1 lg:grid-cols-6 gap-6 min-h-screen">
+        <div className="lg:col-span-4">
           <Section
             host={house?.host}
             onSubmitPassengerInfo={(values) => {
@@ -225,7 +225,7 @@ function AccommodationCheckout() {
         <div className="lg:col-span-2">
           <Aside house={house} />
           
-          <div className="sm:p-4 bg-white sm:border rounded-full mt-6 max-sm:mb-6">
+          <div className="mt-6 max-sm:mb-6">
             {generalError && (
               <div
                 className={`text-red-500 text-sm mb-4 transition-transform duration-300 text-center ${
