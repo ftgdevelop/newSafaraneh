@@ -50,10 +50,22 @@
   }
   div:has(> div > div[role='dialog']){
     div[role='dialog'].custom-selected{
+      .rmdp-calendar{
+
+        .rmdp-header{
+          padding-top: 8px;
+          padding-bottom: 12px;
+          margin-top: 0%;
+        }
+      }
       .rmdp-day-picker {
 
         .rmdp-week{
           margin-bottom: 2px;
+          .rmdp-week-day{
+            height: 39.5px;
+
+          }
 
           .rmdp-day{
             border-width: 2px;
