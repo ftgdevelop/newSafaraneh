@@ -282,8 +282,12 @@ const AccommodationSearchForm: React.FC<Props> = (props) => {
             <div
                 className={`relative z-10 ${theme3 ? "flex sm:grow" : "col-span-1 md:col-span-3"}`}
             >
-                <MultiRangePicker initialValue={dates} onChange={dateChangeHandle} value={dates}Input={CustomRangeInput}
-/>
+                <MultiRangePicker
+                    initialValue={dates}
+                    onChange={dateChangeHandle}
+                    value={dates}
+                    Input={CustomRangeInput}
+                />
             </div>
 
             <div className="sm:grow xl:basis-2/12">

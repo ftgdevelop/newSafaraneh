@@ -9,6 +9,7 @@ import FilterSearch from "@/modules/accommodation/components/accommodationsList/
 import AccommodationList from "@/modules/accommodation/components/accommodationsList/list/AccommodationList";
 import { Accommodation, ServerAddress } from "@/enum/url";
 import { FilterValues } from "@/modules/accommodation/types/FilterValues";
+import Head from "next/head";
 
 const ITEMS_PER_PAGE = 24;
 
@@ -191,45 +192,67 @@ const AccommodationPage: NextPage = () => {
     }, undefined, { shallow: true });
 };
 
+  const baseCanonical = `${process.env.SITE_NAME}/fa/accommodations`;
+  let canonical = baseCanonical;
+
+  if (phrase) {
+    canonical = `${baseCanonical}/${encodeURIComponent(phrase)}`;
+  } else if (defaultDestination && defaultDestination.slug) {
+    canonical = `${baseCanonical}/${defaultDestination.slug}`;
+  }
+
+  if (canonical[canonical.length - 1] !== "/") {
+    canonical += "/";
+  }
+
   return (
-    <div className="max-w-container mx-auto px-5 py-4">
-      <AccommodationSearchForm
-        wrapperClassName="relative z-[2] mb-4"
-        defaultDates={accommodationDefaultDates}
-        defaultDestination={defaultDestination}
-        defaultCapacity={filterValues.capacity ?? 1}
-      />
+    <>
+      <Head>
+        <title>
+          {`اجاره ویلا و سوئیت در ${phrase ? phrase : defaultDestination ? defaultDestination.title : "همه نقاط"}`}
+        </title>
+        <meta name="robots" content="INDEX, FOLLOW" />
+        <link rel="canonical" href={canonical} />
+      </Head>
+      <div className="max-w-container mx-auto px-5 py-4">
+        <AccommodationSearchForm
+          wrapperClassName="relative z-[2] mb-4"
+          defaultDates={accommodationDefaultDates}
+          defaultDestination={defaultDestination}
+          defaultCapacity={filterValues.capacity ?? 1}
+        />
 
-      <FilterSearch filterValues={filterValues} setFilterValues={setFilterValues} onCategoryChange={handleCategoryChange} />
+        <FilterSearch filterValues={filterValues} setFilterValues={setFilterValues} onCategoryChange={handleCategoryChange} />
 
-      <div className="flex flex-row gap-2 items-center mt-6">
-        {destinationLoading || loading ? (
-          <>
-            <div className="h-6 w-40 bg-gray-200 animate-pulse rounded" />
-            <div className="h-6 w-16 bg-gray-200 animate-pulse rounded" />
-          </>
-        ) : (
-          <>
-            <h1 className="font-bold">
-              {/* اجاره ویلا و سوئیت در {defaultDestination ? defaultDestination.title : "همه نقاط"} */}
-              اجاره ویلا و سوئیت در {phrase ? phrase : defaultDestination ? defaultDestination.title : "همه نقاط"}
-            </h1>
-            <div>({total} اقامتگاه)</div>
-          </>
-        )}
+        <div className="flex flex-row gap-2 items-center mt-6">
+          {destinationLoading || loading ? (
+            <>
+              <div className="h-6 w-40 bg-gray-200 animate-pulse rounded" />
+              <div className="h-6 w-16 bg-gray-200 animate-pulse rounded" />
+            </>
+          ) : (
+            <>
+              <h1 className="font-bold">
+                {/* اجاره ویلا و سوئیت در {defaultDestination ? defaultDestination.title : "همه نقاط"} */}
+                اجاره ویلا و سوئیت در {phrase ? phrase : defaultDestination ? defaultDestination.title : "همه نقاط"}
+              </h1>
+              <div>({total} اقامتگاه)</div>
+            </>
+          )}
+        </div>
+
+        <AccommodationList
+          items={items}
+          totalItems={total}
+          currentPage={page}
+          loading={loading}
+          onPageChange={handlePageChange}
+          checkin={checkin}
+          checkout={checkout}
+          capacity={filterValues.capacity ?? 1}
+        />
       </div>
-
-      <AccommodationList
-        items={items}
-        totalItems={total}
-        currentPage={page}
-        loading={loading}
-        onPageChange={handlePageChange}
-        checkin={checkin}
-        checkout={checkout}
-        capacity={filterValues.capacity ?? 1}
-      />
-    </div>
+    </>
   );
 };
 

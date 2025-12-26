@@ -12,7 +12,6 @@ import { GetServerSideProps } from "next";
 function AccommodationCheckout() {
   const router = useRouter();
   const { key } = router.query;
-  console.log("key in checkout page:", key);
 
   const [house, setHouse] = useState<any>(null);
   const [loading, setLoading] = useState(false);

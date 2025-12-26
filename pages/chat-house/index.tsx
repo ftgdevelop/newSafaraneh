@@ -1,5 +1,7 @@
 import { useRouter } from "next/router";
+import { GetServerSideProps } from "next";
 import { useEffect, useState } from "react";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import axios from "axios";
 import { Accommodation, ServerAddress } from "@/enum/url";
 
@@ -59,5 +61,16 @@ function ChatHouse() {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  if (!process.env.PROJECT_MODULES?.includes("Accommodation")) {
+    return { notFound: true };
+  }
+  return {
+    props: {
+      ...(await serverSideTranslations(context.locale, ["common", "hotel", "home"])),
+    },
+  };
+};
 
 export default ChatHouse;

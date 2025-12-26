@@ -4,6 +4,7 @@ import { GetServerSideProps } from "next";
 import { useEffect, useState, useMemo } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { ServerAddress, Accommodation } from "@/enum/url";
+import Head from "next/head";
 
 import AccommodationName from "@/modules/accommodation/components/accommodationDetails/Section/AccommodationName";
 import Gallery from "@/modules/accommodation/components/accommodationDetails/Section/Gallery";
@@ -17,12 +18,9 @@ import Features from "@/modules/accommodation/components/accommodationDetails/Se
 import Distances from "@/modules/accommodation/components/accommodationDetails/Section/Distances";
 import Rules from "@/modules/accommodation/components/accommodationDetails/Section/Rules";
 import Rates from "@/modules/accommodation/components/accommodationDetails/Section/Rates";
-import AnchorTabs from "@/modules/shared/components/ui/AnchorTabs";
 import Calendar from "@/modules/accommodation/components/accommodationDetails/Aside/Calendar";
 import CalendarPicker from "@/modules/accommodation/components/accommodationDetails/Section/CalendarPicker";
-import Button from "@/modules/shared/components/ui/Button";
 import SectionTabs from "@/modules/shared/components/ui/SectionTabs";
-import { Instant } from "@/modules/shared/components/ui/icons";
 
 const AccommodationDetailPage: NextPage = () => {
   const router = useRouter();
@@ -121,8 +119,51 @@ const AccommodationDetailPage: NextPage = () => {
     );
   };
 
+  const title = house
+    ? `${house.title} | رزرو اقامتگاه در ${house.location?.city || ""} | ${process.env.SITE_NAME}`
+    : `جزئیات اقامتگاه | ${process.env.SITE_NAME}`;
+
+  const description = house
+    ? `رزرو آنلاین ${house.title} در ${house.location?.city || ""} با بهترین قیمت، مشاهده تصاویر، امکانات، قوانین و نظرات کاربران در ${process.env.SITE_NAME}.`
+    : `جزئیات و رزرو اقامتگاه در ${process.env.SITE_NAME}.`;
+
+  const canonical = house
+    ? `${process.env.SITE_NAME}/fa/accommodation/${house.id}/`
+    : `${process.env.SITE_NAME}/fa/accommodation/`;
+
+  const image = house?.pictures?.records?.[0]?.url || `${process.env.SITE_NAME}/images/hotelban/hero.jpg`;
+
   return (
     <>
+      <Head>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={image} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={canonical} />
+        <link rel="canonical" href={canonical} />
+        <meta name="robots" content="INDEX, FOLLOW" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "LodgingBusiness",
+              "name": house?.title,
+              "image": image,
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": house?.location?.city,
+                "addressCountry": "IR"
+              },
+              "description": description,
+              "url": canonical
+            }),
+          }}
+        />
+      </Head>
       <div className="max-w-container mx-auto px-5 pb-4">
         {house && (
           <AccommodationName

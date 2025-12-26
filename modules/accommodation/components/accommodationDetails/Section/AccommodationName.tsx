@@ -37,7 +37,7 @@ function AccommodationName({ title, location, rank, reviews, isInstant }: Accomm
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 bg-white rounded-b-xl pt-8">
       <div className="lg:col-span-3">
         <div className="flex flex-col md:flex-row items-start md:justify-between w-full gap-2 md:gap-3 mb-2">
-          <h2 className="text-xl sm:text-3xl xl:text-4xl font-bold text-gray-800 mb-2">{title}</h2>
+          <h1 className="text-xl sm:text-3xl xl:text-4xl font-bold text-gray-800 mb-2">{title}</h1>
 
           {isInstant && (
             <div className="rounded-lg px-2 bg-[#412691]/5 select-none text-center inline-block mb-2 md:mb-4">
