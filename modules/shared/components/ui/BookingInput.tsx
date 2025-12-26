@@ -2,13 +2,17 @@ import React from "react";
 import { Locale } from "react-date-object";
 import { Calendar, CalendarFill, Minus } from "./icons";
 
-export interface DomesticFlightInputProps {
+export interface BookingInputProps {
   isEnd?: boolean;
   isDisabled?: boolean;
   handleRoundTrip?: () => void;
   label: string;
   isTouched?: boolean;
   errors?: string;
+    heightClassName?: string;
+    fieldClassName?: string;
+    groupStart?:boolean;
+    labelIsSimple?: boolean;
 }
 
 interface InternalInputProps {
@@ -19,17 +23,21 @@ interface InternalInputProps {
   isFa: boolean;
 }
 
-type Props = DomesticFlightInputProps & InternalInputProps;
+type Props = BookingInputProps & InternalInputProps;
 
-export default function DomesticFlightDatePickerInput({
-  value,
-  openCalendar,
-  isEnd = false,
-  isDisabled = false,
-  label,
-  isTouched,
-  errors,
-  isFa,
+export default function BookingInput({
+    value,
+    openCalendar,
+    isEnd = false,
+    isDisabled = false,
+    label,
+    isTouched,
+    errors,
+    isFa,
+    heightClassName,
+    fieldClassName,
+    groupStart,
+    labelIsSimple = false,
   ...props
 }: Props) {
   const theme2 = process.env.THEME === "THEME2";
@@ -39,6 +47,37 @@ export default function DomesticFlightDatePickerInput({
     props?.handleRoundTrip?.();
     openCalendar()
   }
+    const inputClassNames : string[] = ["w-full px-9 bg-white border outline-none"];
+    
+    if(heightClassName){
+        inputClassNames.push(heightClassName);
+    } else if(theme2){
+        inputClassNames.push(`h-13`);
+    }else if (theme3){
+        inputClassNames.push(`h-12`);
+    }else{
+        inputClassNames.push("h-10");
+    }
+    
+    if(!labelIsSimple){
+        inputClassNames.push(`leading-4 ${theme2?"pt-4":"pt-0"}`);
+    }
+
+    if(errors && isTouched){
+        inputClassNames.push(`border-red-500 ${theme2?"border-2":""}`);
+    }else{
+        inputClassNames.push(`${theme2?"border-neutral-400 focus:border-2":"border-neutral-300"} focus:border-blue-500`);
+    }
+
+    if (groupStart){
+        inputClassNames.push("rtl:rounded-r-md ltr:rounded-l-md");
+    }else{
+        inputClassNames.push("rounded-md")
+    }
+
+    if(fieldClassName){
+        inputClassNames.push(fieldClassName);
+    }
 
   return (
     <>
@@ -73,9 +112,8 @@ export default function DomesticFlightDatePickerInput({
         readOnly
         onClick={handleOpenCalendar}
         value={value}
-        className={`w-full h-12 text-xs rtl:rounded-lg rtl:pr-10 ltr:pl-10 
-          ${theme3 ? "bg-neutral-200 py-5" : "border border-neutral-400 pt-5 leading-4"}
-        ${isFa ? 'font-vazir': 'font-sans'}`}
+        className={inputClassNames.join(" ")}
+
       />
         {isTouched && errors && <div className='text-xs text-red-500'> {errors as string}</div>}
         {isEnd && isDisabled && (
@@ -84,7 +122,6 @@ export default function DomesticFlightDatePickerInput({
           </div>
         )}
     </div>
-    
     </>
 
   );
