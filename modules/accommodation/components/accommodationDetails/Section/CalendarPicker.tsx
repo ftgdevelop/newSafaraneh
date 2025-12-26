@@ -132,7 +132,7 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({ id, checkin, checkout }
       <PriceCalendar
         calendar={calendarData}
         selectedDates={selectedDates}
-        onDateSelect={handleDateSelect}
+        // onDateSelect={handleDateSelect}
         roomName=""
       />
     </div>
