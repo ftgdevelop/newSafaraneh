@@ -21,6 +21,10 @@ type RulesProps = {
 };
 
 function Rules({ rules }: RulesProps) {
+  if (!rules) {
+    return null;
+  }
+
   const {
     accommodates,
     maxAccommodates,

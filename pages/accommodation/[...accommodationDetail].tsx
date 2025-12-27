@@ -169,7 +169,7 @@ const AccommodationDetailPage: NextPage = () => {
           <AccommodationName
             title={house.title}
             location={house.location}
-            rank={house.rates.rank}
+            rank={house.rates?.rank}
             reviews={house.reviews}
             isInstant={house.isInstant}
           />

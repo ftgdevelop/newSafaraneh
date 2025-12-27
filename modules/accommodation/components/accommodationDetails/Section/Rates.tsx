@@ -2,23 +2,23 @@ import { Accessibility, Accuracy, Cleanliness, Gewel, Host, Star } from "@/modul
 
 type RatesProps = {
   rates: {
-    cleanliness: number;
-    value: number;
-    accuracy: number;
-    accessibility: number;
-    host: number;
-    rank: number;
+    cleanliness?: number;
+    value?: number;
+    accuracy?: number;
+    accessibility?: number;
+    host?: number;
+    rank?: number;
   };
 };
 
 function Rates({ rates }: RatesProps) {
   const ratesList = [
-    { label: "نظافت", value: rates.cleanliness, icon: <Cleanliness className="w-12 h-12 mb-2 text-blue-500" /> },
-    { label: "ارزش", value: rates.value, icon: <Gewel className="w-12 h-12 mb-2 text-blue-500" /> },
-    { label: "دقت", value: rates.accuracy, icon: <Accuracy className="w-12 h-12 mb-2 text-blue-500" /> },
-    { label: "دسترسی", value: rates.accessibility, icon: <Accessibility className="w-12 h-12 mb-2 text-blue-500" /> },
-    { label: "میزبان", value: rates.host, icon: <Host className="w-12 h-12 mb-2 text-blue-500" /> },
-    { label: "رتبه کلی", value: rates.rank, icon: <Star className="w-12 h-12 mb-2 fill-amber-400" /> },
+    { label: "نظافت", value: rates?.cleanliness, icon: <Cleanliness className="w-12 h-12 mb-2 text-blue-500" /> },
+    { label: "ارزش", value: rates?.value, icon: <Gewel className="w-12 h-12 mb-2 text-blue-500" /> },
+    { label: "دقت", value: rates?.accuracy, icon: <Accuracy className="w-12 h-12 mb-2 text-blue-500" /> },
+    { label: "دسترسی", value: rates?.accessibility, icon: <Accessibility className="w-12 h-12 mb-2 text-blue-500" /> },
+    { label: "میزبان", value: rates?.host, icon: <Host className="w-12 h-12 mb-2 text-blue-500" /> },
+    { label: "رتبه کلی", value: rates?.rank, icon: <Star className="w-12 h-12 mb-2 fill-amber-400" /> },
   ];
 
   return (
@@ -37,7 +37,7 @@ function Rates({ rates }: RatesProps) {
               <div className="flex flex-col justify-between w-full">
                 <span className={`text-sm ${isRank ? "text-amber-500" : "text-gray-600"}`}>{rate.label}</span>
                 <span className={`text-md font-bold ${isRank ? "text-amber-500" : "text-gray-800"}`}>
-                  {rate.value.toFixed(2)}
+                  {rate?.value?.toFixed(2)}
                 </span>
               </div>
               {rate.icon}

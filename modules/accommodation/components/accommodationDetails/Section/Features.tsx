@@ -116,6 +116,7 @@ function CategoryFeatures({
 function translateCategory(category: string): string {
   const translations: { [key: string]: string } = {
     kitchen_facilities: "امکانات آشپزخانه",
+    health_facilities: "امکانات بهداشتی",
     spaces: "فضاها",
     amenities: "امکانات رفاهی",
     special_facilities: "امکانات ویژه",
