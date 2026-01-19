@@ -1,9 +1,13 @@
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import axios from "axios";
 import { Accommodation, ServerAddress } from "@/enum/url";
+import Aside from "@/modules/accommodation/components/chatHouse/Aside";
+import HostInfo from "@/modules/accommodation/components/chatHouse/HostInfo";
+import ChatBox from "@/modules/accommodation/components/chatHouse/ChatBox";
+import Button from "@/modules/shared/components/ui/Button";
 
 function ChatHouse() {
   const router = useRouter();
@@ -11,16 +15,51 @@ function ChatHouse() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [messages, setMessages] = useState<any[]>([]);
+  const [reserveInfo, setReserveInfo] = useState<any>(null);
+  const [house, setHouse] = useState<any>(null);
+
+  const fetchMessages = useCallback(async () => {
+    if (!reserveId || !username) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await axios.get(
+        `${ServerAddress.Type}${ServerAddress.Accommodation_Data}${Accommodation.GetAllChats}?ReserveId=${reserveId}&Username=${encodeURIComponent(
+          username as string
+        )}`,
+        {
+          headers: {
+            accept: "text/plain",
+            apikey: process.env.PROJECT_SERVER_APIKEY,
+            tenantId: process.env.PROJECT_SERVER_TENANTID,
+            "accept-language": "fa-IR",
+            currency: "EUR",
+          },
+        }
+      );
+
+      setMessages(response.data.result.messages || []);
+    } catch (err) {
+      setError("خطا در دریافت پیام‌ها");
+    } finally {
+      setLoading(false);
+    }
+  }, [reserveId, username]);
+
+  useEffect(() => {
+    fetchMessages();
+  }, [fetchMessages]);
 
   useEffect(() => {
     if (!reserveId || !username) return;
 
-    const fetchMessages = async () => {
-      setLoading(true);
-      setError(null);
+    const fetchReserveDetails = async () => {
       try {
         const response = await axios.get(
-          `${ServerAddress.Type}${ServerAddress.Accommodation_Data}${Accommodation.GetAllChats}?ReserveId=${reserveId}&Username=${encodeURIComponent(username as string)}`,
+          `${ServerAddress.Type}${ServerAddress.Accommodation_Data}${Accommodation.GetReserveById}?ReserveId=${reserveId}&Username=${username}`,
           {
             headers: {
               accept: "text/plain",
@@ -32,31 +71,58 @@ function ChatHouse() {
           }
         );
 
-        console.log("Fetched messages:", response);
-      } catch (err) {
-        setError("خطا در دریافت پیام‌ها");
-      } finally {
-        setLoading(false);
+        setReserveInfo(response.data.result || null);
+        fetchHouseDetails(response.data.result.houseId);
+      } catch (error) {
+        console.error(error);
       }
     };
 
-    fetchMessages();
+    const fetchHouseDetails = async (houseId: number) => {
+      const response = await axios.get(
+        `${ServerAddress.Type}${ServerAddress.Accommodation_Data}${Accommodation.GetHouse}?Id=${houseId}`,
+        {
+          headers: {
+            accept: "text/plain",
+            apikey: process.env.PROJECT_SERVER_APIKEY,
+            tenantId: process.env.PROJECT_SERVER_TENANTID,
+            "accept-language": "fa-IR",
+            currency: "EUR",
+          },
+        }
+      );
+      setHouse(response.data.result || null);
+    };
+
+    fetchReserveDetails();
   }, [reserveId, username]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <h2 className="text-xl font-bold text-gray-700 mb-4">شما وارد صفحه چت شدید!</h2>
-      {loading && <div>در حال دریافت پیام‌ها...</div>}
-      {error && <div className="text-red-500">{error}</div>}
-      <div className="w-full max-w-md space-y-2">
-        {/* {messages.length === 0 && !loading && <div>پیامی وجود ندارد.</div>}
-        {messages.map((msg, idx) => (
-          <div key={idx} className="p-2 bg-gray-100 rounded">
-            <div className="text-sm text-gray-600">{msg.senderName}</div>
-            <div className="text-base">{msg.text}</div>
-            <div className="text-xs text-gray-400">{msg.creationTime}</div>
+    <div className="max-w-container mx-auto px-3 py-4">
+      <div className="grid grid-cols-1 lg:grid-cols-6 gap-6 mb-8">
+        <div className="lg:col-span-4">
+          <h1>چت با میزبان</h1>
+          <HostInfo host={house?.host} />
+
+          <ChatBox
+            messages={messages}
+            reserveId={reserveId as string}
+            username={username as string}
+            onMessageSent={fetchMessages}
+          />
+
+          {loading && <div className="mt-2">در حال دریافت پیام‌ها...</div>}
+          {error && <div className="text-red-500 mt-2">{error}</div>}
+        </div>
+
+        <div className="lg:col-span-2">
+          <Aside house={house} reserveInfo={reserveInfo} />
+          <div className="mt-6 max-sm:mb-6">
+            <Button className="w-full !bg-[#412691] hover:!bg-[#412691]/70 text-white py-2 !rounded-full">
+              پرداخت
+            </Button>
           </div>
-        ))} */}
+        </div>
       </div>
     </div>
   );
@@ -68,7 +134,11 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   }
   return {
     props: {
-      ...(await serverSideTranslations(context.locale, ["common", "hotel", "home"])),
+      ...(await serverSideTranslations(context.locale, [
+        "common",
+        "hotel",
+        "home",
+      ])),
     },
   };
 };

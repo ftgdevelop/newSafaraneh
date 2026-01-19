@@ -341,6 +341,7 @@ const HomeTheme3Accomodation: React.FC<Props> = props => {
                 categories={southVillas}
                 citySlug="hormozgan"
             />
+            
             <AccommodationCategoryList
                 title="اقامتگاه های بوم گردی"
                 categories={ecoVillas}
