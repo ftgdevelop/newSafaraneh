@@ -52,6 +52,7 @@ const nextConfig = {
     HOTEL_LIST_LAZY_LOAD: "lazy",
     SAFAR_MARKET_SITE_NAME: "",
     USE_SHAB_TRACKER_ID:"true",
+    USE_BASA_USER_TOKEN:"false",
     GET_ALL_PASSENFERS_DATA_IN_SAFAR_MARKET: "false",
     PROJECT_SERVER_TYPE: "https://",
     PROJECT_SERVER_USER: "",
