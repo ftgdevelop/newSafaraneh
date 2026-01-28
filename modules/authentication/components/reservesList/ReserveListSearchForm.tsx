@@ -1,21 +1,103 @@
 import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
-import { Field, Form, Formik } from 'formik';
+import { Field, Form, Formik, useFormikContext } from 'formik';
 import FormikField from '@/modules/shared/components/ui/FormikField';
 // import DatePickerModern from '@/modules/shared/components/ui/DatePickerModern';
 import Button from '@/modules/shared/components/ui/Button';
+import MultiDatePicker from '@/modules/shared/components/ui/MultiDatePicker';
+import DomesticFlightDatePickerInput, { DomesticFlightInputProps } from '@/modules/shared/components/ui/DomesticFlightDatePickerInput';
+import { DateObject } from 'react-multi-date-picker';
+import { useFormikDateRange } from '@/modules/shared/hooks/use-formik-date-range';
+import BookingInput, { BookingInputProps } from '@/modules/shared/components/ui/BookingInput';
+
+interface ReserveListSearchSchema {
+    FromReturnTime?: string;
+    ToReturnTime?: string;
+    reserveId: string;
+    type: string;
+}
 
 type Props = {
-    submitHandle: (values: { FromReturnTime?: string, ToReturnTime?: string, reserveId: string, type: string }) => void;
+    submitHandle: (values: ReserveListSearchSchema) => void;
 }
+
+
+const DateInputs: React.FC<{
+    theme3?: boolean;
+    isFa: boolean;
+    setIsFa: (isFa: boolean) => void;
+}> = ({
+    theme3,
+    isFa,
+    setIsFa,
+}) => {
+        const {
+            values,
+            setFieldValue,
+            errors,
+            touched,
+            isValid,
+            isSubmitting,
+        } = useFormikContext<ReserveListSearchSchema>();
+        const { minEndDate } = useFormikDateRange({
+            values,
+            setFieldValue,
+            startField: 'FromReturnTime',
+            endField: 'ToReturnTime',
+            isFa,
+        });
+    return (
+        <>
+            <div className="relative modernDatePicker-checkin">
+
+                <MultiDatePicker<BookingInputProps>
+                minDate={new DateObject({ date: new Date() })}
+                isFa={isFa}
+                setIsFa={setIsFa}
+                onChange={(v)=>setFieldValue('FromReturnTime', v)}
+                Input={BookingInput}
+                value={values.FromReturnTime ?? ""}
+                inputProps={{
+                    isTouched:touched.FromReturnTime,
+                    errors: errors.FromReturnTime,
+                    label:'از تاریخ',
+                }}
+                
+                /> 
+            </div>
+
+            <div className="relative modernDatePicker-checkin">
+                <MultiDatePicker<BookingInputProps>
+                Input={BookingInput}
+                isFa={isFa}
+                setIsFa={setIsFa}
+                inputProps={
+                    {
+                        isTouched:touched.ToReturnTime,
+                        errors: errors.ToReturnTime,
+                        label: 'تاریخ برگشت',
+                        isEnd: true
+                    }
+                }
+                onChange={(v)=>setFieldValue('ToReturnTime', v)}
+                value={values.ToReturnTime ?? ''}
+                minDate={minEndDate}
+                
+            />
+            </div>
+        </>
+    )
+}
+
 
 const ReserveListSearchForm: React.FC<Props> = props => {
 
     const { t } = useTranslation('common');
 
-    const [locale, setLocale] = useState<any>('fa');
+    const [isFa, setIsFa] = useState<boolean>(true);
     
     const theme2 = process.env.THEME === "THEME2";
+    const theme3 = process.env.THEME === "THEME3";
 
     const initialValues = {
         FromReturnTime: "",
@@ -65,7 +147,7 @@ const ReserveListSearchForm: React.FC<Props> = props => {
                             <Field
                                 name="type"
                                 as="select"
-                                className={`block w-full focus:border-blue-500 ${theme2?"h-13 border-neutral-400":"border-neutral-300 h-10"} px-1 text-sm bg-white border outline-none rounded-lg focus:border-blue-500`}
+                                className={`block w-full focus:border-blue-500 ${theme2 ? "h-13 border-neutral-400": theme3? "h-12 border-neutral-300": "h-10 border-neutral-300"} px-1 text-sm bg-white border outline-none rounded-lg focus:border-blue-500`}
                             >
                                 <option value="">همه</option>
                                 <option value="HotelDomestic"> هتل داخلی </option>
@@ -74,68 +156,15 @@ const ReserveListSearchForm: React.FC<Props> = props => {
                             </Field>
                         </div>
 
-                        <div className="relative modernDatePicker-checkin">
-                            <label className="block leading-4 mb-2 text-sm">
-                                از تاریخ
-                            </label>
-
-                            {/* <DatePickerMobiscroll
-                                placeholder='از تاریخ'
-                                inputStyle='simple'
-                                onChange={a => {
-                                    setFieldValue("FromReturnTime", a.value, true)
-                                }}
-                                rtl
-                                locale={locale}
-                                onChangeLocale={setLocale}
-                            /> */}
-
-
-                            {/* <DatePickerModern
-                                wrapperClassName="block"
-                                maximumDate={dateDisplayFormat({ date: new Date().toISOString(), locale: 'en', format: "YYYY-MM-DD" })}
-                                inputPlaceholder="از تاریخ"
-                                inputClassName="border border-neutral-300 rounded-lg h-10 focus:border-blue-500 outline-none text-base w-full"
-                                inputName="FromReturnTime"
-                                toggleLocale={() => { setLocale(prevState => prevState === 'fa' ? "en" : "fa") }}
-                                locale={locale}
-                                onChange={d => { setFieldValue("FromReturnTime", d) }}
-                            /> */}
-                        </div>
-
-                        <div className="relative modernDatePicker-checkin">
-                            <label className="block leading-4 mb-2 text-sm">
-                                تا تاریخ
-                            </label>
-
-                            {/* <DatePickerMobiscroll
-                                placeholder='تا تاریخ'
-                                inputStyle='simple'
-                                onChange={a => {
-                                    setFieldValue("ToReturnTime", a.value, true)
-                                }}
-                                rtl
-                                minDate={values.FromReturnTime}
-                                locale={locale}
-                                onChangeLocale={setLocale}
-                            /> */}
-
-                            {/* <DatePickerModern
-                                wrapperClassName="block"
-                                maximumDate={dateDisplayFormat({ date: new Date().toISOString(), locale: 'en', format: "YYYY-MM-DD" })}
-                                inputPlaceholder="تا تاریخ"
-                                inputClassName="border border-neutral-300 rounded-lg h-10 focus:border-blue-500 outline-none text-base w-full"
-                                inputName="ToReturnTime"
-                                toggleLocale={() => { setLocale(prevState => prevState === 'fa' ? "en" : "fa") }}
-                                locale={locale}
-                                onChange={d => { setFieldValue("ToReturnTime", d) }}
-                            /> */}
-                        </div>
+                        <DateInputs
+                            isFa={isFa}
+                            setIsFa={setIsFa}
+                        />
 
                         <div className='flex flex-col justify-end'>
                             <Button
                                 type='submit'
-                                className={`px-5 ${theme2?"h-13":"h-10"}`}
+                                className={`px-5 ${theme2?"h-13": theme3 ? "h-12" : "h-10"}`}
                             >
                                 جستجو
                             </Button>
