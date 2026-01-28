@@ -53,7 +53,7 @@ const Tab: React.FC<Props> = props => {
         <>
             <div className={props.wrapperClassName || ""}>
                 {style === 'theme3' ? (
-                    <div className='flex border-b pb-4'>
+                    <div className='flex border-b pb-4 hidden-scrollbar overflow-x-auto'>
                         {items.map(item => <button
                             type="button"
                             key={item.key}
@@ -72,7 +72,7 @@ const Tab: React.FC<Props> = props => {
                 ) : style === 'radioStyle' ? (
                     <>
                         {items.map(item => (
-                            <label className='flex items-center mb-2 gap-1 rtl:ml-4 ltr:mr-4 cursor-pointer' key={item.key}>
+                            <label className='flex items-center hidden-scrollbar overflow-x-auto mb-2 gap-1 rtl:ml-4 ltr:mr-4 cursor-pointer' key={item.key}>
                                 <RadioInputField
                                     checked={activetabKey === item.key}
                                     onChange={(e: any) => {
@@ -85,7 +85,7 @@ const Tab: React.FC<Props> = props => {
                             </label>))}
                     </>
                 ) : (
-                    <div className={`${style === '2' ? "flex gap-4" : style === '3' ? "flex border-b border-neutral-200" : "border-b border-neutral-200 sm:px-5"} ${props.tabLinksBold ? "font-bold" : ""}`}>
+                    <div className={`hidden-scrollbar overflow-x-auto ${style === '2' ? "flex gap-4" : style === '3' ? "flex border-b border-neutral-200" : "border-b border-neutral-200 sm:px-5"} ${props.tabLinksBold ? "font-bold" : ""}`}>
                         {items.map(item => <button
                             type="button"
                             key={item.key}
