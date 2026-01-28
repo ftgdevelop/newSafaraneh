@@ -86,6 +86,7 @@ const Rooms: React.FC<Props> = props => {
                 setAvailabilities(undefined);
                 setAvailabilitiesLoading(true);
 
+                let basaCookie ="";
                 let cookieSafarmarketId;
                 let cookieSafarmarketSource;
                 let cookies = decodeURIComponent(document?.cookie).split(';');
@@ -96,10 +97,23 @@ const Rooms: React.FC<Props> = props => {
                     if (item.includes("safarMarketHotelUtmSource=")) {
                         cookieSafarmarketSource = item.split("=")[1];
                     }
+                    if (item.includes("basaUserToken=")) {
+                        basaCookie = item.split("=")[1];
+                    }
                 }
 
                 let utm: undefined | { utmSource: string; utmKey: string };
-                if (router.query && router.query.utm_source && router.query.safarmarketId) {
+                if(process.env.USE_BASA_USER_TOKEN === "true" && router.query?.ut){
+                    utm = {
+                        utmSource: "basa",
+                        utmKey: router.query.ut as string
+                    }
+                }else if (process.env.USE_BASA_USER_TOKEN === "true" && basaCookie){
+                    utm = {
+                        utmSource: "basa",
+                        utmKey: basaCookie
+                    }
+                } else if (router.query && router.query.utm_source && router.query.safarmarketId) {
                     utm = {
                         utmSource: router.query.utm_source! as string,
                         utmKey: router.query.safarmarketId! as string
@@ -134,6 +148,8 @@ const Rooms: React.FC<Props> = props => {
 
         let cookieSafarmarketId;
         let cookieSafarmarketSource;
+        let basaCookie ="";
+
         let cookies = decodeURIComponent(document?.cookie).split(';');
         for (const item of cookies) {
             if (item.includes("safarMarketHotelSmId=")) {
@@ -142,11 +158,18 @@ const Rooms: React.FC<Props> = props => {
             if (item.includes("safarMarketHotelUtmSource=")) {
                 cookieSafarmarketSource = item.split("=")[1];
             }
-
+            if (item.includes("basaUserToken=")) {
+                basaCookie = item.split("=")[1];
+            }
         }
 
         let utm: undefined | { utmSource: string; utmKey: string };
-        if (router.query && router.query.utm_source && router.query.safarmarketId) {
+        if (process.env.USE_BASA_USER_TOKEN === "true" && basaCookie){
+            utm = {
+                utmSource: "basa",
+                utmKey: basaCookie
+            }
+        } else if (router.query && router.query.utm_source && router.query.safarmarketId) {
             utm = {
                 utmSource: router.query.utm_source! as string,
                 utmKey: router.query.safarmarketId! as string
