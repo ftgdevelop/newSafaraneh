@@ -68,9 +68,9 @@ export const MultiTimePicker = ({ value, onChange , label = '', labelIsSimple = 
                 />
             </div>
             
-            {isTouched && validateFunction && (
+            {/* {isTouched && validateFunction && (
                 <div className="text-xs text-red-500 mt-1">{validateFunction?.(value) ?? errorText}</div>
-            )}
+            )} */}
         </div>
     )
 }
