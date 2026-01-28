@@ -58,6 +58,11 @@ const HotelDetail: NextPage<Props> = props => {
 
   const theme1 = process.env.THEME === "THEME1";
 
+  const router = useRouter();
+
+  const activeBasa = process.env.USE_BASA_USER_TOKEN === "true";
+  const queryBasaUserToken = router.query?.ut; 
+
   const isSafaraneh = process.env.PROJECT === "SAFARANEH" || process.env.PROJECT === "IRANHOTEL" || process.env.PROJECT === "HOTELBAN"|| process.env.PROJECT === "SHAB";
 
   const isSafarlife = process.env.PROJECT === "SAFARLIFE";
@@ -71,7 +76,6 @@ const HotelDetail: NextPage<Props> = props => {
   const { t } = useTranslation('common');
   const { t: tHotel } = useTranslation('hotel');
 
-  const router = useRouter();
   const locale = router.locale;
 
   const searchFormWrapperRef = useRef<HTMLDivElement>(null);
@@ -133,6 +137,16 @@ const utm_term = router.query?.utm_term;
       }
     }
   }, [urlShabTrackerId]);
+  
+  useEffect(() => {
+    if(activeBasa && queryBasaUserToken){
+        const expDate = new Date();
+        expDate.setTime(expDate.getTime() + (20 * 60 * 1000)); //save in cookie only 20 minutes.
+        if (document) {
+            document.cookie = `basaUserToken=${queryBasaUserToken}; expires=${expDate.toUTCString()};path=/`;
+        }        
+    }
+  }, [queryBasaUserToken]);
 
 useEffect(()=>{
 

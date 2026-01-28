@@ -86,6 +86,16 @@ const Checkout: NextPage = () => {
         }
       }
     }
+
+    if(process.env.USE_BASA_USER_TOKEN === "true"){  
+      let cookies = decodeURIComponent(document?.cookie).split(';');
+      for (const item of cookies){
+        if (item.includes("basaUserToken=")){
+          setMetaSearchKey(item.split("=")[1]);
+          setMetaSearchName("basa");
+        }
+      }
+    }
   },[]);
   
 
